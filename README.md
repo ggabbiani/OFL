@@ -14,7 +14,7 @@ This was done for minimize the risk of overlapping with any other API or global 
 1. download and expand the library in the [OpenSCAD Library Folder](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations)
 2. include the following statement in your OpenSCAD code:
 
-    include <ofl/foundation/incs.scad>
+    include <OFL/foundation/incs.scad>
 
 ## Library documentation
 
