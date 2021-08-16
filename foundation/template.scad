@@ -22,9 +22,14 @@
 include <defs.scad>
 
 $fn         = 50;           // [3:50]
-$FL_TRACE   = false;
-$FL_RENDER  = false;
+// Debug statements are turned on
 $FL_DEBUG   = false;
+// When true, disables PREVIEW corrections like FL_NIL
+$FL_RENDER  = false;
+// When true, unsafe definitions are not allowed
+$FL_SAFE    = true;
+// When true, fl_trace() mesages are turned on
+$FL_TRACE   = false;
 
 FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 

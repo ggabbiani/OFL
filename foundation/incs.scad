@@ -30,3 +30,4 @@ use <connect.scad>
 use <drawio.scad>
 use <profile.scad>
 use <symbol.scad>
+use <util.scad>

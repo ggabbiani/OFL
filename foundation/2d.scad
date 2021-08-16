@@ -21,10 +21,15 @@
 
 include <defs.scad>
 
-$fn         = 50;           // [3:50]
+$fn         = 50;           // [3:100]
 $FL_TRACE   = false;
 $FL_RENDER  = false;
 $FL_DEBUG   = false;
+
+/* [Placement] */
+
+PLACE_NATIVE  = true;
+QUADRANT      = [+1,+1];  // [-1:+1]
 
 /* [2D primitives] */
 PRIMITIVE   = "arc";  // ["arc", "circle",  "inscribed polygon", "sector"]
@@ -43,14 +48,28 @@ CIRCLE  = false;
 
 /* [Hidden] */
 
-ANGLES=[START_ANGLE,END_ANGLE];
+// function fl_arc_bbox(
+//   radius  // internal radius
+//   ,angles // start and stop angles
+//   ,width  // added to radius defines the external radius
+// ) = 
 
-if      (PRIMITIVE == "arc"               )   fl_arc(RADIUS,ANGLES,T);
-else if (PRIMITIVE == "circle"            )   fl_circle(RADIUS);
-else if (PRIMITIVE == "inscribed polygon" ) { fl_ipolygon(RADIUS,n=N);if (CIRCLE) %fl_circle(RADIUS); }
-else if (PRIMITIVE == "sector"            )   fl_sector(RADIUS,ANGLES);
+module __test__() {
+  angles  = [START_ANGLE,END_ANGLE];
+  // bbox    = PRIMITIVE == "arc" ? fl_arc_bbox(RADIUS,angles,T)
+  //         : PRIMITIVE == "circle" ? fl_circle_bbox(RADIUS)
+  //         : PRIMITIVE == "inscribed polygon" ? fl_ipolygon_bbox(RADIUS,n=N)
+  //         : PRIMITIVE == "sector" ? fl_sector_bbox(RADIUS,angles)
+  //         : undef;
+  // assert(bbox!=undef,str("Unknown '",PRIMITIVE,"' primitive"));
 
-function fl_sector(
+  if      (PRIMITIVE == "arc"               )   fl_arc(RADIUS,angles,T);
+  else if (PRIMITIVE == "circle"            )   fl_circle(RADIUS);
+  else if (PRIMITIVE == "inscribed polygon" ) { fl_ipolygon(RADIUS,n=N);if (CIRCLE) %fl_circle(RADIUS); }
+  else if (PRIMITIVE == "sector"            )   fl_sector(RADIUS,angles,PLACE_NATIVE?undef:QUADRANT);
+}
+
+function old_fl_sector(
   radius
   ,angles   // start|end angles in whatever order
 ) = assert($fn>2)
@@ -78,9 +97,50 @@ let(
   // echo(points=points)
   points;
 
+function fl_sector(
+  radius
+  ,angles   // start|end angles in whatever order
+) = assert($fn>2)
+let(
+  delta     = 360 / $fn,
+  distance  = angles[1]-angles[0],
+  o         = [if (abs(distance) < 360) [0, 0] ],          // origin NOT included when distance ≥ 360°
+  range     = abs(distance) < 360 ? distance : 360-delta,  // range equal to distance minus last value when distance ≥ 360°
+  canonic   = [angles[0],angles[0]+range],
+  last      = [if (!fl_isMultiple(range,delta)) [radius * cos(canonic[1]), radius * sin(canonic[1])] ],
+  what      = distance>0 ? [for(a = [canonic[0] : delta : canonic[1]]) a] : [for(a = [canonic[0] : -delta : canonic[1]]) a],
+  mid       = [for(a = what) [radius * cos(a), radius * sin(a)]],
+  points    = concat(o,mid,last)
+) 
+  // echo($fn=$fn)
+  echo(delta=delta)
+  // echo(angles=angles)
+  // echo(sorted=sorted)
+  echo(distance=distance)
+  echo(range=range)
+  // echo(canonic=canonic)
+  // echo(o=o)  
+  // echo(last=last)
+  echo(what=what)
+  echo(points=points)
+  points;
+
 function fl_circle(radius) = fl_sector(radius,[0,360]);
 
-module fl_sector(radius, angles) {
+module fl_sector(radius, angles, quadrant) {
+  function bbox() = let(
+    sorted  = [min(angles),max(angles)],
+    points  = [
+      let(a=angles[0]) [cos(a),sin(a)],
+      let(a=angles[1]) [cos(a),sin(a)],
+      for(a=[0:90:270]) if (a>angles[0] && a<angles[1]) [cos(a),sin(a)]
+    ],
+    x = [for(p=points) p.x],
+    y = [for(p=points) p.y]
+  ) [[min(x)*radius,min(y)*radius],[max(x)*radius,max(y)*radius]];
+  fl_trace("points",bbox());
+  M = quadrant!=undef ? fl_quadrant(quadrant=quadrant,bbox=bbox()) : FL_I;
+  multmatrix(M)
   polygon(fl_sector(radius,angles));
 }
 
@@ -109,3 +169,5 @@ module fl_ipolygon(
   radius = r != undef ? r : d/2;
   fl_circle(r,$fn=n);
 }
+
+__test__();

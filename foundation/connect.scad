@@ -5,7 +5,6 @@
  */
 
 include <incs.scad>
-use     <../vitamins/utils.scad>
 
 $fn       = 50;           // [3:50]
 $FL_TRACE    = false;
@@ -17,21 +16,20 @@ $FL_DEBUG    = false;
 VIEW_CONNECTORS = false;
 CONNECTORS_ONLY = false;
 VIEW_SOCKET     = true;
-VIEW_PLUG       = false;
+VIEW_PLUG       = true;
 VIEW_BALL       = true;
 
 /* [Socket] */
 
 // canonical view is solidal with the connector position and orientation
-SOCKET_VIEW     = "natural"; // [natural,canonical,actual]
-SOCKET_ALPHA    = 0; // [0:360]
-SOCKET_BETA     = 0; // [0:360]
-SOCKET_DISTANCE = 1; // [0:10]
+SOCKET_VIEW     = "actual"; // [natural,canonical,actual]
+SOCKET_ALPHA    = 120; // [0:360]
+SOCKET_BETA     = 30; // [0:360]
+SOCKET_DISTANCE = 6; // [0:10]
 
 /* [Plug] */
 // canonical view is solidal with the connector position and orientation
-PLUG_VIEW       = "natural"; // [natural,canonical,actual]
-PLUG_DEBUG      = false;
+PLUG_VIEW       = "actual"; // [natural,canonical,actual]
 
 /* [Hidden] */
 

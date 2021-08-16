@@ -20,11 +20,12 @@
  */
 
 include <../vitamins/knurl_nuts.scad>
-include <../vitamins/utils.scad>
 
-use <profile.scad>
 use <3d.scad>
 use <arrange.scad>
+use <profile.scad>
+use <util.scad>
+
 include <defs.scad>
 
 include <NopSCADlib/lib.scad>

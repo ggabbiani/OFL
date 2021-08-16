@@ -68,7 +68,7 @@ module __test__() {
     if (PLACE_NATIVE)
       fl_cube(verbs,size=SIZE,center=center,axes=AXES);
     else
-      fl_cube(verbs,size=SIZE,octant=OCTANT,center=center,axes=AXES);
+      fl_cube(verbs,size=SIZE,octant=OCTANT,axes=AXES);
   }
 
   module __sphere__(verbs) {
@@ -101,27 +101,26 @@ module __test__() {
 module fl_cube(
   verbs   = FL_ADD  // FL_ADD,FL_AXES,FL_BBOX
   ,size   = [1,1,1]
-  ,octant = +FL_X+FL_Y+FL_Z
-  ,center             // cube() compatibility parameter
+  ,octant           // default [1,1,1]
+  ,center           // cube() compatibility parameter
+                    // alias for octant=[0,0,0] when true, 
+                    // octant=[1,1,1] when false
   ,axes   = false
 ) {
-  o   = (center == undef ? octant : (center ? FL_O : +FL_X+FL_Y+FL_Z));
+  assert(octant==undef || center==undef);
+  o   = center!=undef ? center ? [0,0,0] : [1,1,1] : octant != undef ? octant : [1,1,1];
   sz  = is_list(size) ? size : [size,size,size];
-  M   = fl_place(octant=o,size=sz);
-
-  module do_axes() {
-    fl_axes(size=sz);
-  }
+  M   = fl_octant(octant=o,bbox=[[0,0,0],sz]);
 
   fl_parse(verbs) {
     if ($verb==FL_ADD) {
-      multmatrix(M) cube(sz,true);
+      multmatrix(M) cube(sz,false);
       if (axes)
-        do_axes();
+        fl_axes(size=sz);
     } else if ($verb==FL_BBOX) {
-      multmatrix(M) %cube(size,true);
+      multmatrix(M) %cube(size,false);
     } else if ($verb==FL_AXES) {
-      do_axes();
+      fl_axes(size=sz);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
@@ -137,8 +136,9 @@ module fl_sphere(
 ) {
   Rvec  = is_undef(d) ? (is_list(r) ? r : [r,r,r]) : (is_list(d) ? d : [d,d,d])/2;
   size  = 2*Rvec;
-  M     = fl_place(octant=octant,size=size);
-
+  M     = fl_octant(octant=octant,bbox=[[-Rvec,-Rvec,-Rvec],[Rvec,Rvec,Rvec]]);
+  fl_trace("M",M);
+  
   module do_axes() {
     fl_axes(size=Rvec*2);
   }

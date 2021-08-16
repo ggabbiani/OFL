@@ -21,12 +21,12 @@
 
 include <defs.scad>
 
-$fn       = 50;           // [3:50]
-$FL_TRACE    = false;
-$FL_RENDER   = false;
-$FL_DEBUG    = false;
+$fn         = 50;           // [3:50]
+$FL_TRACE   = false;
+$FL_RENDER  = false;
+$FL_DEBUG   = false;
 
-BBOX      = false;
+BBOX        = false;
 
 /* [Layout] */
 

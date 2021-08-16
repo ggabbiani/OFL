@@ -1,5 +1,6 @@
 /*
- * Created on Fri Aug 06 2021.
+ * Template file for OpenSCAD Founfation Library.
+ * Created on Fri Jul 16 2021.
  *
  * Copyright © 2021 Giampiero Gabbiani.
  *
@@ -19,43 +20,39 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <defs.scad>
-
-use <3d.scad>
+include <../foundation/defs.scad>
 
 $fn         = 50;           // [3:50]
 // Debug statements are turned on
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = true;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
+/* [Placement] */
+
+PLACE_NATIVE  = true;
+QUADRANT      = [0,0];  // [-1:+1]
+SIZE          = [200,100];
+
 /* [Hidden] */
 
-assert(!$FL_SAFE,"unsafe definitions included");
-
 module __test__() {
-  fl_cube();
+
+  module do_square(primus=false) {
+    fl_color("cyan") square(size=SIZE);
+    fl_color("black") {
+      translate([-20,-10]) if (primus) text("C'0"); else text("C0");
+      translate(SIZE) if (primus) text("C'1"); else text("C1");
+    }
+  }
+
+  if (PLACE_NATIVE)
+    do_square();
+  #fl_place(quadrant=QUADRANT,bbox=[FL_O,SIZE]) {
+    do_square(true);
+  }
 }
-
-X = FL_X;
-Y = FL_Y;
-Z = FL_Z;
-O = FL_O;
-I = FL_I;
-
-function T(t)      = fl_T(t);
-function S(s)      = fl_S(s);
-function Rx(alpha) = fl_Rx(alpha);
-function Ry(alpha) = fl_Ry(alpha);
-function Rz(alpha) = fl_Rz(alpha);
-function R(alpha)  = fl_R(alpha);
-
-function X(x) = x*X;
-function Y(y) = y*Y;
-function Z(z) = z*Z;
 
 __test__();

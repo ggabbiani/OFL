@@ -21,9 +21,14 @@
 
 include <TOUL.scad>
 
-$FL_DEBUG  = false;
-$FL_RENDER = false;
-$FL_TRACE  = false;
+// May trigger debug statement in client modules / functions
+$FL_DEBUG   = false;
+// When true, disables PREVIEW corrections like FL_NIL
+$FL_RENDER  = false;
+// When true, unsafe definitions are not allowed
+$FL_SAFE    = true;
+// When true, fl_trace() mesages are turned on
+$FL_TRACE   = false;
 
 // simple workaround for the z-fighting problem during preview
 FL_NIL = ($preview && !$FL_RENDER ? 0.01 : 0);
@@ -134,14 +139,15 @@ function fl_get(type,property,default) =
 
 //*****************************************************************************
 // Standard getters
-function fl_name(type)           = fl_get(type,"name"); 
-function fl_description(type)    = fl_get(type,"description"); 
-function fl_size(type)           = fl_get(type,"size");
-function fl_width(type)          = fl_size(type).x;
-function fl_height(type)         = fl_size(type).y;
-function fl_thickness(type)      = fl_size(type).z;
-function fl_connectors(type)     = fl_get(type,"connectors");
-function fl_product(type)        = fl_get(type,"product");
+function fl_name(type)          = fl_get(type,"name"); 
+function fl_description(type)   = fl_get(type,"description"); 
+function fl_size(type)          = fl_get(type,"size");
+function fl_width(type)         = fl_size(type).x;
+function fl_height(type)        = fl_size(type).y;
+function fl_thickness(type)     = fl_size(type).z;
+function fl_connectors(type)    = fl_get(type,"connectors");
+function fl_product(type)       = fl_get(type,"product");
+function fl_bbCorners(type)     = fl_get(type,"bounding corners");
 
 //*****************************************************************************
 // type traits
@@ -153,7 +159,7 @@ function fl_has(type,property,check) =
   i != [[]] ? assert(len(type[i[0]])==2,"Malformed type") check(type[i[0]][1]) : false;
 
 function fl_has_size(type) = fl_has(type,"size",function(value) is_num(value));
-function fl_has_bb_corners(type) = fl_has(type,"bounding corners",function(value) is_list(value) && len(value)==2);
+function fl_hasBbCorners(type)  = fl_has(type,"bounding corners",function(value) is_list(value) && len(value)==2);
 
 module fl_parse(verbs) {
   for($verb=is_list(verbs) ? verbs : [verbs]) {
@@ -300,42 +306,47 @@ function fl_parse_l(l,l1,def)              = (l != undef ? l : (l1!=undef ? l1 :
 function fl_parse_radius(r,r1,d,d1,def)    = (r != undef ? r : (r1 != undef ? r1 : (d != undef ? d/2 : (d1!=undef ? d1/2:def))));
 function fl_parse_diameter(r,r1,d,d1,def)  = (d != undef ? d : (d1 != undef ? d1 : (r != undef ? 2*r : (r1!=undef ? 2*r1:def))));
 
-function fl_place(
+function fl_octant(
   type
-  ,octant     // 3d octant
-  ,size       // size of placed object
-  ,offset     // 3d offsets
-) =
-  assert(is_list(octant)) 
-  assert(size==undef   || is_list(size))
-  assert(offset==undef || is_list(offset))
-  assert(size !=undef  || type!=undef)
-  let(
-    ok  = type!=undef ? fl_has_bb_corners(type) : false,
-    msg = "Missing type parameter or 'bounding corners' property",
-    sz  = size==undef ? assert(ok,msg) bb_size(type) : size,
-    of  = offset!=undef ? offset : (type!=undef ? assert(ok,msg) -sz / 2 - bb_corners(type)[0] : [0,0,0]),
-    t   = sz / 2
-  ) 
-  fl_T([sign(octant.x) * t.x,sign(octant.y) * t.y,sign(octant.z) * t.z]) * fl_T(of);
+  ,octant // 3d octant
+  ,bbox   // bounding box corners
+) = let(
+  corner    = bbox!=undef ? bbox : fl_bbCorners(type),
+  size      = assert(corner!=undef) corner[1] - corner[0],
+  half_size = size / 2,
+  delta     = [sign(octant.x) * half_size.x,sign(octant.y) * half_size.y,sign(octant.z) * half_size.z]
+) fl_T(-corner[0]-half_size+delta);
+
+function fl_quadrant(
+  type
+  ,quadrant // 2d quadrant
+  ,bbox     // bounding box corners
+) = let(
+  corner    = bbox!=undef ? bbox : fl_bbCorners(type),
+  c0        = assert(corner!=undef) 
+              let(c=corner[0]) [c.x,c.y,c.z==undef?0:c.z], 
+  c1        = let(c=corner[1]) [c.x,c.y,c.z==undef?0:c.z]
+) fl_octant(octant=[quadrant.x,quadrant.y,0],bbox=[c0,c1]);
 
 module fl_place(
   type
-  ,octant     // 3d octant
-  ,size       // size of placed object
-  ,offset     // 3d offsets
+  ,octant   // 3d octant
+  ,quadrant // 2d quadrant
+  ,bbox     // bounding box corners
 ) {
-  multmatrix(fl_place(type,octant,size,offset)) children();
+  assert((octant!=undef && quadrant==undef) || (octant==undef && quadrant!=undef));
+  M = octant!=undef ? fl_octant(type,octant,bbox) : fl_quadrant(type,quadrant,bbox);
+  multmatrix(M) children();
 }
 
 module fl_placeIf(
-  condition   // when true placement is ignored
+  condition // when true placement is ignored
   ,type
-  ,octant     // 3d octant
-  ,size       // size of placed object
-  ,offset     // 3d offsets
+  ,octant   // 3d octant
+  ,quadrant // 2d quadrant
+  ,bbox     // bounding box corners
 ) {
-  if (condition) fl_place(type,octant,size,offset) children();
+  if (condition) fl_place(type,octant,quadrant,bbox) children();
   else children();
 }
 
