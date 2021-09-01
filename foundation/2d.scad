@@ -1,7 +1,8 @@
 /*
- * Created on Thu Jul 08 2021.
- *
- * Copyright © 2021 Giampiero Gabbiani.
+ * 2d.scad  : 2d primitives for OpenSCAD.
+ * Created  : on Thu Jul 08 2021.
+ * Copyright: © 2021 Giampiero Gabbiani.
+ * Email    : giampiero@gabbiani.org.
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -20,11 +21,17 @@
  */
 
 include <defs.scad>
+include <shape_pie.scad>
 
 $fn         = 50;           // [3:100]
 $FL_TRACE   = false;
 $FL_RENDER  = false;
 $FL_DEBUG   = false;
+
+/* [Verbs] */
+ADD   = true;
+AXES  = false;
+BBOX  = false;
 
 /* [Placement] */
 
@@ -32,142 +39,195 @@ PLACE_NATIVE  = true;
 QUADRANT      = [+1,+1];  // [-1:+1]
 
 /* [2D primitives] */
-PRIMITIVE   = "arc";  // ["arc", "circle",  "inscribed polygon", "sector"]
-RADIUS      = 10;
-// arc/sector specific
-START_ANGLE = 0;    // [0:360]
-END_ANGLE   = 60;   // [0:360]
-// arc thickness
-T = 1;
 
-/* [Polygon inscribed a circle] */
-// Edge number
-N       = 3;
-// Adds a circumscribed circle
-CIRCLE  = false;
+PRIMITIVE     = "arc";  // ["arc", "circle",  "inscribed polygon", "sector"]
+RADIUS        = 10;
+// arc/sector specific
+START_ANGLE   = 0;    // [-720:0.1:720]
+END_ANGLE     = 60;   // [-720:0.1:720]
+// arc thickness
+ARC_T         = 1;
+// Inscribed polygon edge number
+IPOLY_N       = 3;  // [3:50]
+// Adds a circumscribed circle to inscribed polygon
+IPOLY_CIRCLE  = false;
 
 /* [Hidden] */
 
-// function fl_arc_bbox(
-//   radius  // internal radius
-//   ,angles // start and stop angles
-//   ,width  // added to radius defines the external radius
-// ) = 
+// $vpr=[0, 0, 0];
+// $vpt=[0.00465057, -0.00132873, 0];
+// $vpd=5.292;
+// $vpf=22.5;
 
 module __test__() {
   angles  = [START_ANGLE,END_ANGLE];
-  // bbox    = PRIMITIVE == "arc" ? fl_arc_bbox(RADIUS,angles,T)
-  //         : PRIMITIVE == "circle" ? fl_circle_bbox(RADIUS)
-  //         : PRIMITIVE == "inscribed polygon" ? fl_ipolygon_bbox(RADIUS,n=N)
-  //         : PRIMITIVE == "sector" ? fl_sector_bbox(RADIUS,angles)
-  //         : undef;
-  // assert(bbox!=undef,str("Unknown '",PRIMITIVE,"' primitive"));
+  verbs   = [
+    if (ADD)  FL_ADD,
+    if (AXES) FL_AXES
+  ];
 
-  if      (PRIMITIVE == "arc"               )   fl_arc(RADIUS,angles,T);
-  else if (PRIMITIVE == "circle"            )   fl_circle(RADIUS);
-  else if (PRIMITIVE == "inscribed polygon" ) { fl_ipolygon(RADIUS,n=N);if (CIRCLE) %fl_circle(RADIUS); }
-  else if (PRIMITIVE == "sector"            )   fl_sector(RADIUS,angles,PLACE_NATIVE?undef:QUADRANT);
+  module sector() {
+    fl_sector(verbs,RADIUS,angles,PLACE_NATIVE ? undef : QUADRANT);
+    if (BBOX)
+      #fl_sector(FL_BBOX,RADIUS,angles,PLACE_NATIVE ? undef : QUADRANT);
+  }
+
+  module circle() {
+    fl_circle(verbs,RADIUS,PLACE_NATIVE ? undef : QUADRANT);
+    if (BBOX)
+      #fl_circle(FL_BBOX,RADIUS,PLACE_NATIVE ? undef : QUADRANT);
+  }
+
+  module arc() {
+    fl_arc(verbs,RADIUS,angles,ARC_T,PLACE_NATIVE ? undef : QUADRANT);
+    if (BBOX)
+      #fl_arc(FL_BBOX,RADIUS,angles,ARC_T,PLACE_NATIVE ? undef : QUADRANT);
+  }
+
+  module ipolygon() {
+    fl_ipolygon(verbs,RADIUS,n=IPOLY_N,quadrant=PLACE_NATIVE ? undef : QUADRANT);
+    if (BBOX)
+      #fl_ipolygon(FL_BBOX,RADIUS,n=IPOLY_N,quadrant=PLACE_NATIVE ? undef : QUADRANT);
+    fl_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_polygon(fl_circle(RADIUS,$fn=IPOLY_N)))
+      if (IPOLY_CIRCLE) %fl_circle(FL_ADD,RADIUS);
+  }
+
+  if      (PRIMITIVE == "arc"               ) arc();
+  else if (PRIMITIVE == "circle"            ) circle();
+  else if (PRIMITIVE == "inscribed polygon" ) ipolygon();
+  else if (PRIMITIVE == "sector"            ) sector();
 }
 
-function old_fl_sector(
-  radius
-  ,angles   // start|end angles in whatever order
-) = assert($fn>2)
-let(
-  delta     = 360 / $fn,
-  sorted    = [min(angles),max(angles)],
-  distance  = sorted[1]-sorted[0],
-  o         = [if (distance < 360) [0, 0] ],          // origin NOT included when distance ≥ 360°
-  range     = distance < 360 ? distance : 360-delta,  // range equal to distance minus last value when distance ≥ 360°
-  canonic   = [sorted[0],sorted[0]+range],
-  last      = [if (!fl_isMultiple(range,delta)) [radius * cos(canonic[1]), radius * sin(canonic[1])] ],
-  what      = [for(a = [canonic[0] : delta : canonic[1]]) a],
-  mid       = [for(a = what) [radius * cos(a), radius * sin(a)]],
-  points    = concat(o,mid,last)
-) 
-  // echo($fn=$fn)
-  // echo(delta=delta)
-  // echo(angles=angles)
-  // echo(sorted=sorted)
-  // echo(range=range)
-  // echo(canonic=canonic)
-  // echo(o=o)  
-  // echo(last=last)
-  // echo(what=what)
-  // echo(points=points)
-  points;
+// return the polygon bounding box
+function fl_bb_polygon(points) = let(
+  x = [for(p=points) p.x],
+  y = [for(p=points) p.y]
+) [[min(x),min(y)],[max(x),max(y)]];
 
 function fl_sector(
   radius
   ,angles   // start|end angles in whatever order
-) = assert($fn>2)
-let(
-  delta     = 360 / $fn,
-  distance  = angles[1]-angles[0],
-  o         = [if (abs(distance) < 360) [0, 0] ],          // origin NOT included when distance ≥ 360°
-  range     = abs(distance) < 360 ? distance : 360-delta,  // range equal to distance minus last value when distance ≥ 360°
-  canonic   = [angles[0],angles[0]+range],
-  last      = [if (!fl_isMultiple(range,delta)) [radius * cos(canonic[1]), radius * sin(canonic[1])] ],
-  what      = distance>0 ? [for(a = [canonic[0] : delta : canonic[1]]) a] : [for(a = [canonic[0] : -delta : canonic[1]]) a],
-  mid       = [for(a = what) [radius * cos(a), radius * sin(a)]],
-  points    = concat(o,mid,last)
-) 
-  // echo($fn=$fn)
-  echo(delta=delta)
-  // echo(angles=angles)
-  // echo(sorted=sorted)
-  echo(distance=distance)
-  echo(range=range)
-  // echo(canonic=canonic)
-  // echo(o=o)  
-  // echo(last=last)
-  echo(what=what)
-  echo(points=points)
-  points;
+) = assert($fn>2) let(
+  sorted    = [min(angles),max(angles)],
+  distance  = sorted[1] - sorted[0],
+  turn      = abs(distance) >= 360,
+  a         = turn ? [0,360] : [sorted[0],sorted[0]+distance%360]
+) shape_pie(radius,a);
+
+module fl_sector(verbs=FL_ADD,radius, angles, quadrant, axes=false) {
+  points  = fl_sector(radius,angles);
+  bbox    = fl_bb_polygon(points);
+  size    = bbox[1] - bbox[0];
+  M       = quadrant!=undef ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  fl_trace("radius",radius);
+  fl_trace("points",points);
+  fl_trace("bbox",bbox);
+  fl_trace("size",size);
+  fl_trace("axes",axes);
+
+  fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      multmatrix(M) polygon(points);
+      if (axes)
+        fl_axes(size=size);
+    } else if ($verb==FL_BBOX) {
+      multmatrix(M) translate(bbox[0]) square(size=size, center=false);
+    } else if ($verb==FL_AXES) {
+      fl_axes(size=size);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
 
 function fl_circle(radius) = fl_sector(radius,[0,360]);
 
-module fl_sector(radius, angles, quadrant) {
-  function bbox() = let(
-    sorted  = [min(angles),max(angles)],
-    points  = [
-      let(a=angles[0]) [cos(a),sin(a)],
-      let(a=angles[1]) [cos(a),sin(a)],
-      for(a=[0:90:270]) if (a>angles[0] && a<angles[1]) [cos(a),sin(a)]
-    ],
-    x = [for(p=points) p.x],
-    y = [for(p=points) p.y]
-  ) [[min(x)*radius,min(y)*radius],[max(x)*radius,max(y)*radius]];
-  fl_trace("points",bbox());
-  M = quadrant!=undef ? fl_quadrant(quadrant=quadrant,bbox=bbox()) : FL_I;
-  multmatrix(M)
-  polygon(fl_sector(radius,angles));
-}
+module fl_circle(verbs,radius,quadrant,axes=false) {
+  bbox  = [[-radius,-radius],[+radius,+radius]];
+  size  = bbox[1] - bbox[0];
+  M     = quadrant!=undef ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  fl_trace("bbox",bbox);
+  fl_trace("axes",axes);
 
-module fl_circle(radius) {
-  polygon(fl_circle(radius));
+  fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      multmatrix(M) polygon(fl_circle(radius));
+      if (axes)
+        fl_axes(size=size);
+    } else if ($verb==FL_BBOX) {
+      multmatrix(M) translate(bbox[0]) square(size=size, center=false);
+    } else if ($verb==FL_AXES) {
+      fl_axes(size=size);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
 }
 
 module fl_arc(
-  radius  // internal radius
+  verbs   = FL_ADD
+  ,radius // internal radius
   ,angles // start and stop angles
   ,width  // added to radius defines the external radius
+  ,quadrant
+  ,axes=false
   ) {
-  difference() {
-    fl_sector(radius + width, angles);
-    fl_sector(radius, angles);
+  
+  bbox  = fl_bb_sector(radius+width,angles);
+  size  = bbox[1] - bbox[0];
+  M     = quadrant!=undef ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+
+  fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      multmatrix(M)
+        difference() {
+          fl_sector(verbs=verbs, radius=radius + width,angles=angles);
+          fl_sector(verbs=verbs, radius=radius, angles=angles);
+        }
+      if (axes)
+        fl_axes(size=size);
+    } else if ($verb==FL_BBOX) {
+      multmatrix(M) translate(bbox[0]) square(size=size, center=false);
+    } else if ($verb==FL_AXES) {
+      fl_axes(size=size);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
   }
 } 
 
 // Regular polygon inscribed a circonference
 module fl_ipolygon(
-  r   // circumscribed circle radius
+  verbs   = FL_ADD
+  ,r  // circumscribed circle radius
   ,d  // circumscribed circle diameter
   ,n  // number of edges
+  ,quadrant
+  ,axes=false
 ) {
   assert(!(r!=undef && d!=undef));
-  radius = r != undef ? r : d/2;
-  fl_circle(r,$fn=n);
+  radius  = r!=undef ? r : d/2;
+  points  = fl_circle(radius,$fn=n);
+
+  bbox    = fl_bb_polygon(points);
+  size    = bbox[1] - bbox[0];
+  M       = quadrant!=undef ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  fl_trace("bbox",bbox);
+  fl_trace("axes",axes);
+
+  fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      multmatrix(M) polygon(points);
+      if (axes)
+        fl_axes(size=size);
+    } else if ($verb==FL_BBOX) {
+      multmatrix(M) translate(bbox[0]) square(size=size, center=false);
+    } else if ($verb==FL_AXES) {
+      fl_axes(size=size);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
 }
 
 __test__();
