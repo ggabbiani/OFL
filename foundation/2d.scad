@@ -1,8 +1,8 @@
 /*
  * 2d.scad  : 2d primitives for OpenSCAD.
- * Created  : on Thu Jul 08 2021.
- * Copyright: © 2021 Giampiero Gabbiani.
- * Email    : giampiero@gabbiani.org.
+ * Created  : on Thu Jul 08 2021
+ * Copyright: © 2021 Giampiero Gabbiani
+ * Email    : giampiero@gabbiani.org
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
