@@ -7,7 +7,7 @@ Every library item has been prefixed in the following way:
 * **FL_** for constants
 * **fl_** for APIs
 
-This was done for minimize the risk of overlapping with any other API or global constant coming from other eventually used libraries.
+This was done for minimizing the risk of overlapping with any other API or global constant coming from other eventually used libraries.
 
 ## Usage
 
@@ -15,6 +15,13 @@ This was done for minimize the risk of overlapping with any other API or global 
 2. include the following statement in your OpenSCAD code:
 
     include <OFL/foundation/incs.scad>
+
+## Pre-reqs
+
+The following libraries are used and must be installed for using all the OFL features:
+
+* [dotSCAD](https://justinsdk.github.io/dotSCAD/)
+* [TOUL: The OpenScad Usefull Library](https://www.thingiverse.com/thing:1237203)
 
 ## Library documentation
 
