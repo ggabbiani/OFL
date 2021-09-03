@@ -1,7 +1,9 @@
 /*
- * Created on Fri Aug 06 2021.
+ * UNPORTABLE DEFINITIONS, DON'T USE TOGETHER OTHER LIBRARIES INCLUDES.
  *
- * Copyright © 2021 Giampiero Gabbiani.
+ * Created  : on Fri Aug 06 2021.
+ * Copyright: © 2021 Giampiero Gabbiani
+ * Email    : giampiero@gabbiani.org
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -21,26 +23,6 @@
 
 include <defs.scad>
 
-use <3d.scad>
-
-$fn         = 50;           // [3:50]
-// Debug statements are turned on
-$FL_DEBUG   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = true;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
-
-/* [Hidden] */
-
-assert(!$FL_SAFE,"unsafe definitions included");
-
-module __test__() {
-  fl_cube();
-}
-
 X = FL_X;
 Y = FL_Y;
 Z = FL_Z;
@@ -57,5 +39,3 @@ function R(alpha)  = fl_R(alpha);
 function X(x) = x*X;
 function Y(y) = y*Y;
 function Z(z) = z*Z;
-
-__test__();
