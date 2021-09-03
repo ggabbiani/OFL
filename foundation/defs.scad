@@ -1,7 +1,9 @@
 /*
- * Created on Tue May 11 2021.
+ * Base definitions for OpenSCAD.
  *
- * Copyright © 2021 Giampiero Gabbiani.
+ * Created  : on Tue May 11 2021
+ * Copyright: © 2021 Giampiero Gabbiani
+ * Email    : giampiero@gabbiani.org
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -19,7 +21,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <TOUL.scad>
+include <TOUL.scad> // TOUL: The OpenScad Usefull Library
 
 // May trigger debug statement in client modules / functions
 $FL_DEBUG   = false;
@@ -106,13 +108,6 @@ function fl_Y(y) = [0,y,0];
 function fl_Z(z) = [0,0,z];
 
 function fl_is_set(flag,list) = search([flag],list)!=[[]];
-// for conditional setup of a list use something like:
-// draw  = [
-//   if (SW_NO_BREAKOUT) USB_NO_BREAKOUT,
-//   if (SW_BBOX)        USB_ADD_BBOX,
-//   if (SW_FIXING_BASE) USB_ADD_FIXING_BASE,
-//   if (SW_ADD_POINTER) USB_ADD_POINTER,
-// ];
 
 FL_ADD        = "FL_ADD adds shapes to scene.";
 FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.";
@@ -275,11 +270,11 @@ module fl_versor(P) {
 
 module fl_axes(size=1,reverse=false) {
   sz  = is_list(size) 
-      ? assert(size.x>=0 && size.y>=0 && size.z>=0) size 
+      ? assert(size.x>=0 && size.y>=0 && (size.z==undef||size.z>=0)) size 
       : assert(size>=0) [size,size,size];
   color("red")   fl_vector(sz.x*FL_X,reverse==undef || !reverse);
   color("green") fl_vector(sz.y*FL_Y,reverse==undef || !reverse);
-  color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
+  if (size.z!=undef) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
 
 // general porpouse flags
