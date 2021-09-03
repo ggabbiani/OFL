@@ -1,5 +1,5 @@
 /*
- * Template file for OpenSCAD Founfation Library.
+ * Template file for OpenSCAD Foundation Library.
  * Created on Fri Jul 16 2021.
  *
  * Copyright © 2021 Giampiero Gabbiani.
@@ -41,6 +41,7 @@ BBOX      = false;
 CUTOUT    = false;
 DRILL     = false;
 FPRINT    = false;
+LAYOUT    = false;
 PLOAD     = false;
 
 /* [Direction] */
