@@ -1,9 +1,7 @@
 /*
  * 2d primitives for OpenSCAD.
  *
- * Created  : on Thu Jul 08 2021
- * Copyright: © 2021 Giampiero Gabbiani
- * Email    : giampiero@gabbiani.org
+ * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -21,15 +19,18 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <defs.scad>
 include <shape_pie.scad> // dotSCAD
+
+include <defs.scad>
+use <placement.scad>
 
 $fn         = 50;           // [3:100]
 $FL_TRACE   = false;
 $FL_RENDER  = false;
 $FL_DEBUG   = false;
 
-/* [Verbs] */
+/* [Supported verbs] */
+
 ADD   = true;
 AXES  = false;
 BBOX  = false;
@@ -50,7 +51,7 @@ END_ANGLE     = 60;   // [-720:0.1:720]
 ARC_T         = 1;
 // Inscribed polygon edge number
 IPOLY_N       = 3;  // [3:50]
-// Adds a circumscribed circle to inscribed polygon
+// Show a circumscribed circle to inscribed polygon
 IPOLY_CIRCLE  = false;
 
 /* [Hidden] */
@@ -71,31 +72,32 @@ module __test__() {
     if (ADD)  FL_ADD,
     if (AXES) FL_AXES
   ];
+  quadrant  = PLACE_NATIVE ? undef : QUADRANT;
 
   module sector() {
-    fl_sector(verbs,RADIUS,angles,PLACE_NATIVE ? undef : QUADRANT);
+    fl_sector(verbs,RADIUS,angles,quadrant=quadrant);
     if (BBOX)
-      #fl_sector(FL_BBOX,RADIUS,angles,PLACE_NATIVE ? undef : QUADRANT);
+      %fl_sector(FL_BBOX,RADIUS,angles,quadrant=quadrant);
   }
 
   module circle() {
-    fl_circle(verbs,RADIUS,PLACE_NATIVE ? undef : QUADRANT);
+    fl_circle(verbs,RADIUS,quadrant=quadrant);
     if (BBOX)
-      #fl_circle(FL_BBOX,RADIUS,PLACE_NATIVE ? undef : QUADRANT);
+      %fl_circle(FL_BBOX,RADIUS,quadrant=quadrant);
   }
 
   module arc() {
-    fl_arc(verbs,RADIUS,angles,ARC_T,PLACE_NATIVE ? undef : QUADRANT);
+    fl_arc(verbs,RADIUS,angles,ARC_T,quadrant=quadrant);
     if (BBOX)
-      #fl_arc(FL_BBOX,RADIUS,angles,ARC_T,PLACE_NATIVE ? undef : QUADRANT);
+      %fl_arc(FL_BBOX,RADIUS,angles,ARC_T,quadrant=quadrant);
   }
 
   module ipoly() {
-    fl_ipoly(verbs,RADIUS,n=IPOLY_N,quadrant=PLACE_NATIVE ? undef : QUADRANT);
+    fl_ipoly(verbs,RADIUS,n=IPOLY_N,quadrant=quadrant);
     if (BBOX)
-      #fl_ipoly(FL_BBOX,RADIUS,n=IPOLY_N,quadrant=PLACE_NATIVE ? undef : QUADRANT);
-    fl_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(RADIUS,IPOLY_N))
-      if (IPOLY_CIRCLE) %fl_circle(FL_ADD,RADIUS);
+      %fl_ipoly(FL_BBOX,RADIUS,n=IPOLY_N,quadrant=quadrant);
+    if (IPOLY_CIRCLE)
+      fl_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(RADIUS,IPOLY_N)) #fl_circle(FL_ADD,RADIUS);
   }
 
   if      (PRIMITIVE == "arc"               ) arc();
@@ -135,10 +137,14 @@ function fl_bb_sector(
 function fl_bb_circle(radius)           = [[-radius,-radius],[+radius,+radius]];
 
 // return the inscribed polygon bounding box
-function fl_bb_ipoly(radius,n)          = fl_bb_polygon(fl_circle(radius));
+function fl_bb_ipoly(radius,n)          = fl_bb_polygon(fl_circle(radius,$fn=n));
 
 // return arc bounding box
-function fl_bb_arc(radius,angles,width) = let(
+function fl_bb_arc(radius,angles,width) =
+assert(is_num(radius),str("«radius» must be a number (",radius,")"))
+assert(is_list(angles))
+assert(is_num(width))
+let(
   interval  = __normalize__(angles),
   inf       = interval[0],
   sup       = interval[1],
@@ -164,7 +170,9 @@ function fl_bb_arc(radius,angles,width) = let(
 //    0° ≤ distance ≤ +360°
 //    0° ≤   inf    < +360°
 //    0° ≤   sup    < +720°
-function __normalize__(angles) = let(
+function __normalize__(angles) = 
+assert(is_list(angles),str("angles=",angles))
+let(
   sorted    = [min(angles),max(angles)],
   d         = sorted[1] - sorted[0],          // d ≥ 0°
   distance  = d>360 ? 360 : d,                // 0° ≤ distance ≤ +360°
@@ -178,9 +186,15 @@ assert(inf>=0 && inf<360)
 function fl_sector(
   radius
   ,angles   // start|end angles in whatever order
-) = assert($fn>2) shape_pie(radius,__normalize__(angles));
+) = 
+assert($fn>2) 
+assert(is_num(radius),str("radius=",radius))
+assert(is_list(angles),str("angles=",angles))
+shape_pie(radius,__normalize__(angles));
 
 module fl_sector(verbs=FL_ADD,radius, angles, quadrant, axes=false) {
+  assert(is_num(radius),str("radius=",radius));
+  assert(is_list(angles),str("angles=",angles));
   points  = fl_sector(radius,angles);
   bbox    = fl_bb_sector(radius,angles);
   size    = bbox[1] - bbox[0];
@@ -214,6 +228,8 @@ module fl_circle(verbs,radius,quadrant,axes=false) {
   bbox  = fl_bb_circle(radius);
   size  = bbox[1] - bbox[0];
   M     = quadrant!=undef ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  fl_trace("quadrant",quadrant);
+  fl_trace("M",M);
   fl_trace("bbox",bbox);
   fl_trace("axes",axes);
 
@@ -242,7 +258,11 @@ module fl_arc(
   ,quadrant
   ,axes=false
   ) {
-  
+  assert(is_list(verbs)||is_string(verbs));
+  assert(is_num(radius));
+  assert(is_list(angles));
+  assert(is_num(width));
+
   bbox  = fl_bb_arc(radius,angles,width);
   size  = bbox[1] - bbox[0];
   M     = quadrant!=undef ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
@@ -277,7 +297,7 @@ module fl_ipoly(
   ,quadrant
   ,axes=false
 ) {
-  assert(!(r!=undef && d!=undef));
+  assert(fl_XOR(r!=undef,d!=undef));
   radius  = r!=undef ? r : d/2;
   points  = fl_circle(radius,$fn=n);
 
