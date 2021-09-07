@@ -1,9 +1,7 @@
 /*
  * 3d primitives for OpenSCAD.
  * 
- * Created  : on Thu Jul 08 2021.
- * Copyright: © 2021 Giampiero Gabbiani.
- * Email    : giampiero@gabbiani.org
+ * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -21,16 +19,20 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-use     <2d.scad>
 include <defs.scad>
+use     <placement.scad>
+use     <2d.scad>
 
 $fn       = 50;           // [3:50]
 $FL_TRACE    = false;
 $FL_RENDER   = false;
 $FL_DEBUG    = false;
 
-AXES      = false;
-BBOX      = false;
+/* [Supported verbs] */
+
+ADD   = true;
+AXES  = false;
+BBOX  = false;
 
 /* [Placement] */
 
@@ -60,44 +62,17 @@ H     = 1; // [0:10]
 module __test__() {
   octant  = PLACE_NATIVE ? undef : OCTANT;
   verbs=[
-    FL_ADD,
+    if (ADD)  FL_ADD,
+    if (AXES) FL_AXES,
     if (BBOX) FL_BBOX,
   ];
   fl_trace("PLACE_NATIVE",PLACE_NATIVE);
   fl_trace("octant",octant);
 
-  module cube(verbs) {
-    if (PLACE_NATIVE)
-      fl_cube(verbs,size=SIZE,axes=AXES);
-    else
-      fl_cube(verbs,size=SIZE,octant=octant,axes=AXES);
-  }
-
-  module sphere(verbs) {
-    if (PLACE_NATIVE)
-      fl_sphere(verbs,d=SIZE,axes=AXES);
-    else
-      fl_sphere(verbs,d=SIZE,octant=octant,axes=AXES);
-  }
-
-  module cylinder(verbs) {
-    if (PLACE_NATIVE)
-      fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,bbfix=BBFIX,axes=AXES);
-    else
-      fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,octant=OCTANT,bbfix=BBFIX,axes=AXES);
-  }
-
-  module prism(verbs) {
-    if (PLACE_NATIVE)
-      fl_prism(verbs,n=N,l1=L_bot,l2=L_top,h=H,axes=AXES);
-    else
-      fl_prism(verbs,n=N,l1=L_bot,l2=L_top,h=H,octant=OCTANT,axes=AXES);
-  }
-
-  if      (SHAPE == "cube"    )  cube(verbs);
-  else if (SHAPE == "sphere"  )  sphere(verbs);
-  else if (SHAPE == "cylinder")  cylinder(verbs);
-  else if (SHAPE == "prism"   )  prism(verbs);
+  if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,octant=octant,axes=AXES);
+  else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,octant=octant,axes=AXES);
+  else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,octant=octant,bbfix=BBFIX,axes=AXES);
+  else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=L_bot,l2=L_top,h=H,octant=octant,axes=AXES);
 }
 
 module fl_cube(
