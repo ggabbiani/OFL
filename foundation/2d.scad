@@ -22,7 +22,7 @@
 include <shape_pie.scad> // dotSCAD
 
 include <defs.scad>
-use <placement.scad>
+use     <placement.scad>
 
 $fn         = 50;           // [3:100]
 $FL_TRACE   = false;
@@ -70,40 +70,21 @@ module __test__() {
   angles  = [START_ANGLE,END_ANGLE];
   verbs   = [
     if (ADD)  FL_ADD,
-    if (AXES) FL_AXES
+    if (AXES) FL_AXES,
+    if (BBOX) FL_BBOX,
   ];
   quadrant  = PLACE_NATIVE ? undef : QUADRANT;
 
-  module sector() {
-    fl_sector(verbs,RADIUS,angles,quadrant=quadrant);
-    if (BBOX)
-      %fl_sector(FL_BBOX,RADIUS,angles,quadrant=quadrant);
-  }
-
-  module circle() {
-    fl_circle(verbs,RADIUS,quadrant=quadrant);
-    if (BBOX)
-      %fl_circle(FL_BBOX,RADIUS,quadrant=quadrant);
-  }
-
-  module arc() {
-    fl_arc(verbs,RADIUS,angles,ARC_T,quadrant=quadrant);
-    if (BBOX)
-      %fl_arc(FL_BBOX,RADIUS,angles,ARC_T,quadrant=quadrant);
-  }
-
   module ipoly() {
     fl_ipoly(verbs,RADIUS,n=IPOLY_N,quadrant=quadrant);
-    if (BBOX)
-      %fl_ipoly(FL_BBOX,RADIUS,n=IPOLY_N,quadrant=quadrant);
     if (IPOLY_CIRCLE)
       fl_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(RADIUS,IPOLY_N)) #fl_circle(FL_ADD,RADIUS);
   }
 
-  if      (PRIMITIVE == "arc"               ) arc();
-  else if (PRIMITIVE == "circle"            ) circle();
+  if      (PRIMITIVE == "arc"               ) fl_arc(verbs,RADIUS,angles,ARC_T,quadrant=quadrant);
+  else if (PRIMITIVE == "circle"            ) fl_circle(verbs,RADIUS,quadrant=quadrant);
   else if (PRIMITIVE == "inscribed polygon" ) ipoly();
-  else if (PRIMITIVE == "sector"            ) sector();
+  else if (PRIMITIVE == "sector"            ) fl_sector(verbs,RADIUS,angles,quadrant=quadrant);
 }
 
 //**** 2d bounding box calculations *******************************************
@@ -211,7 +192,7 @@ module fl_sector(verbs=FL_ADD,radius, angles, quadrant, axes=false) {
       if (axes)
         fl_axes(size=size);
     } else if ($verb==FL_BBOX) {
-      multmatrix(M) translate(bbox[0]) square(size=size, center=false);
+      multmatrix(M) translate(bbox[0]) %square(size=size, center=false);
     } else if ($verb==FL_AXES) {
       fl_axes(size=size);
     } else {
@@ -239,7 +220,7 @@ module fl_circle(verbs,radius,quadrant,axes=false) {
       if (axes)
         fl_axes(size=size);
     } else if ($verb==FL_BBOX) {
-      multmatrix(M) translate(bbox[0]) square(size=size, center=false);
+      multmatrix(M) translate(bbox[0]) %square(size=size, center=false);
     } else if ($verb==FL_AXES) {
       fl_axes(size=size);
     } else {
@@ -277,7 +258,7 @@ module fl_arc(
       if (axes)
         fl_axes(size=size);
     } else if ($verb==FL_BBOX) {
-      multmatrix(M) translate(bbox[0]) square(size=size, center=false);
+      multmatrix(M) translate(bbox[0]) %square(size=size, center=false);
     } else if ($verb==FL_AXES) {
       fl_axes(size=size);
     } else {
@@ -313,7 +294,7 @@ module fl_ipoly(
       if (axes)
         fl_axes(size=size);
     } else if ($verb==FL_BBOX) {
-      multmatrix(M) translate(bbox[0]) square(size=size, center=false);
+      multmatrix(M) translate(bbox[0]) %square(size=size, center=false);
     } else if ($verb==FL_AXES) {
       fl_axes(size=size);
     } else {
