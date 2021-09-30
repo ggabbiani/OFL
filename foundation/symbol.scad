@@ -20,14 +20,22 @@
  */
 
 include <defs.scad>
-use <3d.scad>
+use     <3d.scad>
 
-$fn       = 50;           // [3:50]
-$FL_TRACE    = false;
-$FL_RENDER   = false;
-$FL_DEBUG    = false;
+$fn         = 50;           // [3:100]
+// Debug statements are turned on
+$FL_DEBUG   = false;
+// When true, disables PREVIEW corrections like FL_NIL
+$FL_RENDER  = false;
+// When true, unsafe definitions are not allowed
+$FL_SAFE    = true;
+// When true, fl_trace() mesages are turned on
+$FL_TRACE   = false;
 
-AXES    = false;
+// adds shapes to scene.
+ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds local reference axes
+AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Symbol] */
 SIZE_TYPE       = "default";  // [default,scalar,fl_vector]
@@ -38,39 +46,34 @@ SYMBOL          = "plug";  // [plug,socket]
 /* [Hidden] */
 
 module __test__() {
+  verbs=[
+    if (ADD!="OFF")   FL_ADD,
+    if (AXES!="OFF")  FL_AXES,
+  ];
+
   size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
 
-  if (SYMBOL=="plug")
-    sym_plug(size=size,fl_axes=AXES);
-  else
-    sym_socket(size=size,fl_axes=AXES);
-}
-
-module sym_plug(verbs=FL_ADD,type=undef,size=0.5,debug=false,fl_axes=true) {
-  sym_engine(verbs,type,size,"plug",debug,fl_axes);
-}
-
-module sym_socket(verbs=FL_ADD,type=undef,size=0.5,debug=false,fl_axes=true) {
-  sym_engine(verbs,type,size,"socket",debug,fl_axes);
+  sym_engine(verbs=verbs,size=size,symbol=SYMBOL,$FL_ADD=ADD,$FL_AXES=AXES);
 }
 
 // provides the symbol required in its 'canonical' form:
 // "plug": 'a piece that fits into a hole in order to close it'
 //        Its canonical form implies an orientation of the piece coherent
-//        with its insertion movement along +FL_Z axis. 
+//        with its insertion movement along +Z axis. 
 // "socket": 'a part of the body into which another part fits'
 //        Its canonical form implies an orientation of the piece coherent
-//        with its fitting movement along -FL_Z axis. 
+//        with its fitting movement along -Z axis. 
 module sym_engine(
   verbs   = FL_ADD  // really needed for an 'atomic' shape?
   ,type   = undef   // idem
   ,size   = 0.5     // default size give as a scalar
   ,symbol           // currently "plug" or "socket"
-  ,debug  = false
-  ,fl_axes   = true
   ) {
-  // $FL_TRACE=true;
   assert(verbs!=undef);
+
+  axes    = fl_list_has(verbs,FL_AXES);
+  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
   sz      = size==undef ? [0.5,0.5,0.5] : is_list(size) ? size : [size,size,size];
   d1      = sz.x * 2/3;
   d2      = 0;
@@ -81,6 +84,8 @@ module sym_engine(
   fl_trace("sz",sz);
 
   module do_add() {
+    fl_trace("d1",d1);
+    fl_trace("d2",d2);
     fl_color("blue") resize(sz) 
       translate(fl_Z(symbol=="socket"?-h:0))
       for(i=symbol=="plug"?[0:+2]:[-2:0])
@@ -91,19 +96,13 @@ module sym_engine(
 
   fl_parse(verbs) {
     if ($verb==FL_ADD) {
-      do_add();
-      if (fl_axes)
-        sym_engine(FL_AXES,type,size,symbol,debug,fl_axes);
-    } else if ($verb==FL_BBOX) {
-    } else if ($verb==FL_ASSEMBLY) {
-    } else if ($verb==FL_LAYOUT) { 
-    } else if ($verb==FL_DRILL) {
-    } else if ($verb==FL_AXES) {
-      fl_axes(sz/* ,symbol=="socket" */);
+      fl_modifier($FL_ADD) do_add();
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
   }
+  if (axes)
+    fl_modifier($FL_AXES) fl_axes(size=sz);
 }
 
 __test__();

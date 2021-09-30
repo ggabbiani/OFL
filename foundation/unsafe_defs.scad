@@ -1,9 +1,7 @@
 /*
  * UNPORTABLE DEFINITIONS, DON'T USE TOGETHER OTHER LIBRARIES INCLUDES.
  *
- * Created  : on Fri Aug 06 2021.
- * Copyright: © 2021 Giampiero Gabbiani
- * Email    : giampiero@gabbiani.org
+ * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org).
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -23,18 +21,22 @@
 
 include <defs.scad>
 
+assert(!$FL_SAFE,"Unsafe definitions are not allowed when $FL_SAFE is true!");
+
 X = FL_X;
 Y = FL_Y;
 Z = FL_Z;
 O = FL_O;
 I = FL_I;
 
-function T(t)      = fl_T(t);
-function S(s)      = fl_S(s);
-function Rx(alpha) = fl_Rx(alpha);
-function Ry(alpha) = fl_Ry(alpha);
-function Rz(alpha) = fl_Rz(alpha);
-function R(alpha)  = fl_R(alpha);
+NIL = FL_NIL;
+
+function T(t)        = fl_T(t);
+function S(s)        = fl_S(s);
+function Rx(alpha)   = fl_Rx(alpha);
+function Ry(alpha)   = fl_Ry(alpha);
+function Rz(alpha)   = fl_Rz(alpha);
+function Rxyz(alpha) = fl_Rxyz(alpha);
 
 function X(x) = x*X;
 function Y(y) = y*Y;

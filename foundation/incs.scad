@@ -1,7 +1,5 @@
 /*
- * Created on Tue May 11 2021
- *
- * Copyright © 2021 Giampiero Gabbiani.
+ * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org).
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -24,10 +22,11 @@ include <defs.scad>
 use <2d.scad>
 use <3d.scad>
 use <algo.scad>
-use <arrange.scad>
-use <box.scad>
 use <connect.scad>
 use <drawio.scad>
+use <fillet.scad>
+use <layout.scad>
+use <placement.scad>
 use <profile.scad>
 use <symbol.scad>
 use <util.scad>

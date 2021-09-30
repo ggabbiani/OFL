@@ -1,9 +1,7 @@
 /*
  * Base definitions for OpenSCAD.
  *
- * Created  : on Tue May 11 2021
- * Copyright: © 2021 Giampiero Gabbiani
- * Email    : giampiero@gabbiani.org
+ * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -21,7 +19,8 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <TOUL.scad> // TOUL: The OpenScad Usefull Library
+include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
+use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 // May trigger debug statement in client modules / functions
 $FL_DEBUG   = false;
@@ -77,7 +76,7 @@ function fl_S(s) = is_list(s)
     ]
   : fl_S([s,s,s]);
 
-// rotation around FL_X matrix
+// rotation around X matrix
 function fl_Rx(theta) = [
   [1,           0,            0,           0],
   [0,           cos(theta),   -sin(theta), 0],
@@ -85,7 +84,7 @@ function fl_Rx(theta) = [
   [0,           0,            0,           1]
 ];
 
-// rotation around FL_Y matrix
+// rotation around Y matrix
 function fl_Ry(theta) = [
   [cos(theta),  0,            sin(theta),  0],
   [0,           1,            0,           0],
@@ -93,7 +92,7 @@ function fl_Ry(theta) = [
   [0,           0,            0,           1]
 ];
 
-// rotation around FL_Z matrix
+// rotation around Z matrix
 function fl_Rz(theta) = [
   [cos(theta),  -sin(theta),  0,  0],
   [sin(theta),  cos(theta),   0,  0],
@@ -101,7 +100,18 @@ function fl_Rz(theta) = [
   [0,           0,            0,  1]
 ];
 
-function fl_R(angle) = fl_Rz(angle.z) * fl_Ry(angle.y) * fl_Rx(angle.x);
+function fl_Rxyz(angle) = fl_Rz(angle.z) * fl_Ry(angle.y) * fl_Rx(angle.x);
+
+/*
+ * rotation matrix around arbitrary axis
+ */
+function R(
+  u,      // arbitrary axis
+  theta   // rotation angle around u
+) = let(M = fl_align(u,FL_X))
+  matrix_invert(M)  // align X to «u»
+  * fl_Rx(theta)    // rotate «theta» about X
+  * M;              // align «u» to X
 
 function fl_X(x) = [x,0,0];
 function fl_Y(y) = [0,y,0];
@@ -116,33 +126,112 @@ FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative s
 FL_ASSEMBLY   = "FL_ASSEMBLY layout of predefined auxiliary shapes (like predefined screws).";
 FL_AXES       = "FL_AXES unconditional draw of local reference fl_axes.";
 FL_BBOX       = "FL_BBOX adds a bounding box containing the object.";
-FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z).";
+FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z).";
 FL_HOLDERS    = "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**";
 FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
 FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
 FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
 
+// Runtime behaviour defaults
+$FL_ADD       = "ON";
+$FL_AXES      = "ON";
+$FL_ASSEMBLY  = "ON";
+$FL_BBOX      = "TRANSPARENT";
+$FL_DRILL     = "ON";
+$FL_FOOTPRINT = "ON";
+$FL_PAYLOAD   = "DEBUG";
+
+/*
+ * Modifier module for verbs.
+ */
+module fl_modifier(
+  behaviour // OFF,ON,ONLY,DEBUG,TRANSPARENT
+) {
+  if (behaviour==undef||behaviour=="ON")   children();
+  else if (behaviour=="OFF")              *children();
+  else if (behaviour=="ONLY")             !children();
+  else if (behaviour=="DEBUG")            #children();
+  else if (behaviour=="TRANSPARENT")      %children();
+  else assert(false,str("Unknown '",behaviour,"' behaviour."));
+}
+
+$FL_FILAMENT  = "DodgerBlue";
+
 // generic property getter with default value when not found 
-function fl_get(type,property,default) = 
-  assert(property!=undef,"Undefined property")
-  assert(type!=undef,str("Undefined object for property '",property,"'."))
-  let(index_list=search([property],type))
-  // echo(index_list=index_list)
+function fl_get(type,key,default) = 
+  assert(key,"Undefined property key")
+  assert(type,str("Undefined object for property '",key,"'."))
+  let(index_list=search([key],type))
   index_list != [[]] 
-  ?  type[index_list[0]][1] 
-  : assert(default!=undef,str("Property '",property,"' not found on type:",type)) default;
+  ? type[index_list[0]][1] 
+  : assert(default,str("Property '",key,"' not found on type:",type)) default;
+
+// returns [«key»,«value»] if value is defined, «key» otherwise
+function fl_kv(key,value)   = assert(key) value ? [key,value] : key;
 
 //*****************************************************************************
-// Standard getters
-function fl_name(type)          = fl_get(type,"name"); 
-function fl_description(type)   = fl_get(type,"description"); 
-function fl_size(type)          = fl_get(type,"size");
+// General keys
+function fl_nameKV(value)         = fl_kv("name",value);
+function fl_descriptionKV(value)  = fl_kv("description",value); 
+function fl_sizeKV(value)         = fl_kv("size",value);
+function fl_connectorsKV(value)   = fl_kv("connectors",value);
+function fl_vendorKV(value)       = fl_kv("vendor",value);
+
+//*****************************************************************************
+// General getters
+function fl_name(type)          = fl_get(type,fl_nameKV()); 
+function fl_description(type)   = fl_get(type,fl_descriptionKV()); 
+function fl_size(type)          = fl_get(type,fl_sizeKV());
 function fl_width(type)         = fl_size(type).x;
 function fl_height(type)        = fl_size(type).y;
 function fl_thickness(type)     = fl_size(type).z;
-function fl_connectors(type)    = fl_get(type,"connectors");
-function fl_product(type)       = fl_get(type,"product");
-function fl_bbCorners(type)     = fl_get(type,"bounding corners");
+function fl_connectors(type)    = fl_get(type,fl_connectorsKV());
+function fl_vendor(type)        = fl_get(type,fl_vendorKV());
+
+//*****************************************************************************
+// Bounding Box
+
+// keys
+function fl_bb_cornersKV(value) = fl_kv("bb/bounding corners",value);
+
+// getters
+function fl_bb_corners(type)    = let(
+  value = fl_get(type,fl_bb_cornersKV())
+) is_function(value) ? value(type) : value;
+
+// computes size from the bounding corners.
+function fl_bb_size(type)       = let(c=fl_bb_corners(type)) c[1]-c[0];
+
+// functions
+function fl_bb_new(
+  negative  = [0,0,0],
+  size      = [0,0,0],
+  positive
+) = [fl_bb_cornersKV([negative,positive==undef?negative+size:positive])];
+// bounding box translation
+function fl_bb_center(type) = let(c=fl_bb_corners(type),sz=fl_bb_size(type)) c[0]+sz/2;
+
+// Converts a bounding box in canonic form into four vertices:
+// a,b,c,d on plane y==bbcorner[0].y
+// A,B,C,D on plane y==bbcorner[1].y
+function fl_bb_vertices(bbcorners) = let(
+  a   = bbcorners[0]
+  ,C  = bbcorners[1]
+  ,b  = [C.x,a.y,a.z]
+  ,c  = [C.x,a.y,C.z]
+  ,d  = [a.x,a.y,C.z]
+  ,A  = [a.x,C.y,a.z]
+  ,B  = [C.x,C.y,a.z]
+  ,D  = [a.x,C.y,C.z]
+) [a,b,c,d,A,B,C,D];
+
+// Applies a transformation matrix «M» to a bounding box
+function fl_bb_transform(M,bbcorners) = let(
+  vertices  = [for(v=fl_bb_vertices(bbcorners)) fl_transform(M,v)]
+  ,Xs       = [for(v=vertices) v.x]
+  ,Ys       = [for(v=vertices) v.y]
+  ,Zs       = [for(v=vertices) v.z]
+) [[min(Xs),min(Ys),min(Zs)],[max(Xs),max(Ys),max(Zs)]];
 
 //*****************************************************************************
 // type traits
@@ -186,11 +275,11 @@ module fl_trace(a1,a2,n=1,always=false) {
  */
 function fl_align(from,to) =
   assert(is_list(from))
-  assert(is_list(to))
+  assert(is_list(to),str("to=",to))
   assert(norm(from)>0)
   assert(norm(to)>0)
 
-  let(u1 = from / norm(from),u2 = to / norm(to))
+  let(u1 = fl_versor(from),u2 = fl_versor(to))
   u1==u2 ? FL_I : 
   u1==-u2 ? fl_S(-1) : // in this case the algorithm would fails, so we use a simpler way
   let(
@@ -211,8 +300,8 @@ module fl_align(from,to) {
   assert(norm(from)>0);
   assert(norm(to)>0);
   
-  u1 = from / norm(from);
-  u2 = to / norm(to);
+  u1 = fl_versor(from);
+  u2 = fl_versor(to);
   if (u1==u2)
     children();
   else if (u1==-u2) // in this case the algorithm would fails, so we use a simpler way
@@ -261,7 +350,7 @@ module fl_vector(P,outward=true,endpoint="arrow") {
   }
 }
 
-function fl_versor(v) = v / norm(v);
+function fl_versor(v) = assert(is_list(v),str("v=",v)) v / norm(v);
 
 // Draws a fl_versor facing point P
 module fl_versor(P) {
@@ -272,97 +361,27 @@ module fl_axes(size=1,reverse=false) {
   sz  = is_list(size) 
       ? assert(size.x>=0 && size.y>=0 && (size.z==undef||size.z>=0)) size 
       : assert(size>=0) [size,size,size];
+  fl_trace("Size:",sz);
   color("red")   fl_vector(sz.x*FL_X,reverse==undef || !reverse);
   color("green") fl_vector(sz.y*FL_Y,reverse==undef || !reverse);
-  if (size.z!=undef) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
+  if (size.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
-
-// general porpouse flags
-FL_FLAG_DEBUG  = "OBSOLETE flag: enables debug mode";
-FL_FLAG_AXES   = "OBSOLETE flag: adds local fl_axes during FL_ADD";
-
-// general porpouse parameters
-FL_PROP_FILAMENT_COLOR="string: color to be used for filament"; 
 
 /* A do-nothing helper */
 module fl_nop() {
   sphere(0);
 }
 
-// Static debug switch on DEBUG
-module fl_color(color) {
-  if (color==undef)
-    if ($FL_DEBUG) #children(); else children();
-  else
-    color(color) fl_color() children();
+// debug switch on $FL_DEBUG
+module fl_color(color,alpha=1) {
+  module do() {color(color,alpha) children();}
+  if ($FL_DEBUG) #do() children();
+  else do() children();
 }
 
-function fl_parse_l(l,l1,def)              = (l != undef ? l : (l1!=undef ? l1 : def));
-function fl_parse_radius(r,r1,d,d1,def)    = (r != undef ? r : (r1 != undef ? r1 : (d != undef ? d/2 : (d1!=undef ? d1/2:def))));
-function fl_parse_diameter(r,r1,d,d1,def)  = (d != undef ? d : (d1 != undef ? d1 : (r != undef ? 2*r : (r1!=undef ? 2*r1:def))));
-
-function fl_octant(
-  type
-  ,octant // 3d octant
-  ,bbox   // bounding box corners
-) = let(
-  corner    = bbox!=undef ? bbox : fl_bbCorners(type),
-  size      = assert(corner!=undef) corner[1] - corner[0],
-  half_size = size / 2,
-  delta     = [sign(octant.x) * half_size.x,sign(octant.y) * half_size.y,sign(octant.z) * half_size.z]
-) fl_T(-corner[0]-half_size+delta);
-
-function fl_quadrant(
-  type
-  ,quadrant // 2d quadrant
-  ,bbox     // bounding box corners
-) = let(
-  corner    = bbox!=undef ? bbox : fl_bbCorners(type),
-  c0        = assert(corner!=undef) 
-              let(c=corner[0]) [c.x,c.y,c.z==undef?0:c.z], 
-  c1        = let(c=corner[1]) [c.x,c.y,c.z==undef?0:c.z]
-) fl_octant(octant=[quadrant.x,quadrant.y,0],bbox=[c0,c1]);
-
-module fl_place(
-  type
-  ,octant   // 3d octant
-  ,quadrant // 2d quadrant
-  ,bbox     // bounding box corners
-) {
-  assert((octant!=undef && quadrant==undef) || (octant==undef && quadrant!=undef));
-  M = octant!=undef ? fl_octant(type,octant,bbox) : fl_quadrant(type,quadrant,bbox);
-  multmatrix(M) children();
-}
-
-module fl_placeIf(
-  condition // when true placement is ignored
-  ,type
-  ,octant   // 3d octant
-  ,quadrant // 2d quadrant
-  ,bbox     // bounding box corners
-) {
-  if (condition) fl_place(type,octant,quadrant,bbox) children();
-  else children();
-}
-
-/*
- * returns the fl_direction matrix from prototype
- */
-function fl_direction(
-  proto       // prototype for native director and rotor
-  ,direction  // desired direction [director,rotation around director]
-) = let(
-  def_axis  = fl_get(proto,"default director"),
-  def_rotor = fl_get(proto,"default rotor"),
-  axis      = fl_versor(direction[0]),
-  alpha     = direction[1],
-  rotor     = fl_transform(fl_align(def_axis,axis),def_rotor),
-  placement = [fl_transform(fl_R(alpha*axis),rotor),axis],
-  M         = plane_align(def_rotor,def_axis,placement[0],placement[1])
-) assert(alpha % 90 == 0,"Rotation around FL_Z must be a multiple of 90°")
-  assert(axis==+FL_X || axis==-FL_X || axis==+FL_Y || axis==-FL_Y || axis==+FL_Z || axis==-FL_Z)
-  M;
-
+function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : undef));
+function fl_parse_radius(r,r1,d,d1,def)    = (r!=undef ? r : (r1!=undef ? r1 : (d!=undef ? d/2 : (d1!=undef ? d1/2:undef))));
+function fl_parse_diameter(r,r1,d,d1,def)  = (d!=undef ? d : (d1!=undef ? d1 : (r!=undef ? 2*r : (r1!=undef ? 2*r1:undef))));
 
 /* true when n is multiple of m */
 function fl_isMultiple(n,m) = (n % m == 0);
@@ -388,16 +407,40 @@ function fl_4(v)  =
   assert(len(v)>2)
   len(v)==3 ? [v.x,v.y,v.z,1] : v / v[3];
 
-// Trasforma un vettore secondo la matrice M passata
-// NOTE: result is in 3d format
+// Returns M * v , actually transforming v by M.
+// NOTE: result in 3d format
 function fl_transform(
-  M   // 4x4 transformation matrix
-  ,v  // fl_vector (in homogeneous or 3d format)
+  M,// 4x4 transformation matrix
+  v // fl_vector (in homogeneous or 3d format)
 ) =
-  assert(len(M)==4 && len(M[0])==4,"Only 4x4 matrix are allowed.")
+  assert(len(M)==4 && len(M[0])==4,str("Bad matrix M(",M,")"))
+  assert(is_list(v) && len(v)>2,str("Bad vector v(",v,")"))
   fl_3(M * fl_4(v));
 
 //**** math utils *************************************************************
 
+function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
 function fl_accum(v)          = [for(p=v) 1]*v;
 function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
+
+//**** list utils *************************************************************
+
+FL_EXCLUDE_ANY  = ["AND",function(one,other) one!=other];
+FL_INCLUDE_ALL  = ["OR", function(one,other) one==other];
+
+function fl_list_filter(list,operator,compare,__result__=[],__first__=true) =
+// echo(list=list,compare=compare,operator=operator,__result__=__result__,__first__=__first__)
+let(
+  s_list  = is_list(list) ? list : [list],
+  c_list  = is_string(compare) ? [compare] : compare,
+  len     = len(c_list),
+  logic   = operator[0],
+  f       = operator[1],
+  string  = c_list[0],
+  match   = [for(item=(logic=="OR" || __first__) ? s_list:__result__) if (f(item,string)) item],
+  result  = (logic=="OR") ? concat(__result__,match) : match
+)
+// echo(match=match, result=result) 
+len==1 ? result : fl_list_filter(s_list,operator,[for(i=[1:len-1]) c_list[i]],result,false);
+
+function fl_list_has(list,item) = len(fl_list_filter(list,FL_INCLUDE_ALL,item))>0;

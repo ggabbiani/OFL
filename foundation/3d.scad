@@ -1,6 +1,4 @@
 /*
- * 3d primitives for OpenSCAD.
- * 
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -19,134 +17,198 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <defs.scad>
-use     <placement.scad>
+include <unsafe_defs.scad>
 use     <2d.scad>
+use     <placement.scad>
 
-$fn       = 50;           // [3:50]
-$FL_TRACE    = false;
-$FL_RENDER   = false;
-$FL_DEBUG    = false;
+$fn         = 50;           // [3:100]
+// Debug statements are turned on
+$FL_DEBUG   = false;
+// When true, disables PREVIEW corrections like FL_NIL
+$FL_RENDER  = false;
+// When true, unsafe definitions are not allowed
+$FL_SAFE    = false;
+// When true, fl_trace() mesages are turned on
+$FL_TRACE   = false;
+
+$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */
 
-ADD   = true;
-AXES  = false;
-BBOX  = false;
+// adds shapes to scene.
+ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds local reference axes
+AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds a bounding box containing the object
+BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
 PLACE_NATIVE  = true;
 OCTANT        = [+1,+1,+1];  // [-1:+1]
 
+/* [Direction] */
+
+DIR_NATIVE  = true;
+// ARBITRARY direction vector
+DIR_Z       = [0,0,1];  // [-1:0.1:+1]
+// rotation around
+DIR_R       = 0;        // [0:360]
+
 /* [3ds] */
 
 SHAPE   = "cube";     // ["cube", "cylinder", "prism", "sphere"]
-// Size for cube and sphere, bottom/top diameter and height for cylinder
-SIZE    = [1,1,1]; 
-
-/* [Cylinder] */
-
-// Fix bounding-box for fl_cylinder when $fn is odd
-BBFIX = false;
+// Size for cube and sphere, bottom/top diameter and height for cylinder, bottom/top edge length and height for prism 
+SIZE    = [1,2,3]; 
 
 /* [Prism] */
 
+// Number of edges
 N     = 3; // [3:10]
-L_bot = 1.0;
-L_top = 1.0;
-H     = 1; // [0:10]
 
 /* [Hidden] */
 
 module __test__() {
-  octant  = PLACE_NATIVE ? undef : OCTANT;
+  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+  octant    = PLACE_NATIVE  ? undef : OCTANT;
   verbs=[
-    if (ADD)  FL_ADD,
-    if (AXES) FL_AXES,
-    if (BBOX) FL_BBOX,
+    if (ADD!="OFF")   FL_ADD,
+    if (AXES!="OFF")  FL_AXES,
+    if (BBOX!="OFF")  FL_BBOX,
   ];
   fl_trace("PLACE_NATIVE",PLACE_NATIVE);
   fl_trace("octant",octant);
 
-  if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,octant=octant,axes=AXES);
-  else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,octant=octant,axes=AXES);
-  else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,octant=octant,bbfix=BBFIX,axes=AXES);
-  else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=L_bot,l2=L_top,h=H,octant=octant,axes=AXES);
+  $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;
+  if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,octant=octant,direction=direction);
+  else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,octant=octant,direction=direction);
+  else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,octant=octant,direction=direction);
+  else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=SIZE.x,l2=SIZE.y,h=SIZE.z,octant=octant,direction=direction);
 }
 
-module fl_cube(
-  verbs   = FL_ADD  // FL_ADD,FL_AXES,FL_BBOX
-  ,size   = [1,1,1]
-  ,octant           
-  ,axes   = false
-) {
-  sz  = is_list(size) ? size : [size,size,size];
-  M   = octant!=undef ? fl_octant(octant=octant,bbox=[[0,0,0],sz]) : FL_I;
-  fl_trace("M",M);
+/* 
+ * cube defaults for positioning ("bounding corners")
+ * and direction ("default director", "default rotor").
+ */
+function fl_cube_defaults(
+  size=[1,1,1]
+)  = let(
+  size  = is_list(size) ? size : [size,size,size]
+) [
+  fl_bb_cornersKV([O,size]),  // octant ⇒ +X+Y+Z
+  ["default director",  +Z      ],
+  ["default rotor",     +X      ],
+];
 
-  fl_parse(verbs) {
-    if ($verb==FL_ADD) {
-      multmatrix(M) cube(sz,false);
-      if (axes)
-        fl_axes(size=sz);
-    } else if ($verb==FL_BBOX) {
-      multmatrix(M) %cube(size); // center=default=false ⇒ +X+Y+Z
-    } else if ($verb==FL_AXES) {
-      fl_axes(size=sz);
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+/*
+ * cube replacement
+ */
+module fl_cube(
+  verbs     = FL_ADD, // FL_ADD,FL_AXES,FL_BBOX
+  size      = [1,1,1],
+  octant,             // when undef native positioning is used
+  direction           // desired direction [director,rotation] or native direction if undef
+) {
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
+  size  = is_list(size) ? size : [size,size,size];
+  defs  = fl_cube_defaults(size);
+
+  D     = direction ? fl_direction(defs,direction=direction)  : I;
+  M     = octant    ? fl_octant(defs,octant=octant)           : I;
+
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD) cube(size,false);
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) cube(size);  // center=default=false ⇒ +X+Y+Z
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
     }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
+/* 
+ * sphere defaults for positioning ("bounding corners")
+ * and direction ("default director", "default rotor").
+ */
+function fl_sphere_defaults(
+  r = [1,1,1],
+  d,
+) = let(
+  r  = is_undef(d) ? (is_list(r) ? r : [r,r,r]) : (is_list(d) ? d : [d,d,d])/2
+) [
+  fl_bb_cornersKV([-r,+r]),  // simmetric bounding box ⇒ octant==O
+  ["default director",  +Z      ],
+  ["default rotor",     +X      ],
+];
+
+/*
+ * sphere replacement.
+ */
 module fl_sphere(
   verbs   = FL_ADD,   // FL_ADD,FL_AXES,FL_BBOX
   r       = [1,1,1],
   d,
-  octant,
-  axes    = false
+  octant,             // when undef default positioning is used
+  direction           // desired direction [director,rotation], default direction if undef
 ) {
-  Rvec  = is_undef(d) ? (is_list(r) ? r : [r,r,r]) : (is_list(d) ? d : [d,d,d])/2;
-  size  = 2*Rvec;
-  M     = octant!=undef ? fl_octant(octant=octant,bbox=[-Rvec,Rvec]) : FL_I;
-  fl_trace("M",M);
-  fl_trace("Rvec",Rvec);
-  
-  module do_axes() {
-    fl_axes(size=Rvec*2);
-  }
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  defs  = fl_sphere_defaults(r,d);
 
-  fl_parse(verbs)  {
-    if ($verb==FL_ADD) {
-      multmatrix(M) resize(size) sphere();
-      if (axes)
-        do_axes();
-    } else if ($verb==FL_BBOX) {
-      multmatrix(M) %cube(size,true);
-    } else if ($verb==FL_AXES) {
-      do_axes();
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+  bbox  = fl_bb_corners(defs);
+  size  = fl_bb_size(defs); // bbox[1] - bbox[0];
+  D     = direction ? fl_direction(defs,direction=direction)  : I;
+  M     = octant    ? fl_octant(defs,octant=octant)           : I;
+  
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD) resize(size) sphere();
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) cube(size,true);
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
     }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
-
-// restituisce il multiplo di 360/n con il massimo seno() 
-function __max_sin__(n,val=0) = 
-  let(max=90,step=360/n)
-  val+step >= max ? (sin(val)>sin(val+step) ? val : val+step) : __max_sin__(n,val+step);
+/* 
+ * cylinder defaults for positioning ("bounding corners")
+ * and direction ("default director", "default rotor").
+ */
+function fl_cylinder_defaults(
+  h,                  // height of the cylinder or cone
+  r,                  // radius of cylinder. r1 = r2 = r.
+  r1,                 // radius, bottom of cone.
+  r2,                 // radius, top of cone.
+  d,                  // diameter of cylinder. r1 = r2 = d / 2.
+  d1,                 // diameter, bottom of cone. r1 = d1 / 2.
+  d2                  // diameter, top of cone. r2 = d2 / 2.
+) = [
+  fl_bb_cornersKV(fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
+  ["default director",  +Z                                ],
+  ["default rotor",     +X                                ],
+];
 
 function fl_bb_cylinder(
-  ,h                  // height of the cylinder or cone
-  ,r                  // radius of cylinder. r1 = r2 = r.
-  ,r1                 // radius, bottom of cone.
-  ,r2                 // radius, top of cone.
-  ,d                  // diameter of cylinder. r1 = r2 = d / 2.
-  ,d1                 // diameter, bottom of cone. r1 = d1 / 2.
-  ,d2                 // diameter, top of cone. r2 = d2 / 2.
+  h,                  // height of the cylinder or cone
+  r,                  // radius of cylinder. r1 = r2 = r.
+  r1,                 // radius, bottom of cone.
+  r2,                 // radius, top of cone.
+  d,                  // diameter of cylinder. r1 = r2 = d / 2.
+  d1,                 // diameter, bottom of cone. r1 = d1 / 2.
+  d2                  // diameter, top of cone. r2 = d2 / 2.
 ) =
-assert(h>=0)
+assert(h>=0,"Only positive height are accepted")
 let(
   step    = 360/$fn,
   Rbase   = fl_parse_radius(r,r1,d,d1),
@@ -159,57 +221,73 @@ let(
   z       = [for(p=points) p.z]
 ) [[min(x),min(y),min(z)],[max(x),max(y),max(z)]];
 
+/*
+ * cylinder replacement
+ */
 module fl_cylinder(
-   verbs  = FL_ADD  // FL_ADD,FL_AXES,FL_BBOX
-  ,h                  // height of the cylinder or cone
-  ,r                  // radius of cylinder. r1 = r2 = r.
-  ,r1                 // radius, bottom of cone.
-  ,r2                 // radius, top of cone.
-  ,d                  // diameter of cylinder. r1 = r2 = d / 2.
-  ,d1                 // diameter, bottom of cone. r1 = d1 / 2.
-  ,d2                 // diameter, top of cone. r2 = d2 / 2.
-  ,octant
-  ,bbfix  = false     // bounding box fix when $fn is odd
-  ,axes   = false
+  verbs  = FL_ADD,  // FL_ADD,FL_AXES,FL_BBOX
+  h,                // height of the cylinder or cone
+  r,                // radius of cylinder. r1 = r2 = r.
+  r1,               // radius, bottom of cone.
+  r2,               // radius, top of cone.
+  d,                // diameter of cylinder. r1 = r2 = d / 2.
+  d1,               // diameter, bottom of cone. r1 = d1 / 2.
+  d2,               // diameter, top of cone. r2 = d2 / 2.
+  octant,           // when undef native positioning is used
+  direction         // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 ) {
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
   r_bot = fl_parse_radius(r,r1,d,d1);
   r_top = fl_parse_radius(r,r2,d,d2);
-  bbox  = fl_bb_cylinder(h=h,r1=r_bot,r2=r_top);
-  sz    = bbox[1]-bbox[0];
+  defs  = fl_cylinder_defaults(h,r,r1,r2,d,d1,d2);
+  size  = fl_bb_size(defs);
   step  = 360/$fn;
   R     = max(r_bot,r_top);
-  M     = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : FL_I;
-  Mbbox = M * fl_T(-[sz.x/2,sz.y/2,0]);
+  D     = direction ? fl_direction(defs,direction=direction)  : I;
+  M     = octant    ? fl_octant(defs,octant=octant)           : I;
+  Mbbox = fl_T(-[size.x/2,size.y/2,0]);
   fl_trace("octant",octant);
-  fl_trace("bbox",bbox);
-  fl_trace("sz",sz);
+  fl_trace("size",size);
 
-  module do_axes() {
-    fl_axes(size=sz);
-  }
-
-  fl_parse(verbs)  {
-    if ($verb==FL_ADD) {
-      // multmatrix(Mfix) cylinder(r1=r_bot,r2=r_top, h=h, center=true);
-      multmatrix(M) cylinder(r1=r_bot,r2=r_top, h=h/* , center=false */); // center=default=false ⇒ +Z
-      if (axes)
-        do_axes();
-    } else if ($verb==FL_BBOX) {
-      multmatrix(Mbbox) %cube(size=sz/*,center=false*/); // center=default=false ⇒ +X+Y+Z
-    } else if ($verb==FL_AXES) {
-      do_axes();
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+  multmatrix(D) {
+    multmatrix(M) fl_parse(fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES)) {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) multmatrix(Mbbox) %cube(size=size); // center=default=false ⇒ +X+Y+Z
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
     }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=[size.x,size.y,5/4*size.z]);
   }
 }
 
-function fl_bb_prism(
-  h,  // height of the prism
+/*
+ * prism defaults for positioning ("bounding corners")
+ * and direction ("default director", "default rotor").
+ */
+function fl_prism_defaults(
   n,  // edge number
   l,  // edge length
   l1, // edge length, bottom
-  l2  // edge length, top
+  l2, // edge length, top
+  h   // height of the prism
+) = [
+  fl_bb_cornersKV(fl_bb_prism(n,l,l1,l2,h)),  // placement: +Z
+  ["default director",  +Z      ],
+  ["default rotor",     +X      ],
+];
+
+function fl_bb_prism(
+  n,  // edge number
+  l,  // edge length
+  l1, // edge length, bottom
+  l2, // edge length, top
+  h   // height of the prism
 ) = 
 assert(h>=0) 
 assert(n>2) 
@@ -227,44 +305,52 @@ let(
   z       = [for(p=points) p.z]
 ) [[min(x),min(y),min(z)],[max(x),max(y),max(z)]];
 
+/*
+ * prism
+ * native positioning : +Z
+ * native direction   : [+Z,+X]
+ */
 module fl_prism(
-   verbs  = FL_ADD  // FL_ADD,FL_AXES,FL_BBOX
-  ,n                // edge number
-  ,l                // edge length
-  ,l1               // edge length, bottom
-  ,l2               // edge length, top
-  ,h                // height
-  ,octant
-  ,axes     = false
+  verbs  = FL_ADD,  // FL_ADD,FL_AXES,FL_BBOX
+  n,                // edge number
+  l,                // edge length
+  l1,               // edge length, bottom
+  l2,               // edge length, top
+  h,                // height
+  octant,           // when undef native positioning is used
+  direction         // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 ) {
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
+  defs  = fl_prism_defaults(n,l,l1,l2,h);
   step  = 360/n;
   l_bot = fl_parse_l(l,l1);
   l_top = fl_parse_l(l,l2);
   Rbase = l_bot / (2 * sin(step/2));
   Rtop  = l_top / (2 * sin(step/2));
   R     = max(Rbase,Rtop);
-  bbox  = fl_bb_prism(h,n,l1=l_bot,l2=l_top);
-  sz    = bbox[1]-bbox[0];
-  M     = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : FL_I;
-  Mbbox = M * fl_T([-sz.x+R,-sz.y/2,0]);
+  size  = fl_bb_size(defs);
+  D     = direction ? fl_direction(defs,direction=direction): I;
+  M     = octant    ? fl_octant(defs,octant=octant)         : I;
+  Mbbox = fl_T([-size.x+R,-size.y/2,0]);
   fl_trace("octant",octant);
-  fl_trace("bbox",bbox);
-  fl_trace("sz",sz);
+  fl_trace("direction",direction);
+  fl_trace("size",size);
 
-  fl_parse(verbs)  {
-    if ($verb==FL_ADD) {
-      multmatrix(M) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
-      if (axes)
-        fl_axes(size=sz);
-    } else if ($verb==FL_BBOX) {
-      multmatrix(Mbbox) %cube(size=sz); // center=default=false ⇒ +X+Y+Z
-    } else if ($verb==FL_AXES) {
-      fl_axes(size=sz);
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs)  {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) multmatrix(Mbbox) %cube(size=size);     // center=default=false ⇒ +X+Y+Z
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
     }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=size);
   }
-
 }
 
 __test__();
