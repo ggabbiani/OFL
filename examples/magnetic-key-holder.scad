@@ -23,7 +23,6 @@
 include <OFL/foundation/unsafe_defs.scad>
 include <OFL/vitamins/magnets.scad>
 include <OFL/foundation/incs.scad>
-include <NopSCADlib/core.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -74,24 +73,6 @@ SCREW_ONLY    = false;
 
 /* [Hidden] */
 
-// 90 Degree fillet taken from: https://forum.openscad.org/Fillet-With-Internal-Angles-td17201.html
-module fl_90DegFillet(
-  r   // fillet radius
-  ,n  // number of steps
-  ) {
-
-  function rad(x) = r - sqrt(pow(r,2) - pow(x - r, 2));
-
-  s   = r/n;    //step size
-  eps = 0.001;  // a little overlap between slices
-  for(i = [0 : s : r - s]) 
-    translate([0, 0, i]) minkowski() {
-      linear_extrude(height = eps)
-          children();
-      cylinder(r1 = rad(i), r2 = rad(i + s), h = s, $fn = 32);
-    }
-}
-
 magnet  = FL_MAG_M4_CS_32x6;
 d       = fl_mag_diameter(magnet);
 h       = 5.1; // fl_mag_height(magnet);
@@ -101,7 +82,7 @@ cyl_d   = d + 2*FILLET_T;
 cyl_gap = GAP - 2 * FILLET_T;
 cyl_w   = cyl_d * NUM_MAGS + cyl_gap * (NUM_MAGS-1);
 screw   = fl_mag_screw(magnet);
-screw_l = base_sz.z+h+1;
+screw_l = base_sz.z+h+1.5;
 
 if (ADD)
   fl_color(FILAMENT) difference() {
@@ -110,19 +91,19 @@ if (ADD)
       translate(-X(cyl_w/2)) layout([for(i=[1:NUM_MAGS]) cyl_d],cyl_gap) {
         fl_cylinder(d=cyl_d,h=h,octant=-Z);
         translate(-Z(h))
-        fl_90DegFillet(FILLET_R,FILLET_STEPS) circle(d=cyl_d);
+        fl_90DegFillet(r=FILLET_R,n=FILLET_STEPS,child_bbox=fl_bb_circle(cyl_d/2)) circle(d=cyl_d);
       }
     }
     translate(-X(mag_w/2))
       layout([for(i=[1:NUM_MAGS]) d],10)
         translate(-Z(h-FL_NIL))
-          fl_magnet([FL_FOOTPRINT,FL_DRILL],type=magnet,center=false,gross=TOLERANCE);
+          fl_magnet([FL_FOOTPRINT,FL_DRILL],type=magnet,gross=TOLERANCE);
   }
 
 if (ASSEMBLY)
   translate(-X(mag_w/2))
     layout([for(i=[1:NUM_MAGS]) d],10) {
-      if (!SCREW_ONLY) translate(-Z(h-FL_NIL)) fl_magnet(type=magnet,center=false);
+      if (!SCREW_ONLY) translate(-Z(h-FL_NIL)) fl_magnet(type=magnet);
       if (SCREW_ONLY) {if ($i==0) fl_color(FILAMENT) screw(screw,screw_l);}
       else screw(screw,screw_l);
     }

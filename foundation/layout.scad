@@ -237,7 +237,7 @@ let(
 /**
  * layout of types along a direction
  */
-module fl_layout(
+module _fl_layout(
   axis,   // layout direction
   gap,    // gap inserted along «axis»
   types,  // list of types to be arranged
@@ -265,6 +265,44 @@ module fl_layout(
     fl_trace("offset",offset);
     translate(offset+fac*sz+i*gap*axis)
       children(i);
+  }
+}
+
+/**
+ * layout of types along a direction.
+ * There are basically two methods of invokation call:
+ * - with as many children as the length of types: in this case each children will
+ *   be called explicitly in turn with children($i)
+ * - with one child only called repetitely through children(0) with $i equal to the
+ *   current execution number.
+ */
+module fl_layout(
+  axis,   // layout direction
+  gap,    // gap inserted along «axis»
+  types   // list of types to be arranged
+) {  
+  fl_trace("$children",$children);
+  len = len(types);
+  sum = axis*[1,1,1]>0;
+  fac = sum ? 1 : -1;
+  bcs = [for(t=types) 
+    let(cs=fl_bb_corners(t)) 
+    [fl_3d_vectorialProjection(cs[0],axis),fl_3d_vectorialProjection(cs[1],axis)]];
+  size = [for(c=bcs) c[1]-c[0]];
+
+  fl_trace("bcs",bcs);
+  fl_trace("size",size);
+  for($i=[0:len-1]) {
+    fl_trace("$i",$i);
+    offset = sum
+    ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
+    : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
+    sz = $i>1 ? fl_accum([for(j=[1:$i-1]) size[j]]) : O;
+    fl_trace("sz",sz);
+    fl_trace("delta",$i*gap*axis);
+    fl_trace("offset",offset);
+    translate(offset+fac*sz+$i*gap*axis)
+      if ($children>1) children($i); else children(0);
   }
 }
 

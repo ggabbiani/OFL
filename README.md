@@ -21,7 +21,10 @@ This was done for minimizing the risk of overlapping with any other API or globa
 The following libraries are used and must be installed for using all the OFL features:
 
 * [dotSCAD](https://justinsdk.github.io/dotSCAD/)
-* [TOUL: The OpenScad Usefull Library](https://www.thingiverse.com/thing:1237203)
+* [NopSCADlib](https://github.com/nophead/NopSCADlib)
+* [scad-utils](https://github.com/OskarLinde/scad-utils)
+* [TOUL: The OpenScad Useful Library](https://www.thingiverse.com/thing:1237203)
+
 
 ## Library documentation
 

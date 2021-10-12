@@ -87,8 +87,8 @@ module __test__() {
 }
 
 /* 
- * cube defaults for positioning ("bounding corners")
- * and direction ("default director", "default rotor").
+ * cube defaults for positioning (fl_bb_cornersKV)
+ * and direction (fl_directorKV, fl_rotorKV).
  */
 function fl_cube_defaults(
   size=[1,1,1]
@@ -96,8 +96,8 @@ function fl_cube_defaults(
   size  = is_list(size) ? size : [size,size,size]
 ) [
   fl_bb_cornersKV([O,size]),  // octant ⇒ +X+Y+Z
-  ["default director",  +Z      ],
-  ["default rotor",     +X      ],
+  fl_directorKV(+Z),
+  fl_rotorKV(+X),
 ];
 
 /*
@@ -134,8 +134,8 @@ module fl_cube(
 }
 
 /* 
- * sphere defaults for positioning ("bounding corners")
- * and direction ("default director", "default rotor").
+ * sphere defaults for positioning (fl_bb_cornersKV)
+ * and direction (fl_directorKV, fl_rotorKV).
  */
 function fl_sphere_defaults(
   r = [1,1,1],
@@ -144,8 +144,8 @@ function fl_sphere_defaults(
   r  = is_undef(d) ? (is_list(r) ? r : [r,r,r]) : (is_list(d) ? d : [d,d,d])/2
 ) [
   fl_bb_cornersKV([-r,+r]),  // simmetric bounding box ⇒ octant==O
-  ["default director",  +Z      ],
-  ["default rotor",     +X      ],
+  fl_directorKV(+Z),
+  fl_rotorKV(+X),
 ];
 
 /*
@@ -182,8 +182,8 @@ module fl_sphere(
   }
 }
 /* 
- * cylinder defaults for positioning ("bounding corners")
- * and direction ("default director", "default rotor").
+ * cylinder defaults for positioning (fl_bb_cornersKV)
+ * and direction (fl_directorKV, fl_rotorKV).
  */
 function fl_cylinder_defaults(
   h,                  // height of the cylinder or cone
@@ -195,8 +195,8 @@ function fl_cylinder_defaults(
   d2                  // diameter, top of cone. r2 = d2 / 2.
 ) = [
   fl_bb_cornersKV(fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
-  ["default director",  +Z                                ],
-  ["default rotor",     +X                                ],
+  fl_directorKV(+Z),
+  fl_rotorKV(+X),
 ];
 
 function fl_bb_cylinder(
@@ -267,8 +267,8 @@ module fl_cylinder(
 }
 
 /*
- * prism defaults for positioning ("bounding corners")
- * and direction ("default director", "default rotor").
+ * prism defaults for positioning (fl_bb_cornersKV)
+ * and direction (fl_directorKV, fl_rotorKV).
  */
 function fl_prism_defaults(
   n,  // edge number
@@ -278,8 +278,8 @@ function fl_prism_defaults(
   h   // height of the prism
 ) = [
   fl_bb_cornersKV(fl_bb_prism(n,l,l1,l2,h)),  // placement: +Z
-  ["default director",  +Z      ],
-  ["default rotor",     +X      ],
+  fl_directorKV(+Z),
+  fl_rotorKV(+X),
 ];
 
 function fl_bb_prism(

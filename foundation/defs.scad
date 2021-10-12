@@ -120,25 +120,28 @@ function fl_Z(z) = [0,0,z];
 function fl_is_set(flag,list) = search([flag],list)!=[[]];
 
 FL_ADD        = "FL_ADD adds shapes to scene.";
-FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.";
-FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter).";
-FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws).";
 FL_ASSEMBLY   = "FL_ASSEMBLY layout of predefined auxiliary shapes (like predefined screws).";
-FL_AXES       = "FL_AXES unconditional draw of local reference fl_axes.";
+FL_AXES       = "FL_AXES draw of local reference axes.";
 FL_BBOX       = "FL_BBOX adds a bounding box containing the object.";
 FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z).";
+FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter).";
+FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.";
 FL_HOLDERS    = "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**";
+FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws).";
 FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
 FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
 FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
 
 // Runtime behaviour defaults
 $FL_ADD       = "ON";
-$FL_AXES      = "ON";
 $FL_ASSEMBLY  = "ON";
+$FL_AXES      = "ON";
 $FL_BBOX      = "TRANSPARENT";
+$FL_CUTOUT    = "ON";
 $FL_DRILL     = "ON";
 $FL_FOOTPRINT = "ON";
+$FL_HOLDERS   = "ON";
+$FL_LAYOUT    = "ON";
 $FL_PAYLOAD   = "DEBUG";
 
 /*
@@ -176,6 +179,8 @@ function fl_descriptionKV(value)  = fl_kv("description",value);
 function fl_sizeKV(value)         = fl_kv("size",value);
 function fl_connectorsKV(value)   = fl_kv("connectors",value);
 function fl_vendorKV(value)       = fl_kv("vendor",value);
+function fl_directorKV(value)     = fl_kv("director",value);
+function fl_rotorKV(value)        = fl_kv("rotor",value);
 
 //*****************************************************************************
 // General getters
@@ -187,6 +192,8 @@ function fl_height(type)        = fl_size(type).y;
 function fl_thickness(type)     = fl_size(type).z;
 function fl_connectors(type)    = fl_get(type,fl_connectorsKV());
 function fl_vendor(type)        = fl_get(type,fl_vendorKV());
+function fl_director(type)      = fl_get(type,fl_directorKV());
+function fl_rotor(type)         = fl_get(type,fl_rotorKV());
 
 //*****************************************************************************
 // Bounding Box
@@ -364,7 +371,7 @@ module fl_axes(size=1,reverse=false) {
   fl_trace("Size:",sz);
   color("red")   fl_vector(sz.x*FL_X,reverse==undef || !reverse);
   color("green") fl_vector(sz.y*FL_Y,reverse==undef || !reverse);
-  if (size.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
+  if (sz.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
 
 /* A do-nothing helper */

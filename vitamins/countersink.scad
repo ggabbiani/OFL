@@ -21,72 +21,115 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/defs.scad>
 include <countersinks.scad>
+include <../foundation/unsafe_defs.scad>
+use     <../foundation/3d.scad>
+use     <../foundation/layout.scad>
+use     <../foundation/placement.scad>
+
 
 use <NopSCADlib/utils/layout.scad>
+include <NopSCADlib/lib.scad>
+include <NopSCADlib/vitamins/screws.scad>
 
-$fn         = 50;           // [3:50]
+$fn         = 50;           // [3:100]
 // Debug statements are turned on
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
-$FL_SAFE    = true;
+$FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
-FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
-/* [Verbs] */
-ADD       = true;
-ASSEMBLY  = false;
-AXES      = false;
-BBOX      = false;
-CUTOUT    = false;
-DRILL     = false;
-FPRINT    = false;
-PLOAD     = false;
+/* [Supported verbs] */
+
+// adds shapes to scene.
+ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds local reference axes
+AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds a bounding box containing the object
+BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+
+/* [Placement] */
+
+PLACE_NATIVE  = true;
+OCTANT        = [0,0,0];  // [-1:+1]
+
+/* [Direction] */
+
+DIR_NATIVE  = true;
+// ARBITRARY direction vector
+DIR_Z       = [0,0,1];  // [-1:0.1:+1]
+// rotation around
+DIR_R       = 0;        // [0:360]
 
 /* [Countersink] */
 
-CENTER  = true;
-TRUNK   = 1;
+SHOW    = "ALL"; // [ALL, FL_CS_M3, FL_CS_M4, FL_CS_M5, FL_CS_M6, FL_CS_M8, FL_CS_M10, FL_CS_M12, FL_CS_M16, FL_CS_M20]
+GAP     = 5;
 
 /* [Hidden] */
 
 module __test__() {
-  diams = [for(cs = FL_CS_DICT) fl_cs_head_d(cs)];
-  layout(diams)
-    fl_countersink(FL_ADD,FL_CS_DICT[$i],center=CENTER);
-  translate(fl_Y(max(diams)+2))
-    layout([for(cs = FL_CS_DICT) fl_cs_head_d(cs)])
-      fl_countersink(FL_ADD,FL_CS_DICT[$i],trunk=TRUNK,center=CENTER);
+  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+  octant    = PLACE_NATIVE  ? undef : OCTANT;
+  verbs=[
+    if (ADD!="OFF")   FL_ADD,
+    if (AXES!="OFF")  FL_AXES,
+    if (BBOX!="OFF")  FL_BBOX,
+  ];
+  obj = SHOW=="FL_CS_M3"  ? FL_CS_M3
+      : SHOW=="FL_CS_M4"  ? FL_CS_M4
+      : SHOW=="FL_CS_M5"  ? FL_CS_M5
+      : SHOW=="FL_CS_M6"  ? FL_CS_M6
+      : SHOW=="FL_CS_M8"  ? FL_CS_M8
+      : SHOW=="FL_CS_M10" ? FL_CS_M10
+      : SHOW=="FL_CS_M12" ? FL_CS_M12
+      : SHOW=="FL_CS_M16" ? FL_CS_M16
+      : SHOW=="FL_CS_M20" ? FL_CS_M20
+      : undef;
+
+  if (obj)
+    fl_countersink(verbs,obj,octant=octant,direction=direction,
+                    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+  else
+    fl_layout(X,GAP,FL_CS_DICT)
+      fl_countersink(verbs,FL_CS_DICT[$i],octant=octant,direction=direction,
+                    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
 }
 
-function fl_cs_h(type)         = fl_get(type, "height");
-function fl_cs_nominal_d(type) = fl_get(type, "nominal diameter");
-function fl_cs_head_d(type)    = fl_get(type, "head diameter");
-function fl_cs_d(type,h)       = let (
-  head_d      = fl_cs_head_d(type)
-  ,nominal_d  = fl_cs_nominal_d(type)
-  )
-  h == undef ? head_d : h / fl_cs_h(type) * (head_d - nominal_d) + nominal_d;
+module fl_countersink(
+  verbs,
+  type,
+  direction,        // desired direction [director,rotation], native direction when undef
+  octant            // when undef native positioning is used (+Z)
+) {
+  assert(verbs!=undef);
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-module fl_countersink(verb,type,center=true,trunk,debug=false,axes=false) {
-  assert(verb!=undef);
+  bbox  = fl_bb_corners(type);
+  size  = fl_bb_size(type);
+  d     = fl_cs_d(type);
+  h     = fl_cs_h(type);
+  D     = direction!=undef ? fl_direction(proto=type,direction=direction) : I;
+  M     = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
 
-  h   = (trunk == undef ? fl_cs_h(type) : trunk);
-  d1  = fl_cs_nominal_d(type);
-  d2  = fl_cs_d(type,h);
-
-  fl_trace("trunk",trunk);
-  fl_trace("h==cs_h(type)?",h==fl_cs_h(type));
-
-  if (verb==FL_ADD) {
-    cylinder(d1=d1, d2=d2, h=h, center=center);
-  } else {
-    assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD)
+        fl_modifier($FL_ADD) 
+          fl_cylinder(d1=0,d2=d,h=h,octant=-Z);
+      else if ($verb==FL_BBOX)
+        fl_modifier($FL_BBOX) translate(Z(NIL)) fl_bb_add(bbox);
+      else
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=1.2*size);
   }
 }
 

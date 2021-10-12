@@ -1,5 +1,5 @@
 /*
- * Template file for OpenSCAD Foundation Library.
+ * Single pole, double throw switch.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -18,10 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <defs.scad>
-use     <3d.scad>
-use     <layout.scad>
-use     <placement.scad>
+
+include <spdts.scad>
+use     <../foundation/placement.scad>
+
+include <NopSCADlib/lib.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -33,33 +34,16 @@ $FL_SAFE    = true;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-
 /* [Supported verbs] */
 
 // adds shapes to scene.
 ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of user passed accessories (like alternative screws)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a box representing the payload of the shape
-PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
 
 /* [Direction] */
 
@@ -68,6 +52,11 @@ DIR_NATIVE  = true;
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
+
+/* [Placement] */
+
+PLACE_NATIVE  = true;
+OCTANT        = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
 
@@ -78,61 +67,85 @@ module __test__() {
     if (ADD!="OFF")   FL_ADD,
     if (AXES!="OFF")  FL_AXES,
     if (BBOX!="OFF")  FL_BBOX,
+    if (DRILL!="OFF") FL_DRILL,
   ];
   fl_trace("PLACE_NATIVE",PLACE_NATIVE);
   fl_trace("octant",octant);
 
-  type      = [
-    fl_bb_cornersKV([[0,0,0],[0.5,0.5,1]]),
-    fl_directorKV([0,0,1]),
-    fl_rotorKV([1,0,0]),
-  ];
+  // $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_DRILL=DRILL;
 
-  // $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;
-  stub(verbs,type,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+  fl_spdt(verbs,FL_SODAL_SPDT,octant=octant,direction=direction,
+      $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL);
 }
 
-module stub(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  type,
+function fl_spdt_d(type)       = fl_get(type,"nominal diameter");
+function fl_spdt_l(type)       = fl_get(type,"length");
+function fl_spdt_headH(type)  = fl_get(type,"head height");
+function fl_spdt_headD(type)  = fl_get(type,"head diameter");
+
+module fl_spdt(
+  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_BBOX, FL_DRILL
+  type,                 // prototype
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  octant               // when undef native positioning is used
 ) {
   assert(verbs!=undef);
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  axes    = fl_list_has(verbs,FL_AXES);
+  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
+  head_h  = fl_spdt_headH(type);
+  head_d  = fl_spdt_headD(type);
+  bbox    = fl_bb_corners(type);
+  size    = fl_bb_size(type);
+  d       = fl_spdt_d(type);
+  D       = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
   fl_trace("D",D);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
+  fl_trace("$FL_ADD",$FL_ADD);
+  fl_trace("$FL_AXES",$FL_AXES);
+  fl_trace("$FL_BBOX",$FL_BBOX);
+  fl_trace("$FL_DRILL",$FL_DRILL);
 
-  module do_add() {}
-  module do_bbox() {}
-  module do_assembly() {}
-  module do_layout() {}
-  module do_drill() {}
+  module head() {
+    difference() {
+      cylinder(d1=head_d,d2=16, h=head_h);
+      cylinder(d=16, h=head_h);
+    }
+    cylinder(d=15.5, h=head_h);
+  }
+
+  module do_add() {
+    fl_color("silver") head();
+    let(h=20) translate(-fl_Z(h)){
+      fl_color("silver") cylinder(d=d, h=h);
+      let(d=15,h=10) translate(-fl_Z(h)) {
+        fl_color("LightSlateGray",0.8) cylinder(d=d, h=h);
+        translate([0,-d/2+1,0]) {
+          rotate(180,FL_X) spade(spade3,8);
+          for(x=[-4.5,0,4.5]) translate([x,+3,0]) rotate(180,FL_X) spade(spade3,8);
+        }
+        translate([0,+d/2-1,0]) rotate(180,FL_X) spade(spade3,8);
+      }
+    }
+  }
+
+  module do_drill() {
+    let(d=19,h=20) translate(-fl_Z(h)) 
+      cylinder(d=d, h=h);
+  }
 
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) fl_cube(size=size);
+        fl_modifier($FL_ADD) do_add();
       } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_cube(size=size);
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout()
-          children();
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT);
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY);
+        fl_modifier($FL_BBOX) translate(bbox[0]) cube(size=size,center=false);
       } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL);
+        fl_modifier($FL_DRILL) do_drill();
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }

@@ -92,7 +92,7 @@ module fl_placeIf(
  *
  */
 function fl_direction(
-  proto,      // prototype with "default director" and "default rotor" properties
+  proto,      // prototype with fl_directorKV and fl_rotorKV properties
   direction,  // desired direction in axis-angle representation [axis,rotation about]
   default     // default coordinate system by [director,rotor], overrides «proto» settings
 ) = 
@@ -100,8 +100,8 @@ assert(is_list(direction)&&len(direction)==2,str("direction=",direction))
 assert(proto!=undef || default!=undef)
 // echo(default=default,direction=direction)
 let(
-  def_dir = default==undef ? fl_get(proto,"default director") : default[0],
-  def_rot = default==undef ? fl_get(proto,"default rotor")    : default[1],
+  def_dir = default==undef ? fl_director(proto) : default[0],
+  def_rot = default==undef ? fl_rotor(proto)    : default[1],
   alpha   = direction[1],
   new_dir = fl_versor(direction[0]),
   new_rot = fl_transform(fl_align(def_dir,new_dir),def_rot)

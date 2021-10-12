@@ -22,69 +22,53 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-FL_CS_M3  = [
-  ["name",              "FL_CS_M3"],
-  ["description",       "M3 countersink"],
-  ["nominal diameter",  3   ],
-  ["head diameter",     6   ],
-  ["height",            1.7 ],
+include <../foundation/defs.scad>
+include <NopSCADlib/lib.scad>
+include <NopSCADlib/vitamins/screws.scad>
+
+//*****************************************************************************
+// key values
+function fl_cs_diameterKV(value)  = fl_kv("cs/diameter",value);
+function fl_cs_angleKV(value)     = fl_kv("cs/angle",value);
+
+//*****************************************************************************
+// getters
+function fl_cs_d(type)      = fl_get(type, fl_cs_diameterKV());
+function fl_cs_angle(type)  = fl_get(type, fl_cs_angleKV());
+function fl_cs_h(type)      = let(
+  r     = fl_cs_d(type)/2,
+  alpha = fl_cs_angle(type)/2
+) r / tan(alpha);
+//*****************************************************************************
+// constructor
+function fl_Countersink(
+  name,
+  description,
+  d,
+  angle
+) = let(
+  r = d/2,
+  alpha = angle /2,
+  h = r / tan(alpha)
+) [
+  fl_nameKV(name),
+  fl_descriptionKV(description),
+  fl_cs_diameterKV(d),
+  fl_cs_angleKV(angle),
+  fl_bb_cornersKV([[-r,-r,-h],[r,r,0]]),
+  fl_directorKV(+FL_Z),
+  fl_rotorKV(+FL_X),
 ];
-FL_CS_M4  = [
-  ["name",              "FL_CS_M4"],
-  ["description",       "M4 countersink"],
-  ["nominal diameter",  4   ],
-  ["head diameter",     8   ],
-  ["height",            2.3 ],
-];
-FL_CS_M5  = [
-  ["name",              "FL_CS_M5"],
-  ["description",       "M5 countersink"],
-  ["nominal diameter",  5   ],
-  ["head diameter",     10  ],
-  ["height",            2.8 ],
-];
-FL_CS_M6  = [
-  ["name",              "FL_CS_M6"],
-  ["description",       "M6 countersink"],
-  ["nominal diameter",  6   ],
-  ["head diameter",     12  ],
-  ["height",            3.3 ],
-];
-FL_CS_M8  = [
-  ["name",              "FL_CS_M8"],
-  ["description",       "M8 countersink"],
-  ["nominal diameter",  8   ],
-  ["head diameter",     16  ],
-  ["height",            4.4 ],
-];
-FL_CS_M10  = [
-  ["name",              "FL_CS_M10"],
-  ["description",       "M10 countersink"],
-  ["nominal diameter",  10  ],
-  ["head diameter",     20  ],
-  ["height",            5.5 ],
-];
-FL_CS_M12  = [
-  ["name",              "FL_CS_M12"],
-  ["description",       "M12 countersink"],
-  ["nominal diameter",  12  ],
-  ["head diameter",     24  ],
-  ["height",            6.5 ],
-];
-FL_CS_M16  = [
-  ["name",              "FL_CS_M16"],
-  ["description",       "M16 countersink"],
-  ["nominal diameter",  16  ],
-  ["head diameter",     30  ],
-  ["height",            7.5 ],
-];
-FL_CS_M20  = [
-  ["name",              "FL_CS_M20"],
-  ["description",       "M20 countersink"],
-  ["nominal diameter",  20  ],
-  ["head diameter",     36  ],
-  ["height",            8.5 ],
-];
+
+FL_CS_M3  = fl_Countersink("FL_CS_M3","M3 countersink",6+3/5,angle=90);
+FL_CS_M4  = fl_Countersink("FL_CS_M4","M4 countersink",8+4/5,angle=90);
+FL_CS_M5  = fl_Countersink("FL_CS_M5","M5 countersink",10+5/5,angle=90);
+FL_CS_M6  = fl_Countersink("FL_CS_M6","M6 countersink",12+6/5,angle=90);
+FL_CS_M8  = fl_Countersink("FL_CS_M8","M8 countersink",16+8/5,angle=90);
+FL_CS_M10 = fl_Countersink("FL_CS_M10","M10 countersink",20+10/5,angle=90);
+FL_CS_M12 = fl_Countersink("FL_CS_M12","M12 countersink",24+12/5,angle=90);
+FL_CS_M16 = fl_Countersink("FL_CS_M16","M16 countersink",30+16/5,angle=90);
+FL_CS_M20 = fl_Countersink("FL_CS_M20","M20 countersink",36+20/5,angle=90);
 
 FL_CS_DICT = [
   FL_CS_M3

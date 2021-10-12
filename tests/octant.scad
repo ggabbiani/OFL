@@ -20,6 +20,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 include <../foundation/defs.scad>
+use     <../foundation/placement.scad>
 
 $fn         = 50;           // [3:50]
 // Debug statements are turned on
