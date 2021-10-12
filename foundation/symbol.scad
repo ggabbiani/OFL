@@ -1,7 +1,5 @@
 /*
- * Created on Tue May 11 2021.
- *
- * Copyright © 2021 Giampiero Gabbiani.
+ * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -53,7 +51,15 @@ module __test__() {
 
   size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
 
-  sym_engine(verbs=verbs,size=size,symbol=SYMBOL,$FL_ADD=ADD,$FL_AXES=AXES);
+  fl_symbol(verbs=verbs,size=size,symbol=SYMBOL,$FL_ADD=ADD,$FL_AXES=AXES);
+}
+
+module fl_sym_plug(verbs=FL_ADD,type=undef,size=0.5) {
+  fl_symbol(verbs,type,size,"plug");
+}
+
+module fl_sym_socket(verbs=FL_ADD,type=undef,size=0.5) {
+  fl_symbol(verbs,type,size,"socket");
 }
 
 // provides the symbol required in its 'canonical' form:
@@ -63,7 +69,7 @@ module __test__() {
 // "socket": 'a part of the body into which another part fits'
 //        Its canonical form implies an orientation of the piece coherent
 //        with its fitting movement along -Z axis. 
-module sym_engine(
+module fl_symbol(
   verbs   = FL_ADD  // really needed for an 'atomic' shape?
   ,type   = undef   // idem
   ,size   = 0.5     // default size give as a scalar

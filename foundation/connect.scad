@@ -92,9 +92,9 @@ module __test__() {
 
     size      = fl_get(type,"size");
     plug      = fl_get(type,"plugs")[0];
-    ox        = conn_ox(plug);
-    oy        = conn_oy(plug);
-    position  = conn_pos(plug);
+    ox        = fl_conn_ox(plug);
+    oy        = fl_conn_oy(plug);
+    position  = fl_conn_pos(plug);
     M         = fl_planeAlign(X,Y,ox,oy)
               * T(position);
     if (!connectors || !only) {
@@ -102,7 +102,7 @@ module __test__() {
       fl_color("gold") multmatrix(M) spine();
     }
     if (connectors)
-      multmatrix(M) sym_plug();
+      multmatrix(M) fl_sym_plug();
   }
 
   // "socket": 'a part of the body into which another part fits'
@@ -111,9 +111,9 @@ module __test__() {
   module socket(type,connectors=false,only=false) {
     size      = fl_get(type,"size");
     socket    = fl_get(type,"sockets")[0];
-    ox        = conn_ox(socket);
-    oy        = conn_oy(socket);
-    position  = conn_pos(socket);
+    ox        = fl_conn_ox(socket);
+    oy        = fl_conn_oy(socket);
+    position  = fl_conn_pos(socket);
     M         = fl_planeAlign(X,Y,ox,oy)
               * T(position);
     if (!connectors || !only) {
@@ -123,7 +123,7 @@ module __test__() {
       }
     }
     if (connectors)
-      multmatrix(M) sym_socket();
+      multmatrix(M) fl_sym_socket();
   }
 
   module spine() {
@@ -146,9 +146,9 @@ module __test__() {
     else if (SOCKET_VIEW=="canonical") 
       let(
         socket    = fl_get(test_socket,"sockets")[0],
-        ox        = conn_ox(socket),
-        oy        = conn_oy(socket),
-        position  = conn_pos(socket),
+        ox        = fl_conn_ox(socket),
+        oy        = fl_conn_oy(socket),
+        position  = fl_conn_pos(socket),
         M         = T(-position)
                   * fl_planeAlign(X,Y,ox,oy)
       ) {
@@ -163,9 +163,9 @@ module __test__() {
     else if (PLUG_VIEW=="canonical") 
       let(
         plug      = fl_get(test_plug,"plugs")[0],
-        ox        = conn_ox(plug),
-        oy        = conn_oy(plug),
-        position  = conn_pos(plug),
+        ox        = fl_conn_ox(plug),
+        oy        = fl_conn_oy(plug),
+        position  = fl_conn_pos(plug),
         M         = T(-position)
                   * fl_planeAlign(X,Y,ox,oy)
       ) {
@@ -173,7 +173,7 @@ module __test__() {
     } else if (PLUG_VIEW=="actual") let(
       plug      = fl_get(test_plug,"plugs")[0],
       socket    = fl_get(test_socket,"sockets")[0]
-    ) transform() connect(plug,socket) plug(test_plug,VIEW_CONNECTORS,CONNECTORS_ONLY);
+    ) transform() fl_connect(plug,socket) plug(test_plug,VIEW_CONNECTORS,CONNECTORS_ONLY);
   }
 
   if (VIEW_SOCKET && SOCKET_VIEW=="actual" && VIEW_BALL)
@@ -219,17 +219,17 @@ function fl_conn_posKV(value)    = fl_kv("conn/position",value);
 
 //*****************************************************************************
 // getters
-function conn_type(type)    = fl_get(type,fl_conn_typeKV());
-function conn_fprint(type)  = fl_get(type,fl_conn_fprintKV());
-function conn_ox(type)      = fl_get(type,fl_conn_oxKV());
-function conn_oy(type)      = fl_get(type,fl_conn_oyKV());
-function conn_pos(type)     = fl_get(type,fl_conn_posKV());
+function fl_conn_type(type)    = fl_get(type,fl_conn_typeKV());
+function fl_conn_fprint(type)  = fl_get(type,fl_conn_fprintKV());
+function fl_conn_ox(type)      = fl_get(type,fl_conn_oxKV());
+function fl_conn_oy(type)      = fl_get(type,fl_conn_oyKV());
+function fl_conn_pos(type)     = fl_get(type,fl_conn_posKV());
 
 // massive connection clone eventually transformed
-function conn_import(conns,M) = [for(c=conns) conn_clone(c,M=M)];
+function fl_conn_import(conns,M) = [for(c=conns) fl_conn_clone(c,M=M)];
 
 // returns a copy of the given connection with eventual rewriting of attributes
-function conn_clone(
+function fl_conn_clone(
   original  // MANDATORY original connection to be cloned
   ,type     // OPTIONAL new connection type ("socket" or "plug")
   ,fprint   // OPTIONAL new connection fingerprint
@@ -243,21 +243,21 @@ function conn_clone(
   assert(oy==undef  || len(oy)==3)
   assert(pos==undef || len(pos)==3)
   let(
-    t         = type==undef   ? conn_type(original) : type,
-    f         = fprint==undef ? conn_fprint(original) : fprint,
-    orig_ox_3 = conn_ox(original),
-    orig_oy_3 = conn_oy(original),
+    t         = type==undef   ? fl_conn_type(original) : type,
+    f         = fprint==undef ? fl_conn_fprint(original) : fprint,
+    orig_ox_3 = fl_conn_ox(original),
+    orig_oy_3 = fl_conn_oy(original),
     tran_ox_4 = fl_transform(M,orig_ox_3),
     tran_oy_4 = fl_transform(M,orig_oy_3),
     trans_O_4 = fl_transform(M,O),
 
     x_3   = ox!=undef     ? ox  :  fl_3(tran_ox_4) - fl_3(trans_O_4),
     y_3   = oy!=undef     ? oy  :  fl_3(tran_oy_4) - fl_3(trans_O_4),
-    p_3   = pos!=undef    ? pos :  fl_transform(M,conn_pos(original))
+    p_3   = pos!=undef    ? pos :  fl_transform(M,fl_conn_pos(original))
 
     // x_3   = ox!=undef     ? ox  : M==undef ? orig_ox_3 : fl_3(tran_ox_4) - fl_3(trans_O_4),
     // y_3   = oy!=undef     ? oy  : M==undef ? orig_oy_3 : fl_3(tran_oy_4) - fl_3(trans_O_4),
-    // p_3   = pos!=undef    ? pos : M==undef ? conn_pos(original) : fl_3(M * fl_4(conn_pos(original)))
+    // p_3   = pos!=undef    ? pos : M==undef ? fl_conn_pos(original) : fl_3(M * fl_4(fl_conn_pos(original)))
   )
   // echo(orig_ox_3=orig_ox_3)
   // echo(orig_oy_3=orig_oy_3)
@@ -276,21 +276,21 @@ function conn_clone(
 // their respective connection geometries.
 // Child can be thought as a mobile socket or plug 
 // jointing a fixed plug or socket.
-module connect(
+module fl_connect(
   son     // socket or plug data for the children shape to be jointed
   ,parent // plug or socket data for the fixed part
   ) {
-  son_type      = conn_type(son);
-  son_footprint = conn_fprint(son);
-  son_ox        = conn_ox(son);
-  son_oy        = conn_oy(son);
-  son_pos       = conn_pos(son);
+  son_type      = fl_conn_type(son);
+  son_footprint = fl_conn_fprint(son);
+  son_ox        = fl_conn_ox(son);
+  son_oy        = fl_conn_oy(son);
+  son_pos       = fl_conn_pos(son);
 
-  par_type      = conn_type(parent);
-  par_footprint = conn_fprint(parent);
-  par_ox        = conn_ox(parent);
-  par_oy        = conn_oy(parent);
-  par_pos       = conn_pos(parent);
+  par_type      = fl_conn_type(parent);
+  par_footprint = fl_conn_fprint(parent);
+  par_ox        = fl_conn_ox(parent);
+  par_oy        = fl_conn_oy(parent);
+  par_pos       = fl_conn_pos(parent);
 
   M           = T(+par_pos)
               * fl_planeAlign(son_ox,son_oy,par_ox,par_oy)
@@ -303,13 +303,12 @@ module connect(
 }
 
 // Adds proper connection symbol (plug or socket) to the scene
-module conn_add(connector,size) {
+module fl_conn_add(connector,size) {
   assert(connector!=undef);
-  M = T(conn_pos(connector))
-    * fl_planeAlign(X,Y,conn_ox(connector),conn_oy(connector));
+  M = T(fl_conn_pos(connector))
+    * fl_planeAlign(X,Y,fl_conn_ox(connector),fl_conn_oy(connector));
   multmatrix(M)
-    if (conn_type(connector)=="plug") sym_plug(size=size); else sym_socket(size=size);
+    fl_symbol(size=size,symbol=fl_conn_type(connector));
 }
 
-if ($preview)
-  __test__();
+__test__();
