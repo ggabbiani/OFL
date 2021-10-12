@@ -35,7 +35,7 @@ APIs belongs to one of the following categories:
 
 Verbs can be passed either as single value or as a list.
 
-### Single verb invokation
+### Single verb invocation
 
 When a verb is passed as a single value the verb will be trivially executed.
 
@@ -44,7 +44,7 @@ When a verb is passed as a single value the verb will be trivially executed.
 
     // object instance
     obj = FL_MAG_M4_CS_32x6;
-    // single verb engine invokation 
+    // single verb engine invocation 
     fl_magnet(FL_ADD,obj);
 
 ![Single verb invocation](docs/fig-0.png)
@@ -58,7 +58,7 @@ When a verb is passed as a single value the verb will be trivially executed.
     
     // object instance
     obj = FL_MAG_M4_CS_32x6;
-    // multiple verb engine invokation 
+    // multiple verb engine invocation 
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],obj);
 
 where
