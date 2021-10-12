@@ -54,11 +54,11 @@ module __test__() {
   fl_symbol(verbs=verbs,size=size,symbol=SYMBOL,$FL_ADD=ADD,$FL_AXES=AXES);
 }
 
-module fl_sym_plug(verbs=FL_ADD,type=undef,size=0.5) {
+module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
   fl_symbol(verbs,type,size,"plug");
 }
 
-module fl_sym_socket(verbs=FL_ADD,type=undef,size=0.5) {
+module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
   fl_symbol(verbs,type,size,"socket");
 }
 
@@ -70,10 +70,10 @@ module fl_sym_socket(verbs=FL_ADD,type=undef,size=0.5) {
 //        Its canonical form implies an orientation of the piece coherent
 //        with its fitting movement along -Z axis. 
 module fl_symbol(
-  verbs   = FL_ADD  // really needed for an 'atomic' shape?
-  ,type   = undef   // idem
-  ,size   = 0.5     // default size give as a scalar
-  ,symbol           // currently "plug" or "socket"
+  verbs   = [FL_ADD,FL_AXES],
+  type    = undef,// really needed?
+  size    = 0.5,  // default size given as a scalar
+  symbol          // currently "plug" or "socket"
   ) {
   assert(verbs!=undef);
 
