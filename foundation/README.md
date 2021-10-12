@@ -49,7 +49,7 @@ When a verb is passed as a single value the verb will be trivially executed.
 
 ![Single verb invocation](docs/fig-0.png)
 
-### Multiple verb invokation
+### Multiple verb invocation
 
  When multiple verbs are passed as a list, they are executed sequentially, as in the following example
  
