@@ -109,8 +109,8 @@ function __p__(alpha) = [cos(alpha),sin(alpha)];
 
 // exact sector bounding box
 function fl_bb_sector(
-  radius
-  ,angles
+  radius  = 1,
+  angles
 ) = let(
   interval  = __normalize__(angles),
   inf       = interval[0],
@@ -125,9 +125,7 @@ function fl_bb_sector(
 ) fl_bb_polygon(pts);
 
 // exact circle bounding box
-function fl_bb_circle(radius) =
-assert(radius!=undef)
-[[-radius,-radius],[+radius,+radius]];
+function fl_bb_circle(radius=1) = [[-radius,-radius],[+radius,+radius]];
 
 // exact inscribed polygon bounding box
 function fl_bb_ipoly(radius,n)          = fl_bb_polygon(fl_circle(radius,$fn=n));
@@ -177,7 +175,7 @@ assert(inf>=0 && inf<360)
 [inf,inf+distance];
 
 function fl_sector(
-  radius
+  radius=1
   ,angles   // start|end angles in whatever order
 ) = 
 assert($fn>2) 
@@ -185,7 +183,8 @@ assert(is_num(radius),str("radius=",radius))
 assert(is_list(angles),str("angles=",angles))
 shape_pie(radius,__normalize__(angles));
 
-module fl_sector(verbs=FL_ADD,radius, angles, quadrant) {
+module fl_sector(verbs=FL_ADD,radius=1, angles, quadrant) {
+  assert(is_list(verbs)||is_string(verbs));
   assert(is_num(radius),str("radius=",radius));
   assert(is_list(angles),str("angles=",angles));
 
@@ -216,9 +215,10 @@ module fl_sector(verbs=FL_ADD,radius, angles, quadrant) {
 
 //**** circle *****************************************************************
 
-function fl_circle(radius) = fl_sector(radius,[0,360]);
+function fl_circle(radius=1) = fl_sector(radius,[0,360]);
 
-module fl_circle(verbs,radius,quadrant) {
+module fl_circle(verbs=FL_ADD,radius,quadrant) {
+  assert(is_list(verbs)||is_string(verbs),verbs);
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
@@ -290,6 +290,7 @@ module fl_ipoly(
   ,n  // number of edges
   ,quadrant
 ) {
+  assert(is_list(verbs)||is_string(verbs));
   assert(fl_XOR(r,d));
 
   axes  = fl_list_has(verbs,FL_AXES);

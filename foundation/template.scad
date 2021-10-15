@@ -98,7 +98,7 @@ module stub(
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
 ) {
-  assert(verbs!=undef);
+  assert(is_list(verbs)||is_string(verbs),verbs);
 
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);

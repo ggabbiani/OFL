@@ -253,6 +253,7 @@ function fl_has_size(type) = fl_has(type,"size",function(value) is_num(value));
 function fl_hasBbCorners(type)  = fl_has(type,"bounding corners",function(value) is_list(value) && len(value)==2);
 
 module fl_parse(verbs) {
+  assert(is_list(verbs)||is_string(verbs),verbs);
   for($verb=is_list(verbs) ? verbs : [verbs]) {
     tokens = split($verb);
     fl_trace(tokens[0]);
@@ -437,6 +438,8 @@ FL_INCLUDE_ALL  = ["OR", function(one,other) one==other];
 
 function fl_list_filter(list,operator,compare,__result__=[],__first__=true) =
 // echo(list=list,compare=compare,operator=operator,__result__=__result__,__first__=__first__)
+assert(is_list(list)||is_string(list),list)
+assert(is_list(compare)||is_string(compare),compare)
 let(
   s_list  = is_list(list) ? list : [list],
   c_list  = is_string(compare) ? [compare] : compare,
