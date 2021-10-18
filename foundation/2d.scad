@@ -49,8 +49,12 @@ QUADRANT      = [+1,+1];  // [-1:+1]
 
 /* [2D primitives] */
 
-PRIMITIVE     = "arc";  // ["arc", "circle",  "inscribed polygon", "sector"]
+PRIMITIVE     = "circle arc";  // ["circle", "circle arc", "circle sector", "ellipse", "elliptic arc", "elliptic sector", "inscribed polygon"]
 RADIUS        = 10;
+// ellipse horiz. semi axis
+A             = 10;
+// ellipse vert. semi axis
+B             = 6;
 // arc/sector specific
 START_ANGLE   = 0;    // [-360:360]
 END_ANGLE     = 60;   // [-360:360]
@@ -59,7 +63,7 @@ ARC_T         = 1;  // [0:10]
 // Inscribed polygon edge number
 IPOLY_N       = 3;  // [3:50]
 // Show a circumscribed circle to inscribed polygon
-IPOLY_CIRCLE  = false;
+IPOLY_CIRCLE  = true;
 
 /* [Hidden] */
 
@@ -68,10 +72,10 @@ IPOLY_CIRCLE  = false;
 // echo($vpd=$vpd);
 // echo($vpf=$vpf);
 
-$vpr  = [0, 0, 0];
-$vpt  = [0, 0, 0];
-$vpd  = 140;
-$vpf  = 22.5;
+// $vpr  = [0, 0, 0];
+// $vpt  = [0, 0, 0];
+// $vpd  = 140;
+// $vpf  = 22.5;
 
 module __test__() {
   angles  = [START_ANGLE,END_ANGLE];
@@ -90,10 +94,13 @@ module __test__() {
 
   $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;
 
-  if      (PRIMITIVE == "arc"               ) fl_arc(verbs,RADIUS,angles,ARC_T,quadrant=quadrant);
-  else if (PRIMITIVE == "circle"            ) fl_circle(verbs,RADIUS,quadrant=quadrant);
+  if      (PRIMITIVE == "circle"            ) fl_circle(verbs,RADIUS,quadrant=quadrant);
+  else if (PRIMITIVE == "circle arc"        ) fl_arc(verbs,RADIUS,angles,ARC_T,quadrant=quadrant);
+  else if (PRIMITIVE == "circle sector"     ) fl_sector(verbs,RADIUS,angles,quadrant=quadrant);
+  else if (PRIMITIVE == "ellipse"           ) fl_ellipse(verbs,[A,B],quadrant=quadrant);
+  else if (PRIMITIVE == "elliptic arc"      ) fl_ellipticArc(verbs,[A,B],angles,ARC_T,quadrant=quadrant);
+  else if (PRIMITIVE == "elliptic sector"   ) fl_ellipticSector(verbs,[A,B],angles,quadrant=quadrant);
   else if (PRIMITIVE == "inscribed polygon" ) ipoly();
-  else if (PRIMITIVE == "sector"            ) fl_sector(verbs,RADIUS,angles,quadrant=quadrant);
 }
 
 //**** 2d bounding box calculations *******************************************
@@ -104,8 +111,8 @@ function fl_bb_polygon(points) = let(
   y = [for(p=points) p.y]
 ) [[min(x),min(y)],[max(x),max(y)]];
 
-// 2d point on unit circle by angle alpha
-function __p__(alpha) = [cos(alpha),sin(alpha)];
+// exact inscribed polygon bounding box
+function fl_bb_ipoly(radius,n) = fl_bb_polygon(fl_circle(radius,$fn=n));
 
 // exact sector bounding box
 function fl_bb_sector(
@@ -118,17 +125,14 @@ function fl_bb_sector(
   start     = ceil(inf / 90), // 0 ≤ start ≤ 3
   pts = [
     if ((sup-inf)<360) [0,0],
-    if (inf%90!=0) let(alpha=inf)                           radius*__p__(alpha),
-    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  radius*__p__(alpha),
-    if (sup%90!=0) let(alpha=sup)                           radius*__p__(alpha)
+    if (inf%90!=0) let(alpha=inf)                           fl_circleXY(radius,alpha),
+    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_circleXY(radius,alpha),
+    if (sup%90!=0) let(alpha=sup)                           fl_circleXY(radius,alpha)
   ]
 ) fl_bb_polygon(pts);
 
 // exact circle bounding box
 function fl_bb_circle(radius=1) = [[-radius,-radius],[+radius,+radius]];
-
-// exact inscribed polygon bounding box
-function fl_bb_ipoly(radius,n)          = fl_bb_polygon(fl_circle(radius,$fn=n));
 
 // exact arc bounding box
 function fl_bb_arc(radius,angles,width) =
@@ -143,13 +147,13 @@ let(
   RADIUS    = radius+width,
   pts = [
     // internal sector
-    if (inf%90!=0) let(alpha=inf)                           radius*__p__(alpha),
-    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  radius*__p__(alpha),
-    if (sup%90!=0) let(alpha=sup)                           radius*__p__(alpha),
+    if (inf%90!=0) let(alpha=inf)                           fl_circleXY(radius,alpha),
+    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_circleXY(radius,alpha),
+    if (sup%90!=0) let(alpha=sup)                           fl_circleXY(radius,alpha),
     // external sector
-    if (inf%90!=0) let(alpha=inf)                           RADIUS*__p__(alpha),
-    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  RADIUS*__p__(alpha),
-    if (sup%90!=0) let(alpha=sup)                           RADIUS*__p__(alpha)
+    if (inf%90!=0) let(alpha=inf)                           fl_circleXY(RADIUS,alpha),
+    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_circleXY(RADIUS,alpha),
+    if (sup%90!=0) let(alpha=sup)                           fl_circleXY(RADIUS,alpha)
   ]
 ) fl_bb_polygon(pts);
 
@@ -162,17 +166,17 @@ let(
 //    0° ≤   inf    < +360°
 //    0° ≤   sup    < +720°
 function __normalize__(angles) = 
-assert(is_list(angles),str("angles=",angles))
-let(
-  sorted    = [min(angles),max(angles)],
-  d         = sorted[1] - sorted[0],          // d ≥ 0°
-  distance  = d>360 ? 360 : d,                // 0° ≤ distance ≤ +360°
-  inf       = (sorted[0] % 360 + 360) % 360   // 0° ≤   inf    < +360°
-)
-assert(d>=0)
-assert(distance>=0 && distance<=360)
-assert(inf>=0 && inf<360)
-[inf,inf+distance];
+  assert(is_list(angles),str("angles=",angles))
+  let(
+    sorted    = [min(angles),max(angles)],
+    d         = sorted[1] - sorted[0],          // d ≥ 0°
+    distance  = d>360 ? 360 : d,                // 0° ≤ distance ≤ +360°
+    inf       = (sorted[0] % 360 + 360) % 360   // 0° ≤   inf    < +360°
+  )
+  assert(d>=0)
+  assert(distance>=0 && distance<=360)
+  assert(inf>=0 && inf<360)
+  [inf,inf+distance];
 
 function fl_sector(
   radius=1
@@ -213,7 +217,292 @@ module fl_sector(verbs=FL_ADD,radius=1, angles, quadrant) {
     fl_modifier($FL_AXES) fl_axes(size=size);
 }
 
+//**** elliptic sector ********************************************************
+
+// Exact elliptic sector bounding box
+function fl_bb_ellipticSector(
+  e,      // ellipse in [a,b] form
+  angles  // start|end angles
+) =
+assert(len(e)==2,str("e=",e))
+assert(len(angles)==2,str("angles=",angles))
+let(
+  a = e[0],
+  b = e[1],
+  inf       = angles[0],
+  sup       = angles[1],
+  start     = ceil(inf / 90), // 0 ≤ start ≤ 3
+  pts = assert(start>=0 && start<=3,start) [
+    if ((sup-inf)<360) [0,0],
+    if (inf%90!=0) let(alpha=inf)                           fl_ellipseXY(e,angle=alpha),
+    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_ellipseXY(e,angle=alpha),
+    if (sup%90!=0) let(alpha=sup)                           fl_ellipseXY(e,angle=alpha)
+  ]
+) fl_bb_polygon(pts);
+
+function __frags__(perimeter) = 
+  $fn == 0 
+    ?  max(min(360 / $fa, perimeter / $fs), 5) 
+    :  $fn >= 3 ? $fn : 3;
+
+// line to line intersection as from https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+function fl_intersection(
+  line1,          // first line in [P0,P1] format
+  line2,          // second line in [P0,P1] format
+  in1     = true, // solution valid if inside segment 1
+  in2     = true  // solution valid if inside segment 2
+) = let(
+  x1  = line1[0].x,
+  y1  = line1[0].y,
+  x2  = line1[1].x,
+  y2  = line1[1].y,
+  x3  = line2[0].x,
+  y3  = line2[0].y,
+  x4  = line2[1].x,
+  y4  = line2[1].y,
+  D   = (x1-x2)*(y3-y4)-(y1-y2)*(x3-x4),
+
+  t = ((x1-x3)*(y3-y4)-(y1-y3)*(x3-x4))/D,
+  u = ((x1-x3)*(y1-y2)-(y1-y3)*(x1-x2))/D,
+  c = (in1==false || (t>=0 && t<=1)) && (in2==false || (u>=0 && u<=1)) 
+) assert(D!=0)  // no intersection
+  assert(c)     // intersection outside segments
+  [x1+t*(x2-x1),y1+t*(y2-y1)];
+
+function fl_ellipticSector(e,angles) = 
+assert(is_list(e),str("e=",e))
+// echo(str("***e***=",e))
+// echo(str("***angles***=",angles))
+assert(is_list(angles),str("angles=",angles))
+let(
+  O     = [0,0],
+  a     = e[0],
+  b     = e[1],
+  step  = 360 / __frags__(fl_ellipseP(e)),
+  // angles  = __normalize__(angles),
+  t     = [fl_ellipseT(e,angles[0]),fl_ellipseT(e,angles[1])],
+  m     = floor(angles[0] / step) + 1,
+  n     = floor(angles[1] / step),
+  M     = floor(t[0]/step) + 1,
+  N     = floor(t[1]/step),
+  // FIRST AND LAST POINTS ARE CALCULATED IN POLAR FORM
+  first = let(
+      ray   = [O,fl_ellipseXY(e,angle=angles[0])],
+      edge  = [fl_ellipseXY(e,angle=(m-1)*step),fl_ellipseXY(e,angle=m*step)]
+    ) fl_intersection(ray,edge),
+  last  = let(
+      ray   = [O,fl_ellipseXY(e,angle=angles[1])],
+      edge  = [fl_ellipseXY(e,angle=n*step),fl_ellipseXY(e,angle=(n+1)*step)]
+    ) fl_intersection(ray,edge),
+  pts   = concat(
+    [[0, 0], first],
+    // m > n ? [] : [
+      // for(i = m; i <= n; i = i + 1)
+      //   let(alpha = step * i,p=fl_ellipseXY(e,theta=alpha)) p
+    
+    // INFRA POINTS ARE CALCULATED IN PARAMETRIC «T» FORM
+    M > N ? [] : [
+      for(i = M; i <= N; i = i + 1)
+        fl_ellipseXY(e,t=step * i)
+    ],
+    angles[1]==step * n ? [] : [last]
+  )
+) pts;
+
+module fl_ellipticSector(
+  verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX,
+  e,                  // ellipse in [a,b] form
+  angles,             // start|end angles in whatever order
+  quadrant
+) {
+  assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(e!=undef && angles!=undef);
+
+  a     = e[0];
+  b     = e[1];
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  bbox  = fl_bb_ellipticSector(e,angles);
+  size  = bbox[1]-bbox[0];
+  M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+
+  multmatrix(M) fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) polygon(fl_ellipticSector(e,angles));
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) translate(bbox[0]) square(size=size, center=false);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+  if (axes)
+    fl_modifier($FL_AXES) fl_axes(size=size);
+}
+
+//**** elliptic arc ***********************************************************
+
+// Exact elliptic arc bounding box
+function fl_bb_ellipticArc(
+  e,      // ellipse in [a,b] form
+  angles, // start|end angles
+  width   // added to radius defines the external radius
+) = 
+assert(is_list(e)     ,str("e=",e))
+assert(is_list(angles),str("angles=",angles))
+assert(is_num(width)  ,str("width=",width))
+let(
+  a = e[0],
+  b = e[1],
+
+  inf       = angles[0],
+  sup       = angles[1],
+  start     = ceil(inf / 90),  // 0 <= start <= 3
+  E         = assert(start>=0 && start<=3,start) e+[width,width],
+  pts = [
+    // internal sector
+    if (inf%90!=0) let(alpha=inf)                           fl_ellipseXY(e,angle=alpha),
+    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_ellipseXY(e,angle=alpha),
+    if (sup%90!=0) let(alpha=sup)                           fl_ellipseXY(e,angle=alpha),
+    // external sector
+    if (inf%90!=0) let(alpha=inf)                           fl_ellipseXY(E,angle=alpha),
+    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_ellipseXY(E,angle=alpha),
+    if (sup%90!=0) let(alpha=sup)                           fl_ellipseXY(E,angle=alpha)
+  ]
+) fl_bb_polygon(pts);
+
+module fl_ellipticArc(
+  verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX,
+  e,                  // ellipse in [a,b] form
+  angles,             // start|end angles
+  width,              // added to radius defines the external radius
+  quadrant
+) {
+  assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(is_list(e)     ,str("e=",e));
+  // echo(angles=angles);
+  assert(is_list(angles),str("angles=",angles));
+  assert(is_num(width)  ,str("width=",width));
+
+  a     = e[0];
+  b     = e[1];
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  bbox  = fl_bb_ellipticArc(e,angles,width);
+  size  = bbox[1]-bbox[0];
+  M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+
+  multmatrix(M) fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) difference() {
+        fl_ellipticSector(verbs=$verb, e=[a+width,b+width] ,angles=angles);
+        fl_ellipticSector(verbs=$verb, e=e, angles=angles);
+      }
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) translate(bbox[0]) square(size=size, center=false);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+  if (axes)
+    fl_modifier($FL_AXES) fl_axes(size=size);
+}
+
+//**** ellipse ****************************************************************
+
+// r(θ): polar value of ellipse «e» by «θ»
+function fl_ellipseR(e,theta) = let(
+    a           = e[0],
+    b           = e[1],
+    e_cos_theta = fl_ellipseE(e) * cos(theta)
+  ) b / sqrt(1-e_cos_theta*e_cos_theta);
+
+// [x,y]: rectangular value of ellipse «e» by «t» (parametric) or «angle» (polar) input
+function fl_ellipseXY(
+  e,    // ellipse in [a,b] form
+  t,    // parametric input 0≤t<360
+  angle // polar input 0≤a<360
+) =
+assert(is_list(e))
+assert(fl_XOR(t!=undef,angle!=undef))
+// assert(t==undef || (t>=0  &&  t<=360),str("t=",t))
+// assert(theta==undef || (theta>=0 && theta<=360),str("theta=",theta))
+let(
+  a = e[0],
+  b = e[1]
+) t!=undef ? [a*cos(t),b*sin(t)] : fl_ellipseXY(e,t=fl_ellipseT(e,angle));
+
+// Approximated ellipse perimeter 
+function fl_ellipseP(e) = 
+assert(e[0]>0 && e[1]>0,str("e=",e))
+let(
+  a = e[0],
+  b = e[1],
+  h = (a-b)*(a-b)/(a+b)/(a+b)
+) PI*(a+b)*(1+3*h/(10+sqrt(4-3*h)));
+
+// eccentricity of ellipse «e»
+function fl_ellipseE(e) =
+assert(e[0]>0 && e[1]>0,str("e=",e))
+let(
+  a = e[0],
+  b = e[1]
+) sqrt(1-b*b/a/a);
+
+// converts «θ» value to the corresponding ellipse «t» parameter
+function fl_ellipseT(e,angle) =
+assert(is_list(e),str("e=",e))
+assert(is_num(angle),str("angle=",angle))
+let(
+  a = e[0],
+  b = e[1],
+  t = asin(fl_ellipseR(e,angle)*sin(angle)/b)
+) angle>270 ? t+360 : angle>90 ? 180-t : t;
+
+// Exact ellipse bounding box
+function fl_bb_ellipse(
+  e // ellipse in [a,b] form
+) = let(a=e[0],b=e[1]) assert(is_list(e),str("e=",e)) [[-a,-b],[+a,+b]];
+
+function fl_ellipse(
+  e // ellipse in [a,b] form
+) = let(a=e[0],b=e[1]) fl_ellipticSector([a,b],[0,360]);
+
+module fl_ellipse(
+  verbs   = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  e,                // ellipse in [a,b] form
+  quadrant
+) {
+  assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(e!=undef);
+
+  a     = e[0];
+  b     = e[1];
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  bbox  = fl_bb_ellipse(e);
+  size  = bbox[1]-bbox[0];
+  M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+
+  multmatrix(M) fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) polygon(fl_ellipse(e));
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) translate(bbox[0]) square(size=size, center=false);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+  if (axes)
+    fl_modifier($FL_AXES) fl_axes(size=size);
+}
+
 //**** circle *****************************************************************
+
+// Rectangular value [x,y] of circle of ray «r» by «t» (parametric)
+function fl_circleXY(
+  r,  // radius of the circle
+  t   // 0≤t<360, angle that the ray from (0,0) to (x,y) makes with +X 
+) = r*[cos(t),sin(t)];
 
 function fl_circle(radius=1) = fl_sector(radius,[0,360]);
 
