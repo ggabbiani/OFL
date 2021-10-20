@@ -18,6 +18,8 @@
  */
 include <unsafe_defs.scad>
 use     <2d.scad>
+use     <3d.scad>
+use     <layout.scad>
 use     <placement.scad>
 
 $fn         = 50;           // [3:100]
@@ -31,69 +33,54 @@ $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-
 /* [Supported verbs] */
 
 // adds shapes to scene.
 ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of user passed accessories (like alternative screws)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a box representing the payload of the shape
-PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
 PLACE_NATIVE  = true;
-QUADRANT      = [+1,+1];  // [-1:+1]
+OCTANT        = [0,0,0];  // [-1:+1]
+
+/* [Direction] */
+
+DIR_NATIVE  = true;
+// ARBITRARY direction vector
+DIR_Z       = [0,0,1];  // [-1:0.1:+1]
+// rotation around
+DIR_R       = 0;        // [0:360]
 
 /* [Torus] */
 
 // Torus radius
 R = 5;                // [0:+100]
 // Ellipse horiz. semi axis
-A = 2;
+A = 2;                // [0:+10]
 // Ellipse vert. semi axis
-B = 1;
-// arc/sector specific
-START_ANGLE   = 0;    // [0:360]
-END_ANGLE     = 60;   // [0:360]
-T             = 1;
+B = 1;                // [0:+10]
 
 /* [Hidden] */
 
 module __test__() {
-  quadrant  = PLACE_NATIVE ? undef : QUADRANT;
+  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+  octant    = PLACE_NATIVE  ? undef : OCTANT;
   verbs=[
     if (ADD!="OFF")       FL_ADD,
-    if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
     if (AXES!="OFF")      FL_AXES,
     if (BBOX!="OFF")      FL_BBOX,
-    if (LAYOUT!="OFF")    FL_LAYOUT,
   ];
-  fl_torus(verbs,r=R,a=A,b=B)
-    fl_ellipticArc(e=[A,B],angles=[START_ANGLE,END_ANGLE],width=T,quadrant=+X);
-  // fl_torus(r=R) fl_circle(radius=A,quadrant=+X);
-  // fl_torus(r=R) fl_ellipse(e=[A,B],quadrant=+X);
-  // fl_torus(r=R) fl_ellipticArc(e=[A,B],angles=[START_ANGLE,END_ANGLE],width=T,quadrant=+X);
-  // fl_torus(r=R) fl_ellipticSector(e=[A,B],angles=[START_ANGLE,END_ANGLE],quadrant=+X);
 
+  fl_torus(verbs,r=R,a=A,b=B,$fn=$fn,octant=octant,direction=direction,
+    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
 }
 
 module fl_torus(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
   r           = 1,
   a,
   b,
@@ -101,47 +88,30 @@ module fl_torus(
   octant                // when undef native positioning is used
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(r>=a,str("r=",r,",a=",a));
   
+  // echo(n=($fn>0?($fn>=3?$fn:3):ceil(max(min(360/$fa,r*2*PI/$fs),5))),a_based=360/$fa,s_based=r*2*PI/$fs);
+
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  // bbox  = fl_bb_corners(type);
-  // size  = fl_bb_size(type);
-  // D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
-  // M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
-  D     = I;
-  M     = I;
+  ellipse = [a,b];
+  bbox    = let(edge=a+r) [[-edge,-edge,-b],[+edge,+edge,+b]];
+  size    = bbox[1]-bbox[0];
+  D       = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
+  M       = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+
+  fn      = $fn;
 
   fl_trace("D",D);
   fl_trace("M",M);
-  // fl_trace("bbox",bbox);
-
-  module do_bbox() {}
-  
-  module do_assembly() {
-    do_layout()
-      fl_ellipse(e=[a,b],quadrant=+X);
-  }
-  
-  module do_layout() {
-    rotate_extrude() translate(X(r)) children();
-  }
 
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_assembly();
+        fl_modifier($FL_ADD) rotate_extrude($fn=$fn) translate(X(r-a)) fl_ellipse(e=ellipse,quadrant=+X,$fn=fn);
       } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_cube(size=size);
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout()
-          children();
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT);
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_assembly();
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL);
+        fl_modifier($FL_BBOX) fl_bb_add(bbox);
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }
