@@ -138,7 +138,7 @@ module fl_box(
 ) {
   assert((size==undef && psize!=undef) || (size!=undef && psize==undef));
   assert(thick!=undef);
-  $FL_TRACE=true;
+  
   fl_trace("$FL_ADD",$FL_ADD);
   fl_trace("$FL_PAYLOAD",$FL_PAYLOAD);
 
