@@ -22,6 +22,11 @@
 include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
+function fl_version() = [1,1,0];
+function fl_version_num() = let(
+  version = fl_version()
+) version.x*10000+version.y*100+version.z;
+
 // May trigger debug statement in client modules / functions
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
