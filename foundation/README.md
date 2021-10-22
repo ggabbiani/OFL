@@ -261,28 +261,26 @@ For similar reasons all global constants used in OFL are prefixed with **'FL_'**
 
 ## File name convention
 
-Basically OFL uses two type of files: (Object) definition files and (Component) implementation files.
+Basically OFL uses three type of files: (Object) definition files,  (Component) implementation and test files.
 
 ### Definition files
 
 Files named in plural form, contain *Object* definitions and must be \<included\> by clients. They *can* contain also function helpers, but essentially they export Objects. Valid examples are:
 
-    OFL/foundation/defs.scad
-    OFL/vitamins/countersinks.scad
+    include <OFL/foundation/defs.scad>
+    include <OFL/vitamins/countersinks.scad>
 
 ### Implementation files
 
 Files named in singular form contain the implementation code for components and must be \<used\> by clients. Valid examples are:
 
-    OFL/foundation/layout.scad
-    OFL/vitamins/countersink.scad
+    use <OFL/foundation/layout.scad>
+    use <OFL/vitamins/countersink.scad>
 
-Inside OFL implementation files a \_\_test\_\_ module is defined and called from the main body in order to:
+### Test files
 
-* provide a functional test of the component features for the maintainer;
-* facilitate the component comprehension for the user;
-* reduce the need of other separated test files.
+Test files are available in singular form as standalone units (i.e. loadable from OpenSCAD) in order to:
 
-This is also the reason why these file must be \<used\> - not \<included\> - by clients.
-
-**As a general rule of thumb: files in plural form must be INCLUDED, singulars must be USED.**
+* provide a functional test of the component features;
+* facilitate component comprehension;
+* act as concrete documentation for the library.
