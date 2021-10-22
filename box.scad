@@ -19,9 +19,9 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <OFL/foundation/unsafe_defs.scad>
-include <OFL/foundation/incs.scad>
-include <OFL/vitamins/incs.scad>
+include <foundation/unsafe_defs.scad>
+include <foundation/incs.scad>
+include <vitamins/incs.scad>
 
 include <NopSCADlib/lib.scad>
 
