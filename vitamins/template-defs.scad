@@ -1,5 +1,7 @@
 /*
- * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org).
+ * Definition file template for OpenSCAD Foundation Library vitamins.
+ *
+ * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -16,18 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
+include <../foundation/defs.scad>
 
-include <defs.scad>
+FL_TEMP_DICT = [
+];
 
-use <2d.scad>
-use <3d.scad>
-use <algo.scad>
-use <connect.scad>
-use <drawio.scad>
-use <fillet.scad>
-use <layout.scad>
-use <placement.scad>
-use <profile.scad>
-use <symbol.scad>
-use <torus.scad>
-use <util.scad>
+use     <template-imp.scad>

@@ -1,4 +1,6 @@
 /*
+ * Implementation file template for OpenSCAD Foundation Library vitamins.
+ *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -16,45 +18,48 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <unsafe_defs.scad>
-use     <2d.scad>
-use     <3d.scad>
-use     <layout.scad>
-use     <placement.scad>
+// include <../foundation/unsafe_defs.scad>
+include <../foundation/defs.scad>
 
-module fl_torus(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
-  r           = 1,
-  a,
-  b,
+include <template-defs.scad>
+
+module stub(
+  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  type,
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant                // when undef native positioning is used
+  octant,               // when undef native positioning is used
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(r>=a,str("r=",r,",a=",a));
-  
-  // echo(n=($fn>0?($fn>=3?$fn:3):ceil(max(min(360/$fa,r*2*PI/$fs),5))),a_based=360/$fa,s_based=r*2*PI/$fs);
 
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  ellipse = [a,b];
-  bbox    = let(edge=a+r) [[-edge,-edge,-b],[+edge,+edge,+b]];
-  size    = bbox[1]-bbox[0];
-  D       = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  bbox  = fl_bb_corners(type);
+  size  = fl_bb_size(type);
+  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
-  fn      = $fn;
-
-  fl_trace("D",D);
-  fl_trace("M",M);
+  module do_add() {}
+  module do_bbox() {}
+  module do_assembly() {}
+  module do_layout() {}
+  module do_drill() {}
 
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) rotate_extrude($fn=$fn) translate(X(r-a)) fl_ellipse(e=ellipse,quadrant=+X,$fn=fn);
+        fl_modifier($FL_ADD) fl_cube(size=size);
       } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+        fl_modifier($FL_BBOX) fl_cube(size=size);
+      } else if ($verb==FL_LAYOUT) {
+        fl_modifier($FL_LAYOUT) do_layout()
+          children();
+      } else if ($verb==FL_FOOTPRINT) {
+        fl_modifier($FL_FOOTPRINT);
+      } else if ($verb==FL_ASSEMBLY) {
+        fl_modifier($FL_ASSEMBLY);
+      } else if ($verb==FL_DRILL) {
+        fl_modifier($FL_DRILL);
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }

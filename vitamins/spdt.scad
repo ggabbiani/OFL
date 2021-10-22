@@ -24,60 +24,6 @@ use     <../foundation/placement.scad>
 
 include <NopSCADlib/lib.scad>
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$FL_DEBUG   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = true;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
-
-/* [Supported verbs] */
-
-// adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-
-/* [Direction] */
-
-DIR_NATIVE  = true;
-// ARBITRARY direction vector
-DIR_Z       = [0,0,1];  // [-1:0.1:+1]
-// rotation around
-DIR_R       = 0;        // [0:360]
-
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
-
-/* [Hidden] */
-
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-    if (BBOX!="OFF")  FL_BBOX,
-    if (DRILL!="OFF") FL_DRILL,
-  ];
-  fl_trace("PLACE_NATIVE",PLACE_NATIVE);
-  fl_trace("octant",octant);
-
-  // $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_DRILL=DRILL;
-
-  fl_spdt(verbs,FL_SODAL_SPDT,octant=octant,direction=direction,
-      $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL);
-}
-
 function fl_spdt_d(type)       = fl_get(type,"nominal diameter");
 function fl_spdt_l(type)       = fl_get(type,"length");
 function fl_spdt_headH(type)  = fl_get(type,"head height");
@@ -154,5 +100,3 @@ module fl_spdt(
       fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
-
-__test__();

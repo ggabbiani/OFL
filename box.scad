@@ -19,9 +19,9 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <OFL/foundation/unsafe_defs.scad>
-include <OFL/foundation/incs.scad>
-include <OFL/vitamins/incs.scad>
+include <foundation/unsafe_defs.scad>
+include <foundation/incs.scad>
+include <vitamins/incs.scad>
 
 include <NopSCADlib/lib.scad>
 
@@ -138,7 +138,7 @@ module fl_box(
 ) {
   assert((size==undef && psize!=undef) || (size!=undef && psize==undef));
   assert(thick!=undef);
-  $FL_TRACE=true;
+  
   fl_trace("$FL_ADD",$FL_ADD);
   fl_trace("$FL_PAYLOAD",$FL_PAYLOAD);
 

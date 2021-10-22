@@ -20,40 +20,6 @@
 include <defs.scad>
 use     <3d.scad>
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$FL_DEBUG   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = true;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
-
-// adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-
-/* [Symbol] */
-SIZE_TYPE       = "default";  // [default,scalar,fl_vector]
-SIZE_SCALAR     = 0.5;
-SIZE_VECTOR     = [1.0,1.0,0.5];
-SYMBOL          = "plug";  // [plug,socket]
-
-/* [Hidden] */
-
-module __test__() {
-  verbs=[
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-  ];
-
-  size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
-
-  fl_symbol(verbs=verbs,size=size,symbol=SYMBOL,$FL_ADD=ADD,$FL_AXES=AXES);
-}
-
 module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
   fl_symbol(verbs,type,size,"plug");
 }
@@ -110,5 +76,3 @@ module fl_symbol(
   if (axes)
     fl_modifier($FL_AXES) fl_axes(size=sz);
 }
-
-__test__();
