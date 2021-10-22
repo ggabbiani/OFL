@@ -29,4 +29,5 @@ use <layout.scad>
 use <placement.scad>
 use <profile.scad>
 use <symbol.scad>
+use <torus.scad>
 use <util.scad>
