@@ -1,9 +1,7 @@
 /*
  * Countersink implementation.
  *
- * Created  : on Mon Aug 30 2021.
- * Copyright: © 2021 Giampiero Gabbiani.
- * Email    : giampiero@gabbiani.org
+ * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -31,75 +29,6 @@ use     <../foundation/placement.scad>
 use <NopSCADlib/utils/layout.scad>
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
-
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$FL_DEBUG   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
-
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-
-/* [Supported verbs] */
-
-// adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
-
-/* [Direction] */
-
-DIR_NATIVE  = true;
-// ARBITRARY direction vector
-DIR_Z       = [0,0,1];  // [-1:0.1:+1]
-// rotation around
-DIR_R       = 0;        // [0:360]
-
-/* [Countersink] */
-
-SHOW    = "ALL"; // [ALL, FL_CS_M3, FL_CS_M4, FL_CS_M5, FL_CS_M6, FL_CS_M8, FL_CS_M10, FL_CS_M12, FL_CS_M16, FL_CS_M20]
-GAP     = 5;
-
-/* [Hidden] */
-
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-    if (BBOX!="OFF")  FL_BBOX,
-  ];
-  obj = SHOW=="FL_CS_M3"  ? FL_CS_M3
-      : SHOW=="FL_CS_M4"  ? FL_CS_M4
-      : SHOW=="FL_CS_M5"  ? FL_CS_M5
-      : SHOW=="FL_CS_M6"  ? FL_CS_M6
-      : SHOW=="FL_CS_M8"  ? FL_CS_M8
-      : SHOW=="FL_CS_M10" ? FL_CS_M10
-      : SHOW=="FL_CS_M12" ? FL_CS_M12
-      : SHOW=="FL_CS_M16" ? FL_CS_M16
-      : SHOW=="FL_CS_M20" ? FL_CS_M20
-      : undef;
-
-  if (obj)
-    fl_countersink(verbs,obj,octant=octant,direction=direction,
-                    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else
-    fl_layout(X,GAP,FL_CS_DICT)
-      fl_countersink(verbs,FL_CS_DICT[$i],octant=octant,direction=direction,
-                    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-}
 
 module fl_countersink(
   verbs,
@@ -132,5 +61,3 @@ module fl_countersink(
       fl_modifier($FL_AXES) fl_axes(size=1.2*size);
   }
 }
-
-__test__();

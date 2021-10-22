@@ -22,63 +22,6 @@ use     <3d.scad>
 use     <layout.scad>
 use     <placement.scad>
 
-$fn         = 50;           // [3:100]
-$fs         = 50;           // [3:100]
-// Debug statements are turned on
-$FL_DEBUG   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
-
-/* [Supported verbs] */
-
-// adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
-
-/* [Direction] */
-
-DIR_NATIVE  = true;
-// ARBITRARY direction vector
-DIR_Z       = [0,0,1];  // [-1:0.1:+1]
-// rotation around
-DIR_R       = 0;        // [0:360]
-
-/* [Torus] */
-
-// Torus radius
-R = 5;                // [0:+100]
-// Ellipse horiz. semi axis
-A = 2;                // [0:+10]
-// Ellipse vert. semi axis
-B = 1;                // [0:+10]
-
-/* [Hidden] */
-
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")       FL_ADD,
-    if (AXES!="OFF")      FL_AXES,
-    if (BBOX!="OFF")      FL_BBOX,
-  ];
-
-  fl_torus(verbs,r=R,a=A,b=B,$fn=$fn,octant=octant,direction=direction,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-}
-
 module fl_torus(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
   r           = 1,
@@ -120,5 +63,3 @@ module fl_torus(
       fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
-
-__test__();

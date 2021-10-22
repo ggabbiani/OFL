@@ -24,49 +24,8 @@
  */
 
 include <unsafe_defs.scad>
-
 use     <3d.scad>
 use     <placement.scad>
-
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$FL_DEBUG   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
-
-// Draw planes
-FL_PLANES  = true;
-
-/* [Placement] */
-
-OCTANT        = [0,0,0];  // [-1:+1]
-
-/* [Algo] */
-
-DEPLOYMENT  = [10,0,0];
-ALIGN       = [0,0,0];  // [-1:+1]
-
-/* [Hidden] */
-
-module __test__() {
-  data    = [
-    ["zero",    [1,11,111]],
-    ["first",   [2,22,1]],
-    ["second",  [3,33,1]],
-  ];
-  pattern = [0,1,1,2];
-
-  fl_trace("result",fl_algo_pattern(10,pattern,data));
-  fl_algo_pattern(10,pattern,data,deployment=DEPLOYMENT,octant=OCTANT,align=ALIGN);
-
-  if (FL_PLANES)
-    fl_planes(size=200);
-
-}
 
 module fl_planes(size=1,alpha=0.2) {
   nil = 0.01;
@@ -149,5 +108,3 @@ module fl_algo_pattern(
       }
     }
 }
-
-__test__();
