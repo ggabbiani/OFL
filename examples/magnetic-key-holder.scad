@@ -20,9 +20,9 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <OFL/foundation/unsafe_defs.scad>
-include <OFL/vitamins/magnets.scad>
-include <OFL/foundation/incs.scad>
+include <../foundation/unsafe_defs.scad>
+include <../foundation/incs.scad>
+include <../vitamins/incs.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
