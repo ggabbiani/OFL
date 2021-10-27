@@ -87,7 +87,7 @@ module __test__() {
     fl_countersink(verbs,obj,octant=octant,direction=direction,
                     $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
   else
-    fl_layout(X,GAP,FL_CS_DICT)
+    fl_layout(axis=X,gap=GAP,types=FL_CS_DICT)
       fl_countersink(verbs,FL_CS_DICT[$i],octant=octant,direction=direction,
                     $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
 }

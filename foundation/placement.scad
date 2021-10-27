@@ -105,7 +105,7 @@ let(
   alpha   = direction[1],
   new_dir = fl_versor(direction[0]),
   new_rot = fl_transform(fl_align(def_dir,new_dir),def_rot)
-) R(new_dir,alpha)                              // rotate «alpha» degrees around «new_dir»
+) R(new_dir,alpha)                                // rotate «alpha» degrees around «new_dir»
 * fl_planeAlign(def_dir,def_rot,new_dir,new_rot); // align direction
 
 /*

@@ -1,0 +1,20 @@
+{
+    "parameterSets": {
+        "v2": {
+            "$FL_RENDER": "false",
+            "$FL_SAFE": "false",
+            "$FL_TRACE": "false",
+            "$fn": "50",
+            "ADD": "ON",
+            "ASSEMBLY": "ON",
+            "BBOX": "OFF",
+            "BIT_TOLERANCE": "0.25",
+            "FILAMENT": "DodgerBlue",
+            "GAP": "[3, 1, 2]",
+            "HEIGHT": "20",
+            "diameters": "[1, 2, 3, 3.3, 4, 4.2, 5]",
+            "magnet_size": "[10, 5, 1]"
+        }
+    },
+    "fileFormatVersion": "1"
+}

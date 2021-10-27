@@ -87,14 +87,14 @@ module __test__() {
   module ipoly() {
     fl_ipoly(verbs,RADIUS,n=IPOLY_N,quadrant=quadrant);
     if (IPOLY_CIRCLE)
-      fl_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(RADIUS,IPOLY_N)) #fl_circle(FL_ADD,RADIUS);
+      fl_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(r=RADIUS,n=IPOLY_N)) #fl_circle(FL_ADD,r=RADIUS);
   }
 
   $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;
 
-  if      (PRIMITIVE == "circle"            ) fl_circle(verbs,RADIUS,quadrant=quadrant);
-  else if (PRIMITIVE == "circle arc"        ) fl_arc(verbs,RADIUS,angles,ARC_T,quadrant=quadrant);
-  else if (PRIMITIVE == "circle sector"     ) fl_sector(verbs,RADIUS,angles,quadrant=quadrant);
+  if      (PRIMITIVE == "circle"            ) fl_circle(verbs,r=RADIUS,quadrant=quadrant);
+  else if (PRIMITIVE == "circle arc"        ) fl_arc(verbs,r=RADIUS,angles=angles,thick=ARC_T,quadrant=quadrant);
+  else if (PRIMITIVE == "circle sector"     ) fl_sector(verbs,r=RADIUS,angles=angles,quadrant=quadrant);
   else if (PRIMITIVE == "ellipse"           ) fl_ellipse(verbs,[A,B],quadrant=quadrant);
   else if (PRIMITIVE == "elliptic arc"      ) fl_ellipticArc(verbs,[A,B],angles,ARC_T,quadrant=quadrant);
   else if (PRIMITIVE == "elliptic sector"   ) fl_ellipticSector(verbs,[A,B],angles,quadrant=quadrant);

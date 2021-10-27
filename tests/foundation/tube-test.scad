@@ -20,7 +20,8 @@
  */
 include <../../foundation/unsafe_defs.scad>
 include <../../foundation/incs.scad>
-use     <../../foundation/template.scad>
+
+use     <../../foundation/tube.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -38,22 +39,12 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 // adds shapes to scene.
 ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of user passed accessories (like alternative screws)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a box representing the payload of the shape
-PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -68,22 +59,25 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [Stub] */
+/* [Tube] */
+
+A = 5;    // [0:10]
+B = 5;    // [0:10]
+H = 10;   // [0:10]
+T = 2.5;  // [0:0.1:10]
 
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
-  if (ADD!="OFF")   FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if (AXES!="OFF")  FL_AXES,
-  if (BBOX!="OFF")  FL_BBOX,
-  if (CUTOUT!="OFF")  FL_CUTOUT,
-  if (DRILL!="OFF")  FL_DRILL,
+  if (ADD!="OFF")     FL_ADD,
+  if (AXES!="OFF")    FL_AXES,
+  if (BBOX!="OFF")    FL_BBOX,
   if (FPRINT!="OFF")  FL_FOOTPRINT,
-  if (LAYOUT!="OFF")  FL_LAYOUT,
-  if (PLOAD!="OFF")  FL_PAYLOAD,
 ];
 
-$FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
+// $FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
+
+fl_tube(verbs,base=[A,B],h=H,thick=T,direction=direction,octant=octant,
+  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);

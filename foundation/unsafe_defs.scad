@@ -31,12 +31,13 @@ I = FL_I;
 
 NIL = FL_NIL;
 
-function T(t)        = fl_T(t);
-function S(s)        = fl_S(s);
-function Rx(alpha)   = fl_Rx(alpha);
-function Ry(alpha)   = fl_Ry(alpha);
-function Rz(alpha)   = fl_Rz(alpha);
-function Rxyz(alpha) = fl_Rxyz(alpha);
+function T(t)       = fl_T(t);
+function S(s)       = fl_S(s);
+function Rx(alpha)  = fl_Rx(alpha);
+function Ry(alpha)  = fl_Ry(alpha);
+function Rz(alpha)  = fl_Rz(alpha);
+function Rxyz(alpha)= fl_Rxyz(alpha);
+function R(u,theta) = fl_R(u,theta);
 
 function X(x) = x*X;
 function Y(y) = y*Y;

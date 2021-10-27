@@ -32,13 +32,17 @@ function fl_bb_polygon(points) = let(
 ) [[min(x),min(y)],[max(x),max(y)]];
 
 // exact inscribed polygon bounding box
-function fl_bb_ipoly(radius,n) = fl_bb_polygon(fl_circle(radius,$fn=n));
+function fl_bb_ipoly(r,d,n) = let(
+  radius  = r!=undef ? r : d
+) assert(is_num(radius),str("radius=",radius)) fl_bb_polygon(fl_circle(r=radius,$fn=n));
 
 // exact sector bounding box
 function fl_bb_sector(
-  radius  = 1,
+  r       = 1,
+  d,
   angles
 ) = let(
+  radius    = d!=undef ? d/2 : r,
   interval  = __normalize__(angles),
   inf       = interval[0],
   sup       = interval[1],
@@ -49,22 +53,26 @@ function fl_bb_sector(
     for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_circleXY(radius,alpha),  // 
     if (sup%90!=0) let(alpha=sup)                           fl_circleXY(radius,alpha)   // superior interval added
   ]
-) fl_bb_polygon(pts);
+) assert(is_num(radius),str("radius=",radius)) fl_bb_polygon(pts);
 
 // exact circle bounding box
-function fl_bb_circle(radius=1) = [[-radius,-radius],[+radius,+radius]];
+function fl_bb_circle(r=1,d) = let(
+  radius  = d!=undef ? d/2 : r
+) assert(is_num(radius),str("radius=",radius)) [[-radius,-radius],[+radius,+radius]];
 
 // exact arc bounding box
-function fl_bb_arc(radius,angles,width) =
-assert(is_num(radius),str("«radius» must be a number (",radius,")"))
-assert(is_list(angles))
-assert(is_num(width))
+function fl_bb_arc(r=1,d,angles,thick) =
+assert(is_list(angles),str("angles must be a list (",angles,")"))
 let(
+  radius    = d!=undef ? d/2 : r,
   interval  = __normalize__(angles),
   inf       = interval[0],
   sup       = interval[1],
   start     = ceil(inf / 90),  // 0 <= start <= 3
-  RADIUS    = radius+width,
+  RADIUS    = 
+    assert(is_num(radius),str("«radius» must be a number (",radius,")"))
+    assert(is_num(thick), str("«thick» must be a number (",thick,")"))
+    radius+thick,
   pts = [
     if (inf%90!=0) for(r=[radius,RADIUS]) fl_circleXY(r,inf),
     for(alpha=[90*start:90:90*(start+3)]) if (alpha<=sup) for(r=[radius,RADIUS]) fl_circleXY(r,alpha),
@@ -94,23 +102,31 @@ function __normalize__(angles) =
   [inf,inf+distance];
 
 function fl_sector(
-  radius=1
-  ,angles   // start|end angles in whatever order
-) = 
-  assert($fn>2) 
+  r=1,
+  d,
+  angles  // start|end angles in whatever order
+) = let(
+  radius  = d!=undef ? d/2 : r
+) assert($fn>2) 
   assert(is_num(radius),str("radius=",radius))
   assert(is_list(angles),str("angles=",angles))
   shape_pie(radius,__normalize__(angles));
 
-module fl_sector(verbs=FL_ADD,radius=1, angles, quadrant) {
+module fl_sector(
+  verbs = FL_ADD,
+  r     = 1,
+  d,
+  angles,
+  quadrant
+) {
   assert(is_list(verbs)||is_string(verbs));
-  assert(is_num(radius),str("radius=",radius));
   assert(is_list(angles),str("angles=",angles));
 
+  radius  = d!=undef ? d/2 : r; assert(is_num(radius),str("radius=",radius));
   axes    = fl_list_has(verbs,FL_AXES);
   verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-  points  = fl_sector(radius,angles);
-  bbox    = fl_bb_sector(radius,angles);
+  points  = fl_sector(r=radius,angles=angles);
+  bbox    = fl_bb_sector(r=radius,angles=angles);
   size    = bbox[1] - bbox[0];
   M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
   fl_trace("radius",radius);
@@ -258,17 +274,17 @@ module fl_ellipticSector(
 function fl_bb_ellipticArc(
   e,      // ellipse in [a,b] form
   angles, // start|end angles
-  width   // added to radius defines the external radius
+  thick   // added to radius defines the external radius
 ) = 
 assert(is_list(e)     ,str("e=",e))
 assert(is_list(angles),str("angles=",angles))
-assert(is_num(width)  ,str("width=",width))
+assert(is_num(thick)  ,str("thick=",thick))
 let(
   angles    = __normalize__(angles),
   inf       = angles[0],
   sup       = angles[1],
   start     = ceil(inf / 90),
-  E         = e+[width,width],
+  E         = e+[thick,thick],
   pts = [
     if (inf%90!=0) for(ellipse=[e,E]) fl_ellipseXY(ellipse,angle=inf),
     for(alpha=[90*start:90:90*(start+3)]) if (alpha<=sup) for(ellipse=[e,E]) fl_ellipseXY(ellipse,angle=alpha),
@@ -280,27 +296,27 @@ module fl_ellipticArc(
   verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX,
   e,                  // ellipse in [a,b] form
   angles,             // start|end angles
-  width,              // added to radius defines the external radius
+  thick,              // added to radius defines the external radius
   quadrant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(is_list(e)     ,str("e=",e));
   // echo(angles=angles);
   assert(is_list(angles),str("angles=",angles));
-  assert(is_num(width)  ,str("width=",width));
+  assert(is_num(thick)  ,str("thick=",thick));
 
   a     = e[0];
   b     = e[1];
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-  bbox  = fl_bb_ellipticArc(e,angles,width);
+  bbox  = fl_bb_ellipticArc(e,angles,thick);
   size  = bbox[1]-bbox[0];
   M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
 
   multmatrix(M) fl_parse(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) difference() {
-        fl_ellipticSector(verbs=$verb, e=[a+width,b+width] ,angles=angles);
+        fl_ellipticSector(verbs=$verb, e=[a+thick,b+thick] ,angles=angles);
         fl_ellipticSector(verbs=$verb, e=e, angles=angles);
       }
     } else if ($verb==FL_BBOX) {
@@ -417,16 +433,22 @@ function fl_circleXY(
   t   // 0≤t<360, angle that the ray from (0,0) to (x,y) makes with +X 
 ) = r*[cos(t),sin(t)];
 
-function fl_circle(radius=1) = fl_sector(radius,[0,360]);
+function fl_circle(r=1) = assert(r) fl_sector(r=r,angles=[0,360]);
 
-module fl_circle(verbs=FL_ADD,radius,quadrant) {
+module fl_circle(
+  verbs = FL_ADD,
+  r,
+  d,
+  quadrant
+) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  bbox  = fl_bb_circle(radius);
-  size  = bbox[1] - bbox[0];
-  M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  radius  = r!=undef ? r : d/2; assert(is_num(radius));
+  bbox    = fl_bb_circle(r=radius);
+  size    = bbox[1] - bbox[0];
+  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
   fl_trace("quadrant",quadrant);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
@@ -434,7 +456,7 @@ module fl_circle(verbs=FL_ADD,radius,quadrant) {
 
   multmatrix(M)  fl_parse(verbs) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) polygon(fl_circle(radius));
+      fl_modifier($FL_ADD) polygon(fl_circle(r=radius));
     } else if ($verb==FL_BBOX) {
       fl_modifier($FL_BBOX) translate(bbox[0]) %square(size=size, center=false);
     } else {
@@ -448,29 +470,30 @@ module fl_circle(verbs=FL_ADD,radius,quadrant) {
 //**** arc ********************************************************************
 
 module fl_arc(
-  verbs   = FL_ADD
-  ,radius // internal radius
-  ,angles // start and stop angles
-  ,width  // added to radius defines the external radius
-  ,quadrant
+  verbs     = FL_ADD,
+  r,          // INTERNAL radius
+  d,          // INTERNAL diameter
+  angles,     // start and stop angles
+  thick,      // added to radius defines the external radius
+  quadrant
   ) {
   assert(is_list(verbs)||is_string(verbs));
-  assert(is_num(radius));
   assert(is_list(angles));
-  assert(is_num(width));
+  assert(is_num(thick));
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  axes    = fl_list_has(verbs,FL_AXES);
+  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  bbox  = fl_bb_arc(radius,angles,width);
-  size  = bbox[1] - bbox[0];
-  M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  radius  = r!=undef ? r : d/2; assert(is_num(radius));
+  bbox    = fl_bb_arc(r=radius,angles=angles,thick=thick);
+  size    = bbox[1] - bbox[0];
+  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
 
   multmatrix(M) fl_parse(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) difference() {
-        fl_sector(verbs=$verb, radius=radius + width,angles=angles);
-        fl_sector(verbs=$verb, radius=radius, angles=angles);
+        fl_sector($verb, r=radius + thick,angles=angles);
+        fl_sector($verb, r=radius, angles=angles);
       }
     } else if ($verb==FL_BBOX) {
       fl_modifier($FL_BBOX) if (size.x>0 && size.y>0) translate(bbox[0]) square(size=size, center=false);
@@ -498,8 +521,8 @@ module fl_ipoly(
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  radius  = r ? r : d/2;
-  points  = fl_circle(radius,$fn=n);
+  radius  = r!=undef ? r : d/2; assert(is_num(radius));
+  points  = fl_circle(r=radius,$fn=n);
 
   bbox    = fl_bb_polygon(points);
   size    = bbox[1] - bbox[0];
