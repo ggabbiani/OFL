@@ -19,6 +19,7 @@
 
 include <unsafe_defs.scad>
 use     <3d.scad>
+use     <placement.scad>
 
 /**
  * ... an unveiled mistery ...
@@ -108,9 +109,13 @@ function lay_bb_corners(
   axis, // cartesian axis ([-1,0,0]==[1,0,0]==X)
   gap,  // gap to be inserted between bounding boxes along axis
   types // list of types
-) = let(
-  bbcs = [for(t=types) fl_bb_corners(t)]
-) fl_bb_accum(axis,gap,bbcs);
+) =
+  assert(is_list(axis)&&len(axis)==3,str("axis=",axis))
+  assert(is_num(gap),gap)
+  assert(is_list(types),types)
+  let(
+    bbcs = [for(t=types) fl_bb_corners(t)]
+  ) fl_bb_accum(axis,gap,bbcs);
 
 /**
  * Accumulates a list of bounding boxes along a direction.
@@ -162,40 +167,6 @@ let(
 ) result_plane + result_axis;
 
 /**
- * layout of types along a direction
- */
-module _fl_layout(
-  axis,   // layout direction
-  gap,    // gap inserted along «axis»
-  types,  // list of types to be arranged
-  _i_=0   // internally used: DO NOT TOUCH
-) {  
-  fl_trace("$children",$children);
-  len = len(types);
-  sum = axis*[1,1,1]>0;
-  fac = sum ? 1 : -1;
-  bcs = [for(t=types) 
-    let(cs=fl_bb_corners(t)) 
-    [fl_3d_vectorialProjection(cs[0],axis),fl_3d_vectorialProjection(cs[1],axis)]];
-  size = [for(c=bcs) c[1]-c[0]];
-
-  fl_trace("bcs",bcs);
-  fl_trace("size",size);
-  for(i=[0:len-1]) {
-    fl_trace("i",i);
-    offset = sum
-    ? i>0 ? bcs[0][1] -bcs[i][0] : O
-    : i>0 ? bcs[0][0] -bcs[i][1] : O;
-    sz = i>1 ? fl_accum([for(j=[1:i-1]) size[j]]) : O;
-    fl_trace("sz",sz);
-    fl_trace("delta",i*gap*axis);
-    fl_trace("offset",offset);
-    translate(offset+fac*sz+i*gap*axis)
-      children(i);
-  }
-}
-
-/**
  * layout of types along a direction.
  * There are basically two methods of invokation call:
  * - with as many children as the length of types: in this case each children will
@@ -204,10 +175,25 @@ module _fl_layout(
  *   current execution number.
  */
 module fl_layout(
-  axis,   // layout direction
-  gap,    // gap inserted along «axis»
-  types   // list of types to be arranged
+  verbs = FL_LAYOUT, // supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
+  axis,     // layout direction
+  gap,      // gap inserted along «axis»
+  types,    // list of types to be arranged
+  direction,// desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  octant    // when undef native positioning is used
 ) {  
+  assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(len(axis)==3,axis);
+  assert(is_num(gap),gap);
+  assert(is_list(types),types);
+  
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  bbox  = lay_bb_corners(axis,gap,types);
+  size  = bbox[1]-bbox[0]; // resulting size
+  D     = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
+  M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+
   fl_trace("$children",$children);
   len = len(types);
   sum = axis*[1,1,1]>0;
@@ -215,20 +201,35 @@ module fl_layout(
   bcs = [for(t=types) 
     let(cs=fl_bb_corners(t)) 
     [fl_3d_vectorialProjection(cs[0],axis),fl_3d_vectorialProjection(cs[1],axis)]];
-  size = [for(c=bcs) c[1]-c[0]];
-
+  // composite sizes list
+  sz = [for(c=bcs) c[1]-c[0]];
   fl_trace("bcs",bcs);
-  fl_trace("size",size);
-  for($i=[0:len-1]) {
-    fl_trace("$i",$i);
-    offset = sum
-    ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
-    : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
-    sz = $i>1 ? fl_accum([for(j=[1:$i-1]) size[j]]) : O;
-    fl_trace("sz",sz);
-    fl_trace("delta",$i*gap*axis);
-    fl_trace("offset",offset);
-    translate(offset+fac*sz+$i*gap*axis)
-      if ($children>1) children($i); else children(0);
+  fl_trace("sz",sz);
+
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      } else if ($verb==FL_LAYOUT) {
+        fl_modifier($FL_LAYOUT)
+          for($i=[0:len-1]) {
+            fl_trace("$i",$i);
+            offset = sum
+            ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
+            : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
+            sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : O;
+            fl_trace("sz",sz);
+            fl_trace("delta",$i*gap*axis);
+            fl_trace("offset",offset);
+            translate(offset+fac*sz+$i*gap*axis)
+              if ($children>1) children($i); else children(0);
+          };
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
+    }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=size);
   }
+
 }
