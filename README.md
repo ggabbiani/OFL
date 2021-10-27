@@ -15,7 +15,7 @@ The following libraries are used and must be installed for using all the OFL fea
 
 * [dotSCAD](https://justinsdk.github.io/dotSCAD/)
 * [NopSCADlib](https://github.com/nophead/NopSCADlib)
-* [scad-utils](https://github.com/OskarLinde/scad-utils)
+* [scad-utils](https://github.com/openscad/scad-utils)
 * [TOUL: The OpenScad Useful Library](https://www.thingiverse.com/thing:1237203)
 
 ## Usage
