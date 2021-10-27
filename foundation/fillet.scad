@@ -67,13 +67,21 @@ module fl_fillet(
   }
 }
 
+function _3d_(p)  = [p.x,p.y,0];
+
+function fl_bb_90DegFillet(
+  r,                  // fillet radius
+  n,                  // number of steps along Z axis
+  child_bbox,         // bounding box od the object to apply the fillet to
+) = [_3d_(child_bbox[0])-[r,r,0],_3d_(child_bbox[1])+[r,r,r]];
+
 // 90 Degree fillet taken from:
 // https://forum.openscad.org/Fillet-With-Internal-Angles-td17201.html
 module fl_90DegFillet(
   verbs = FL_ADD,
   r,                  // fillet radius
   n,                  // number of steps along Z axis
-  child_bbox,         // bounding box od the object to apply the fillet to
+  child_bbox,         // 2D bounding box of the object to apply the fillet to
   direction,          // desired direction [director,rotation], [+Z,0°] native direction when undef
   octant,             // 3d placement, children positioning when undef
 ) {
@@ -82,10 +90,10 @@ module fl_90DegFillet(
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   function rad(x) = r - sqrt(pow(r,2) - pow(x - r, 2));
-  function d3(p)  = [p.x,p.y,0];
 
   default = [+Z,+X];  // default director and rotor
-  bbox    = [d3(child_bbox[0])-[r,r,0],d3(child_bbox[1])+[r,r,r]];
+  // bbox    = [_3d_(child_bbox[0])-[r,r,0],_3d_(child_bbox[1])+[r,r,r]];
+  bbox    = fl_bb_90DegFillet(r,n,child_bbox);
   size    = bbox[1]-bbox[0];
   D       = direction ? fl_direction(direction=direction,default=default) : I;
   M       = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
