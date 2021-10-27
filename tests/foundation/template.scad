@@ -20,6 +20,7 @@
  */
 include <../../foundation/unsafe_defs.scad>
 include <../../foundation/incs.scad>
+use     <../../foundation/template.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

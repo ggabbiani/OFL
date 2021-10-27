@@ -30,7 +30,27 @@ $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
-BBOX        = false;
+/* [Supported verbs] */
+
+// adds local reference axes
+AXES      = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds a bounding box containing the object
+BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of user passed accessories (like alternative screws)
+LAYOUT    = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+
+/* [Placement] */
+
+PLACE_NATIVE  = true;
+OCTANT        = [0,0,0];  // [-1:+1]
+
+/* [Direction] */
+
+DIR_NATIVE  = true;
+// ARBITRARY direction vector
+DIR_Z       = [0,0,1];  // [-1:0.1:+1]
+// rotation around
+DIR_R       = 0;        // [0:360]
 
 /* [Layout] */
 
@@ -40,6 +60,14 @@ AXIS          = "+X"; // [+X, -X, +Y, -Y, +Z, -Z]
 /* [Hidden] */
 
 module __test__() {
+  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+  octant    = PLACE_NATIVE  ? undef : OCTANT;
+  verbs=[
+    if (AXES!="OFF")    FL_AXES,
+    if (BBOX!="OFF")    FL_BBOX,
+    if (LAYOUT!="OFF")  FL_LAYOUT,
+  ];
+
   psu= [
     ["name", "PSU MeanWell RS-25-5 25W 5V 5A"],
     fl_bb_cornersKV([
@@ -68,29 +96,12 @@ module __test__() {
   bcs     = [for(t=types) fl_bb_corners(t)];
   axis    = AXIS=="+X" ? +X : AXIS=="-X" ? -X : AXIS=="+Y" ? +Y : AXIS=="-Y" ? -Y : AXIS=="+Z" ? +Z : -Z;
 
-  module arrow() {
-    first   = types[0];
-    size    = lay_bb_size(axis,GAP,types);
-    sum     = axis*[1,1,1]>0;
-    corner  = fl_bb_corners(first);
-    pivot   = sum ? corner[0] : corner[1];
-
-    translate(fl_3d_vectorialProjection(pivot,axis))
-      fl_vector(abs(size*axis)*axis);
-  }
-
-  fl_color("red") arrow();
-
-  fl_layout(axis,GAP,types) { 
+  fl_layout(verbs,axis,GAP,types,octant=octant,direction=direction,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_LAYOUT=LAYOUT) { 
     let(type=rpi, bc=fl_bb_corners(type)) fl_bb_add(bc);
     let(type=hd,  bc=fl_bb_corners(type)) fl_bb_add(bc);
     let(type=hd,  bc=fl_bb_corners(type)) fl_bb_add(bc);
     let(type=psu, bc=fl_bb_corners(type)) fl_bb_add(bc);
   }
-  bc = lay_bb_corners(axis,GAP,types);
-  fl_trace("bc",bc);
-  if (BBOX) 
-    %fl_bb_add(bc);
 }
 
 __test__();
