@@ -30,4 +30,5 @@ use <placement.scad>
 use <profile.scad>
 use <symbol.scad>
 use <torus.scad>
+use <tube.scad>
 use <util.scad>
