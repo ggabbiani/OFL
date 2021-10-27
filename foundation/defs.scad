@@ -23,7 +23,8 @@ include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 function fl_version() = [1,1,0];
-function fl_version_num() = let(
+
+function fl_versionNumber() = let(
   version = fl_version()
 ) version.x*10000+version.y*100+version.z;
 
@@ -110,10 +111,11 @@ function fl_Rxyz(angle) = fl_Rz(angle.z) * fl_Ry(angle.y) * fl_Rx(angle.x);
 /*
  * rotation matrix around arbitrary axis
  */
-function R(
+function fl_R(
   u,      // arbitrary axis
   theta   // rotation angle around u
-) = let(M = fl_align(u,FL_X))
+) =
+  let(M = fl_align(u,FL_X))
   matrix_invert(M)  // align X to «u»
   * fl_Rx(theta)    // rotate «theta» about X
   * M;              // align «u» to X
@@ -220,6 +222,7 @@ function fl_bb_new(
   size      = [0,0,0],
   positive
 ) = [fl_bb_cornersKV([negative,positive==undef?negative+size:positive])];
+
 // bounding box translation
 function fl_bb_center(type) = let(c=fl_bb_corners(type),sz=fl_bb_size(type)) c[0]+sz/2;
 
@@ -430,12 +433,6 @@ function fl_transform(
   assert(is_list(v) && len(v)>2,str("Bad vector v(",v,")"))
   fl_3(M * fl_4(v));
 
-//**** math utils *************************************************************
-
-function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
-function fl_accum(v)          = [for(p=v) 1]*v;
-function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
-
 //**** list utils *************************************************************
 
 FL_EXCLUDE_ANY  = ["AND",function(one,other) one!=other];
@@ -459,3 +456,27 @@ let(
 len==1 ? result : fl_list_filter(s_list,operator,[for(i=[1:len-1]) c_list[i]],result,false);
 
 function fl_list_has(list,item) = len(fl_list_filter(list,FL_INCLUDE_ALL,item))>0;
+
+//**** math utils *************************************************************
+
+function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
+function fl_accum(v)          = [for(p=v) 1]*v;
+function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
+
+//**** internally used 'lazy' math ************************************************
+
+// function _sum_(x,y) = (x!=undef && y!=undef) ? x + y : undef;
+// function _sub_(x,y) = (x!=undef && y!=undef) ? x - y : undef;
+// function _mul_(x,y) = (x!=undef && y!=undef) ? x * y : undef;
+// function _div_(x,y) = (x!=undef && y!=undef) ? x / y : undef;
+// function _lst_(l)   = fl_accum(l)!=undef ? l : undef;
+
+// function fl_synonymous(syns) = 
+//   echo(syns=syns)
+//   syns==[] 
+//   ? echo("Empty --> UNDEF") undef 
+//   : syns[0]!=undef 
+//     ? echo(str("First OK --> syns[0]=",syns[0])) syns[0] 
+//     : len(syns)==1
+//       ? echo("Last KO --> UNDEF") undef 
+//       : echo("Current KO --> RECURSION") fl_synonymous([for(i=[1:len(syns)-1]) syns[i]]);
