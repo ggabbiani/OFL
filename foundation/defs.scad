@@ -162,15 +162,15 @@ module fl_modifier(
   else if (behaviour=="ONLY")             !children();
   else if (behaviour=="DEBUG")            #children();
   else if (behaviour=="TRANSPARENT")      %children();
-  else assert(false,str("Unknown '",behaviour,"' behaviour."));
+  else assert(false,str("Unknown behaviour ('",behaviour,"')."));
 }
 
 $FL_FILAMENT  = "DodgerBlue";
 
 // generic property getter with default value when not found 
 function fl_get(type,key,default) = 
-  assert(key,"Undefined property key")
-  assert(type,str("Undefined object for property '",key,"'."))
+  assert(key,str("key=",key))
+  assert(type,str("type=",type))
   let(index_list=search([key],type))
   index_list != [[]] 
   ? type[index_list[0]][1] 
@@ -384,9 +384,9 @@ module fl_axes(size=1,reverse=false) {
 }
 
 /* A do-nothing helper */
-module fl_nop() {
-  sphere(0);
-}
+// module fl_nop() {
+//   sphere(0);
+// }
 
 // debug switch on $FL_DEBUG
 module fl_color(color,alpha=1) {
