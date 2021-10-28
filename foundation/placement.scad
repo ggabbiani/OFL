@@ -115,7 +115,7 @@ let(
 module fl_direct(
   proto,      // prototype for native coordinate system
   direction,  // desired direction in axis-angle representation [axis,rotation about]
-  default     // default coordinate system, overrides «proto» settings
+  default     // default coordinate system by [director,rotor], overrides «proto» settings
 ) {
   multmatrix(fl_direction(proto,direction,default)) children();
 }
