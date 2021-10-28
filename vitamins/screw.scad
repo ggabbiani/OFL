@@ -50,12 +50,13 @@ function fl_screw_size(type,length) = let(
 // return the overall length of a screw (according to parameters)
 function fl_screw_l(
   type,
-  thick,
+  len,
+  thick   = 0,
   washer  = "no",   // screw washer : "no","default","penny"
   nut     = "no",   // screw nut    : "no","default","nyloc"
   xwasher = "no",   // extra washer : "no","spring","star"
   nwasher = false,  // nut washer
-) = fl_screw_lens(type,thick,washer,nut,xwasher,nwasher)[0];
+) = fl_screw_lens(type,len,thick,washer,nut,xwasher,nwasher)[0];
 
 /*
  * return a list with layered thickness (according to parameters):
@@ -70,13 +71,13 @@ function fl_screw_l(
  */
 function fl_screw_lens(
   type,
-  thick,
+  len,
+  thick   = 0,
   washer  = "no",   // screw washer : "no","default","penny"
   nut     = "no",   // screw nut    : "no","default","nyloc"
   xwasher = "no",   // extra washer : "no","spring","star"
   nwasher = false,  // nut washer
 ) = 
-assert(thick!=undef)
 let(
   description   = type[0],
   no_nut_msg    = str("No possible NUT for screw ",description),
@@ -100,13 +101,13 @@ let(
     : assert(false,str("Unknown extra washer value ",xwasher)),
   thick_nwasher = nwasher ? assert(screw_nut,no_nut_msg) washer_thickness(nut_washer(screw_nut)) : 0,
   thick_all = thick+thick_nut+thick_washer+thick_xwasher+thick_nwasher
-) [thick_all,thick,thick_washer,thick_xwasher,thick_nwasher,thick_nut];
+) [len!=undef?len:thick_all,thick,thick_washer,thick_xwasher,thick_nwasher,thick_nut];
 
 module fl_screw(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   type,                 // NopSCADlib screw type
   len,                  // when passed a fixed len will be used instead of fl_screw_len()
-  thick,                // thickness part passed to fl_screw_len() during length calculation
+  thick   = 0,          // thickness part passed to fl_screw_len() during length calculation
   washer  = "no",       // screw washer : "no","default","penny"
   nut     = "no",       // screw nut    : "no","default","nyloc"
   xwasher = "no",       // extra washer : "no","spring","star"
@@ -118,13 +119,13 @@ module fl_screw(
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  length  = len ? len : fl_screw_l(type,thick,washer,nut,xwasher,nwasher);
+  length  = len ? len : fl_screw_l(type,len,thick,washer,nut,xwasher,nwasher);
   fl_trace("length",length);
   fl_trace("type",type);
 
   screw_nut     = screw_nut(type);
   screw_washer  = screw_washer(type);
-  lens          = fl_screw_lens(type,thick,washer,nut,xwasher,nwasher);
+  lens          = fl_screw_lens(type,len,thick,washer,nut,xwasher,nwasher);
   thick_washer  = lens[2];
   thick_xwasher = lens[3];
   thick_nwasher = lens[4];
@@ -154,6 +155,17 @@ module fl_screw(
         nut(screw_nut, nyloc=(nut=="nyloc"), brass = false, nylon = false);
   }
 
+  module do_footprint() {
+    rotate(180,Y)
+      rotate_extrude()
+        intersection() {
+          projection()
+            fl_direct(direction=[-Y,0],default=[+Z,+X]) screw(type,length);
+          translate([0,-screw_head_height(type)])
+            square(size=[screw_head_radius(type),length+screw_head_height(type)]);
+        }
+  }
+
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
@@ -167,6 +179,8 @@ module fl_screw(
       } else if ($verb==FL_DRILL) {
         fl_modifier($FL_DRILL) 
           fl_cylinder(FL_ADD,h=hole_l,r=hole_r,octant=-Z);
+      } else if ($verb==FL_FOOTPRINT) {
+        fl_modifier($FL_FOOTPRINT) do_footprint();
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }

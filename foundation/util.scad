@@ -24,22 +24,9 @@ use     <placement.scad>
 use     <scad-utils/spline.scad>
 include <NopSCADlib/lib.scad>
 
-// generates a screw without socket
-module fl_metaScrew(screw,len) {
-  rotate(180,Y)
-    rotate_extrude()
-      intersection() {
-        projection()
-          rotate(90,FL_X)
-            screw(screw,len);
-        translate([0,-screw_head_height(screw)])
-        square(size=[screw_head_radius(screw),len+screw_head_height(screw)]);
-      }
-}
-
 // use children(0) for making a rail
 module fl_rail(
-  length=0 // when undef or 0 rail degenerates into children(0)
+  length  // when undef or 0 rail degenerates into children(0)
 ) {
   len = length ? length : 0;
   rotate(-90,FL_X)

@@ -45,6 +45,8 @@ AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds a footprint to scene, usually a simplified FL_ADD
+FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -62,6 +64,7 @@ DIR_R       = 0;        // [0:360]
 /* [Screw] */
 
 SCREW     = "M2_cap_screw"; // [No632_pan_screw,M2_cap_screw,M2_cs_cap_screw,M2_dome_screw,M2p5_cap_screw,M2p5_pan_screw,M3_cap_screw,M3_cs_cap_screw,M3_dome_screw,M3_grub_screw,M3_hex_screw,M3_low_cap_screw,M3_pan_screw,M4_cap_screw,M4_cs_cap_screw,M4_dome_screw,M4_grub_screw,M4_hex_screw,M4_pan_screw,M5_cap_screw,M5_cs_cap_screw,M5_dome_screw,M5_hex_screw,M5_pan_screw,M6_cap_screw,M6_cs_cap_screw,M6_hex_screw,M6_pan_screw,M8_cap_screw,M8_hex_screw,No2_screw,No4_screw,No6_cs_screw,No6_screw,No8_screw]
+FIXED_LEN = 0;
 // thickness
 T       = 10;   // [1:0.1:20]
 WASHER  = "no"; // [no,default,penny]
@@ -79,6 +82,7 @@ verbs=[
   if (AXES!="OFF")      FL_AXES,
   if (BBOX!="OFF")      FL_BBOX,
   if (DRILL!="OFF")     FL_DRILL,
+  if (FPRINT!="OFF")    FL_FOOTPRINT,
 ];
 
 screw = SCREW=="No632_pan_screw" ? No632_pan_screw
@@ -119,5 +123,6 @@ screw = SCREW=="No632_pan_screw" ? No632_pan_screw
       : undef;
 assert(screw!=undef);
 
-fl_screw(verbs,screw,thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=NWASHER,octant=octant,direction=direction,
-  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL);
+fl_screw(verbs,screw,thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=NWASHER,len=FIXED_LEN?FIXED_LEN:undef,
+  octant=octant,direction=direction,
+  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT);
