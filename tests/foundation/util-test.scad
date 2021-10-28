@@ -19,6 +19,7 @@
 
 include <../../foundation/unsafe_defs.scad>
 include <../../foundation/incs.scad>
+use     <../../vitamins/screw.scad>
 
 use     <scad-utils/spline.scad>
 include <NopSCADlib/lib.scad>
@@ -38,7 +39,7 @@ FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Commons] */
 
 // select the utility to be tested
-UTIL        = "meta screw"; // [meta screw, rail, plane align, cutout]
+UTIL        = "rail"; // [rail, plane align, cutout]
 // thickness of the test plane to be 'railed'
 PLANE_T    = 2.5;
 
@@ -120,14 +121,14 @@ module __test__() {
         : undef;
   assert(screw!=undef);
 
-  module meta_screw_test() {
-    gap = 1.5 * 2 * screw_head_radius(screw);
-    translate(-X(gap))
-      screw(screw,META_LEN);
-    fl_color(FILAMENT) 
-      translate(X(gap))
-        fl_metaScrew(screw,META_LEN);
-  }
+  // module meta_screw_test() {
+  //   gap = 1.5 * 2 * screw_head_radius(screw);
+  //   translate(-X(gap))
+  //     screw(screw,META_LEN);
+  //   fl_color(FILAMENT) 
+  //     translate(X(gap))
+  //       fl_metaScrew(screw,META_LEN);
+  // }
 
   module rail_test() {
     cs    = screw_head_depth(screw);
@@ -137,12 +138,10 @@ module __test__() {
     if (ADD)
       difference() {
         fl_color(FILAMENT) translate(Z(hh)) fl_cube(size=size,octant=-Z);
-        translate(+Z(NIL)) fl_color() fl_rail(RAIL_LEN) fl_metaScrew(screw,META_LEN);
+        translate(+Z(NIL)) fl_color() fl_rail(RAIL_LEN) fl_screw(FL_FOOTPRINT,screw,META_LEN);
       }
     if (ASSEMBLY)
       translate(+Z(NIL)) screw(screw,META_LEN);
-    // if ($FL_DEBUG)
-    //   #translate(+Z(NIL)) fl_rail(RAIL_LEN) fl_metaScrew(screw,META_LEN);
   }
 
   module plane_align_test() {
@@ -221,9 +220,9 @@ module __test__() {
       #co() shapes();
   }
 
-  if (UTIL=="meta screw")
-    meta_screw_test();
-  else if (UTIL=="rail")
+  // if (UTIL=="meta screw")
+  //   meta_screw_test();
+  if (UTIL=="rail")
     rail_test();
   else if (UTIL=="plane align")
     plane_align_test();
