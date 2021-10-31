@@ -25,4 +25,5 @@ include <magnets.scad>
 include <spdts.scad>
 include <usbs.scad>
 
+use     <rj45.scad>
 use     <screw.scad>
