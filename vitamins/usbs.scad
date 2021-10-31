@@ -26,6 +26,8 @@ function fl_USB_typeKV(value)             = fl_kv("USB/type",value);
 function __fl_USBA_heightKV__(value)      = fl_kv("USBA/__height__",value);
 function __fl_USBA_vFlangeLKV__(value)    = fl_kv("USBA/__vFlangeL__",value);
 function __fl_USBA_barKV__(value)         = fl_kv("USBA/__bar__",value);
+// function __fl_USBA_flangeTKV__(value)     = fl_kv("USBA/__flangeT__",value);
+// function __fl_USB_coDriftKV__(value)      = fl_kv("USB/__codrift__",value);
 
 //*****************************************************************************
 // USB getters
@@ -33,6 +35,8 @@ function fl_USB_type(type)              = fl_get(type,fl_USB_typeKV());
 function __fl_USBA_height__(type)       = fl_get(type,__fl_USBA_heightKV__()); 
 function __fl_USBA_vFlangeL__(type)     = fl_get(type,__fl_USBA_vFlangeLKV__()); 
 function __fl_USBA_bar__(type)          = fl_get(type,__fl_USBA_barKV__()); 
+// function __fl_USBA_flangeT__(type)      = fl_get(type,__fl_USBA_flangeTKV__(),0);
+// function __fl_USB_coDrift__(type)       = fl_get(type,__fl_USB_coDriftKV__());
 
 //*****************************************************************************
 // USB constructors
@@ -44,9 +48,35 @@ function fl_USB_new(utype) =
       v_flange_l  = 4.5,
       bar         = 0,
       // following data definitions taken from NopSCADlib usb_A() module
+      l         = 17,
+      w         = 13.25,
+      flange_t  = 0.4,
+      // calculated bounding box corners
+      bbox      = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
+    ) [
+      fl_USB_typeKV(utype),
+      fl_sizeKV(bbox[1]-bbox[0]),
+      fl_bb_cornersKV(bbox),
+      fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
+
+      // __fl_USB_coDriftKV__(1),
+
+      __fl_USBA_heightKV__(h),
+      __fl_USBA_vFlangeLKV__(v_flange_l),
+      __fl_USBA_barKV__(bar),
+      // __fl_USBA_flangeTKV__(flange_t)
+    ]
+  : utype=="Ax2"
+  ? let(
+      // following data definitions taken from NopSCADlib usb_Ax2() module
+      h           = 15.6,
+      v_flange_l  = 12.15,
+      bar         = 3.4,
+      // following data definitions taken from NopSCADlib usb_A() module
       l           = 17,
       w           = 13.25,
-
+      flange_t    = 0.4,
+      // calculated bounding box corners
       bbox        = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
       fl_USB_typeKV(utype),
@@ -54,9 +84,11 @@ function fl_USB_new(utype) =
       fl_bb_cornersKV(bbox),
       fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
 
+      // __fl_USB_coDriftKV__(1),
       __fl_USBA_heightKV__(h),
       __fl_USBA_vFlangeLKV__(v_flange_l),
-      __fl_USBA_barKV__(bar)
+      __fl_USBA_barKV__(bar),
+      // __fl_USBA_flangeTKV__(flange_t)
     ]
   : utype=="B"
   ? let(
@@ -64,35 +96,40 @@ function fl_USB_new(utype) =
       l     = 16.4,
       w     = 12.2,
       h     = 11,
-
+      // calculated bounding box corners
       bbox  = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
       fl_USB_typeKV(utype),
       fl_sizeKV(bbox[1]-bbox[0]),
       fl_bb_cornersKV(bbox),
       fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
+      // __fl_USB_coDriftKV__(1),
     ]
   : utype=="C"
   ? let(
+      // following data definitions taken from NopSCADlib usb_C() module
       l     = 7.35,
       w     = 8.94,
       h     = 3.26,
-
+      // calculated bounding box corners
       bbox  = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
       fl_USB_typeKV(utype),
       fl_sizeKV(bbox[1]-bbox[0]),
       fl_bb_cornersKV(bbox),
       fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
+      // __fl_USB_coDriftKV__(1.17),
     ]
   : assert(false) [];
 
-FL_USB_TYPE_A  = fl_USB_new("A");
-FL_USB_TYPE_B  = fl_USB_new("B");
-FL_USB_TYPE_C  = fl_USB_new("C");
+FL_USB_TYPE_A   = fl_USB_new("A");
+FL_USB_TYPE_Ax2 = fl_USB_new("Ax2");
+FL_USB_TYPE_B   = fl_USB_new("B");
+FL_USB_TYPE_C   = fl_USB_new("C");
 
 FL_USB_DICT = [
   FL_USB_TYPE_A,
+  FL_USB_TYPE_Ax2,
   FL_USB_TYPE_B,
   FL_USB_TYPE_C,
 ];

@@ -57,21 +57,21 @@ DIR_R       = 0;        // [0:360]
 
 /* [USB] */
 
-SHOW        = "ALL"; // [ALL,FL_USB_TYPE_A,FL_USB_TYPE_B,FL_USB_TYPE_C]
+SHOW        = "ALL"; // [ALL,FL_USB_TYPE_A,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C]
 // tolerance used during FL_CUTOUT
 CO_TOLERANCE   = 0;  // [0:0.1:5]
 // thickness for FL_CUTOUT
-CO_LEN  = 2.5;
+CO_T  = 2.5;
 // translation applied to cutout
 CO_DRIFT = 0; // [-5:0.05:5]
 
 /* [Hidden] */
 
 module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  cutout    = CUTOUT!="OFF" ? CO_LEN : undef;
-  tolerance = CUTOUT!="OFF" ? CO_TOLERANCE : undef;
+  direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
+  octant    = PLACE_NATIVE  ? undef         : OCTANT;
+  thick     = CUTOUT!="OFF" ? CO_T          : undef;
+  tolerance = CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
   drift     = CUTOUT!="OFF" ? CO_DRIFT : undef;
 
   verbs=[
@@ -81,9 +81,10 @@ module __test__() {
     if (CUTOUT!="OFF")    FL_CUTOUT,
   ];
   // target object(s)
-  single  = SHOW=="FL_USB_TYPE_A"  ? FL_USB_TYPE_A
-          : SHOW=="FL_USB_TYPE_B"  ? FL_USB_TYPE_B
-          : SHOW=="FL_USB_TYPE_C"  ? FL_USB_TYPE_C
+  single  = SHOW=="FL_USB_TYPE_A"   ? FL_USB_TYPE_A
+          : SHOW=="FL_USB_TYPE_Ax2" ? FL_USB_TYPE_Ax2
+          : SHOW=="FL_USB_TYPE_B"   ? FL_USB_TYPE_B
+          : SHOW=="FL_USB_TYPE_C"   ? FL_USB_TYPE_C
           : undef;
 
   fl_trace("verbs",verbs);
@@ -93,13 +94,13 @@ module __test__() {
   // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
   if (single)
     fl_USB(verbs,single,
-      direction=direction,octant=octant,co_thick=cutout,co_tolerance=tolerance,co_drift=drift,
+      direction=direction,octant=octant,co_thick=thick,co_tolerance=tolerance,co_drift=drift,
       $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
     );
   else
     layout([for(socket=FL_USB_DICT) fl_width(socket)], 10)
       fl_USB(verbs,FL_USB_DICT[$i],
-        direction=direction,octant=octant,co_thick=cutout,co_tolerance=tolerance,co_drift=drift,
+        direction=direction,octant=octant,co_thick=thick,co_tolerance=tolerance,co_drift=drift,
         $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
       );
 }

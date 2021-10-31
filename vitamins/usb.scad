@@ -48,8 +48,10 @@ module fl_USB(
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
   utype = fl_USB_type(type);
 
+  fl_trace("cutout drift",co_drift);
+
   module wrap() {
-    if (utype=="A") let(
+    if (utype=="A" || utype=="Ax2") let(
       h           = __fl_USBA_height__(type),
       v_flange_l  = __fl_USBA_vFlangeL__(type),
       bar         = __fl_USBA_bar__(type)
@@ -69,8 +71,8 @@ module fl_USB(
       } else if ($verb==FL_CUTOUT) {
         assert(co_thick!=undef);
         fl_modifier($FL_CUTOUT) 
-          translate(X(size.x/2+co_drift))
-            fl_cutout(len=co_thick,z=X,x=-Z,delta=co_tolerance) 
+          translate(+X(size.x/2+co_drift))
+            fl_cutout(len=co_thick,z=X,x=-Z,delta=co_tolerance,trim=X(size.x/2-0.1),cut=true)
               wrap();
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
