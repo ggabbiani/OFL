@@ -176,10 +176,10 @@ function fl_get(type,key,default) =
   let(index_list=search([key],type))
   index_list != [[]] 
   ? type[index_list[0]][1] 
-  : assert(default,str("Property '",key,"' not found on type:",type)) default;
+  : assert(default!=undef,"Missing value and default") default;
 
 // returns [«key»,«value»] if value is defined, «key» otherwise
-function fl_kv(key,value)   = assert(key) value ? [key,value] : key;
+function fl_kv(key,value)   = assert(key!=undef) value!=undef ? [key,value] : key;
 
 //*****************************************************************************
 // General keys
