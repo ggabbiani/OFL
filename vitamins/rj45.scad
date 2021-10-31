@@ -1,5 +1,5 @@
 /*
- * NopACADlib Jack engine wrapper.
+ * NopACADlib RJ45 engine wrapper.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
