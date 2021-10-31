@@ -63,7 +63,7 @@ module fl_hdmi(
         assert(co_thick!=undef);
         fl_modifier($FL_CUTOUT) 
         translate(X(0))
-          translate(X(size.x/2+co_drift)) fl_cutout(len=co_thick,z=X,x=-Z,cut=true,delta=co_tolerance) hdmi(nop,false);
+          translate(X(size.x/2+co_drift)) fl_cutout(len=co_thick,z=X,x=-Z,delta=co_tolerance) hdmi(nop,false);
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }
