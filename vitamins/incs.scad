@@ -20,6 +20,7 @@
 include <countersinks.scad>
 include <knurl_nuts.scad>
 include <hdmis.scad>
+include <jacks.scad>
 include <magnets.scad>
 include <spdts.scad>
 include <usbs.scad>
