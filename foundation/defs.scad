@@ -83,7 +83,8 @@ function fl_S(s) = is_list(s)
   : fl_S([s,s,s]);
 
 // rotation around X matrix
-function fl_Rx(theta) = [
+function fl_Rx(theta) =
+[
   [1,           0,            0,           0],
   [0,           cos(theta),   -sin(theta), 0],
   [0,           sin(theta),   cos(theta),  0],
@@ -109,7 +110,8 @@ function fl_Rz(theta) = [
 function fl_Rxyz(angle) = fl_Rz(angle.z) * fl_Ry(angle.y) * fl_Rx(angle.x);
 
 /*
- * rotation matrix around arbitrary axis
+ * rotation matrix about arbitrary axis.
+ * TODO: check with more efficient alternative [here](https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724)
  */
 function fl_R(
   u,      // arbitrary axis
@@ -169,8 +171,8 @@ $FL_FILAMENT  = "DodgerBlue";
 
 // generic property getter with default value when not found 
 function fl_get(type,key,default) = 
-  assert(key,str("key=",key))
-  assert(type,str("type=",type))
+  assert(key!=undef)
+  assert(type!=undef)
   let(index_list=search([key],type))
   index_list != [[]] 
   ? type[index_list[0]][1] 
@@ -188,6 +190,7 @@ function fl_connectorsKV(value)   = fl_kv("connectors",value);
 function fl_vendorKV(value)       = fl_kv("vendor",value);
 function fl_directorKV(value)     = fl_kv("director",value);
 function fl_rotorKV(value)        = fl_kv("rotor",value);
+function fl_nopSCADlibKV(value)   = fl_kv("Verbatim NopSCADlib definition",value);
 
 //*****************************************************************************
 // General getters
@@ -201,6 +204,7 @@ function fl_connectors(type)    = fl_get(type,fl_connectorsKV());
 function fl_vendor(type)        = fl_get(type,fl_vendorKV());
 function fl_director(type)      = fl_get(type,fl_directorKV());
 function fl_rotor(type)         = fl_get(type,fl_rotorKV());
+function fl_nopSCADlib(type)    = fl_get(type,fl_nopSCADlibKV());
 
 //*****************************************************************************
 // Bounding Box
@@ -209,7 +213,8 @@ function fl_rotor(type)         = fl_get(type,fl_rotorKV());
 function fl_bb_cornersKV(value) = fl_kv("bb/bounding corners",value);
 
 // getters
-function fl_bb_corners(type)    = let(
+function fl_bb_corners(type)    = assert(type!=undef)
+let(
   value = fl_get(type,fl_bb_cornersKV())
 ) is_function(value) ? value(type) : value;
 
