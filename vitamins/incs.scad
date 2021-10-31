@@ -22,5 +22,6 @@ include <knurl_nuts.scad>
 include <hdmis.scad>
 include <magnets.scad>
 include <spdts.scad>
+include <usbs.scad>
 
 use     <screw.scad>
