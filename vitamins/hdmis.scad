@@ -1,5 +1,5 @@
 /*
- * NopACADlib hdmi definitions wrapper.
+ * NopACADlib HDMI definitions wrapper.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *

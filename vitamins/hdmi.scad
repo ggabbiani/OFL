@@ -1,5 +1,5 @@
 /*
- * NopACADlib hdmi engine wrapper.
+ * NopACADlib HDMI engine wrapper.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
