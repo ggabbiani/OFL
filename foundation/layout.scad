@@ -42,6 +42,7 @@ function lay_group(axis,gap,types) = [fl_bb_cornersKV(lay_bb_corners(axis,gap,ty
 module fl_bb_add(
   corners // bounding box corners
 ) {
+  assert(is_list(corners),corners)
   translate(corners[0]) fl_cube(size=corners[1]-corners[0],octant=+X+Y+Z);
 }
 
