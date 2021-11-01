@@ -22,14 +22,12 @@
 include <../../foundation/incs.scad>
 
 $fn         = 50;           // [3:100]
-// Debug statements are turned on
-$FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = true;
 // When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+TRACE   = false;
 
 /* [Supported verbs] */
 
@@ -47,7 +45,7 @@ QUADRANT      = [+1,+1];  // [-1:+1]
 
 /* [2D primitives] */
 
-PRIMITIVE     = "circle arc";  // ["circle", "circle arc", "circle sector", "ellipse", "elliptic arc", "elliptic sector", "inscribed polygon"]
+PRIMITIVE     = "circle arc";  // ["circle", "circle arc", "circle sector", "ellipse", "elliptic arc", "elliptic sector", "inscribed polygon", "square"]
 RADIUS        = 10;
 // ellipse horiz. semi axis
 A             = 10;
@@ -62,6 +60,7 @@ ARC_T         = 1;  // [0:10]
 IPOLY_N       = 3;  // [3:50]
 // Show a circumscribed circle to inscribed polygon
 IPOLY_CIRCLE  = true;
+SQUARE_SIZE   = [40,30];
 
 /* [Hidden] */
 
@@ -76,6 +75,7 @@ $vpd  = 140;
 $vpf  = 22.5;
 
 module __test__() {
+  // $FL_TRACE = TRACE;
   angles  = [START_ANGLE,END_ANGLE];
   verbs=[
     if (ADD!="OFF")   FL_ADD,
@@ -99,6 +99,7 @@ module __test__() {
   else if (PRIMITIVE == "elliptic arc"      ) fl_ellipticArc(verbs,[A,B],angles,ARC_T,quadrant=quadrant);
   else if (PRIMITIVE == "elliptic sector"   ) fl_ellipticSector(verbs,[A,B],angles,quadrant=quadrant);
   else if (PRIMITIVE == "inscribed polygon" ) ipoly();
+  else if (PRIMITIVE == "square"            ) fl_square(verbs,r=RADIUS,size=SQUARE_SIZE,quadrant=quadrant,$FL_TRACE=TRACE);
 }
 
 __test__();
