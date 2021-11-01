@@ -1,5 +1,5 @@
 /*
- * Definition file template for OpenSCAD Foundation Library vitamins.
+ * Definition file template for OpenSCAD Foundation Library.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *

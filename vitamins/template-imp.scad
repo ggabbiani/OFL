@@ -1,5 +1,5 @@
 /*
- * Implementation file template for OpenSCAD Foundation Library vitamins.
+ * Implementation file template for OpenSCAD Foundation Library.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
