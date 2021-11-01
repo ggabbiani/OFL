@@ -191,6 +191,7 @@ function fl_vendorKV(value)       = fl_kv("vendor",value);
 function fl_directorKV(value)     = fl_kv("director",value);
 function fl_rotorKV(value)        = fl_kv("rotor",value);
 function fl_nopSCADlibKV(value)   = fl_kv("Verbatim NopSCADlib definition",value);
+function fl_screwKV(value)        = fl_kv("screw",value);
 
 //*****************************************************************************
 // General getters
@@ -205,6 +206,7 @@ function fl_vendor(type)        = fl_get(type,fl_vendorKV());
 function fl_director(type)      = fl_get(type,fl_directorKV());
 function fl_rotor(type)         = fl_get(type,fl_rotorKV());
 function fl_nopSCADlib(type)    = fl_get(type,fl_nopSCADlibKV());
+function fl_screw(type)         = fl_get(type,fl_screwKV());
 
 //*****************************************************************************
 // Bounding Box
