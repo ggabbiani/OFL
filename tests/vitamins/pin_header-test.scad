@@ -21,7 +21,7 @@
 include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
-include <../../vitamins/pin_header.scad>
+// use <../../vitamins/pin_header.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -59,13 +59,14 @@ DIR_R       = 0;        // [0:360]
 
 /* [Pin Header] */
 
+COLOR         = "base";   // [base,red]
+SHOW          = "custom"; // [all,custom,FL_PHDR_RPIGPIO]
 // size in columns x rows
-SIZE  = [1,1];  // [1:20]
-COLOR = "base"; // [base,red]
+GEOMETRY          = [10,1]; // [1:20]
 // tolerance used during FL_CUTOUT
-CO_TOLERANCE   = 0;  // [0:0.1:5]
+CO_TOLERANCE  = 0.5;      // [0:0.1:5]
 // thickness for FL_CUTOUT
-CO_T  = 2.5;
+CO_T          = 15;     // [0:0.1:20]
 
 /* [Hidden] */
 
@@ -74,6 +75,7 @@ octant    = PLACE_NATIVE  ? undef : OCTANT;
 thick     = CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = COLOR=="base"?grey(20):COLOR;
+type      = SHOW=="FL_PHDR_RPIGPIO"  ? FL_PHDR_RPIGPIO : undef;
 
 verbs=[
   if (ADD!="OFF")       FL_ADD,
@@ -82,10 +84,23 @@ verbs=[
   if (CUTOUT!="OFF")    FL_CUTOUT,
 ];
 
+module wrapIt(nop,geometry) {
+  fl_pinHeader(verbs,nop,
+    geometry=geometry,color=color,co_thick=thick,co_tolerance=tolerance,
+    octant=octant,direction=direction,
+    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
+    $FL_TRACE=FL_TRACE
+    );
+}
+
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-fl_pinHeader(verbs,2p54header,
-  cols=SIZE.x,rows=SIZE.y,color=color,co_thick=thick,co_tolerance=tolerance,
-  octant=octant,direction=direction,
-  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
-  $FL_TRACE=FL_TRACE
-  );
+if (type) 
+  // predefined
+  wrapIt(fl_nopSCADlib(type),fl_phdr_geometry(type));
+else if (SHOW=="all") 
+  // all predefined
+  layout([for(type=FL_PHDR_DICT) fl_width(type)], 10)
+    let(t=FL_PHDR_DICT[$i]) wrapIt(fl_nopSCADlib(t),fl_phdr_geometry(t));
+else 
+  // custom
+  wrapIt(2p54header,GEOMETRY);

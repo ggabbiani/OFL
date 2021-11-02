@@ -1,5 +1,5 @@
 /*
- * NopSCADlib pin header wrapper implementation for OpenSCAD Foundation Library.
+ * NopSCADlib pin header wrapper implementation.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -18,18 +18,22 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
+
 include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
+use     <../foundation/placement.scad>
 use     <../foundation/layout.scad>
+use     <../foundation/util.scad>
 
-// include <template-defs.scad>
-include <NopSCADlib/vitamins/pin_headers.scad>
+include <pin_headers.scad>
+
+// include <NopSCADlib/lib.scad>
+// use     <NopSCADlib/vitamins/pin_header.scad>
 
 module fl_pinHeader(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  type,                 // NopSCADlib header
-  cols      = 1,
-  rows      = 1,
+  nop,                 // NopSCADlib header
+  geometry  = [1,1], // pin header size in [cols,rows]
   smt = false,          // surface mount
   right_angle = false,
   color,
@@ -39,32 +43,28 @@ module fl_pinHeader(
   octant,               // when undef native positioning is used
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(nop!=undef);
 
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  fl_trace("hdr_pin_length",hdr_pin_length(type));
-  fl_trace("hdr_pin_below",hdr_pin_below(type));
-  fl_trace("hdr_pin_width",hdr_pin_width(type));
-  fl_trace("hdr_box_size",hdr_box_size(type));
-  fl_trace("hdr_box_wall",hdr_box_wall(type));
-  fl_trace("hdr_pitch",hdr_pitch(type));
+  cols      = geometry.x;
+  rows      = geometry.y;
 
-  bbox  = let(
-    w = hdr_pitch(type)*cols,
-    d = hdr_pitch(type)*rows,
-    h = hdr_pin_length(type),
-    b = hdr_pin_below(type)
-  ) [
-    [-w/2,-d/2,-b],[+w/2,+d/2,h-b]
-  ];
+  fl_trace("hdr_pin_length",hdr_pin_length(nop));
+  fl_trace("hdr_pin_below",hdr_pin_below(nop));
+  fl_trace("hdr_pin_width",hdr_pin_width(nop));
+  fl_trace("hdr_box_size",hdr_box_size(nop));
+  fl_trace("hdr_box_wall",hdr_box_wall(nop));
+  fl_trace("hdr_pitch",hdr_pitch(nop));
+
+  bbox  = fl_phdr_nopBBox(nop,geometry);
   size  = bbox[1]-bbox[0];
-  D     = direction ? fl_direction(proto=type,direction=direction,default=[Z,X])  : I;
+  D     = direction ? fl_direction(direction=direction,default=[Z,X])  : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
 
   module do_add() {
-    // pin_header(type, cols = 1, rows = 1, smt = false, right_angle = false, cutout = false, "red");
-    pin_header(type, cols, rows,smt=smt,right_angle=right_angle,colour=color);
+    pin_header(nop, cols, rows,smt=smt,right_angle=right_angle,colour=color);
   }
   module do_layout() {}
   module do_drill() {}

@@ -22,9 +22,11 @@ include <../foundation/defs.scad>
 include <../vitamins/hdmis.scad>
 include <../vitamins/jacks.scad>
 include <../vitamins/usbs.scad>
+include <pin_headers.scad>
 
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
+include <NopSCADlib/vitamins/pin_headers.scad>
 
 //*****************************************************************************
 // PCB keys
@@ -49,21 +51,24 @@ FL_PCB_RPI4 = let(
   fl_rotorKV(+FL_X),
   fl_PCB_holesKV([ 
     // each row represents a hole with the following format:
-    // [drill direction],[entrance point]
-    [-FL_Z,  [24.5,3.5,0  ] ],
-    [-FL_Z,  [24.5,61.5,0  ] ],
-    [-FL_Z,  [-24.5,3.5,0 ] ],
-    [-FL_Z,  [-24.5,61.5,0 ] ],
+    // [drill direction],[position]
+    [-FL_Z, [ 24.5, 3.5,  0 ]],
+    [-FL_Z, [ 24.5, 61.5, 0 ]],
+    [-FL_Z, [-24.5, 3.5,  0 ]],
+    [-FL_Z, [-24.5, 61.5, 0 ]],
     ]),
   fl_screwKV(M3_cap_screw),
   fl_PCB_componentsKV([
-    ["USB",   [24.5+1, 3.5+7.7,0],                  [+FL_X,0], FL_USB_TYPE_C],
-    ["HDMI",  [24.5+1,3.5+7.7+14.8,0],              [+FL_X,0], FL_HDMI_TYPE_D],
-    ["HDMI",  [24.5+1,3.5+7.7+14.8+13.5,0],         [+FL_X,0], FL_HDMI_TYPE_D],
-    ["JACK",  [24.5-2.5,3.5+7.7+14.8+13.5+7+7.5,0], [+FL_X,0], FL_JACK],
-    ["USB",   [w/2-9, 78,0],                        [+FL_Y,0], FL_USB_TYPE_Ax2],
-    ["USB",   [w/2-27, 78,0],                       [+FL_Y,0], FL_USB_TYPE_Ax2],
-    ["ETHER", [w/2-45.75, 76,0],                    [+FL_Y,0], undef],
+    // each row represent one component with the following format:
+    // ["engine", [position], [[director],rotation] type]
+    ["USB",   [24.5+1, 3.5+7.7,0],                  [+FL_X,0  ], FL_USB_TYPE_C  ],
+    ["HDMI",  [24.5+1,3.5+7.7+14.8,0],              [+FL_X,0  ], FL_HDMI_TYPE_D ],
+    ["HDMI",  [24.5+1,3.5+7.7+14.8+13.5,0],         [+FL_X,0  ], FL_HDMI_TYPE_D ],
+    ["JACK",  [24.5-2.5,3.5+7.7+14.8+13.5+7+7.5,0], [+FL_X,0  ], FL_JACK        ],
+    ["USB",   [w/2-9, 78,0],                        [+FL_Y,0  ], FL_USB_TYPE_Ax2],
+    ["USB",   [w/2-27, 78,0],                       [+FL_Y,0  ], FL_USB_TYPE_Ax2],
+    ["ETHER", [w/2-45.75, 76,0],                    [+FL_Y,0  ], undef          ],
+    [FL_PHDR_NS,  [-w/2+3.5,29+3.5,0],              [+FL_Z,90 ], FL_PHDR_RPIGPIO],
   ]),
 ];
 

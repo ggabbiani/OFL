@@ -20,12 +20,11 @@
  */
 include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
-use     <../foundation/2d.scad>
-use     <../foundation/3d.scad>
-use     <../foundation/layout.scad>
-use     <../foundation/placement.scad>
-use     <rj45.scad>
 include <pcbs.scad>
+include <pin_headers.scad>
+
+use     <../foundation/2d.scad>
+use     <rj45.scad>
 
 module fl_pcb(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -92,6 +91,10 @@ module fl_pcb(
             fl_jack(type=type,direction=direction);
           else if (engine=="ETHER")
             fl_rj45(direction=direction);
+          else if (engine==FL_PHDR_NS)
+            fl_pinHeader(nop=fl_nopSCADlib(type),direction=direction,geometry=[20,2]);
+          else
+            assert(false,str("Unknown engine ",engine));
     }
   }
 
