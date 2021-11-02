@@ -1,5 +1,5 @@
 /*
- * Foundation test template.
+ * PCB vitamins test.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -18,19 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/unsafe_defs.scad>
+
 include <../../foundation/incs.scad>
-use     <../../foundation/template.scad>
+include <../../vitamins/incs.scad>
 
 $fn         = 50;           // [3:100]
-// Debug statements are turned on
-$FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -45,7 +43,7 @@ AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
@@ -68,22 +66,45 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [Stub] */
+/* [PCB] */
+
+SHOW  = "ALL";  // [ALL,FL_PCB_RPI4]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
-verbs=[
-  if (ADD!="OFF")   FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if (AXES!="OFF")  FL_AXES,
-  if (BBOX!="OFF")  FL_BBOX,
-  if (CUTOUT!="OFF")  FL_CUTOUT,
-  if (DRILL!="OFF")  FL_DRILL,
-  if (FPRINT!="OFF")  FL_FOOTPRINT,
-  if (LAYOUT!="OFF")  FL_LAYOUT,
-  if (PLOAD!="OFF")  FL_PAYLOAD,
-];
+module __test__() {
+  direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
+  octant    = PLACE_NATIVE  ? undef         : OCTANT;
 
-$FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
+  verbs=[
+    if (ADD!="OFF")       FL_ADD,
+    if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
+    if (AXES!="OFF")      FL_AXES,
+    if (BBOX!="OFF")      FL_BBOX,
+    if (CUTOUT!="OFF")    FL_CUTOUT,
+  ];
+  // target object(s)
+  single  = SHOW=="FL_PCB_RPI4"   ? FL_PCB_RPI4
+          : undef;
+  $FL_TRACE=TRACE;
+  fl_trace("verbs",verbs);
+  fl_trace("single",single);
+  fl_trace("FL_PCB_DICT",FL_PCB_DICT);
+
+  // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
+  if (single)
+    fl_pcb(verbs,single,
+      direction=direction,octant=octant,
+      $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
+      $FL_TRACE=TRACE
+    );
+  else
+    layout([for(pcb=FL_PCB_DICT) fl_width(pcb)], 10)
+      fl_pcb(verbs,FL_PCB_DICT[$i],
+        direction=direction,octant=octant,
+        $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
+        $FL_TRACE=TRACE
+      );
+}
+
+__test__();

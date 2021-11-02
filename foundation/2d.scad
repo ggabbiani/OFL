@@ -23,6 +23,8 @@ include <shape_pie.scad> // dotSCAD
 include <defs.scad>
 use     <placement.scad>
 
+// use     <NopSCADlib/utils/core/rounded_rectangle.scad>
+
 //**** 2d bounding box calculations *******************************************
 
 // general 2d polygon bounding box
@@ -542,3 +544,87 @@ module fl_ipoly(
   if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
 }
+
+//**** square *****************************************************************
+
+function fl_square(
+  size  = [1,1],
+  r     = 0
+) = 
+  assert(r>=0)
+  assert(2*r<=min(size))
+  let(
+    bbox  = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]],
+    points =
+      (size.x==size.y && size.x==2*r) ? echo("CIRCLE!!") fl_circle(r)
+      : r>0 ? let(
+        q1  = let(
+          M = [
+            [1,0,bbox[1].x-r],
+            [0,1,bbox[1].y-r],
+            [0,0,1          ]
+          ]
+        ) [for(p=fl_sector(r,angles=[0,90])) let(point=M*[p.x,p.y,1]) [point.x,point.y]],
+        q2  = let(
+          M = [
+            [1,0,bbox[0].x+r],
+            [0,1,bbox[1].y-r],
+            [0,0,1          ]
+          ]
+        ) [for(p=fl_sector(r,angles=[90,180])) let(point=M*[p.x,p.y,1]) [point.x,point.y]],
+        q3  = let(
+          M = [
+            [1,0,bbox[0].x+r],
+            [0,1,bbox[0].y+r],
+            [0,0,1          ]
+          ]
+        ) [for(p=fl_sector(r,angles=[180,270])) let(point=M*[p.x,p.y,1]) [point.x,point.y]],
+        q4  = let(
+          M = [
+            [1,0,bbox[1].x-r],
+            [0,1,bbox[0].y+r],
+            [0,0,1          ]
+          ]
+        ) [for(p=fl_sector(r,angles=[270,360])) let(point=M*[p.x,p.y,1]) [point.x,point.y]]
+      ) concat(
+        [for(i=[1:len(q1)-1]) q1[i]],
+        [for(i=[1:len(q2)-1]) q2[i]],
+        [for(i=[1:len(q3)-1]) q3[i]],
+        [for(i=[1:len(q4)-1]) q4[i]]
+      )
+      : [bbox[1],[bbox[0].x,bbox[1].y],bbox[0],[bbox[1].x,bbox[0].y]]
+  ) points;
+
+module fl_square(
+  verbs = FL_ADD,
+  size  = [1,1],
+  r     = 0,        // rounded corners radius
+  quadrant
+) {
+  assert(is_list(verbs)||is_string(verbs));
+  assert(is_num(r));
+
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
+  points  = fl_square(size,r);
+  bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
+  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+
+  fl_trace("size",size);
+  fl_trace("radius",r);
+  fl_trace("points",points);
+  
+  multmatrix(M) fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) polygon(points);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) translate(bbox[0]) %square(size=size, center=false);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+  if (axes)
+    fl_modifier($FL_AXES) fl_axes(size=size);
+}
+

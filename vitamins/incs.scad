@@ -17,8 +17,17 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
+include <../foundation/incs.scad>
+
 include <countersinks.scad>
 include <knurl_nuts.scad>
+include <hdmis.scad>
+include <jacks.scad>
 include <magnets.scad>
+include <pcbs.scad>
+include <pin_headers.scad>
 include <spdts.scad>
+include <usbs.scad>
+
+use     <rj45.scad>
 use     <screw.scad>
