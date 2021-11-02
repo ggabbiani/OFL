@@ -69,42 +69,44 @@ DIR_R       = 0;        // [0:360]
 /* [PCB] */
 
 SHOW  = "ALL";  // [ALL,FL_PCB_RPI4]
+// FL_DRILL and FL_CUTOUT thickness
+T     = 2.5;
+// FL_CUTOUT tolerance
+TOLERANCE = 0.5;
+// when passed, the FL_CUTOUT verb will be triggered only on the labelled component
+CO_LABEL = "undef"; // [undef,POWER IN,HDMI0,HDMI1,A/V,USB2,USB3,ETHERNET,GPIO]
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef         : OCTANT;
-
-  verbs=[
-    if (ADD!="OFF")       FL_ADD,
-    if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-    if (AXES!="OFF")      FL_AXES,
-    if (BBOX!="OFF")      FL_BBOX,
-    if (CUTOUT!="OFF")    FL_CUTOUT,
-  ];
-  // target object(s)
-  single  = SHOW=="FL_PCB_RPI4"   ? FL_PCB_RPI4
-          : undef;
-  $FL_TRACE=TRACE;
-  fl_trace("verbs",verbs);
-  fl_trace("single",single);
-  fl_trace("FL_PCB_DICT",FL_PCB_DICT);
-
-  // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-  if (single)
-    fl_pcb(verbs,single,
-      direction=direction,octant=octant,
-      $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
-      $FL_TRACE=TRACE
-    );
-  else
-    layout([for(pcb=FL_PCB_DICT) fl_width(pcb)], 10)
-      fl_pcb(verbs,FL_PCB_DICT[$i],
-        direction=direction,octant=octant,
-        $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
-        $FL_TRACE=TRACE
-      );
+module wrap(type) {
+  fl_pcb(verbs,type,
+    direction=direction,octant=octant,thick=T,co_tolerance=TOLERANCE,co_label=co_label,
+    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
+    $FL_TRACE=TRACE
+  );
 }
 
-__test__();
+co_label  = CO_LABEL=="undef" ? undef : CO_LABEL;
+direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef         : OCTANT;
+verbs=[
+  if (ADD!="OFF")       FL_ADD,
+  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if (AXES!="OFF")      FL_AXES,
+  if (BBOX!="OFF")      FL_BBOX,
+  if (CUTOUT!="OFF")    FL_CUTOUT,
+  if (DRILL!="OFF")     FL_DRILL,
+];
+// target object(s)
+single  = SHOW=="FL_PCB_RPI4"   ? FL_PCB_RPI4
+        : undef;
+fl_trace("verbs",verbs);
+fl_trace("single",single);
+fl_trace("FL_PCB_DICT",FL_PCB_DICT);
+
+// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
+if (single)
+  wrap(single);
+else // TODO: replace with fl_layout
+  layout([for(pcb=FL_PCB_DICT) fl_width(pcb)], 10)
+    wrap(FL_PCB_DICT[$i]);

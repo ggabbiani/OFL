@@ -47,8 +47,7 @@ FL_PCB_RPI4 = let(
   fl_nameKV("RPI4-MODBP-8GB"),
   fl_bb_cornersKV(bbox),
   fl_sizeKV(bbox[1]-bbox[0]),
-  fl_directorKV(+FL_Z),
-  fl_rotorKV(+FL_X),
+  fl_directorKV(+FL_Z),fl_rotorKV(+FL_X),
   fl_PCB_holesKV([ 
     // each row represents a hole with the following format:
     // [drill direction],[position]
@@ -60,15 +59,15 @@ FL_PCB_RPI4 = let(
   fl_screwKV(M3_cap_screw),
   fl_PCB_componentsKV([
     // each row represent one component with the following format:
-    // ["engine", [position], [[director],rotation] type]
-    ["USB",   [24.5+1, 3.5+7.7,0],                  [+FL_X,0  ], FL_USB_TYPE_C  ],
-    ["HDMI",  [24.5+1,3.5+7.7+14.8,0],              [+FL_X,0  ], FL_HDMI_TYPE_D ],
-    ["HDMI",  [24.5+1,3.5+7.7+14.8+13.5,0],         [+FL_X,0  ], FL_HDMI_TYPE_D ],
-    ["JACK",  [24.5-2.5,3.5+7.7+14.8+13.5+7+7.5,0], [+FL_X,0  ], FL_JACK        ],
-    ["USB",   [w/2-9, 78,0],                        [+FL_Y,0  ], FL_USB_TYPE_Ax2],
-    ["USB",   [w/2-27, 78,0],                       [+FL_Y,0  ], FL_USB_TYPE_Ax2],
-    ["ETHER", [w/2-45.75, 76,0],                    [+FL_Y,0  ], undef          ],
-    [FL_PHDR_NS,  [-w/2+3.5,29+3.5,0],              [+FL_Z,90 ], FL_PHDR_RPIGPIO],
+    // ["label", ["engine", [position], [[director],rotation] type]]
+    ["POWER IN",  ["USB",   [24.5+1, 3.5+7.7,0],                  [+FL_X,0  ], FL_USB_TYPE_C  ]],
+    ["HDMI0",     ["HDMI",  [24.5+1,3.5+7.7+14.8,0],              [+FL_X,0  ], FL_HDMI_TYPE_D ]],
+    ["HDMI1",     ["HDMI",  [24.5+1,3.5+7.7+14.8+13.5,0],         [+FL_X,0  ], FL_HDMI_TYPE_D ]],
+    ["A/V",       ["JACK",  [24.5-2.5,3.5+7.7+14.8+13.5+7+7.5,0], [+FL_X,0  ], FL_JACK        ]],
+    ["USB2",      ["USB",   [w/2-9, 78,0],                        [+FL_Y,0  ], FL_USB_TYPE_Ax2]],
+    ["USB3",      ["USB",   [w/2-27, 78,0],                       [+FL_Y,0  ], FL_USB_TYPE_Ax2]],
+    ["ETHERNET",  ["ETHER", [w/2-45.75, 76,0],                    [+FL_Y,0  ], undef          ]],
+    ["GPIO",  [FL_PHDR_NS,  [-w/2+3.5,29+3.5,0],                  [+FL_Z,90 ], FL_PHDR_RPIGPIO]],
   ]),
 ];
 

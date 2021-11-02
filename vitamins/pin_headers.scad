@@ -24,6 +24,7 @@ include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/pin_headers.scad>
 
 // namespace for pin headers engine
+// TODO: extend namespace definition to other modules
 FL_PHDR_NS  = "phdr";
 
 //*****************************************************************************
