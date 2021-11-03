@@ -19,6 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
+include <../../foundation/unsafe_defs.scad>
 include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
@@ -46,12 +47,8 @@ BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of user passed accessories (like alternative screws)
+// layout of user passed accessories (like alternative screws or supports)
 LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a box representing the payload of the shape
-PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -81,9 +78,10 @@ CO_LABEL = "undef"; // [undef,POWER IN,HDMI0,HDMI1,A/V,USB2,USB3,ETHERNET,GPIO]
 module wrap(type) {
   fl_pcb(verbs,type,
     direction=direction,octant=octant,thick=T,co_tolerance=TOLERANCE,co_label=co_label,
-    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
+    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,
     $FL_TRACE=TRACE
-  );
+  )
+    children();
 }
 
 co_label  = CO_LABEL=="undef" ? undef : CO_LABEL;
@@ -96,6 +94,7 @@ verbs=[
   if (BBOX!="OFF")      FL_BBOX,
   if (CUTOUT!="OFF")    FL_CUTOUT,
   if (DRILL!="OFF")     FL_DRILL,
+  if (LAYOUT!="OFF")    FL_LAYOUT,
 ];
 // target object(s)
 single  = SHOW=="FL_PCB_RPI4"   ? FL_PCB_RPI4
@@ -104,9 +103,18 @@ fl_trace("verbs",verbs);
 fl_trace("single",single);
 fl_trace("FL_PCB_DICT",FL_PCB_DICT);
 
+module support(pcb) {
+  screw = fl_screw(pcb);
+  translate(-Z(fl_PCB_thick(pcb)))
+    fl_color($FL_FILAMENT)
+      fl_cylinder(r=screw_head_radius(screw),h=T,octant=-Z);
+}
+
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 if (single)
-  wrap(single);
+  wrap(single)
+    support(single);
 else // TODO: replace with fl_layout
   layout([for(pcb=FL_PCB_DICT) fl_width(pcb)], 10)
-    wrap(FL_PCB_DICT[$i]);
+    wrap(FL_PCB_DICT[$i])
+      support(FL_PCB_DICT[$i]);
