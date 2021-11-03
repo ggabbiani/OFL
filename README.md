@@ -1,13 +1,8 @@
 # OpenSCAD Foundation Library
 
-OFL stands for **O**penSCAD **F**oundation **L**ibrary. In brief it is an attempt to write a foundation library for OpenSCAD, introducing some concepts not included in the OpenSCAD language.
+![Cover](docs/cover.png)
 
-Every library item has been prefixed in the following way:
-
-* **FL_** for constants
-* **fl_** for APIs
-
-This was done for minimizing the risk of overlapping with any other API or global constant coming from other eventually used libraries.
+**O**penSCAD **F**oundation **L**ibrary (OFL) is a foundation library for OpenSCAD integrating concepts not included natively in the OpenSCAD language and providing an extendible standardized API base.
 
 ## Pre-reqs
 
@@ -23,7 +18,7 @@ The following libraries are used and must be installed for using all the OFL fea
 1. download and expand the library in the [OpenSCAD Library Folder](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations)
 2. include the following statement in your OpenSCAD code:
 
-    include <OFL/foundation/incs.scad>
+    include \<OFL/foundation/incs.scad\>
 
 ## Library documentation
 

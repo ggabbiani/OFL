@@ -1,0 +1,29 @@
+{
+    "parameterSets": {
+        "cover": {
+            "$FL_FILAMENT": "DodgerBlue",
+            "$FL_RENDER": "false",
+            "$FL_SAFE": "false",
+            "$fn": "50",
+            "ADD": "ON",
+            "ASSEMBLY": "DEBUG",
+            "AXES": "OFF",
+            "BBOX": "OFF",
+            "CO_LABEL": "POWER IN",
+            "CUTOUT": "ON",
+            "DIR_NATIVE": "true",
+            "DIR_R": "3",
+            "DIR_Z": "[1, 1, 1]",
+            "DRILL": "OFF",
+            "LAYOUT": "ON",
+            "OCTANT": "[-1, 1, 1]",
+            "PLACE_NATIVE": "true",
+            "SHOW": "FL_PCB_RPI4",
+            "T": "10",
+            "TOLERANCE": "0.5",
+            "TRACE": "false"
+        }
+    },
+    "parameterSets": "",
+    "fileFormatVersion": "1"
+}

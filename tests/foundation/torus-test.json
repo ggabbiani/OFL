@@ -1,0 +1,25 @@
+{
+    "parameterSets": {
+        "torus": {
+            "$FL_DEBUG": "false",
+            "$FL_RENDER": "false",
+            "$FL_SAFE": "false",
+            "$FL_TRACE": "false",
+            "$fn": "50",
+            "$fs": "50",
+            "A": "2",
+            "ADD": "ON",
+            "AXES": "OFF",
+            "B": "3",
+            "BBOX": "OFF",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
+            "OCTANT": "[0, 0, 0]",
+            "PLACE_NATIVE": "true",
+            "R": "5"
+        }
+    },
+    "parameterSets": "",
+    "fileFormatVersion": "1"
+}
