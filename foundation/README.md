@@ -12,6 +12,11 @@ An Object is a key/value list like the following:
 
 ## APIs
 
+In order to minimize the risk of overlap with other APIs or global constant from other client libraries, every library item has been prefixed in the following way:
+
+* **FL_** for constants
+* **fl_** for APIs
+
 APIs belongs to one of the following categories:
 
 * **contructor** - function returning an *Object*;
@@ -21,51 +26,81 @@ APIs belongs to one of the following categories:
 
 ## Verbs
 
-*Engines* and *primitive modules* may implement any of the following verbs:
+Any action that modifies the rendering of the scene is called 'Verb'.
+
+A number of predefined verbs are available:
 
 * **FL_ADD** - add shapes to scene;
-* **FL_ASSEMBLY** - layout of predefined auxiliary shapes (like predefined screws);
+* **FL_ASSEMBLY** - layout of predefined auxiliary shapes (like screws and/or components);
 * **FL_AXES** - draw of local (*Object* relative) reference axes;
 * **FL_BBOX** - adds a bounding box containing the *Object*;
-* **FL_CUTOUT** - layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z);
-* **FL_DRILL** - layout of predefined drill shapes (like holes with predefined screw diameter);
-* **FL_FOOTPRINT** - adds an *Object* footprint to scene, usually a simplified FL_ADD;
-* **FL_LAYOUT** - layout of passed children (useful for assembling user defined accessories like screws);
-* **FL_PAYLOAD** - adds a box representing the payload of the shape (when supported).
+* **FL_CUTOUT** - layout of predefined cutout shapes along any of the Cartesian axes;
+* **FL_DRILL** - layout of predefined drill shapes (generally holes);
+* **FL_FOOTPRINT** - adds an *Object* footprint to scene (usually a simplified FL_ADD);
+* **FL_LAYOUT** - layout of children modules (like user defined accessories);
+* **FL_PAYLOAD** - a box representing the payload of the shape (when supported).
 
-Verbs can be passed either as single value or as a list.
+All *engine* and *primitive* API signatures are standardized in order to respond to the same verbs with the same behaviour/semantic.
+
+Every *engine* or *primitive* is implemented to respond to single or multiple *Verbs* in whatever order, reducing the problem of 'perfect' argument forwarding in case of multiple calls.
 
 ### Single verb invocation
 
 When a verb is passed as a single value the verb will be trivially executed.
 
     include <OFL/foundation/incs.scad>
+    include <OFL/foundation/3d.scad>
+
+    // single verb primitive invocation 
+    fl_torus(FL_ADD,a=2,b=3);
+    ^         ^     ^   ^
+    |         |     |   |
+    |         |     +---+----< other primitive dependent parameters
+    |         |
+    |         +---< verb
+    |
+    +---< primitive
+
+![Single verb primitive invocation](docs/torus.png)
+
+    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
-    // object instance
-    obj = FL_MAG_M4_CS_32x6;
     // single verb engine invocation 
-    fl_magnet(FL_ADD,obj);
+    fl_magnet(FL_ADD,FL_MAG_M4_CS_32x6,...);
+    ^         ^      ^
+    |         |      |
+    |         |      +---< object
+    |         |
+    |         +---< verb
+    |
+    +---< engine
 
-![Single verb invocation](docs/fig-0.png)
+
+![Single verb engine invocation](docs/fig-0.png)
 
 ### Multiple verb invocation
 
- When multiple verbs are passed as a list, they are executed sequentially, as in the following example
+ When a list of *verbs* is passed, it wil be executed sequentially, as in the following example
  
     include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
     
-    // object instance
-    obj = FL_MAG_M4_CS_32x6;
     // multiple verb engine invocation 
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],obj);
+    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6);
+    ^         ^                                    ^
+    |         |                                    |
+    |         |                                    +---> object
+    |         |
+    |         +---> verb list executed sequentially
+    |
+    +---> engine
 
-where
+so that same invokation of the same primitive will actually perform the following actions:
  
- 1. a magnet is added (FL_ADD);
- 2. the default assembly of its accessories is performed (FL_ASSEMBLY);
- 3. local reference axes are shown (FL_AXES);
+ 1. add of a magnet shape to the scene (FL_ADD);
+ 2. default assembly of its accessories (FL_ASSEMBLY);
+ 3. draw of local reference axes (FL_AXES);
  4. the object bounding box is shown (FL_BBOX).
 
 ![Multiple verb invocation](docs/fig-1.png)
@@ -104,9 +139,19 @@ In the previous example we can modify the rendering of the FL_AXES verb
     include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
     
-    // object instance
-    obj = FL_MAG_M4_CS_32x6;
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],obj,$FL_AXES="DEBUG");
+    // multiple verb engine invocation 
+    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,$FL_AXES="DEBUG");
+    ^         ^                                    ^                 ^         ^
+    |         |                                    |                 |         |
+    |         |                                    |                 |         +---> DEBUG rendering
+    |         |                                    |                 |          
+    |         |                                    |                 +---> runtime modifier for FL_AXES verb        
+    |         |                                    |                           
+    |         |                                    +---> object
+    |         |
+    |         +---> verb list executed sequentially
+    |
+    +---> engine
 
 obtaining the reference axes rendering in 'debug' mode
 
@@ -148,6 +193,15 @@ We can pass this value to our example for placing the object in the desired octa
     $FL_SAFE  = false;
 
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=+X+Y+Z);
+    ^         ^                                    ^                 ^         
+    |         |                                    |                 |          
+    |         |                                    |                 +---> octant expressed as [1,1,1] ⇒ first octant
+    |         |                                    |                           
+    |         |                                    +---> object
+    |         |
+    |         +---> verb list executed sequentially
+    |
+    +---> engine
 
 ![Modified verb invocation](docs/fig-3.png)
 
@@ -161,6 +215,15 @@ If we want the object centered along the X axis, the octant will be [0,1,1] ⇒ 
     $FL_SAFE  = false;
 
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=+Y+Z);
+    ^         ^                                    ^                 ^         
+    |         |                                    |                 |          
+    |         |                                    |                 +---> octant expressed as [0,1,1] ⇒ x==0 means 'centered'
+    |         |                                    |                           
+    |         |                                    +---> object
+    |         |
+    |         +---> verb list executed sequentially
+    |
+    +---> engine
 
 ![Modified verb invocation](docs/fig-4.png)
 

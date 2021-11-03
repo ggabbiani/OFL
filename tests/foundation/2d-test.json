@@ -1,0 +1,33 @@
+{
+    "parameterSets": {
+        "rounded-square": {
+            "$FL_RENDER": "false",
+            "$FL_SAFE": "true",
+            "$fn": "50",
+            "$vpd": "140",
+            "$vpf": "22.5",
+            "$vpr": "[0, 0, 0]",
+            "$vpt": "[0, 0, 0]",
+            "A": "10",
+            "ADD": "ON",
+            "ARC_T": "1",
+            "AXES": "OFF",
+            "B": "6",
+            "BBOX": "OFF",
+            "END_ANGLE": "60",
+            "IPOLY_CIRCLE": "true",
+            "IPOLY_N": "3",
+            "PLACE_NATIVE": "true",
+            "PRIMITIVE": "square",
+            "QUADRANT": "[1, 1]",
+            "RADIUS": "10",
+            "SQUARE_SIZE": "[40, 30]",
+            "START_ANGLE": "0",
+            "TRACE": "false"
+        }
+    },
+    "parameterSets": "",
+    "fileFormatVersion": "1",
+    "parameterSets": "",
+    "parameterSets": ""
+}

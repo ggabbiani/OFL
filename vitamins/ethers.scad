@@ -1,4 +1,6 @@
 /*
+ * Ethernet definition file.
+ *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -16,18 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
+include <../foundation/defs.scad>
 
-include <../foundation/incs.scad>
+FL_ETHER_NS = "ether";
 
-include <countersinks.scad>
-include <knurl_nuts.scad>
-include <ethers.scad>
-include <hdmis.scad>
-include <jacks.scad>
-include <magnets.scad>
-include <pcbs.scad>
-include <pin_headers.scad>
-include <spdts.scad>
-include <usbs.scad>
+FL_ETHER_RJ45 = let(
+  bbox  = let(l=21,w=16,h=13.5) [[-l/2,-w/2,0],[+l/2,+w/2,h]]
+) [
+  fl_nameKV("RJ45"),
+  fl_bb_cornersKV(bbox),
+  fl_sizeKV(bbox[1]-bbox[0]),
+  fl_directorKV(+FL_X),fl_rotorKV(-FL_Z),
+];
 
-use     <screw.scad>
+FL_ETHER_DICT = [
+  FL_ETHER_RJ45,
+];
+
+use     <ether.scad>

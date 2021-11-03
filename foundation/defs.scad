@@ -22,7 +22,7 @@
 include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
-function fl_version() = [1,4,0];
+function fl_version() = [1,6,0];
 
 function fl_versionNumber() = let(
   version = fl_version()
@@ -176,7 +176,7 @@ function fl_get(type,key,default) =
   let(index_list=search([key],type))
   index_list != [[]] 
   ? type[index_list[0]][1] 
-  : assert(default!=undef,"Missing value and default") default;
+  : assert(default!=undef,str("Missing value and default - ",key)) default;
 
 // returns [«key»,«value»] if value is defined, «key» otherwise
 function fl_kv(key,value)   = assert(key!=undef) value!=undef ? [key,value] : key;
