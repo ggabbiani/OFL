@@ -21,6 +21,20 @@ include <unsafe_defs.scad>
 use     <3d.scad>
 use     <placement.scad>
 
+// /**
+//  * return the sum of the passed bounding boxes
+//  */
+// function fl_bb_sum(bboxes,__r__) = let(
+//     len = len(bboxes)
+//   ) len>0
+//   ? let(
+//     curr = bboxes[0],
+//     min  = let(c=curr[0],r=__r__[0]) __r__ ? [min(c.x,r.x),min(c.y,r.y),min(c.z,r.z)] : c,
+//     max  = let(c=curr[1],r=__r__[1]) __r__ ? [max(c.x,r.x),max(c.y,r.y),max(c.z,r.z)] : c,
+//     rest = len==1 ? [] : [for(i=[1:len(bboxes)-1]) bboxes[i]]
+//   ) fl_bb_sum(rest,[min,max])
+//   : __r__;
+
 /**
  * ... an unveiled mistery ...
  */
