@@ -65,20 +65,17 @@ function fl_phdr_new(
   description,  // optional description string
   nop,          // NopSCADlib base type
   geometry  = [1,1] // pin header size in [cols,rows]
-) =
+) = let(
+  bbox = fl_phdr_nopBBox(nop,geometry)
+)
   [
     assert(is_string(name)) fl_nameKV(name),
     assert(nop!=undef) fl_nopSCADlibKV(nop),
     if (description!=undef) 
       assert(is_string(description)) fl_descriptionKV(description),
     fl_phdr_geometryKV(geometry),
-    let(
-      w = hdr_pitch(nop)*geometry.x,
-      d = hdr_pitch(nop)*geometry.y,
-      h = hdr_pin_length(nop),
-      b = hdr_pin_below(nop),
-      bbox = [[-w/2,-d/2,-b],[+w/2,+d/2,h-b]]
-    ) fl_sizeKV(bbox[1]-bbox[0]),
+    fl_bb_cornersKV(bbox),
+    fl_sizeKV(bbox[1]-bbox[0]),
   ];
 
 FL_PHDR_RPIGPIO = fl_phdr_new("FL_RPI_GPIO","Raspberry PI GPIO",2p54header,[20,2]);
