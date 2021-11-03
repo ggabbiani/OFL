@@ -21,27 +21,40 @@
 include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
 include <../foundation/layout.scad>
+include <../foundation/2d.scad>
+include <ethers.scad>
+
 use     <../foundation/util.scad>
 
 use     <NopSCADlib/vitamins/pcb.scad>
 
-module fl_rj45(
+module fl_ether(
   verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
-  co_thick,                // thickness for FL_CUTOUT
-  co_tolerance=0,          // tolerance used during FL_CUTOUT
-  co_drift=0,              // translation applied to cutout
+  type,
+  co_thick,             // thickness for FL_CUTOUT
+  co_tolerance=0,       // tolerance used during FL_CUTOUT
+  co_drift=0,           // translation applied to cutout
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(type!=undef);
 
   axes    = fl_list_has(verbs,FL_AXES);
   verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  bbox  = let(l=21,w=16,h=13.5) [[-l/2,-w/2,0],[+l/2,+w/2,h]];
+  bbox  = fl_bb_corners(type);
   size  = bbox[1]-bbox[0];
-  D     = direction ? fl_direction(direction=direction,default=[+X,-Z])  : I;
+  D     = direction ? fl_direction(proto=type,direction=direction)  : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+
+  module do_cutout() {
+    translate([co_thick,0,size.z/2])
+    rotate(-90,Y)
+    linear_extrude(co_thick)
+    offset(r=co_tolerance)
+    fl_square(FL_ADD,size=[size.z,size.y]);
+  }
 
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
@@ -54,8 +67,7 @@ module fl_rj45(
         assert(co_thick!=undef);
         fl_modifier($FL_CUTOUT) 
           translate(+X(bbox[1].x+co_drift))
-            fl_cutout(len=co_thick,z=X,x=-Z,delta=co_tolerance,trim=-X(size.x/2),cut=true)
-              rj45();
+            do_cutout();
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }

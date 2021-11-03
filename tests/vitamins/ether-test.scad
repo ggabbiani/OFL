@@ -82,8 +82,7 @@ module __test__() {
 
   fl_trace("verbs",verbs);
 
-  // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-  fl_rj45(verbs,
+  fl_ether(verbs,FL_ETHER_RJ45,
     direction=direction,octant=octant,co_thick=thick,co_tolerance=tolerance,co_drift=drift,
     $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
   );
