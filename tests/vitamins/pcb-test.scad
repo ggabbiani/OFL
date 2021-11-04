@@ -65,7 +65,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [PCB] */
 
-SHOW  = "ALL";  // [ALL,FL_PCB_RPI4]
+SHOW  = "FL_PCB_RPI4";  // [ALL,FL_PCB_RPI4]
 // FL_DRILL and FL_CUTOUT thickness
 T     = 2.5;
 // FL_CUTOUT tolerance
