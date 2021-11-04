@@ -32,6 +32,7 @@ include <pin_headers.scad>
 
 module fl_pinHeader(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  type,
   nop,                  // NopSCADlib header
   geometry    = [1,1],  // pin header size in [cols,rows]
   smt         = false,  // surface mount
@@ -42,16 +43,22 @@ module fl_pinHeader(
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
+  // echo(nop=nop);
+  // echo(type=type);
   assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(nop!=undef);
-
+  // FIXME: when called from fl_pcb the following assert fails
+  // assert(fl_XOR(nop!=undef,type!=undef));
+  
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   
-  cols  = geometry.x;
-  rows  = geometry.y;
-  bbox  = fl_phdr_nopBBox(nop,geometry);
-  size  = bbox[1]-bbox[0];
+  nop       = type!=undef ? fl_nopSCADlib(type) : nop;
+  geometry  = type!=undef ? fl_phdr_geometry(type) : geometry;
+  bbox      =  type!=undef ? fl_bb_corners(type) : fl_phdr_nopBBox(nop,geometry);
+  size      = bbox[1]-bbox[0];
+  cols      = geometry.x;
+  rows      = geometry.y;
+
   D     = direction ? fl_direction(direction=direction,default=[Z,X])  : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
 
