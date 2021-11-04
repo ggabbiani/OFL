@@ -29,9 +29,9 @@ use     <NopSCADlib/vitamins/pcb.scad>
 module fl_USB(
   verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   type,
-  co_thick,                // thickness for FL_CUTOUT
-  co_tolerance=0,          // tolerance used during FL_CUTOUT
-  co_drift=0,              // translation applied to cutout
+  co_thick,             // thickness for FL_CUTOUT
+  co_tolerance=0,       // tolerance used during FL_CUTOUT
+  co_drift=0,           // translation applied to cutout
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
 ) {
@@ -51,13 +51,10 @@ module fl_USB(
   fl_trace("cutout drift",co_drift);
 
   module wrap() {
-    if (utype=="A" || utype=="Ax2") let(
-      h           = __fl_USBA_height__(type),
-      v_flange_l  = __fl_USBA_vFlangeL__(type),
-      bar         = __fl_USBA_bar__(type)
-    ) usb_A(h,v_flange_l, bar,false);
-    else if (utype=="B") usb_B(false);
-    else if (utype=="C") usb_C(false);
+    if      (utype=="A")    usb_Ax1();
+    else if (utype=="Ax2")  usb_Ax2();
+    else if (utype=="B")    usb_B();
+    else if (utype=="C")    usb_C();
     else assert(false,str("Unimplemented USB type ",utype));
   }
 
@@ -72,7 +69,7 @@ module fl_USB(
         assert(co_thick!=undef);
         fl_modifier($FL_CUTOUT) 
           translate(+X(size.x/2+co_drift))
-            fl_cutout(len=co_thick,z=X,x=-Z,delta=co_tolerance,trim=X(size.x/2-0.1),cut=true)
+            fl_cutout(len=co_thick,z=X,x=Y,delta=co_tolerance)
               wrap();
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));

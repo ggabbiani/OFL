@@ -31,7 +31,7 @@ FL_PHDR_NS  = "phdr";
 // keys
 
 // pin header size in [cols,rows]
-function fl_phdr_geometryKV(value)  = fl_kv("PCB/size",value);
+function fl_phdr_geometryKV(value)  = fl_kv("phdr/size",value);
 
 //*****************************************************************************
 // getters

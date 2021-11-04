@@ -65,28 +65,22 @@ DIR_R       = 0;        // [0:360]
 
 /* [PCB] */
 
-SHOW  = "ALL";  // [ALL,FL_PCB_RPI4]
+SHOW          = "FL_PCB_RPI4";  // [ALL,FL_PCB_RPI4]
 // FL_DRILL and FL_CUTOUT thickness
-T     = 2.5;
+T             = 2.5;
 // FL_CUTOUT tolerance
-TOLERANCE = 0.5;
-// when passed, the FL_CUTOUT verb will be triggered only on the labelled component
-CO_LABEL = "undef"; // [undef,POWER IN,HDMI0,HDMI1,A/V,USB2,USB3,ETHERNET,GPIO]
+TOLERANCE     = 0.5;
+// when !="undef", FL_CUTOUT verb is triggered only on the labelled component
+CO_LABEL      = "undef";        // [undef,POWER IN,HDMI0,HDMI1,A/V,USB2,USB3,ETHERNET,GPIO]
+// when !=[0,0,0], FL_CUTOUT is triggered only on components oriented accordingly to any of the not-null axis values
+CO_DIRECTION  = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
 
-module wrap(type) {
-  fl_pcb(verbs,type,
-    direction=direction,octant=octant,thick=T,co_tolerance=TOLERANCE,co_label=co_label,
-    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,
-    $FL_TRACE=TRACE
-  )
-    children();
-}
-
-co_label  = CO_LABEL=="undef" ? undef : CO_LABEL;
-direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef         : OCTANT;
+co_direction  = CO_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]) if (CO_DIRECTION[i]) CO_DIRECTION[i]*axes[i]];
+co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
+direction     = DIR_NATIVE        ? undef : [DIR_Z,DIR_R];
+octant        = PLACE_NATIVE      ? undef : OCTANT;
 verbs=[
   if (ADD!="OFF")       FL_ADD,
   if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
@@ -97,18 +91,10 @@ verbs=[
   if (LAYOUT!="OFF")    FL_LAYOUT,
 ];
 // target object(s)
-single  = SHOW=="FL_PCB_RPI4"   ? FL_PCB_RPI4
-        : undef;
+single  = SHOW=="FL_PCB_RPI4" ? FL_PCB_RPI4 : undef;
 fl_trace("verbs",verbs);
 fl_trace("single",single);
 fl_trace("FL_PCB_DICT",FL_PCB_DICT);
-
-module support(pcb) {
-  screw = fl_screw(pcb);
-  translate(-Z(fl_PCB_thick(pcb)))
-    fl_color($FL_FILAMENT)
-      fl_cylinder(r=screw_head_radius(screw),h=T,octant=-Z);
-}
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 if (single)
@@ -118,3 +104,26 @@ else // TODO: replace with fl_layout
   layout([for(pcb=FL_PCB_DICT) fl_width(pcb)], 10)
     wrap(FL_PCB_DICT[$i])
       support(FL_PCB_DICT[$i]);
+
+module wrap(type) {
+  fl_pcb(verbs,type,
+    direction=direction,octant=octant,thick=T,co_tolerance=TOLERANCE,co_by_label=co_label,co_by_direction=co_direction,
+    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,
+    $FL_TRACE=TRACE
+  )
+    children();
+}
+
+module support(pcb) {
+  screw = fl_screw(pcb);
+  translate(-Z(fl_PCB_thick(pcb)))
+    fl_color($FL_FILAMENT)
+      fl_cylinder(r=screw_head_radius(screw),h=T,octant=-Z);
+}
+
+// converts a list of strings into a list of their represented axes
+// TODO: insert the function in defs?
+function s2axes(slist) = 
+  [for(s=slist)
+    assert(s=="+X"||s=="-X"||s=="+Y"||s=="-Y"||s=="+Z"||s=="-Z",str("Invalid value '",s,"'"))
+    (s=="+X") ? +X : (s=="-X") ? -X : (s=="+Y") ? +Y : (s=="-Y") ? -Y : (s=="+Z") ? +Z : -Z];

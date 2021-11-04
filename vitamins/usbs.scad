@@ -23,16 +23,10 @@ include <../foundation/defs.scad>
 //*****************************************************************************
 // USB keys
 function fl_USB_typeKV(value)             = fl_kv("USB/type",value);
-function __fl_USBA_heightKV__(value)      = fl_kv("USBA/__height__",value);
-function __fl_USBA_vFlangeLKV__(value)    = fl_kv("USBA/__vFlangeL__",value);
-function __fl_USBA_barKV__(value)         = fl_kv("USBA/__bar__",value);
 
 //*****************************************************************************
 // USB getters
 function fl_USB_type(type)              = fl_get(type,fl_USB_typeKV()); 
-function __fl_USBA_height__(type)       = fl_get(type,__fl_USBA_heightKV__()); 
-function __fl_USBA_vFlangeL__(type)     = fl_get(type,__fl_USBA_vFlangeLKV__()); 
-function __fl_USBA_bar__(type)          = fl_get(type,__fl_USBA_barKV__()); 
 
 //*****************************************************************************
 // USB constructors
@@ -54,10 +48,6 @@ function fl_USB_new(utype) =
       fl_sizeKV(bbox[1]-bbox[0]),
       fl_bb_cornersKV(bbox),
       fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
-
-      __fl_USBA_heightKV__(h),
-      __fl_USBA_vFlangeLKV__(v_flange_l),
-      __fl_USBA_barKV__(bar),
     ]
   : utype=="Ax2"
   ? let(
@@ -76,12 +66,6 @@ function fl_USB_new(utype) =
       fl_sizeKV(bbox[1]-bbox[0]),
       fl_bb_cornersKV(bbox),
       fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
-
-      // __fl_USB_coDriftKV__(1),
-      __fl_USBA_heightKV__(h),
-      __fl_USBA_vFlangeLKV__(v_flange_l),
-      __fl_USBA_barKV__(bar),
-      // __fl_USBA_flangeTKV__(flange_t)
     ]
   : utype=="B"
   ? let(
@@ -96,7 +80,6 @@ function fl_USB_new(utype) =
       fl_sizeKV(bbox[1]-bbox[0]),
       fl_bb_cornersKV(bbox),
       fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
-      // __fl_USB_coDriftKV__(1),
     ]
   : utype=="C"
   ? let(

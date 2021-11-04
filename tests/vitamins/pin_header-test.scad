@@ -85,7 +85,7 @@ verbs=[
 ];
 
 module wrapIt(nop,geometry) {
-  fl_pinHeader(verbs,nop,
+  fl_pinHeader(verbs,nop=nop,
     geometry=geometry,color=color,co_thick=thick,co_tolerance=tolerance,
     octant=octant,direction=direction,
     $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
