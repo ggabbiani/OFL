@@ -56,7 +56,7 @@ module fl_jack(
       } else if ($verb==FL_CUTOUT) {
         assert(co_thick!=undef);
         fl_modifier($FL_CUTOUT) 
-          translate(+X(bbox[1].x+co_drift))
+          translate(+X(bbox[1].x-2.5+co_drift))
             fl_cutout(len=co_thick,z=X,x=-Z,delta=co_tolerance,trim=X(-size.x/2),cut=true)
               jack();
       } else {
