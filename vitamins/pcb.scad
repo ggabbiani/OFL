@@ -29,17 +29,19 @@ use     <ether.scad>
 use     <screw.scad>
 
 module fl_pcb(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD, // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT
   type,
-  dr_thick=0,           // thickness during FL_DRILL
-  co_thick=0,           // thickness during FL_CUTOUT
-  co_tolerance=0,       // tolerance used during FL_CUTOUT
-  co_label,             // when passed, the FL_CUTOUT verb will be triggered only on the labelled component
-  thick=0,              // common override for dr_thick and co_thick
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  dr_thick=0,           // FL_DRILL thickness 
+  co_thick=0,           // FL_CUTOUT thickness 
+  co_tolerance=0,       // FL_CUTOUT tolerance 
+  co_by_label,          // FL_CUTOUT component filter by label
+  co_by_direction,      // FL_CUTOUT component filter by direction (+X,+Y or +Z)
+  thick=0,              // shortcut for dr_thick and co_thick
+  direction,            // desired direction [director,rotation], native direction when undef
+  octant                // when undef native positioning is used
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(!(co_by_direction!=undef && co_by_label!=undef),"cutout filtering cannot be done by label and direction at the same time");
 
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
@@ -67,35 +69,51 @@ module fl_pcb(
     }
   }
 
-  module do_layout(class,label) {
+  module do_layout(class,label,directions) {
     assert(is_string(class));
     assert(label==undef||is_string(label));
+    assert(directions==undef||is_list(directions));
     fl_trace("class",class);
+    fl_trace("directions",directions);
     fl_trace("label",label);
     fl_trace("children",$children);
 
-    if (!label) { // layout by 'class'
+    if (label) {
+      assert(class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
+      $component  = fl_get(comps,label);
+      $label      = label;
+      position    = $component[1];
+      translate(position) children();
+    } else if (directions) {
+      assert(class=="components",str("Cannot layout BY DIRECTION on class '",class,"'"));
+      for(c=comps) {  // «c» = ["label",component]
+        component = c[1];
+        direction = component[2][0];
+        // triggers a component if its direction matches the direction list
+        if (search([direction],directions)!=[[]]) {
+          $component  = c[1];
+          $label      = c[0];
+          $direction  = direction;  // component direction
+          position    = $component[1];
+          translate(position) children();
+        }
+      }
+    } else {  // by class
       if (class=="holes")
         for(hole=holes) {
-          fl_trace("hole",hole);
           $director = hole[0];
           position  = hole[1];
-          translate(position)
-            children();
+          translate(position) children();
         }
       else if (class=="components")
-        for(c=comps) {
-          $label      = c[0];
+        for(c=comps) {  // «c» = ["label",component]
           $component  = c[1];
-          children();
+          $label      = c[0];
+          position    = $component[1];
+          translate(position) children();
         }
       else
         assert(false,"unknown component class '",class,"'.");
-    } else {  // layout by 'label'
-      assert(class=="components",str("layout BY LABEL not implemented on class '",class,"'"));
-      $component  = fl_get(comps,label);
-      $label      = label;
-      children();
     }
   }
   
@@ -103,22 +121,20 @@ module fl_pcb(
     do_layout("components")
       let(
         engine    = $component[0],
-        position  = $component[1],
         direction = $component[2],
         type      = $component[3]
-      ) translate(position) 
-          if (engine=="USB")
-            fl_USB(type=type,direction=direction);
-          else if (engine=="HDMI")
-            fl_hdmi(type=type,direction=direction);
-          else if (engine=="JACK")
-            fl_jack(type=type,direction=direction);
-          else if (engine==FL_ETHER_NS)
-            fl_ether(type=type,direction=direction);
-          else if (engine==FL_PHDR_NS)
-            fl_pinHeader(FL_ADD,type=type,direction=direction);
-          else
-            assert(false,str("Unknown engine ",engine));
+      ) if (engine=="USB")
+          fl_USB(type=type,direction=direction);
+        else if (engine=="HDMI")
+          fl_hdmi(type=type,direction=direction);
+        else if (engine=="JACK")
+          fl_jack(type=type,direction=direction);
+        else if (engine==FL_ETHER_NS)
+          fl_ether(type=type,direction=direction);
+        else if (engine==FL_PHDR_NS)
+          fl_pinHeader(FL_ADD,type=type,direction=direction);
+        else
+          assert(false,str("Unknown engine ",engine));
     do_layout("holes")
       fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
   }
@@ -130,33 +146,32 @@ module fl_pcb(
   }
 
   module do_cutout() {
-
     module trigger(component) {
       engine    = component[0];
-      position  = component[1];
       direction = component[2];
       type      = component[3];
-      translate(position) 
-        if (engine=="USB")
-          let(drift= $label=="POWER IN" ? -1.2 : -3)
-            fl_USB(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
-        else if (engine=="HDMI")
-          let(drift=-1.3)
-            fl_hdmi(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
-        else if (engine=="JACK")
-          let(drift=0)
-            fl_jack(FL_CUTOUT,type=type,co_thick=co_thick-drift,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
-        else if (engine==FL_ETHER_NS)
-          let(drift=-3.)
-            fl_ether(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
-        else if (engine==FL_PHDR_NS)
-          fl_pinHeader(FL_CUTOUT,type=type,co_thick=co_thick*4,co_tolerance=co_tolerance,direction=direction);
-        else
-          assert(false,str("Unknown engine ",engine));
+      if (engine=="USB")
+        let(drift= $label=="POWER IN" ? -1.2 : -3)
+          fl_USB(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+      else if (engine=="HDMI")
+        let(drift=-1.3)
+          fl_hdmi(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+      else if (engine=="JACK")
+        let(drift=0)
+          fl_jack(FL_CUTOUT,type=type,co_thick=co_thick-drift,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+      else if (engine==FL_ETHER_NS)
+        let(drift=-3.)
+          fl_ether(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+      else if (engine==FL_PHDR_NS)
+        fl_pinHeader(FL_CUTOUT,type=type,co_thick=co_thick*4,co_tolerance=co_tolerance,direction=direction);
+      else
+        assert(false,str("Unknown engine ",engine));
     }
 
-    do_layout("components",co_label)
-      trigger($component);
+    if (co_by_label) 
+      do_layout("components",co_by_label) trigger($component);
+    else
+      do_layout("components",undef,co_by_direction) trigger($component);
   }
 
   multmatrix(D) {

@@ -41,7 +41,6 @@ function fl_PCB_holes(type)       = fl_get(type,fl_PCB_holesKV());
 function fl_PCB_components(type)  = fl_get(type,fl_PCB_componentsKV()); 
 function fl_PCB_thick(type)       = fl_get(type,fl_PCB_thickKV()); 
 
-// TODO: implement component management by group ('X','Y','Z')
 FL_PCB_RPI4 = let(
   w     = 56,
   l     = 85,
@@ -66,14 +65,14 @@ FL_PCB_RPI4 = let(
   fl_PCB_componentsKV([
     // each row represent one component with the following format:
     // ["label", ["engine", [position], [[director],rotation] type]]
-    ["POWER IN",  ["USB",   [25.5, 3.5+7.7,0],                  [+FL_X,0  ], FL_USB_TYPE_C  ]],
-    ["HDMI0",     ["HDMI",  [25,3.5+7.7+14.8,0],              [+FL_X,0  ], FL_HDMI_TYPE_D ]],
-    ["HDMI1",     ["HDMI",  [25,3.5+7.7+14.8+13.5,0],         [+FL_X,0  ], FL_HDMI_TYPE_D ]],
-    ["A/V",       ["JACK",  [22,3.5+7.7+14.8+13.5+7+7.5,0], [+FL_X,0  ], FL_JACK        ]],
-    ["USB2",      ["USB",   [w/2-9,  79.5,0],                     [+FL_Y,0  ], FL_USB_TYPE_Ax2]],
-    ["USB3",      ["USB",   [w/2-27, 79.5,0],                     [+FL_Y,0  ], FL_USB_TYPE_Ax2]],
-    ["ETHERNET",[FL_ETHER_NS, [w/2-45.75, 77.5,0],                [+FL_Y,0  ], FL_ETHER_RJ45  ]],
-    ["GPIO",    [FL_PHDR_NS,  [-w/2+3.5,29+3.5,0],                [+FL_Z,90 ], FL_PHDR_RPIGPIO]],
+    ["POWER IN",  ["USB",       [25.5,      11.2, 0], [+FL_X,0  ], FL_USB_TYPE_C  ]],
+    ["HDMI0",     ["HDMI",      [25,        26,   0], [+FL_X,0  ], FL_HDMI_TYPE_D ]],
+    ["HDMI1",     ["HDMI",      [25,        39.5, 0], [+FL_X,0  ], FL_HDMI_TYPE_D ]],
+    ["A/V",       ["JACK",      [22,        54,   0], [+FL_X,0  ], FL_JACK        ]],
+    ["USB2",      ["USB",       [w/2-9,     79.5, 0], [+FL_Y,0  ], FL_USB_TYPE_Ax2]],
+    ["USB3",      ["USB",       [w/2-27,    79.5, 0], [+FL_Y,0  ], FL_USB_TYPE_Ax2]],
+    ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+FL_Y,0  ], FL_ETHER_RJ45  ]],
+    ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+FL_Z,90 ], FL_PHDR_RPIGPIO]],
   ]),
 ];
 
