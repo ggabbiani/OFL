@@ -1,5 +1,5 @@
 /*
- * PCB implementation file template for OpenSCAD Foundation Library.
+ * PCB implementation file.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -67,14 +67,14 @@ module fl_pcb(
     }
   }
 
-  module do_layout(class,name) {
+  module do_layout(class,label) {
     assert(is_string(class));
-    assert(name==undef||is_string(name));
+    assert(label==undef||is_string(label));
     fl_trace("class",class);
-    fl_trace("name",name);
+    fl_trace("label",label);
     fl_trace("children",$children);
 
-    if (!name) {
+    if (!label) { // layout by 'class'
       if (class=="holes")
         for(hole=holes) {
           fl_trace("hole",hole);
@@ -85,14 +85,16 @@ module fl_pcb(
         }
       else if (class=="components")
         for(c=comps) {
-          $component = c[1];
+          $label      = c[0];
+          $component  = c[1];
           children();
         }
       else
         assert(false,"unknown component class '",class,"'.");
-    } else {
-      assert(class=="components","layout by name implemented only for components");
-      $component = fl_get(comps,name);
+    } else {  // layout by 'label'
+      assert(class=="components",str("layout BY LABEL not implemented on class '",class,"'"));
+      $component  = fl_get(comps,label);
+      $label      = label;
       children();
     }
   }
@@ -114,7 +116,7 @@ module fl_pcb(
           else if (engine==FL_ETHER_NS)
             fl_ether(type=type,direction=direction);
           else if (engine==FL_PHDR_NS)
-            fl_pinHeader(nop=fl_nopSCADlib(type),direction=direction,geometry=[20,2]);
+            fl_pinHeader(FL_ADD,type=type,direction=direction);
           else
             assert(false,str("Unknown engine ",engine));
     do_layout("holes")
@@ -136,19 +138,19 @@ module fl_pcb(
       type      = component[3];
       translate(position) 
         if (engine=="USB")
-          let(drift=-1.25)
-            fl_USB(FL_CUTOUT,type=type,co_thick=co_thick-drift,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+          let(drift= $label=="POWER IN" ? -1.2 : -3)
+            fl_USB(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
         else if (engine=="HDMI")
-          let(drift=-1.8)
-            fl_hdmi(FL_CUTOUT,type=type,co_thick=co_thick-drift,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+          let(drift=-1.3)
+            fl_hdmi(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
         else if (engine=="JACK")
-          let(drift=-2.5)
+          let(drift=0)
             fl_jack(FL_CUTOUT,type=type,co_thick=co_thick-drift,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
         else if (engine==FL_ETHER_NS)
-          let(drift=-1.5)
-            fl_ether(FL_CUTOUT,type=type,co_thick=co_thick-drift,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+          let(drift=-3.)
+            fl_ether(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
         else if (engine==FL_PHDR_NS)
-          fl_pinHeader(FL_CUTOUT,nop=fl_nopSCADlib(type),co_thick=co_thick*4,co_tolerance=co_tolerance,direction=direction,geometry=[20,2]);
+          fl_pinHeader(FL_CUTOUT,type=type,co_thick=co_thick*4,co_tolerance=co_tolerance,direction=direction);
         else
           assert(false,str("Unknown engine ",engine));
     }
