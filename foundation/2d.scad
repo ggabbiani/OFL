@@ -203,6 +203,7 @@ function fl_intersection(
   assert(c)     // intersection outside segments
   [x1+t*(x2-x1),y1+t*(y2-y1)];
 
+// TODO: should be used also for circular sectors? 
 function fl_ellipticSector(e,angles) = 
 assert(is_list(e),str("e=",e))
 assert(is_list(angles),str("angles=",angles))
@@ -435,7 +436,7 @@ function fl_circleXY(
   t   // 0≤t<360, angle that the ray from (0,0) to (x,y) makes with +X 
 ) = r*[cos(t),sin(t)];
 
-function fl_circle(r=1) = assert(r) fl_sector(r=r,angles=[0,360]);
+function fl_circle(r=1) = /* assert(r) */ fl_sector(r=r,angles=[0,360]);
 
 module fl_circle(
   verbs = FL_ADD,
@@ -548,78 +549,95 @@ module fl_ipoly(
 //**** square *****************************************************************
 
 function fl_square(
-  size  = [1,1],
-  r     = 0
+  size      = [1,1],
+  r,                    // overrides vertices with [r,r,r,r]
+  vertices  = [0,0,0,0] // List of four radiuses, one for each quadrant's corners.
+                        // Each zero means that the corresponding corner is squared.
+                        // Defaults to a 'perfect' rectangle with four squared corners.
+                        // Scalar value R for «vertices» means vertices=[R,R,R,R]
 ) = 
-  assert(r>=0)
-  assert(2*r<=min(size))
+  assert(is_list(vertices)||is_num(vertices))
   let(
-    bbox  = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]],
-    points =
-      (size.x==size.y && size.x==2*r) ? echo("CIRCLE!!") fl_circle(r)
-      : r>0 ? let(
+    bad_r     = "one corner radius cannot exceed half of the minimum size",
+    bbox      = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]],
+    vertices  = is_num(r) ? [r,r,r,r] : is_num(vertices) ? [vertices,vertices,vertices,vertices] : vertices,
+    points    = /* echo(str("r ", r)) */ let(
+      r = /* echo(str("vertices ", vertices)) */ r!=undef ? r : (vertices[0]==vertices[1] && vertices[1]==vertices[2] && vertices[2]==vertices[3]) ? vertices[0] : undef
+    ) (r!=undef && size.x==size.y &&  size.x==2*r) 
+      ? /* echo("***THE PERFECT CIRCLE!***") */ fl_circle(r)
+      : let(
         q1  = let(
+          r = let(radius=vertices[0]) assert(radius<=min(size)/2,bad_r) radius,
           M = [
             [1,0,bbox[1].x-r],
             [0,1,bbox[1].y-r],
             [0,0,1          ]
-          ]
-        ) [for(p=fl_sector(r,angles=[0,90])) let(point=M*[p.x,p.y,1]) [point.x,point.y]],
+          ],
+          points  = r>0 ? [for(p=fl_sector(r,angles=[0,90])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [bbox[1]]
+        ) /* echo(str("q1=", points)) */ points,
         q2  = let(
+          r = let(radius=vertices[1]) assert(radius<=min(size)/2,bad_r) radius,
           M = [
             [1,0,bbox[0].x+r],
             [0,1,bbox[1].y-r],
             [0,0,1          ]
-          ]
-        ) [for(p=fl_sector(r,angles=[90,180])) let(point=M*[p.x,p.y,1]) [point.x,point.y]],
+          ],
+          points  = r>0 ? [for(p=fl_sector(r,angles=[90,180])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [[bbox[0].x,bbox[1].y]]
+        ) /* echo(str("q2=", points)) */ points,
         q3  = let(
+          r = let(radius=vertices[2]) assert(radius<=min(size)/2,bad_r) radius,
           M = [
             [1,0,bbox[0].x+r],
             [0,1,bbox[0].y+r],
             [0,0,1          ]
-          ]
-        ) [for(p=fl_sector(r,angles=[180,270])) let(point=M*[p.x,p.y,1]) [point.x,point.y]],
+          ],
+          points  = r>0 ? [for(p=fl_sector(r,angles=[180,270])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [bbox[0]]
+        ) /* echo(str("q3=", points)) */ points,
         q4  = let(
+          r = let(radius=vertices[3]) assert(radius<=min(size)/2,bad_r) radius,
           M = [
             [1,0,bbox[1].x-r],
             [0,1,bbox[0].y+r],
             [0,0,1          ]
-          ]
-        ) [for(p=fl_sector(r,angles=[270,360])) let(point=M*[p.x,p.y,1]) [point.x,point.y]]
+          ],
+          points  = r>0 ? [for(p=fl_sector(r,angles=[270,360])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [[bbox[1].x,bbox[0].y]]
+        ) /* echo(str("q4=", points)) */ points
       ) concat(
-        [for(i=[1:len(q1)-1]) q1[i]],
-        [for(i=[1:len(q2)-1]) q2[i]],
-        [for(i=[1:len(q3)-1]) q3[i]],
-        [for(i=[1:len(q4)-1]) q4[i]]
+        let(q=q1,len=len(q)) len>1 ? [for(i=[1:len-1]) q[i]] : q,
+        let(q=q2,len=len(q)) len>1 ? [for(i=[1:len-1]) q[i]] : q,
+        let(q=q3,len=len(q)) len>1 ? [for(i=[1:len-1]) q[i]] : q,
+        let(q=q4,len=len(q)) len>1 ? [for(i=[1:len-1]) q[i]] : q
       )
-      : [bbox[1],[bbox[0].x,bbox[1].y],bbox[0],[bbox[1].x,bbox[0].y]]
   ) points;
 
 module fl_square(
-  verbs = FL_ADD,
-  size  = [1,1],
-  r     = 0,        // rounded corners radius
+  verbs     = FL_ADD,
+  size      = [1,1],
+  r,                    // overrides vertices with [r,r,r,r]
+  vertices  = [0,0,0,0],// List of four radiuses, one for each quadrant's corners.
+                        // Each zero means that the corresponding corner is squared.
+                        // Defaults to a 'perfect' rectangle with four squared corners.
+                        // Scalar value R for «vertices» means vertices=[R,R,R,R]
   quadrant
 ) {
   assert(is_list(verbs)||is_string(verbs));
-  assert(is_num(r));
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  axes      = fl_list_has(verbs,FL_AXES);
+  verbs     = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  points  = fl_square(size,r);
+  points  = fl_square(size,r,vertices);
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
   M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
 
   fl_trace("size",size);
-  fl_trace("radius",r);
+  fl_trace("vertices",vertices);
   fl_trace("points",points);
   
   multmatrix(M) fl_parse(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) polygon(points);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) translate(bbox[0]) %square(size=size, center=false);
+      fl_modifier($FL_BBOX) %fl_square(size=size,$FL_ADD=$FL_BBOX);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
@@ -627,4 +645,3 @@ module fl_square(
   if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
 }
-
