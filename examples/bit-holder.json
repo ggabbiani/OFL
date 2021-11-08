@@ -1,18 +1,31 @@
 {
     "parameterSets": {
-        "v2": {
+        "v1": {
             "$FL_RENDER": "false",
             "$FL_SAFE": "false",
             "$FL_TRACE": "false",
-            "$fn": "50",
+            "$fn": "100",
             "ADD": "ON",
-            "ASSEMBLY": "ON",
+            "ASSEMBLY": "OFF",
             "BBOX": "OFF",
-            "BIT_TOLERANCE": "0.25",
             "FILAMENT": "DodgerBlue",
-            "GAP": "[3, 1, 2]",
+            "GAP_holder": "1",
+            "GAP_magnet": "0.5",
             "HEIGHT": "20",
-            "diameters": "[1, 2, 3, 3.3, 4, 4.2, 5]",
+            "MM1": "false",
+            "MM1P6": "false",
+            "MM2": "false",
+            "MM3": "true",
+            "MM3P3": "false",
+            "MM4": "true",
+            "MM4P2": "false",
+            "MM5": "true",
+            "MM6": "true",
+            "MM7": "true",
+            "MM8": "true",
+            "T": "1.5",
+            "TOLERANCE": "0.15",
+            "T_bottom": "1",
             "magnet_size": "[10, 5, 1]"
         }
     },
