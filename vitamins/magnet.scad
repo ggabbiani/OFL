@@ -29,33 +29,22 @@ use     <screw.scad>
 use <../foundation/3d.scad>
 use <../foundation/placement.scad>
 
-function fl_mag_diameter(type)    = fl_get(type,"diameter");
-function fl_mag_radius(type)      = fl_mag_diameter(type) / 2;
-function fl_mag_height(type)      = fl_get(type,"height");
-function fl_mag_cs_h(type)        = fl_get(type,"counter sink height");
-function fl_mag_color(type)       = fl_get(type,"color");
-function fl_mag_screw(type)       = fl_get(type,"screw type");
-function fl_mag_cs(type)          = fl_get(type,"counter sink type");
-
-// function fl_bb_calculator(type)   = fl_get(type,"bbox calculator");
-
 module fl_magnet(
-  verbs   = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  type,             // magnet object
-  gross   = 0,      // quantity to add to the footprint dimensions
-  thick   = 0,      // thickness for screws
-  direction,        // desired direction [director,rotation], native direction when undef
-  octant,           // when undef native positioning is used (+Z)
-  axes    = false
+  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  type,                 // magnet object
+  fp_gross    = 0,      // quantity to add to the footprint dimensions
+  thick       = 0,      // thickness for screws
+  direction,            // desired direction [director,rotation], native direction when undef
+  octant                // when undef native positioning is used (+Z)
 ) {
   assert(verbs!=undef);
   assert(type!=undef);
 
+  engine        = fl_mag_engine(type);
   cs            = fl_mag_cs(type);
-  color         = fl_mag_color(type);
-  d             = fl_mag_diameter(type);
-  h             = fl_mag_height(type);
-  screw         = fl_mag_screw(type);
+  color         = fl_material(type);
+  h             = fl_thickness(type);
+  screw         = fl_screw(type);
   screw_len     = screw!=undef  ? screw_longer_than(h)   : undef;
   screw_d       = screw!=undef  ? 2*screw_radius(screw)  : undef;
   h_cs          = cs!=undef     ? fl_mag_cs_h(type)      : undef;
@@ -73,41 +62,58 @@ module fl_magnet(
   fl_trace("D:",D);
   fl_trace("Bounding Box:",bbox);
 
-  module M4_cs_magnet32x6() {
-    // d=32;
-    fl_trace("size",size);
-    shell_r=size.z/2;
-    cyl_h=size.z/2;
-    shell_t=2;
-    little=0.2;
-    difference() {
-      union() {
-        translate([0,0,shell_r])
-          rotate_extrude(convexity = 10)
-            translate([d/2-shell_r, 0, 0])
-              circle(r = shell_r);
-        translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d);
-        fl_cylinder(h=cyl_h,d=d-2*shell_r);
+  module do_add() {
+    module cyl_engine() {
+      d = fl_mag_d(type);
+
+      module M4_cs_magnet32x6() {
+        // d=32;
+        fl_trace("size",size);
+        shell_r=size.z/2;
+        cyl_h=size.z/2;
+        shell_t=2;
+        little=0.2;
+        difference() {
+          union() {
+            translate([0,0,shell_r])
+              rotate_extrude(convexity = 10)
+                translate([d/2-shell_r, 0, 0])
+                  circle(r = shell_r);
+            translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d);
+            fl_cylinder(h=cyl_h,d=d-2*shell_r);
+          }
+          translate(+Z(cyl_h+NIL)) fl_cylinder(h=cyl_h,d=d-2*shell_t);  
+        }
+        translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d-2*shell_t-2*little);  
       }
-      translate(+Z(cyl_h+NIL)) fl_cylinder(h=cyl_h,d=d-2*shell_t);  
+
+      fl_trace("FL_ADD",$FL_ADD);
+      fl_trace("name",name);
+      fl_color(color) difference() {
+        if (name=="M4_cs_magnet32x6") 
+          M4_cs_magnet32x6();
+        else 
+          fl_cylinder(d=d, h=h, octant=+Z);
+        if (cs!=undef)
+            translate(+Z(h+NIL)) fl_countersink(FL_ADD,type=cs);
+        if (screw!=undef)
+          do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL);
+      }
     }
 
-    translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d-2*shell_t-2*little);  
+    module quad_engine() {
+      fl_color("silver") fl_cube(size=size,octant=+Z);
+    }
+
+    if (engine=="cyl") cyl_engine();
+    else if (engine=="quad") quad_engine();
+    else assert(false,str("Unknown engine '",engine,"'."));
   }
 
-  module do_add() {
-    fl_trace("FL_ADD",$FL_ADD);
-    fl_trace("name",name);
-    fl_color(color) difference() {
-      if (name=="M4_cs_magnet32x6") 
-        M4_cs_magnet32x6();
-      else 
-        fl_cylinder(d=d, h=h, octant=+Z);
-      if (cs!=undef)
-          translate(+Z(h+NIL)) fl_countersink(FL_ADD,type=cs);
-      if (screw!=undef)
-        do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL);
-    }
+  module do_footprint() {
+    translate(-Z(fp_gross))
+      if (engine=="cyl") let(d = fl_mag_d(type)) fl_cylinder(d=d+2*fp_gross, h=h+2*fp_gross,octant=+Z);
+      else if (engine=="quad") fl_cube(size=size+fp_gross*[2,2,2],octant=+Z);
   }
 
   module do_layout() {
@@ -126,7 +132,7 @@ module fl_magnet(
         fl_modifier($FL_LAYOUT)
           do_layout() children();
       } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) fl_cylinder(d=d+gross, h=h+gross,octant=+Z);
+        fl_modifier($FL_FOOTPRINT) do_footprint();
       } else if ($verb==FL_ASSEMBLY) {
         fl_modifier($FL_ASSEMBLY) 
           do_layout() fl_screw(type=screw,thick=screw_thick);
