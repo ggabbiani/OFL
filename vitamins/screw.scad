@@ -31,8 +31,9 @@ include <NopSCADlib/vitamins/screws.scad>
 //*****************************************************************************
 // bounding box
 function fl_bb_screw(type,length) =
-  assert(type!=undef)
+  assert(type!=undef && is_list(type) && !is_string(type),type)
   assert(is_num(length),length)
+  // echo(type=type)
   let(
     hr  = screw_head_radius(type),
     hh  = screw_head_height(type),

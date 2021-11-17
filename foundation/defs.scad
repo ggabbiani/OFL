@@ -22,7 +22,7 @@
 include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
-function fl_version() = [1,7,0];
+function fl_version() = [1,8,0];
 
 function fl_versionNumber() = let(
   version = fl_version()
@@ -38,7 +38,8 @@ $FL_SAFE    = true;
 $FL_TRACE   = false;
 
 // simple workaround for the z-fighting problem during preview
-FL_NIL = ($preview && !$FL_RENDER ? 0.01 : 0);
+FL_NIL  = ($preview && !$FL_RENDER ? 0.01 : 0);
+FL_NIL2 = 2*FL_NIL;
 
 // PER SURFACE distance in case of movable parts to be doubled when applied to a diameter
 fl_MVgauge  = 0.6;
@@ -169,6 +170,11 @@ module fl_modifier(
 
 $FL_FILAMENT  = "DodgerBlue";
 
+// deprecated function call
+function fl_deprecated(bad,value,replacement) = let(
+    complain  = str("***DEPRECATED***: ", bad, " is deprecated and ", replacement!=undef ? str("will be replaced by ", replacement, " in next major release.") : "WILL NOT BE REPLACED.")
+  ) echo(complain) value;
+
 // generic property getter with default value when not found 
 function fl_get(type,key,default) = 
   assert(key!=undef)
@@ -176,37 +182,39 @@ function fl_get(type,key,default) =
   let(index_list=search([key],type))
   index_list != [[]] 
   ? type[index_list[0]][1] 
-  : assert(default!=undef,str("Missing value and default - ",key)) default;
+  : assert(default!=undef,str("Missing value and default for key ***",key,"***")) default;
 
 // returns [«key»,«value»] if value is defined, «key» otherwise
 function fl_kv(key,value)   = assert(key!=undef) value!=undef ? [key,value] : key;
 
 //*****************************************************************************
 // General keys
-function fl_nameKV(value)         = fl_kv("name",value);
-function fl_descriptionKV(value)  = fl_kv("description",value); 
-function fl_sizeKV(value)         = fl_kv("size",value);
 function fl_connectorsKV(value)   = fl_kv("connectors",value);
-function fl_vendorKV(value)       = fl_kv("vendor",value);
+function fl_descriptionKV(value)  = fl_kv("description",value); 
 function fl_directorKV(value)     = fl_kv("director",value);
-function fl_rotorKV(value)        = fl_kv("rotor",value);
+function fl_nameKV(value)         = fl_kv("name",value);
+function fl_material_KV(value)    = fl_kv("material (actually a color)",value);
 function fl_nopSCADlibKV(value)   = fl_kv("Verbatim NopSCADlib definition",value);
+function fl_rotorKV(value)        = fl_kv("rotor",value);
 function fl_screwKV(value)        = fl_kv("screw",value);
+function fl_sizeKV(value)         = fl_kv("size",value);
+function fl_vendorKV(value)       = fl_kv("vendor",value);
 
 //*****************************************************************************
 // General getters
-function fl_name(type)          = fl_get(type,fl_nameKV()); 
-function fl_description(type)   = fl_get(type,fl_descriptionKV()); 
-function fl_size(type)          = fl_get(type,fl_sizeKV());
-function fl_width(type)         = fl_size(type).x;
-function fl_height(type)        = fl_size(type).y;
-function fl_thickness(type)     = fl_size(type).z;
 function fl_connectors(type)    = fl_get(type,fl_connectorsKV());
-function fl_vendor(type)        = fl_get(type,fl_vendorKV());
+function fl_description(type)   = fl_get(type,fl_descriptionKV()); 
 function fl_director(type)      = fl_get(type,fl_directorKV());
-function fl_rotor(type)         = fl_get(type,fl_rotorKV());
+function fl_height(type)        = fl_size(type).y;
+function fl_material(type)      = fl_get(type,fl_material_KV());
+function fl_name(type)          = fl_get(type,fl_nameKV()); 
 function fl_nopSCADlib(type)    = fl_get(type,fl_nopSCADlibKV());
+function fl_rotor(type)         = fl_get(type,fl_rotorKV());
 function fl_screw(type)         = fl_get(type,fl_screwKV());
+function fl_size(type)          = fl_get(type,fl_sizeKV());
+function fl_thickness(type)     = fl_size(type).z;
+function fl_width(type)         = fl_size(type).x;
+function fl_vendor(type)        = fl_get(type,fl_vendorKV());
 
 //*****************************************************************************
 // Bounding Box

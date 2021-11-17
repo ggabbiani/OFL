@@ -21,20 +21,6 @@ include <unsafe_defs.scad>
 use     <3d.scad>
 use     <placement.scad>
 
-// /**
-//  * return the sum of the passed bounding boxes
-//  */
-// function fl_bb_sum(bboxes,__r__) = let(
-//     len = len(bboxes)
-//   ) len>0
-//   ? let(
-//     curr = bboxes[0],
-//     min  = let(c=curr[0],r=__r__[0]) __r__ ? [min(c.x,r.x),min(c.y,r.y),min(c.z,r.z)] : c,
-//     max  = let(c=curr[1],r=__r__[1]) __r__ ? [max(c.x,r.x),max(c.y,r.y),max(c.z,r.z)] : c,
-//     rest = len==1 ? [] : [for(i=[1:len(bboxes)-1]) bboxes[i]]
-//   ) fl_bb_sum(rest,[min,max])
-//   : __r__;
-
 /**
  * ... an unveiled mistery ...
  */
@@ -122,7 +108,7 @@ function lay_bb_size(axis,gap,types) = let(c = lay_bb_corners(axis,gap,types)) c
  */
 function lay_bb_corners(
   axis, // cartesian axis ([-1,0,0]==[1,0,0]==X)
-  gap,  // gap to be inserted between bounding boxes along axis
+  gap=0,// gap to be inserted between bounding boxes along axis
   types // list of types
 ) =
   assert(is_list(axis)&&len(axis)==3,str("axis=",axis))
@@ -135,6 +121,23 @@ function lay_bb_corners(
 /**
  * Accumulates a list of bounding boxes along a direction.
  *
+ * Recursive algorithm, at each call a bounding box is extracted from the list
+ * and decomposed into axial and planar components. The last is returned as 
+ * result. If there are still bounding boxes left, a new call is made and its
+ * result, decomposed into the axial and planar components, used to produce a
+ * new bounding box as follows:
+ * - for planar component, the new negative and positive corners are calculated
+ *   with the minimum dimensions between the current one and the result of the
+ *   recursive call;
+ * - for the axial component when axis is positive:
+ *   - negative corner is equal to the current corner;
+ *   - positive corner is equal to the current positive corner PLUS the gap and
+ *     the axial dimension of the result;
+ *   - when axis is negative:
+ *     - negative corner is equal to the current one MINUS the gap and the 
+ *       axial dimension of the result
+ *     - the positive corner is equal to the current corner. 
+ * 
  * L'algoritmo è ricorsivo, ad ogni chiamata un bounding box viene estratto dalla lista e
  * scomposto nelle componente assiale e planare. Se è l'ultimo viene restituito come risultato.
  * Se rimangono ancora bounding box da calcolare, viene fatta una nuova chiamata e il suo
@@ -152,9 +155,9 @@ function lay_bb_corners(
  *   - il corner positivo è uguale al corner corrente.
  */
 function fl_bb_accum(
-  axis, // cartesian axis ([-1,0,0]==[1,0,0]==X)
-  gap,  // gap to be inserted between bounding boxes along axis
-  bbcs  // bounding box corners
+  axis,   // cartesian axis ([-1,0,0]==[1,0,0]==X)
+  gap=0,  // gap to be inserted between bounding boxes along axis
+  bbcs    // bounding box corners
 ) =
 assert(fl_3d_abs(axis)==+X||fl_3d_abs(axis)==+Y||fl_3d_abs(axis)==+Z)
 assert(len(bbcs))
@@ -188,11 +191,19 @@ let(
  *   be called explicitly in turn with children($i)
  * - with one child only called repetitely through children(0) with $i equal to the
  *   current execution number.
+ * Called children can use the following special variables:
+ *  $i      - current item index
+ *  $first  - true when $i==0
+ *  $last   - true when $i==len(types)-1
+ *  $item   - equal to types[$i]
+ *  $len    - equal to len(types)
+ *  $size   - equal to bounding box size of $item
+ *  
  */
 module fl_layout(
   verbs = FL_LAYOUT, // supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
   axis,     // layout direction
-  gap,      // gap inserted along «axis»
+  gap=0,    // gap inserted along «axis»
   types,    // list of types to be arranged
   direction,// desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant    // when undef native positioning is used
@@ -210,14 +221,14 @@ module fl_layout(
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
 
   fl_trace("$children",$children);
-  len = len(types);
-  sum = axis*[1,1,1]>0;
-  fac = sum ? 1 : -1;
-  bcs = [for(t=types) 
+  $len  = len(types);
+  sum   = axis*[1,1,1]>0;
+  fac   = sum ? 1 : -1;
+  bcs   = [for(t=types) 
     let(cs=fl_bb_corners(t)) 
     [fl_3d_vectorialProjection(cs[0],axis),fl_3d_vectorialProjection(cs[1],axis)]];
   // composite sizes list
-  sz = [for(c=bcs) c[1]-c[0]];
+  sz    = [for(c=bcs) c[1]-c[0]];
   fl_trace("bcs",bcs);
   fl_trace("sz",sz);
 
@@ -226,9 +237,13 @@ module fl_layout(
       if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
       } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT)
-          for($i=[0:len-1]) {
+        fl_modifier($FL_LAYOUT) 
+          for($i=[0:$len-1]) {
             fl_trace("$i",$i);
+            $first  = $i==0;
+            $last   = $i==$len-1;
+            $item   = types[$i];
+            $size   = let(corner=fl_bb_corners($item)) corner[1]-corner[0];
             offset = sum
             ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
             : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
@@ -246,5 +261,4 @@ module fl_layout(
     if (axes)
       fl_modifier($FL_AXES) fl_axes(size=size);
   }
-
 }

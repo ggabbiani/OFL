@@ -29,7 +29,8 @@ Z = FL_Z;
 O = FL_O;
 I = FL_I;
 
-NIL = FL_NIL;
+NIL   = FL_NIL;
+NIL2  = FL_NIL2;
 
 function T(t)       = fl_T(t);
 function S(s)       = fl_S(s);

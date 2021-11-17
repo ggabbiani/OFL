@@ -75,9 +75,9 @@ function cyl_d(
 assert(is_list(magnet),magnet)
 assert(is_num(edge_thick),edge_thick)
 assert(is_num(tolerance),tolerance)
-fl_mag_diameter(magnet) + 2*edge_thick + tolerance;
+fl_mag_d(magnet) + 2*edge_thick + tolerance;
 
-function cyl_h(magnet) = fl_mag_height(magnet) - 1;
+function cyl_h(magnet) = fl_thickness(magnet) - 1;
 
 function bb_element(
   magnet,
@@ -119,8 +119,8 @@ module element(
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  mag_d       = fl_mag_diameter(magnet);
-  mag_h       = fl_mag_height(magnet);
+  mag_d       = fl_mag_d(magnet);
+  mag_h       = fl_thickness(magnet);
   cyl_d       = cyl_d(magnet,edge_thick,tolerance);
   cyl_h       = cyl_h(magnet);
   child_bbox  = fl_bb_circle(d=cyl_d);
@@ -139,7 +139,7 @@ module element(
             fl_circle(d=cyl_d);
         }
         translate(-Z(NIL)) 
-          fl_magnet([FL_FOOTPRINT,FL_DRILL],magnet,thick=base_thick+NIL,gross=tolerance);
+          fl_magnet([FL_FOOTPRINT,FL_DRILL],magnet,thick=base_thick+NIL,fp_gross=tolerance);
       }
       // base
       difference() {
@@ -156,7 +156,7 @@ module element(
   }
 
   module do_drill() {
-    fl_magnet(FL_DRILL,magnet,thick=base_thick+NIL,gross=tolerance);
+    fl_magnet(FL_DRILL,magnet,thick=base_thick+NIL,fp_gross=tolerance);
   }
 
   module do_layout() {
