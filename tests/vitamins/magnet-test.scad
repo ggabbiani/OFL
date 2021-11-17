@@ -1,5 +1,5 @@
 /*
- * Magnet test file for OpenSCAD Foundation Library.
+ * Magnet test file.
  * 
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -65,48 +65,42 @@ DIR_R       = 0;        // [0:360]
 
 /* [Magnet] */
 
-SHOW      = "ALL"; // [ALL:All, M3_cs_magnet10x2:M3_cs_magnet10x2, M3_cs_magnet10x5:M3_cs_magnet10x5, M3_magnet10x5:M3_magnet10x5, M4_cs_magnet32x6:M4_cs_magnet32x6]
-GROSS     = 0;
-T         = 2.5;
+// -1 for all, the ordinal dictionary member otherwise
+SHOW      = -1;   // [-1:1:5]
+// extra dimension to be added when FOOTPRINT verb is called
+FP_EXTRA  = 0;    // [0:0.1:3]
+T         = 2.5;  // [0:10]
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")       FL_ADD,
-    if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-    if (AXES!="OFF")      FL_AXES,
-    if (BBOX!="OFF")      FL_BBOX,
-    if (DRILL!="OFF")     FL_DRILL,
-    if (FPRINT!="OFF")    FL_FOOTPRINT,
-    if (LAYOUT!="OFF")    FL_LAYOUT,
-  ];
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+verbs=[
+  if (ADD!="OFF")       FL_ADD,
+  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if (AXES!="OFF")      FL_AXES,
+  if (BBOX!="OFF")      FL_BBOX,
+  if (DRILL!="OFF")     FL_DRILL,
+  if (FPRINT!="OFF")    FL_FOOTPRINT,
+  if (LAYOUT!="OFF")    FL_LAYOUT,
+];
 
-  // target object(s)
-  object  = SHOW=="M3_cs_magnet10x2"  ? FL_MAG_M3_CS_10x2 
-          : SHOW=="M3_magnet10x5"     ? FL_MAG_M3_10x5 
-          : SHOW=="M3_cs_magnet10x5"  ? FL_MAG_M3_CS_10x5 
-          : SHOW=="M4_cs_magnet32x6"  ? FL_MAG_M4_CS_32x6
-          : undef;
+// target object(s)
+object  = SHOW>-1 ? FL_MAG_DICT[SHOW] : undef;
 
-  module do_test(magnet) {
-    fl_trace("obj name:",fl_name(magnet));
-    fl_trace("DIR_NATIVE",DIR_NATIVE);
-    fl_trace("DIR_Z",DIR_Z);
-    fl_trace("DIR_R",DIR_R);
-    screw = fl_mag_screw(magnet);
-    fl_magnet(verbs,magnet,gross=GROSS,thick=T,octant=octant,direction=direction,
-      $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT)
-        if (screw!=undef) fl_color("green") fl_cylinder(h=fl_mag_height(magnet),r=screw_radius(screw),octant=-Z);
-  }
-
-  if (object)
-    do_test(object);
-  else
-    layout([for(magnet=FL_MAG_DICT) fl_mag_diameter(magnet)], 10)
-      do_test(FL_MAG_DICT[$i]);
+module do_test(magnet) {
+  fl_trace("obj name:",fl_name(magnet));
+  fl_trace("DIR_NATIVE",DIR_NATIVE);
+  fl_trace("DIR_Z",DIR_Z);
+  fl_trace("DIR_R",DIR_R);
+  screw = fl_screw(magnet);
+  fl_magnet(verbs,magnet,fp_gross=FP_EXTRA,thick=T,octant=octant,direction=direction,
+    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT)
+      if (screw!=undef) fl_color("green") fl_cylinder(h=fl_thickness(magnet),r=screw_radius(screw),octant=-Z);
 }
 
-__test__();
+if (object)
+  do_test(object);
+else
+  layout([for(magnet=FL_MAG_DICT) fl_bb_size(magnet).x], 10)
+    do_test(FL_MAG_DICT[$i]);
