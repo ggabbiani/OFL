@@ -29,7 +29,7 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+TRACE       = false;
 
 FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -41,8 +41,10 @@ ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 ASSEMBLY  = "ON";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of predefined drill shapes (like holes with predefined screw diameter)
+DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Bits (nominal/shank/length)] */
+/* [Bits (nominal/shank/length,cardinality)] */
 
 BIT_1   = [3,2.73,70,1];  // [0:0.01:200]
 BIT_2   = [4,3.34,74,1];  // [0:0.01:200]
@@ -54,33 +56,38 @@ BIT_7   = [0,0,0,0];      // [0:0.01:200]
 BIT_8   = [0,0,0,0];      // [0:0.01:200]
 BIT_9   = [0,0,0,0];      // [0:0.01:200]
 BIT_10  = [0,0,0,0];      // [0:0.01:200]
+BIT_11  = [0,0,0,0];      // [0:0.01:200]
+BIT_12  = [0,0,0,0];      // [0:0.01:200]
+BIT_13  = [0,0,0,0];      // [0:0.01:200]
+BIT_14  = [0,0,0,0];      // [0:0.01:200]
+BIT_15  = [0,0,0,0];      // [0:0.01:200]
 
 /* [Holder] */
 
 // thickness around bit hole
-T           = 1.5;  // [0:0.1:10]
+T_hole      = 1.5;  // [0:0.1:10]
 T_bottom    = 1;    // [0:0.1:10]
-// Y distance between bit and magnet
-GAP_magnet  = 0.5; // [0:0.1:10]
+// Y wall thickness with magnet
+T_magnet    = 0.5; // [0:0.1:10]
 // min bit holder height
 HEIGHT      = 20;
 // bit tolerance (fl_JNgauge=0.15mm)
-TOLERANCE   = 0.15; // [0:0.05:1]
-// inter holder gap along X axis
-GAP_holder  = 1;
+TOLERANCE   = 0.18; // [0:0.05:1]
+// inter holder distance along X axis
+I_holder  = 1;
+// magnet size 
+MAGNET    = "FL_MAG_RECT_10x5x1"; // [FL_MAG_RECT_10x5x1,FL_MAG_RECT_10x5x2]
 
 /* [Hidden] */
 
 function check(r) = r[3]!=0;
 
-function bitHolder(name,bit,cardinality) = let(
-  h     = max(bit[1]/3,HEIGHT),
-  d     = bit[0]+2*TOLERANCE,
-  bbox_1 = fl_bb_cylinder(h=h,d=d+T),
-  bbox  = [
-    [bbox_1[0].x-GAP_holder/2,(bbox_1[0].y)*cardinality-T/2,bbox_1[0].z],
-    [bbox_1[1].x+GAP_holder/2,(bbox_1[1].y)*cardinality+T/2,bbox_1[1].z]
-  ]
+function bitHolder(name,bit,cardinality,magnet) = let(
+  d       = bit[0]+2*TOLERANCE,
+  h       = max(bit[1]/3,HEIGHT),
+  width   = max(SZ_magnet.y+2*(TOLERANCE+T_magnet)+I_holder,d+2*(TOLERANCE+T_hole)+I_holder),
+  length  = T_magnet+2*TOLERANCE+T_hole+SZ_magnet.z+cardinality*(d+T_hole),
+  bbox    = [[-width/2,-length,0],[+width/2,0,h]]
 ) [
     fl_nameKV(str(name," bit-holder")),
     fl_bb_cornersKV(bbox),
@@ -89,6 +96,7 @@ function bitHolder(name,bit,cardinality) = let(
     ["d",           d],
     ["bit",         bit],
     ["cardinality", cardinality],
+    ["magnet",      magnet],
   ];
 
 verbs=[
@@ -97,7 +105,13 @@ verbs=[
   if (BBOX!="OFF")      FL_BBOX,
 ];
 
-magnet_size = [10,5,1];
+magnet    = MAGNET=="FL_MAG_RECT_10x5x1" 
+          ? FL_MAG_RECT_10x5x1 
+          : MAGNET=="FL_MAG_RECT_10x5x2" 
+          ? FL_MAG_RECT_10x5x2 
+          : undef;
+
+SZ_magnet = fl_size(magnet);
 
 bits = [
   if (check(BIT_1))  let(r=BIT_1)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
@@ -110,72 +124,112 @@ bits = [
   if (check(BIT_8))  let(r=BIT_8)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
   if (check(BIT_9))  let(r=BIT_9)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
   if (check(BIT_10)) let(r=BIT_10)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
+  if (check(BIT_11)) let(r=BIT_11)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
+  if (check(BIT_12)) let(r=BIT_12)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
+  if (check(BIT_13)) let(r=BIT_13)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
+  if (check(BIT_14)) let(r=BIT_14)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
+  if (check(BIT_15)) let(r=BIT_15)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
 ];
+// let(bit=bits[0]) holder(bitHolder(bit[0],bit[1],bit[2]));
+strip($FL_TRACE=TRACE);
 
-if (bits) {
+module strip() {
+  if (bits) {
   strip = let(
-    bhs   = [for(bit=bits) bitHolder(bit[0],bit[1],bit[2])],
-    bb    = lay_bb_corners(axis=+X,types=bhs),
-    size  = bb[1]-bb[0],
-    bbox  = bb + [-Y(size.y/2),-Y(size.y/2)]
+    bhs   = [for(bit=bits) bitHolder(bit[0],bit[1],bit[2],magnet)],
+    bbox  = lay_bb_corners(axis=+X,types=bhs),
+    size  = bbox[1]-bbox[0]
   ) [ 
       ["Bit holders",  bhs],
       ["Bit number",  len(bhs)],
       fl_bb_cornersKV(bbox),
       fl_sizeKV(size)
     ];
-  strip_bb  = fl_bb_corners(strip);
-  strip_sz  = strip_bb[1]-strip_bb[0];
-  fl_trace("strip object",strip);
-
-  fl_modifier(ADD) fl_color($FL_FILAMENT) difference() {
-    // strip FL_LAYOUT and FL_ADD of the first and last $item shape
-    hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders")) union() {
-      h = fl_get($item,"h");
-      d = fl_get($item,"d");
-      translate(-Y($size.y/2))
-        linear_extrude(h) 
-          fl_square(size=$size,vertices=[0,0,d/2,d/2]);
-    }
-    // FL_LAYOUT of bits and magnets
-    fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders")) union() {
-      bhs     = fl_get(strip,"Bit holders");
-      next    = bhs[$i+1];
-      prev    = bhs[$i-1];
-      bbox    = fl_bb_corners($item);
-      sz_next = !$last  ? fl_size(next) : undef;
-      sz_prev = !$first ? fl_size(prev) : undef;
-      h       = fl_get($item,"h");
-      d       = fl_get($item,"d");
-      card    = fl_get($item,"cardinality");
-      translate([0,-(d/2+T),T_bottom-NIL]) {
-        // bit 
-        for(i=[0:card-1]) translate(-Y(i*(T+d))) 
-          fl_cylinder(h=100,d=d);
-        // magnet
-        translate(Y(d/2+GAP_magnet))
-          fl_cutout(100,z=+Y)
-            fl_cutout(magnet_size.x+2*TOLERANCE,delta=TOLERANCE) 
-              translate([0,d/2+magnet_size.z/2+GAP_magnet,TOLERANCE]) rotate(90,Z)
-                fl_cube(size=magnet_size,direction=[-X,0],octant=+X);
-        }
-    }
+  // fl_trace("strip object",strip);
+  
+  //**** FL_ADD ***************************************************************
+  fl_modifier(ADD) difference() {
+    fl_color($FL_FILAMENT) hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders")) 
+      holder(FL_ADD,$item);
+    fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders")) 
+      holder(FL_DRILL,$item,$FL_DRILL=DRILL);
   }
-
-  fl_modifier(ASSEMBLY) fl_color("silver")
-    fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders")) union() {
-      d     = fl_get($item,"d");
-      card  = fl_get($item,"cardinality");
-      translate([0,-(d/2+T),T_bottom-NIL]) {
-        // bit(s)
-        let(bit=fl_get($item,"bit")) for(i=[0:card-1]) translate(-Y(i*(T+d)))  
-            fl_cylinder(h=bit[1],d=bit[0]);     
-        // magnet
-        translate([0,d/2+magnet_size.z/2+GAP_magnet,TOLERANCE]) rotate(90,Z)
-          fl_cube(size=magnet_size,direction=[-X,0],octant=+X);
-      }
-    }
+  //**** FL_ASSEMBLY **********************************************************
+  fl_modifier(ASSEMBLY)
+    fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
+      holder(FL_ASSEMBLY,$item,$FL_TRACE=TRACE);
 
   fl_modifier(BBOX) 
     fl_bb_add(fl_bb_corners(strip));
+}
+}
+
+module holder(verbs,item) {
+  assert(verbs!=undef);
+  assert(item!=undef);
+  
+  module bit(gross=false) {
+    assert(is_bool(gross));
+    d = bit[0];
+    h = bit[1];
+    if (gross)
+      fl_cutout(h+2*TOLERANCE,delta=TOLERANCE) bit(gross=false);
+    else
+      fl_cylinder(h=h,d=d);
+  }
+
+  module box() {
+    linear_extrude(h) 
+      fl_square(size=size,vertices=[0,0,d/2,d/2],quadrant=+X+Y);
+  }
+
+  bbox    = fl_bb_corners(item);
+  size    = fl_size(item);
+  h       = fl_get(item,"h");
+  d       = fl_get(item,"d");
+  card    = fl_get(item,"cardinality");
+  bit     = fl_get(item,"bit");
+  Mbox    = T(bbox[0]);
+  magnet  = fl_get(item,"magnet");
+  Mmagnet = T([0,-SZ_magnet.z/2-T_magnet-TOLERANCE,T_bottom]);
+  Mbit    = T([0,-(T_magnet+2*TOLERANCE+T_hole+SZ_magnet.z+d/2),T_bottom]);
+
+  fl_trace("item",item);
+  fl_trace("size",size);
+  fl_trace("bit",bit);
+  fl_trace("magnet",magnet);
+
+  module do_drill() {
+    // bit 
+    multmatrix(Mbit)
+      for(i=[0:card-1]) translate(-Y(i*(T_hole+d))) 
+        bit(gross=true);
+    // magnet
+    multmatrix(Mmagnet) {
+      fl_magnet(FL_FOOTPRINT,magnet,fp_gross=TOLERANCE,octant=+X,direction=[-Y,90]);
+    }
+  }
+
+  fl_parse(verbs) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) fl_color($FL_FILAMENT)
+        multmatrix(Mbox) box();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier(BBOX) fl_bb_add(bbox);
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($FL_ASSEMBLY) fl_color("silver") {
+        // bit 
+        multmatrix(Mbit)
+          for(i=[0:card-1]) translate(-Y(i*(T_hole+d))) 
+            bit();
+        // magnet
+        multmatrix(Mmagnet)
+          fl_magnet(FL_ADD,magnet,octant=+X,direction=[-Y,90]);
+      }
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($FL_DRILL) do_drill();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
 }
