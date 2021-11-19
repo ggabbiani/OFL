@@ -44,19 +44,23 @@ function fl_Countersink(
   description,
   d,
   angle
-) = let(
-  r = d/2,
-  alpha = angle /2,
-  h = r / tan(alpha)
-) [
-  fl_nameKV(name),
-  fl_descriptionKV(description),
-  fl_cs_diameterKV(d),
-  fl_cs_angleKV(angle),
-  fl_bb_cornersKV([[-r,-r,-h],[r,r,0]]),
-  fl_directorKV(+FL_Z),
-  fl_rotorKV(+FL_X),
-];
+) = 
+  assert(name!=undef)
+  assert(d>0)
+  assert(angle>0)
+  let(
+    r           = d/2,
+    alpha       = angle/2,
+    h           = r/tan(alpha),
+    description = description!=undef ? description : str("M",d,"countersink")
+  ) [
+    fl_nameKV(name),
+    fl_descriptionKV(description),
+    fl_cs_diameterKV(d),
+    fl_cs_angleKV(angle),
+    fl_bb_cornersKV([[-r,-r,-h],[r,r,0]]),
+    fl_directorKV(+FL_Z),fl_rotorKV(+FL_X),
+  ];
 
 FL_CS_M3  = fl_Countersink("FL_CS_M3","M3 countersink",6+3/5,angle=90);
 FL_CS_M4  = fl_Countersink("FL_CS_M4","M4 countersink",8+4/5,angle=90);
