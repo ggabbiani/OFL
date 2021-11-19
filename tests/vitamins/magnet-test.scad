@@ -85,9 +85,6 @@ verbs=[
   if (LAYOUT!="OFF")    FL_LAYOUT,
 ];
 
-// target object(s)
-object  = SHOW>-1 ? FL_MAG_DICT[SHOW] : undef;
-
 module do_test(magnet) {
   fl_trace("obj name:",fl_name(magnet));
   fl_trace("DIR_NATIVE",DIR_NATIVE);
@@ -99,8 +96,8 @@ module do_test(magnet) {
       if (screw!=undef) fl_color("green") fl_cylinder(h=fl_thickness(magnet),r=screw_radius(screw),octant=-Z);
 }
 
-if (object)
-  do_test(object);
+if (SHOW>-1)
+  do_test(FL_MAG_DICT[SHOW]);
 else
   layout([for(magnet=FL_MAG_DICT) fl_bb_size(magnet).x], 10)
     do_test(FL_MAG_DICT[$i]);
