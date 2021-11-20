@@ -27,7 +27,7 @@ jobs:
 
       # pull correct image from DOckerHub
       - name: pull executor
-        run: docker pull giampa/openscad
+        run: docker pull ggabbiani/openscad
       # Runs a single command using the runners shell
       - name: run tests
         run: docker run -v $GITHUB_WORKSPACE/:/import:Z  -t giampa/openscad
