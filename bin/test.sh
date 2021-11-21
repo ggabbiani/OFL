@@ -17,11 +17,11 @@ OFL="$(dirname $(realpath $0))/.."
 help() {
 cat <<EoH
 
-$(basename $0) [-?|-h|--help] [-i|--interactive] [-v|--verbose] 
+$(basename $0) [-?|-h|--help] [-i|--interactive] [-s|--silent] 
 
   -?|-h|--help      this help
   -i|--interactive  when unset confirmations are inibhited (default unset)
-  -v|--verbose      verbose output when set, silent otherwise (default silent)
+  -s|--silent       silent output when set, verbose otherwise (default verbose)
   
 EoH
 exit 0
@@ -45,7 +45,7 @@ trap 'on_exit $? $test' EXIT
 
 OUT=$(mktemp -d -p /var/tmp SCAD_TEST_XXXXXXXX)
 CMD="openscad"
-VERBOSE="0"
+VERBOSE="1"
 INTERACTIVE="0"
 
 ##############################################################################
@@ -61,8 +61,8 @@ while (( "$#" )); do
       INTERACTIVE="1"
       shift
       ;;
-    -v|--verbose)
-      VERBOSE="1"
+    -s|--silent)
+      VERBOSE="0"
       shift
       ;;
     --) # end argument parsing
