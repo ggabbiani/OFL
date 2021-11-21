@@ -29,7 +29,7 @@ exit 0
 
 on_exit() {
   if [ "$1" != "0" ]; then
-    echo -e "${COLOR_RED}[*ERR*] $2 failed.${COLOR_DEFAULT}"
+    color_message ${COLOR_RED} "$2 failed."
   fi
 }
 
@@ -85,7 +85,15 @@ eval set -- "$POSITIONALS"
 info "Output directory set to: '$OUT'."
 for test in $(find $OFL/tests/ -name '*-test.scad'); do
   info "running `basename $test .scad`"
-  "$CMD" -o $OUT/`basename $test .scad`.echo $test
+  OFILE="$OUT/$(basename $test .scad).echo"
+  "$CMD" --hardwarnings -o $OFILE $test
+  # --hardwarnings doesn't change openscad return code even when terminated by warn
+  # so a further check must be done in order to be sure that no warning are present 
+  ERROR=$(grep "WARNING:" $OFILE|wc -l)
+  if [ "$ERROR" -ne "0" ]; then 
+    cat $OFILE
+    fail 1 "Error on $(basename $test)"
+  fi
 done
 
 if [ "$INTERACTIVE" -eq "1" ]; then
