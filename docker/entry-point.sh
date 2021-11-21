@@ -94,4 +94,4 @@ cat <<EoM
 
 EoM
 
-$IMPORT/bin/test.sh -v
+$IMPORT/bin/test.sh
