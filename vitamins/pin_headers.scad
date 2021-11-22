@@ -72,7 +72,7 @@ function fl_phdr_new(
     assert(is_string(name)) fl_nameKV(name),
     assert(nop!=undef) fl_nopSCADlibKV(nop),
     if (description!=undef) 
-      assert(is_string(description)) fl_descriptionKV(description),
+      assert(is_string(description)) fl_description(value=description),
     fl_phdr_geometryKV(geometry),
     fl_bb_cornersKV(bbox),
     fl_sizeKV(bbox[1]-bbox[0]),

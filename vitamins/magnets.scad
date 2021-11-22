@@ -64,7 +64,7 @@ function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
               : assert(size!=undef) [[-size.x/2,-size.y/2,0],[size.x/2,size.y/2,size.z]]
   ) [
     fl_nameKV(name),
-    fl_descriptionKV(description),
+    fl_description(value=description),
     fl_mag_engine_KV(engine),
     fl_directorKV(+FL_Z), fl_rotorKV(+FL_X),
     if (engine=="cyl") fl_mag_dKV(d),

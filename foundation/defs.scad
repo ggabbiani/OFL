@@ -184,13 +184,30 @@ function fl_get(type,key,default) =
   ? type[index_list[0]][1] 
   : assert(default!=undef,str("Missing value and default for key ***",key,"***")) default;
 
+/**
+ * 'bipolar' property helper: 
+ *
+ * type/key{/default} ↦ value       (property getter)
+ * key/value          ↦ [key,value] (property constructor)
+ *
+ * It concentrates property key definition in a single point, reducing possible
+ * mismatches when referring separately to a property key in the more usual 
+ * getter/setter function pair.
+ */
+function fl_property(type,key,value,default)  = 
+  assert(key!=undef)
+  value==undef 
+  ? assert(type!=undef)     fl_get(type,key,default)  // property getter
+  : assert(default==undef)  [key,value];              // property constructor
+
 // returns [«key»,«value»] if value is defined, «key» otherwise
 function fl_kv(key,value)   = assert(key!=undef) value!=undef ? [key,value] : key;
 
 //*****************************************************************************
-// General keys
-function fl_connectorsKV(value)   = fl_kv("connectors",value);
-function fl_descriptionKV(value)  = fl_kv("description",value); 
+// General properties
+function fl_connectors(type,value)  = fl_property(type,"connectors",value);
+function fl_description(type,value) = fl_property(type,"description",value); 
+
 function fl_directorKV(value)     = fl_kv("director",value);
 function fl_nameKV(value)         = fl_kv("name",value);
 function fl_material_KV(value)    = fl_kv("material (actually a color)",value);
@@ -202,8 +219,6 @@ function fl_vendorKV(value)       = fl_kv("vendor",value);
 
 //*****************************************************************************
 // General getters
-function fl_connectors(type)    = fl_get(type,fl_connectorsKV());
-function fl_description(type)   = fl_get(type,fl_descriptionKV()); 
 function fl_director(type)      = fl_get(type,fl_directorKV());
 function fl_height(type)        = fl_size(type).y;
 function fl_material(type)      = fl_get(type,fl_material_KV());

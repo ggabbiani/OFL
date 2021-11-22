@@ -55,7 +55,7 @@ function fl_Countersink(
     description = description!=undef ? description : str("M",d,"countersink")
   ) [
     fl_nameKV(name),
-    fl_descriptionKV(description),
+    fl_description(value=description),
     fl_cs_diameterKV(d),
     fl_cs_angleKV(angle),
     fl_bb_cornersKV([[-r,-r,-h],[r,r,0]]),
