@@ -1,7 +1,7 @@
 FROM fedora:34
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 
-ARG libs=$HOME/.local/share/OpenSCAD/libraries
+ARG libs=/root/.local/share/OpenSCAD/libraries
 ###############################################################################
 # system pre requisites
 RUN dnf install -y openscad git
@@ -13,6 +13,7 @@ RUN mkdir -p $libs
 WORKDIR $libs
 RUN git clone https://github.com/nophead/NopSCADlib.git
 RUN git clone https://github.com/openscad/scad-utils.git
+COPY TOUL.scad .
 ###############################################################################
 # entrypoint
 COPY entry-point.sh /usr/bin/entry-point
