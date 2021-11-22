@@ -11,8 +11,11 @@
 # Test results are session persistent since written inside 
 # /var/tmp/<random directory name>/
 # 
-OFL="$(dirname $(realpath $0))/.."
+set -e # exit immediately in case of error
+OFL="$(realpath $(dirname $0)/..)"
 . $OFL/bin/functions.sh
+trap 'on_exit $? $test' EXIT
+# trap 'catch $? $test' ERR
 
 help() {
 cat <<EoH
@@ -39,12 +42,8 @@ catch() {
   exit $1
 }
 
-set -e  # exit immediately in case of error
-trap 'on_exit $? $test' EXIT
-# trap 'catch $? $test' ERR
-
-OUT=$(mktemp -d -p /var/tmp SCAD_TEST_XXXXXXXX)
-CMD="openscad"
+OUT=$(mktemp -d -p /var/tmp OFL_TESTS_XXXXXXXX)
+CMD="$(which openscad)"
 VERBOSE="1"
 INTERACTIVE="0"
 
@@ -86,13 +85,11 @@ info "Output directory set to: '$OUT'."
 for test in $(find $OFL/tests/ -name '*-test.scad'); do
   info "running `basename $test .scad`"
   OFILE="$OUT/$(basename $test .scad).echo"
-  "$CMD" --hardwarnings -o $OFILE $test
-  # --hardwarnings doesn't change openscad return code even when terminated by warn
-  # so a further check must be done in order to be sure that no warning are present 
-  ERROR=$(grep "WARNING:" $OFILE|wc -l)
+  "$CMD" -o $OFILE $test
+  ERROR=$(grep -e "WARNING:" -e "ERROR:" $OFILE | grep -v "WARNING: Viewall and autocenter disabled in favor of $vp*" |wc -l)
   if [ "$ERROR" -ne "0" ]; then 
     cat $OFILE
-    fail 1 "Error on $(basename $test)"
+    exit 1
   fi
 done
 
