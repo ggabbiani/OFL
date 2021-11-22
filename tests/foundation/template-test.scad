@@ -72,27 +72,23 @@ DIR_R       = 0;        // [0:360]
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")       FL_ADD,
-    if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-    if (AXES!="OFF")      FL_AXES,
-    if (BBOX!="OFF")      FL_BBOX,
-    if (CUTOUT!="OFF")    FL_CUTOUT,
-    if (DRILL!="OFF")     FL_DRILL,
-    if (FPRINT!="OFF")    FL_FOOTPRINT,
-    if (LAYOUT!="OFF")    FL_LAYOUT,
-    if (PLOAD!="OFF")     FL_PAYLOAD,
-  ];
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+verbs=[
+  if (ADD!="OFF")       FL_ADD,
+  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if (AXES!="OFF")      FL_AXES,
+  if (BBOX!="OFF")      FL_BBOX,
+  if (CUTOUT!="OFF")    FL_CUTOUT,
+  if (DRILL!="OFF")     FL_DRILL,
+  if (FPRINT!="OFF")    FL_FOOTPRINT,
+  if (LAYOUT!="OFF")    FL_LAYOUT,
+  if (PLOAD!="OFF")     FL_PAYLOAD,
+];
 
-  // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-  test(
-    verbs,type,
-    direction=direction,octant=octant,
-    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD
-  );
-}
-
-__test__();
+// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
+// test(
+//   verbs,type,
+//   direction=direction,octant=octant,
+//   $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD
+// );
