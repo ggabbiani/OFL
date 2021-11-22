@@ -1,5 +1,7 @@
 # OpenSCAD Foundation Library
 
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ggabbiani/OFL/CI?style=square)
+
 ![Cover](docs/cover.png)
 
 **O**penSCAD **F**oundation **L**ibrary (OFL) is a foundation library for OpenSCAD integrating concepts not included natively in the OpenSCAD language and providing an extendible standardized API base.
@@ -22,3 +24,4 @@ The following libraries are used and must be installed for using all the OFL fea
 ## Library documentation
 
 See [foundation/README.md](foundation/README.md) for further documentation.
+
