@@ -22,50 +22,42 @@ use     <3d.scad>
 use     <symbol.scad>
 use     <util.scad>
 
+//*****************************************************************************
+// Connection properties
+function fl_conn_type(type,value) = fl_property(type,"conn/type",value);
+function fl_conn_id(type,value)   = fl_property(type,"conn/id",value);
+function fl_conn_ox(type,value)   = fl_property(type,"conn/orientation X",value);
+function fl_conn_oy(type,value)   = fl_property(type,"conn/orientation Y",value);
+function fl_conn_pos(type,value)  = fl_property(type,"conn/position",value);
+
 // contructors
-function conn_Plug(fprint,ox,oy,pos) = 
-  assert(is_string(fprint))
+function conn_Plug(id,ox,oy,pos) = 
+  assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
   assert(ox*oy==0,str("ox=",ox,",oy=",oy))
   assert(is_list(pos))
   [
-    fl_conn_typeKV("plug"),
-    fl_conn_fprintKV(fprint),
-    fl_conn_oxKV(ox),
-    fl_conn_oyKV(oy),
-    fl_conn_posKV(pos),
+    fl_conn_type(value="plug"),
+    fl_conn_id(value=id),
+    fl_conn_ox(value=ox),
+    fl_conn_oy(value=oy),
+    fl_conn_pos(value=pos),
   ];
 
-function conn_Socket(fprint,ox,oy,pos) = 
-  assert(is_string(fprint))
+function conn_Socket(id,ox,oy,pos) = 
+  assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
   assert(ox*oy==0,str("ox=",ox,",oy=",oy))
   assert(is_list(pos))
   [
-    fl_conn_typeKV("socket"),
-    fl_conn_fprintKV(fprint),
-    fl_conn_oxKV(ox),
-    fl_conn_oyKV(oy),
-    fl_conn_posKV(pos),
+    fl_conn_type(value="socket"),
+    fl_conn_id(value=id),
+    fl_conn_ox(value=ox),
+    fl_conn_oy(value=oy),
+    fl_conn_pos(value=pos),
   ];
-
-//*****************************************************************************
-// key values
-function fl_conn_typeKV(value)   = fl_kv("conn/type",value);
-function fl_conn_fprintKV(value) = fl_kv("conn/footprint",value);
-function fl_conn_oxKV(value)     = fl_kv("conn/orientation X",value);
-function fl_conn_oyKV(value)     = fl_kv("conn/orientation Y",value);
-function fl_conn_posKV(value)    = fl_kv("conn/position",value);
-
-//*****************************************************************************
-// getters
-function fl_conn_type(type)    = fl_get(type,fl_conn_typeKV());
-function fl_conn_fprint(type)  = fl_get(type,fl_conn_fprintKV());
-function fl_conn_ox(type)      = fl_get(type,fl_conn_oxKV());
-function fl_conn_oy(type)      = fl_get(type,fl_conn_oyKV());
-function fl_conn_pos(type)     = fl_get(type,fl_conn_posKV());
 
 // massive connection clone eventually transformed
 function fl_conn_import(conns,M) = [for(c=conns) fl_conn_clone(c,M=M)];
@@ -74,7 +66,7 @@ function fl_conn_import(conns,M) = [for(c=conns) fl_conn_clone(c,M=M)];
 function fl_conn_clone(
   original  // MANDATORY original connection to be cloned
   ,type     // OPTIONAL new connection type ("socket" or "plug")
-  ,fprint   // OPTIONAL new connection fingerprint
+  ,id       // OPTIONAL new connection id
   ,ox       // OPTIONAL new orientation X
   ,oy       // OPTIONAL new orientation Y
   ,pos      // OPTIONAL new position
@@ -85,8 +77,8 @@ function fl_conn_clone(
   assert(oy==undef  || len(oy)==3)
   assert(pos==undef || len(pos)==3)
   let(
-    t         = type==undef   ? fl_conn_type(original) : type,
-    f         = fprint==undef ? fl_conn_fprint(original) : fprint,
+    type         = type==undef   ? fl_conn_type(original) : type,
+    id         = id==undef ? fl_conn_id(original) : id,
     orig_ox_3 = fl_conn_ox(original),
     orig_oy_3 = fl_conn_oy(original),
     tran_ox_4 = fl_transform(M,orig_ox_3),
@@ -96,10 +88,6 @@ function fl_conn_clone(
     x_3   = ox!=undef     ? ox  :  fl_3(tran_ox_4) - fl_3(trans_O_4),
     y_3   = oy!=undef     ? oy  :  fl_3(tran_oy_4) - fl_3(trans_O_4),
     p_3   = pos!=undef    ? pos :  fl_transform(M,fl_conn_pos(original))
-
-    // x_3   = ox!=undef     ? ox  : M==undef ? orig_ox_3 : fl_3(tran_ox_4) - fl_3(trans_O_4),
-    // y_3   = oy!=undef     ? oy  : M==undef ? orig_oy_3 : fl_3(tran_oy_4) - fl_3(trans_O_4),
-    // p_3   = pos!=undef    ? pos : M==undef ? fl_conn_pos(original) : fl_3(M * fl_4(fl_conn_pos(original)))
   )
   // echo(orig_ox_3=orig_ox_3)
   // echo(orig_oy_3=orig_oy_3)
@@ -112,7 +100,7 @@ function fl_conn_clone(
   assert(norm(y_3)==1)
   assert(orig_ox_3*orig_oy_3==0,"Original orientation fl_axes are not orthogonal")
   assert(x_3*y_3==0,"Resulting orientation fl_axes are not orthogonal")
-  t=="plug" ? conn_Plug(f,x_3,y_3,p_3) : conn_Socket(f,x_3,y_3,p_3);
+  type=="plug" ? conn_Plug(id,x_3,y_3,p_3) : conn_Socket(id,x_3,y_3,p_3);
 
 // Transforms a child shape to its parent form coherently with 
 // their respective connection geometries.
@@ -123,13 +111,13 @@ module fl_connect(
   ,parent // plug or socket data for the fixed part
   ) {
   son_type      = fl_conn_type(son);
-  son_footprint = fl_conn_fprint(son);
+  son_footprint = fl_conn_id(son);
   son_ox        = fl_conn_ox(son);
   son_oy        = fl_conn_oy(son);
   son_pos       = fl_conn_pos(son);
 
   par_type      = fl_conn_type(parent);
-  par_footprint = fl_conn_fprint(parent);
+  par_footprint = fl_conn_id(parent);
   par_ox        = fl_conn_ox(parent);
   par_oy        = fl_conn_oy(parent);
   par_pos       = fl_conn_pos(parent);

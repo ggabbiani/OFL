@@ -62,7 +62,7 @@ module __test__() {
     ["name",  "test plug" ],
     ["size",  [1.2,2,0.5] ],
     ["plugs", [
-        conn_Plug(fprint="Test 220v AC ITA",ox=+X,oy=+Y,pos=[-0.4,-0.5,0])
+        conn_Plug(id="Test 220v AC ITA",ox=+X,oy=+Y,pos=[-0.4,-0.5,0])
       ]
     ]
 
@@ -72,7 +72,7 @@ module __test__() {
     ["name",    "test socket" ],
     ["size",    [2,0.5,1]     ],
     ["sockets", [
-        conn_Socket(fprint="Test 220v AC ITA",ox=+X,oy=-Y,pos=[-0.7,0,0]),
+        conn_Socket(id="Test 220v AC ITA",ox=+X,oy=-Y,pos=[-0.7,0,0]),
       ]
     ]
   ];
