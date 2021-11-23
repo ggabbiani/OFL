@@ -29,17 +29,16 @@ include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
 include <NopSCADlib/vitamins/pin_headers.scad>
 
-//*****************************************************************************
-// PCB keys
-function fl_PCB_holesKV(value)      = fl_kv("PCB/holes",value);
-function fl_PCB_componentsKV(value) = fl_kv("PCB/components",value);
-function fl_PCB_thickKV(value)      = fl_kv("PCB/thick",value);
+// namespace for PCB engine
+FL_PCB_NS  = "PCB";
 
 //*****************************************************************************
-// PCB getters
-function fl_PCB_holes(type)       = fl_get(type,fl_PCB_holesKV()); 
-function fl_PCB_components(type)  = fl_get(type,fl_PCB_componentsKV()); 
-function fl_PCB_thick(type)       = fl_get(type,fl_PCB_thickKV()); 
+// PCB properties
+// when invoked by «type» parameter act as getters
+// when invoked by «value» parameter act as property constructors
+function fl_PCB_holes(type,value)      = fl_property(type,"PCB/holes",value);
+function fl_PCB_components(type,value) = fl_property(type,"PCB/components",value);
+function fl_PCB_thick(type,value)      = fl_property(type,"PCB/thickness",value);
 
 FL_PCB_RPI4 = let(
   w     = 56,
@@ -52,8 +51,8 @@ FL_PCB_RPI4 = let(
   fl_bb_corners(value=bbox),
   fl_size(value=bbox[1]-bbox[0]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  fl_PCB_thickKV(pcb_t),
-  fl_PCB_holesKV([ 
+  fl_PCB_thick(value=pcb_t),
+  fl_PCB_holes(value=[ 
     // each row represents a hole with the following format:
     // [drill direction],[position]
     [-FL_Z, [ 24.5, 3.5,  0 ]],
@@ -62,7 +61,7 @@ FL_PCB_RPI4 = let(
     [-FL_Z, [-24.5, 61.5, 0 ]],
     ]),
   fl_screw(value=M3_cap_screw),
-  fl_PCB_componentsKV([
+  fl_PCB_components(value=[
     // each row represent one component with the following format:
     // ["label", ["engine", [position], [[director],rotation] type]]
     ["POWER IN",  ["USB",       [25.5,      11.2, 0], [+FL_X,0  ], FL_USB_TYPE_C  ]],
