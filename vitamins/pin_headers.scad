@@ -28,14 +28,10 @@ include <NopSCADlib/vitamins/pin_headers.scad>
 FL_PHDR_NS  = "phdr";
 
 //*****************************************************************************
-// keys
-
-// pin header size in [cols,rows]
-function fl_phdr_geometryKV(value)  = fl_kv("phdr/size",value);
-
-//*****************************************************************************
-// getters
-function fl_phdr_geometry(type)     = fl_get(type,fl_phdr_geometryKV()); 
+// Pin header properties
+// when invoked by «type» parameter act as getters
+// when invoked by «value» parameter act as property constructors
+function fl_phdr_geometry(type,value)  = fl_property(type,"phdr/size in [cols,rows]",value);
 
 //*****************************************************************************
 // helpers
@@ -73,7 +69,7 @@ function fl_phdr_new(
     assert(nop!=undef) fl_nopSCADlib(value=nop),
     if (description!=undef) 
       assert(is_string(description)) fl_description(value=description),
-    fl_phdr_geometryKV(geometry),
+    fl_phdr_geometry(value=geometry),
     fl_bb_corners(value=bbox),
     fl_size(value=bbox[1]-bbox[0]),
   ];
