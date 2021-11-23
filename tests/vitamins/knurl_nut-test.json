@@ -1,0 +1,23 @@
+{
+    "parameterSets": {
+        "CI-TEST": {
+            "$FL_DEBUG": "false",
+            "$FL_RENDER": "false",
+            "$FL_SAFE": "false",
+            "$FL_TRACE": "false",
+            "$fn": "50",
+            "ADD": "ON",
+            "ASSEMBLY": "ON",
+            "AXES": "ON",
+            "BBOX": "TRANSPARENT",
+            "DIR_NATIVE": "false",
+            "DIR_R": "20",
+            "DIR_Z": "[1, 1, 1]",
+            "DRILL": "OFF",
+            "OCTANT": "[0, 0, 0]",
+            "PLACE_NATIVE": "false",
+            "SHOW": "All"
+        }
+    },
+    "fileFormatVersion": "1"
+}
