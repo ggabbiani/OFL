@@ -36,7 +36,7 @@ module fl_pcb(
   co_tolerance=0,       // FL_CUTOUT tolerance 
   co_by_label,          // FL_CUTOUT component filter by label
   co_by_direction,      // FL_CUTOUT component filter by direction (+X,+Y or +Z)
-  thick=0,              // shortcut for dr_thick and co_thick
+  thick,                // shortcut for dr_thick and co_thick
   direction,            // desired direction [director,rotation], native direction when undef
   octant                // when undef native positioning is used
 ) {
@@ -147,20 +147,28 @@ module fl_pcb(
 
   module do_cutout() {
     module trigger(component) {
+
+      function drift(component) = let(
+        position  = component[1],
+        direction = component[2],
+        type      = component[3],
+        sz        = fl_size(type),
+        director  = direction[0]
+      ) -(sz.x/2-((director==X||director==-X ? size/2 : size)-position) * director);
+
       engine    = component[0];
+      position  = component[1];
       direction = component[2];
       type      = component[3];
       if (engine=="USB")
-        let(drift= $label=="POWER IN" ? -1.2 : -3)
-          fl_USB(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+        let(drift=drift(component)) fl_USB(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
       else if (engine=="HDMI")
-        let(drift=-1.3)
-          fl_hdmi(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+        let(drift=drift(component)) fl_hdmi(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
       else if (engine=="JACK")
         let(drift=0)
-          fl_jack(FL_CUTOUT,type=type,co_thick=co_thick-drift,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
+          fl_jack(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
       else if (engine==FL_ETHER_NS)
-        let(drift=-3.)
+        let(drift=drift(component)) 
           fl_ether(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
       else if (engine==FL_PHDR_NS)
         fl_pinHeader(FL_CUTOUT,type=type,co_thick=co_thick*4,co_tolerance=co_tolerance,direction=direction);
