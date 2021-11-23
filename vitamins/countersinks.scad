@@ -24,19 +24,21 @@ include <../foundation/defs.scad>
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
+// countersinks namespace
+FL_CS_NS  = "cs";
+
 //*****************************************************************************
-// key values
-function fl_cs_diameterKV(value)  = fl_kv("cs/diameter",value);
-function fl_cs_angleKV(value)     = fl_kv("cs/angle",value);
+// properties
+function fl_cs_d(type,value)      = fl_property(type,"cs/diameter",value);
+function fl_cs_angle(type,value)  = fl_property(type,"cs/angle",value);
 
 //*****************************************************************************
 // getters
-function fl_cs_d(type)      = fl_get(type, fl_cs_diameterKV());
-function fl_cs_angle(type)  = fl_get(type, fl_cs_angleKV());
 function fl_cs_h(type)      = let(
-  r     = fl_cs_d(type)/2,
-  alpha = fl_cs_angle(type)/2
-) r / tan(alpha);
+    r     = fl_cs_d(type)/2,
+    alpha = fl_cs_angle(type)/2
+  ) r / tan(alpha);
+
 //*****************************************************************************
 // constructor
 function fl_Countersink(
@@ -54,12 +56,12 @@ function fl_Countersink(
     h           = r/tan(alpha),
     description = description!=undef ? description : str("M",d,"countersink")
   ) [
-    fl_nameKV(name),
+    fl_name(value=name),
     fl_description(value=description),
-    fl_cs_diameterKV(d),
-    fl_cs_angleKV(angle),
-    fl_bb_cornersKV([[-r,-r,-h],[r,r,0]]),
-    fl_directorKV(+FL_Z),fl_rotorKV(+FL_X),
+    fl_cs_d(value=d),
+    fl_cs_angle(value=angle),
+    fl_bb_corners(value=[[-r,-r,-h],[r,r,0]]),
+    fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   ];
 
 FL_CS_M3  = fl_Countersink("FL_CS_M3","M3 countersink",6+3/5,angle=90);
