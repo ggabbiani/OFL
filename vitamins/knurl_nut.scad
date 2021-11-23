@@ -1,4 +1,6 @@
 /*
+ * Knurl nuts (aka known as 'inserts') definition module.
+ *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -24,17 +26,6 @@ use     <../foundation/3d.scad>
 use     <../foundation/layout.scad>
 use     <../foundation/placement.scad>
 
-//*****************************************************************************
-// getters
-function knut_screw(type)   = fl_get(type,fl_knut_screwKV());
-function knut_l(type)       = fl_get(type,fl_knut_lengthKV());
-function knut_tooth_h(type) = fl_get(type,fl_knut_toothHeightKV());
-function knut_teeth(type)   = fl_get(type,fl_knut_teethNumberKV());
-function knut_r(type)       = fl_get(type,fl_knut_externalRadiusKV());
-function knut_rings(type)   = fl_get(type,fl_knut_ringsKV());
-
-function knut_size(type)    = fl_bb_size(type);
-
 module knut(
   verbs,
   type,
@@ -45,16 +36,16 @@ module knut(
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  r       = knut_r(type);
-  l       = knut_l(type);
-  screw   = knut_screw(type);
+  r       = fl_knut_r(type);
+  l       = fl_knut_thick(type);
+  screw   = fl_screw(type);
   screw_r = screw_radius(screw);
   screw_l = screw_shorter_than(l);
-  rings   = knut_rings(type);
-  tooth_h = knut_tooth_h(type);
-  teeth   = knut_teeth(type);
+  rings   = fl_knut_rings(type);
+  tooth_h = fl_knut_tooth(type);
+  teeth   = fl_knut_teeth(type);
   bbox    = fl_bb_corners(type);
-  size    = knut_size(type);
+  size    = fl_bb_size(type);
   D       = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
   M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 

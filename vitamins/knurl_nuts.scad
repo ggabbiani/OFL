@@ -1,4 +1,6 @@
 /*
+ * Knurl nuts (aka known as 'inserts') definition module.
+ *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -21,13 +23,17 @@ include <../foundation/defs.scad>
 include <NopSCADlib/lib.scad>;
 
 //*****************************************************************************
+// Knurl nuts properties
+// when invoked by «type» parameter act as getters
+// when invodec by «value» parameter act as property constructors
+function fl_knut_thick(type,value)  = fl_property(type,"knut/Z axis length",value);
+function fl_knut_tooth(type,value)  = fl_property(type,"knut/tooth height",value);
+function fl_knut_teeth(type,value)  = fl_property(type,"knut/teeth number",value);
+function fl_knut_r(type,value)      = fl_property(type,"knut/external radius",value);
+function fl_knut_rings(type,value)  = fl_property(type,"knut/rings array [[height1,position1],[height2,position2,..]]",value);
+
+//*****************************************************************************
 // key values
-function fl_knut_screwKV(value)           = fl_kv("knut/screw",value);
-function fl_knut_lengthKV(value)          = fl_kv("knut/Z axis length",value);
-function fl_knut_toothHeightKV(value)     = fl_kv("knut/tooth height",value);
-function fl_knut_teethNumberKV(value)     = fl_kv("knut/teeth number",value);
-function fl_knut_externalRadiusKV(value)  = fl_kv("knut/external radius",value);
-function fl_knut_ringsKV(value)           = fl_kv("knut/rings array [[height1,position1],[height2,position2,..]]",value);
 
 /**
  * contructor
@@ -41,12 +47,12 @@ assert(is_num(length),str("length=",length))
 assert(is_num(diameter),str("diameter=",diameter))
 assert(is_num(tooth),str("tooth=",tooth))
 [
-  fl_knut_screwKV(screw),
-  fl_knut_lengthKV(length),
-  fl_knut_externalRadiusKV(diameter/2),
-  fl_knut_toothHeightKV(tooth),
-  fl_knut_teethNumberKV(100),
-  fl_knut_ringsKV(
+  fl_screw(value=screw),
+  fl_knut_thick(value=length),
+  fl_knut_r(value=diameter/2),
+  fl_knut_tooth(value=tooth),
+  fl_knut_teeth(value=100),
+  fl_knut_rings(value=
     [for(i=[0:len(rings)-1]) [rings[i],(i<(rlen-1)/2?rings[i]/2:(i==(rlen-1)/2?0:-rings[i]/2))+i*delta-rings[i]/2]] 
   ),
   fl_bb_corners(value=[
