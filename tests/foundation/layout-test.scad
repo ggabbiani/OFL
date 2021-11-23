@@ -70,7 +70,7 @@ module __test__() {
 
   psu= [
     ["name", "PSU MeanWell RS-25-5 25W 5V 5A"],
-    fl_bb_cornersKV([
+    fl_bb_corners(value=[
         [-51/2, -11,   0],  // negative corner
         [+51/2,  78,  28],  // positive corner
       ]),
@@ -78,7 +78,7 @@ module __test__() {
 
   hd = [
     ["name",  "Samsung V-NAND SSD 860 EVO"],
-    fl_bb_cornersKV([
+    fl_bb_corners(value=[
       [-69/2,-(13+3),0],  // negative corner
       [69/2,100,6.7],     // positive corner
     ]),
@@ -86,7 +86,7 @@ module __test__() {
 
   rpi = [
     ["name",                "RPI4-MODBP-8GB"],
-    fl_bb_cornersKV([
+    fl_bb_corners(value=[
       [-56/2-2.5,  -3, -1.5],     // negative corner
       [+56/2,     85,  -1.5+16],  // positive corner
     ]),

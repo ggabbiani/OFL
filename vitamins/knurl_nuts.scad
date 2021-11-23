@@ -49,12 +49,12 @@ assert(is_num(tooth),str("tooth=",tooth))
   fl_knut_ringsKV(
     [for(i=[0:len(rings)-1]) [rings[i],(i<(rlen-1)/2?rings[i]/2:(i==(rlen-1)/2?0:-rings[i]/2))+i*delta-rings[i]/2]] 
   ),
-  fl_bb_cornersKV([
+  fl_bb_corners(value=[
     [-diameter/2, -diameter/2,  0],       // negative corner
     [+diameter/2, +diameter/2,  length],  // positive corner
   ]),
-  fl_directorKV(FL_Z),
-  fl_rotorKV(FL_X),
+  fl_director(value=FL_Z),
+  fl_rotor(value=FL_X),
 ];
 
 FL_KNUT_M2x4x3p5   = fl_Knut(M2_cap_screw,4,3.5,0.6, [1.15,  1.15      ]);

@@ -30,10 +30,10 @@ function fl_hdmi_new(nop_type) = let(
     t   = hdmi_thickness(nop_type),
     bbox  = let(d=max(iw1,iw2)+2*t) [[-l/2,-d/2,h-2*t-ih2],[+l/2,+d/2,h]]
 ) [
-  fl_nopSCADlibKV(nop_type),
-  fl_sizeKV(bbox[1]-bbox[0]),
-  fl_bb_cornersKV(bbox),
-  fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
+  fl_nopSCADlib(value=nop_type),
+  fl_size(value=bbox[1]-bbox[0]),
+  fl_bb_corners(value=bbox),
+  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
 ];
 
 // following HDMI socket definitions are taken from NopSCADlib/vitamins/pcb.scad

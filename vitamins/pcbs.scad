@@ -48,10 +48,10 @@ FL_PCB_RPI4 = let(
   pcb_t = 1.5,
   bbox  = [[-w/2,0,-pcb_t],[+w/2,l,0+h]]
 ) [
-  fl_nameKV("RPI4-MODBP-8GB"),
-  fl_bb_cornersKV(bbox),
-  fl_sizeKV(bbox[1]-bbox[0]),
-  fl_directorKV(+FL_Z),fl_rotorKV(+FL_X),
+  fl_name(value="RPI4-MODBP-8GB"),
+  fl_bb_corners(value=bbox),
+  fl_size(value=bbox[1]-bbox[0]),
+  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_PCB_thickKV(pcb_t),
   fl_PCB_holesKV([ 
     // each row represents a hole with the following format:
@@ -61,7 +61,7 @@ FL_PCB_RPI4 = let(
     [-FL_Z, [-24.5, 3.5,  0 ]],
     [-FL_Z, [-24.5, 61.5, 0 ]],
     ]),
-  fl_screwKV(M3_cap_screw),
+  fl_screw(value=M3_cap_screw),
   fl_PCB_componentsKV([
     // each row represent one component with the following format:
     // ["label", ["engine", [position], [[director],rotation] type]]

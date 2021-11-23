@@ -76,7 +76,7 @@ TOLERANCE   = 0.18; // [0:0.05:1]
 // inter holder distance along X axis
 I_holder  = 1;
 // magnet size 
-MAGNET    = "FL_MAG_RECT_10x5x1"; // [FL_MAG_RECT_10x5x1,FL_MAG_RECT_10x5x2]
+MAGNET    = "FL_MAG_RECT_10x5x2"; // [FL_MAG_RECT_10x5x1,FL_MAG_RECT_10x5x2]
 
 /* [Hidden] */
 
@@ -89,9 +89,9 @@ function bitHolder(name,bit,cardinality,magnet) = let(
   length  = T_magnet+2*TOLERANCE+T_hole+SZ_magnet.z+cardinality*(d+T_hole),
   bbox    = [[-width/2,-length,0],[+width/2,0,h]]
 ) [
-    fl_nameKV(str(name," bit-holder")),
-    fl_bb_cornersKV(bbox),
-    fl_sizeKV(bbox[1]-bbox[0]),
+    fl_name(value=str(name," bit-holder")),
+    fl_bb_corners(value=bbox),
+    fl_size(value=bbox[1]-bbox[0]),
     ["h",           h],
     ["d",           d],
     ["bit",         bit],
@@ -142,8 +142,8 @@ module strip() {
   ) [ 
       ["Bit holders",  bhs],
       ["Bit number",  len(bhs)],
-      fl_bb_cornersKV(bbox),
-      fl_sizeKV(size)
+      fl_bb_corners(value=bbox),
+      fl_size(value=size)
     ];
   // fl_trace("strip object",strip);
   

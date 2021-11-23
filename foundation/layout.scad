@@ -34,7 +34,7 @@ function lay_align_many(axis,types) = let(
 /**
  * creates a group with the resulting bounding box corners of a layout
  */
-function lay_group(axis,gap,types) = [fl_bb_cornersKV(lay_bb_corners(axis,gap,types))];
+function lay_group(axis,gap,types) = [fl_bb_corners(value=lay_bb_corners(axis,gap,types))];
 
 /**
  * add a bounding box shape

@@ -30,9 +30,9 @@ function fl_cube_defaults(
 )  = let(
   size  = is_list(size) ? size : [size,size,size]
 ) [
-  fl_bb_cornersKV([O,size]),  // octant ⇒ +X+Y+Z
-  fl_directorKV(+Z),
-  fl_rotorKV(+X),
+  fl_bb_corners(value=[O,size]),  // octant ⇒ +X+Y+Z
+  fl_director(value=+Z),
+  fl_rotor(value=+X),
 ];
 
 /*
@@ -78,9 +78,9 @@ function fl_sphere_defaults(
 ) = let(
   r  = is_undef(d) ? (is_list(r) ? r : [r,r,r]) : (is_list(d) ? d : [d,d,d])/2
 ) [
-  fl_bb_cornersKV([-r,+r]),  // simmetric bounding box ⇒ octant==O
-  fl_directorKV(+Z),
-  fl_rotorKV(+X),
+  fl_bb_corners(value=[-r,+r]),  // simmetric bounding box ⇒ octant==O
+  fl_director(value=+Z),
+  fl_rotor(value=+X),
 ];
 
 /*
@@ -129,9 +129,9 @@ function fl_cylinder_defaults(
   d1,                 // diameter, bottom of cone. r1 = d1 / 2.
   d2                  // diameter, top of cone. r2 = d2 / 2.
 ) = [
-  fl_bb_cornersKV(fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
-  fl_directorKV(+Z),
-  fl_rotorKV(+X),
+  fl_bb_corners(value=fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
+  fl_director(value=+Z),
+  fl_rotor(value=+X),
 ];
 
 function fl_bb_cylinder(
@@ -212,9 +212,9 @@ function fl_prism_defaults(
   l2, // edge length, top
   h   // height of the prism
 ) = [
-  fl_bb_cornersKV(fl_bb_prism(n,l,l1,l2,h)),  // placement: +Z
-  fl_directorKV(+Z),
-  fl_rotorKV(+X),
+  fl_bb_corners(value=fl_bb_prism(n,l,l1,l2,h)),  // placement: +Z
+  fl_director(value=+Z),
+  fl_rotor(value=+X),
 ];
 
 function fl_bb_prism(

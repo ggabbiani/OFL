@@ -196,52 +196,43 @@ function fl_get(type,key,default) =
  */
 function fl_property(type,key,value,default)  = 
   assert(key!=undef)
-  value==undef 
-  ? assert(type!=undef)     fl_get(type,key,default)  // property getter
-  : assert(default==undef)  [key,value];              // property constructor
+  type!=undef 
+  ? fl_get(type,key,default)              // property getter
+  : assert(default==undef)  [key,value];  // property constructor
 
 // returns [«key»,«value»] if value is defined, «key» otherwise
 function fl_kv(key,value)   = assert(key!=undef) value!=undef ? [key,value] : key;
 
 //*****************************************************************************
 // General properties
+// when invoked by «type» parameter act as getters
+// when invodec by «value» parameter act as property constructors
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value); 
-
-function fl_directorKV(value)     = fl_kv("director",value);
-function fl_nameKV(value)         = fl_kv("name",value);
-function fl_material_KV(value)    = fl_kv("material (actually a color)",value);
-function fl_nopSCADlibKV(value)   = fl_kv("Verbatim NopSCADlib definition",value);
-function fl_rotorKV(value)        = fl_kv("rotor",value);
-function fl_screwKV(value)        = fl_kv("screw",value);
-function fl_sizeKV(value)         = fl_kv("size",value);
-function fl_vendorKV(value)       = fl_kv("vendor",value);
+function fl_director(type,value)    = fl_property(type,"director",value);
+function fl_name(type,value)        = fl_property(type,"name",value);
+function fl_material(type,value)    = fl_property(type,"material (actually a color)",value);
+function fl_nopSCADlib(type,value)  = fl_property(type,"Verbatim NopSCADlib definition",value);
+function fl_rotor(type,value)       = fl_property(type,"rotor",value);
+function fl_screw(type,value)       = fl_property(type,"screw",value);
+function fl_size(type,value)        = fl_property(type,"size",value);
+function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 
 //*****************************************************************************
-// General getters
-function fl_director(type)      = fl_get(type,fl_directorKV());
+// Property derived getters
 function fl_height(type)        = fl_size(type).y;
-function fl_material(type)      = fl_get(type,fl_material_KV());
-function fl_name(type)          = fl_get(type,fl_nameKV()); 
-function fl_nopSCADlib(type)    = fl_get(type,fl_nopSCADlibKV());
-function fl_rotor(type)         = fl_get(type,fl_rotorKV());
-function fl_screw(type)         = fl_get(type,fl_screwKV());
-function fl_size(type)          = fl_get(type,fl_sizeKV());
 function fl_thickness(type)     = fl_size(type).z;
 function fl_width(type)         = fl_size(type).x;
-function fl_vendor(type)        = fl_get(type,fl_vendorKV());
 
 //*****************************************************************************
 // Bounding Box
 
-// keys
-function fl_bb_cornersKV(value) = fl_kv("bb/bounding corners",value);
-
-// getters
-function fl_bb_corners(type)    = assert(type!=undef)
-let(
-  value = fl_get(type,fl_bb_cornersKV())
-) is_function(value) ? value(type) : value;
+// when invoked by «type» parameter acts as getter
+// when invoked by «value» parameter acts as property constructor
+function fl_bb_corners(type,value)  = let(key="bb/bounding corners")
+  type!=undef
+  ? let(value = fl_property(type,key)) is_function(value) ? value(type) : value
+  : fl_property(key=key,value=value);
 
 // computes size from the bounding corners.
 function fl_bb_size(type)       = let(c=fl_bb_corners(type)) c[1]-c[0];
@@ -251,7 +242,7 @@ function fl_bb_new(
   negative  = [0,0,0],
   size      = [0,0,0],
   positive
-) = [fl_bb_cornersKV([negative,positive==undef?negative+size:positive])];
+) = [fl_bb_corners(value=[negative,positive==undef?negative+size:positive])];
 
 // bounding box translation
 function fl_bb_center(type) = let(c=fl_bb_corners(type),sz=fl_bb_size(type)) c[0]+sz/2;

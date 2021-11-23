@@ -63,18 +63,18 @@ function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
               ? assert(size==undef) assert(thick!=undef) fl_bb_cylinder(d=d,h=thick) 
               : assert(size!=undef) [[-size.x/2,-size.y/2,0],[size.x/2,size.y/2,size.z]]
   ) [
-    fl_nameKV(name),
+    fl_name(value=name),
     fl_description(value=description),
     fl_mag_engine_KV(engine),
-    fl_directorKV(+FL_Z), fl_rotorKV(+FL_X),
+    fl_director(value=+FL_Z), fl_rotor(value=+FL_X),
     if (engine=="cyl") fl_mag_dKV(d),
-    fl_sizeKV(bbox[1]-bbox[0]),
+    fl_size(value=bbox[1]-bbox[0]),
     [fl_mag_csKV(),cs],
     if (cs!=undef) fl_mag_csHKV(csh),
-    fl_material_KV(grey(80)),
-    [fl_screwKV(),screw],
-    fl_bb_cornersKV(bbox),
-    fl_vendorKV(vendors),
+    fl_material(value=grey(80)),
+    fl_screw(value=screw),
+    fl_bb_corners(value=bbox),
+    fl_vendor(value=vendors),
   ];
 
 FL_MAG_M3_CS_10x2 = fl_Magnet(

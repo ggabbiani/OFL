@@ -45,9 +45,9 @@ function fl_USB_new(utype) =
       bbox      = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
       fl_USB_typeKV(utype),
-      fl_sizeKV(bbox[1]-bbox[0]),
-      fl_bb_cornersKV(bbox),
-      fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
+      fl_size(value=bbox[1]-bbox[0]),
+      fl_bb_corners(value=bbox),
+      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
     ]
   : utype=="Ax2"
   ? let(
@@ -63,9 +63,9 @@ function fl_USB_new(utype) =
       bbox        = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
       fl_USB_typeKV(utype),
-      fl_sizeKV(bbox[1]-bbox[0]),
-      fl_bb_cornersKV(bbox),
-      fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
+      fl_size(value=bbox[1]-bbox[0]),
+      fl_bb_corners(value=bbox),
+      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
     ]
   : utype=="B"
   ? let(
@@ -77,9 +77,9 @@ function fl_USB_new(utype) =
       bbox  = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
       fl_USB_typeKV(utype),
-      fl_sizeKV(bbox[1]-bbox[0]),
-      fl_bb_cornersKV(bbox),
-      fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
+      fl_size(value=bbox[1]-bbox[0]),
+      fl_bb_corners(value=bbox),
+      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
     ]
   : utype=="C"
   ? let(
@@ -91,9 +91,9 @@ function fl_USB_new(utype) =
       bbox  = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
       fl_USB_typeKV(utype),
-      fl_sizeKV(bbox[1]-bbox[0]),
-      fl_bb_cornersKV(bbox),
-      fl_directorKV(+FL_X),fl_rotorKV(+FL_Y),
+      fl_size(value=bbox[1]-bbox[0]),
+      fl_bb_corners(value=bbox),
+      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
       // __fl_USB_coDriftKV__(1.17),
     ]
   : assert(false) [];

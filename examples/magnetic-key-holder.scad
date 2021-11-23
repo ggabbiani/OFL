@@ -192,8 +192,8 @@ verbs=[
 ];
 
 element=[
-  fl_nameKV("Magnetic key-holder element"),
-  fl_bb_cornersKV(bb_element(magnet,FILLET_R,FILLET_STEPS,HOLDER_T,BASE_T,TOLERANCE,GAP))
+  fl_name(value="Magnetic key-holder element"),
+  fl_bb_corners(value=bb_element(magnet,FILLET_R,FILLET_STEPS,HOLDER_T,BASE_T,TOLERANCE,GAP))
 ];
 fl_trace("element",element);
 

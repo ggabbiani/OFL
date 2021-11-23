@@ -27,9 +27,9 @@ FL_SODAL_SPDT = let(
   ,head_d = 22
   ,head_h = +2
 ) [
-  fl_nameKV("B077HJT92M"),
+  fl_name(value="B077HJT92M"),
   fl_description(value="SODIAL(R) SPDT Button Switch 220V"),
-  fl_bb_cornersKV([
+  fl_bb_corners(value=[
     [-head_d/2, -head_d/2,  -len+head_h ],  // negative corner
     [+head_d/2, +head_d/2,   head_h     ],  // positive corner
   ]),
@@ -37,9 +37,9 @@ FL_SODAL_SPDT = let(
   ["length",                len],
   ["head diameter",         head_d],
   ["head height",           head_h],
-  fl_directorKV(+FL_Z),
-  fl_rotorKV(+FL_X),
-  fl_vendorKV(
+  fl_director(value=+FL_Z),
+  fl_rotor(value=+FL_X),
+  fl_vendor(value=
     [
       ["Amazon", "https://www.amazon.it/gp/product/B077HJT92M/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1"],
     ]

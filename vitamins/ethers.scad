@@ -25,10 +25,10 @@ FL_ETHER_NS = "ether";
 FL_ETHER_RJ45 = let(
   bbox  = let(l=21,w=16,h=13.5) [[-l/2,-w/2,0],[+l/2,+w/2,h]]
 ) [
-  fl_nameKV("RJ45"),
-  fl_bb_cornersKV(bbox),
-  fl_sizeKV(bbox[1]-bbox[0]),
-  fl_directorKV(+FL_X),fl_rotorKV(-FL_Z),
+  fl_name(value="RJ45"),
+  fl_bb_corners(value=bbox),
+  fl_size(value=bbox[1]-bbox[0]),
+  fl_director(value=+FL_X),fl_rotor(value=-FL_Z),
 ];
 
 FL_ETHER_DICT = [
