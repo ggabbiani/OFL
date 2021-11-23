@@ -33,25 +33,13 @@ include <NopSCADlib/vitamins/screws.scad>
 FL_MAG_NS  = "mag";
 
 //*****************************************************************************
-// magnet keys
-function fl_mag_dKV(value)        = fl_kv("mag/diameter",value);
-function fl_mag_csHKV(value)      = fl_kv("mag/counter sink height",value);
-function fl_mag_csKV(value)       = fl_kv("mag/counter sink type",value);
-function fl_mag_engine_KV(value)  = fl_kv("mag/__internal engine type__",value);
-
-//*****************************************************************************
-// magnet getters
-function fl_mag_d(type)       = fl_get(type,fl_mag_dKV()); 
-function fl_mag_cs_h(type)    = fl_get(type,fl_mag_csHKV());
-function fl_mag_cs(type)      = fl_get(type,fl_mag_csKV());
-function fl_mag_engine(type)  = fl_get(type,fl_mag_engine_KV());
-
-//*****************************************************************************
-// magnet DEPRECATED getters
-function fl_mag_diameter(type)  = fl_deprecated("fl_mag_diameter(type)",fl_mag_d(type),"fl_mag_d(type)");
-function fl_mag_radius(type)    = fl_deprecated("fl_mag_radius(type)",fl_mag_d(type) / 2,"fl_mag_d(type) / 2");
-function fl_mag_height(type)    = fl_deprecated("fl_mag_height(type)",fl_thick(type),"fl_thick(type)");
-function fl_mag_screw(type)     = fl_deprecated("fl_mag_screw(type)",fl_screw(type),"fl_screw(type)");
+// magnet properties
+// when invoked by «type» parameter act as getters
+// when invoked by «value» parameter act as property constructors
+function fl_mag_d(type,value)       = fl_property(type,"mag/diameter",value);
+function fl_mag_csH(type,value)     = fl_property(type,"mag/counter sink height",value);
+function fl_mag_cs(type,value)      = fl_property(type,"mag/counter sink type",value);
+function fl_mag_engine(type,value)  = fl_property(type,"mag/__internal engine type__",value);
 
 //*****************************************************************************
 // constructor
@@ -65,12 +53,12 @@ function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
   ) [
     fl_name(value=name),
     fl_description(value=description),
-    fl_mag_engine_KV(engine),
+    fl_mag_engine(value=engine),
     fl_director(value=+FL_Z), fl_rotor(value=+FL_X),
-    if (engine=="cyl") fl_mag_dKV(d),
+    if (engine=="cyl") fl_mag_d(value=d),
     fl_size(value=bbox[1]-bbox[0]),
-    [fl_mag_csKV(),cs],
-    if (cs!=undef) fl_mag_csHKV(csh),
+    fl_mag_cs(value=cs),
+    if (cs!=undef) fl_mag_csH(value=csh),
     fl_material(value=grey(80)),
     fl_screw(value=screw),
     fl_bb_corners(value=bbox),

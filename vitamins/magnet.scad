@@ -47,7 +47,7 @@ module fl_magnet(
   screw         = fl_screw(type);
   screw_len     = screw!=undef  ? screw_longer_than(h)   : undef;
   screw_d       = screw!=undef  ? 2*screw_radius(screw)  : undef;
-  h_cs          = cs!=undef     ? fl_mag_cs_h(type)      : undef;
+  h_cs          = cs!=undef     ? fl_mag_csH(type)       : undef;
   cs_offset     = h_cs!=undef   ? h-h_cs : undef;
   screw_offset  = screw!=undef  ? h-(h_cs-screw_socket_af(screw)) : undef;
   bbox          = fl_bb_corners(type);
