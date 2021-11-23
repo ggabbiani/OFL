@@ -205,7 +205,7 @@ function fl_property(type,key,value,default)  =
 //*****************************************************************************
 // General properties
 // when invoked by «type» parameter act as getters
-// when invodec by «value» parameter act as property constructors
+// when invoked by «value» parameter act as property constructors
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value); 
 function fl_director(type,value)    = fl_property(type,"director",value);
