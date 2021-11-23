@@ -21,6 +21,8 @@ include <../../foundation/unsafe_defs.scad>
 include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
+// TODO: implement a CI-TEST parameter set for all test
+
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
 $FL_DEBUG   = false;
