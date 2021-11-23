@@ -21,12 +21,10 @@
 include <../foundation/defs.scad>
 
 //*****************************************************************************
-// USB keys
-function fl_USB_typeKV(value)             = fl_kv("USB/type",value);
-
-//*****************************************************************************
-// USB getters
-function fl_USB_type(type)              = fl_get(type,fl_USB_typeKV()); 
+// USB properties
+// when invoked by «type» parameter act as getters
+// when invoked by «value» parameter act as property constructors
+function fl_USB_type(type,value) = fl_property(type,"USB/type",value);
 
 //*****************************************************************************
 // USB constructors
@@ -44,7 +42,7 @@ function fl_USB_new(utype) =
       // calculated bounding box corners
       bbox      = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
-      fl_USB_typeKV(utype),
+      fl_USB_type(value=utype),
       fl_size(value=bbox[1]-bbox[0]),
       fl_bb_corners(value=bbox),
       fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
@@ -62,7 +60,7 @@ function fl_USB_new(utype) =
       // calculated bounding box corners
       bbox        = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
-      fl_USB_typeKV(utype),
+      fl_USB_type(value=utype),
       fl_size(value=bbox[1]-bbox[0]),
       fl_bb_corners(value=bbox),
       fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
@@ -76,7 +74,7 @@ function fl_USB_new(utype) =
       // calculated bounding box corners
       bbox  = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
-      fl_USB_typeKV(utype),
+      fl_USB_type(value=utype),
       fl_size(value=bbox[1]-bbox[0]),
       fl_bb_corners(value=bbox),
       fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
@@ -90,7 +88,7 @@ function fl_USB_new(utype) =
       // calculated bounding box corners
       bbox  = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
     ) [
-      fl_USB_typeKV(utype),
+      fl_USB_type(value=utype),
       fl_size(value=bbox[1]-bbox[0]),
       fl_bb_corners(value=bbox),
       fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
