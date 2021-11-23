@@ -190,9 +190,8 @@ function fl_get(type,key,default) =
  * type/key{/default} ↦ value       (property getter)
  * key/value          ↦ [key,value] (property constructor)
  *
- * It concentrates property key definition in a single point, reducing possible
- * mismatches when referring separately to a property key in the more usual 
- * getter/setter function pair.
+ * It concentrates property key definition reducing possible mismatch when 
+ * referring to property key in the more usual getter/setter function pair.
  */
 function fl_property(type,key,value,default)  = 
   assert(key!=undef)
@@ -201,7 +200,7 @@ function fl_property(type,key,value,default)  =
   : assert(default==undef)  [key,value];  // property constructor
 
 // returns [«key»,«value»] if value is defined, «key» otherwise
-function fl_kv(key,value)   = assert(key!=undef) value!=undef ? [key,value] : key;
+// function fl_kv(key,value)   = assert(key!=undef) value!=undef ? [key,value] : key;
 
 //*****************************************************************************
 // General properties
@@ -219,10 +218,10 @@ function fl_size(type,value)        = fl_property(type,"size",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 
 //*****************************************************************************
-// Property derived getters
-function fl_height(type)        = fl_size(type).y;
-function fl_thickness(type)     = fl_size(type).z;
-function fl_width(type)         = fl_size(type).x;
+// Derived property getters
+function fl_width(type)   = fl_size(type).x;
+function fl_height(type)  = fl_size(type).y;
+function fl_thick(type)   = fl_size(type).z;
 
 //*****************************************************************************
 // Bounding Box

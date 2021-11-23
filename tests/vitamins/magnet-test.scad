@@ -93,7 +93,7 @@ module do_test(magnet) {
   screw = fl_screw(magnet);
   fl_magnet(verbs,magnet,fp_gross=FP_EXTRA,thick=T,octant=octant,direction=direction,
     $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT)
-      if (screw!=undef) fl_color("green") fl_cylinder(h=fl_thickness(magnet),r=screw_radius(screw),octant=-Z);
+      if (screw!=undef) fl_color("green") fl_cylinder(h=fl_thick(magnet),r=screw_radius(screw),octant=-Z);
 }
 
 if (SHOW>-1)

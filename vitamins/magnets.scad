@@ -50,7 +50,7 @@ function fl_mag_engine(type)  = fl_get(type,fl_mag_engine_KV());
 // magnet DEPRECATED getters
 function fl_mag_diameter(type)  = fl_deprecated("fl_mag_diameter(type)",fl_mag_d(type),"fl_mag_d(type)");
 function fl_mag_radius(type)    = fl_deprecated("fl_mag_radius(type)",fl_mag_d(type) / 2,"fl_mag_d(type) / 2");
-function fl_mag_height(type)    = fl_deprecated("fl_mag_height(type)",fl_thickness(type),"fl_thickness(type)");
+function fl_mag_height(type)    = fl_deprecated("fl_mag_height(type)",fl_thick(type),"fl_thick(type)");
 function fl_mag_screw(type)     = fl_deprecated("fl_mag_screw(type)",fl_screw(type),"fl_screw(type)");
 
 //*****************************************************************************

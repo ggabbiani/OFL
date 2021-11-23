@@ -43,7 +43,7 @@ module fl_magnet(
   engine        = fl_mag_engine(type);
   cs            = fl_mag_cs(type);
   color         = fl_material(type);
-  h             = fl_thickness(type);
+  h             = fl_thick(type);
   screw         = fl_screw(type);
   screw_len     = screw!=undef  ? screw_longer_than(h)   : undef;
   screw_d       = screw!=undef  ? 2*screw_radius(screw)  : undef;

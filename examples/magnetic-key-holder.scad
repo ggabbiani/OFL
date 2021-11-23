@@ -77,7 +77,7 @@ assert(is_num(edge_thick),edge_thick)
 assert(is_num(tolerance),tolerance)
 fl_mag_d(magnet) + 2*edge_thick + tolerance;
 
-function cyl_h(magnet) = fl_thickness(magnet) - 1;
+function cyl_h(magnet) = fl_thick(magnet) - 1;
 
 function bb_element(
   magnet,
@@ -120,7 +120,7 @@ module element(
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   mag_d       = fl_mag_d(magnet);
-  mag_h       = fl_thickness(magnet);
+  mag_h       = fl_thick(magnet);
   cyl_d       = cyl_d(magnet,edge_thick,tolerance);
   cyl_h       = cyl_h(magnet);
   child_bbox  = fl_bb_circle(d=cyl_d);
