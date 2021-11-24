@@ -170,8 +170,9 @@ module fl_pcb(
       else if (engine==FL_ETHER_NS)
         let(drift=drift(component)) 
           fl_ether(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
-      else if (engine==FL_PHDR_NS)
-        fl_pinHeader(FL_CUTOUT,type=type,co_thick=co_thick*4,co_tolerance=co_tolerance,direction=direction);
+      else if (engine==FL_PHDR_NS) let(
+          thick = size.z-pcb_t+co_thick
+        ) fl_pinHeader(FL_CUTOUT,type=type,co_thick=thick,co_tolerance=co_tolerance,direction=direction);
       else
         assert(false,str("Unknown engine ",engine));
     }
