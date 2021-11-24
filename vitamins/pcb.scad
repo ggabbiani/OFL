@@ -31,32 +31,38 @@ use     <screw.scad>
 module fl_pcb(
   verbs       = FL_ADD, // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT
   type,
-  dr_thick=0,           // FL_DRILL thickness 
-  co_thick=0,           // FL_CUTOUT thickness 
+  dr_thick=0,           // SCALAR for FL_DRILL thickness along -Z semi-axis.
+  co_thick=0,           // FL_CUTOUT thickness in the form [[-X,+X],[-Y,+Y],[-Z,+Z]]. Scalar means same value on each semi-axis.
   co_tolerance=0,       // FL_CUTOUT tolerance 
   co_by_label,          // FL_CUTOUT component filter by label
   co_by_direction,      // FL_CUTOUT component filter by direction (+X,+Y or +Z)
-  thick,                // shortcut for dr_thick and co_thick
+  thick,                // shortcut for dr_thick and co_thick in the form [[-X,+X],[-Y,+Y],[-Z,+Z]]. 
+                        // When «thick» is set, «dr_thick» will inherit thick.z[0] (-Z semi-axis)
   direction,            // desired direction [director,rotation], native direction when undef
   octant                // when undef native positioning is used
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(!(co_by_direction!=undef && co_by_label!=undef),"cutout filtering cannot be done by label and direction at the same time");
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+  axes      = fl_list_has(verbs,FL_AXES);
+  verbs     = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  pcb_t   = fl_PCB_thick(type);
-  comps   = fl_PCB_components(type);
-  bbox    = fl_bb_corners(type);
-  size    = fl_bb_size(type);
-  D       = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
-  holes   = fl_PCB_holes(type);
-  screw   = fl_screw(type);
-  screw_r = screw_radius(screw);
-  dr_thick  = thick!=undef ? thick : dr_thick;
-  co_thick  = thick!=undef ? thick : co_thick;
+  pcb_t     = fl_PCB_thick(type);
+  comps     = fl_PCB_components(type);
+  bbox      = fl_bb_corners(type);
+  size      = fl_bb_size(type);
+  D         = direction ? fl_direction(proto=type,direction=direction)  : I;
+  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  holes     = fl_PCB_holes(type);
+  screw     = fl_screw(type);
+  screw_r   = screw_radius(screw);
+  thick     = is_num(thick) 
+            ? [[thick,thick],[thick,thick],[thick,thick]] 
+            : assert(len(thick)==3 && len(thick.x)==2 && len(thick.y)==2 && len(thick.z)==2,thick) thick;
+  dr_thick  = thick!=undef 
+            ? thick.z[0]  // thickness along -Z
+            : assert(is_num(dr_thick)) dr_thick;
+  co_thick  = thick!=undef ? thick : is_num(co_thick) ? [[co_thick,co_thick],[co_thick,co_thick],[co_thick,co_thick]] : co_thick;
 
   module do_add() {
     fl_color("green") difference() {
@@ -160,6 +166,10 @@ module fl_pcb(
       position  = component[1];
       direction = component[2];
       type      = component[3];
+      director  = direction[0];
+      co_thick  = director==+X ? co_thick.x[1] : director==-X ? co_thick.x[0]
+                : director==+Y ? co_thick.y[1] : director==-Y ? co_thick.y[0]
+                : director==+Z ? co_thick.z[1] : co_thick.z[0];
       if (engine=="USB")
         let(drift=drift(component)) fl_USB(FL_CUTOUT,type=type,co_thick=co_thick,co_tolerance=co_tolerance,co_drift=drift,direction=direction);
       else if (engine=="HDMI")
