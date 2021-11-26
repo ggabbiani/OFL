@@ -27,6 +27,7 @@ include <knurl_nuts.scad>
 include <magnets.scad>
 include <pcbs.scad>
 include <pin_headers.scad>
+include <sata-adapters.scad>
 include <satas.scad>
 use     <screw.scad>
 include <spdts.scad>
