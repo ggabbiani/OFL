@@ -63,7 +63,10 @@ TEST="linear"; // [linear,round]
 
 /* [Linear fillet] */
 
-RADIUS  = 1;
+LINEAR_TYPE = "fillet"; // [fillet,hFillet,vFillet]
+
+R_x     = 1;  // [0:10]
+R_y     = 1;  // [0:10]
 LENGTH  = 10;
 
 /* [Round fillet] */
@@ -73,27 +76,35 @@ ROUND_STEPS   = 10;
 CHILD_SIZE    = [1,2];
 
 /* [Hidden] */
-
+echo($FL_TRACE=$FL_TRACE);
+// $FL_TRACE = true;
 CHILD_BBOX=[O,CHILD_SIZE];
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-    if (BBOX!="OFF")  FL_BBOX,
-  ];
-  fl_trace("PLACE_NATIVE",PLACE_NATIVE);
-  fl_trace("octant",octant);
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+verbs=[
+  if (ADD!="OFF")   FL_ADD,
+  if (AXES!="OFF")  FL_AXES,
+  if (BBOX!="OFF")  FL_BBOX,
+];
+fl_trace("PLACE_NATIVE",PLACE_NATIVE);
+fl_trace("octant",octant);
 
-  if (TEST=="linear")
-    fl_fillet(verbs,r=RADIUS,h=LENGTH,octant=octant,direction=direction,
+module linear_wrpper() {
+  if (LINEAR_TYPE=="fillet")
+    fl_fillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction,
               $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else 
-    fl_90DegFillet(verbs,r=ROUND_RADIUS,n=ROUND_STEPS,child_bbox=CHILD_BBOX,octant=octant,direction=direction,
-                    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX)
-      square(size=CHILD_SIZE);
+  else if (LINEAR_TYPE=="hFillet")
+    fl_hFillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction,
+              $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+  else if (LINEAR_TYPE=="vFillet")
+    fl_vFillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction,
+              $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
 }
 
-__test__();
+if (TEST=="linear")
+  linear_wrpper();
+else 
+  fl_90DegFillet(verbs,r=ROUND_RADIUS,n=ROUND_STEPS,child_bbox=CHILD_BBOX,octant=octant,direction=direction,
+                  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX)
+    square(size=CHILD_SIZE);

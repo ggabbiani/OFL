@@ -20,13 +20,78 @@
  */
 
 include <unsafe_defs.scad>
+use     <2d.scad>
 use     <3d.scad>
+use     <layout.scad>
 use     <placement.scad>
+
+module fl_vFillet(
+  verbs   = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX
+  r,          // shortcut for «rx»/«ry»
+  h,
+  rx,ry,      // ellipse's radius
+  direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
+  octant      // when undef native positioning is used (+Z)
+  ) {
+  assert(verbs!=undef,str("verbs=",verbs));
+  default = [+Z,+X];  // default director and rotor
+  rx      = r ? r : rx;
+  ry      = r ? r : ry;
+  bbox    = [[0,0,-h/2],[rx,ry,h/2]];
+  M       = octant!=undef     ? fl_octant(octant=octant,bbox=bbox) : I;
+  D       = direction!=undef  ? fl_direction(direction=direction,default=default) : I;
+  multmatrix(D) 
+    multmatrix(M) fl_parse(verbs) 
+        fl_fillet(verbs,r,h,rx,ry,octant=+X);
+}
+
+module fl_hFillet(
+  verbs   = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX
+  r,          // shortcut for «rx»/«ry»
+  h,
+  rx,ry,      // ellipse's radius
+  direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
+  octant      // when undef native positioning is used (+Z)
+  ) {
+  assert(verbs!=undef,str("verbs=",verbs));
+  
+  axes    = fl_list_has(verbs,FL_AXES);
+  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
+  default = [+Z,+X];  // default director and rotor
+  rx      = r ? r : rx;
+  ry      = r ? r : ry;
+  bbox    = [[0,-h/2,0],[rx,h/2,ry]];
+  size    = bbox[1]-bbox[0];
+  M       = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
+  D       = direction!=undef ? fl_direction(direction=direction,default=default) : I;
+
+  module do_add() {
+    translate(Y(h/2))
+      rotate(90,X)
+        fl_fillet(FL_ADD,r,h,rx,ry);
+  }
+
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD) do_add();
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
+    }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=1.1*max(size));
+  }
+}
 
 module fl_fillet(
   verbs   = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX
-  r,
+  r,          // shortcut for «rx»/«ry»
   h,
+  rx,ry,      // ellipse's radius
   direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
   octant      // when undef native positioning is used (+Z)
   ) {
@@ -36,7 +101,9 @@ module fl_fillet(
   verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   default = [+Z,+X];  // default director and rotor
-  size    = [r,r,h];
+  rx      = r ? r : rx;
+  ry      = r ? r : ry;
+  size    = [rx,ry,h];
   bbox    = [O,size];
   M       = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
   D       = direction!=undef ? fl_direction(direction=direction,default=default) : I;
@@ -46,15 +113,14 @@ module fl_fillet(
   module do_add() {
     linear_extrude(h)
       difference() {
-        square(r);
-        translate([r, r]) circle(r);
+        fl_square(size=[rx,ry],quadrant=+X+Y);
+        fl_ellipse(e=[rx,ry],quadrant=+X+Y);
     }
   }
 
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
-    fl_trace("***");
         fl_modifier($FL_ADD) do_add();
       } else if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_cube(size=size);
