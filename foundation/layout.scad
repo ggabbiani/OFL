@@ -121,9 +121,10 @@ function lay_bb_corners(
 /**
  * Accumulates a list of bounding boxes along a direction.
  *
- * Recursive algorithm, at each call a bounding box is extracted from the list
- * and decomposed into axial and planar components. The last is returned as 
- * result. If there are still bounding boxes left, a new call is made and its
+ * Recursive algorithm, at each call a bounding box is extracted from «bbcs»
+ * and decomposed into axial and planar components. The last bunding box in 
+ * the list ended up the recursion and is returned as result. 
+ * If there are still bounding boxes left, a new call is made and its
  * result, decomposed into the axial and planar components, used to produce a
  * new bounding box as follows:
  * - for planar component, the new negative and positive corners are calculated
@@ -137,22 +138,6 @@ function lay_bb_corners(
  *     - negative corner is equal to the current one MINUS the gap and the 
  *       axial dimension of the result
  *     - the positive corner is equal to the current corner. 
- * 
- * L'algoritmo è ricorsivo, ad ogni chiamata un bounding box viene estratto dalla lista e
- * scomposto nelle componente assiale e planare. Se è l'ultimo viene restituito come risultato.
- * Se rimangono ancora bounding box da calcolare, viene fatta una nuova chiamata e il suo
- * risultato, scomposto nella componente assiale e planare, usato per produrre un nuovo 
- * bounding box nel seguente modo:
- * - per la componente planare, si calcolano i nuovi corner negativo e positivo con le 
- *   dimensioni minime tra quello corrente ed il risultato della chiamata ricorsiva;
- * - per la componente assiale in caso di asse positivo
- *   - il corner negativo è uguale al corner corrente;
- *   - il corner positivo è pari al corner positivo corrente PIÙ il gap e la dimensione
- *     assiale del risultato;
- * - in caso di asse negativo:
- *   - il corner negativo è pari a quello corrente MENO il gap e la dimensione assiale del
- *     risultato
- *   - il corner positivo è uguale al corner corrente.
  */
 function fl_bb_accum(
   axis,   // cartesian axis ([-1,0,0]==[1,0,0]==X)
@@ -162,9 +147,9 @@ function fl_bb_accum(
 assert(fl_3d_abs(axis)==+X||fl_3d_abs(axis)==+Y||fl_3d_abs(axis)==+Z)
 assert(len(bbcs))
 let(
-  len = len(bbcs),
-  plane   = fl_3d_orthoPlane(axis),
-  sum = axis*[1,1,1]>0,
+  len   = len(bbcs),
+  plane = fl_3d_orthoPlane(axis),
+  sum   = axis*[1,1,1]>0,
 
   curr_result = bbcs[0],
   curr_plane  = [fl_3d_planarProjection(curr_result[0],plane),fl_3d_planarProjection(curr_result[1],plane)],
@@ -205,7 +190,7 @@ module fl_layout(
   axis,     // layout direction
   gap=0,    // gap inserted along «axis»
   types,    // list of types to be arranged
-  direction,// desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,// desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])
   octant    // when undef native positioning is used
 ) {  
   assert(is_list(verbs)||is_string(verbs),verbs);
@@ -236,6 +221,7 @@ module fl_layout(
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
+
       } else if ($verb==FL_LAYOUT) {
         fl_modifier($FL_LAYOUT) 
           for($i=[0:$len-1]) {
@@ -254,6 +240,7 @@ module fl_layout(
             translate(offset+fac*sz+$i*gap*axis)
               if ($children>1) children($i); else children(0);
           };
+
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }
