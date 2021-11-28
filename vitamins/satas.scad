@@ -28,9 +28,10 @@ FL_SATA_NS  = "sata";
  * public helpers
  */
 
+function fl_sata_instance(type,value)  = fl_property(type,"sata/connector instance (plug or socket)",value);
+function fl_sata_type(type,value)   = fl_property(type,"sata/type",value);
 function fl_sata_conns(type,value)  = fl_property(type,"sata/connectors",value);
 function fl_sata_conn(type)         = fl_sata_conns(type)[0];
-function fl_sata_engine(type,value) = fl_property(type,"sata/engine",value);
 
 /****************************************************************************
  * PRIVATE helpers
@@ -62,7 +63,7 @@ FL_SATA_DATAPLUG  = let(
   fl_sata_conns(value=[conn_Plug(cid,+FL_X,+FL_Y,[0,0,0.5])]),
   fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  fl_sata_engine(value="data plug"),
+  fl_sata_type(value="data plug"),
   ["points",      dio_polyCoords(dio_pts,size)],
   ["contacts",      7],
   ["contact step",  1.27],
@@ -99,7 +100,7 @@ FL_SATA_POWERPLUG = let(
   fl_sata_conns(value=[conn_Plug(cid,+FL_X,+FL_Y,[size.x,0,0.5])]),
   fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  fl_sata_engine(value="power plug"),
+  fl_sata_type(value="power plug"),
   ["points",        dio_polyCoords(dio_pts,size)],
   ["contacts",      15],
   ["contact step",  1.27],
@@ -138,7 +139,7 @@ FL_SATA_POWERDATAPLUG  = let(
   fl_sata_conns(value=[pc,dc]),
   fl_bb_corners(value=[-size/2,+size/2]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  fl_sata_engine(value="power data plug"),
+  fl_sata_type(value="power data plug"),
   ["power plug",  power],
   ["data plug",   data],
   __fl_sata_Mshell__(value=Mshell),
@@ -177,7 +178,7 @@ FL_SATA_POWERDATASOCKET = let(
   fl_sata_conns(value=[pc,dc]),
   fl_bb_corners(value=[-blk_sz/2,+blk_sz/2]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  fl_sata_engine(value="power data socket"),
+  fl_sata_type(value="power data socket"),
   ["points",      dio_polyCoords(dio_pts,[side_blk_sz.x,side_blk_sz.z,side_blk_sz.y])],
   ["block size",      blk_sz],
   ["side block size", side_blk_sz],

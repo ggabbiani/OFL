@@ -58,6 +58,8 @@ module fl_sata_dataPlug(
   D           = direction ? fl_direction(proto=type,direction=direction)  : I;
   M           = octant    ? fl_octant(type,octant=octant)                 : I;
 
+  fl_trace("type",type);
+
   module do_footprint() {
     linear_extrude(size.z) polygon(points);
   }
@@ -119,6 +121,7 @@ module fl_sata_powerPlug(
   D           = direction ? fl_direction(type,direction=direction)  : I;
   M           = octant    ? fl_octant(type,octant=octant)           : I;
 
+  fl_trace("type",type);
   fl_trace("connection",connection);
   fl_trace("bounding box",bbox);
 
@@ -188,6 +191,8 @@ module fl_sata_powerDataPlug(
   Ms          = __fl_sata_Mshell__(type);
   D           = direction ? fl_direction(type,direction=direction)  : I;
   M           = octant    ? fl_octant(type,octant=octant)           : I;
+
+  fl_trace("type",type);
 
   // power data shell
   module shell() {
@@ -262,6 +267,8 @@ module sata_PowerDataSocket(
   D           = direction ? fl_direction(type,direction=direction)  : I;
   M           = octant    ? fl_octant(type,octant=octant)           : I;
 
+  fl_trace("type",type);
+
   module side_plug() {
     multmatrix(Mpoly)
       linear_extrude(sideblk_sz.y)
@@ -330,8 +337,8 @@ module fl_sata(
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
-  if      (fl_sata_engine(type)=="data plug")         fl_sata_dataPlug(verbs,type,connectors,direction,octant);
-  else if (fl_sata_engine(type)=="power plug")        fl_sata_powerPlug(verbs,type,connectors,direction,octant);
-  else if (fl_sata_engine(type)=="power data plug")   fl_sata_powerDataPlug(verbs,type,connectors,direction,octant);
-  else if (fl_sata_engine(type)=="power data socket") fl_sata_powerDataSocket(verbs,type,connectors,direction,octant);
+  if      (fl_sata_type(type)=="data plug")         fl_sata_dataPlug(verbs,type,connectors,direction,octant);
+  else if (fl_sata_type(type)=="power plug")        fl_sata_powerPlug(verbs,type,connectors,direction,octant);
+  else if (fl_sata_type(type)=="power data plug")   fl_sata_powerDataPlug(verbs,type,connectors,direction,octant);
+  else if (fl_sata_type(type)=="power data socket") fl_sata_powerDataSocket(verbs,type,connectors,direction,octant);
 }

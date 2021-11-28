@@ -30,7 +30,7 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+TRACE       = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -81,14 +81,18 @@ verbs=[
 
 if (PART=="data plug") {
   fl_sata(verbs,FL_SATA_DATAPLUG,connectors=CONNECTORS,octant=octant,direction=direction,
+    $FL_TRACE=TRACE,
     $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);
 } else if (PART=="power plug") {
   fl_sata_powerPlug(verbs,FL_SATA_POWERPLUG,connectors=CONNECTORS,octant=octant,direction=direction,
+    $FL_TRACE=TRACE,
     $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);
 } else if (PART=="power data plug") {
     fl_sata_powerDataPlug(verbs,FL_SATA_POWERDATAPLUG,shell=SW_SHELL,connectors=CONNECTORS,octant=octant,direction=direction,
+    $FL_TRACE=TRACE,
     $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);
 } else {
   sata_PowerDataSocket(verbs,FL_SATA_POWERDATASOCKET,connectors=CONNECTORS,octant=octant,direction=direction,
+    $FL_TRACE=TRACE,
     $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);
 }
