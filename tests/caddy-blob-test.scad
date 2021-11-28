@@ -186,16 +186,16 @@ blob  = [
   fl_bb_corners(value=BLOB_BBOX)
 ];
 // thickness list built from customizer values
-T     = [["-X",T_x[0]],["+X",T_x[1]],["-Y",T_y[0]],["+Y",T_y[1]],["-Z",T_z[0]],["+Z",T_z[1]]];
+T     = [T_x,T_y,T_z];
 // 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
 T_NIL = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 
 fl_caddy(verbs,blob,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant,
-  $FL_TRACE=TRACE,  
+  $FL_TRACE=TRACE,
   $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD)
   // the children is called with the following special variables set:
   // $verbs ⇒ list of verbs to be executed
   // $thick ⇒ thickness list for DRILL and CUTOUT
   blob($verbs,blob,thick=$thick+T_NIL,
       $FL_TRACE=TRACE,
-      $FL_ADD=ASSEMBLY,$FL_DRILL=DRILL,$FL_CUTOUT="DEBUG");
+      $FL_DRILL="ON",$FL_CUTOUT="ON");

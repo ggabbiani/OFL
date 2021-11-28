@@ -24,29 +24,29 @@ include <foundation/incs.scad>
 include <vitamins/incs.scad>
 
 /*
- * Builds a caddy around the passed object «type».
- * Any eventually passed children will be used during FL_ADD (for drilling) and FL_ASSEMBLY.
+ * Builds a caddy around the passed object «type». 
+ * Even if not mandatory - when passed - children will be used during 
+ * FL_ADD (for drilling), FL_ASSEMBLY (for rendering) and FL_LAYOUT.
  *
- * Children context:
- * $verbs - list of verbs to be executed
+ * Children must implement the following verbs:
+ * FL_DRILL,FL_CUTOUT (used during FL_ADD)
+ * FL_ADD,FL_ASSEMBLY (used during FL_ASSEMBLY)
+ *
+ * Context passed to children:
+ :
  * $thick - see «thick» parameter
- *
- * Triggered verbs on children:
- * FL_DRILL,FL_CUTOUT (during FL_ADD)
- * FL_ADD,FL_ASSEMBLY (during FL_ASSEMBLY)
+ * $verbs - list of verbs to be executed
  *
  * TODO: FL_DRILL implementation
  */
 module fl_caddy(
   verbs       = FL_ADD,     // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
   type,
-  thick,                    // walls thickness in the free form:
-                            // [["+X",«+X thick value»],["-X",«-X thick value»],["+Y",«+Y thick value»],["-Y",«-Y thick value»],["+Z",«+Z thick value»],["-Z",«-Z thick value»]]. 
+  thick,                    // walls thickness in the fixed form: [[-x,+x],[-y,+y],[-z+z]]
                             // Passed as scalar means same thickness for all the six walls:
-                            // [["+X",«thick»],["-X",«thick»],["+Y",«thick»],["-Y",«thick»],["+X",«thick»],["-X",«thick»]]. 
-                            // NOTE: any missing semi-axis thickness is set to 0
+                            // [[«thick»,«thick»],[«thick»,«thick»],[«thick»«thick»]]. 
                             // examples:
-                            // thick=[["+X",2.5],["-Z",5]]
+                            // thick=[[0,2.5],[0,0],[5,0]]
                             // thick=2.5
   faces,                    // faces defined by their othonormal axis
   tolerance   = fl_JNgauge, // SCALAR added to each internal payload dimension.
@@ -64,13 +64,11 @@ module fl_caddy(
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  // delta da sommare agli spessori inviati ai figli
+  // delta to add to children thicknesses
   t_deltas  = let(d=(tolerance+fillet)) [[d,d],[d,d],[d,d]];
-  // spessore SENZA tolleranza e filetto
-  thick     = is_num(thick) 
-            ? [[thick,thick],[thick,thick],[thick,thick]] 
-            : [[fl_get(thick,"-X",0),fl_get(thick,"+X",0)],[fl_get(thick,"-Y",0),fl_get(thick,"+Y",0)],[fl_get(thick,"-Z",0),fl_get(thick,"+Z",0)]];
-  // payload CON tolleranza e filetto
+  // thickness without tolerance and fillet
+  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
+  // payload with tolerance and fillet
   pload     = let(
                 d     = tolerance+fillet,
                 pload = fl_bb_corners(type),
@@ -129,7 +127,7 @@ module fl_caddy(
       }
       let(
         $verbs  = [FL_DRILL,FL_CUTOUT],
-        // ai figli inviamo lo spessore delle pareti + tolleranza e filetto
+        // children thickness must include also tolerance and fillet
         $thick  = thick+t_deltas
       ) children();
     }
