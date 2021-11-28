@@ -23,11 +23,31 @@ include <foundation/unsafe_defs.scad>
 include <foundation/incs.scad>
 include <vitamins/incs.scad>
 
-// TODO: FL_DRILL implementation
+/*
+ * Builds a caddy around the passed object «type».
+ * Any eventually passed children will be used during FL_ADD (for drilling) and FL_ASSEMBLY.
+ *
+ * Children context:
+ * $verbs - list of verbs to be executed
+ * $thick - see «thick» parameter
+ *
+ * Triggered verbs on children:
+ * FL_DRILL,FL_CUTOUT (during FL_ADD)
+ * FL_ADD,FL_ASSEMBLY (during FL_ASSEMBLY)
+ *
+ * TODO: FL_DRILL implementation
+ */
 module fl_caddy(
-  verbs       = FL_ADD,     // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,     // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
   type,
-  thick,                    // walls thickness in the form [[-X,+X],[-Y,+Y],[-Z,+Z]]. Scalar means same value for each semi-axis.
+  thick,                    // walls thickness in the free form:
+                            // [["+X",«+X thick value»],["-X",«-X thick value»],["+Y",«+Y thick value»],["-Y",«-Y thick value»],["+Z",«+Z thick value»],["-Z",«-Z thick value»]]. 
+                            // Passed as scalar means same thickness for all the six walls:
+                            // [["+X",«thick»],["-X",«thick»],["+Y",«thick»],["-Y",«thick»],["+X",«thick»],["-X",«thick»]]. 
+                            // NOTE: any missing semi-axis thickness is set to 0
+                            // examples:
+                            // thick=[["+X",2.5],["-Z",5]]
+                            // thick=2.5
   faces,                    // faces defined by their othonormal axis
   tolerance   = fl_JNgauge, // SCALAR added to each internal payload dimension.
   fillet      = 0,          // fillet radius, when > 0 a fillet is inserted where needed
@@ -44,18 +64,34 @@ module fl_caddy(
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
-  pload     = fl_bb_corners(type);
+  // delta da sommare agli spessori inviati ai figli
+  t_deltas  = let(d=(tolerance+fillet)) [[d,d],[d,d],[d,d]];
+  // spessore SENZA tolleranza e filetto
+  thick     = is_num(thick) 
+            ? [[thick,thick],[thick,thick],[thick,thick]] 
+            : [[fl_get(thick,"-X",0),fl_get(thick,"+X",0)],[fl_get(thick,"-Y",0),fl_get(thick,"+Y",0)],[fl_get(thick,"-Z",0),fl_get(thick,"+Z",0)]];
+  // payload CON tolleranza e filetto
+  pload     = let(
+                d     = tolerance+fillet,
+                pload = fl_bb_corners(type),
+                delta = [
+                    [isSet(-X,faces)?d:0, isSet(-Y,faces)?d:0, isSet(-Z,faces)?tolerance:0],
+                    [isSet(+X,faces)?d:0, isSet(+Y,faces)?d:0, isSet(+Z,faces)?tolerance:0]
+                  ]) [pload[0]-delta[0],pload[1]+delta[1]];
+  // bounding box = payload + spessori
   bbox      = let(
                 delta = [
-                    [isSet(-FL_X,faces)?thick.x[0]+tolerance+fillet:0, isSet(-FL_Y,faces)?thick.y[0]+tolerance+fillet:0, isSet(-FL_Z,faces)?thick.z[0]+tolerance:0],
-                    [isSet(+FL_X,faces)?thick.x[1]+tolerance+fillet:0, isSet(+FL_Y,faces)?thick.y[1]+tolerance+fillet:0, isSet(+FL_Z,faces)?thick.z[1]+tolerance:0]
+                    [isSet(-X,faces)?thick.x[0]:0, isSet(-Y,faces)?thick.y[0]:0, isSet(-Z,faces)?thick.z[0]:0],
+                    [isSet(+X,faces)?thick.x[1]:0, isSet(+Y,faces)?thick.y[1]:0, isSet(+Z,faces)?thick.z[1]:0]
                   ]) [pload[0]-delta[0],pload[1]+delta[1]];
   size      = bbox[1]-bbox[0];
-  D         = direction ? fl_direction(default=[+FL_Z,+FL_X],direction=direction)  : FL_I;
-  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
+  D         = direction ? fl_direction(default=[+Z,+X],direction=direction) : I;
+  M         = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+
+  fl_trace("thick",thick);
 
   module do_add() {
+    fl_trace("faces",faces);
     difference() {
       translate(bbox[0]) {
         for(f=faces) 
@@ -91,13 +127,25 @@ module fl_caddy(
             translate([0,size.y-thick.y[1],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,+180]);
         }
       }
-      let($verb=[FL_DRILL,FL_CUTOUT]) children();
+      let(
+        $verbs  = [FL_DRILL,FL_CUTOUT],
+        // ai figli inviamo lo spessore delle pareti + tolleranza e filetto
+        $thick  = thick+t_deltas
+      ) children();
     }
   }
   module do_bbox() {}
-  module do_assembly() {}
-  module do_layout() {}
   module do_drill() {}
+
+  module do_assembly() {
+    // enrich children context with $verbs
+    let($verbs=[FL_ADD,FL_ASSEMBLY]) do_layout() children();
+  }
+
+  module do_layout() {
+    // enrich children context with wall's thickness
+    let($thick=thick+t_deltas) children();
+  }
 
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
@@ -105,24 +153,31 @@ module fl_caddy(
         fl_modifier($FL_ADD) 
           fl_color($FL_FILAMENT)
             do_add() children();
+
       } else if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_bb_add(corners=bbox);
+
       } else if ($verb==FL_LAYOUT) {
         fl_modifier($FL_LAYOUT) do_layout()
           children();
+
       } else if ($verb==FL_PAYLOAD) {
         fl_modifier($FL_PAYLOAD) fl_bb_add(pload);
+
       } else if ($verb==FL_FOOTPRINT) {
         fl_modifier($FL_FOOTPRINT);
+
       } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) let($verb=[FL_ADD,FL_ASSEMBLY]) children();
+        fl_modifier($FL_ASSEMBLY) do_assembly() children();
+
       } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL);
+        fl_modifier($FL_DRILL) echo(str("***WARN***: ",$verb," not yet implemented"));
+
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }
     }
     if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+      fl_modifier($FL_AXES) fl_axes(size=1.1*size);
   }
 }

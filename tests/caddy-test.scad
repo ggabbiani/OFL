@@ -75,6 +75,7 @@ T_x   = [2.5,2.5];  // [0:0.1:10]
 T_y   = [2.5,2.5];  // [0:0.1:10]
 // wall thickness on Z semi-axes (-Z,+Z)
 T_z   = [2.5,2.5];  // [0:0.1:10]
+
 FACES = ["+X","-X","-Z"];
 
 // CUT OUT tolerance
@@ -105,15 +106,22 @@ verbs=[
   if (LAYOUT!="OFF")    FL_LAYOUT,
   if (PLOAD!="OFF")     FL_PAYLOAD,
 ];
-
+// list of normals to faces
 faces     = s2axes(FACES);
+// the carried item
 medium    = FL_PCB_RPI4;
-T         = [T_x,T_y,T_z];
-tolerance = [[TOLERANCE+FILLET_R+FL_NIL,TOLERANCE+FILLET_R+FL_NIL],[TOLERANCE+FILLET_R+FL_NIL,TOLERANCE+FILLET_R+FL_NIL],[TOLERANCE+FL_NIL,TOLERANCE+FL_NIL]];
+// thickness list built from customizer values
+T         = [["-X",T_x[0]],["+X",T_x[1]],["-Y",T_y[0]],["+Y",T_y[1]],["-Z",T_z[0]],["+Z",T_z[1]]];
+// 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
+T_NIL     = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 
 fl_trace("faces",faces);
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant,
+  $FL_TRACE=TRACE,  
   $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD)
-  fl_pcb($verb,medium,thick=T+tolerance,co_by_direction=faces,co_tolerance=CO_TOLERANCE,$FL_TRACE=TRACE);
+  // the children is called with the following special variables set:
+  // $verbs ⇒ list of verbs to be executed
+  // $thick ⇒ thickness list for DRILL and CUTOUT
+  fl_pcb($verbs,medium,thick=$thick+T_NIL,co_by_direction=faces,co_tolerance=CO_TOLERANCE,$FL_TRACE=TRACE);
