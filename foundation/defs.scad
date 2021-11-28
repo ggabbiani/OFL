@@ -199,9 +199,6 @@ function fl_property(type,key,value,default)  =
   ? fl_get(type,key,default)              // property getter
   : assert(default==undef)  [key,value];  // property constructor
 
-// returns [«key»,«value»] if value is defined, «key» otherwise
-// function fl_kv(key,value)   = assert(key!=undef) value!=undef ? [key,value] : key;
-
 //*****************************************************************************
 // General properties
 // when invoked by «type» parameter act as getters
@@ -214,11 +211,12 @@ function fl_material(type,value)    = fl_property(type,"material (actually a col
 function fl_nopSCADlib(type,value)  = fl_property(type,"Verbatim NopSCADlib definition",value);
 function fl_rotor(type,value)       = fl_property(type,"rotor",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
+// FIXME: is it really useful to store a size? Or should we calculate it from the bounding block?
 function fl_size(type,value)        = fl_property(type,"size",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 
 //*****************************************************************************
-// Derived property getters
+// Derived getters
 function fl_width(type)   = fl_size(type).x;
 function fl_height(type)  = fl_size(type).y;
 function fl_thick(type)   = fl_size(type).z;
