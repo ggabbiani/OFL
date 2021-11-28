@@ -44,6 +44,8 @@ module fl_pcb(
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(!(co_by_direction!=undef && co_by_label!=undef),"cutout filtering cannot be done by label and direction at the same time");
 
+  fl_trace("thick",thick);
+
   axes      = fl_list_has(verbs,FL_AXES);
   verbs     = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
