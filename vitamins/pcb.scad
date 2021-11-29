@@ -29,17 +29,14 @@ use     <ether.scad>
 use     <screw.scad>
 
 module fl_pcb(
-  verbs       = FL_ADD, // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT
+  verbs=FL_ADD,   // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT
   type,
-  dr_thick=0,           // SCALAR for FL_DRILL thickness along -Z semi-axis.
-  co_thick=0,           // FL_CUTOUT thickness in the form [[-X,+X],[-Y,+Y],[-Z,+Z]]. Scalar means same value on each semi-axis.
-  co_tolerance=0,       // FL_CUTOUT tolerance 
-  co_by_label,          // FL_CUTOUT component filter by label
-  co_by_direction,      // FL_CUTOUT component filter by direction (+X,+Y or +Z)
-  thick,                // shortcut for dr_thick and co_thick in the form [[-X,+X],[-Y,+Y],[-Z,+Z]]. 
-                        // When «thick» is set, «dr_thick» will inherit thick.z[0] (-Z semi-axis)
-  direction,            // desired direction [director,rotation], native direction when undef
-  octant                // when undef native positioning is used
+  co_tolerance=0, // FL_CUTOUT tolerance 
+  co_by_label,    // FL_CUTOUT component filter by label
+  co_by_direction,// FL_CUTOUT component filter by direction (+X,+Y or +Z)
+  thick,          // surface thickness for FL_DRILL and FL_CUTOUT in the form [[-X,+X],[-Y,+Y],[-Z,+Z]]. 
+  direction,      // desired direction [director,rotation], native direction when undef
+  octant          // when undef native positioning is used
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(!(co_by_direction!=undef && co_by_label!=undef),"cutout filtering cannot be done by label and direction at the same time");
@@ -58,13 +55,10 @@ module fl_pcb(
   holes     = fl_PCB_holes(type);
   screw     = fl_screw(type);
   screw_r   = screw_radius(screw);
-  thick     = is_num(thick) 
-            ? [[thick,thick],[thick,thick],[thick,thick]] 
+  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] 
             : assert(len(thick)==3 && len(thick.x)==2 && len(thick.y)==2 && len(thick.z)==2,thick) thick;
-  dr_thick  = thick!=undef 
-            ? thick.z[0]  // thickness along -Z
-            : assert(is_num(dr_thick)) dr_thick;
-  co_thick  = thick!=undef ? thick : is_num(co_thick) ? [[co_thick,co_thick],[co_thick,co_thick],[co_thick,co_thick]] : co_thick;
+  dr_thick  = thick.z[0]; // thickness along -Z
+  co_thick  = thick;
 
   module do_add() {
     fl_color("green") difference() {
@@ -215,6 +209,6 @@ module fl_pcb(
       }
     }
     if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size+Z(5));
+      fl_modifier($FL_AXES) fl_axes(size=size*1.2);
   }
 }
