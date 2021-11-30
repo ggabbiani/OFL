@@ -33,7 +33,7 @@ include <vitamins/incs.scad>
  * FL_ADD,FL_ASSEMBLY (used during FL_ASSEMBLY)
  *
  * Context passed to children:
- :
+ *
  * $thick - see «thick» parameter
  * $verbs - list of verbs to be executed
  *
@@ -57,6 +57,7 @@ module fl_caddy(
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(thick);
 
+  // TODO: make public somehow
   function isSet(semi_axis,faces) = let(
       rest  = len(faces)>1 ? [for(i=[1:len(faces)-1]) faces[i]] : []
     ) len(faces)==0 ? false : faces[0]==semi_axis ? true : isSet(semi_axis,rest);
