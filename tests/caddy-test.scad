@@ -86,6 +86,7 @@ TOLERANCE     = 0.15;
 FILLET_R      = 0;  // [0:0.1:5]
 
 /* [Hidden] */
+
 // converts a list of strings into a list of their represented axes
 // TODO: insert the function in OFL defs?
 function s2axes(slist) = 
