@@ -170,8 +170,9 @@ function fl_sata_powerDataCID()  = "sata/power-data connector footprint";
 module fl_sata_powerDataPlug(
   verbs       = FL_ADD,
   type,
-  connectors = false,
-  shell      = true,
+  connectors  =false,
+  shell       =true,    // FIXME: really useful?
+  tolerance   =0,       // tolerance used during FL_FOOTPRINT
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
@@ -192,13 +193,20 @@ module fl_sata_powerDataPlug(
   D           = direction ? fl_direction(type,direction=direction)  : I;
   M           = octant    ? fl_octant(type,octant=octant)           : I;
 
+  dio_int = [[0.06,0],[0.94,0],[0.94,0.38],[1,0.38],[1,0.86],[0.94,0.86],[0.94,1],[0.06,1],[0.06,0.86],[0,0.86],[0,0.38],[0.06,0.38],[0.06,0]];
+  dio_ext = [[0.02,0],[0.98,0],[1,0.18],[1,1],[0,1],[0,0.18],[0.02,0]];
+
   fl_trace("type",type);
+
+  module do_footprint() {
+    translate(-fl_Z(size.z/2))
+    fl_cutout(size.z,delta=tolerance)
+      linear_extrude(size.z) 
+        dio_polyCoords(points=dio_ext,size=[size.x,size.y],quadrant=FL_O);
+  }
 
   // power data shell
   module shell() {
-    dio_int = [[0.06,0],[0.94,0],[0.94,0.38],[1,0.38],[1,0.86],[0.94,0.86],[0.94,1],[0.06,1],[0.06,0.86],[0,0.86],[0,0.38],[0.06,0.38],[0.06,0]];
-    dio_ext = [[0.02,0],[0.98,0],[1,0.18],[1,1],[0,1],[0,0.18],[0.02,0]];
-
     translate(-fl_Z(size.z/2))
     fl_color("DarkSlateGray") linear_extrude(size.z)
       difference() {
@@ -220,10 +228,13 @@ module fl_sata_powerDataPlug(
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
         fl_modifier($FL_ADD) do_add();
+
       } else if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
+
       } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) fl_bb_add(bbox);
+        fl_modifier($FL_FOOTPRINT) do_footprint();
+
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }

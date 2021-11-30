@@ -42,6 +42,8 @@ ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
+CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -60,9 +62,12 @@ DIR_R       = 0;        // [0:360]
 
 /* [Sata] */
 PART            = "data plug";  // ["data plug", "power plug", "power data plug", "power data socket"]
+// TODO: see comment on sata.scad
 SW_SHELL        = true;
 CONTACTS        = true;
 CONNECTORS      = false;
+// tolerance duing FL_FOOTPRINT (fl_JNgauge=0.15)
+TOLERANCE       = 0.15;   // [0:0.05:2]
 
 /* [Hidden] */
 
@@ -82,17 +87,17 @@ verbs=[
 if (PART=="data plug") {
   fl_sata(verbs,FL_SATA_DATAPLUG,connectors=CONNECTORS,octant=octant,direction=direction,
     $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);
+    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_FOOTPRINT=FPRINT);
 } else if (PART=="power plug") {
   fl_sata_powerPlug(verbs,FL_SATA_POWERPLUG,connectors=CONNECTORS,octant=octant,direction=direction,
     $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);
+    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_FOOTPRINT=FPRINT);
 } else if (PART=="power data plug") {
-    fl_sata_powerDataPlug(verbs,FL_SATA_POWERDATAPLUG,shell=SW_SHELL,connectors=CONNECTORS,octant=octant,direction=direction,
+    fl_sata_powerDataPlug(verbs,FL_SATA_POWERDATAPLUG,tolerance=TOLERANCE,shell=SW_SHELL,connectors=CONNECTORS,octant=octant,direction=direction,
     $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);
+    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_FOOTPRINT=FPRINT);
 } else {
   sata_PowerDataSocket(verbs,FL_SATA_POWERDATASOCKET,connectors=CONNECTORS,octant=octant,direction=direction,
     $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_FOOTPRINT=FPRINT);
+    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_FOOTPRINT=FPRINT);
 }
