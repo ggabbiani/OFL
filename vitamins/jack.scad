@@ -29,9 +29,9 @@ use     <NopSCADlib/vitamins/pcb.scad>
 module fl_jack(
   verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   type,
-  co_thick,                // thickness for FL_CUTOUT
-  cut_tolerance=0,          // tolerance used during FL_CUTOUT
-  co_drift=0,              // translation applied to cutout
+  cut_thick,            // thickness for FL_CUTOUT
+  cut_tolerance=0,      // tolerance used during FL_CUTOUT
+  co_drift=0,           // translation applied to cutout
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
 ) {
@@ -54,10 +54,10 @@ module fl_jack(
       } else if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
       } else if ($verb==FL_CUTOUT) {
-        assert(co_thick!=undef);
+        assert(cut_thick!=undef);
         fl_modifier($FL_CUTOUT) 
           translate(+X(bbox[1].x-2.5+co_drift))
-            fl_cutout(len=co_thick,z=X,x=-Z,delta=cut_tolerance,trim=X(-size.x/2),cut=true)
+            fl_cutout(len=cut_thick,z=X,x=-Z,delta=cut_tolerance,trim=X(-size.x/2),cut=true)
               jack();
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));

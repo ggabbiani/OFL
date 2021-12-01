@@ -34,7 +34,7 @@ module fl_pcb(
   cut_tolerance=0,// FL_CUTOUT tolerance 
   cut_label,      // FL_CUTOUT component filter by label
   cut_direction,  // FL_CUTOUT component filter by direction (+X,+Y or +Z)
-  thick,          // surface thickness for FL_DRILL and FL_CUTOUT in the form [[-X,+X],[-Y,+Y],[-Z,+Z]]. 
+  thick,          // FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]]. 
   direction,      // desired direction [director,rotation], native direction when undef
   octant          // when undef native positioning is used
 ) {
@@ -58,7 +58,7 @@ module fl_pcb(
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] 
             : assert(len(thick)==3 && len(thick.x)==2 && len(thick.y)==2 && len(thick.z)==2,thick) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
-  co_thick  = thick;
+  cut_thick  = thick;
 
   module do_add() {
     fl_color("green") difference() {
@@ -163,22 +163,22 @@ module fl_pcb(
       direction = component[2];
       type      = component[3];
       director  = direction[0];
-      co_thick  = director==+X ? co_thick.x[1] : director==-X ? co_thick.x[0]
-                : director==+Y ? co_thick.y[1] : director==-Y ? co_thick.y[0]
-                : director==+Z ? co_thick.z[1] : co_thick.z[0];
+      cut_thick  = director==+X ? cut_thick.x[1] : director==-X ? cut_thick.x[0]
+                : director==+Y ? cut_thick.y[1] : director==-Y ? cut_thick.y[0]
+                : director==+Z ? cut_thick.z[1] : cut_thick.z[0];
       if (engine=="USB")
-        let(drift=drift(component)) fl_USB(FL_CUTOUT,type=type,co_thick=co_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
+        let(drift=drift(component)) fl_USB(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
       else if (engine=="HDMI")
-        let(drift=drift(component)) fl_hdmi(FL_CUTOUT,type=type,co_thick=co_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
+        let(drift=drift(component)) fl_hdmi(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
       else if (engine=="JACK")
         let(drift=0)
-          fl_jack(FL_CUTOUT,type=type,co_thick=co_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
+          fl_jack(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
       else if (engine==FL_ETHER_NS)
         let(drift=drift(component)) 
-          fl_ether(FL_CUTOUT,type=type,co_thick=co_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
+          fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
       else if (engine==FL_PHDR_NS) let(
-          thick = size.z-pcb_t+co_thick
-        ) fl_pinHeader(FL_CUTOUT,type=type,co_thick=thick,cut_tolerance=cut_tolerance,direction=direction);
+          thick = size.z-pcb_t+cut_thick
+        ) fl_pinHeader(FL_CUTOUT,type=type,cut_thick=thick,cut_tolerance=cut_tolerance,direction=direction);
       else
         assert(false,str("Unknown engine ",engine));
     }

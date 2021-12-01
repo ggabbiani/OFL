@@ -91,13 +91,13 @@ module __test__() {
   // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
   if (single)
     fl_jack(verbs,single,
-      direction=direction,octant=octant,co_thick=thick,cut_tolerance=tolerance,co_drift=drift,
+      direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,co_drift=drift,
       $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
     );
   else
     layout([for(socket=FL_JACK_DICT) fl_width(socket)], 10)
       fl_jack(verbs,FL_JACK_DICT[$i],
-        direction=direction,octant=octant,co_thick=thick,cut_tolerance=tolerance,co_drift=drift,
+        direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,co_drift=drift,
         $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
       );
 }
