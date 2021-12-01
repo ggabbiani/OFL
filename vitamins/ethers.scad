@@ -27,7 +27,6 @@ FL_ETHER_RJ45 = let(
 ) [
   fl_name(value="RJ45"),
   fl_bb_corners(value=bbox),
-  fl_size(value=bbox[1]-bbox[0]),
   fl_director(value=+FL_X),fl_rotor(value=-FL_Z),
 ];
 

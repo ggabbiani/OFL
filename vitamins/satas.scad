@@ -59,7 +59,6 @@ FL_SATA_DATAPLUG  = let(
   sz_short  = [0.84,        size.z-2*0.5,  0.1],
   sz_long   = [sz_short.x,  size.z-0.5,    0.1]
 ) [
-  fl_size(value=size),
   fl_sata_conns(value=[conn_Plug(cid,+FL_X,+FL_Y,[0,0,0.5])]),
   fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
@@ -96,7 +95,6 @@ FL_SATA_POWERPLUG = let(
   sz_short  = [0.84,        size.z-2*0.5,  0.1],
   sz_long   = [sz_short.x,  size.z-0.5,    0.1]
 ) [
-  fl_size(value=size),
   fl_sata_conns(value=[conn_Plug(cid,+FL_X,+FL_Y,[size.x,0,0.5])]),
   fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
@@ -135,7 +133,6 @@ FL_SATA_POWERDATAPLUG  = let(
   dc      = fl_conn_clone(fl_sata_conn(data),M=Mdata),
   pc      = fl_conn_clone(fl_sata_conn(power),M=Mpower)
 ) [
-  fl_size(value=size),
   fl_sata_conns(value=[pc,dc]),
   fl_bb_corners(value=[-size/2,+size/2]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
@@ -173,7 +170,6 @@ FL_SATA_POWERDATASOCKET = let(
   Mpower        = fl_T(fl_X((data_sz.x-power_sz.x)/2)) * fl_T([inter_d/2,power_sz.y/2,-power_sz.z/2]),
   pc            = conn_Socket(fl_sata_powerCID(),-FL_X,+FL_Y,Mpower * [0,0,power_sz.z,1])
 ) [
-  fl_size(value=size),
   fl_conn_id(value=cid),
   fl_sata_conns(value=[pc,dc]),
   fl_bb_corners(value=[-blk_sz/2,+blk_sz/2]),

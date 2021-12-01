@@ -91,7 +91,6 @@ function bitHolder(name,bit,cardinality,magnet) = let(
 ) [
     fl_name(value=str(name," bit-holder")),
     fl_bb_corners(value=bbox),
-    fl_size(value=bbox[1]-bbox[0]),
     ["h",           h],
     ["d",           d],
     ["bit",         bit],
@@ -143,7 +142,6 @@ module strip() {
       ["Bit holders",  bhs],
       ["Bit number",  len(bhs)],
       fl_bb_corners(value=bbox),
-      fl_size(value=size)
     ];
   // fl_trace("strip object",strip);
   

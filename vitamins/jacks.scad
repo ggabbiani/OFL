@@ -39,7 +39,6 @@ function fl_jack_new(utype) = let(
   // calculated bounding box corners
   bbox      = [[-l/2,-w/2,0],[+l/2+ch,+w/2,h]]
 ) [
-  fl_size(value=bbox[1]-bbox[0]),
   fl_bb_corners(value=bbox),
   fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
 ];

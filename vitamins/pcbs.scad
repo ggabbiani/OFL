@@ -49,7 +49,6 @@ FL_PCB_RPI4 = let(
 ) [
   fl_name(value="RPI4-MODBP-8GB"),
   fl_bb_corners(value=bbox),
-  fl_size(value=bbox[1]-bbox[0]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_PCB_thick(value=pcb_t),
   fl_PCB_holes(value=[ 

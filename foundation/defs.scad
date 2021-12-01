@@ -211,12 +211,11 @@ function fl_material(type,value)    = fl_property(type,"material (actually a col
 function fl_nopSCADlib(type,value)  = fl_property(type,"Verbatim NopSCADlib definition",value);
 function fl_rotor(type,value)       = fl_property(type,"rotor",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
-// FIXME: is it really useful to store a size? Or should we calculate it from the bounding block?
-function fl_size(type,value)        = fl_property(type,"size",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 
 //*****************************************************************************
 // Derived getters
+function fl_size(type)    = fl_bb_size(type);
 function fl_width(type)   = fl_size(type).x;
 function fl_height(type)  = fl_size(type).y;
 function fl_thick(type)   = fl_size(type).z;
@@ -232,7 +231,7 @@ function fl_bb_corners(type,value)  = let(key="bb/bounding corners")
   : fl_property(key=key,value=value);
 
 // computes size from the bounding corners.
-function fl_bb_size(type)       = let(c=fl_bb_corners(type)) c[1]-c[0];
+function fl_bb_size(type)       = assert(type) let(c=fl_bb_corners(type)) c[1]-c[0];
 
 // functions
 function fl_bb_new(

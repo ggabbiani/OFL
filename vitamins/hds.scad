@@ -48,7 +48,6 @@ HD_EVO860 = let(
     [+size.x/2, +size.y,+size.z ],  // positive corner
   ]),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  fl_size(value=size),
   ["offset",            [0,-size.y/2,-size.z/2]],
   ["corner radius",     3],
   fl_screw(value=M3_cs_cap_screw),

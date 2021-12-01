@@ -56,7 +56,6 @@ function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
     fl_mag_engine(value=engine),
     fl_director(value=+FL_Z), fl_rotor(value=+FL_X),
     if (engine=="cyl") fl_mag_d(value=d),
-    fl_size(value=bbox[1]-bbox[0]),
     fl_mag_cs(value=cs),
     if (cs!=undef) fl_mag_csH(value=csh),
     fl_material(value=grey(80)),

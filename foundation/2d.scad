@@ -204,44 +204,43 @@ function fl_intersection(
   assert(c2,line2)  // intersection outside segment 2
   [x1+t*(x2-x1),y1+t*(y2-y1)];
 
-// TODO: should be used also for circular sectors? 
 function fl_ellipticSector(e,angles) = 
-assert(is_list(e),str("e=",e))
-assert(is_list(angles),str("angles=",angles))
-let(
-  fa    = $fa,
-  fn    = $fn,
-  fs    = $fs,
-  O     = [0,0],
-  a     = e[0],
-  b     = e[1],
-  step  = 360 / __frags__(fl_ellipseP(e),$fa=fa,$fn=fn,$fs=fs),
-  angles  = __normalize__(angles),
-  t     = [fl_ellipseT(e,angles[0]),fl_ellipseT(e,angles[1])],
-  m     = floor(angles[0] / step) + 1,
-  n     = floor(angles[1] / step),
-  M     = floor(t[0]/step) + 1,
-  N     = floor(t[1]/step),
-  // FIRST AND LAST POINTS ARE CALCULATED IN POLAR FORM
-  first = let(
-      ray   = [O,fl_ellipseXY(e,angle=angles[0])],
-      edge  = [fl_ellipseXY(e,angle=(m-1)*step),fl_ellipseXY(e,angle=m*step)]
-    ) fl_intersection(ray,edge),
-  last  = let(
-      ray   = [O,fl_ellipseXY(e,angle=angles[1])],
-      edge  = [fl_ellipseXY(e,angle=n*step),fl_ellipseXY(e,angle=(n+1)*step)]
-    ) fl_intersection(ray,edge),
-  pts   = concat(
-    // origin «O» and point «first» included only if angular distance <360°
-    ((angles[1]-angles[0])<360) ? [O, first] : [],
-    // INFRA POINTS ARE CALCULATED IN PARAMETRIC «T» FORM
-    M > N ? [] : [
-      for(i = M; i <= N; i = i + 1)
-        fl_ellipseXY(e,t=step * i)
-    ],
-    angles[1]==step * n ? [] : [last]
-  )
-) pts;
+  assert(is_list(e),str("e=",e))
+  assert(is_list(angles),str("angles=",angles))
+  let(
+    fa    = $fa,
+    fn    = $fn,
+    fs    = $fs,
+    O     = [0,0],
+    a     = e[0],
+    b     = e[1],
+    step  = 360 / __frags__(fl_ellipseP(e),$fa=fa,$fn=fn,$fs=fs),
+    angles  = __normalize__(angles),
+    t     = [fl_ellipseT(e,angles[0]),fl_ellipseT(e,angles[1])],
+    m     = floor(angles[0] / step) + 1,
+    n     = floor(angles[1] / step),
+    M     = floor(t[0]/step) + 1,
+    N     = floor(t[1]/step),
+    // FIRST AND LAST POINTS ARE CALCULATED IN POLAR FORM
+    first = let(
+        ray   = [O,fl_ellipseXY(e,angle=angles[0])],
+        edge  = [fl_ellipseXY(e,angle=(m-1)*step),fl_ellipseXY(e,angle=m*step)]
+      ) fl_intersection(ray,edge),
+    last  = let(
+        ray   = [O,fl_ellipseXY(e,angle=angles[1])],
+        edge  = [fl_ellipseXY(e,angle=n*step),fl_ellipseXY(e,angle=(n+1)*step)]
+      ) fl_intersection(ray,edge),
+    pts   = concat(
+      // origin «O» and point «first» included only if angular distance <360°
+      ((angles[1]-angles[0])<360) ? [O, first] : [],
+      // INFRA POINTS ARE CALCULATED IN PARAMETRIC «T» FORM
+      M > N ? [] : [
+        for(i = M; i <= N; i = i + 1)
+          fl_ellipseXY(e,t=step * i)
+      ],
+      angles[1]==step * n ? [] : [last]
+    )
+  ) pts;
 
 module fl_ellipticSector(
   verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX,
