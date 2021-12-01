@@ -121,9 +121,6 @@ module blob(
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
-  dr_thick  = thick ? thick : dr_thick;
-  co_thick  = thick ? thick : co_thick;
-
   module do_add() {}
   module do_bbox() {}
   module do_assembly() {}
