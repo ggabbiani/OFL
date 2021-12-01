@@ -172,7 +172,6 @@ module fl_sata_powerDataPlug(
   type,
   connectors  =false,
   shell       =true,    // FIXME: really useful?
-  tolerance   =0,       // tolerance used during FL_FOOTPRINT
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
@@ -200,7 +199,7 @@ module fl_sata_powerDataPlug(
 
   module do_footprint() {
     translate(-fl_Z(size.z/2))
-    fl_cutout(size.z,delta=tolerance)
+    fl_cutout(size.z,delta=fl_JNgauge)
       linear_extrude(size.z) 
         dio_polyCoords(points=dio_ext,size=[size.x,size.y],quadrant=FL_O);
   }
