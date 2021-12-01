@@ -32,7 +32,7 @@ module fl_ether(
   verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   type,
   co_thick,             // thickness for FL_CUTOUT
-  co_tolerance=0,       // tolerance used during FL_CUTOUT
+  cut_tolerance=0,       // tolerance used during FL_CUTOUT
   co_drift=0,           // translation applied to cutout
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
@@ -52,7 +52,7 @@ module fl_ether(
     translate([co_thick,0,size.z/2])
     rotate(-90,Y)
     linear_extrude(co_thick)
-    offset(r=co_tolerance)
+    offset(r=cut_tolerance)
     fl_square(FL_ADD,size=[size.z,size.y]);
   }
 

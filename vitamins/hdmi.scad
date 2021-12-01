@@ -35,7 +35,7 @@ module fl_hdmi(
   verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   type,
   co_thick,                // thickness for FL_CUTOUT
-  co_tolerance=0,          // tolerance used during FL_CUTOUT
+  cut_tolerance=0,          // tolerance used during FL_CUTOUT
   co_drift=0,              // translation applied to cutout
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
@@ -63,7 +63,7 @@ module fl_hdmi(
         assert(co_thick!=undef);
         fl_modifier($FL_CUTOUT) 
         translate(X(0))
-          translate(X(size.x/2+co_drift)) fl_cutout(len=co_thick,z=X,x=-Z,delta=co_tolerance) hdmi(nop,false);
+          translate(X(size.x/2+co_drift)) fl_cutout(len=co_thick,z=X,x=-Z,delta=cut_tolerance) hdmi(nop,false);
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }

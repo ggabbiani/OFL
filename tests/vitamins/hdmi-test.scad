@@ -90,13 +90,13 @@ module __test__() {
   // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
   if (single)
     fl_hdmi(
-      verbs,single,direction=direction,octant=octant,co_thick=cutout,co_tolerance=tolerance,co_drift=drift,
+      verbs,single,direction=direction,octant=octant,co_thick=cutout,cut_tolerance=tolerance,co_drift=drift,
       $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
     );
   else
     layout([for(socket=FL_HDMI_DICT) fl_width(socket)], 10)
       fl_hdmi(
-        verbs,FL_HDMI_DICT[$i],direction=direction,octant=octant,co_thick=cutout,co_tolerance=tolerance,co_drift=drift,
+        verbs,FL_HDMI_DICT[$i],direction=direction,octant=octant,co_thick=cutout,cut_tolerance=tolerance,co_drift=drift,
         $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
       );
 }

@@ -39,7 +39,7 @@ module fl_pinHeader(
   right_angle = false,
   color,
   co_thick,             // thickness for FL_CUTOUT
-  co_tolerance=0,       // tolerance used during FL_CUTOUT
+  cut_tolerance=0,       // tolerance used during FL_CUTOUT
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
@@ -84,7 +84,7 @@ module fl_pinHeader(
       } else if ($verb==FL_CUTOUT) {
         assert(co_thick!=undef);
         fl_modifier($FL_CUTOUT) 
-          fl_cutout(len=co_thick,delta=co_tolerance)
+          fl_cutout(len=co_thick,delta=cut_tolerance)
             do_add();
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
