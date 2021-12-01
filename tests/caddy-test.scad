@@ -81,7 +81,7 @@ T_z   = [2.5,2.5];  // [0:0.1:10]
 FACES = ["+X","-X","-Z"];
 
 // CUT OUT tolerance
-CO_TOLERANCE  = 0.5;
+CUT_TOLERANCE = 0.5;
 // Internal tolerance (fl_JNgauge=0.15mm)
 TOLERANCE     = 0.15;
 // fillet radius
@@ -127,7 +127,7 @@ fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,di
   // the children is called with the following special variables set:
   // $verbs ⇒ list of verbs to be executed
   // $thick ⇒ thickness list for DRILL and CUTOUT
-  if (medium==FL_PCB_RPI4) fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,co_tolerance=CO_TOLERANCE,$FL_TRACE=TRACE);
-  else                     fl_hd ($verbs,medium,thick=$thick+T_NIL,lay_by_direction=faces,tolerance=TOLERANCE,$FL_TRACE=TRACE);
+  if (medium==FL_PCB_RPI4) fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE,$FL_TRACE=TRACE);
+  else                     fl_hd ($verbs,medium,thick=$thick+T_NIL,lay_direction=faces,tolerance=TOLERANCE,$FL_TRACE=TRACE);
       // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
       // fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);
