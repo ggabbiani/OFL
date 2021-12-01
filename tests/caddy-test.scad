@@ -69,6 +69,8 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 DIR_R       = 0;        // [0:360]
 
 /* [Caddy] */
+// the media to be contained
+MEDIUM  = "Raspberry PI4";  // [Raspberry PI4,Hard Disk]
 // wall thickness on X semi-axes (-X,+X)
 T_x   = [2.5,2.5];  // [0:0.1:10]
 // wall thickness on Y semi-axes (-Y,+Y)
@@ -110,7 +112,7 @@ verbs=[
 // list of normals to faces
 faces     = s2axes(FACES);
 // the carried item
-medium    = FL_PCB_RPI4;
+medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : HD_EVO860;
 // thickness list built from customizer values
 T         = [T_x,T_y,T_z];
 // 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
@@ -125,4 +127,7 @@ fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,di
   // the children is called with the following special variables set:
   // $verbs ⇒ list of verbs to be executed
   // $thick ⇒ thickness list for DRILL and CUTOUT
-  fl_pcb($verbs,medium,thick=$thick+T_NIL,co_by_direction=faces,co_tolerance=CO_TOLERANCE,$FL_TRACE=TRACE);
+  if (medium==FL_PCB_RPI4) fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,co_tolerance=CO_TOLERANCE,$FL_TRACE=TRACE);
+  else                     fl_hd ($verbs,medium,thick=$thick+T_NIL,lay_by_direction=faces,tolerance=TOLERANCE,$FL_TRACE=TRACE);
+      // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
+      // fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);
