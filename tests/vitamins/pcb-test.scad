@@ -107,7 +107,7 @@ else // TODO: replace with fl_layout
 
 module wrap(type) {
   fl_pcb(verbs,type,
-    direction=direction,octant=octant,thick=T,co_tolerance=TOLERANCE,co_by_label=co_label,co_by_direction=co_direction,
+    direction=direction,octant=octant,thick=T,co_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction,
     $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,
     $FL_TRACE=TRACE
   )

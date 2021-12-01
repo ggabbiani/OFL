@@ -32,14 +32,14 @@ module fl_pcb(
   verbs=FL_ADD,   // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT
   type,
   co_tolerance=0, // FL_CUTOUT tolerance 
-  co_by_label,    // FL_CUTOUT component filter by label
-  co_by_direction,// FL_CUTOUT component filter by direction (+X,+Y or +Z)
+  cut_label,      // FL_CUTOUT component filter by label
+  cut_direction,  // FL_CUTOUT component filter by direction (+X,+Y or +Z)
   thick,          // surface thickness for FL_DRILL and FL_CUTOUT in the form [[-X,+X],[-Y,+Y],[-Z,+Z]]. 
   direction,      // desired direction [director,rotation], native direction when undef
   octant          // when undef native positioning is used
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(!(co_by_direction!=undef && co_by_label!=undef),"cutout filtering cannot be done by label and direction at the same time");
+  assert(!(cut_direction!=undef && cut_label!=undef),"cutout filtering cannot be done by label and direction at the same time");
 
   fl_trace("thick",thick);
 
@@ -183,10 +183,10 @@ module fl_pcb(
         assert(false,str("Unknown engine ",engine));
     }
 
-    if (co_by_label) 
-      do_layout("components",co_by_label) trigger($component);
+    if (cut_label) 
+      do_layout("components",cut_label) trigger($component);
     else
-      do_layout("components",undef,co_by_direction) trigger($component);
+      do_layout("components",undef,cut_direction) trigger($component);
   }
 
   multmatrix(D) {
