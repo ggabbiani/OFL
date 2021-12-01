@@ -167,15 +167,15 @@ module fl_pcb(
                 : director==+Y ? cut_thick.y[1] : director==-Y ? cut_thick.y[0]
                 : director==+Z ? cut_thick.z[1] : cut_thick.z[0];
       if (engine=="USB")
-        let(drift=drift(component)) fl_USB(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
+        let(drift=drift(component)) fl_USB(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
       else if (engine=="HDMI")
-        let(drift=drift(component)) fl_hdmi(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
+        let(drift=drift(component)) fl_hdmi(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
       else if (engine=="JACK")
         let(drift=0)
-          fl_jack(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
+          fl_jack(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
       else if (engine==FL_ETHER_NS)
         let(drift=drift(component)) 
-          fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,co_drift=drift,direction=direction);
+          fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
       else if (engine==FL_PHDR_NS) let(
           thick = size.z-pcb_t+cut_thick
         ) fl_pinHeader(FL_CUTOUT,type=type,cut_thick=thick,cut_tolerance=cut_tolerance,direction=direction);

@@ -94,13 +94,13 @@ module __test__() {
   // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
   if (single)
     fl_USB(verbs,single,
-      direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,co_drift=drift,
+      direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift,
       $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
     );
   else
     layout([for(socket=FL_USB_DICT) fl_width(socket)], 10)
       fl_USB(verbs,FL_USB_DICT[$i],
-        direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,co_drift=drift,
+        direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift,
         $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
       );
 }

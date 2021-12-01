@@ -31,7 +31,7 @@ module fl_USB(
   type,
   cut_thick,            // thickness for FL_CUTOUT
   cut_tolerance=0,      // tolerance used during FL_CUTOUT
-  co_drift=0,           // translation applied to cutout
+  cut_drift=0,          // translation applied to cutout
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
 ) {
@@ -48,7 +48,7 @@ module fl_USB(
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
   utype = fl_USB_type(type);
 
-  fl_trace("cutout drift",co_drift);
+  fl_trace("cutout drift",cut_drift);
 
   module wrap() {
     if      (utype=="A")    usb_Ax1();
@@ -68,7 +68,7 @@ module fl_USB(
       } else if ($verb==FL_CUTOUT) {
         assert(cut_thick!=undef);
         fl_modifier($FL_CUTOUT) 
-          translate(+X(size.x/2+co_drift))
+          translate(+X(size.x/2+cut_drift))
             fl_cutout(len=cut_thick,z=X,x=Y,delta=cut_tolerance)
               wrap();
       } else {
