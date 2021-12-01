@@ -66,7 +66,11 @@ module fl_caddy(
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   // delta to add to children thicknesses
-  t_deltas  = let(d=(tolerance+fillet)) [[d,d],[d,d],[d,d]];
+  t_deltas  = let(d=(tolerance+fillet)) [
+    [isSet(-X,faces)?d:0,isSet(+X,faces)?d:0],
+    [isSet(-Y,faces)?d:0,isSet(+Y,faces)?d:0],
+    [isSet(-Z,faces)?tolerance:0,isSet(+Z,faces)?tolerance:0]
+  ];
   // thickness without tolerance and fillet
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
   // payload with tolerance and fillet
@@ -143,7 +147,9 @@ module fl_caddy(
 
   module do_layout() {
     // enrich children context with wall's thickness
-    let($thick=thick+t_deltas) children();
+    $thick  = thick+t_deltas;
+    fl_trace("$thick",$thick);
+    children();
   }
 
   multmatrix(D) {
