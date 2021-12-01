@@ -90,12 +90,12 @@ Rail_z   = [0,0];  // [0:0.1:10]
 
 /* [ Hard Disk ] */
 
-SHOW_CONNECTORS    = false;
+SHOW_CONNECTORS = false;
 
-// tolerance (fl_JNgauge=0.15mm)
-TOLERANCE     = 0.15;
+// FL_DRILL tolerance (fl_JNgauge=0.15mm)
+DRI_TOLERANCE   = 0.15;
 // faces to be used during children layout
-FACES     = ["-X","+X","-Z"];
+LAY_DIRECTION     = ["-X","+X","-Z"];
 
 /* [Hidden] */
 
@@ -128,7 +128,7 @@ verbs=[
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 
-// thickness list built from customizer values
+// thickness matrix built from customizer values
 T         = [T_x,T_y,T_z];
 // 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
 T_NIL     = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
@@ -139,11 +139,11 @@ hd_ctor   = fl_connectors(hd)[0];
 adp       = FL_SADP_ELUTENG;
 adp_ctor  = fl_connectors(adp)[0];
 
-faces     = s2axes(FACES);
-fl_trace("faces",faces);
+lay_dir     = s2axes(LAY_DIRECTION);
+fl_trace("lay_dir",lay_dir);
 
 fl_hd( verbs,hd,
-    tolerance=TOLERANCE,thick=T,faces=faces,connectors=SHOW_CONNECTORS,dr_rail=rail,direction=direction,octant=octant,
+    dri_tolerance=DRI_TOLERANCE,thick=T,lay_direction=lay_dir,add_connectors=SHOW_CONNECTORS,dri_rails=rail,direction=direction,octant=octant,
     $FL_TRACE=TRACE,
     $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT)
   // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);

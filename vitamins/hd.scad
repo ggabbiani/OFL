@@ -45,23 +45,24 @@ function hd_screw_len(type,t)   = assert(t!=undef) screw_longer_than(fl_get(type
 module fl_hd(
   verbs,
   type,
-  // surface thickness for FL_DRILL and FL_CUTOUT in the form [[-X,+X],[-Y,+Y],[-Z,+Z]].
+  // thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
   thick,          
-  // faces to be used during children layout
-  faces=[-X,+X,-Z], 
-  // tolerance for the holder part and FL_CUTOUT
-  tolerance   = fl_JNgauge, 
-  connectors = false,
-  // rail lens during FL_DRILL in the form [[-X,+X],[-Y,+Y],[-Z,+Z]].
-  dr_rail=[[0,0],[0,0],[0,0]],
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  // faces for children FL_LAYOUT
+  lay_direction=[-X,+X,-Z], 
+  // tolerance for FL_DRILL
+  dri_tolerance   = fl_JNgauge, 
+  // rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
+  dri_rails=[[0,0],[0,0],[0,0]],
+  // FL_ADD connectors
+  add_connectors = false,
+  // desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
   direction,        
   // when undef native positioning is used
   octant            
   ) {
   assert(verbs!=undef);
   assert(type!=undef);
-  assert(is_bool(connectors));
+  assert(is_bool(add_connectors));
 
   // TODO: make it public somehow
   function isSet(semi_axis,faces) =
@@ -90,12 +91,12 @@ module fl_hd(
     : thick.z[1];
 
   function railLen(axis) = 
-      axis==-X ? dr_rail.x[0]
-    : axis==+X ? dr_rail.x[1]
-    : axis==-Y ? dr_rail.y[0]
-    : axis==+Y ? dr_rail.x[1]
-    : axis==-Z ? dr_rail.z[0]
-    : dr_rail.z[1];
+      axis==-X ? dri_rails.x[0]
+    : axis==+X ? dri_rails.x[1]
+    : axis==-Y ? dri_rails.y[0]
+    : axis==+Y ? dri_rails.x[1]
+    : axis==-Z ? dri_rails.z[0]
+    : dri_rails.z[1];
 
   axes        = fl_list_has(verbs,FL_AXES);
   verbs       = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
@@ -124,8 +125,8 @@ module fl_hd(
       $direction  = [$director,0];
       $octant     = undef;
       $thick      = fl_axisThick($director,thick);
-      $length     = $thick+screw_hole+tolerance;
-      delta       = fl_width(type)/2+fl_axisThick($director,thick)+tolerance;
+      $length     = $thick+screw_hole+dri_tolerance;
+      delta       = fl_width(type)/2+fl_axisThick($director,thick)+dri_tolerance;
       // lower block
       translate([i*delta,block_lower.y,block_lower.z])
         children();
@@ -140,8 +141,8 @@ module fl_hd(
         $direction  = [$director,0];
         $octant     = undef;
         $thick      = fl_axisThick($director,thick);
-        $length     = $thick+screw_hole+tolerance;
-        delta       = -(fl_axisThick($director,thick)+tolerance);
+        $length     = $thick+screw_hole+dri_tolerance;
+        delta       = -(fl_axisThick($director,thick)+dri_tolerance);
         translate([i*block_lower.x,block_lower.y,delta])
           children();
         translate([i*block_upper.x,block_upper.y,delta])
@@ -157,11 +158,11 @@ module fl_hd(
           l = fl_axisThick($director,thick)+screw_hole
         ) fl_screw(FL_FOOTPRINT,screw,len=l,octant=$octant,direction=[$director,0]);
       }
-      multmatrix(Mpd) fl_sata_powerDataPlug(FL_FOOTPRINT,plug,tolerance=tolerance);
+      multmatrix(Mpd) fl_sata_powerDataPlug(FL_FOOTPRINT,plug);
     }
     multmatrix(Mpd) fl_sata_powerDataPlug(type=plug);
 
-    if (connectors)
+    if (add_connectors)
       for(c=conns) fl_conn_add(c,2);
   }
 
@@ -176,15 +177,15 @@ module fl_hd(
         fl_modifier($FL_ADD) do_add();
 
       } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_layout(faces)
+        fl_modifier($FL_ASSEMBLY) do_layout(lay_direction)
           fl_screw(type=screw,len=$length,direction=$direction);
 
       } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout(faces)
+        fl_modifier($FL_LAYOUT) do_layout(lay_direction)
           children();
 
       } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL) do_layout(faces)
+        fl_modifier($FL_DRILL) do_layout(lay_direction)
           fl_rail(railLen($direction[0])) 
             if ($children) children(); 
             else fl_screw(FL_FOOTPRINT,screw,len=$length,direction=$direction);
@@ -196,7 +197,7 @@ module fl_hd(
         fl_modifier($FL_FOOTPRINT) do_bbox();
 
       } else if ($verb==FL_CUTOUT) {
-        echo(str("**WARN**: unimplemented verb ",$verb));
+        // FL_CUTOUT is intentionally a no-op
 
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
