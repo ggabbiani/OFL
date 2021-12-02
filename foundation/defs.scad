@@ -21,8 +21,9 @@
 
 include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
+use     <string.scad>
 
-function fl_version() = [2,1,0];
+function fl_version() = [2,2,0];
 
 function fl_versionNumber() = let(
   version = fl_version()
