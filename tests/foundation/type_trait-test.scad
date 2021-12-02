@@ -48,12 +48,6 @@ assert(fl_tt_isKV(["key",1],f=function (value) is_string(value))==false);
 assert(fl_tt_isKV(["key",[1,2,3,4]],f=function (value) is_string(value))==false);
 assert(fl_tt_isKV(["key",[1,2,3,4]],f=function (value) is_list(value))==true);
 
-mixed_case="I WAS a string in MiXed case!";
-assert(fl_str_lower(mixed_case)=="i was a string in mixed case!");
-assert(fl_str_upper(mixed_case)=="I WAS A STRING IN MIXED CASE!");
-assert(fl_str_lower("+Z")=="+z");
-assert(fl_str_upper("+z")=="+Z");
-
 free_ko = [
 ];
 

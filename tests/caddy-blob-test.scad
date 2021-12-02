@@ -90,13 +90,6 @@ BLOB_BBOX  = [[0,0,0],[30,20,10]];
 
 /* [Hidden] */
 
-// converts a list of strings into a list of their represented axes
-// TODO: insert the function in OFL defs?
-function s2axes(slist) = 
-  [for(s=slist)
-    assert(s=="+X"||s=="-X"||s=="+Y"||s=="-Y"||s=="+Z"||s=="-Z",str("Invalid value '",s,"'"))
-    (s=="+X") ? +FL_X : (s=="-X") ? -FL_X : (s=="+Y") ? +FL_Y : (s=="-Y") ? -FL_Y : (s=="+Z") ? +FL_Z : -FL_Z];
-
 module blob(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   type,
@@ -177,7 +170,7 @@ verbs=[
   if (PLOAD!="OFF")     FL_PAYLOAD,
 ];
 // list of normals to faces
-faces = s2axes(FACES);
+faces = fl_str_2axes(FACES);
 // the carried item
 blob  = [
   fl_bb_corners(value=BLOB_BBOX)

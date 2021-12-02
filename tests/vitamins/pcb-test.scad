@@ -123,7 +123,7 @@ module support(pcb) {
 
 // converts a list of strings into a list of their represented axes
 // TODO: insert the function in defs?
-function s2axes(slist) = 
+function fl_str_2axes(slist) = 
   [for(s=slist)
     assert(s=="+X"||s=="-X"||s=="+Y"||s=="-Y"||s=="+Z"||s=="-Z",str("Invalid value '",s,"'"))
     (s=="+X") ? +X : (s=="-X") ? -X : (s=="+Y") ? +Y : (s=="-Y") ? -Y : (s=="+Z") ? +Z : -Z];

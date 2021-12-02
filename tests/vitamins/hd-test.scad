@@ -99,20 +99,6 @@ LAY_DIRECTION     = ["-X","+X","-Z"];
 
 /* [Hidden] */
 
-// converts a list of strings into a list of their represented axes
-// TODO: make it public somehow
-function s2axes(slist) = 
-  [for(s=slist)
-    let(s=fl_str_lower(s))
-    assert(search(s[0],"+-")!=[] && search(s[1],"xyz")!=[],str("Invalid value '",s,"'")) 
-      (s=="+x") ? +FL_X 
-    : (s=="-x") ? -FL_X 
-    : (s=="+y") ? +FL_Y 
-    : (s=="-y") ? -FL_Y 
-    : (s=="+z") ? +FL_Z 
-    : -FL_Z];
-
-
 hd        = HD_EVO860;
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
@@ -139,7 +125,7 @@ hd_ctor   = fl_connectors(hd)[0];
 adp       = FL_SADP_ELUTENG;
 adp_ctor  = fl_connectors(adp)[0];
 
-lay_dir     = s2axes(LAY_DIRECTION);
+lay_dir     = fl_str_2axes(LAY_DIRECTION);
 fl_trace("lay_dir",lay_dir);
 
 fl_hd( verbs,hd,

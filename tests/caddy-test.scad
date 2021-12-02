@@ -89,13 +89,6 @@ FILLET_R      = 0;  // [0:0.1:5]
 
 /* [Hidden] */
 
-// converts a list of strings into a list of their represented axes
-// TODO: insert the function in OFL defs?
-function s2axes(slist) = 
-  [for(s=slist)
-    assert(s=="+X"||s=="-X"||s=="+Y"||s=="-Y"||s=="+Z"||s=="-Z",str("Invalid value '",s,"'"))
-    (s=="+X") ? +FL_X : (s=="-X") ? -FL_X : (s=="+Y") ? +FL_Y : (s=="-Y") ? -FL_Y : (s=="+Z") ? +FL_Z : -FL_Z];
-
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
@@ -110,7 +103,7 @@ verbs=[
   if (PLOAD!="OFF")     FL_PAYLOAD,
 ];
 // list of normals to faces
-faces     = s2axes(FACES);
+faces     = fl_str_2axes(FACES);
 // the carried item
 medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : HD_EVO860;
 // thickness list built from customizer values
@@ -128,6 +121,6 @@ fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,di
   // $verbs ⇒ list of verbs to be executed
   // $thick ⇒ thickness list for DRILL and CUTOUT
   if (medium==FL_PCB_RPI4) fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE,$FL_TRACE=TRACE);
-  else                     fl_hd ($verbs,medium,thick=$thick+T_NIL,lay_direction=faces,tolerance=TOLERANCE,$FL_TRACE=TRACE);
+  else                     fl_hd ($verbs,medium,thick=$thick+T_NIL,lay_direction=faces,dri_tolerance=TOLERANCE,$FL_TRACE=TRACE);
       // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
       // fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);
