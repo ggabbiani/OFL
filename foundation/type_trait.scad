@@ -19,25 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-function fl_str_upper(s) = let(len=len(s))
-  len==0 ? ""
-  : len==1 ? let(
-      c   = s[0],
-      cp  = ord(c),
-      uc = cp>=97 && cp<=122 ? str(chr(ord(c)-32)) : c
-    ) uc
-  : str(fl_str_upper(s[0]),fl_str_upper([for(i=[1:len-1]) s[i]]));
-
-function fl_str_lower(s) = let(
-    len=len(s)
-  )
-  len==0 ? ""
-  : len==1 ? let(
-      c   = s[0],
-      cp  = ord(c),
-      lc = cp>=65 && cp<=90 ? str(chr(ord(c)+32)) : c
-    ) lc
-  : str(fl_str_lower(s[0]),fl_str_lower([for(i=[1:len-1]) s[i]]));
+use <string.scad>
 
 function fl_tt_isList(list,f=function(value) true,size) = let(
     len   = len(list),
