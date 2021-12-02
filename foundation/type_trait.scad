@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-use <string.scad>
+use <base_string.scad>
 
 function fl_tt_isList(list,f=function(value) true,size) = let(
     len   = len(list),

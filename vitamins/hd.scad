@@ -65,23 +65,6 @@ module fl_hd(
   assert(is_bool(add_connectors));
 
   // TODO: make it public somehow
-  function isSet(semi_axis,faces) =
-    assert(faces!=undef)
-    let(
-      len   = len(faces),
-      rest  = len>1 ? [for(i=[1:len-1]) faces[i]] : []
-    ) len==0 ? false : faces[0]==semi_axis ? true : isSet(semi_axis,rest);
-
-  // TODO: make it public somehow
-  function fl_isParallel(a,b) = fl_versor(a)*fl_versor(b)==1;
-
-  // // TODO: make it public somehow
-  // function fl_isParallel(a,b) = abs(fl_versor(a)*fl_versor(b))==1;
-
-  // TODO: make it public somehow
-  function fl_isOrthogonal(a,b) = a*b==0;
-
-  // TODO: make it public somehow
   function fl_axisThick(axis,thick) = 
       axis==-X ? thick.x[0]
     : axis==+X ? thick.x[1]
@@ -117,8 +100,8 @@ module fl_hd(
     assert(faces!=undef);
     // horizontal layout
     h_indexes = [
-      if (isSet(-X,faces)) -1,
-      if (isSet(+X,faces)) +1,
+      if (fl_isSet(-X,faces)) -1,
+      if (fl_isSet(+X,faces)) +1,
     ];
     for(i=h_indexes) {
       $director   = i*X;
@@ -135,7 +118,7 @@ module fl_hd(
         children();
     }
     // vertical layout
-    if (isSet(-Z,faces))
+    if (fl_isSet(-Z,faces))
       for(i=[-1,+1]) {
         $director   = -Z;
         $direction  = [$director,0];

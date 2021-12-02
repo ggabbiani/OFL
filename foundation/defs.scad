@@ -21,7 +21,9 @@
 
 include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
-use     <string.scad>
+
+use     <base_geo.scad>
+use     <base_string.scad>
 
 function fl_version() = [2,2,0];
 
@@ -128,7 +130,7 @@ function fl_X(x) = [x,0,0];
 function fl_Y(y) = [0,y,0];
 function fl_Z(z) = [0,0,z];
 
-function fl_is_set(flag,list) = search([flag],list)!=[[]];
+function fl_isSet(flag,list) = search([flag],list)!=[[]];
 
 FL_ADD        = "FL_ADD adds shapes to scene.";
 FL_ASSEMBLY   = "FL_ASSEMBLY layout of predefined auxiliary shapes (like predefined screws).";
@@ -283,9 +285,9 @@ module fl_parse(verbs) {
   for($verb=is_list(verbs) ? verbs : [verbs]) {
     tokens = split($verb);
     fl_trace(tokens[0]);
-    if (fl_is_set("**DEPRECATED**",tokens)) {
+    if (fl_isSet("**DEPRECATED**",tokens)) {
       fl_trace(str("***WARN*** ", tokens[0], " is marked as DEPRECATED and will be removed in future version!"),always=true);
-    } else if (fl_is_set("**OBSOLETE**",tokens)) {
+    } else if (fl_isSet("**OBSOLETE**",tokens)) {
       assert(false,str(tokens[0], " is marked as OBSOLETE!"));
     }
     children();
@@ -383,8 +385,6 @@ module fl_vector(P,outward=true,endpoint="arrow") {
       }
   }
 }
-
-function fl_versor(v) = assert(is_list(v),str("v=",v)) v / norm(v);
 
 // Draws a fl_versor facing point P
 module fl_versor(P) {

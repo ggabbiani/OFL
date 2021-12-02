@@ -120,10 +120,3 @@ module support(pcb) {
     fl_color($FL_FILAMENT)
       fl_cylinder(r=screw_head_radius(screw),h=T,octant=-Z);
 }
-
-// converts a list of strings into a list of their represented axes
-// TODO: insert the function in defs?
-function fl_str_2axes(slist) = 
-  [for(s=slist)
-    assert(s=="+X"||s=="-X"||s=="+Y"||s=="-Y"||s=="+Z"||s=="-Z",str("Invalid value '",s,"'"))
-    (s=="+X") ? +X : (s=="-X") ? -X : (s=="+Y") ? +Y : (s=="-Y") ? -Y : (s=="+Z") ? +Z : -Z];

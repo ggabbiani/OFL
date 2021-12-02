@@ -1,9 +1,9 @@
 /*
- * Type traits test file.
+ * Base geometry test.
  *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
- * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
  * OFL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
+use     <../../foundation/base_geo.scad>
 
-use <../../foundation/string.scad>
+let(
+  vector  = [1.2,13,-4.5],
+  versor  = fl_versor(vector)
+) assert(norm(versor)==1);
 
-s = "I was A Mixed string!";
+let(
+  a = [1.3,-5.2,10],
+  b = +5 * a
+) assert(fl_isParallel(a,b));
 
-assert(fl_str_upper(s)=="I WAS A MIXED STRING!");
-assert(fl_str_lower(s)=="i was a mixed string!");
+let(
+  a = [1.3,-5.2,10],
+  b = -5 * a
+) assert(fl_isParallel(a,b,exact=false));
 
-let(r=fl_str_2axes([]))                   assert(r==[],r);
-let(r=fl_str_2axes(["+x","-Z"]))          assert(r==[[1,0,0],[0,0,-1]],r);
-let(r=fl_str_2axes(["+x","pippo","-Z"]))  assert(r==-1,r);
+let(
+  a = [1.3,-5.2,10],
+  b = [-5*a.z,-5*a.y,+2*a.z]
+) assert(fl_isParallel(a,b,exact=false)==false);
 
+let(
+  a = [1,0,0],
+  b = [2,0,0]
+) assert(fl_isParallel(a,b));

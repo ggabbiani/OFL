@@ -57,19 +57,14 @@ module fl_caddy(
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(thick);
 
-  // TODO: make public somehow
-  function isSet(semi_axis,faces) = let(
-      rest  = len(faces)>1 ? [for(i=[1:len(faces)-1]) faces[i]] : []
-    ) len(faces)==0 ? false : faces[0]==semi_axis ? true : isSet(semi_axis,rest);
-
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   // delta to add to children thicknesses
   t_deltas  = let(d=(tolerance+fillet)) [
-    [isSet(-X,faces)?d:0,isSet(+X,faces)?d:0],
-    [isSet(-Y,faces)?d:0,isSet(+Y,faces)?d:0],
-    [isSet(-Z,faces)?tolerance:0,isSet(+Z,faces)?tolerance:0]
+    [fl_isSet(-X,faces)?d:0,fl_isSet(+X,faces)?d:0],
+    [fl_isSet(-Y,faces)?d:0,fl_isSet(+Y,faces)?d:0],
+    [fl_isSet(-Z,faces)?tolerance:0,fl_isSet(+Z,faces)?tolerance:0]
   ];
   // thickness without tolerance and fillet
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
@@ -78,14 +73,14 @@ module fl_caddy(
                 d     = tolerance+fillet,
                 pload = fl_bb_corners(type),
                 delta = [
-                    [isSet(-X,faces)?d:0, isSet(-Y,faces)?d:0, isSet(-Z,faces)?tolerance:0],
-                    [isSet(+X,faces)?d:0, isSet(+Y,faces)?d:0, isSet(+Z,faces)?tolerance:0]
+                    [fl_isSet(-X,faces)?d:0, fl_isSet(-Y,faces)?d:0, fl_isSet(-Z,faces)?tolerance:0],
+                    [fl_isSet(+X,faces)?d:0, fl_isSet(+Y,faces)?d:0, fl_isSet(+Z,faces)?tolerance:0]
                   ]) [pload[0]-delta[0],pload[1]+delta[1]];
   // bounding box = payload + spessori
   bbox      = let(
                 delta = [
-                    [isSet(-X,faces)?thick.x[0]:0, isSet(-Y,faces)?thick.y[0]:0, isSet(-Z,faces)?thick.z[0]:0],
-                    [isSet(+X,faces)?thick.x[1]:0, isSet(+Y,faces)?thick.y[1]:0, isSet(+Z,faces)?thick.z[1]:0]
+                    [fl_isSet(-X,faces)?thick.x[0]:0, fl_isSet(-Y,faces)?thick.y[0]:0, fl_isSet(-Z,faces)?thick.z[0]:0],
+                    [fl_isSet(+X,faces)?thick.x[1]:0, fl_isSet(+Y,faces)?thick.y[1]:0, fl_isSet(+Z,faces)?thick.z[1]:0]
                   ]) [pload[0]-delta[0],pload[1]+delta[1]];
   size      = bbox[1]-bbox[0];
   D         = direction ? fl_direction(default=[+Z,+X],direction=direction) : I;
@@ -112,21 +107,21 @@ module fl_caddy(
             fl_cube(size=[size.x,size.y,thick.z[0]],octant=+FL_X+FL_Y+FL_Z);
           }
         if (fillet) {
-          if (isSet(+X,faces) && isSet(-Z,faces))
+          if (fl_isSet(+X,faces) && fl_isSet(-Z,faces))
             translate([size.x-thick.x[1],0,thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+Y,180]);
-          if (isSet(+X,faces) && isSet(+Z,faces))
+          if (fl_isSet(+X,faces) && fl_isSet(+Z,faces))
             translate([size.x-thick.x[1],0,size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+Y,90]);
-          if (isSet(+Z,faces) && isSet(-X,faces))
+          if (fl_isSet(+Z,faces) && fl_isSet(-X,faces))
             translate([thick.x[0],0,size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+Y,0]);
-          if (isSet(-X,faces) && isSet(-Z,faces))
+          if (fl_isSet(-X,faces) && fl_isSet(-Z,faces))
             translate([thick.x[0],0,thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+Y,-90]);
-          if (isSet(-Y,faces) && isSet(-Z,faces))
+          if (fl_isSet(-Y,faces) && fl_isSet(-Z,faces))
             translate([0,thick.y[0],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,+90]);
-          if (isSet(+Z,faces) && isSet(-Y,faces))
+          if (fl_isSet(+Z,faces) && fl_isSet(-Y,faces))
             translate([0,thick.y[0],size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,0]);
-          if (isSet(+Z,faces) && isSet(+Y,faces))
+          if (fl_isSet(+Z,faces) && fl_isSet(+Y,faces))
             translate([0,size.y-thick.y[1],size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,-90]);
-          if (isSet(-Z,faces) && isSet(+Y,faces))
+          if (fl_isSet(-Z,faces) && fl_isSet(+Y,faces))
             translate([0,size.y-thick.y[1],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,+180]);
         }
       }
