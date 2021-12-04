@@ -136,7 +136,7 @@ module fl_hd(
   module do_add() {
     difference() {
       fl_color("dimgray") difference() {
-        linear_extrude(height=size.z) fl_square(size=size,r=corner_r,quadrant=+Y);
+        linear_extrude(height=size.z) fl_square(size=size,corners=corner_r,quadrant=+Y);
         do_layout([-X,+X,-Z]) let(
           l = fl_axisThick($director,thick)+screw_hole
         ) fl_screw(FL_FOOTPRINT,screw,len=l,octant=$octant,direction=[$director,0]);

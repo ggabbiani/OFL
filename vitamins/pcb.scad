@@ -64,7 +64,7 @@ module fl_pcb(
     fl_color("green") difference() {
       translate(-Z(pcb_t))
         linear_extrude(pcb_t)
-          fl_square(r=3,size=[size.x,size.y],quadrant=+Y);
+          fl_square(corners=3,size=[size.x,size.y],quadrant=+Y);
       do_layout("holes")
         translate(-NIL*$director) 
           fl_cylinder(r=screw_r,h=size.z+2*NIL,octant=$director);
