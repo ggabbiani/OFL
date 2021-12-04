@@ -549,58 +549,70 @@ module fl_ipoly(
 
 function fl_square(
   size      = [1,1],
-  r,                    // overrides vertices with [r,r,r,r]
-  vertices  = [0,0,0,0] // List of four radiuses, one corner each.
-                        // Each zero means that the corresponding corner is squared.
-                        // Defaults to a 'perfect' rectangle with four squared corners.
-                        // Scalar value R for «vertices» means vertices=[R,R,R,R]
+  // List of four values (one for each quadrant) each in the following format:
+  //   [a,b]    ⇒ ellipse with semi-axis a and b
+  //   scalar r ⇒ circle of radius r (or ellipse with a==b==r)
+  // corners=R         ⇒ corners=[R,R,R,R] == corners=[[R,R],[R,R],[R,R],[R,R]] == rounded rectangle with FOUR CIRCULAR ARCS with radius=R
+  // corners=[a,b]     ⇒ corners=[[a,b],[a,b],[a,b],[a,b]] == rounded rectangle with FOUR ELLIPTICAL ARCS with e=[a,b]
+  // Default corners=0 ⇒ corners=[0,0,0,0] == corners=[[0,0],[0,0],[0,0],[0,0]]) == squared rectangle
+  // any combination is allowed i.e.
+  // corners=[r,[a,b],0,0] ⇒ corners=[[r,r],[a,b],[0,0],[0,0]] == rectangle with circular arc on quadrant I, elliptical arc on quadrant II and squared on quadrants III,IV
+  corners  = [0,0,0,0]
 ) = 
-  assert(is_list(vertices)||is_num(vertices))
+  assert(is_num(corners) || len(corners)==2 || len(corners)==4)
   let(
-    bad_r     = "corner radius cannot exceed half of the minimum size",
     bbox      = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]],
-    vertices  = is_num(r) ? [r,r,r,r] : is_num(vertices) ? [vertices,vertices,vertices,vertices] : vertices,
+    corners  = is_num(corners) ? let(e=[corners,corners]) [e,e,e,e]                                 // same circular arc x 4
+              : len(corners)==2 ? let(e=corners)            [e,e,e,e]                                 // same elliptical arc x 4
+              : /*  len(corners)==4  */                      [for(v=corners) is_num(v) ? [v,v] : v],  // 4 elliptical arcs
     points    = /* echo(str("r ", r)) */ let(
-      r = /* echo(str("vertices ", vertices)) */ r!=undef ? r : (vertices[0]==vertices[1] && vertices[1]==vertices[2] && vertices[2]==vertices[3]) ? vertices[0] : undef
-    ) (r!=undef && size.x==size.y &&  size.x==2*r) 
-      ? /* echo("***THE PERFECT CIRCLE!***") */ fl_circle(r)
-      : let(
+        e = /* echo(str("corners ", corners)) */ (corners[0]==corners[1] && corners[1]==corners[2] && corners[2]==corners[3]) ? corners[0] : undef
+      ) (e!=undef && size.x!=size.y && size.x==2*e.x && size.y==2*e.y) ? /* echo("***PERFECT CIRCLE | ELLIPSE***") */ fl_ellipse(e=e) 
+      : let(v1=corners[0],v2=corners[1]) assert(size.x-v1.x-v2.x>=0,"***BAD PARAMETER*** horiz semi-axes sum on corner 0 and 1 exceeds width!") // check corner[0],corner[1]
+        let(v1=corners[1],v2=corners[2]) assert(size.y-v1.y-v2.y>=0,"***BAD PARAMETER*** vert semi-axes sum on corner 1 and 2 exceeds height!") // check corner[1],corner[2]
+        let(v1=corners[2],v2=corners[3]) assert(size.x-v1.x-v2.x>=0,"***BAD PARAMETER*** horiz semi-axes sum on corner 2 and 3 exceeds width!") // check corner[2],corner[3]
+        let(v1=corners[3],v2=corners[0]) assert(size.y-v1.y-v2.y>=0,"***BAD PARAMETER*** vert semi-axes sum on corner 3 and 0 exceeds height!") // check corner[3],corner[0]
+        let(
+        // quadrant I
         q1  = let(
-          r = let(radius=vertices[0]) assert(radius<=min(size)/2,bad_r) radius,
+          e = corners[0],
           M = [
-            [1,0,bbox[1].x-r],
-            [0,1,bbox[1].y-r],
-            [0,0,1          ]
+            [1,0,bbox[1].x-e.x],
+            [0,1,bbox[1].y-e.y],
+            [0,0,1            ]
           ],
-          points  = r>0 ? [for(p=fl_sector(r,angles=[0,90])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [bbox[1]]
+          points  = (e.x>0 && e.y>0) ? [for(p=fl_ellipticSector(e,angles=[0,90])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [bbox[1]]
         ) /* echo(str("len(q1)=", len(points))) */ len(points)>1 ? [for(i=[1:len(points)-1]) points[i]] : points,  // we can safely remove the first point (origin)
+        // quadrant II
         q2  = let(
-          r = let(radius=vertices[1]) assert(radius<=min(size)/2,bad_r) radius,
+          e = corners[1],
           M = [
-            [1,0,bbox[0].x+r],
-            [0,1,bbox[1].y-r],
-            [0,0,1          ]
+            [1,0,bbox[0].x+e.x],
+            [0,1,bbox[1].y-e.y],
+            [0,0,1            ]
           ],
-          points  = r>0 ? [for(p=fl_sector(r,angles=[90,180])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [[bbox[0].x,bbox[1].y]]
-        ) /* echo(str("q2=", points)) */ len(points)>1 ? [for(i=[1:len(points)-1]) points[i]] : points,  // we can safely remove the first point (origin)
+          points  = (e.x>0 && e.y>0) ? [for(p=fl_ellipticSector(e,angles=[90,180])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [[bbox[0].x,bbox[1].y]]
+        ) /* echo(str("len(q2)=", len(points))) */ len(points)>1 ? [for(i=[1:len(points)-1]) points[i]] : points,  // we can safely remove the first point (origin)
+        // quadrant III
         q3  = let(
-          r = let(radius=vertices[2]) assert(radius<=min(size)/2,bad_r) radius,
+          e = corners[2],
           M = [
-            [1,0,bbox[0].x+r],
-            [0,1,bbox[0].y+r],
-            [0,0,1          ]
+            [1,0,bbox[0].x+e.x],
+            [0,1,bbox[0].y+e.y],
+            [0,0,1            ]
           ],
-          points  = r>0 ? [for(p=fl_sector(r,angles=[180,270])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [bbox[0]]
-        ) /* echo(str("q3=", points)) */ len(points)>1 ? [for(i=[1:len(points)-1]) points[i]] : points,  // we can safely remove the first point (origin)
+          points  = (e.x>0 && e.y>0) ? [for(p=fl_ellipticSector(e,angles=[180,270])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [bbox[0]]
+        ) /* echo(str("len(q3)=", len(points))) */ len(points)>1 ? [for(i=[1:len(points)-1]) points[i]] : points,  // we can safely remove the first point (origin)
+        // quadrant IV
         q4  = let(
-          r = let(radius=vertices[3]) assert(radius<=min(size)/2,bad_r) radius,
+          e = corners[3],
           M = [
-            [1,0,bbox[1].x-r],
-            [0,1,bbox[0].y+r],
-            [0,0,1          ]
+            [1,0,bbox[1].x-e.x],
+            [0,1,bbox[0].y+e.y],
+            [0,0,1            ]
           ],
-          points  = r>0 ? [for(p=fl_sector(r,angles=[270,360])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [[bbox[1].x,bbox[0].y]]
-        ) /* echo(str("q4=", points)) */ len(points)>1 ? [for(i=[1:len(points)-1]) points[i]] : points   // we can safely remove the first point (origin)
+          points  = (e.x>0 && e.y>0) ? [for(p=fl_ellipticSector(e,angles=[270,360])) let(point=M*[p.x,p.y,1]) [point.x,point.y]] : [[bbox[1].x,bbox[0].y]]
+        ) /* echo(str("len(q4)=", len(points))) */ len(points)>1 ? [for(i=[1:len(points)-1]) points[i]] : points  // we can safely remove the first point (origin)
       ) concat(
         let(q=q1,len=len(q)) len>1 ? [for(i=[1:len-1]) q[i]] : q,
         let(q=q2,len=len(q)) len>1 ? [for(i=[1:len-1]) q[i]] : q,
@@ -610,13 +622,12 @@ function fl_square(
   ) points;
 
 module fl_square(
-  verbs     = FL_ADD,
-  size      = [1,1],
-  r,                    // overrides vertices with [r,r,r,r]
-  vertices  = [0,0,0,0],// List of four radiuses, one for each quadrant's corners.
+  verbs   = FL_ADD,
+  size    = [1,1],
+  corners = [0,0,0,0],// List of four radiuses, one for each quadrant's corners.
                         // Each zero means that the corresponding corner is squared.
                         // Defaults to a 'perfect' rectangle with four squared corners.
-                        // Scalar value R for «vertices» means vertices=[R,R,R,R]
+                        // Scalar value R for «vertices» means corners=[R,R,R,R]
   quadrant
 ) {
   assert(is_list(verbs)||is_string(verbs));
@@ -624,12 +635,12 @@ module fl_square(
   axes      = fl_list_has(verbs,FL_AXES);
   verbs     = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  points  = fl_square(size,r,vertices);
+  points  = fl_square(size,corners);
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
   M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
 
   fl_trace("size",size);
-  fl_trace("vertices",vertices);
+  fl_trace("corners",corners);
   fl_trace("points",points);
   
   multmatrix(M) fl_parse(verbs) {

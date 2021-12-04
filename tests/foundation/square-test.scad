@@ -21,7 +21,7 @@
 include <../../foundation/unsafe_defs.scad>
 include <../../foundation/incs.scad>
 
-$fn         = 50;           // [3:100]
+$fn         = 5000;           // [3:10000]
 // Debug statements are turned on
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
@@ -50,16 +50,27 @@ QUADRANT      = [0,0];  // [-1:+1]
 /* [Square] */
 
 // overall size of the rectangle
-SIZE      = [2,1];
-// one radius for each vertex
-VERTICES  = [0,0,0,0];  // [0:0.1:10]
+SIZE      = [15,10];
+// Quadrant I
+CORNER_0  = [6,3];
+// Quadrant II
+CORNER_1  = [2,2];  
+// Quadrant III
+CORNER_2  = [3,6];  
+// Quadrant IV
+CORNER_3  = [0,0];  
 
 /* [Hidden] */
 
-$vpr  = [0, 0, 0];
-$vpt  = [0, 0, 0];
-$vpd  = 5.73;
-$vpf  = 22.5;
+$vpr = [0, 0, 0];
+$vpt = [0.371305, 0.380909, 0.268921];
+$vpd = 43.9335;
+$vpf = 22.5;
+
+// echo($vpr=$vpr);
+// echo($vpt=$vpt);
+// echo($vpd=$vpd);
+// echo($vpf=$vpf);
 
 quadrant  = PLACE_NATIVE  ? undef : QUADRANT;
 verbs=[
@@ -67,11 +78,12 @@ verbs=[
   if (AXES!="OFF")      FL_AXES,
   if (BBOX!="OFF")      FL_BBOX,
 ];
+corners  = [CORNER_0,CORNER_1,CORNER_2,CORNER_3];
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 fl_square(
   verbs,
-  size=SIZE,vertices=VERTICES,
+  size=SIZE,corners=corners,
   quadrant=quadrant,
   $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX
 );
