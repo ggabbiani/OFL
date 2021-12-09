@@ -99,7 +99,7 @@ module __test__() {
   else if (PRIMITIVE == "elliptic arc"      ) fl_ellipticArc(verbs,[A,B],angles,ARC_T,quadrant=quadrant);
   else if (PRIMITIVE == "elliptic sector"   ) fl_ellipticSector(verbs,[A,B],angles,quadrant=quadrant);
   else if (PRIMITIVE == "inscribed polygon" ) ipoly();
-  else if (PRIMITIVE == "square"            ) fl_square(verbs,r=RADIUS,size=SQUARE_SIZE,quadrant=quadrant,$FL_TRACE=TRACE);
+  else if (PRIMITIVE == "square"            ) fl_square(verbs,size=SQUARE_SIZE,quadrant=quadrant,$FL_TRACE=TRACE);
 }
 
 __test__();
