@@ -408,7 +408,16 @@ module fl_axes(size=1,reverse=false) {
 
 // debug switch on $FL_DEBUG
 module fl_color(color,alpha=1) {
-  module do() {color(color,alpha) children();}
+
+  function palette(name) =
+    name=="bronze"        ? "#CD7F32"
+    : name=="copper red"  ? "#CB6D51"
+    : name=="copper penny"? "#AD6F69"
+    : name=="pale copper" ? "#DA8A67"
+    : name;
+
+  module do() {color(palette(color),alpha) children();}
+
   if ($FL_DEBUG) #do() children();
   else do() children();
 }
