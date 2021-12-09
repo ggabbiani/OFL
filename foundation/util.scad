@@ -99,3 +99,144 @@ module fl_cutout(
               children();
   if (debug) #translate(trim) children();
 }
+
+/*
+ * 3d surface bending on rectangular cuboid faces.
+ *
+ * «faces» is used for mapping each surface sizings and calculating the total size of the sheet.
+ * A sheet object is then created with the overall sheet bounding box.
+ *
+ * Children context:
+ * 
+ * 
+ *                        N           M               
+ *                         +=========+                  ✛ ⇐ upper corner
+ *                         |         |                     (at sizing x,y)
+ *                         |    4    |                   
+ *                 D      C|         |F      H          L
+ *                 +=======+=========+=======+==========+
+ *                 |       |         |       |          |
+ *                 |  0    |    1    |   2   |     3    |
+ *                 |       |         |       |          |
+ *                 +=======+=========+=======+==========+
+ *                 A      B|         |E      G          I
+ *                         |    5    |
+ *                         |         |
+ * lower corner ⇒ ✛       +=========+
+ * (at origin)            O           P
+ * 
+ * $sheet - an object containing the calculated bounding corners of the sheet
+ * $A..$N - 3d values of the corresponding points in the above picture
+ * $size  - list of six surface sizings in the order shown in the picture
+ * 
+ */
+module fl_bend(
+  // key/value list of face sizing:
+  // key    = one of the eight cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
+  // value  = 3d size [x-size,y-size,z-size]
+  // Missing faces means 0-sized.
+  faces,
+  // when true children 3d surface is not bent
+  flat=false
+) {
+  fcs = [
+    fl_get(faces,-X,[0,0,0]),
+    fl_get(faces,+Z,[0,0,0]),
+    fl_get(faces,+X,[0,0,0]),
+    fl_get(faces,-Z,[0,0,0]),
+    fl_get(faces,+Y,[0,0,0]),
+    fl_get(faces,-Y,[0,0,0]),
+  ];
+  bbox  = bbox(fcs);
+  size  = bbox[1]-bbox[0];
+  type  = fl_bb_new(size=size);
+  fl_trace("fcs",fcs);
+  fl_trace("sheet metal bounding box:",bbox);
+
+  // calculates the bounding box containing the needed faces
+  function bbox(faces) = let(
+      width   = faces[0].x+faces[1].x+faces[2].x+faces[3].x,
+      height  = faces[5].y+faces[1].y+faces[4].y,
+      thick   = faces[0].z
+    ) [O,[width,height,thick]];
+
+  module always(face,translate) {
+    $sheet  = type;
+    $size   = fcs;
+    $A      = [0,               $size[5].y,       0];
+    $B      = [$size[0].x,      $A.y,             0];
+    $C      = [$B.x,            $B.y+$size[0].y,  0];
+    $D      = [$A.x,            $C.y,             0];
+    $E      = [$B.x+$size[1].x, $B.y,             0];
+    $F      = [$E.x,            $C.y,             0];
+    $G      = [$E.x+$size[2].x, $E.y,             0];
+    $H      = [$G.x,            $F.y,             0];
+    $I      = [$G.x+$size[3].x, $G.y,             0];
+    $L      = [$I.x,            $H.y,             0];
+    $M      = [$F.x,            $F.y+$size[4].y,  0];
+    $N      = [$C.x,            $M.y,             0];
+    $O      = [$B.x,            0,                0];
+    $P      = [$O.x+$size[5].x, 0,                0];
+    intersection() {
+      fl_place(octant=+X+Y-Z,bbox=bbox)
+        children();
+      translate(translate)
+        fl_cube(size=face,octant=+X+Y-Z);
+    } 
+  }
+
+  // -X
+  let(f=fcs[0]) if (f.x && f.y) 
+    if (flat) 
+      always(f,translate=[0,fcs[5].y]) children();
+    else
+      translate([0,0,-f.x]) rotate(-90,Y) always(f,translate=[0,fcs[5].y]) children(); 
+
+  // +Z
+  let(f=fcs[1]) if (f.x && f.y)
+    if (flat)
+      always(f,translate=[fcs[0].x,fcs[5].y]) children();
+    else 
+      translate([-fcs[0].x,0]) always(f,translate=[fcs[0].x,fcs[5].y]) children(); 
+
+  // +X
+  let(f=fcs[2]) if (f.x && f.y)
+    if (flat)
+      always(f,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
+    else 
+      translate([fcs[1].x,0])
+        rotate(90,Y)
+          translate([-fcs[0].x-fcs[1].x,0])
+            always(f,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
+
+  // -Z
+  let(f=fcs[3]) if (f.x && f.y) 
+    if (flat)
+      always(f,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
+    else 
+      translate([f.x,0,-max(fcs[0].x,fcs[2].x)])
+        rotate(180,Y)
+          translate([-fcs[0].x-fcs[1].x-fcs[2].x,0])
+            always(f,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
+
+  // +Y
+  let(f=fcs[4]) if (f.x && f.y)
+    if (flat)
+      always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
+    else 
+      translate([-fcs[0].x,fcs[5].y+fcs[1].y])
+        translate([0,f.z])
+          rotate(-90,X)
+            translate([0,-fcs[5].y-fcs[1].y])
+              always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
+
+  // -Y
+  let(f=fcs[5]) if (f.x && f.y)
+    if (flat)
+      always(f,translate=[fcs[0].x,0]) children();
+    else 
+      translate([-fcs[0].x,f.y,-f.y])
+        rotate(90,X)
+          always(f,translate=[fcs[0].x,0]) children();
+
+}
