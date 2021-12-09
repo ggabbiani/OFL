@@ -1,0 +1,35 @@
+{
+    "parameterSets": {
+        "hexes": {
+            "$FL_DEBUG": "false",
+            "$FL_FILAMENT": "DodgerBlue",
+            "$FL_RENDER": "false",
+            "$FL_SAFE": "false",
+            "$FL_TRACE": "false",
+            "$fn": "50",
+            "ADD": "ON",
+            "ASSEMBLY": "OFF",
+            "AXES": "OFF",
+            "BBOX": "OFF",
+            "BEND": "false",
+            "CUTOUT": "OFF",
+            "D": "4",
+            "DELTA": "1",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
+            "DRILL": "OFF",
+            "FPRINT": "OFF",
+            "GRID_EDGES": "6",
+            "LAYOUT": "OFF",
+            "MATERIAL": "silver",
+            "OCTANT": "[0, 0, 0]",
+            "PLACE_NATIVE": "true",
+            "PLOAD": "OFF",
+            "ROTATION": "90",
+            "SIZE": "[50, 50, 0.5]"
+        }
+    },
+    "parameterSets": "",
+    "fileFormatVersion": "1"
+}
