@@ -18,6 +18,7 @@
  */
 
 include <unsafe_defs.scad>
+use     <2d.scad>
 use     <3d.scad>
 use     <placement.scad>
 
@@ -40,10 +41,13 @@ function lay_group(axis,gap,types) = [fl_bb_corners(value=lay_bb_corners(axis,ga
  * add a bounding box shape
  */
 module fl_bb_add(
-  corners // bounding box corners
+  corners, // bounding box corners,
+  2d=false
 ) {
   assert(is_list(corners),corners)
-  translate(corners[0]) fl_cube(size=corners[1]-corners[0],octant=+X+Y+Z);
+  translate(corners[0]) 
+    if (!2d) fl_cube(size=corners[1]-corners[0],octant=+X+Y+Z);
+    else fl_square(size=corners[1]-corners[0],quadrant=+X+Y);
 }
 
 /*
