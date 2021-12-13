@@ -664,11 +664,12 @@ module fl_2d_grid(
   bbox,
   // distance between centers of two adjacent holes
   shift,
-  // holes diameter
+  // holes by diameter
   d,
-  // holes radius
+  // or radius
   r,
-  // edge number actually drawn for each hole
+  // holes are circles approximation whose edge number can be reduced 
+  // actually drawning a polygon
   edges=$fn,
   // rotation about +Z of the resulting hole geometry
   rotation=0
