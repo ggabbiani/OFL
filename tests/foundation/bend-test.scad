@@ -38,35 +38,10 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 // adds shapes to scene.
 ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of user passed accessories (like alternative screws)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a box representing the payload of the shape
-PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
-
-/* [Direction] */
-
-DIR_NATIVE  = true;
-// ARBITRARY direction vector
-DIR_Z       = [0,0,1];  // [-1:0.1:+1]
-// rotation around
-DIR_R       = 0;        // [0:360]
 
 /* [grid] */
 
@@ -84,51 +59,42 @@ ROT_1   = 0;  // [0:360]
 EDGES_2 = 50; // [3:1:50]
 // drill rotation about +Z on grid 2
 ROT_2    = 0; // [0:360]
-// when true folding is NOT bent
-FLAT        = false;
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
   if (ADD!="OFF")       FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
   if (AXES!="OFF")      FL_AXES,
   if (BBOX!="OFF")      FL_BBOX,
-  if (CUTOUT!="OFF")    FL_CUTOUT,
-  if (DRILL!="OFF")     FL_DRILL,
-  if (FPRINT!="OFF")    FL_FOOTPRINT,
-  if (LAYOUT!="OFF")    FL_LAYOUT,
-  if (PLOAD!="OFF")     FL_PAYLOAD,
 ];
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 
+size = [51,78,28];
+
 surfaces=[
-  [-X,[28,78,T]],
-  [+Z,[51,78,T]],
-  [+Y,[51,28,T]],
-  [-Y,[51,9,T]], 
+  [-FL_X,[size.z, size.y, T]],
+  [+FL_Z,[size.x, size.y, T]],
+  [+FL_Y,[size.x, size.z, T]],
+  [-FL_Y,[size.x, 9,      T]], 
+  [+FL_X,[size.z, size.y, T]],
+  [-FL_Z,[size.x, size.y, T]],
 ];
 
 shift = D + DELTA;
 folding = fl_folding(faces=surfaces);
 
-fl_bend(verbs,type=folding,flat=FLAT,octant=octant,direction=direction)
-  // bending algorithm requires a 3d shape
-  linear_extrude(fl_bb_size($sheet).z) 
-  // grid on face 4 (normal +Y)
-  // the bounding box used is the C-M region
-  // reduced by (shift,2.5) on the lower corner
-  // and (5,10) on the upper one
-  fl_2d_grid([$C,$M] + [[shift,-2.5],-[5,10]],shift=shift,d=D,edges=EDGES_2,rotation=ROT_2)
-  // grid on face 0,1 (normal -X and +Z)
-  // the bounding box used is the A-F region
-  // reduced by (4.2,2.2) on the lower corner
-  // and (5,3.2) on the upper one
-  fl_2d_grid([$A + [4.2,2.2],$F - [5,3.2]],shift=shift,d=D,edges=EDGES_1,rotation=ROT_1)
-    // grid algorithm operates on 2d surfaces
-    // we add a 2d surface fitting the exact number of sized surfaces
-    // passed to the bend constructor through «faces»
-    fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
+for(oct=[-Z-X,+Z+X]) translate(10*oct)
+  fl_bend(verbs,type=folding,flat=oct==-Z-X,octant=oct)
+    // bending algorithm requires a 3d shape
+    linear_extrude(fl_bb_size($sheet).z) 
+    // grid on face 4 (normal +Y) the bounding box used is the C-M region
+    // reduced by (shift,2.5) on the lower corner and (5,10) on the upper one
+    fl_2d_grid([$C,$M] + [[shift,-2.5],-[5,10]],shift=shift,d=D,edges=EDGES_2,rotation=ROT_2)
+    // grid on face 0,1 (normal -X and +Z) the bounding box used is the A-F region
+    // reduced by (4.2,2.2) on the lower corner and (5,3.2) on the upper one
+    fl_2d_grid([$A + [4.2,2.2],$F - [5,3.2]],shift=shift,d=D,edges=EDGES_1,rotation=ROT_1)
+      // grid algorithm operates on 2d surfaces
+      // we add a 2d surface fitting the exact number of sized surfaces
+      // passed to the bend constructor through «faces»
+      fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
