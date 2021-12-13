@@ -209,6 +209,7 @@ function fl_property(type,key,value,default)  =
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value); 
 function fl_director(type,value)    = fl_property(type,"director",value);
+function fl_holes(type,value)       = fl_property(type,"holes (list with items in [<direction>,<position>] format)",value);
 function fl_name(type,value)        = fl_property(type,"name",value);
 function fl_material(type,value)    = fl_property(type,"material (actually a color)",value);
 function fl_nopSCADlib(type,value)  = fl_property(type,"Verbatim NopSCADlib definition",value);
