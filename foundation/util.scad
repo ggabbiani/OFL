@@ -204,19 +204,19 @@ module fl_bend(
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   sheet       = fl_bend_sheet(type);
-  sheet_bbox  = fl_bb_corners(sheet);
+  flat_bbox   = fl_bb_corners(sheet);
   fcs         = fl_bend_faceSet(type);
-  bbox        = fl_bb_corners(type);
-  size        = bbox[1]-bbox[0];
-  material    = fl_material(type);
-
-  D = direction ? fl_direction(proto=type,direction=direction)  : I;
+  bent_bbox   = fl_bb_corners(type);
   // this API has two modes of operation:
   //  - as a 3d object when bent (the default)
   //  - as a 2d object when unfolded (flat=true)
   // use the correct bounding box when calculating the position matrix
-  M = octant    ? fl_octant(octant=octant,bbox=flat?sheet_bbox:bbox) : I;
+  bbox        = flat ? flat_bbox : bent_bbox;
+  size        = bbox[1]-bbox[0];
+  material    = fl_material(type);
 
+  D = direction ? fl_direction(proto=type,direction=direction)  : I;
+  M = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
 
   module do_add() {
     fl_color(material)
@@ -243,9 +243,9 @@ module fl_bend(
     $P      = [$O.x+$size[5].x, 0,                0];
     // translate on -Z when NOT FLAT so the resulting volume is 
     // coherent with the bent bounding box
-    translate(+Z(flat?0:-sheet_bbox[1].z))
+    translate(+Z(flat?0:-flat_bbox[1].z))
     intersection() {
-      fl_place(bbox=sheet_bbox,octant=+X+Y+Z)
+      fl_place(bbox=flat_bbox,octant=+X+Y+Z)
         children();
       translate(translate)
         fl_cube(size=face,octant=+X+Y+Z);
