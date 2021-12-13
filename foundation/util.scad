@@ -19,6 +19,7 @@
 
 include <unsafe_defs.scad>
 use     <3d.scad>
+use     <layout.scad>
 use     <placement.scad>
 
 use     <scad-utils/spline.scad>
@@ -100,6 +101,53 @@ module fl_cutout(
   if (debug) #translate(trim) children();
 }
 
+function fl_bend_sheet(type,value)    = fl_property(type,"bend/sheet",value);
+function fl_bend_faceSet(type,value)  = fl_property(type,"bend/face set",value);
+
+/**
+ * folding objects contain bending information
+ */
+function fl_folding(
+  // key/value list of face sizings:
+  // key    = one of the eight cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
+  // value  = 3d size [x-size,y-size,z-size]
+  // Missing faces means 0-sized.
+  // Examples
+  // face=[
+  //  [-X, [28, 78, 0.5]],
+  //  [+Z, [51, 78, 0.5]],
+  //  [+Y, [51, 28, 0.5]],
+  //  [-Y, [51,  9, 0.5]],
+  // ]
+  faces,
+  material  = "silver"
+) = let(
+    fcs     = [
+      fl_get(faces,-X,[0,0,0]),
+      fl_get(faces,+Z,[0,0,0]),
+      fl_get(faces,+X,[0,0,0]),
+      fl_get(faces,-Z,[0,0,0]),
+      fl_get(faces,+Y,[0,0,0]),
+      fl_get(faces,-Y,[0,0,0]),
+    ],
+
+    flat_w  = fcs[0].x+fcs[1].x+fcs[2].x+fcs[3].x,
+    flat_h  = fcs[5].y+fcs[1].y+fcs[4].y,
+    flat_t  = fcs[0].z,
+    flat_bb = [O,[flat_w,flat_h,flat_t]],
+
+    bent_w  = max(fcs[1].x,fcs[3].x),
+    bent_h  = max(fcs[0].y,fcs[1].y,fcs[2].y,fcs[3].y),
+    bent_t  = max(fcs[0].x,fcs[2].x,fcs[4].y,fcs[5].y),
+    bent_bb = [[0,fcs[5].y,-bent_t],[bent_w,fcs[5].y+bent_h,0]]
+  ) [
+    fl_bb_corners(value=bent_bb),
+    fl_bend_sheet(value=[fl_bb_corners(value=flat_bb)]),
+    fl_bend_faceSet(value=fcs),
+    fl_material(value=material),
+    fl_director(value=FL_Z),fl_rotor(value=FL_X),
+  ];
+
 /*
  * 3d surface bending on rectangular cuboid faces.
  *
@@ -112,16 +160,16 @@ module fl_cutout(
  *                        N           M               
  *                         +=========+                  ✛ ⇐ upper corner
  *                         |         |                     (at sizing x,y)
- *                         |    4    |                   
- *                 D      C|         |F      H          L
+ *                         |   [4]   |                   
+ *                 D      C|   +Y    |F      H          L
  *                 +=======+=========+=======+==========+
  *                 |       |         |       |          |
- *                 |  0    |    1    |   2   |     3    |
- *                 |       |         |       |          |
+ *                 |  [0]  |   [1]   |  [2]  |    [3]   |
+ *                 |  -X   |   +Z    |  +X   |    -Z    |
  *                 +=======+=========+=======+==========+
  *                 A      B|         |E      G          I
- *                         |    5    |
- *                         |         |
+ *                         |   [5]   |
+ *                         |   -Y    |
  * lower corner ⇒ ✛       +=========+
  * (at origin)            O           P
  * 
@@ -131,37 +179,53 @@ module fl_cutout(
  * 
  */
 module fl_bend(
+  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD, 
+  // bend type as constructed from function fl_folding()
+  type,
+  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  // verbs       = FL_ADD, 
   // key/value list of face sizing:
   // key    = one of the eight cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
   // value  = 3d size [x-size,y-size,z-size]
   // Missing faces means 0-sized.
-  faces,
+  // faces,
   // when true children 3d surface is not bent
-  flat=false
+  flat=false,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,            
+  // when undef native positioning is used
+  octant                
 ) {
-  fcs = [
-    fl_get(faces,-X,[0,0,0]),
-    fl_get(faces,+Z,[0,0,0]),
-    fl_get(faces,+X,[0,0,0]),
-    fl_get(faces,-Z,[0,0,0]),
-    fl_get(faces,+Y,[0,0,0]),
-    fl_get(faces,-Y,[0,0,0]),
-  ];
-  bbox  = bbox(fcs);
-  size  = bbox[1]-bbox[0];
-  type  = fl_bb_new(size=size);
-  fl_trace("fcs",fcs);
-  fl_trace("sheet metal bounding box:",bbox);
+  assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(type!=undef);
 
-  // calculates the bounding box containing the needed faces
-  function bbox(faces) = let(
-      width   = faces[0].x+faces[1].x+faces[2].x+faces[3].x,
-      height  = faces[5].y+faces[1].y+faces[4].y,
-      thick   = faces[0].z
-    ) [O,[width,height,thick]];
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
+  sheet       = fl_bend_sheet(type);
+  sheet_bbox  = fl_bb_corners(sheet);
+  fcs         = fl_bend_faceSet(type);
+  bbox        = fl_bb_corners(type);
+  size        = bbox[1]-bbox[0];
+  material    = fl_material(type);
+
+  D = direction ? fl_direction(proto=type,direction=direction)  : I;
+  // this API has two modes of operation:
+  //  - as a 3d object when bent (the default)
+  //  - as a 2d object when unfolded (flat=true)
+  // use the correct bounding box when calculating the position matrix
+  M = octant    ? fl_octant(octant=octant,bbox=flat?sheet_bbox:bbox) : I;
+
+
+  module do_add() {
+    fl_color(material)
+      do_bend() 
+        children();
+  }
 
   module always(face,translate) {
-    $sheet  = type;
+    $sheet  = sheet;
     $size   = fcs;
     $A      = [0,               $size[5].y,       0];
     $B      = [$size[0].x,      $A.y,             0];
@@ -177,66 +241,87 @@ module fl_bend(
     $N      = [$C.x,            $M.y,             0];
     $O      = [$B.x,            0,                0];
     $P      = [$O.x+$size[5].x, 0,                0];
+    // translate on -Z when NOT FLAT so the resulting volume is 
+    // coherent with the bent bounding box
+    translate(+Z(flat?0:-sheet_bbox[1].z))
     intersection() {
-      fl_place(octant=+X+Y-Z,bbox=bbox)
+      fl_place(bbox=sheet_bbox,octant=+X+Y+Z)
         children();
       translate(translate)
-        fl_cube(size=face,octant=+X+Y-Z);
+        fl_cube(size=face,octant=+X+Y+Z);
     } 
   }
 
-  // -X
-  let(f=fcs[0]) if (f.x && f.y) 
-    if (flat) 
-      always(f,translate=[0,fcs[5].y]) children();
-    else
-      translate([0,0,-f.x]) rotate(-90,Y) always(f,translate=[0,fcs[5].y]) children(); 
+  module do_bend() {
+    // -X
+    let(f=fcs[0]) if (f.x && f.y) 
+      if (flat) 
+        always(f,translate=[0,fcs[5].y]) children();
+      else
+        translate([0,0,-f.x]) rotate(-90,Y) always(f,translate=[0,fcs[5].y]) children(); 
 
-  // +Z
-  let(f=fcs[1]) if (f.x && f.y)
-    if (flat)
-      always(f,translate=[fcs[0].x,fcs[5].y]) children();
-    else 
-      translate([-fcs[0].x,0]) always(f,translate=[fcs[0].x,fcs[5].y]) children(); 
+    // +Z
+    let(f=fcs[1]) if (f.x && f.y)
+      if (flat)
+        always(f,translate=[fcs[0].x,fcs[5].y]) children();
+      else 
+        translate([-fcs[0].x,0]) always(f,translate=[fcs[0].x,fcs[5].y]) children(); 
 
-  // +X
-  let(f=fcs[2]) if (f.x && f.y)
-    if (flat)
-      always(f,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
-    else 
-      translate([fcs[1].x,0])
-        rotate(90,Y)
-          translate([-fcs[0].x-fcs[1].x,0])
-            always(f,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
+    // +X
+    let(f=fcs[2]) if (f.x && f.y)
+      if (flat)
+        always(f,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
+      else 
+        translate([fcs[1].x,0])
+          rotate(90,Y)
+            translate([-fcs[0].x-fcs[1].x,0])
+              always(f,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
 
-  // -Z
-  let(f=fcs[3]) if (f.x && f.y) 
-    if (flat)
-      always(f,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
-    else 
-      translate([f.x,0,-max(fcs[0].x,fcs[2].x)])
-        rotate(180,Y)
-          translate([-fcs[0].x-fcs[1].x-fcs[2].x,0])
-            always(f,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
+    // -Z
+    let(f=fcs[3]) if (f.x && f.y) 
+      if (flat)
+        always(f,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
+      else 
+        translate([f.x,0,-max(fcs[0].x,fcs[2].x)])
+          rotate(180,Y)
+            translate([-fcs[0].x-fcs[1].x-fcs[2].x,0])
+              always(f,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
 
-  // +Y
-  let(f=fcs[4]) if (f.x && f.y)
-    if (flat)
-      always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
-    else 
-      translate([-fcs[0].x,fcs[5].y+fcs[1].y])
-        translate([0,f.z])
-          rotate(-90,X)
-            translate([0,-fcs[5].y-fcs[1].y])
-              always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
+    // +Y
+    let(f=fcs[4]) if (f.x && f.y)
+      if (flat)
+        always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
+      else 
+        translate([-fcs[0].x,fcs[5].y+fcs[1].y])
+          translate([0,f.z])
+            rotate(-90,X)
+              translate([0,-fcs[5].y-fcs[1].y])
+                always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
 
-  // -Y
-  let(f=fcs[5]) if (f.x && f.y)
-    if (flat)
-      always(f,translate=[fcs[0].x,0]) children();
-    else 
-      translate([-fcs[0].x,f.y,-f.y])
-        rotate(90,X)
-          always(f,translate=[fcs[0].x,0]) children();
+    // -Y
+    let(f=fcs[5]) if (f.x && f.y)
+      if (flat)
+        always(f,translate=[fcs[0].x,0]) children();
+      else 
+        translate([-fcs[0].x,f.y,-f.y])
+          rotate(90,X)
+            always(f,translate=[fcs[0].x,0]) children();
+  }
+
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD) do_add() children();
+
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
+    }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=1.2*size);
+  }
 
 }

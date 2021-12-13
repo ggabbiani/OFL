@@ -86,7 +86,7 @@ EDGES_2 = 50; // [3:1:50]
 ROT_2    = 0; // [0:360]
 // when true folding is NOT bent
 FLAT        = false;
-
+BREAK   = 0.5;  // [0:0.1:10]
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
@@ -105,11 +105,14 @@ verbs=[
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 
+size=[51,78,28];
 surfaces=[
-  [-X,[28,78,T]],
-  [+Z,[51,78,T]],
-  [+Y,[51,28,T]],
-  [-Y,[51,9,T]], 
+  [-X,[size.z,size.y,T]],
+  [+Z,[size.x,size.y,T]],
+  [+Y,[size.x,size.z,T]],
+  [-Y,[size.x,size.z/3,T]], 
+  [+X,[size.z,size.y,T]],
+  [-Z,[size.x,size.y,T]],
 ];
 
 shift = D + DELTA;
@@ -118,17 +121,13 @@ folding = fl_folding(faces=surfaces);
 fl_bend(verbs,type=folding,flat=FLAT,octant=octant,direction=direction)
   // bending algorithm requires a 3d shape
   linear_extrude(fl_bb_size($sheet).z) 
-  // grid on face 4 (normal +Y)
-  // the bounding box used is the C-M region
-  // reduced by (shift,2.5) on the lower corner
-  // and (5,10) on the upper one
-  fl_2d_grid([$C,$M] + [[shift,-2.5],-[5,10]],shift=shift,d=D,edges=EDGES_2,rotation=ROT_2)
-  // grid on face 0,1 (normal -X and +Z)
-  // the bounding box used is the A-F region
-  // reduced by (4.2,2.2) on the lower corner
-  // and (5,3.2) on the upper one
-  fl_2d_grid([$A + [4.2,2.2],$F - [5,3.2]],shift=shift,d=D,edges=EDGES_1,rotation=ROT_1)
-    // grid algorithm operates on 2d surfaces
-    // we add a 2d surface fitting the exact number of sized surfaces
-    // passed to the bend constructor through «faces»
-    fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
+    difference() {
+      fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
+      let(thick=BREAK+T) {
+        let(size=$size[3]) translate($H-Y(thick)) fl_square(size=[size.y,thick,size.z],quadrant=+X+Y);
+        let(size=$size[4]) translate($F-X(thick)) fl_square(size=[thick,size.y,size.z],quadrant=+X+Y);
+        let(size=$size[5]) translate($P-X(thick)) fl_square(size=[thick,size.y,size.z],quadrant=+X+Y);
+        let(size=$size[1]) translate($E-X(thick)) fl_square(size=[thick,size.y,size.z],quadrant=+X+Y);
+        let(size=$size[3]) translate($I-X(thick)) fl_square(size=[thick,size.y,size.z],quadrant=+X+Y);
+      }
+    }
