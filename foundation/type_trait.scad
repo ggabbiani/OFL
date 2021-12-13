@@ -93,3 +93,13 @@ function fl_tt_isThickList(list) =
       f=function(x) is_num(x)
       )
     );
+
+/**
+ * hole specifications: [<surface normal>,<position>]
+ */
+function fl_tt_isHole(list) = let(
+    direction = list[0],
+    position  = list[1]
+  )  (len(list)==2) 
+  && (is_list(direction) && len(direction)==3)
+  && (is_list(position) && len(position)==3);

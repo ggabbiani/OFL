@@ -66,3 +66,8 @@ assert(fl_tt_isThickList([[1,2],[3,4],[5]])==false);
 assert(fl_tt_isThickList([[1,2],[3,4],[5,6]]));
 assert(fl_tt_isThickList([[1,2],[5,6]])==false);
 assert(fl_tt_isThickList([[1,"2"],[3,4],[5,6]])==false);
+
+
+assert(fl_tt_isHole([[1,0,0],[1,2,3]]));
+assert(fl_tt_isHole([4,[1,2,3]])==false);
+assert(fl_tt_isHole([[1,0,0],3])==false);
