@@ -20,6 +20,9 @@
  */
 include <../foundation/defs.scad>
 
+// namespace 
+FL_TEMP_NS  = "mag";
+
 FL_TEMP_DICT = [
 ];
 
