@@ -63,9 +63,9 @@ FILLET_STEPS  = 20;
 
 /* [Hidden] */
 
-magnet  = MAGNET=="M3_cs_magnet10x2"  ? FL_MAG_M3_CS_10x2 
-        : MAGNET=="M3_cs_magnet10x5"  ? FL_MAG_M3_CS_10x5 
-        : FL_MAG_M4_CS_32x6;
+magnet  = MAGNET=="M3_cs_magnet_d10x2"  ? FL_MAG_M3_CS_D10x2 
+        : MAGNET=="M3_cs_magnet_d10x5"  ? FL_MAG_M3_CS_D10x5 
+        : FL_MAG_M4_CS_D32x6;
 
 function cyl_d(
   magnet,

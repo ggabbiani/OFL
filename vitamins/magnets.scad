@@ -64,72 +64,72 @@ function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
     fl_vendor(value=vendors),
   ];
 
-FL_MAG_M3_CS_10x2 = fl_Magnet(
-  name        = "M3_cs_magnet10x2",
-  description = "M3 10x2mm countersink magnet",
+FL_MAG_M3_CS_D10x2 = fl_Magnet(
+  name        = "mag_M3_cs_d10x2",
+  description = "M3 countersink magnet d10x2mm 1.2kg",
   d           = 10, thick = 2,
   cs          = FL_CS_M3, csh = 2,
   screw       = M3_cs_cap_screw,
   vendors     = [
-      ["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1"],
+      ["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/"],
     ]
 );
 
-FL_MAG_M3_10x5  = fl_Magnet(
-  name        = "M3_magnet10x5",
-  description = "M3 10x5mm magnet",
+FL_MAG_D10x5  = fl_Magnet(
+  name        = "mag_d10x5",
+  description = "magnet d10x5mm",
   d           = 10, thick = 5,
   vendors     = [
-      ["Amazon", "https://www.amazon.it/gp/product/B017W7J0TA/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1"],
+      ["Amazon", "https://www.amazon.it/gp/product/B017W7J0TA/"],
     ]
 );
 
-FL_MAG_M3_CS_10x5 = fl_Magnet(
-  name        = "M3_cs_magnet10x5",
-  description = "M3 10x5mm countersink magnet",
+FL_MAG_M3_CS_D10x5 = fl_Magnet(
+  name        = "mag_M3_cs_d10x5",
+  description = "M3 countersink magnet d10x5mm 2.0kg",
   d           = 10, thick = 5,
   cs          = FL_CS_M3, csh = 3,
   screw       = M3_cs_cap_screw,
   vendors     = [
-      ["Amazon", "https://www.amazon.it/gp/product/B001TOJESK/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1"],
+      ["Amazon", "https://www.amazon.it/gp/product/B001TOJESK/"],
     ]
 );
 
-FL_MAG_M4_CS_32x6  = fl_Magnet(
-  name        = "M4_cs_magnet32x6",
-  description = "M4 32x6mm countersink magnet",
+FL_MAG_M4_CS_D32x6  = fl_Magnet(
+  name        = "mag_M4_cs_d32x6",
+  description = "M4 countersink magnet d32x6mm 29.0kg",
   d           = 32, // actual: 31.89 31.89 31.92 31.88 31.88 31.81 31.88 31.88  ⇒ average: 31.88mm ±0.04mm
   thick       = 6,
   cs          = FL_CS_M3, csh = 2,
   screw       = M3_cs_cap_screw,
   vendors     = [
-      ["Amazon", "https://www.amazon.it/gp/product/B07RQL2ZSS/ref=crt_ewc_title_dp_1?ie=UTF8&psc=1&smid=A3USG5B4TCNFER"],
+      ["Amazon", "https://www.amazon.it/gp/product/B07RQL2ZSS/"],
     ]
 );
 
 FL_MAG_RECT_10x5x1  = fl_Magnet(
-  name        = "RECT_10x5x1",
-  description = "10x5x1mm rectangular magnet",
+  name        = "mag_rect_10x5x1",
+  description = "rectangular magnet 10x5x1mm",
   size        = [10,5,1],
   vendors     = [
-      ["Amazon", "https://www.amazon.it/gp/product/B07RQL2ZSS/ref=crt_ewc_title_dp_1?ie=UTF8&psc=1&smid=A3USG5B4TCNFER"],
+      ["Amazon", "https://www.amazon.it/gp/product/B06XQNG59T/"],
     ]
 );
 
 FL_MAG_RECT_10x5x2  = fl_Magnet(
-  name        = "RECT_10x5x2",
-  description = "10x5x2mm rectangular magnet",
+  name        = "mag_rect_10x5x2",
+  description = "rectangular magnet 10x5x2mm",
   size        = [10,5,2],
   vendors     = [
-      ["Amazon", "https://www.amazon.it/gp/product/B07RQL2ZSS/ref=crt_ewc_title_dp_1?ie=UTF8&psc=1&smid=A3USG5B4TCNFER"],
+      ["Amazon", "https://www.amazon.it/gp/product/B075PBJ31D/"],
     ]
 );
 
 FL_MAG_DICT = [
-  FL_MAG_M3_CS_10x2,
-  FL_MAG_M3_10x5,
-  FL_MAG_M3_CS_10x5,
-  FL_MAG_M4_CS_32x6,
+  FL_MAG_M3_CS_D10x2,
+  FL_MAG_D10x5,
+  FL_MAG_M3_CS_D10x5,
+  FL_MAG_M4_CS_D32x6,
   FL_MAG_RECT_10x5x1,
   FL_MAG_RECT_10x5x2,
 ];

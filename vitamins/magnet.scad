@@ -66,7 +66,7 @@ module fl_magnet(
     module cyl_engine() {
       d = fl_mag_d(type);
 
-      module M4_cs_magnet32x6() {
+      module mag_M4_cs_d32x6() {
         // d=32;
         fl_trace("size",size);
         shell_r=size.z/2;
@@ -90,8 +90,8 @@ module fl_magnet(
       fl_trace("FL_ADD",$FL_ADD);
       fl_trace("name",name);
       fl_color(color) difference() {
-        if (name=="M4_cs_magnet32x6") 
-          M4_cs_magnet32x6();
+        if (name=="mag_M4_cs_d32x6") 
+          mag_M4_cs_d32x6();
         else 
           fl_cylinder(d=d, h=h, octant=+Z);
         if (cs!=undef)
