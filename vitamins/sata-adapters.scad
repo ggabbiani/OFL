@@ -35,7 +35,7 @@ let(
   fl_name(value="ELUTENG USB 3.0 TO SATA ADAPTER"),
   fl_bb_corners(value=[[-size.x/2,-handle_size.y,-size.z/2],[size.x/2,socket_size.z,+size.z/2]]),
   fl_director(value=+FL_Y),fl_rotor(value=+FL_X),
-  fl_vendor(value=[["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1"]]),
+  fl_vendor(value=[["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/"]]),
   ["handle size", handle_size],
   ["Mpd",         Mpd],
   ["connectors",  fl_conn_import(fl_sata_conns(socket),Mpd)],

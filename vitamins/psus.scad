@@ -67,7 +67,7 @@ PSU_MeanWell_RS_25_5 = let(
     ]),
     fl_vendor(value=
       [
-        ["Amazon",  "https://www.amazon.it/gp/product/B00MWQDAMU/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1"],
+        ["Amazon",  "https://www.amazon.it/gp/product/B00MWQDAMU/"],
       ]
     ),
     fl_director(value=-FL_Y),fl_rotor(value=-FL_X),
@@ -115,7 +115,7 @@ PSU_MeanWell_RS_15_5 = let(
     ]),
     fl_vendor(value=
       [
-        ["Amazon",  "https://www.amazon.it/gp/product/B00MWQD43U/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1"],
+        ["Amazon",  "https://www.amazon.it/gp/product/B00MWQD43U/"],
       ]
     ),
     fl_director(value=-FL_Y),fl_rotor(value=-FL_X),

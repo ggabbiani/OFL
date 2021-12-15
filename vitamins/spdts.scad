@@ -41,7 +41,7 @@ FL_SODAL_SPDT = let(
   fl_rotor(value=+FL_X),
   fl_vendor(value=
     [
-      ["Amazon", "https://www.amazon.it/gp/product/B077HJT92M/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1"],
+      ["Amazon", "https://www.amazon.it/gp/product/B077HJT92M/"],
     ]
   ),
 ];
