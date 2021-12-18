@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-
 include <unsafe_defs.scad>
 use     <3d.scad>
 use     <layout.scad>
@@ -293,7 +292,7 @@ module fl_bend(
         always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
       else 
         translate([-fcs[0].x,fcs[5].y+fcs[1].y])
-          translate([0,f.z])
+          // translate([0,f.z])
             rotate(-90,X)
               translate([0,-fcs[5].y-fcs[1].y])
                 always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
