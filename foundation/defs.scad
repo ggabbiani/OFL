@@ -130,13 +130,14 @@ function fl_X(x) = [x,0,0];
 function fl_Y(y) = [0,y,0];
 function fl_Z(z) = [0,0,z];
 
+// TODO: make a case insensitive option
 function fl_isSet(flag,list) = search([flag],list)!=[[]];
 
 FL_ADD        = "FL_ADD adds shapes to scene.";
 FL_ASSEMBLY   = "FL_ASSEMBLY layout of predefined auxiliary shapes (like predefined screws).";
 FL_AXES       = "FL_AXES draw of local reference axes.";
 FL_BBOX       = "FL_BBOX adds a bounding box containing the object.";
-FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z).";
+FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (±X,±Y,±Z).";
 FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter).";
 FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.";
 FL_HOLDERS    = "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**";
@@ -209,7 +210,7 @@ function fl_property(type,key,value,default)  =
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value); 
 function fl_director(type,value)    = fl_property(type,"director",value);
-function fl_holes(type,value)       = fl_property(type,"holes (list with items in [<direction>,<position>] format)",value);
+function fl_holes(type,value)       = fl_property(type,"holes [<point>,<surface normal>] format",value);
 function fl_name(type,value)        = fl_property(type,"name",value);
 function fl_material(type,value)    = fl_property(type,"material (actually a color)",value);
 function fl_nopSCADlib(type,value)  = fl_property(type,"Verbatim NopSCADlib definition",value);
