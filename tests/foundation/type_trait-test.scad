@@ -68,6 +68,14 @@ assert(fl_tt_isThickList([[1,2],[5,6]])==false);
 assert(fl_tt_isThickList([[1,"2"],[3,4],[5,6]])==false);
 
 
-assert(fl_tt_isHole([[1,0,0],[1,2,3]]));
-assert(fl_tt_isHole([4,[1,2,3]])==false);
-assert(fl_tt_isHole([[1,0,0],3])==false);
+assert(fl_tt_isPointNormal([[1,2,3],[1,0,0]]));
+assert(fl_tt_isPointNormal([[1,2,3],4])==false);
+assert(fl_tt_isPointNormal([3,[1,0,0]])==false);
+
+assert(
+  fl_tt_isPointNormalList([
+    [[ 24.5, 3.5,  0 ],[0,0,1]],
+    [[ 24.5, 61.5, 0 ],[1,0,0]],
+    [[-24.5, 3.5,  0 ],[0,1,0]],
+  ])
+);
