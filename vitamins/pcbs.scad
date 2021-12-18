@@ -36,7 +36,6 @@ FL_PCB_NS  = "PCB";
 // PCB properties
 // when invoked by «type» parameter act as getters
 // when invoked by «value» parameter act as property constructors
-function fl_PCB_holes(type,value)      = fl_property(type,"PCB/holes",value);
 function fl_PCB_components(type,value) = fl_property(type,"PCB/components",value);
 function fl_PCB_thick(type,value)      = fl_property(type,"PCB/thickness",value);
 
@@ -51,13 +50,13 @@ FL_PCB_RPI4 = let(
   fl_bb_corners(value=bbox),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_PCB_thick(value=pcb_t),
-  fl_PCB_holes(value=[ 
+  fl_holes(value=[ 
     // each row represents a hole with the following format:
-    // [drill direction],[position]
-    [-FL_Z, [ 24.5, 3.5,  0 ]],
-    [-FL_Z, [ 24.5, 61.5, 0 ]],
-    [-FL_Z, [-24.5, 3.5,  0 ]],
-    [-FL_Z, [-24.5, 61.5, 0 ]],
+    // [point],[normal]
+    [[ 24.5, 3.5,  0 ], +FL_Z],
+    [[ 24.5, 61.5, 0 ], +FL_Z],
+    [[-24.5, 3.5,  0 ], +FL_Z],
+    [[-24.5, 61.5, 0 ], +FL_Z],
     ]),
   fl_screw(value=M3_cap_screw),
   fl_PCB_components(value=[

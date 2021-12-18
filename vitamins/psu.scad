@@ -21,6 +21,7 @@
 
 include <psus.scad>
 use     <screw.scad>
+use     <../foundation/hole.scad>
 use     <../foundation/util.scad>
 
 include <../foundation/unsafe_defs.scad>
@@ -61,6 +62,7 @@ module ofl_psu(
   holes       = fl_holes(type);
 
   screw       = fl_screw(type);
+  screw_r     = screw_radius(screw);
   screw_len   = screw_longer_than(thick+1);
 
   term_screw  = fl_get(type,"terminal screw");
@@ -140,12 +142,7 @@ module ofl_psu(
           fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
 
       // screw holes
-      let(r=screw_radius(screw)) do_layout() {
-        cylinder(r=r, h=3, center=true);
-        cylinder(r=r, h=3, center=true);
-        cylinder(r=r, h=3, center=true);
-        cylinder(r=r, h=3, center=true);
-      }
+      fl_holes(holes,thick=grid_t,r=screw_r);
     }
     // pcb
     fl_color(pcb_color) 
@@ -162,41 +159,18 @@ module ofl_psu(
   }
 
   module do_assembly()  {
-    do_layout() {
-      translate(fl_Z(thick))
-        screw(screw,screw_len);
-    }
+    do_layout()
+      translate(thick*$normal)
+        fl_screw(type=screw,len=screw_len,direction=[$normal,0]);
   }
 
   module do_drill()  {
-    do_layout() {
-      translate(fl_Z(thick))
-        fl_screw(FL_FOOTPRINT,screw,screw_len);
-      translate(fl_Z(thick))
-        fl_screw(FL_FOOTPRINT,screw,screw_len);
-      translate(fl_Z(thick))
-        fl_screw(FL_FOOTPRINT,screw,screw_len);
-      translate(fl_Z(thick))
-        fl_screw(FL_FOOTPRINT,screw,screw_len);
-    }
+    fl_holes(holes,thick=grid_t,r=screw_r);
   }
 
   module do_layout() {
-    // TODO: why not a 'screw hole layout' helper module?
-    for(i=[0:len(holes)-1]) {
-      hole  = holes[i];
-      axis  = hole[0];
-      point = hole[1];
-      if ((axis==-FL_Z) && fl_isSet("-Z",assembly))
-        fl_overlap(FL_Z,axis,point)
-          children();
-      if ((axis==FL_X) && fl_isSet("+X",assembly))
-        fl_overlap(FL_Z,axis,point)
-          children();
-      if ((axis==FL_Y) && fl_isSet("+Y",assembly))
-        fl_overlap(FL_Z,axis,point)
-          children();
-    }
+    fl_lay_points(holes,assembly)
+      children();
   }
 
   multmatrix(D) {

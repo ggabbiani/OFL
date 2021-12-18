@@ -20,13 +20,15 @@
  */
 include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
-include <pcbs.scad>
-include <pin_headers.scad>
-
-// use     <../foundation/2d.scad>
+use     <../foundation/hole.scad>
 use     <../foundation/placement.scad>
+include <../foundation/type_trait.scad>
+
 use     <ether.scad>
+include <pin_headers.scad>
 use     <screw.scad>
+
+include <pcbs.scad>
 
 module fl_pcb(
   verbs=FL_ADD,   // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT
@@ -34,7 +36,8 @@ module fl_pcb(
   cut_tolerance=0,// FL_CUTOUT tolerance 
   cut_label,      // FL_CUTOUT component filter by label
   cut_direction,  // FL_CUTOUT component filter by direction (+X,+Y or +Z)
-  thick,          // FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]]. 
+  // FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  thick=0,
   direction,      // desired direction [director,rotation], native direction when undef
   octant          // when undef native positioning is used
 ) {
@@ -52,11 +55,11 @@ module fl_pcb(
   size      = fl_bb_size(type);
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;
   M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
-  holes     = fl_PCB_holes(type);
+  holes     = fl_holes(type);
   screw     = fl_screw(type);
   screw_r   = screw_radius(screw);
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] 
-            : assert(len(thick)==3 && len(thick.x)==2 && len(thick.y)==2 && len(thick.z)==2,thick) thick;
+            : assert(fl_tt_isThickList(thick)) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
   cut_thick  = thick;
 
@@ -65,9 +68,7 @@ module fl_pcb(
       translate(-Z(pcb_t))
         linear_extrude(pcb_t)
           fl_square(corners=3,size=[size.x,size.y],quadrant=+Y);
-      do_layout("holes")
-        translate(-NIL*$director) 
-          fl_cylinder(r=screw_r,h=size.z+2*NIL,octant=$director);
+      fl_holes(holes,"+Z",thick=pcb_t,r=screw_r);
     }
   }
 
@@ -101,21 +102,18 @@ module fl_pcb(
         }
       }
     } else {  // by class
-      if (class=="holes")
-        for(hole=holes) {
-          $director = hole[0];
-          position  = hole[1];
-          translate(position) children();
-        }
-      else if (class=="components")
+      if (class=="components")
         for(c=comps) {  // «c» = ["label",component]
           $component  = c[1];
           $label      = c[0];
           position    = $component[1];
           translate(position) children();
         }
+      else if (class=="holes")
+        fl_lay_points(holes,"+z")
+          children();
       else
-        assert(false,"unknown component class '",class,"'.");
+        assert(false,str("unknown component class '",class,"'."));
     }
   }
   
@@ -137,13 +135,14 @@ module fl_pcb(
           fl_pinHeader(FL_ADD,type=type,direction=direction);
         else
           assert(false,str("Unknown engine ",engine));
-    do_layout("holes")
+    fl_lay_points(holes,"+z") 
       fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
   }
 
   module do_drill() {
-    do_layout("holes")
-      translate(-$director*NIL)
+    fl_lay_points(holes,"+z")
+    // do_layout("holes")
+    //   translate(-$director*NIL)
       fl_screw([FL_DRILL],type=screw,washer="default",nut="default",thick=dr_thick+pcb_t,nwasher=true);
   }
 
@@ -193,20 +192,24 @@ module fl_pcb(
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
         fl_modifier($FL_ADD) do_add();
+
       } else if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
+
       } else if ($verb==FL_LAYOUT) {
         fl_modifier($FL_LAYOUT) do_layout("holes")
           children();
+
       } else if ($verb==FL_ASSEMBLY) {
         fl_modifier($FL_ASSEMBLY) do_assembly();
+
       } else if ($verb==FL_DRILL) {
         fl_modifier($FL_DRILL) do_drill();
+
       } else if ($verb==FL_CUTOUT) {
         fl_modifier($FL_CUTOUT) do_cutout();
-      } else {
+      } else
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
     }
     if (axes)
       fl_modifier($FL_AXES) fl_axes(size=size*1.2);

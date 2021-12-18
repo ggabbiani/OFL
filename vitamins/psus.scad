@@ -28,7 +28,7 @@ include <NopSCADlib/lib.scad>
 PSU_MeanWell_RS_25_5 = let(
     size  = [51,78,28],
     // sheet metal thickness
-    t     = 0.5,
+    t     = 1,
     // TODO: terminal must become a stand-alone vitamin
     term_ways = 5,
     term_step = 7.62,
@@ -49,7 +49,7 @@ PSU_MeanWell_RS_25_5 = let(
 
     ["grid diameter",       4.4],
     ["grid diagonal delta", 1.6],
-    ["grid thickness",      1],
+    ["grid thickness",      t],
     ["grid surfaces",       [
       [-FL_X,[size.z, size.y, t]],
       [+FL_Z,[size.x, size.y, t]],
@@ -59,11 +59,11 @@ PSU_MeanWell_RS_25_5 = let(
       [-FL_Z,[size.x, size.y, t]],
     ]],
     fl_holes(value=[
-      [+FL_X,[25.5,8.75,14]],
-      [+FL_X,[25.5,75.25,14]],
-      [-FL_Z,[0,12,0]],
-      [-FL_Z,[0,67,0]],
-      [+FL_Y,[-size.x/2+6.2,  size.y, 10  ]],
+      [[25.5,8.75,14                ],+FL_X],
+      [[25.5,75,14                  ],+FL_X],
+      [[0,12,0                      ],-FL_Z],
+      [[0,67,0                      ],-FL_Z],
+      [[-size.x/2+6.2,  size.y, 10  ],+FL_Y],
     ]),
     fl_vendor(value=
       [
@@ -76,7 +76,7 @@ PSU_MeanWell_RS_25_5 = let(
 PSU_MeanWell_RS_15_5 = let(
     size      = [51,62.5,28],
     // sheet metal thickness
-    t         = 0.5, 
+    t         = 1, 
     // TODO: terminal must become a stand-alone vitamin
     term_ways = 5,
     term_step = 7.62,
@@ -97,7 +97,7 @@ PSU_MeanWell_RS_15_5 = let(
 
     ["grid diameter",       4.4],
     ["grid diagonal delta", 1.6],
-    ["grid thickness",      1],
+    ["grid thickness",      t],
     ["grid surfaces",       [
       [-FL_X,[size.z, size.y, t]],
       [+FL_Z,[size.x, size.y, t]],
@@ -107,11 +107,11 @@ PSU_MeanWell_RS_15_5 = let(
       [-FL_Z,[size.x, size.y, t]],
     ]],
     fl_holes(value=[
-      [+FL_X,[size.x/2,     11.9,   15.1]],
-      [+FL_X,[size.x/2,     size.x, 15.1]],
-      [-FL_Z,[0,            8.75,   0   ]],
-      [-FL_Z,[0,            47.85,  0   ]],
-      [+FL_Y,[-size.x/2+6.2,  size.y, 10  ]],
+      [[size.x/2,     11.9,   15.1  ],+FL_X],
+      [[size.x/2,     size.x, 15.1  ],+FL_X],
+      [[0,            8.75,   0     ],-FL_Z],
+      [[0,            47.85,  0     ],-FL_Z],
+      [[-size.x/2+6.2,  size.y, 10  ],+FL_Y],
     ]),
     fl_vendor(value=
       [
