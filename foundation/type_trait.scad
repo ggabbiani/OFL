@@ -21,8 +21,18 @@
 
 use <base_string.scad>
 
-function fl_tt_isList(list,f=function(value) true,size) = let(
-    len   = len(list),
+/**
+ * return true when «list» is a list and each item satisfy f(value)
+ */
+function fl_tt_isList(
+    // list to be verified
+    list,
+    // check function 
+    f=function(value) true,
+    // optional list size 
+    size
+  ) = let(
+    len   = assert(is_list(list),list) len(list),
     rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
   ) 
   (
@@ -31,14 +41,23 @@ function fl_tt_isList(list,f=function(value) true,size) = let(
     && (rest!=[] ? fl_tt_isList(rest,f) : true)
   );
 
+/**
+ * true if «string» appears in «dictionary»
+ */
 function fl_tt_isInDictionary(string,dictionary,nocase=true) =
   assert(is_string(string))
   let(
     len   = len(dictionary),
     rest  = len>1 ? [for(i=[1:len-1]) dictionary[i]] : []
   ) dictionary==[] ? false 
-  : (nocase ? fl_str_lower(string)==fl_str_lower(dictionary[0]) : string==dictionary[0]) || fl_tt_isInDictionary(string,rest);
+  : (nocase 
+    ? fl_str_lower(string)==fl_str_lower(dictionary[0]) 
+    : string==dictionary[0]
+    ) || fl_tt_isInDictionary(string,rest,nocase);
 
+/**
+ * true if «kv» is a key/value pair satisfying f(value)
+ */
 function fl_tt_isKV(kv,dictionary=[],f=function (value) value!=undef) = 
   assert(fl_tt_isList(dictionary,function(value) is_string(value)))
   let(
@@ -50,8 +69,11 @@ function fl_tt_isKV(kv,dictionary=[],f=function (value) value!=undef) =
     && is_string(key) && f(value)
   );
 
+/**
+ * true if «kv» is a key/value pair list with each item satisfying f(value)
+ */
 function fl_tt_isKVList(list,dictionary=[],f=function (value) value!=undef,size) =
-  fl_tt_isList(list,function (value) fl_tt_isKV(value,dictionary=dictionary,f=f),size);
+  fl_tt_isList(list,function(value) fl_tt_isKV(value,dictionary=dictionary,f=f),size);
 
 /*
  * Key/value list of thickness
@@ -69,7 +91,11 @@ function fl_tt_isKVList(list,dictionary=[],f=function (value) value!=undef,size)
  */
 function fl_tt_isThickKVList(list) = 
   assert(len(list)<=6,list)
-  fl_tt_isKVList(list,dictionary=["-x","+x","-y","+y","-z","+z"],f=function(value) is_num(value));
+  fl_tt_isKVList(
+    list,
+    dictionary=["-x","+x","-y","+y","-z","+z"],
+    f=function(value) is_num(value)
+  );
 
 /*
  * Full thickness list.
@@ -95,11 +121,21 @@ function fl_tt_isThickList(list) =
     );
 
 /**
- * hole specifications: [<surface normal>,<position>]
+ * plane in point-normal format: [<3d point>,<plane normal>]
  */
-function fl_tt_isHole(list) = let(
-    direction = list[0],
-    position  = list[1]
-  )  (len(list)==2) 
-  && (is_list(direction) && len(direction)==3)
-  && (is_list(position) && len(position)==3);
+function fl_tt_isPointNormal(plane) = let(
+    point = plane[0],
+    n     = plane[1]
+  )  (len(plane)==2) 
+  && (is_list(point) && len(point)==3)
+  && (is_list(n) && len(n)==3);
+
+function fl_tt_isPointNormalList(list) = 
+  fl_tt_isList(list,f=function(plane) fl_tt_isPointNormal(plane));
+
+function isAxisString(s) = 
+  fl_tt_isInDictionary(
+    string=s,
+    dictionary=["-x","+x","-y","+y","-z","+z"],
+    nocase=true
+  );
