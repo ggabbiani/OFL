@@ -98,3 +98,7 @@ for(oct=[-Z-X,+Z+X]) translate(10*oct)
       // we add a 2d surface fitting the exact number of sized surfaces
       // passed to the bend constructor through «faces»
       fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
+
+// for(oct=[+Z+X]) translate(10*oct)
+// fl_place(folding, octant=oct)
+// fl_bb_add(fl_bb_corners(folding));
