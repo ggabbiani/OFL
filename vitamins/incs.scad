@@ -22,6 +22,7 @@ include <../foundation/incs.scad>
 include <countersinks.scad>
 include <ethers.scad>
 include <hdmis.scad>
+include <heatsinks.scad>
 include <hds.scad>
 include <jacks.scad>
 include <knurl_nuts.scad>
