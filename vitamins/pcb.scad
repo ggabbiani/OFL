@@ -38,6 +38,8 @@ module fl_pcb(
   cut_direction,  // FL_CUTOUT component filter by direction (+X,+Y or +Z)
   // FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
+  // FL_ASSEMBLY,FL_LAYOUT enabled directions passed as list of strings
+  lay_direction="+z",
   direction,      // desired direction [director,rotation], native direction when undef
   octant          // when undef native positioning is used
 ) {
@@ -110,7 +112,7 @@ module fl_pcb(
           translate(position) children();
         }
       else if (class=="holes")
-        fl_lay_points(holes,"+z")
+        fl_lay_points(holes,lay_direction)
           children();
       else
         assert(false,str("unknown component class '",class,"'."));
@@ -135,7 +137,7 @@ module fl_pcb(
           fl_pinHeader(FL_ADD,type=type,direction=direction);
         else
           assert(false,str("Unknown engine ",engine));
-    fl_lay_points(holes,"+z") 
+    fl_lay_points(holes,lay_direction) 
       fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
   }
 
