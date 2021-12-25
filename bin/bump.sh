@@ -43,9 +43,10 @@ git_chk() {
   git status --porcelain|wc -l|grep '0' && info "Git status is clean"
 }
 
+REMOTE="NO"
+DEFS="$OFL/foundation/defs.scad"
 ##############################################################################
 # parsing
-REMOTE="NO"
 MAX=1
 POSITIONALS=""
 VERBOSE="0"
@@ -130,14 +131,14 @@ git_chk
 cat <<EOM
 this script is going to:
 
-  * modify and commit $OFL/defs.scad;
+  * modify and commit \"$DEFS\";
   * annotate local repo as v$VERSION;
-  * push updated $OFL/defs.scad and v$VERSION annotation to remote repo
+  * push updated \"$DEFS\" and v$VERSION annotation to remote repo
 
 EOM
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
-sed -i.bak -e 's/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[a,b,c\];/g' $(dirname) "$OFL/foundation/defs.scad"
-git commit -m "Version $VERSION bumped" "$OFL/foundation/defs.scad"
+sed -i.bak -e 's/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[a,b,c\];/g' $(dirname) "$DEFS"
+git commit -m "Version $VERSION bumped" "$DEFS"
 git tag -m "Version $VERSION bumped" $TAG $BRANCH
 git push --follow-tags
