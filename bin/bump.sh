@@ -133,7 +133,7 @@ git_chk
 cat <<EOM
 this script is going to:
 
-  * modify and commit "$DEFS" ($V[0],$V[1],$V[2]);
+  * modify and commit "$DEFS" (${V[0]},${V[1]},${V[2]});
   * annotate local repo as v$VERSION;
   * push updated "$DEFS" and v$VERSION annotation to remote repo
 
