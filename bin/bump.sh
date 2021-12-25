@@ -123,6 +123,7 @@ else
   VERSION=$1
 fi
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
+info "Current branch is \"$BRANCH\""
 TAG="v$VERSION"
 git_chk
 
@@ -136,7 +137,7 @@ this script is going to:
 EOM
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
-echo sed -i.bak -e 's/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[a,b,c\];/g' $(dirname) "$OFL/defs.scad"
-echo git commit -m "Version $VERSION bumped" "$OFL/defs.scad"
-echo git tag -m "Version $VERSION bumped" $TAG $BRANCH
-echo git push --follow-tags
+sed -i.bak -e 's/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[a,b,c\];/g' $(dirname) "$OFL/foundation/defs.scad"
+git commit -m "Version $VERSION bumped" "$OFL/foundation/defs.scad"
+git tag -m "Version $VERSION bumped" $TAG $BRANCH
+git push --follow-tags
