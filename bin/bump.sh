@@ -122,6 +122,8 @@ if [[ "$INCREMENT" != "" ]]; then
   info "New version is $VERSION"
 else
   VERSION=$1
+  # replace points, split into array
+  V=( ${VERSION//./ } )             
 fi
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 info "Current branch is \"$BRANCH\""
@@ -131,14 +133,14 @@ git_chk
 cat <<EOM
 this script is going to:
 
-  * modify and commit "$DEFS";
+  * modify and commit "$DEFS" ($V[0],$V[1],$V[2]);
   * annotate local repo as v$VERSION;
   * push updated "$DEFS" and v$VERSION annotation to remote repo
 
 EOM
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
-sed -i.bak -e 's/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[a,b,c\];/g' $(dirname) "$DEFS"
+sed -i.bak -e 's/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[$V[0],$V[1],$V[2]\];/g' "$DEFS"
 git commit -m "Version $VERSION bumped" "$DEFS"
 git tag -m "Version $VERSION bumped" $TAG $BRANCH
 git push --follow-tags
