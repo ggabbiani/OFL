@@ -131,9 +131,9 @@ git_chk
 cat <<EOM
 this script is going to:
 
-  * modify and commit \"$DEFS\";
+  * modify and commit "$DEFS";
   * annotate local repo as v$VERSION;
-  * push updated \"$DEFS\" and v$VERSION annotation to remote repo
+  * push updated "$DEFS" and v$VERSION annotation to remote repo
 
 EOM
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
