@@ -140,7 +140,7 @@ this script is going to:
 EOM
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
-sed -i.bak -e 's/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${V[0]},${V[1]},${V[2]}\];/g' "$DEFS"
+sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${V[0]},${V[1]},${V[2]}\];/g" "$DEFS"
 git commit -m "Version $VERSION bumped" "$DEFS"
 git tag -m "Version $VERSION bumped" $TAG $BRANCH
 git push --follow-tags
