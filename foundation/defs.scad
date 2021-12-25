@@ -25,7 +25,7 @@ use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 use     <base_geo.scad>
 use     <base_string.scad>
 
-function fl_version() = [a,b,c];
+function fl_version() = [2,3,0];
 
 function fl_versionNumber() = let(
   version = fl_version()
