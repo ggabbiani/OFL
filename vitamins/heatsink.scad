@@ -33,6 +33,7 @@ module pimoroni(
   rpi4      = FL_PCB_RPI4;
   pcb_t     = fl_PCB_thick(rpi4);
   screw     = fl_screw(type);
+  dxf       = fl_get(type,"DXF model");
 
   bot_base_t    = fl_get(bottom,"layer 0 base thickness");
   bot_fluting_t = fl_get(bottom,"layer 0 fluting thickness");
@@ -60,16 +61,16 @@ module pimoroni(
           // add holders
           translate(+Z(bot_base_t+bot_fluting_t))
             linear_extrude(bot_holder_t)
-              import(file="docs/pimoroni.dxf",layer="0 holders");
+              import(file=dxf,layer="0 holders");
         }
         // subtracts holes
         translate(-Z(NIL))
           linear_extrude(bot_base_t+bot_fluting_t+NIL2)
-            import(file="docs/pimoroni.dxf",layer="0 holes");
+            import(file=dxf,layer="0 holes");
         // subtracts fluting
         translate(-Z(NIL))
           linear_extrude(bot_fluting_t)
-            import(file="docs/pimoroni.dxf",layer="0 fluting");
+            import(file=dxf,layer="0 fluting");
       }
       // let(
       //   sz  = bottom_sz(),
@@ -84,7 +85,7 @@ module pimoroni(
           union() {
             // add holders
             linear_extrude(top_holder_t)
-              import(file="docs/pimoroni.dxf",layer="0 holders");
+              import(file=dxf,layer="0 holders");
             translate(+Z(top_holder_t)) {
               // metal block
               intersection() {
@@ -94,7 +95,7 @@ module pimoroni(
                     fl_cylinder(r2=0, r1=corner_r, h=2.3);
                   }
                 linear_extrude(top_base_t+top_fluting_t)
-                  import(file="docs/pimoroni.dxf",layer="1");
+                  import(file=dxf,layer="1");
               }
             }
           }
@@ -103,7 +104,7 @@ module pimoroni(
             resize(newsize=[0,70+NIL,0])
               translate(Z(top_base_t+NIL))
                 linear_extrude(top_fluting_t)
-                  import(file="docs/pimoroni.dxf",layer="1 fluting");
+                  import(file=dxf,layer="1 fluting");
           }
           // subtracts GPIO
           fl_pcb([FL_ADD,FL_CUTOUT],rpi4,cut_label="GPIO",thick=5,cut_tolerance=2);

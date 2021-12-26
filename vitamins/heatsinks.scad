@@ -37,7 +37,7 @@ FL_HS_PIMORONI = let(
   ]),
   fl_screw(value=M2p5_cap_screw),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  ["DXF model",         "docs/pimoroni.dxf"],
+  ["DXF model",         "pimoroni.dxf"],
   ["corner radius",      3],
   ["bottom part", [
     ["layer 0 base thickness",    2   ],
