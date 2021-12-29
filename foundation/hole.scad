@@ -44,7 +44,7 @@ module fl_lay_points(
 ) {
   assert(fl_tt_isPointNormalList(points),points);
   enable  = is_string(enable) ? [enable] : enable;
-  assert(fl_tt_isList(enable,function(s) isAxisString(s)),enable);
+  assert(fl_tt_isList(enable,function(s) fl_tt_isAxisString(s)),enable);
 
   for($i=[0:len(points)-1]) {
     plane   = points[$i];
