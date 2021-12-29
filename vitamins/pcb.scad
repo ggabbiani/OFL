@@ -70,7 +70,7 @@ module fl_pcb(
       translate(-Z(pcb_t))
         linear_extrude(pcb_t)
           fl_square(corners=3,size=[size.x,size.y],quadrant=+Y);
-      fl_holes(holes,"+Z",thick=pcb_t,r=screw_r);
+      fl_holes(holes,"+Z");
     }
   }
 
@@ -112,7 +112,7 @@ module fl_pcb(
           translate(position) children();
         }
       else if (class=="holes")
-        fl_lay_points(holes,lay_direction)
+        fl_lay_holes(holes,lay_direction)
           children();
       else
         assert(false,str("unknown component class '",class,"'."));
@@ -137,15 +137,13 @@ module fl_pcb(
           fl_pinHeader(FL_ADD,type=type,direction=direction);
         else
           assert(false,str("Unknown engine ",engine));
-    fl_lay_points(holes,lay_direction) 
+    fl_lay_holes(holes,lay_direction) 
       fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
   }
 
   module do_drill() {
-    fl_lay_points(holes,"+z")
-    // do_layout("holes")
-    //   translate(-$director*NIL)
-      fl_screw([FL_DRILL],type=screw,washer="default",nut="default",thick=dr_thick+pcb_t,nwasher=true);
+    fl_lay_holes(holes,"+z")
+      fl_cylinder(d=$diameter,h=dr_thick+pcb_t,octant=-$normal);
   }
 
   module do_cutout() {

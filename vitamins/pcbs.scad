@@ -54,10 +54,10 @@ FL_PCB_RPI4 = let(
   fl_holes(value=[ 
     // each row represents a hole with the following format:
     // [point],[normal]
-    [[ 24.5, 3.5,  0 ], +FL_Z],
-    [[ 24.5, 61.5, 0 ], +FL_Z],
-    [[-24.5, 3.5,  0 ], +FL_Z],
-    [[-24.5, 61.5, 0 ], +FL_Z],
+    [[ 24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
+    [[ 24.5, 61.5, 0 ], +FL_Z, hole_d, pcb_t],
+    [[-24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
+    [[-24.5, 61.5, 0 ], +FL_Z, hole_d, pcb_t],
     ]),
   fl_screw(value=M3_cap_screw),
   fl_pcb_components(value=[

@@ -142,7 +142,7 @@ module ofl_psu(
           fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
 
       // screw holes
-      fl_holes(holes,thick=grid_t,r=screw_r);
+      fl_holes(holes);
     }
     // pcb
     fl_color(pcb_color) 
@@ -165,11 +165,11 @@ module ofl_psu(
   }
 
   module do_drill()  {
-    fl_holes(holes,thick=grid_t,r=screw_r);
+    fl_holes(holes);
   }
 
   module do_layout() {
-    fl_lay_points(holes,assembly)
+    fl_lay_holes(holes,assembly)
       children();
   }
 

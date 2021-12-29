@@ -118,5 +118,5 @@ module support(pcb) {
   screw = fl_screw(pcb);
   translate(-Z(fl_pcb_thick(pcb)))
     fl_color($FL_FILAMENT)
-      fl_cylinder(r=screw_head_radius(screw),h=T,octant=-Z);
+      fl_cylinder(r=screw_head_radius(screw),h=T,octant=-$normal);
 }

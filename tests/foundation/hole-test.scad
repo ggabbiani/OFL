@@ -40,11 +40,11 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Holes] */
 
-SIZE  = 20;       // [20:20]
+SIZE  = 20;       // [20:30]
 // hole depth
 T     = 0.7;      // [0.7:0.1:3]
-// hole radius
-R     = 2;        // [0:0.1:3]
+// hole diameter
+D     = 2;        // [2:4]
 MODE  = "holes";  // [layout,holes]
 
 ONE   = true;
@@ -56,34 +56,34 @@ SIX   = true;
 
 /* [Hidden] */
 
-vectors = [
+holes = [
   // ONE
-  [SIZE/2*[0,0,1],+Z],
+  [SIZE/2*[0,0,1],+Z, D, T],
   // TWO
-  [SIZE/2*[+0.5,+0.5,-1],-Z],
-  [SIZE/2*[-0.5,-0.5,-1],-Z],
+  [SIZE/2*[+0.5,+0.5,-1],-Z, D, T],
+  [SIZE/2*[-0.5,-0.5,-1],-Z, D, T],
   // THREE
-  [SIZE/2*[ 0,    1,   0  ],  +Y],
-  [SIZE/2*[+0.5,  1,  +0.5],  +Y],
-  [SIZE/2*[-0.5,  1,  -0.5],  +Y],
+  [SIZE/2*[ 0,    1,   0  ],  +Y, D, T],
+  [SIZE/2*[+0.5,  1,  +0.5],  +Y, D, T],
+  [SIZE/2*[-0.5,  1,  -0.5],  +Y, D, T],
   // FOUR
-  [SIZE/2*[-1,   0.5,  0.5 ],-X],
-  [SIZE/2*[-1,  -0.5,  0.5 ],-X],
-  [SIZE/2*[-1,  -0.5, -0.5 ],-X],
-  [SIZE/2*[-1,   0.5, -0.5 ],-X],
+  [SIZE/2*[-1,   0.5,  0.5 ],-X, D, T],
+  [SIZE/2*[-1,  -0.5,  0.5 ],-X, D, T],
+  [SIZE/2*[-1,  -0.5, -0.5 ],-X, D, T],
+  [SIZE/2*[-1,   0.5, -0.5 ],-X, D, T],
   // FIVE
-  [SIZE/2*[1,   0,  0   ],+X],
-  [SIZE/2*[1, 0.5,  0.5 ],+X],
-  [SIZE/2*[1,-0.5,  0.5 ],+X],
-  [SIZE/2*[1,-0.5, -0.5 ],+X],
-  [SIZE/2*[1, 0.5, -0.5 ],+X],
+  [SIZE/2*[1,   0,  0   ],+X, D, T],
+  [SIZE/2*[1, 0.5,  0.5 ],+X, D, T],
+  [SIZE/2*[1,-0.5,  0.5 ],+X, D, T],
+  [SIZE/2*[1,-0.5, -0.5 ],+X, D, T],
+  [SIZE/2*[1, 0.5, -0.5 ],+X, D, T],
   // SIX
-  [SIZE/2*[+0.5,  -1,  0  ],-Y],
-  [SIZE/2*[-0.5,  -1,  0  ],-Y],
-  [SIZE/2*[+0.5,  -1,  0.5],-Y],
-  [SIZE/2*[-0.5,  -1,  0.5],-Y],
-  [SIZE/2*[-0.5,  -1, -0.5],-Y],
-  [SIZE/2*[+0.5,  -1, -0.5],-Y],
+  [SIZE/2*[+0.5,  -1,  0  ],-Y, D, T],
+  [SIZE/2*[-0.5,  -1,  0  ],-Y, D, T],
+  [SIZE/2*[+0.5,  -1,  0.5],-Y, D, T],
+  [SIZE/2*[-0.5,  -1,  0.5],-Y, D, T],
+  [SIZE/2*[-0.5,  -1, -0.5],-Y, D, T],
+  [SIZE/2*[+0.5,  -1, -0.5],-Y, D, T],
 ];
 
 enable  = [
@@ -98,11 +98,15 @@ enable  = [
 if (MODE=="layout") difference() {
   fl_color("red") 
     fl_cube(size=SIZE,octant=O);
-  fl_lay_points(points=vectors,enable=enable)
+  fl_lay_holes(points=holes,enable=enable)
     translate(NIL*$normal) 
-      fl_screw(FL_FOOTPRINT,type=M2_cs_cap_screw,len=T,direction=[$normal,0]);
+      let(
+        screw = $diameter==2 ? M2_cs_cap_screw
+              : $diameter==3 ? M3_cs_cap_screw
+              : M4_cs_cap_screw
+      ) fl_screw(FL_FOOTPRINT,type=screw,len=$depth,direction=[$normal,0]);
 } else difference() {
   fl_color("red") 
     fl_cube(size=SIZE,octant=O);
-  fl_holes(points=vectors,enable=enable,thick=T,r=R);
+  fl_holes(holes=holes,enable=enable);
 }

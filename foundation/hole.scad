@@ -24,32 +24,36 @@ use     <type_trait.scad>
 include <3d.scad>
 
 /**
-  * Layouts children along a list of points.
+  * Layouts children along a list of holes.
   *
-  * Point information is used for positioning, normals are passed back to 
-  * children through context.
+  * Point information is used for positioning.
+  * normals, diameter and depth are passed back to children context.
   *
   * NOTE: supported normals are x,y or z semi-axis ONLY
   *
   * Children context:
-  *  $i        - ordinal position inside «points»
+  *  $depth     - hole depth
+  *  $diameter  - hole diameter
+  *  $i         - ordinal position inside «points»
   *  $normal
   */
-module fl_lay_points(
-  // list of point-normal pairs
-  points,
+module fl_lay_holes(
+  // list of hole specs
+  holes,
   // list of enabled normals (ex. ["+X","-z"])
   // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"])
   enable  = ["-x","+x","-y","+y","-z","+z"]
 ) {
-  assert(fl_tt_isPointNormalList(points),points);
+  assert(fl_tt_isHoleList(holes),holes);
   enable  = is_string(enable) ? [enable] : enable;
   assert(fl_tt_isList(enable,function(s) fl_tt_isAxisString(s)),enable);
 
-  for($i=[0:len(points)-1]) {
-    plane   = points[$i];
-    point   = plane[0];
-    $normal = plane[1];
+  for($i=[0:len(holes)-1]) {
+    hole      = holes[$i];
+    point     = hole[0];
+    $normal   = hole[1];
+    $diameter = hole[2];
+    $depth    = len(hole)==4 ? assert(is_num(hole[3])) hole[3] : 0;
     if ((($normal==-X) && fl_tt_isInDictionary("-x",enable))
     ||  (($normal==+X) && fl_tt_isInDictionary("+x",enable))
     ||  (($normal==-Y) && fl_tt_isInDictionary("-y",enable))
@@ -67,20 +71,13 @@ module fl_lay_points(
   * NOTE: supported normals are x,y or z semi-axis ONLY
   */
 module fl_holes(
-  // list of point-normal pairs
-  points,
+  // list of holes specs
+  holes,
   // list of enabled normals (ex. ["+X","-z"])
   // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"])
-  enable  = ["-x","+x","-y","+y","-z","+z"],
-  // hole depth
-  thick,
-  // hole radius
-  r
+  enable  = ["-x","+x","-y","+y","-z","+z"]
 ) {
-  assert(is_num(thick),thick);
-  assert(is_num(r),r);
-
-  fl_lay_points(points,enable)
+  fl_lay_holes(holes,enable)
     translate(NIL*$normal) 
-      fl_cylinder(h=thick+NIL2,r=r,direction=[-$normal,0]);
+      fl_cylinder(h=$depth+NIL2,d=$diameter,direction=[-$normal,0]);
 }

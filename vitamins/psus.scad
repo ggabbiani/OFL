@@ -27,6 +27,7 @@ include <NopSCADlib/lib.scad>
 
 PSU_MeanWell_RS_25_5 = let(
     size  = [51,78,28],
+    pcb_t = 1.6,
     // sheet metal thickness
     t     = 1,
     // TODO: terminal must become a stand-alone vitamin
@@ -40,7 +41,7 @@ PSU_MeanWell_RS_25_5 = let(
       [+size.x/2,  size.y,      size.z],  // positive corner
     ]),
     fl_screw(value=M3_cs_cap_screw),
-    ["pcb thickness",       1.6],
+    ["pcb thickness",       pcb_t],
 
     ["terminal screw",      M3_pan_screw  ],
     ["terminal ways",       term_ways     ],
@@ -59,11 +60,11 @@ PSU_MeanWell_RS_25_5 = let(
       [-FL_Z,[size.x, size.y, t]],
     ]],
     fl_holes(value=[
-      [[25.5,8.75,14                ],+FL_X],
-      [[25.5,75,14                  ],+FL_X],
-      [[0,12,0                      ],-FL_Z],
-      [[0,67,0                      ],-FL_Z],
-      [[-size.x/2+6.2,  size.y, 10  ],+FL_Y],
+      [[25.5,8.75,14                ],+FL_X, 3, pcb_t],
+      [[25.5,75,14                  ],+FL_X, 3, pcb_t],
+      [[0,12,0                      ],-FL_Z, 3, pcb_t],
+      [[0,67,0                      ],-FL_Z, 3, pcb_t],
+      [[-size.x/2+6.2,  size.y, 10  ],+FL_Y, 3, pcb_t],
     ]),
     fl_vendor(value=
       [
@@ -75,6 +76,7 @@ PSU_MeanWell_RS_25_5 = let(
 
 PSU_MeanWell_RS_15_5 = let(
     size      = [51,62.5,28],
+    pcb_t     = 1.6,
     // sheet metal thickness
     t         = 1, 
     // TODO: terminal must become a stand-alone vitamin
@@ -88,7 +90,7 @@ PSU_MeanWell_RS_15_5 = let(
       [+size.x/2, size.y,       size.z],  // positive corner
     ]),
     fl_screw(value=M3_cs_cap_screw),
-    ["pcb thickness",       1.6],
+    ["pcb thickness",       pcb_t],
     
     ["terminal screw",      M3_pan_screw  ],
     ["terminal ways",       term_ways     ],
@@ -107,11 +109,11 @@ PSU_MeanWell_RS_15_5 = let(
       [-FL_Z,[size.x, size.y, t]],
     ]],
     fl_holes(value=[
-      [[size.x/2,     11.9,   15.1  ],+FL_X],
-      [[size.x/2,     size.x, 15.1  ],+FL_X],
-      [[0,            8.75,   0     ],-FL_Z],
-      [[0,            47.85,  0     ],-FL_Z],
-      [[-size.x/2+6.2,  size.y, 10  ],+FL_Y],
+      [[size.x/2,     11.9,   15.1  ],+FL_X, 3, pcb_t],
+      [[size.x/2,     size.x, 15.1  ],+FL_X, 3, pcb_t],
+      [[0,            8.75,   0     ],-FL_Z, 3, pcb_t],
+      [[0,            47.85,  0     ],-FL_Z, 3, pcb_t],
+      [[-size.x/2+6.2,  size.y, 10  ],+FL_Y, 3, pcb_t],
     ]),
     fl_vendor(value=
       [
