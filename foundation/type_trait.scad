@@ -133,9 +133,24 @@ function fl_tt_isPointNormal(plane) = let(
 function fl_tt_isPointNormalList(list) = 
   fl_tt_isList(list,f=function(plane) fl_tt_isPointNormal(plane));
 
-function isAxisString(s) = 
+function fl_tt_isAxisString(s) = 
   fl_tt_isInDictionary(
     string=s,
     dictionary=["-x","+x","-y","+y","-z","+z"],
     nocase=true
   );
+
+/**
+ * Hole representation as:
+ * «3d point»,«plane normal»,«diameter»[,«depth»]
+ * NOTE: «depth» is an optional scalar, when absent or 0 means thru-hole
+ */
+function fl_tt_isHole(hole) = let(
+    len   = len(hole),
+    depth = len==4 ? hole[3] : 0
+  )  ((len==4 && is_num(depth)) || (len==3 && depth==0))
+  && fl_tt_isPointNormal([hole[0],hole[1]])
+  && is_num(hole[2]);
+
+function fl_tt_isHoleList(list) = 
+  fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));

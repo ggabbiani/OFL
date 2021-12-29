@@ -79,3 +79,9 @@ assert(
     [[-24.5, 3.5,  0 ],[0,1,0]],
   ])
 );
+
+assert(fl_tt_isHole([[1,2,3],[1,0,0]])==false);
+assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7])==true);
+assert(fl_tt_isHole([[1,2,3],[1,0,0],"2.7"])==false);
+assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5])==true);
+assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,"5"])==false);
