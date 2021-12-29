@@ -30,26 +30,27 @@ include <NopSCADlib/vitamins/screws.scad>
 include <NopSCADlib/vitamins/pin_headers.scad>
 
 // namespace for PCB engine
-FL_PCB_NS  = "PCB";
+FL_PCB_NS  = "pcb";
 
 //*****************************************************************************
 // PCB properties
 // when invoked by «type» parameter act as getters
 // when invoked by «value» parameter act as property constructors
-function fl_PCB_components(type,value) = fl_property(type,"PCB/components",value);
-function fl_PCB_thick(type,value)      = fl_property(type,"PCB/thickness",value);
+function fl_pcb_components(type,value) = fl_property(type,"pcb/components",value);
+function fl_pcb_thick(type,value)      = fl_property(type,"pcb/thickness",value);
 
 FL_PCB_RPI4 = let(
-  w     = 56,
-  l     = 85,
-  h     = 16,
-  pcb_t = 1.5,
-  bbox  = [[-w/2,0,-pcb_t],[+w/2,l,0+h]]
+  w       = 56,
+  l       = 85,
+  h       = 16,
+  pcb_t   = 1.5,
+  hole_d  = 2.7,
+  bbox    = [[-w/2,0,-pcb_t],[+w/2,l,0+h]]
 ) [
   fl_name(value="RPI4-MODBP-8GB"),
   fl_bb_corners(value=bbox),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  fl_PCB_thick(value=pcb_t),
+  fl_pcb_thick(value=pcb_t),
   fl_holes(value=[ 
     // each row represents a hole with the following format:
     // [point],[normal]
@@ -59,7 +60,7 @@ FL_PCB_RPI4 = let(
     [[-24.5, 61.5, 0 ], +FL_Z],
     ]),
   fl_screw(value=M3_cap_screw),
-  fl_PCB_components(value=[
+  fl_pcb_components(value=[
     // each row represent one component with the following format:
     // ["label", ["engine", [position], [[director],rotation] type]]
     ["POWER IN",  ["USB",       [25.5,      11.2, 0], [+FL_X,0  ], FL_USB_TYPE_C  ]],

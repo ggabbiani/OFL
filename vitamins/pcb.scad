@@ -51,8 +51,8 @@ module fl_pcb(
   axes      = fl_list_has(verbs,FL_AXES);
   verbs     = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  pcb_t     = fl_PCB_thick(type);
-  comps     = fl_PCB_components(type);
+  pcb_t     = fl_pcb_thick(type);
+  comps     = fl_pcb_components(type);
   bbox      = fl_bb_corners(type);
   size      = fl_bb_size(type);
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;

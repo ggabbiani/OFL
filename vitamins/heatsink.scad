@@ -31,7 +31,7 @@ module pimoroni(
   bottom    = fl_get(type,"bottom part");
   top       = fl_get(type,"top part");
   rpi4      = FL_PCB_RPI4;
-  pcb_t     = fl_PCB_thick(rpi4);
+  pcb_t     = fl_pcb_thick(rpi4);
   screw     = fl_screw(type);
   dxf       = fl_get(type,"DXF model");
 
