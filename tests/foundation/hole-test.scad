@@ -98,7 +98,7 @@ enable  = [
 if (MODE=="layout") difference() {
   fl_color("red") 
     fl_cube(size=SIZE,octant=O);
-  fl_lay_holes(points=holes,enable=enable)
+  fl_lay_holes(holes=holes,enable=enable)
     translate(NIL*$normal) 
       let(
         screw = $diameter==2 ? M2_cs_cap_screw
