@@ -296,7 +296,7 @@ let(
 ) fl_bb_polygon(pts);
 
 module fl_ellipticArc(
-  verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX,
+  verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
   e,                  // ellipse in [a,b] form
   angles,             // start|end angles
   thick,              // added to radius defines the external radius
@@ -330,6 +330,17 @@ module fl_ellipticArc(
   if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
 }
+
+//**** elliptic annulus *******************************************************
+
+module fl_ellipticAnnulus(
+  verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  e,                  // ellipse in [a,b] form
+  thick,              // added to radius defines the external radius
+  quadrant
+  ) {
+  fl_ellipticArc(verbs,e,[0,360],thick,quadrant);
+} 
 
 //**** ellipse ****************************************************************
 
@@ -468,6 +479,18 @@ module fl_circle(
   if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
 }
+
+//**** annulus ****************************************************************
+
+module fl_annulus(
+  verbs     = FL_ADD,
+  r,          // INTERNAL radius
+  d,          // INTERNAL diameter
+  thick,      // added to radius defines the external radius
+  quadrant
+  ) {
+  fl_arc(verbs,r,d,[0,360],thick,quadrant);
+} 
 
 //**** arc ********************************************************************
 
