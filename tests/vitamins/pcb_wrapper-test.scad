@@ -229,7 +229,7 @@ if (ORIGINAL)
 else {
   pcb = fl_pcb_Wrapper(nop);
   fl_pcb(verbs,type=pcb,direction=direction,octant=octant,
-      $FL_TRACE=true,
+      // $FL_TRACE=true,
       $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD
       );
 }

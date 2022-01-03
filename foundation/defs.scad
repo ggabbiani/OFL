@@ -192,7 +192,7 @@ function fl_get(type,key,default) =
  * 'bipolar' property helper: 
  *
  * type/key{/default} ↦ value       (property getter)
- * key/value          ↦ [key,value] (property constructor)
+ * key{/value}        ↦ [key,value] (property constructor)
  *
  * It concentrates property key definition reducing possible mismatch when 
  * referring to property key in the more usual getter/setter function pair.
@@ -207,13 +207,21 @@ function fl_property(type,key,value,default)  =
 // General properties
 // when invoked by «type» parameter act as getters
 // when invoked by «value» parameter act as property constructors
+// NOTE: when called without «type» and «value» parameters, it acts as a 
+// constructor with undef value, usable for retrieving the key after '0' post
+// indexing, as in the following examples:
+// fl_connectors()[0]   ↦ "connectors"
+// fl_description()[0]  ↦ "description"
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value); 
 function fl_director(type,value)    = fl_property(type,"director",value);
-function fl_holes(type,value)       = fl_property(type,"holes [«point»,«surface normal»,«diameter»,«optional depth»] format",value);
+// holes in [«point»,«surface normal»,«diameter»,«optional depth»] format
+function fl_holes(type,value)       = fl_property(type,"holes",value);
 function fl_name(type,value)        = fl_property(type,"name",value);
-function fl_material(type,value,default)    = fl_property(type,"material (actually a color)",value,default);
-function fl_nopSCADlib(type,value,default)  = fl_property(type,"Verbatim NopSCADlib definition",value,default);
+function fl_material(type,value,default)    
+                                    = fl_property(type,"material (actually a color)",value,default);
+function fl_nopSCADlib(type,value,default)  
+                                    = fl_property(type,"Verbatim NopSCADlib definition",value,default);
 function fl_rotor(type,value)       = fl_property(type,"rotor",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
@@ -271,16 +279,13 @@ function fl_bb_transform(M,bbcorners) = let(
 ) [[min(Xs),min(Ys),min(Zs)],[max(Xs),max(Ys),max(Zs)]];
 
 //*****************************************************************************
-// type traits
-function fl_has(type,property,check) =
+// type check
+function fl_has(type,property,check=function(value) true) =
   assert(is_string(property))
   assert(is_list(type))
   assert(is_function(check))
   let(i=search([property],type)) 
   i != [[]] ? assert(len(type[i[0]])==2,"Malformed type") check(type[i[0]][1]) : false;
-
-function fl_has_size(type) = fl_has(type,"size",function(value) is_num(value));
-function fl_hasBbCorners(type)  = fl_has(type,"bounding corners",function(value) is_list(value) && len(value)==2);
 
 module fl_parse(verbs) {
   assert(is_list(verbs)||is_string(verbs),verbs);

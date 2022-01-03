@@ -164,7 +164,7 @@ module fl_pcb(
   cut_thick = thick;
   material  = fl_material(type,default="green");
   radius    = fl_pcb_radius(type);
-  grid      = fl_has(type,"pcb/grid",function(value) true) ? fl_pcb_grid(type) : undef;
+  grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
 
   fl_trace("type",type);
   fl_trace("holes",fl_holes(type));
