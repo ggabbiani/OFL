@@ -77,6 +77,8 @@ module fl_holes(
   // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"])
   enable  = ["-x","+x","-y","+y","-z","+z"]
 ) {
+  fl_trace("enable",enable);
+  fl_trace("holes",holes);
   fl_lay_holes(holes,enable)
     translate(NIL*$normal) 
       fl_cylinder(h=$depth+NIL2,d=$diameter,direction=[-$normal,0]);
