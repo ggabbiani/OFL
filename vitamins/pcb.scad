@@ -30,6 +30,97 @@ use     <screw.scad>
 
 include <pcbs.scad>
 
+// Convert offsets from the edge to coordinates relative to the centre
+// This allows negative ordinates to represent offsets from the far edge
+function pcb_coord(size, p) = [
+    (p.x >= 0 ? p.x : size.x + p.x) - size.x / 2,
+    (p.y >= 0 ? p.y : size.y + p.y) - size.y / 2
+  ];
+
+module fl_grid_plating(grid,size,pcb_color,holes) {
+  t               = size.z;
+  plating         = 0.1;
+  fr4             = pcb_color != "sienna";
+  plating_colour  = is_undef(grid[4]) ? ((pcb_color == "green" || pcb_color == "#2140BE") ? silver : pcb_color == "sienna" ? copper : gold) : grid[4];
+  color(plating_colour)
+    translate(-Z(plating))
+      linear_extrude(fr4 ? t + 2 * plating : plating) {
+        fl_grid_layout(grid,size)
+          fl_annulus(d=1-NIL2,thick=0.5);
+        // oval lands at the ends
+        if (fr4 && len(grid) < 3) { 
+          screw_x = holes[0][0].x;
+          y0      = grid.y;
+          rows    = fl_grid_geometry(grid,size).y;
+          for(end = [-1, 1], y = [1 : rows - 1])
+            translate([end * screw_x, y0 + y * inch(0.1) - size.y / 2])
+              hull()
+                for(x = [-1, 1])
+                  translate([x * 1.6 / 2, 0])
+                    circle(d = 2);
+        }
+      }
+}
+
+/**
+ * Return the grid size in [cols,rows] format
+ */
+function fl_grid_geometry(grid,size) = let(
+    cols  = is_undef(grid[2]) ? round((size.x - 2 * grid.x) / inch(0.1))  : grid[2] - 1,
+    rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
+  ) [cols,rows];
+
+/**
+ * Iterates over grid members calling children with the following context:
+ * $position  ⇒ current [column,row] position 
+ * $point     ⇒ current [x,y,z] 3d position
+ */
+module fl_grid_iterate(
+  // grid specs as from NopSCADlib: [«origin x»,«origin y»,«optional columns»,«optional rows»,«optional plating color»]
+  grid,
+  // 2d pcb size
+  size
+) {
+  // conversion inches ⇒ millimeters
+  function inch(inches) = inches*25.4;
+  // Transforms [columns,rows,z] grid position into 3d [x,y,z] position
+  function grid2xyz(position) = let(
+    column  = position.x,
+    row     = position.y,
+    z       = is_undef(position.z) ? 0 : position.z
+  ) [
+      -size.x / 2 + grid.x + 2.54 * column,
+      -size.y / 2 + grid.y + 2.54 * row, 
+      +size.z + z
+    ];
+
+  geometry  = fl_grid_geometry(grid,size);
+  cols      = geometry.x;
+  rows      = geometry.y;
+  for(x = [0 : cols], y = [0 : rows])
+    let(
+      $position = [x,y],
+      $point    = grid2xyz($position)
+    ) children();
+  // $position = [0,0];
+  // $point    = grid2xyz($position);
+  // children();
+}
+
+/**
+ * Layout children over 3d positions, same context as fl_grid_iterate() module:
+ */
+module fl_grid_layout(
+  // grid specs as from NopSCADlib: [«origin x,y»,«optional columns»,«optional rows»]
+  grid,
+  // 2d pcb size
+  size
+) {
+  fl_grid_iterate(grid,size)
+    translate($point)
+      children();
+}
+
 module fl_pcb(
   verbs=FL_ADD,   // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT
   type,
@@ -63,15 +154,30 @@ module fl_pcb(
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] 
             : assert(fl_tt_isThickList(thick)) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
-  cut_thick  = thick;
+  cut_thick = thick;
+  material  = fl_material(type,default="green");
+  radius    = fl_pcb_radius(type);
+  grid      = fl_has(type,"pcb/grid",function(value) true) ? fl_pcb_grid(type) : undef;
+
+  fl_trace("type",type);
+  fl_trace("holes",fl_holes(type));
+  fl_trace("bbox",bbox);
+  fl_trace("grid",grid);
 
   module do_add() {
-    fl_color("green") difference() {
-      translate(-Z(pcb_t))
-        linear_extrude(pcb_t)
-          fl_square(corners=3,size=[size.x,size.y],quadrant=+Y);
+    fl_color(material) difference() {
+      translate(Z(bbox[0].z)) linear_extrude(pcb_t)
+        difference() {
+          translate(bbox[0]) 
+            fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
+          if (grid)
+            fl_grid_layout(grid,size)
+              circle(d=1);
+        }
       fl_holes(holes,"+Z");
     }
+    if (grid)
+      fl_grid_plating(grid=grid,size=size,pcb_color=material,holes=holes);
   }
 
   module do_layout(class,label,directions) {
