@@ -27,6 +27,7 @@ include <hds.scad>
 include <jacks.scad>
 include <knurl_nuts.scad>
 include <magnets.scad>
+use     <pcb_holder.scad>
 include <pcbs.scad>
 include <pin_headers.scad>
 include <psus.scad>
