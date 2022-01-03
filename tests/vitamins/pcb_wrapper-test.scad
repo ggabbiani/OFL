@@ -201,6 +201,9 @@ function nop_holes(nop) = let(
  * wrapper constructor from NopSCADlib pcb objects.
  * Returns a valid OFL PCB.
  */
+// TODO: decide where to put this, either inside fl_pcb() module when constructing
+// from NopSCADlib types or as a separate function constructor. In whatever case, the
+// name must be updated, since it doesn't correspond to a wrapper, rather to an import...
 function fl_pcb_Wrapper(nop) = let(
     w         = max(pcb_width(nop),pcb_length(nop)),
     l         = min(pcb_width(nop),pcb_length(nop)),

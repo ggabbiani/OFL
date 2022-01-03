@@ -75,6 +75,7 @@ function fl_grid_geometry(grid,size) = let(
  * $position  ⇒ current [column,row] position 
  * $point     ⇒ current [x,y,z] 3d position
  */
+// TODO: unify this grid implementation with fl_2d_grid()
 module fl_grid_iterate(
   // grid specs as from NopSCADlib: [«origin x»,«origin y»,«optional columns»,«optional rows»,«optional plating color»]
   grid,
@@ -108,8 +109,14 @@ module fl_grid_iterate(
 }
 
 /**
- * Layout children over 3d positions, same context as fl_grid_iterate() module:
+ * Layout children over 3d positions, same context as fl_grid_iterate() module.
  */
+// TODO: better management needed for the grid origin. 
+// For now it follows NopSCADlib conventions, implying the grid placed in the first quadrant.
+// This implies positive coords for all the grid points. Useful for implementing
+// the convention abouot negative coordinates for hole offsets from the pcb edges.
+// But this is incoherent with OFL hole conventions, actually using all the 3d space
+// and so accepting also negatives as valid hole coordinates.
 module fl_grid_layout(
   // grid specs as from NopSCADlib: [«origin x,y»,«optional columns»,«optional rows»]
   grid,
@@ -164,6 +171,9 @@ module fl_pcb(
   fl_trace("bbox",bbox);
   fl_trace("grid",grid);
 
+  // TODO: better clarify the kind of native positioning, right now it places pcb on first quadrant
+  // then translate according the bounding box. This doesn't match the behaviour followed
+  // for holes, that are instead already placed din the final full 3d space
   module do_add() {
     fl_color(material) difference() {
       translate(Z(bbox[0].z)) linear_extrude(pcb_t)
