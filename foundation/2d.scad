@@ -514,6 +514,8 @@ module fl_arc(
   size    = bbox[1] - bbox[0];
   M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
 
+  fl_trace("radius",radius);
+
   multmatrix(M) fl_parse(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) difference() {
