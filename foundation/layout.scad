@@ -44,6 +44,7 @@ module fl_bb_add(
   corners, // bounding box corners,
   2d=false
 ) {
+  fl_trace("$FL_ADD",$FL_ADD);
   assert(is_list(corners),corners)
   translate(corners[0]) 
     if (!2d) fl_cube(size=corners[1]-corners[0],octant=+X+Y+Z);

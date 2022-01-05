@@ -667,6 +667,7 @@ module fl_square(
   fl_trace("size",size);
   fl_trace("corners",corners);
   fl_trace("points",points);
+  fl_trace("$FL_ADD",$FL_ADD);
   
   multmatrix(M) fl_parse(verbs) {
     if ($verb==FL_ADD) {
