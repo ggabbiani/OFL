@@ -77,7 +77,7 @@ function fl_grid_geometry(grid,size) = let(
  */
 // TODO: unify this grid implementation with fl_2d_grid()
 module fl_grid_iterate(
-  // grid specs as from NopSCADlib: [«origin x»,«origin y»,«optional columns»,«optional rows»,«optional plating color»]
+  // grid specs as from NopSCADlib: [«origin x,y»{,«columns»{,«rows»}}]
   grid,
   // 2d pcb size
   size
@@ -103,22 +103,19 @@ module fl_grid_iterate(
       $position = [x,y],
       $point    = grid2xyz($position)
     ) children();
-  // $position = [0,0];
-  // $point    = grid2xyz($position);
-  // children();
 }
 
 /**
  * Layout children over 3d positions, same context as fl_grid_iterate() module.
  */
 // TODO: better management needed for the grid origin. 
-// For now it follows NopSCADlib conventions, implying the grid placed in the first quadrant.
+// For now it follows NopSCADlib conventions with the grid in the first quadrant.
 // This implies positive coords for all the grid points. Useful for implementing
 // the convention abouot negative coordinates for hole offsets from the pcb edges.
 // But this is incoherent with OFL hole conventions, actually using all the 3d space
 // and so accepting also negatives as valid hole coordinates.
 module fl_grid_layout(
-  // grid specs as from NopSCADlib: [«origin x,y»,«optional columns»,«optional rows»]
+  // grid specs as from NopSCADlib: [«origin x,y»{,«columns»{,«rows»}}]
   grid,
   // 2d pcb size
   size
