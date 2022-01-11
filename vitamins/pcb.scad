@@ -20,6 +20,7 @@
  */
 include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
+use     <../foundation/grid.scad>
 use     <../foundation/hole.scad>
 use     <../foundation/placement.scad>
 include <../foundation/type_trait.scad>
@@ -29,101 +30,6 @@ include <pin_headers.scad>
 use     <screw.scad>
 
 include <pcbs.scad>
-
-// Convert offsets from the edge to coordinates relative to the centre
-// This allows negative ordinates to represent offsets from the far edge
-function pcb_coord(size, p) = [
-    (p.x >= 0 ? p.x : size.x + p.x) - size.x / 2,
-    (p.y >= 0 ? p.y : size.y + p.y) - size.y / 2
-  ];
-
-module fl_grid_plating(grid,size,pcb_color,holes) {
-  t               = size.z;
-  plating         = 0.1;
-  fr4             = pcb_color != "sienna";
-  plating_colour  = is_undef(grid[4]) ? ((pcb_color == "green" || pcb_color == "#2140BE") ? silver : pcb_color == "sienna" ? copper : gold) : grid[4];
-  color(plating_colour)
-    translate(-Z(plating))
-      linear_extrude(fr4 ? t + 2 * plating : plating) {
-        fl_grid_layout(grid,size)
-          fl_annulus(d=1-NIL2,thick=0.5);
-        // oval lands at the ends
-        if (fr4 && len(grid) < 3) { 
-          screw_x = holes[0][0].x;
-          y0      = grid.y;
-          rows    = fl_grid_geometry(grid,size).y;
-          for(end = [-1, 1], y = [1 : rows - 1])
-            translate([end * screw_x, y0 + y * inch(0.1) - size.y / 2])
-              hull()
-                for(x = [-1, 1])
-                  translate([x * 1.6 / 2, 0])
-                    circle(d = 2);
-        }
-      }
-}
-
-/**
- * Return the grid size in [cols,rows] format
- */
-function fl_grid_geometry(grid,size) = let(
-    cols  = is_undef(grid[2]) ? round((size.x - 2 * grid.x) / inch(0.1))  : grid[2] - 1,
-    rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
-  ) [cols,rows];
-
-/**
- * Iterates over grid members calling children with the following context:
- * $position  ⇒ current [column,row] position 
- * $point     ⇒ current [x,y,z] 3d position
- */
-// TODO: unify this grid implementation with fl_2d_grid()
-module fl_grid_iterate(
-  // grid specs as from NopSCADlib: [«origin x,y»{,«columns»{,«rows»}}]
-  grid,
-  // 2d pcb size
-  size
-) {
-  // conversion inches ⇒ millimeters
-  function inch(inches) = inches*25.4;
-  // Transforms [columns,rows,z] grid position into 3d [x,y,z] position
-  function grid2xyz(position) = let(
-    column  = position.x,
-    row     = position.y,
-    z       = is_undef(position.z) ? 0 : position.z
-  ) [
-      -size.x / 2 + grid.x + 2.54 * column,
-      -size.y / 2 + grid.y + 2.54 * row, 
-      +size.z + z
-    ];
-
-  geometry  = fl_grid_geometry(grid,size);
-  cols      = geometry.x;
-  rows      = geometry.y;
-  for(x = [0 : cols], y = [0 : rows])
-    let(
-      $position = [x,y],
-      $point    = grid2xyz($position)
-    ) children();
-}
-
-/**
- * Layout children over 3d positions, same context as fl_grid_iterate() module.
- */
-// TODO: better management needed for the grid origin. 
-// For now it follows NopSCADlib conventions with the grid in the first quadrant.
-// This implies positive coords for all the grid points. Useful for implementing
-// the convention abouot negative coordinates for hole offsets from the pcb edges.
-// But this is incoherent with OFL hole conventions, actually using all the 3d space
-// and so accepting also negatives as valid hole coordinates.
-module fl_grid_layout(
-  // grid specs as from NopSCADlib: [«origin x,y»{,«columns»{,«rows»}}]
-  grid,
-  // 2d pcb size
-  size
-) {
-  fl_grid_iterate(grid,size)
-    translate($point)
-      children();
-}
 
 module fl_pcb(
   verbs=FL_ADD,   // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT
@@ -168,6 +74,36 @@ module fl_pcb(
   fl_trace("bbox",bbox);
   fl_trace("grid",grid);
 
+  module fl_grid_plating() {
+    t               = size.z;
+    plating         = 0.1;
+    fr4             = material != "sienna";
+    plating_colour  = is_undef(grid[4]) ? ((material == "green" || material == "#2140BE") ? silver : material == "sienna" ? copper : gold) : grid[4];
+    color(plating_colour)
+      translate(-Z(plating))
+        linear_extrude(fr4 ? t + 2 * plating : plating) {
+          fl_grid_layout(
+            step    = inch(0.1),
+            bbox    = bbox+[grid,-grid],
+            clip    = false
+          )
+            fl_annulus(d=1-NIL2,thick=0.5);
+
+          // oval lands at the ends
+          if (fr4 && len(grid) < 3) { 
+            screw_x = holes[0][0].x;
+            y0      = grid.y;
+            rows    = fl_grid_geometry(grid,size).y;
+            for(end = [-1, 1], y = [1 : rows - 1])
+              translate([end * screw_x, y0 + y * inch(0.1) - size.y / 2])
+                hull()
+                  for(x = [-1, 1])
+                    translate([x * 1.6 / 2, 0])
+                      circle(d = 2);
+          }
+        }
+  }
+
   // TODO: better clarify the kind of native positioning, right now it places pcb on first quadrant
   // then translate according the bounding box. This doesn't match the behaviour followed
   // for holes, that are instead already placed din the final full 3d space
@@ -177,14 +113,21 @@ module fl_pcb(
         difference() {
           translate(bbox[0]) 
             fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
-          if (grid)
-            fl_grid_layout(grid,size)
-              circle(d=1);
+          if (grid) {
+            fl_trace("PCB  size:",size);
+            fl_grid_layout(
+              step    = inch(0.1),
+              bbox    = bbox+[grid,-grid],
+              clip    = false
+              // $FL_TRACE=true
+            )
+              fl_circle(d=1);
+          }
         }
       fl_holes(holes,"+Z");
     }
     if (grid)
-      fl_grid_plating(grid=grid,size=size,pcb_color=material,holes=holes);
+      fl_grid_plating();
   }
 
   module do_layout(class,label,directions) {

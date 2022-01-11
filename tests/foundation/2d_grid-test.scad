@@ -1,6 +1,4 @@
 /*
- * Foundation test template.
- *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -20,7 +18,7 @@
  */
 include <../../foundation/unsafe_defs.scad>
 include <../../foundation/incs.scad>
-use     <../../foundation/template.scad>
+use     <../../foundation/grid.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -34,83 +32,48 @@ $FL_TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
-/* [Supported verbs] */
+/* [Grid] */
 
-// adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of user passed accessories (like alternative screws)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a box representing the payload of the shape
-PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+GRID_TYPE   = "quad";   // [quad,hex]
+GRID_CLIP   = false;
+// draw the grid clipping bounding box
+GRID_BBOX   = false;
+BORDER      = [1,1];    // [0:0.05:20]
+TRIM_ORIGIN = [0,0];      // [-10:0.1:+10]
+QUAD_STEP = [6,6];  // [0:0.01:+10]
+// radius of the polygon circumcircle used for creating 6 holes for each grid point
+HEX_STEP    = 6;    // [0:0.1:10]
 
-/* [Placement] */
+/* [Holes] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
-
-/* [Direction] */
-
-DIR_NATIVE  = true;
-// ARBITRARY direction vector
-DIR_Z       = [0,0,1];  // [-1:0.1:+1]
-// rotation around
-DIR_R       = 0;        // [0:360]
-
-/* [Test] */
-
-MATERIAL    = "silver"; // [bronze,copper red,copper penny,gold,pale copper,silver]
-// sheet metal size
-SIZE        = [50,50,0.5];
-// inter drill shape distance
-DELTA       = 1.60;
-// drill shape diameter
-D           = 4.4;
-// Number of grid edges
-GRID_EDGES  = 50;     // [3:1:50]
+// hole vertex number
+HOLE_VERTICES = 50; // [3:1:50]
+// hole diameter
+HOLE_D        = 4.4;
 // drill shape rotation about +Z
 ROTATION    = 0;    // [0:360]
-// when true sheet is bent
-BEND        = false;
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
-verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if (AXES!="OFF")      FL_AXES,
-  if (BBOX!="OFF")      FL_BBOX,
-  if (CUTOUT!="OFF")    FL_CUTOUT,
-  if (DRILL!="OFF")     FL_DRILL,
-  if (FPRINT!="OFF")    FL_FOOTPRINT,
-  if (LAYOUT!="OFF")    FL_LAYOUT,
-  if (PLOAD!="OFF")     FL_PAYLOAD,
-];
+sheet_metal = [[0,0],[50,50]];
+// the grid bounding box is equal to the sheet metal one reduced by border size
+grid_bbox   = sheet_metal+[BORDER,-BORDER];
 
-// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-// test(
-//   verbs,type,
-//   direction=direction,octant=octant,
-//   $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD
-// );
+if (GRID_BBOX)
+  translate(Z(NIL)) #fl_bb_add(grid_bbox,2d=true);
 
-shift = D + DELTA;
-sheet = fl_bb_new(size=SIZE);
-
-fl_color(MATERIAL)
-linear_extrude(fl_bb_size(sheet).z) 
-  fl_2d_grid(fl_bb_corners(sheet),shift=shift,d=D,edges=GRID_EDGES,rotation=ROTATION)
-    fl_bb_add(corners=fl_bb_corners(sheet),2d=true);
+fl_color("silver") 
+  linear_extrude(0.5)
+    difference() {
+      // sheet metal
+      fl_bb_add(sheet_metal,2d=true);
+      // grid holes
+      fl_grid_layout(
+        origin  = TRIM_ORIGIN,
+        step    = GRID_TYPE=="quad" ? QUAD_STEP : undef,
+        r_step  = GRID_TYPE=="hex" ? HEX_STEP : undef,
+        bbox    = grid_bbox,
+        clip    = GRID_CLIP
+      ) // hole shape
+        rotate(ROTATION,+Z) fl_circle(d=HOLE_D,$fn=HOLE_VERTICES);
+    }

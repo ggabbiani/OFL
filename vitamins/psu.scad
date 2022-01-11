@@ -87,6 +87,8 @@ module ofl_psu(
   D           = direction ? fl_direction(proto=type,direction=direction)      : I;
   M           = octant    ? fl_octant(octant=octant,bbox=fl_bb_corners(type)) : I;
 
+  fl_trace("grid shift",grid_shift);
+
   module terminal() {
     module flange() {
       r=0.5;
@@ -135,12 +137,18 @@ module ofl_psu(
       // case box as a bent sheet metal
       fl_bend(type=bent_sheet,octant=+Y+Z)
         linear_extrude(fl_bb_size($sheet).z) 
-        // grid on [$C,$M]
-        fl_2d_grid([$C+X(grid_shift)-Y(2.5),$M-X(5)-Y(10)],shift=grid_shift,d=grid_d)
-        // grid on [$A,$F]
-        fl_2d_grid([$A+X(4.2)+Y(2.2),$F-X(5)-Y(3.2)],shift=grid_shift,d=grid_d)
-          fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
-
+          difference() {
+            // 2d surface fitting the calculated $sheet size
+            fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
+            // grid on face 4 (normal +Y) and part of face 1 (normal +Z)
+            if (search($fid,[4,1])) 
+              fl_grid_layout(origin=[0,grid_d],r_step=grid_shift,bbox=[$C,$M] + [[grid_shift,-grid_shift],-[5,9]],clip=false) 
+                fl_circle(d=grid_d);
+            // grid on face 0,1 (normal -X and +Z) 
+            if (search($fid,[0,1])) 
+              fl_grid_layout(origin=[2*grid_shift,1.5*grid_shift],r_step=grid_shift,bbox=[$A,$F] + [[1,5],-[5,3]],clip=false)
+                fl_circle(d=grid_d);
+          }
       // screw holes
       fl_holes(holes);
     }

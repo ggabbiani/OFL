@@ -25,6 +25,7 @@ use <algo.scad>
 use <connect.scad>
 use <drawio.scad>
 use <fillet.scad>
+use <grid.scad>
 use <layout.scad>
 use <placement.scad>
 use <profile.scad>
