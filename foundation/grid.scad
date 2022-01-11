@@ -79,6 +79,13 @@ module fl_grid_layout(
   bbox,
   clip=true
 ) {
+
+  module grid() {
+    union() for(row=points,set=row,p=set)
+      translate(p) 
+        children();
+  }
+
   // echo($FL_TRACE=$FL_TRACE);
   assert(fl_XOR(step!=undef,r_step!=undef));
   // fl_trace("$id",$id);
@@ -89,10 +96,12 @@ module fl_grid_layout(
   points  = step!=undef 
           ? fl_grid_quad(origin,step,bbox) 
           : fl_grid_hex(origin,r_step,bbox);
-  intersection() {
-    union() for(row=points,set=row,p=set)
-      translate(p) 
-        children();
-    if (clip) fl_bb_add(bbox,2d=true);
-  }
+  if (clip)
+    intersection() {
+      grid() children();
+      fl_bb_add(bbox,2d=true);
+    }
+  else
+    grid()
+      children();
 }
