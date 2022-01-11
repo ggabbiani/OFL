@@ -186,7 +186,7 @@ function fl_get(type,key,default) =
   let(index_list=search([key],type))
   index_list != [[]] 
   ? type[index_list[0]][1] 
-  : assert(default!=undef,str("Missing value and default for key ***",key,"***")) default;
+  : assert(default!=undef,str("Key not found ***",key,"***")) default;
 
 /**
  * 'bipolar' property helper: 
@@ -220,6 +220,7 @@ function fl_holes(type,value)       = fl_property(type,"holes",value);
 function fl_name(type,value)        = fl_property(type,"name",value);
 function fl_material(type,value,default)    
                                     = fl_property(type,"material (actually a color)",value,default);
+function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,false);
 function fl_nopSCADlib(type,value,default)  
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
 function fl_rotor(type,value)       = fl_property(type,"rotor",value);
