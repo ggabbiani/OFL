@@ -33,7 +33,7 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+TRACE       = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -109,6 +109,7 @@ nop = NOP_MODEL=="RAMPSEndstop" ? RAMPSEndstop
     : NOP_MODEL=="DuetE"  ? DuetE
     : NOP_MODEL=="Duex5"  ? Duex5
     : NOP_MODEL=="PERF74x51"  ? PERF74x51
+    : NOP_MODEL=="PERF70x51"  ? PERF70x51
     : NOP_MODEL=="PERF70x50"  ? PERF70x50
     : NOP_MODEL=="PERF60x40"  ? PERF60x40
     : NOP_MODEL=="PERF70x30"  ? PERF70x30
@@ -229,7 +230,7 @@ if (ORIGINAL)
 else {
   pcb = fl_pcb_Wrapper(nop);
   fl_pcb(verbs,type=pcb,direction=direction,octant=octant,
-      // $FL_TRACE=true,
+      $FL_TRACE=TRACE,
       $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD
       );
 }

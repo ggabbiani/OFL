@@ -30,7 +30,7 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+TRACE       = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -67,7 +67,7 @@ SHOW        = "ALL"; // [ALL, PSU_MeanWell_RS_25_5, PSU_MeanWell_RS_15_5]
 // Holder thickness
 T           = 2.5;
 // Assembly flags
-SCREW_MODE  = ["-Z","+X"];
+SCREW_MODE  = ["-Z","+X","+Y"];
 
 /* [Hidden] */
 
@@ -90,9 +90,11 @@ single  = SHOW=="PSU_MeanWell_RS_25_5"  ? PSU_MeanWell_RS_25_5
 
 if (single)
   ofl_psu(verbs,single,thick=T,assembly=SCREW_MODE,octant=octant,direction=direction,
+  $FL_TRACE=TRACE,
     $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL);
 else
   fl_layout(FL_LAYOUT,+X,20,FL_PSU_DICT) 
     let(type=FL_PSU_DICT[$i])
       ofl_psu(verbs,type,thick=T,assembly=SCREW_MODE,octant=octant,direction=direction,
+        $FL_TRACE=TRACE,
         $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL);
