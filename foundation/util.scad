@@ -105,10 +105,13 @@ function fl_bend_faceSet(type,value)  = fl_property(type,"bend/face set",value);
 
 /**
  * folding objects contain bending information
+ * «faces» is used for mapping each surface sizings and calculating the total size of the sheet.
+ * The folding object is then created with the overall sheet bounding box.
+ *
  */
 function fl_folding(
   // key/value list of face sizings:
-  // key    = one of the eight cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
+  // key    = one of the six cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
   // value  = 3d size [x-size,y-size,z-size]
   // Missing faces means 0-sized.
   // Examples
@@ -150,9 +153,6 @@ function fl_folding(
 /*
  * 3d surface bending on rectangular cuboid faces.
  *
- * «faces» is used for mapping each surface sizings and calculating the total size of the sheet.
- * A sheet object is then created with the overall sheet bounding box.
- *
  * Children context:
  * 
  * 
@@ -175,6 +175,7 @@ function fl_folding(
  * $sheet - an object containing the calculated bounding corners of the sheet
  * $A..$N - 3d values of the corresponding points in the above picture
  * $size  - list of six surface sizings in the order shown in the picture
+ * $fid   - current face id
  * 
  */
 module fl_bend(
@@ -223,7 +224,10 @@ module fl_bend(
         children();
   }
 
-  module always(face,translate) {
+  module always(fid,translate) {
+    face    = fcs[fid];
+    // children context
+    $fid    = fid;
     $sheet  = sheet;
     $size   = fcs;
     $A      = [0,               $size[5].y,       0];
@@ -252,59 +256,60 @@ module fl_bend(
   }
 
   module do_bend() {
+    fl_trace("***START***");
     // -X
-    let(f=fcs[0]) if (f.x && f.y) 
+    let(id=0,f=fcs[id]) if (f.x && f.y)
       if (flat) 
-        always(f,translate=[0,fcs[5].y]) children();
+        always(id,translate=[0,fcs[5].y]) children();
       else
-        translate([0,0,-f.x]) rotate(-90,Y) always(f,translate=[0,fcs[5].y]) children(); 
+        translate([0,0,-f.x]) rotate(-90,Y) always(id,translate=[0,fcs[5].y]) children(); 
 
     // +Z
-    let(f=fcs[1]) if (f.x && f.y)
+    let(id=1,f=fcs[id]) if (f.x && f.y)
       if (flat)
-        always(f,translate=[fcs[0].x,fcs[5].y]) children();
+        always(id,translate=[fcs[0].x,fcs[5].y]) children();
       else 
-        translate([-fcs[0].x,0]) always(f,translate=[fcs[0].x,fcs[5].y]) children(); 
+        translate([-fcs[0].x,0]) always(id,translate=[fcs[0].x,fcs[5].y]) children(); 
 
     // +X
-    let(f=fcs[2]) if (f.x && f.y)
+    let(id=2,f=fcs[id]) if (f.x && f.y)
       if (flat)
-        always(f,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
+        always(id,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
       else 
         translate([fcs[1].x,0])
           rotate(90,Y)
             translate([-fcs[0].x-fcs[1].x,0])
-              always(f,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
+              always(id,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
 
     // -Z
-    let(f=fcs[3]) if (f.x && f.y) 
+    let(id=3,f=fcs[id]) if (f.x && f.y)
       if (flat)
-        always(f,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
+        always(id,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
       else 
         translate([f.x,0,-max(fcs[0].x,fcs[2].x)])
           rotate(180,Y)
             translate([-fcs[0].x-fcs[1].x-fcs[2].x,0])
-              always(f,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
+              always(id,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
 
     // +Y
-    let(f=fcs[4]) if (f.x && f.y)
+    let(id=4,f=fcs[id]) if (f.x && f.y)
       if (flat)
-        always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
+        always(id,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
       else 
         translate([-fcs[0].x,fcs[5].y+fcs[1].y])
-          // translate([0,f.z])
             rotate(-90,X)
               translate([0,-fcs[5].y-fcs[1].y])
-                always(f,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
+                always(id,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
 
     // -Y
-    let(f=fcs[5]) if (f.x && f.y)
+    let(id=5,f=fcs[id]) if (f.x && f.y)
       if (flat)
-        always(f,translate=[fcs[0].x,0]) children();
+        always(id,translate=[fcs[0].x,0]) children();
       else 
         translate([-fcs[0].x,f.y,-f.y])
           rotate(90,X)
-            always(f,translate=[fcs[0].x,0]) children();
+            always(id,translate=[fcs[0].x,0]) children();
+    fl_trace("***END***");
   }
 
   multmatrix(D) {

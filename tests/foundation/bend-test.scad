@@ -44,9 +44,9 @@ AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [grid] */
-
+MODE        = "sheet";  // [sheet,bent,both]
 // folding thickness
-T           = 0.5;
+T           = 0.5;  // [0.1:0.1:1]
 // inter drill shape distance
 DELTA       = 1.60;
 // drill shape diameter
@@ -70,7 +70,7 @@ verbs=[
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 
-size = [51,78,28];
+size = [51,62.5,28];
 
 surfaces=[
   [-FL_X,[size.z, size.y, T]],
@@ -84,21 +84,43 @@ surfaces=[
 shift = D + DELTA;
 folding = fl_folding(faces=surfaces);
 
-for(oct=[-Z-X,+Z+X]) translate(10*oct)
-  fl_bend(verbs,type=folding,flat=oct==-Z-X,octant=oct)
+// for(oct=[-Z-X,+Z+X]) translate(10*[oct.x,0,0])
+  // fl_bend(verbs,type=folding,flat=oct==-Z-X,octant=oct,
+
+module test() {
+  if (MODE=="both")
+    for($octant=[-X+Y+Z,+X+Y+Z]) translate(40*[$octant.x,0,0])
+      let($flat=$octant==+X+Y+Z) children();
+  else
+    let(
+      $flat   = MODE=="sheet",
+      $octant = MODE=="sheet" ? undef : +Y+Z
+    ) children();
+  }
+
+test()
+  fl_bend(verbs,type=folding,flat=$flat,octant=$octant,
+          $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX)
     // bending algorithm requires a 3d shape
     linear_extrude(fl_bb_size($sheet).z) 
-    // grid on face 4 (normal +Y) the bounding box used is the C-M region
-    // reduced by (shift,2.5) on the lower corner and (5,10) on the upper one
-    fl_2d_grid([$C,$M] + [[shift,-2.5],-[5,10]],shift=shift,d=D,edges=EDGES_2,rotation=ROT_2)
-    // grid on face 0,1 (normal -X and +Z) the bounding box used is the A-F region
-    // reduced by (4.2,2.2) on the lower corner and (5,3.2) on the upper one
-    fl_2d_grid([$A + [4.2,2.2],$F - [5,3.2]],shift=shift,d=D,edges=EDGES_1,rotation=ROT_1)
       // grid algorithm operates on 2d surfaces
-      // we add a 2d surface fitting the exact number of sized surfaces
-      // passed to the bend constructor through «faces»
-      fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
-
-// for(oct=[+Z+X]) translate(10*oct)
-// fl_place(folding, octant=oct)
-// fl_bb_add(fl_bb_corners(folding));
+      difference() {
+        // 2d surface fitting the calculated $sheet size
+        fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
+        // grid on face 4 (normal +Y) and part of face 1 (normal +Z)
+        if (search($fid,[4,1])) fl_grid_layout(
+          origin  = [0,D],
+          r_step  = shift,
+          // bounding box C-M 
+          bbox    = [$C,$M] + [[shift,-shift],-[5,9]],
+          clip    = false
+        ) rotate(ROT_2,Z) fl_circle(d=D,$fn=EDGES_2);
+        // grid on face 0,1 (normal -X and +Z) 
+        if (search($fid,[0,1])) fl_grid_layout(
+          origin=[2*shift,1.5*shift],
+          r_step  = shift,
+          // bounding box A-F
+          bbox    = [$A,$F] + [[1,5],-[5,3]],
+          clip    = false
+        ) rotate(ROT_1,Z) fl_circle(d=D,$fn=EDGES_1);
+      }
