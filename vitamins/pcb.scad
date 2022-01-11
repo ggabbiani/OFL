@@ -75,6 +75,14 @@ module fl_pcb(
   fl_trace("grid",grid);
 
   module fl_grid_plating() {
+  /**
+  * Return the grid size in [cols,rows] format
+  */
+  function fl_grid_geometry(grid,size) = let(
+      cols  = is_undef(grid[2]) ? round((size.x - 2 * grid.x) / inch(0.1))  : grid[2] - 1,
+      rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
+    ) [cols,rows];
+
     t               = size.z;
     plating         = 0.1;
     fr4             = material != "sienna";
