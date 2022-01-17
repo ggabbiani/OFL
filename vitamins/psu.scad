@@ -168,8 +168,8 @@ module ofl_psu(
 
   module do_assembly()  {
     do_layout()
-      translate(thick*$normal)
-        fl_screw(type=screw,len=screw_len,direction=[$normal,0]);
+      translate(thick*$hole_n)
+        fl_screw(type=screw,len=screw_len,direction=[$hole_n,0]);
   }
 
   module do_drill()  {
