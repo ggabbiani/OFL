@@ -220,9 +220,11 @@ function fl_holes(type,value)       = fl_property(type,"holes",value);
 function fl_name(type,value)        = fl_property(type,"name",value);
 function fl_material(type,value,default)    
                                     = fl_property(type,"material (actually a color)",value,default);
-function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,false);
+function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,type!=undef?false:undef);
 function fl_nopSCADlib(type,value,default)  
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
+// pay-load bounding box, it contributes to the overall bounding box calculation
+function fl_payload(type,value)     = fl_property(type,"payload bounding box",value);
 function fl_rotor(type,value)       = fl_property(type,"rotor",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);

@@ -32,6 +32,56 @@ include <NopSCADlib/vitamins/pin_headers.scad>
 // namespace for PCB engine
 FL_PCB_NS  = "pcb";
 
+/**
+ * PCB constructor from NopSCADlib.
+ *
+ * Only basic PCB attributes are imported from NopSCADlib types:
+ *
+ *  - sizing
+ *  - material
+ *  - holes
+ *  - screw
+ *  - grid
+ * 
+ * NO COMPONENT IS CURRENTLY IMPORTED.
+ */
+function fl_pcb_import(nop,payload) = let(
+    w         = max(pcb_width(nop),pcb_length(nop)),
+    l         = min(pcb_width(nop),pcb_length(nop)),
+    h         = 0,
+    pcb_t     = pcb_thickness(nop),
+    bbox      = [[-w/2,-l/2,0],[+w/2,+l/2,pcb_t+h]]
+  )
+  [
+    fl_bb_corners(value=bbox),
+    fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
+    fl_pcb_thick(value=pcb_t),
+    fl_pcb_components(value=[]),
+    fl_screw(value=pcb_screw(nop)),
+    fl_material(value=pcb_colour(nop)),
+    fl_pcb_radius(value=pcb_radius(nop)),
+    fl_holes(value=fl_pcb_NopHoles(nop)),
+    fl_pcb_grid(value=pcb_grid(nop)),
+    fl_payload(value=payload),
+  ];
+
+/**
+ * Helper for conversion from NopSCADlib hole format to OFL.
+ */
+function fl_pcb_NopHoles(nop) = let(
+  pcb_t     = pcb_thickness(nop),
+  hole_d    = pcb_hole_d(nop),
+  nop_holes = pcb_holes(nop),
+  holes     = [
+    for(h=nop_holes) [
+      let(p=pcb_coord(nop, h)) [p.x,p.y,pcb_t],  // 3d point
+      +FL_Z,  // plane normal
+      hole_d, // hole diameter
+      pcb_t   // hole depth
+    ]
+  ]
+) holes;
+
 //*****************************************************************************
 // PCB properties
 // when invoked by «type» parameter act as getters
@@ -47,16 +97,19 @@ FL_PCB_RPI4 = let(
   h       = 16,
   pcb_t   = 1.5,
   hole_d  = 2.7,
-  bbox    = [[-w/2,0,-pcb_t],[+w/2,l,0+h]]
+  bbox    = [[-w/2,0,-pcb_t],[+w/2,l,0+h]],
+  payload = [bbox[0]+fl_Z(pcb_t),bbox[1]]
 ) [
+  fl_native(value=true),
   fl_name(value="RPI4-MODBP-8GB"),
   fl_bb_corners(value=bbox),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_pcb_thick(value=pcb_t),
   fl_pcb_radius(value=3),
+  fl_payload(value=payload),
   fl_holes(value=[ 
     // each row represents a hole with the following format:
-    // [point],[normal]
+    // [[point],[normal], diameter, thickness]
     [[ 24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
     [[ 24.5, 61.5, 0 ], +FL_Z, hole_d, pcb_t],
     [[-24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
@@ -77,8 +130,17 @@ FL_PCB_RPI4 = let(
   ]),
 ];
 
+FL_PCB_PERF70x50  = fl_pcb_import(PERF70x50);
+FL_PCB_PERF60x40  = fl_pcb_import(PERF60x40);
+FL_PCB_PERF70x30  = fl_pcb_import(PERF70x30);
+FL_PCB_PERF80x20  = fl_pcb_import(PERF80x20);
+
 FL_PCB_DICT = [
   FL_PCB_RPI4,
+  FL_PCB_PERF70x50,
+  FL_PCB_PERF60x40,
+  FL_PCB_PERF70x30,
+  FL_PCB_PERF80x20,
 ];
 
 use     <pcb.scad>

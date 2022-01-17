@@ -36,19 +36,19 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+ADD       = "ON";     // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+ASSEMBLY  = "OFF";    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+AXES      = "OFF";    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+BBOX      = "DEBUG";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+CUTOUT    = "OFF";    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+DRILL     = "OFF";    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws or supports)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+LAYOUT    = "OFF";    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 PAYLOAD   = "ON";     // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -65,22 +65,15 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [PCB] */
+/* [ Adapter ] */
 
-TYPE  = "FL_PCB_RPI4";  // [FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20, ALL]
+NOP  = "PERF80x20"; // [PERF74x51, PERF70x51, PERF70x50, PERF60x40, PERF70x30, PERF80x20, RAMPSEndstop, MT3608, PI_IO, ExtruderPCB, ZC_A0591, RPI0, EnviroPlus, ArduinoUno3, ArduinoLeonardo, WD2002SJ, RPI3, RPI4, BTT_SKR_MINI_E3_V2_0, BTT_SKR_E3_TURBO, BTT_SKR_V1_4_TURBO, DuetE, Duex5]
 // FL_DRILL and FL_CUTOUT thickness
-T             = 2.5;
-// FL_CUTOUT tolerance
-TOLERANCE     = 0.5;
-// when !="undef", FL_CUTOUT verb is triggered only on the labelled component
-CO_LABEL      = "undef";        // [undef,POWER IN,HDMI0,HDMI1,A/V,USB2,USB3,ETHERNET,GPIO]
-// when !=[0,0,0], FL_CUTOUT is triggered only on components oriented accordingly to any of the not-null axis values
-CO_DIRECTION  = [0,0,0];  // [-1:+1]
+T         = 2.5;
+PAY_LOAD  = [-5,-5,10];        // [-100:0.1:100]
 
 /* [Hidden] */
 
-co_direction  = CO_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]) if (CO_DIRECTION[i]) CO_DIRECTION[i]*axes[i]];
-co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
 direction     = DIR_NATIVE        ? undef : [DIR_Z,DIR_R];
 octant        = PLACE_NATIVE      ? undef : OCTANT;
 verbs=[
@@ -94,34 +87,41 @@ verbs=[
   if (PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 
-single  = TYPE=="FL_PCB_RPI4"       ? FL_PCB_RPI4
-        : TYPE=="FL_PCB_PERF70x50"  ? FL_PCB_PERF70x50
-        : TYPE=="FL_PCB_PERF60x40"  ? FL_PCB_PERF60x40
-        : TYPE=="FL_PCB_PERF70x30"  ? FL_PCB_PERF70x30
-        : TYPE=="FL_PCB_PERF80x20"  ? FL_PCB_PERF80x20
-        : undef;
+nop = NOP=="RAMPSEndstop" ? RAMPSEndstop
+    : NOP=="MT3608" ? MT3608
+    : NOP=="PI_IO"  ? PI_IO
+    : NOP=="ExtruderPCB"  ? ExtruderPCB
+    : NOP=="ZC_A0591" ? ZC_A0591
+    : NOP=="RPI0" ? RPI0
+    : NOP=="EnviroPlus" ? EnviroPlus
+    : NOP=="ArduinoUno3"  ? ArduinoUno3
+    : NOP=="ArduinoLeonardo"  ? ArduinoLeonardo
+    : NOP=="WD2002SJ" ? WD2002SJ
+    : NOP=="RPI3" ? RPI3
+    : NOP=="RPI4" ? RPI4
+    : NOP=="BTT_SKR_MINI_E3_V2_0" ? BTT_SKR_MINI_E3_V2_0
+    : NOP=="BTT_SKR_E3_TURBO" ? BTT_SKR_E3_TURBO
+    : NOP=="BTT_SKR_V1_4_TURBO" ? BTT_SKR_V1_4_TURBO
+    : NOP=="DuetE"  ? DuetE
+    : NOP=="Duex5"  ? Duex5
+    : NOP=="PERF74x51"  ? PERF74x51
+    : NOP=="PERF70x51"  ? PERF70x51
+    : NOP=="PERF70x50"  ? PERF70x50
+    : NOP=="PERF60x40"  ? PERF60x40
+    : NOP=="PERF70x30"  ? PERF70x30
+    : PERF80x20;
 
-module test() {
+fl_trace("verbs",verbs);
 
-  module pcb(type) {
-    fl_pcb(verbs,type,
-      direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction,
-      $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PAYLOAD,
-      $FL_TRACE=TRACE)
-      children();
-  }
+payload = let(
+    sz    = pcb_size(nop),
+    bare  = [[-sz.x/2,-sz.y/2,0],[+sz.x/2,+sz.y/2,+sz.z]]
+  ) [[bare[0].x-PAY_LOAD.x,bare[0].y-PAY_LOAD.y,bare[1].z],[bare[1].x+PAY_LOAD.x,bare[1].y+PAY_LOAD.y,bare[1].z+PAY_LOAD.z]];
 
-  if (single)
-    pcb(single)
-      children();
-  else // TODO: replace with fl_layout
-    layout([for(pcb=FL_PCB_DICT) fl_width(pcb)], 10)
-      pcb(FL_PCB_DICT[$i])
-        children();
-}
-
-
-test()
-  fl_color($FL_FILAMENT) 
-    translate(-Z($hole_depth))
-      fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);
+fl_pcb_adapter(verbs,nop,
+  payload=payload, direction=direction,octant=octant,thick=T,
+  $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PAYLOAD,
+  $FL_TRACE=TRACE
+) fl_color($FL_FILAMENT) 
+  translate(-Z($hole_depth))
+    fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);
