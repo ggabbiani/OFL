@@ -99,12 +99,12 @@ if (MODE=="layout") difference() {
   fl_color("red") 
     fl_cube(size=SIZE,octant=O);
   fl_lay_holes(holes=holes,enable=enable)
-    translate(NIL*$normal) 
+    translate(NIL*$hole_n) 
       let(
-        screw = $diameter==2 ? M2_cs_cap_screw
-              : $diameter==3 ? M3_cs_cap_screw
+        screw = $hole_d==2 ? M2_cs_cap_screw
+              : $hole_d==3 ? M3_cs_cap_screw
               : M4_cs_cap_screw
-      ) fl_screw(FL_FOOTPRINT,type=screw,len=$depth,direction=[$normal,0]);
+      ) fl_screw(FL_FOOTPRINT,type=screw,len=$hole_depth,direction=[$hole_n,0]);
 } else difference() {
   fl_color("red") 
     fl_cube(size=SIZE,octant=O);

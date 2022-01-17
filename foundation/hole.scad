@@ -32,10 +32,10 @@ include <3d.scad>
   * NOTE: supported normals are x,y or z semi-axis ONLY
   *
   * Children context:
-  *  $depth     - hole depth
-  *  $diameter  - hole diameter
-  *  $i         - ordinal position inside «points»
-  *  $normal
+  *  $hole_depth  - hole depth
+  *  $hole_d      - hole diameter
+  *  $hole_i      - ordinal position inside «points»
+  *  $hole_n      - hole normal
   */
 module fl_lay_holes(
   // list of hole specs
@@ -48,18 +48,18 @@ module fl_lay_holes(
   enable  = is_string(enable) ? [enable] : enable;
   assert(fl_tt_isList(enable,function(s) fl_tt_isAxisString(s)),enable);
 
-  for($i=[0:len(holes)-1]) {
-    hole      = holes[$i];
-    point     = hole[0];
-    $normal   = hole[1];
-    $diameter = hole[2];
-    $depth    = len(hole)==4 ? assert(is_num(hole[3])) hole[3] : 0;
-    if ((($normal==-X) && fl_tt_isInDictionary("-x",enable))
-    ||  (($normal==+X) && fl_tt_isInDictionary("+x",enable))
-    ||  (($normal==-Y) && fl_tt_isInDictionary("-y",enable))
-    ||  (($normal==+Y) && fl_tt_isInDictionary("+y",enable))
-    ||  (($normal==-Z) && fl_tt_isInDictionary("-z",enable))
-    ||  (($normal==+Z) && fl_tt_isInDictionary("+z",enable)))
+  for($hole_i=[0:len(holes)-1]) {
+    hole        = holes[$hole_i];
+    point       = hole[0];
+    $hole_n     = hole[1];
+    $hole_d     = hole[2];
+    $hole_depth = len(hole)==4 ? assert(is_num(hole[3])) hole[3] : 0;
+    if ((($hole_n==-X) && fl_tt_isInDictionary("-x",enable))
+    ||  (($hole_n==+X) && fl_tt_isInDictionary("+x",enable))
+    ||  (($hole_n==-Y) && fl_tt_isInDictionary("-y",enable))
+    ||  (($hole_n==+Y) && fl_tt_isInDictionary("+y",enable))
+    ||  (($hole_n==-Z) && fl_tt_isInDictionary("-z",enable))
+    ||  (($hole_n==+Z) && fl_tt_isInDictionary("+z",enable)))
       translate(point)
         children();
   }
@@ -80,6 +80,6 @@ module fl_holes(
   fl_trace("enable",enable);
   fl_trace("holes",holes);
   fl_lay_holes(holes,enable)
-    translate(NIL*$normal) 
-      fl_cylinder(h=$depth+NIL2,d=$diameter,direction=[-$normal,0]);
+    translate(NIL*$hole_n) 
+      fl_cylinder(h=$hole_depth+NIL2,d=$hole_d,direction=[-$hole_n,0]);
 }
