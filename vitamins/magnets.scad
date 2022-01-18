@@ -1,6 +1,6 @@
 /*
  * Magnets definitions.
- * 
+ *
  * Created  : on Mon Aug 30 2021.
  * Copyright: © 2021 Giampiero Gabbiani.
  * Email    : giampiero@gabbiani.org
@@ -43,12 +43,12 @@ function fl_mag_engine(type,value)  = fl_property(type,"mag/__internal engine ty
 
 //*****************************************************************************
 // constructor
-function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) = 
+function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
   assert(thick!=undef || size!=undef)
   let(
     engine  = d!=undef ? "cyl" : "quad",
-    bbox    = engine=="cyl" 
-              ? assert(size==undef) assert(thick!=undef) fl_bb_cylinder(d=d,h=thick) 
+    bbox    = engine=="cyl"
+              ? assert(size==undef) assert(thick!=undef) fl_bb_cylinder(d=d,h=thick)
               : assert(size!=undef) [[-size.x/2,-size.y/2,0],[size.x/2,size.y/2,size.z]]
   ) [
     fl_name(value=name),

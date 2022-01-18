@@ -39,8 +39,10 @@ module stub(
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
-  module do_add() {}
-  module do_bbox() {}
+  module do_add() {
+    fl_cube(size=size);
+  }
+
   module do_assembly() {}
   module do_layout() {}
   module do_drill() {}
@@ -48,18 +50,24 @@ module stub(
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) fl_cube(size=size);
+        fl_modifier($FL_ADD) do_add();
+
+      } else if ($verb==FL_ASSEMBLY) {
+        fl_modifier($FL_ASSEMBLY) do_assembly();
+        
       } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_cube(size=size);
+        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+
       } else if ($verb==FL_LAYOUT) {
         fl_modifier($FL_LAYOUT) do_layout()
           children();
+
       } else if ($verb==FL_FOOTPRINT) {
         fl_modifier($FL_FOOTPRINT);
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY);
+
       } else if ($verb==FL_DRILL) {
         fl_modifier($FL_DRILL);
+
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }

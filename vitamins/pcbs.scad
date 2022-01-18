@@ -32,6 +32,15 @@ include <NopSCADlib/vitamins/pin_headers.scad>
 // namespace for PCB engine
 FL_PCB_NS  = "pcb";
 
+//*****************************************************************************
+// PCB properties
+// when invoked by «type» parameter act as getters
+// when invoked by «value» parameter act as property constructors
+function fl_pcb_components(type,value)  = fl_property(type,"pcb/components",value);
+function fl_pcb_radius(type,value)      = fl_property(type,"pcb/corners radius",value);
+function fl_pcb_thick(type,value)       = fl_property(type,"pcb/thickness",value);
+function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
+
 /**
  * PCB constructor from NopSCADlib.
  *
@@ -42,7 +51,7 @@ FL_PCB_NS  = "pcb";
  *  - holes
  *  - screw
  *  - grid
- * 
+ *
  * NO COMPONENT IS CURRENTLY IMPORTED.
  */
 function fl_pcb_import(nop,payload) = let(
@@ -53,6 +62,7 @@ function fl_pcb_import(nop,payload) = let(
     bbox      = [[-w/2,-l/2,0],[+w/2,+l/2,pcb_t+h]]
   )
   [
+    fl_name(value=nop[1]),
     fl_bb_corners(value=bbox),
     fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
     fl_pcb_thick(value=pcb_t),
@@ -82,15 +92,6 @@ function fl_pcb_NopHoles(nop) = let(
   ]
 ) holes;
 
-//*****************************************************************************
-// PCB properties
-// when invoked by «type» parameter act as getters
-// when invoked by «value» parameter act as property constructors
-function fl_pcb_components(type,value)  = fl_property(type,"pcb/components",value);
-function fl_pcb_radius(type,value)      = fl_property(type,"pcb/corners radius",value);
-function fl_pcb_thick(type,value)       = fl_property(type,"pcb/thickness",value);
-function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
-
 FL_PCB_RPI4 = let(
   w       = 56,
   l       = 85,
@@ -107,7 +108,7 @@ FL_PCB_RPI4 = let(
   fl_pcb_thick(value=pcb_t),
   fl_pcb_radius(value=3),
   fl_payload(value=payload),
-  fl_holes(value=[ 
+  fl_holes(value=[
     // each row represents a hole with the following format:
     // [[point],[normal], diameter, thickness]
     [[ 24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],

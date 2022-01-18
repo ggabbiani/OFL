@@ -33,22 +33,22 @@ include <pcbs.scad>
 
 module fl_pcb(
   // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
-  verbs=FL_ADD,   
+  verbs=FL_ADD,
   type,
-  // FL_CUTOUT tolerance 
+  // FL_CUTOUT tolerance
   cut_tolerance=0,
   // FL_CUTOUT component filter by label
-  cut_label,      
+  cut_label,
   // FL_CUTOUT component filter by direction (+X,+Y or +Z)
-  cut_direction,  
+  cut_direction,
   // FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
   // FL_ASSEMBLY,FL_LAYOUT enabled directions passed as list of strings
   lay_direction="+z",
   // desired direction [director,rotation], native direction when undef
-  direction,      
+  direction,
   // when undef native positioning is used
-  octant          
+  octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(!(cut_direction!=undef && cut_label!=undef),"cutout filtering cannot be done by label and direction at the same time");
@@ -65,15 +65,15 @@ module fl_pcb(
   holes     = fl_holes(type);
   screw     = fl_screw(type);
   screw_r   = screw_radius(screw);
-  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] 
+  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
             : assert(fl_tt_isThickList(thick)) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
   cut_thick = thick;
   material  = fl_material(type,default="green");
   radius    = fl_pcb_radius(type);
   grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
-  pload     = fl_has(type,fl_payload()[0]) 
-            ? fl_payload(type) 
+  pload     = fl_has(type,fl_payload()[0])
+            ? fl_payload(type)
             : let(
                 h = max([for(i=comps) let(c=i[1][3],bb=fl_bb_corners(c)) bb[1].z-bb[0].z])
               ) [bbox[0]+Z(pcb_t),[bbox[1].x,bbox[1].y,bbox[0].z+pcb_t+h]];
@@ -125,7 +125,7 @@ module fl_pcb(
             fl_annulus(d=1-NIL2,thick=0.5);
 
           // oval lands at the ends
-          if (fr4 && len(grid) < 3) { 
+          if (fr4 && len(grid) < 3) {
             screw_x = holes[0][0].x;
             y0      = grid.y;
             rows    = fl_grid_geometry(grid,size).y;
@@ -146,7 +146,7 @@ module fl_pcb(
     fl_color(material) difference() {
       translate(Z(bbox[0].z)) linear_extrude(pcb_t)
         difference() {
-          translate(bbox[0]) 
+          translate(bbox[0])
             fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
           if (grid) {
             fl_trace("PCB  size:",size);
@@ -211,7 +211,7 @@ module fl_pcb(
           assert(false,str("unknown component class '",class,"'."));
       }
   }
-  
+
   module do_assembly() {
     do_layout("components")
       let(
@@ -231,7 +231,7 @@ module fl_pcb(
         else
           assert(false,str("Unknown engine ",engine));
     if (holes)
-      fl_lay_holes(holes,lay_direction) 
+      fl_lay_holes(holes,lay_direction)
         fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
   }
 
@@ -267,7 +267,7 @@ module fl_pcb(
         let(drift=0)
           fl_jack(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
       else if (engine==FL_ETHER_NS)
-        let(drift=drift(component)) 
+        let(drift=drift(component))
           fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
       else if (engine==FL_PHDR_NS) let(
           thick = size.z-pcb_t+cut_thick
@@ -276,7 +276,7 @@ module fl_pcb(
         assert(false,str("Unknown engine ",engine));
     }
 
-    if (cut_label) 
+    if (cut_label)
       do_layout("components",cut_label) trigger($component);
     else
       do_layout("components",undef,cut_direction) trigger($component);
@@ -327,11 +327,11 @@ function fl_bb_calc(
     bbs,
     // list of 3d points to be included in the new bounding block
     pts
-  ) = 
+  ) =
   assert(fl_XOR(bbs!=undef,pts!=undef))
   assert(bbs==undef || is_list(bbs),bbs)
   assert(pts==undef || is_list(pts),pts)
-  bbs!=undef 
+  bbs!=undef
   ? let(
     xs  = [for(bb=bbs) bb[0].x],
     ys  = [for(bb=bbs) bb[0].y],
@@ -339,7 +339,7 @@ function fl_bb_calc(
     XS  = [for(bb=bbs) bb[1].x],
     YS  = [for(bb=bbs) bb[1].y],
     ZS  = [for(bb=bbs) bb[1].z]
-  ) [[min(xs),min(ys),min(zs)],[max(XS),max(YS),max(ZS)]] 
+  ) [[min(xs),min(ys),min(zs)],[max(XS),max(YS),max(ZS)]]
   : let(
     xs  = [for(p=pts) p.x],
     ys  = [for(p=pts) p.y],
@@ -352,18 +352,18 @@ function fl_bb_calc(
  * While full attributes rendering is supported via NopSCADlib APIs, only basic
  * support is provided to OFL verbs, sometimes even with different behaviour:
  *
- * FL_ADD       - being impossible to render NopSCADlib pcbs without components, 
+ * FL_ADD       - being impossible to render NopSCADlib pcbs without components,
  *                this verb always renders components too;
- * FL_ASSEMBLY  - only screws are added during assembly, since 
+ * FL_ASSEMBLY  - only screws are added during assembly, since
  *                components are always rendered during FL_ADD;
  * FL_AXES      - no changes;
- * FL_BBOX      - while OFL native PCBs includes also components sizing in 
- *                bounding box calculations, the adapter bounding box is 
- *                'reduced' to pcb only. The only way to mimic OFL native 
+ * FL_BBOX      - while OFL native PCBs includes also components sizing in
+ *                bounding box calculations, the adapter bounding box is
+ *                'reduced' to pcb only. The only way to mimic OFL native
  *                behaviour is to explicity add the payload capacity through
  *                the «payload» parameter.
- * FL_CUTOUT    - always applied to all the components, it's not possible to 
- *                reduce component triggering by label nor direction. 
+ * FL_CUTOUT    - always applied to all the components, it's not possible to
+ *                reduce component triggering by label nor direction.
  *                No cutout tolerance is provided either;
  * FL_DRILL     - no changes
  * FL_LAYOUT    - no changes
@@ -376,16 +376,16 @@ function fl_bb_calc(
  */
 module fl_pcb_adapter(
   // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
-  verbs=FL_ADD,   
+  verbs=FL_ADD,
   type,
   // FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
   // pay-load bounding box, is added to the overall bounding box calculation
   payload,
   // desired direction [director,rotation], native direction when undef
-  direction,      
+  direction,
   // when undef native positioning is used
-  octant          
+  octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
@@ -401,7 +401,7 @@ module fl_pcb_adapter(
   holes     = fl_pcb_NopHoles(type);
   screw     = pcb_screw(type);
   screw_r   = screw ? screw_radius(screw) : 0;
-  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] 
+  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
             : assert(fl_tt_isThickList(thick)) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
   material  = fl_material(type,default="green");
@@ -427,10 +427,10 @@ module fl_pcb_adapter(
       fl_lay_holes(holes,"+z")
         children();
   }
-  
+
   module do_assembly() {
     if (holes)
-      fl_lay_holes(holes,"+z") 
+      fl_lay_holes(holes,"+z")
         fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
   }
 
