@@ -51,7 +51,7 @@ function fl_bb_sector(
   pts = [
     if ((sup-inf)<360) [0,0],                                                           // origin added
     if (inf%90!=0) let(alpha=inf)                           fl_circleXY(radius,alpha),  // inferior interval added
-    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_circleXY(radius,alpha),  // 
+    for(i=[start:start+3]) let(alpha=i*90) if (alpha<=sup)  fl_circleXY(radius,alpha),  //
     if (sup%90!=0) let(alpha=sup)                           fl_circleXY(radius,alpha)   // superior interval added
   ]
 ) assert(is_num(radius),str("radius=",radius)) fl_bb_polygon(pts);
@@ -70,7 +70,7 @@ let(
   inf       = interval[0],
   sup       = interval[1],
   start     = ceil(inf / 90),  // 0 <= start <= 3
-  RADIUS    = 
+  RADIUS    =
     assert(is_num(radius),str("«radius» must be a number (",radius,")"))
     assert(is_num(thick), str("«thick» must be a number (",thick,")"))
     radius+thick,
@@ -89,7 +89,7 @@ let(
 //    0° ≤ distance ≤ +360°
 //    0° ≤   inf    < +360°
 //    0° ≤   sup    < +720°
-function __normalize__(angles) = 
+function __normalize__(angles) =
   assert(is_list(angles),str("angles=",angles))
   let(
     sorted    = [min(angles),max(angles)],
@@ -108,7 +108,7 @@ function fl_sector(
   angles  // start|end angles in whatever order
 ) = let(
   radius  = d!=undef ? d/2 : r
-) assert($fn>2) 
+) assert($fn>2)
   assert(is_num(radius),str("radius=",radius))
   assert(is_list(angles),str("angles=",angles))
   fl_ellipticSector(e=[radius,radius],angles=angles);
@@ -173,9 +173,9 @@ function fl_bb_ellipticSector(
     ]
   ) fl_bb_polygon(pts);
 
-function __frags__(perimeter) = 
-  $fn == 0 
-    ?  max(min(360 / $fa, perimeter / $fs), 5) 
+function __frags__(perimeter) =
+  $fn == 0
+    ?  max(min(360 / $fa, perimeter / $fs), 5)
     :  $fn >= 3 ? $fn : 3;
 
 // line to line intersection as from https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
@@ -204,7 +204,7 @@ function fl_intersection(
   assert(c2,line2)  // intersection outside segment 2
   [x1+t*(x2-x1),y1+t*(y2-y1)];
 
-function fl_ellipticSector(e,angles) = 
+function fl_ellipticSector(e,angles) =
   assert(is_list(e),str("e=",e))
   assert(is_list(angles),str("angles=",angles))
   let(
@@ -278,7 +278,7 @@ function fl_bb_ellipticArc(
   e,      // ellipse in [a,b] form
   angles, // start|end angles
   thick   // added to radius defines the external radius
-) = 
+) =
 assert(is_list(e)     ,str("e=",e))
 assert(is_list(angles),str("angles=",angles))
 assert(is_num(thick)  ,str("thick=",thick))
@@ -340,7 +340,7 @@ module fl_ellipticAnnulus(
   quadrant
   ) {
   fl_ellipticArc(verbs,e,[0,360],thick,quadrant);
-} 
+}
 
 //**** ellipse ****************************************************************
 
@@ -366,8 +366,8 @@ let(
   parametric  = t!=undef
 ) parametric ? [a*cos(t),b*sin(t)] : fl_ellipseXY(e,t=fl_ellipseT(e,angle=angle));
 
-// APPROXIMATED ellipse perimeter 
-function fl_ellipseP(e) = 
+// APPROXIMATED ellipse perimeter
+function fl_ellipseP(e) =
 assert(e[0]>0 && e[1]>0,str("e=",e))
 let(
   a = e[0],
@@ -381,7 +381,7 @@ function ramp(angle) = 180*floor((angle+90)/180);
 function step(angle) = sin(angle/3)==1 ? 1 : cos(angle)>0 ? 1 : -1;
 
 // converts «θ» value to the corresponding ellipse «t» parameter
-// NOTE: we need to extend the theoretical function behiond ±π/2 codomain, 
+// NOTE: we need to extend the theoretical function behiond ±π/2 codomain,
 // for that we use ramp() and step() function accordingly.
 function fl_ellipseT(e,angle) =
 assert(is_list(e),str("e=",e))
@@ -443,10 +443,21 @@ module fl_ellipse(
 // Rectangular value [x,y] of circle of ray «r» by «t» (parametric)
 function fl_circleXY(
   r,  // radius of the circle
-  t   // 0≤t<360, angle that the ray from (0,0) to (x,y) makes with +X 
+  t   // 0≤t<360, angle that the ray from (0,0) to (x,y) makes with +X
 ) = r*[cos(t),sin(t)];
 
-function fl_circle(r=1) = fl_sector(r=r,angles=[0,360]);
+// function fl_circle(r=1) = fl_sector(r=r,angles=[0,360]);
+
+function fl_circle(r=1,center=[0,0]) = let(
+    points  = fl_sector(r=r,angles=[0,360]),
+    T = [
+      [1,0, center.x],
+      [0,1, center.y],
+      [0,0, 1       ]
+    ]
+  ) center!=[0,0]
+  ? [for(p=points) let(t=T*[p.x,p.y,1]) [t.x,t.y]]
+  : points;
 
 module fl_circle(
   verbs = FL_ADD,
@@ -490,7 +501,7 @@ module fl_annulus(
   quadrant
   ) {
   fl_arc(verbs,r,d,[0,360],thick,quadrant);
-} 
+}
 
 //**** arc ********************************************************************
 
@@ -530,7 +541,7 @@ module fl_arc(
   }
   if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
-} 
+}
 
 //**** inscribed polygon ******************************************************
 
@@ -583,7 +594,7 @@ function fl_square(
   // any combination is allowed i.e.
   // corners=[r,[a,b],0,0] ⇒ corners=[[r,r],[a,b],[0,0],[0,0]] == rectangle with circular arc on quadrant I, elliptical arc on quadrant II and squared on quadrants III,IV
   corners  = [0,0,0,0]
-) = 
+) =
   assert(is_num(corners) || len(corners)==2 || len(corners)==4)
   let(
     bbox      = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]],
@@ -592,7 +603,7 @@ function fl_square(
               : /*  len(corners)==4  */                      [for(v=corners) is_num(v) ? [v,v] : v],  // 4 elliptical arcs
     points    = /* echo(str("r ", r)) */ let(
         e = /* echo(str("corners ", corners)) */ (corners[0]==corners[1] && corners[1]==corners[2] && corners[2]==corners[3]) ? corners[0] : undef
-      ) (e!=undef && size.x!=size.y && size.x==2*e.x && size.y==2*e.y) ? /* echo("***PERFECT CIRCLE | ELLIPSE***") */ fl_ellipse(e=e) 
+      ) (e!=undef && size.x!=size.y && size.x==2*e.x && size.y==2*e.y) ? /* echo("***PERFECT CIRCLE | ELLIPSE***") */ fl_ellipse(e=e)
       : let(v1=corners[0],v2=corners[1]) assert(size.x-v1.x-v2.x>=0,"***BAD PARAMETER*** horiz semi-axes sum on corner 0 and 1 exceeds width!") // check corner[0],corner[1]
         let(v1=corners[1],v2=corners[2]) assert(size.y-v1.y-v2.y>=0,"***BAD PARAMETER*** vert semi-axes sum on corner 1 and 2 exceeds height!") // check corner[1],corner[2]
         let(v1=corners[2],v2=corners[3]) assert(size.x-v1.x-v2.x>=0,"***BAD PARAMETER*** horiz semi-axes sum on corner 2 and 3 exceeds width!") // check corner[2],corner[3]
@@ -668,7 +679,7 @@ module fl_square(
   fl_trace("corners",corners);
   fl_trace("points",points);
   fl_trace("$FL_ADD",$FL_ADD);
-  
+
   multmatrix(M) fl_parse(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) polygon(points);

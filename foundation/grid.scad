@@ -34,9 +34,9 @@ function fl_grid_quad(
   low   = bbox[0],
   high  = bbox[1],
   step  = is_num(step) ? [step,step] : step
-) [ 
+) [
     for(y=[low.y+origin.y:step.y:high.y]) [
-      for(x=[low.x+origin.x:step.x:high.x]) 
+      for(x=[low.x+origin.x:step.x:high.x])
         generator(x,y,bbox)
     ]
   ];
@@ -52,18 +52,11 @@ function fl_grid_hex(
   let(
     edges = 6,
     size  = let(bb = fl_bb_ipoly(r=r_step,n=edges)) bb[1]-bb[0],
-    // builds points needed for a circle given «center» and «r»
-    circle  = function(center,r) let(
-        T = [
-          [1,0, center.x],
-          [0,1, center.y],
-          [0,0, 1       ]
-        ]
-      ) [for(p=fl_circle(r)) let(t=T*[p.x,p.y,1]) [t.x,t.y]],
     // hex generator
     generator = function(x,y,bbox) let(
         center  = [x,y],
-        points  = circle(center=center,r=r_step,$fn=edges),
+        // builds points needed for a circle given «center» and «r»
+        points  = fl_circle(center=center,r=r_step,$fn=edges),
         clipped = [for(p=points) if (p.x>bbox[0].x && p.y>bbox[0].y && p.x<bbox[1].x && p.y<bbox[1].y) p]
       ) concat([center],clipped)
   ) fl_grid_quad(origin,size,bbox,generator);
@@ -82,7 +75,7 @@ module fl_grid_layout(
 
   module grid() {
     union() for(row=points,set=row,p=set)
-      translate(p) 
+      translate(p)
         children();
   }
 
@@ -93,8 +86,8 @@ module fl_grid_layout(
   // fl_trace("step",step);
   // fl_trace("r_step",r_step);
   // fl_trace("bbox",bbox);
-  points  = step!=undef 
-          ? fl_grid_quad(origin,step,bbox) 
+  points  = step!=undef
+          ? fl_grid_quad(origin,step,bbox)
           : fl_grid_hex(origin,r_step,bbox);
   if (clip)
     intersection() {
