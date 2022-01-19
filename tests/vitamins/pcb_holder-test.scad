@@ -67,16 +67,12 @@ DIR_R       = 0;        // [0:360]
 
 /* [PCB Holder ]*/
 
-SCREW       = "M2"; // [M2:Screw M2 cap, M3:Screw M3 cap]
-CENTER      = false;
-SCREW_LEN   = 4;
-TOLERANCE   = 0.1;
+H   = 4;  // [0.1:0.1:5]
 // draw a base frame
 DRAW_FRAME  = false;
 // frame base thickness
 BASE_T      = 2.5;
-HALF        = true;
-PCB_SIZE    = [16,23,1.6];  // [1:0.1:50]
+PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20]
 
 /* [Hidden] */
 
@@ -93,17 +89,20 @@ verbs=[
   if (LAYOUT!="OFF")    FL_LAYOUT,
   if (PLOAD!="OFF")     FL_PAYLOAD,
 ];
+pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
+    : PCB=="FL_PCB_PERF70x50"  ? FL_PCB_PERF70x50
+    : PCB=="FL_PCB_PERF60x40"  ? FL_PCB_PERF60x40
+    : PCB=="FL_PCB_PERF70x30"  ? FL_PCB_PERF70x30
+    : PCB=="FL_PCB_PERF80x20"  ? FL_PCB_PERF80x20
+    : undef;
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 
-screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
-pcb     = fl_bb_new(size=PCB_SIZE); fl_trace("pcb",pcb);
+// screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
+// pcb     = fl_bb_new(size=PCB_SIZE); fl_trace("pcb",pcb);
 
-holder  = fl_pcb_Holder(pcb,screw=screw,len=SCREW_LEN,tolerance=TOLERANCE,frame_t=DRAW_FRAME ? BASE_T : 0,half=HALF);
+holder  = fl_pcb_Holder(pcb,h=H);
+pcb_holder(verbs,holder,direction=direction,octant=octant,
+  $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD
+  );
 fl_trace("holder",holder);
-fl_placeIf(!PLACE_NATIVE,holder,OCTANT) {
-  // fl_cube(size=bb_size(holder));
-  pcb_holder(verbs,pcb,screw=screw,screw_len=SCREW_LEN,filament=$FL_FILAMENT,center=CENTER,tolerance=TOLERANCE,frame=DRAW_FRAME,thick=DRAW_FRAME?BASE_T:undef,half=HALF);
-  if (ASSEMBLY)
-    pcb_holder(FL_ASSEMBLY,pcb,screw=screw,screw_len=SCREW_LEN,filament=$FL_FILAMENT,center=CENTER,tolerance=TOLERANCE,frame=DRAW_FRAME,thick=DRAW_FRAME?BASE_T:undef,half=HALF);
-}

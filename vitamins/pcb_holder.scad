@@ -18,6 +18,13 @@
  */
 include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
+use     <../foundation/2d.scad>
+use     <../foundation/hole.scad>
+use     <../foundation/layout.scad>
+use     <../foundation/placement.scad>
+use     <../foundation/tube.scad>
+
+include <../vitamins/pcbs.scad>
 
 include <NopSCADlib/lib.scad>
 
@@ -28,184 +35,144 @@ module screw_and_nylon_washer(screw,len,filament) {
   fl_color("DarkSlateGray") translate(-fl_Z(washer_t)) washer(washer);
 }
 
+function fl_pcb(type,value)      = fl_property(type,"pcb in OFL format",value);
+
 // contructor
 function fl_pcb_Holder(
   // OFL PCB
   pcb,
-  // screw used for PCB fixing
-  screw,            
-  // screw len fixes the holder height
-  len,              
-  tolerance=0.5, 
-  // when >0 a base frame is added to supports
-  frame_t=0,   
-  // when true only two on the four available screws will be mounted
-  half=true 
+  // holder height
+  h,
+  // TODO: ignored in case of pcb with holes
+  // tolerance=0.5
 ) =
-assert(pcb!=undef)
+assert(pcb)
+assert(h)
 let(
-  hole_r      = screw_radius(screw),
+  screw   = fl_screw(pcb),
 
-  washer      = screw_washer(screw),
-  washer_t    = washer_thickness(washer),
-  washer_r    = washer_radius(washer),
+  washer  = screw_washer(screw),
+  wsh_t   = washer_thickness(washer),
+  wsh_r   = washer_radius(washer),
 
-  holder_h    = len-washer_t,
-  holder_r    = hole_r,
-  holder_R    = washer_r,
-  
-  // pcb 'as is'
-  pcb_corners = fl_bb_corners(pcb),
-  pcb_size    = fl_bb_size(pcb),
-  
-  // pcb with tolerance applied
-  pcb_t_corners = let(c=pcb_corners,t=tolerance) c+[[-t,-t,0],[t,t,0]],
-  pcb_t_size    = pcb_size+[2*tolerance,2*tolerance,0],
-  
-  // x and y distance between holes and 'toleranced' pcb
-  delta   = hole_r/sqrt(2),
-  holes   = let(c=pcb_t_corners,d=delta,z=c[0].z) 
-      half==true 
-    ? c+[[-d,-d,-c[0].z],[d,d,-c[1].z]] 
-    : let(c4=[c[0],c[1],[c[1].x,c[0].y,0],[c[0].x,c[1].y,0]]) c4+[[-d,-d,-c[0].z],[d,d,-c[1].z],[d,-d,0],[-d,d,0]],
-  t       = pcb_size.z,
-
-  corners = let(R=holder_R,h=holder_h) holes+[[-R,-R,0],[R,R,h]]
-
-) fl_bb_new(negative=corners[0],positive=corners[1]);
+  pcb_bb      = fl_bb_corners(pcb),
+  pcb_t = fl_pcb_thick(pcb),
+  bbox    = [pcb_bb[0]-Z(h),pcb_bb[1]]
+  // bbox    = [pcb_bb[0]-Z(h),[pcb_bb[1].x,pcb_bb[1].y,pcb_bb[0].z]]
+) [
+  fl_name(value=str("Holder for ",fl_name(pcb))),
+  fl_screw(value=screw),
+  // TODO: fl_tolerance(value=tolerance),
+  fl_bb_corners(value=bbox),
+  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
+  fl_pcb(value=pcb),
+  ["holder/height", h],
+];
 
 module pcb_holder(
   verbs,
+  // as returned from function fl_pcb_Holder()
   type,
-  screw,                    // screw used for PCB fixing
-  screw_len,
-  filament  = "DodgerBlue", // filament color
-  tolerance = 0.5,
-  center    = false,
-  frame     = false,        // when true a base frame is added to supports
-  half      = true,         // when true only two on the four available screws will be mounted
-  thick                     // mandatory when frame==true
-  ) {
+  // when >0 a frame is added
+  frame = 0,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  // when undef native positioning is used
+  octant,
+) {
   // $FL_TRACE=true;
   assert(verbs!=undef);
+  assert(type!=undef);
+  assert(frame>=0);
 
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  hole_r      = screw_radius(screw);
+  screw       = fl_screw(type);
+  scr_r       = screw_radius(screw);
 
   washer      = screw_washer(screw);
-  washer_t    = washer_thickness(washer);
-  washer_r    = washer_radius(washer);
+  wsh_t    = washer_thickness(washer);
+  wsh_r    = washer_radius(washer);
 
-  holder_h    = screw_len-washer_t;
-  holder_r    = hole_r;
-  holder_R    = washer_r;
-  
-  // pcb 'as is'
-  pcb_corners = fl_bb_corners(type);
-  pcb_size    = fl_bb_size(type);
-  
-  // pcb with tolerance applied
-  pcb_t_corners = let(c=pcb_corners,t=tolerance) c+[[-t,-t,0],[t,t,0]];
-  pcb_t_size    = pcb_size+[2*tolerance,2*tolerance,0];
-  
-  delta   = hole_r/sqrt(2); // x and y distance between holes and 'toleranced' pcb
-  fl_trace("Half",half);
-  holes   = let(c=pcb_t_corners,d=delta,z=c[0].z) 
-      half==true 
-    ? c+[[-d,-d,-c[0].z],[d,d,-c[1].z]] 
-    : let(c4=[c[0],c[1],[c[1].x,c[0].y,0],[c[0].x,c[1].y,0]]) c4+[[-d,-d,-c[0].z],[d,d,-c[1].z],[d,-d,0],[-d,d,0]];
-  fl_trace("Holes",holes);
-  t       = pcb_size.z;
+  bbox    = fl_bb_corners(type);
+  size    = bbox[1]-bbox[0];
+  pcb     = fl_pcb(type);
+  pcb_t   = fl_pcb_thick(pcb);
+  pcb_bb  = fl_bb_corners(pcb);
 
-  corners     = let(R=holder_R,h=holder_h) holes+[[-R,-R,0],[R,R,h]];
-  bbox        = corners[1]-corners[0];
+  h    = fl_get(type,"holder/height");
+  radius     = wsh_r;
+  // thick = wsh_r - scr_r;
 
-  M  = let(h=holes,fl_T=h[0],A=h[0],B=h[1],D=(A+(B-A)/2)) center ? [
-    [1,0,0,-D.x],
-    [0,1,0,-D.y],
-    [0,0,1,-D.z],
-  ] : [
-    [1,0,0,-fl_T.x],
-    [0,1,0,-fl_T.y],
-    [0,0,1,-fl_T.z],
-  ];
-  fl_trace("M",M);
+  holes = fl_holes(pcb);
 
-  assert(holder_R>delta+holder_r/sqrt(2));
-
-  module pcb(tolerance=false) {
-    size  = tolerance?pcb_t_size:pcb_size;
-    c     = tolerance?pcb_t_corners:pcb_corners;
-    translate([0,0,holder_h-size.z]+c[0]) cube(size=size+[0,0,FL_NIL]);
-  }
+  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
   module do_add() {
 
     module frame() {
-      fl_color(filament) translate(corners[0]-FL_Z*thick) difference() {
+      translate(bbox[0]-Z*size.z) difference() {
         cube(size=[bbox.x,bbox.y,thick]);
         translate([2*holder_R,2*holder_R,-FL_NIL]) cube(size=[bbox.x-4*holder_R,bbox.y-4*holder_R,thick+2*FL_NIL]);
       }
     }
 
-    module holder() {
-      r=holder_R;
-      h=holder_h;
-      fl_color(filament) difference() {
-        translate(fl_Z(h/2)) cylinder(r=r, h=h, center=true);
-        translate(fl_Z(screw_len)) screw(screw,screw_len);
-      }
-    }
+    fl_lay_holes(holes)
+      translate(-Z(pcb_t)) let(
+          pos = holes[$hole_i][0],
+          dx0 = abs(abs(pcb_bb[0].x)-abs(pos.x)),
+          dy0 = abs(abs(pcb_bb[0].y)-abs(pos.y)),
+          dx1 = abs(abs(pcb_bb[1].x)-abs(pos.x)),
+          dy1 = abs(abs(pcb_bb[1].y)-abs(pos.y)),
+          r   = min(wsh_r,dx0,dy0,dx1,dy1),
+          t   = r-$hole_d / 2
+        ) fl_tube(r=r,h=h,thick=t,octant=-Z);
 
-    difference() {
-      for(hole=holes) translate(fl_2(hole)) holder();
-      pcb(tolerance=true);
-    }
     if (frame)
       frame();
   }
-  
+
   module do_bbox() {
-    translate(corners[0]) %cube(size=bbox);
+    fl_bb_add(bbox);
   }
 
   module do_assembly() {
-    fl_color("green") pcb();
-    fl_trace("Holes size",len(holes));
-    for(i=[0:len(holes)-1])
-      translate(fl_2(holes[i])) translate(fl_Z(screw_len)) children(i);
+    fl_pcb([FL_ADD,FL_ASSEMBLY],pcb,thick=h);
+    // fl_color("green") pcb();
+    // fl_trace("Holes size",len(holes));
+    // for(i=[0:len(holes)-1])
+    //   translate(fl_2(holes[i])) translate(Z(screw_len)) children();
   }
 
   module do_layout()    {}
   module do_drill()     {}
 
-  fl_parse(verbs) {
-    if ($verb==FL_ADD) {
-      multmatrix(M) do_add();
-      if (axes)
-        axes(bbox);
-    } else if ($verb==FL_BBOX) {
-      multmatrix(M) do_bbox();
-    } else if ($verb==FL_ASSEMBLY) {
-      multmatrix(M) do_assembly() {
-        screw_and_nylon_washer(screw,screw_len,filament);
-        screw_and_nylon_washer(screw,screw_len,filament);
-        screw_and_nylon_washer(screw,screw_len,filament);
-        screw_and_nylon_washer(screw,screw_len,filament);
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD) do_add();
+
+      } else if ($verb==FL_ASSEMBLY) {
+        fl_modifier($FL_ASSEMBLY) do_assembly()
+          screw_and_nylon_washer(screw,screw_len,filament);
+
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) do_bbox();
+
+      } else if ($verb==FL_LAYOUT) {
+        fl_modifier($FL_LAYOUT) do_layout() children();
+
+      } else if ($verb==FL_DRILL) {
+        fl_modifier($FL_DRILL) do_drill();
+
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }
-    } else if ($verb==FL_LAYOUT) { 
-      multmatrix(M) do_layout() children();
-    } else if ($verb==FL_DRILL) {
-      multmatrix(M) color("orange") {
-        do_drill();
-      }
-    } else if ($verb==FL_AXES) {
-      fl_trace("bbox = ",bbox);
-      fl_axes(bbox);
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=1.2*(bbox[1]-bbox[0]));
   }
+
 }
