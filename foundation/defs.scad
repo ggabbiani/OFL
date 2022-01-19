@@ -77,7 +77,7 @@ function fl_T(t) = is_list(t)
   : fl_T([t,t,t]);
 
 // scale matrix in homogeneous coordinates
-function fl_S(s) = is_list(s) 
+function fl_S(s) = is_list(s)
   ? [
       [s.x, 0,    0,    0 ],
       [0,   s.y,  0,    0 ],
@@ -179,27 +179,27 @@ function fl_deprecated(bad,value,replacement) = let(
     complain  = str("***DEPRECATED***: ", bad, " is deprecated and ", replacement!=undef ? str("will be replaced by ", replacement, " in next major release.") : "WILL NOT BE REPLACED.")
   ) echo(complain) value;
 
-// generic property getter with default value when not found 
-function fl_get(type,key,default) = 
+// generic property getter with default value when not found
+function fl_get(type,key,default) =
   assert(key!=undef)
   assert(type!=undef)
   let(index_list=search([key],type))
-  index_list != [[]] 
-  ? type[index_list[0]][1] 
+  index_list != [[]]
+  ? type[index_list[0]][1]
   : assert(default!=undef,str("Key not found ***",key,"***")) default;
 
 /**
- * 'bipolar' property helper: 
+ * 'bipolar' property helper:
  *
  * type/key{/default} ↦ value       (property getter)
  * key{/value}        ↦ [key,value] (property constructor)
  *
- * It concentrates property key definition reducing possible mismatch when 
+ * It concentrates property key definition reducing possible mismatch when
  * referring to property key in the more usual getter/setter function pair.
  */
-function fl_property(type,key,value,default)  = 
+function fl_property(type,key,value,default)  =
   assert(key!=undef)
-  type!=undef 
+  type!=undef
   ? fl_get(type,key,default)              // property getter
   : assert(default==undef)  [key,value];  // property constructor
 
@@ -207,26 +207,28 @@ function fl_property(type,key,value,default)  =
 // General properties
 // when invoked by «type» parameter act as getters
 // when invoked by «value» parameter act as property constructors
-// NOTE: when called without «type» and «value» parameters, it acts as a 
+// NOTE: when called without «type» and «value» parameters, it acts as a
 // constructor with undef value, usable for retrieving the key after '0' post
 // indexing, as in the following examples:
 // fl_connectors()[0]   ↦ "connectors"
 // fl_description()[0]  ↦ "description"
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
-function fl_description(type,value) = fl_property(type,"description",value); 
+function fl_description(type,value) = fl_property(type,"description",value);
 function fl_director(type,value)    = fl_property(type,"director",value);
 // holes in [«point»,«surface normal»,«diameter»,«optional depth»] format
 function fl_holes(type,value)       = fl_property(type,"holes",value);
 function fl_name(type,value)        = fl_property(type,"name",value);
-function fl_material(type,value,default)    
+function fl_material(type,value,default)
                                     = fl_property(type,"material (actually a color)",value,default);
 function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,type!=undef?false:undef);
-function fl_nopSCADlib(type,value,default)  
+function fl_nopSCADlib(type,value,default)
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
 // pay-load bounding box, it contributes to the overall bounding box calculation
 function fl_payload(type,value)     = fl_property(type,"payload bounding box",value);
 function fl_rotor(type,value)       = fl_property(type,"rotor",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
+// TODO: implement for pcb_holder
+// function fl_tolerance(type,value)   = fl_property(type,"tolerance",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 
 //*****************************************************************************
@@ -245,6 +247,9 @@ function fl_bb_corners(type,value)  = let(key="bb/bounding corners")
   type!=undef
   ? let(value = fl_property(type,key)) is_function(value) ? value(type) : value
   : fl_property(key=key,value=value);
+
+// TODO: every type implementing FL_FOOTPRINT should have this
+// function fl_bb_fprint(type,value)  = fl_property(type,"bb/footprint bounding corners",value);
 
 // computes size from the bounding corners.
 function fl_bb_size(type)       = assert(type) let(c=fl_bb_corners(type)) c[1]-c[0];
@@ -287,7 +292,7 @@ function fl_has(type,property,check=function(value) true) =
   assert(is_string(property))
   assert(is_list(type))
   assert(is_function(check))
-  let(i=search([property],type)) 
+  let(i=search([property],type))
   i != [[]] ? assert(len(type[i[0]])==2,"Malformed type") check(type[i[0]][1]) : false;
 
 module fl_parse(verbs) {
@@ -316,7 +321,7 @@ module fl_trace(a1,a2,n=1,always=false) {
 /*
  * Applies a Rotation Matrix for aligning fl_vector A (from) to fl_vector B (to).
  *
- * Taken from 
+ * Taken from
  * [How to Calculate a Rotation Matrix to Align Vector A to Vector B in 3D](https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724)
  */
 function fl_align(from,to) =
@@ -326,10 +331,10 @@ function fl_align(from,to) =
   assert(norm(to)>0)
 
   let(u1 = fl_versor(from),u2 = fl_versor(to))
-  u1==u2 ? FL_I : 
+  u1==u2 ? FL_I :
   u1==-u2 ? fl_S(-1) : // in this case the algorithm would fails, so we use a simpler way
   let(
-    axis  = cross( u1, u2 ), // cross product == prodotto vettoriale: normale al piano [u1,u2] 
+    axis  = cross( u1, u2 ), // cross product == prodotto vettoriale: normale al piano [u1,u2]
     cosA  = u1 * u2, // dot product == prodotto scalare: Σa[i]*b[i] nullo se u1 e u2 sono ortogonali
     k     = 1.0 / (1.0 + cosA)
   )
@@ -345,7 +350,7 @@ module fl_align(from,to) {
   assert(is_list(to));
   assert(norm(from)>0);
   assert(norm(to)>0);
-  
+
   u1 = fl_versor(from);
   u2 = fl_versor(to);
   if (u1==u2)
@@ -353,7 +358,7 @@ module fl_align(from,to) {
   else if (u1==-u2) // in this case the algorithm would fails, so we use a simpler way
     multmatrix(fl_S(-1)) children();
   else {
-    axis  = cross( u1, u2 ); // cross product == prodotto vettoriale: normale al piano [u1,u2] 
+    axis  = cross( u1, u2 ); // cross product == prodotto vettoriale: normale al piano [u1,u2]
     cosA  = u1 * u2; // dot product == prodotto scalare: Σa[i]*b[i] nullo se u1 e u2 sono ortogonali
     k     = 1.0 / (1.0 + cosA);
     multmatrix(
@@ -375,7 +380,7 @@ module fl_overlap(u1,u2,position) {
 }
 
 // Draws a fl_vector [out|in]ward P
-module fl_vector(P,outward=true,endpoint="arrow") { 
+module fl_vector(P,outward=true,endpoint="arrow") {
   assert(is_list(P));
   length  = norm(P);
   d       = length / 20;
@@ -402,8 +407,8 @@ module fl_versor(P) {
 }
 
 module fl_axes(size=1,reverse=false) {
-  sz  = is_list(size) 
-      ? assert(size.x>=0 && size.y>=0 && (size.z==undef||size.z>=0)) size 
+  sz  = is_list(size)
+      ? assert(size.x>=0 && size.y>=0 && (size.z==undef||size.z>=0)) size
       : assert(size>=0) [size,size,size];
   fl_trace("Size:",sz);
   color("red")   fl_vector(sz.x*FL_X,reverse==undef || !reverse);
@@ -456,7 +461,7 @@ function fl_3(v)  =
   len(v)==3 ? v : [v.x,v.y,v.z] / v[3];
 
 // transforms 3D coords to homogeneous
-function fl_4(v)  = 
+function fl_4(v)  =
   assert(len(v)>2)
   len(v)==3 ? [v.x,v.y,v.z,1] : v / v[3];
 
@@ -489,7 +494,7 @@ let(
   match   = [for(item=(logic=="OR" || __first__) ? s_list:__result__) if (f(item,string)) item],
   result  = (logic=="OR") ? concat(__result__,match) : match
 )
-// echo(match=match, result=result) 
+// echo(match=match, result=result)
 len==1 ? result : fl_list_filter(s_list,operator,[for(i=[1:len-1]) c_list[i]],result,false);
 
 function fl_list_has(list,item) = len(fl_list_filter(list,FL_INCLUDE_ALL,item))>0;
@@ -508,12 +513,12 @@ function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
 // function _div_(x,y) = (x!=undef && y!=undef) ? x / y : undef;
 // function _lst_(l)   = fl_accum(l)!=undef ? l : undef;
 
-// function fl_synonymous(syns) = 
+// function fl_synonymous(syns) =
 //   echo(syns=syns)
-//   syns==[] 
-//   ? echo("Empty --> UNDEF") undef 
-//   : syns[0]!=undef 
-//     ? echo(str("First OK --> syns[0]=",syns[0])) syns[0] 
+//   syns==[]
+//   ? echo("Empty --> UNDEF") undef
+//   : syns[0]!=undef
+//     ? echo(str("First OK --> syns[0]=",syns[0])) syns[0]
 //     : len(syns)==1
-//       ? echo("Last KO --> UNDEF") undef 
+//       ? echo("Last KO --> UNDEF") undef
 //       : echo("Current KO --> RECURSION") fl_synonymous([for(i=[1:len(syns)-1]) syns[i]]);
