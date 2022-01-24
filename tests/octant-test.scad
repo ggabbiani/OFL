@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../foundation/defs.scad>
-use     <../foundation/placement.scad>
+include <../foundation/placement.scad>
 
 $fn         = 50;           // [3:50]
 // Debug statements are turned on
