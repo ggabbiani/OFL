@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+
+include <../../foundation/torus.scad>
 
 $fn         = 50;           // [3:100]
 $fs         = 50;           // [3:100]

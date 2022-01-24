@@ -19,16 +19,13 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+include <../../foundation/3d.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
@@ -59,8 +56,8 @@ DIR_R       = 0;        // [0:360]
 /* [3ds] */
 
 SHAPE   = "cube";     // ["cube", "cylinder", "prism", "sphere"]
-// Size for cube and sphere, bottom/top diameter and height for cylinder, bottom/top edge length and height for prism 
-SIZE    = [1,2,3]; 
+// Size for cube and sphere, bottom/top diameter and height for cylinder, bottom/top edge length and height for prism
+SIZE    = [1,2,3];
 
 /* [Prism] */
 

@@ -18,11 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
 
-use     <../../foundation/hole.scad>
-use     <../../vitamins/screw.scad>
+include <../../foundation/hole.scad>
+include <../../foundation/util.scad>
+
+include <../../vitamins/screw.scad>
+
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
@@ -96,17 +97,17 @@ enable  = [
 ];
 
 if (MODE=="layout") difference() {
-  fl_color("red") 
+  fl_color("red")
     fl_cube(size=SIZE,octant=O);
   fl_lay_holes(holes=holes,enable=enable)
-    translate(NIL*$hole_n) 
+    translate(NIL*$hole_n)
       let(
         screw = $hole_d==2 ? M2_cs_cap_screw
               : $hole_d==3 ? M3_cs_cap_screw
               : M4_cs_cap_screw
       ) fl_screw(FL_FOOTPRINT,type=screw,len=$hole_depth,direction=[$hole_n,0]);
 } else difference() {
-  fl_color("red") 
+  fl_color("red")
     fl_cube(size=SIZE,octant=O);
   fl_holes(holes=holes,enable=enable);
 }

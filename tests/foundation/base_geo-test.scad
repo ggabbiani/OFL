@@ -18,7 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-use     <../../foundation/base_geo.scad>
+
+include <../../foundation/base_geo.scad>
 
 let(
   vector  = [1.2,13,-4.5],

@@ -18,10 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
 
-use     <../../foundation/tube.scad>
+include <../../foundation/tube.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

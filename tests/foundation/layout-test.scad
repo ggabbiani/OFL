@@ -17,8 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+include <../../foundation/layout.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -96,7 +95,7 @@ module __test__() {
   bcs     = [for(t=types) fl_bb_corners(t)];
   axis    = AXIS=="+X" ? +X : AXIS=="-X" ? -X : AXIS=="+Y" ? +Y : AXIS=="-Y" ? -Y : AXIS=="+Z" ? +Z : -Z;
 
-  fl_layout(verbs,axis,GAP,types,octant=octant,direction=direction,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_LAYOUT=LAYOUT) { 
+  fl_layout(verbs,axis,GAP,types,octant=octant,direction=direction,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_LAYOUT=LAYOUT) {
     let(type=rpi, bc=fl_bb_corners(type)) fl_bb_add(bc);
     let(type=hd,  bc=fl_bb_corners(type)) fl_bb_add(bc);
     let(type=hd,  bc=fl_bb_corners(type)) fl_bb_add(bc);

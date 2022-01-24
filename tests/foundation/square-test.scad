@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+
+include <../../foundation/2d.scad>
 
 $fn         = 5000;           // [3:10000]
 // Debug statements are turned on
@@ -54,11 +54,11 @@ SIZE      = [15,10];
 // Quadrant I
 CORNER_0  = [6,3];
 // Quadrant II
-CORNER_1  = [2,2];  
+CORNER_1  = [2,2];
 // Quadrant III
-CORNER_2  = [3,6];  
+CORNER_2  = [3,6];
 // Quadrant IV
-CORNER_3  = [0,0];  
+CORNER_3  = [0,0];
 
 /* [Hidden] */
 

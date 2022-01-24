@@ -19,24 +19,22 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/incs.scad>
+include <../../foundation/2d.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = true;
 // When true, fl_trace() mesages are turned on
-TRACE   = false;
+$FL_TRACE   = false;
 
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -75,12 +73,11 @@ $vpd  = 140;
 $vpf  = 22.5;
 
 module __test__() {
-  // $FL_TRACE = TRACE;
   angles  = [START_ANGLE,END_ANGLE];
   verbs=[
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-    if (BBOX!="OFF")  FL_BBOX,
+    if ($FL_ADD!="OFF")   FL_ADD,
+    if ($FL_AXES!="OFF")  FL_AXES,
+    if ($FL_BBOX!="OFF")  FL_BBOX,
   ];
   quadrant  = PLACE_NATIVE ? undef : QUADRANT;
 
@@ -90,18 +87,16 @@ module __test__() {
       fl_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(r=RADIUS,n=IPOLY_N)) #fl_circle(FL_ADD,r=RADIUS);
   }
 
-  $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;
-
-  if      (PRIMITIVE == "circle"            ) fl_circle(verbs,r=RADIUS,quadrant=quadrant,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "circle arc"        ) fl_arc(verbs,r=RADIUS,angles=angles,thick=ARC_T,quadrant=quadrant,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "circle sector"     ) fl_sector(verbs,r=RADIUS,angles=angles,quadrant=quadrant,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "circle annulus"    ) fl_annulus(verbs,r=RADIUS,thick=ARC_T,quadrant=quadrant,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "ellipse"           ) fl_ellipse(verbs,[A,B],quadrant=quadrant,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "elliptic arc"      ) fl_ellipticArc(verbs,[A,B],angles,ARC_T,quadrant=quadrant,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "elliptic sector"   ) fl_ellipticSector(verbs,[A,B],angles,quadrant=quadrant,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "elliptic annulus"  ) fl_ellipticAnnulus(verbs,[A,B],ARC_T,quadrant=quadrant,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "inscribed polygon" ) ipoly($FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-  else if (PRIMITIVE == "square"            ) fl_square(verbs,size=SQUARE_SIZE,quadrant=quadrant,$FL_TRACE=TRACE,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+  if      (PRIMITIVE == "circle"            ) fl_circle(verbs,r=RADIUS,quadrant=quadrant);
+  else if (PRIMITIVE == "circle arc"        ) fl_arc(verbs,r=RADIUS,angles=angles,thick=ARC_T,quadrant=quadrant);
+  else if (PRIMITIVE == "circle sector"     ) fl_sector(verbs,r=RADIUS,angles=angles,quadrant=quadrant);
+  else if (PRIMITIVE == "circle annulus"    ) fl_annulus(verbs,r=RADIUS,thick=ARC_T,quadrant=quadrant);
+  else if (PRIMITIVE == "ellipse"           ) fl_ellipse(verbs,[A,B],quadrant=quadrant);
+  else if (PRIMITIVE == "elliptic arc"      ) fl_ellipticArc(verbs,[A,B],angles,ARC_T,quadrant=quadrant);
+  else if (PRIMITIVE == "elliptic sector"   ) fl_ellipticSector(verbs,[A,B],angles,quadrant=quadrant);
+  else if (PRIMITIVE == "elliptic annulus"  ) fl_ellipticAnnulus(verbs,[A,B],ARC_T,quadrant=quadrant);
+  else if (PRIMITIVE == "inscribed polygon" ) ipoly();
+  else if (PRIMITIVE == "square"            ) fl_square(verbs,size=SQUARE_SIZE,quadrant=quadrant);
 }
 
 __test__();

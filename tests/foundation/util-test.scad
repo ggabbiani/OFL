@@ -17,12 +17,9 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
-use     <../../vitamins/screw.scad>
+include <../../foundation/util.scad>
 
-use     <scad-utils/spline.scad>
-include <NopSCADlib/lib.scad>
+include <../../vitamins/screw.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -55,7 +52,7 @@ META_LEN    = 10;
 ADD       = true;
 ASSEMBLY  = false;
 
-// length of the rail 
+// length of the rail
 RAIL_LEN  = 10; // [0:100]
 
 /* [Plane align test] */
@@ -79,7 +76,7 @@ CO_CUT    = false;
 /* [Hidden] */
 
 module __test__() {
-  // customizer helper 
+  // customizer helper
   function axis(s) =
     assert(s=="X" || s=="-X" || s=="Y" || s=="-Y" || s=="Z" || s=="-Z")
     s == "X" ? FL_X : s=="-X" ? -FL_X : s=="Y" ? FL_Y : s=="-Y" ? -FL_Y : s=="Z" ? FL_Z : -FL_Z;
@@ -98,7 +95,7 @@ module __test__() {
         : META_SCREW=="M3_pan_screw"    ? M3_pan_screw
         : META_SCREW=="M4_cap_screw"    ? M4_cap_screw
         : META_SCREW=="M4_cs_cap_screw" ? M4_cs_cap_screw
-        : META_SCREW=="M4_dome_screw"   ? M4_dome_screw 
+        : META_SCREW=="M4_dome_screw"   ? M4_dome_screw
         : META_SCREW=="M4_grub_screw"   ? M4_grub_screw
         : META_SCREW=="M4_hex_screw"    ? M4_hex_screw
         : META_SCREW=="M4_pan_screw"    ? M4_pan_screw
@@ -125,7 +122,7 @@ module __test__() {
   //   gap = 1.5 * 2 * screw_head_radius(screw);
   //   translate(-X(gap))
   //     screw(screw,META_LEN);
-  //   fl_color(FILAMENT) 
+  //   fl_color(FILAMENT)
   //     translate(X(gap))
   //       fl_metaScrew(screw,META_LEN);
   // }
@@ -201,7 +198,7 @@ module __test__() {
     }
 
     module co() {
-      fl_cutout(len=co_len,z=co_axes[0],x=co_axes[1],trim=CO_TRIM,cut=CO_CUT,delta=CO_DELTA) 
+      fl_cutout(len=co_len,z=co_axes[0],x=co_axes[1],trim=CO_TRIM,cut=CO_CUT,delta=CO_DELTA)
         children();
     }
 

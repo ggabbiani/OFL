@@ -18,17 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+
+include <../../foundation/grid.scad>
+include <../../foundation/util.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
@@ -76,7 +74,7 @@ surfaces=[
   [-FL_X,[size.z, size.y, T]],
   [+FL_Z,[size.x, size.y, T]],
   [+FL_Y,[size.x, size.z, T]],
-  [-FL_Y,[size.x, 9,      T]], 
+  [-FL_Y,[size.x, 9,      T]],
   [+FL_X,[size.z, size.y, T]],
   [-FL_Z,[size.x, size.y, T]],
 ];
@@ -102,7 +100,7 @@ test()
   fl_bend(verbs,type=folding,flat=$flat,octant=$octant,
           $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX)
     // bending algorithm requires a 3d shape
-    linear_extrude(fl_bb_size($sheet).z) 
+    linear_extrude(fl_bb_size($sheet).z)
       // grid algorithm operates on 2d surfaces
       difference() {
         // 2d surface fitting the calculated $sheet size
@@ -111,11 +109,11 @@ test()
         if (search($fid,[4,1])) fl_grid_layout(
           origin  = [0,D],
           r_step  = shift,
-          // bounding box C-M 
+          // bounding box C-M
           bbox    = [$C,$M] + [[shift,-shift],-[5,9]],
           clip    = false
         ) rotate(ROT_2,Z) fl_circle(d=D,$fn=EDGES_2);
-        // grid on face 0,1 (normal -X and +Z) 
+        // grid on face 0,1 (normal -X and +Z)
         if (search($fid,[0,1])) fl_grid_layout(
           origin=[2*shift,1.5*shift],
           r_step  = shift,

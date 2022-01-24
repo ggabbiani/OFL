@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
-use     <../../foundation/grid.scad>
+include <../../foundation/grid.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -62,7 +60,7 @@ grid_bbox   = sheet_metal+[BORDER,-BORDER];
 if (GRID_BBOX)
   translate(Z(NIL)) #fl_bb_add(grid_bbox,2d=true);
 
-fl_color("silver") 
+fl_color("silver")
   linear_extrude(0.5)
     difference() {
       // sheet metal

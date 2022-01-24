@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-use <../../foundation/base_string.scad>
+include <../../foundation/base_string.scad>
 
 s = "I was A Mixed string!";
 

@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-use <../../foundation/type_trait.scad>
+include <../../foundation/type_trait.scad>
 
 assert(fl_tt_isInDictionary("inexistent",["key1","key2","key3"])==false);
 assert(fl_tt_isInDictionary("key2",["key1","key2","key3"]));

@@ -17,8 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+include <../../foundation/connect.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -83,7 +82,7 @@ module __test__() {
 
   // "plug": 'a piece that fits into a hole in order to close it'
   //        Its canonical form implies an orientation of the piece coherent
-  //        with its insertion movement along +Z semi-axis. 
+  //        with its insertion movement along +Z semi-axis.
   module plug(type,connectors=false,only=false) {
     positions=fl_get(type,"plugs");
     t=positions[0];
@@ -105,7 +104,7 @@ module __test__() {
 
   // "socket": 'a part of the body into which another part fits'
   //        Its canonical form implies an orientation of the piece coherent
-  //        with its fitting movement along -Z semi-axis. 
+  //        with its fitting movement along -Z semi-axis.
   module socket(type,connectors=false,only=false) {
     size      = fl_get(type,"size");
     socket    = fl_get(type,"sockets")[0];
@@ -139,9 +138,9 @@ module __test__() {
   }
 
   if (VIEW_SOCKET) {
-    if (SOCKET_VIEW=="natural") 
+    if (SOCKET_VIEW=="natural")
       socket(test_socket,VIEW_CONNECTORS,CONNECTORS_ONLY);
-    else if (SOCKET_VIEW=="canonical") 
+    else if (SOCKET_VIEW=="canonical")
       let(
         socket    = fl_get(test_socket,"sockets")[0],
         ox        = fl_conn_ox(socket),
@@ -151,14 +150,14 @@ module __test__() {
                   * fl_planeAlign(X,Y,ox,oy)
       ) {
       multmatrix(M) socket(test_socket,VIEW_CONNECTORS,CONNECTORS_ONLY);
-    } else if (SOCKET_VIEW=="actual") 
+    } else if (SOCKET_VIEW=="actual")
       transform() socket(test_socket,VIEW_CONNECTORS,CONNECTORS_ONLY);
   }
 
   if (VIEW_PLUG) {
-    if (PLUG_VIEW=="natural") 
+    if (PLUG_VIEW=="natural")
       plug(test_plug,VIEW_CONNECTORS,CONNECTORS_ONLY);
-    else if (PLUG_VIEW=="canonical") 
+    else if (PLUG_VIEW=="canonical")
       let(
         plug      = fl_get(test_plug,"plugs")[0],
         ox        = fl_conn_ox(plug),

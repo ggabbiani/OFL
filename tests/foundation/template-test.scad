@@ -18,9 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
-use     <../../foundation/template.scad>
+
+include <../../foundation/template.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -86,6 +85,7 @@ verbs=[
   if (PLOAD!="OFF")     FL_PAYLOAD,
 ];
 
+stub(verbs);
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 // test(
 //   verbs,type,

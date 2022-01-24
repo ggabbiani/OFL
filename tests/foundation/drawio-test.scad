@@ -19,8 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+include <../../foundation/drawio.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -35,11 +34,11 @@ $FL_TRACE   = false;
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -55,12 +54,12 @@ SIZE        = [100,100];
 
 module __test__() {
   verbs = [
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-    if (BBOX!="OFF")  FL_BBOX,
+    if ($FL_ADD!="OFF")   FL_ADD,
+    if ($FL_AXES!="OFF")  FL_AXES,
+    if ($FL_BBOX!="OFF")  FL_BBOX,
   ];
   quadrant  = PLACE_NATIVE ? undef : QUADRANT;
-  dio_polyCoords(verbs, POLYCOORDS, SIZE, quadrant, $FL_ADD=ADD, $FL_AXES=AXES, $FL_BBOX=BBOX);
+  dio_polyCoords(verbs, POLYCOORDS, SIZE, quadrant);
 }
 
 __test__();

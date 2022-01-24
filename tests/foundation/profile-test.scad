@@ -17,8 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+include <../../foundation/profile.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -58,11 +57,11 @@ DIR_R       = 0;        // [0:360]
 
 /* [Commons] */
 
-// thickness 
+// thickness
 T         = 2.5;
 // Type
 TYPE    = "Profile";     // ["Profile", "Bent plate"]
-SIZE    = [150,40,200]; // [1:0.1:100] 
+SIZE    = [150,40,200]; // [1:0.1:100]
 // radius in case of rounded angles (square if 0)
 RADIUS  = 1.1;
 SECTION = "L"; // ["E", "L", "T", "U"]

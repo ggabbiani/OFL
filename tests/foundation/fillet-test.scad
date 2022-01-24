@@ -19,8 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+include <../../foundation/fillet.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -37,11 +36,11 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -76,35 +75,30 @@ ROUND_STEPS   = 10;
 CHILD_SIZE    = [1,2];
 
 /* [Hidden] */
-echo($FL_TRACE=$FL_TRACE);
-// $FL_TRACE = true;
+
 CHILD_BBOX=[O,CHILD_SIZE];
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
-  if (ADD!="OFF")   FL_ADD,
-  if (AXES!="OFF")  FL_AXES,
-  if (BBOX!="OFF")  FL_BBOX,
+  if ($FL_ADD!="OFF")   FL_ADD,
+  if ($FL_AXES!="OFF")  FL_AXES,
+  if ($FL_BBOX!="OFF")  FL_BBOX,
 ];
 fl_trace("PLACE_NATIVE",PLACE_NATIVE);
 fl_trace("octant",octant);
 
 module linear_wrpper() {
   if (LINEAR_TYPE=="fillet")
-    fl_fillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction,
-              $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+    fl_fillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction);
   else if (LINEAR_TYPE=="hFillet")
-    fl_hFillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction,
-              $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+    fl_hFillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction);
   else if (LINEAR_TYPE=="vFillet")
-    fl_vFillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction,
-              $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+    fl_vFillet(verbs,rx=R_x,ry=R_y,h=LENGTH,octant=octant,direction=direction);
 }
 
 if (TEST=="linear")
   linear_wrpper();
-else 
-  fl_90DegFillet(verbs,r=ROUND_RADIUS,n=ROUND_STEPS,child_bbox=CHILD_BBOX,octant=octant,direction=direction,
-                  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX)
+else
+  fl_90DegFillet(verbs,r=ROUND_RADIUS,n=ROUND_STEPS,child_bbox=CHILD_BBOX,octant=octant,direction=direction)
     square(size=CHILD_SIZE);
