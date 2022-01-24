@@ -18,20 +18,18 @@
  */
 
 /*
- * TODO: 
+ * TODO:
  * 1) better example (SATA plug?)
  * 2) orientation?
  */
 
-include <unsafe_defs.scad>
-use     <3d.scad>
-use     <placement.scad>
+include <3d.scad>
 
 module fl_planes(size=1,alpha=0.2) {
   nil = 0.01;
   fl_trace("size",size);
-  sz  = is_list(size) 
-      ? assert(size.x>=0 && size.y>=0 && size.z>=0) size 
+  sz  = is_list(size)
+      ? assert(size.x>=0 && size.y>=0 && size.z>=0) size
       : assert(size>=0) [size,size,size];
   fl_trace("sz",sz);
   color("red",alpha=alpha)   fl_cube(size=[sz.x,sz.y,nil],octant=O);
@@ -43,7 +41,7 @@ function fl_algo_pattern(
   n         // number of items to be taken from data
   ,pattern  // data index pattern
   ,data     // list of item containing 2d/3d data in their 2nd element
-) = 
+) =
   assert(n!=undef)
   assert(pattern!=undef)
   assert(data!=undef)
@@ -64,7 +62,7 @@ module fl_algo_pattern(
   ,octant = O
 ) {
 
-  function sz(step,items,prev_steps=[0,0,0]) = 
+  function sz(step,items,prev_steps=[0,0,0]) =
     assert(is_list(step))
     assert(is_list(items))
     let(curr = items[0])
@@ -101,7 +99,7 @@ module fl_algo_pattern(
         // matrice di allineamento del segmento i-esimo
         A = fl_octant(octant=align,bbox=[-data/2,+data/2]);
         // matrice di dispiegamento del segmento i-esimo
-        D = fl_T(i*deployment);  
+        D = fl_T(i*deployment);
         multmatrix(A*D)
           if (len(data)<3) square(size=data, center=true);
           else fl_cube(size=data, octant=on);

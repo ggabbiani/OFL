@@ -17,8 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <defs.scad>
-use     <3d.scad>
+include <3d.scad>
 
 module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
   fl_symbol(verbs,type,size,"plug");
@@ -31,10 +30,10 @@ module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
 // provides the symbol required in its 'canonical' form:
 // "plug": 'a piece that fits into a hole in order to close it'
 //        Its canonical form implies an orientation of the piece coherent
-//        with its insertion movement along +Z axis. 
+//        with its insertion movement along +Z axis.
 // "socket": 'a part of the body into which another part fits'
 //        Its canonical form implies an orientation of the piece coherent
-//        with its fitting movement along -Z axis. 
+//        with its fitting movement along -Z axis.
 module fl_symbol(
   verbs   = [FL_ADD,FL_AXES],
   type    = undef,// really needed?
@@ -58,7 +57,7 @@ module fl_symbol(
   module do_add() {
     fl_trace("d1",d1);
     fl_trace("d2",d2);
-    fl_color("blue") resize(sz) 
+    fl_color("blue") resize(sz)
       translate(fl_Z(symbol=="socket"?-h:0))
       for(i=symbol=="plug"?[0:+2]:[-2:0])
         translate(fl_Z(i*delta))

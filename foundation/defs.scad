@@ -22,8 +22,8 @@
 include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
-use     <base_geo.scad>
-use     <base_string.scad>
+include <base_geo.scad>
+include <base_string.scad>
 
 function fl_version() = [2,8,0];
 

@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-use <base_string.scad>
+include <base_string.scad>
 
 /**
  * return true when «list» is a list and each item satisfy f(value)
@@ -27,16 +27,16 @@ use <base_string.scad>
 function fl_tt_isList(
     // list to be verified
     list,
-    // check function 
+    // check function
     f=function(value) true,
-    // optional list size 
+    // optional list size
     size
   ) = let(
     len   = assert(is_list(list),list) len(list),
     rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
-  ) 
+  )
   (
-    (size!=undef ? size==len : true) 
+    (size!=undef ? size==len : true)
     && (len>0 ? f(list[0]) : true)
     && (rest!=[] ? fl_tt_isList(rest,f) : true)
   );
@@ -49,23 +49,23 @@ function fl_tt_isInDictionary(string,dictionary,nocase=true) =
   let(
     len   = len(dictionary),
     rest  = len>1 ? [for(i=[1:len-1]) dictionary[i]] : []
-  ) dictionary==[] ? false 
-  : (nocase 
-    ? fl_str_lower(string)==fl_str_lower(dictionary[0]) 
+  ) dictionary==[] ? false
+  : (nocase
+    ? fl_str_lower(string)==fl_str_lower(dictionary[0])
     : string==dictionary[0]
     ) || fl_tt_isInDictionary(string,rest,nocase);
 
 /**
  * true if «kv» is a key/value pair satisfying f(value)
  */
-function fl_tt_isKV(kv,dictionary=[],f=function (value) value!=undef) = 
+function fl_tt_isKV(kv,dictionary=[],f=function (value) value!=undef) =
   assert(fl_tt_isList(dictionary,function(value) is_string(value)))
   let(
     key   = kv[0],
     value = kv[1]
   ) (
     (dictionary ? fl_tt_isInDictionary(key,dictionary) : true)
-    && len(kv)==2 
+    && len(kv)==2
     && is_string(key) && f(value)
   );
 
@@ -78,7 +78,7 @@ function fl_tt_isKVList(list,dictionary=[],f=function (value) value!=undef,size)
 /*
  * Key/value list of thickness
  *
- * Each item of the list is actually a key/value pair representing thickness 
+ * Each item of the list is actually a key/value pair representing thickness
  * along a given semi-axis. The dimension of this representation is floating
  * from 0 (empty list) to 6 (complete list), both of them being valid list
  * values.
@@ -86,10 +86,10 @@ function fl_tt_isKVList(list,dictionary=[],f=function (value) value!=undef,size)
  * example:
  *
  * thick=[["+x",3],["-Z",1.5]];
- * 
+ *
  * indicates a thickness of 3mm along +X and of 1.5mm along +Z.
  */
-function fl_tt_isThickKVList(list) = 
+function fl_tt_isThickKVList(list) =
   assert(len(list)<=6,list)
   fl_tt_isKVList(
     list,
@@ -102,16 +102,16 @@ function fl_tt_isThickKVList(list) =
  *
  * Each row is the thickness along one 3d dimension (X,Y and Z) represented as
  * a pair of thickness values for negative/positive direction.
- * Concretely is a 3x2 matrix in which each item is the thickness 
+ * Concretely is a 3x2 matrix in which each item is the thickness
  * along one of the six 3d semi-axes.
- * 
+ *
  * example:
  *
  * [[0,3],[0,0],[1.5,0]]
  *
  * indicates a thickness of 3mm along +X, 1.5mm along -Z and 0mm otherwise.
  */
-function fl_tt_isThickList(list) = 
+function fl_tt_isThickList(list) =
   fl_tt_isList(
     list,size=3,
     f=function(x) fl_tt_isList(
@@ -126,14 +126,14 @@ function fl_tt_isThickList(list) =
 function fl_tt_isPointNormal(plane) = let(
     point = plane[0],
     n     = plane[1]
-  )  (len(plane)==2) 
+  )  (len(plane)==2)
   && (is_list(point) && len(point)==3)
   && (is_list(n) && len(n)==3);
 
-function fl_tt_isPointNormalList(list) = 
+function fl_tt_isPointNormalList(list) =
   fl_tt_isList(list,f=function(plane) fl_tt_isPointNormal(plane));
 
-function fl_tt_isAxisString(s) = 
+function fl_tt_isAxisString(s) =
   fl_tt_isInDictionary(
     string=s,
     dictionary=["-x","+x","-y","+y","-z","+z"],
@@ -152,5 +152,5 @@ function fl_tt_isHole(hole) = let(
   && fl_tt_isPointNormal([hole[0],hole[1]])
   && is_num(hole[2]);
 
-function fl_tt_isHoleList(list) = 
+function fl_tt_isHoleList(list) =
   fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));

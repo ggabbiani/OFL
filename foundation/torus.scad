@@ -16,11 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <unsafe_defs.scad>
-use     <2d.scad>
-use     <3d.scad>
-use     <layout.scad>
-use     <placement.scad>
+
+include <3d.scad>
 
 module fl_torus(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
@@ -32,7 +29,7 @@ module fl_torus(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(r>=a,str("r=",r,",a=",a));
-  
+
   // echo(n=($fn>0?($fn>=3?$fn:3):ceil(max(min(360/$fa,r*2*PI/$fs),5))),a_based=360/$fa,s_based=r*2*PI/$fs);
 
   axes  = fl_list_has(verbs,FL_AXES);

@@ -17,11 +17,11 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <unsafe_defs.scad>
-use     <2d.scad>
-use     <placement.scad>
+// include <unsafe_defs.scad>
+include <2d.scad>
+// include <placement.scad>
 
-/* 
+/*
  * cube defaults for positioning (fl_bb_cornersKV)
  * and direction (fl_directorKV, fl_rotorKV).
  */
@@ -68,7 +68,7 @@ module fl_cube(
   }
 }
 
-/* 
+/*
  * sphere defaults for positioning (fl_bb_cornersKV)
  * and direction (fl_directorKV, fl_rotorKV).
  */
@@ -101,7 +101,7 @@ module fl_sphere(
   size  = fl_bb_size(defs); // bbox[1] - bbox[0];
   D     = direction ? fl_direction(defs,direction=direction)  : I;
   M     = octant    ? fl_octant(defs,octant=octant)           : I;
-  
+
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
@@ -116,7 +116,7 @@ module fl_sphere(
       fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
-/* 
+/*
  * cylinder defaults for positioning (fl_bb_cornersKV)
  * and direction (fl_directorKV, fl_rotorKV).
  */
@@ -223,9 +223,9 @@ function fl_bb_prism(
   l1, // edge length, bottom
   l2, // edge length, top
   h   // height of the prism
-) = 
-assert(h>=0) 
-assert(n>2) 
+) =
+assert(h>=0)
+assert(n>2)
 let(
   l_bot = fl_parse_l(l,l1),
   l_top = fl_parse_l(l,l2),

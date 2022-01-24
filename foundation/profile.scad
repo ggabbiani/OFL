@@ -17,12 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <defs.scad>
-include <unsafe_defs.scad>
-
-use     <2d.scad>
-use     <3d.scad>
-use     <placement.scad>
+include <3d.scad>
 
 // engine for generating profiles
 // default octant     : O
@@ -201,8 +196,8 @@ module fl_bentPlate(
 
   module U(size,footprint=false) {
     for(i=[-1,1])
-      translate(-i*fl_X(size.x/4)) 
-        rotate(-90*i+90,FL_Y) 
+      translate(-i*fl_X(size.x/4))
+        rotate(-90*i+90,FL_Y)
           L([size.x/2,size.y,size.z],footprint);
   }
 
@@ -229,5 +224,3 @@ module fl_bentPlate(
       fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
-
-__test__();

@@ -17,11 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <defs.scad>
 include <unsafe_defs.scad>
-
-use     <layout.scad>
-use     <util.scad>
 
 function fl_octant(
   type    // type with "bounding corners" property
@@ -41,8 +37,8 @@ function fl_quadrant(
   ,bbox     // bounding box corners
 ) = let(
   corner    = bbox!=undef ? bbox : fl_bb_corners(type),
-  c0        = assert(corner!=undef) 
-              let(c=corner[0]) [c.x,c.y,c.z==undef?0:c.z], 
+  c0        = assert(corner!=undef)
+              let(c=corner[0]) [c.x,c.y,c.z==undef?0:c.z],
   c1        = let(c=corner[1]) [c.x,c.y,c.z==undef?0:c.z]
 ) fl_octant(octant=[quadrant.x,quadrant.y,0],bbox=[c0,c1]);
 
@@ -55,8 +51,8 @@ module fl_place(
   assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
   assert(fl_XOR(octant!=undef,quadrant!=undef));
   bbox  = bbox!=undef ? bbox : fl_bb_corners(type);
-  M     = octant!=undef 
-    ? fl_octant(octant=octant,bbox=bbox) 
+  M     = octant!=undef
+    ? fl_octant(octant=octant,bbox=bbox)
     : fl_quadrant(quadrant=quadrant,bbox=bbox);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
@@ -83,11 +79,11 @@ module fl_placeIf(
 /*
  * Direction matrix transforming native coordinates along new direction.
  *
- * Native coordinate system is represented by two vectors either retrieved 
- * from «proto» or passed explicitly through «default» in the format 
+ * Native coordinate system is represented by two vectors either retrieved
+ * from «proto» or passed explicitly through «default» in the format
  * [direction axis (director),orthonormal vector (rotor)]
  *
- * New direction is expected in [Axis–angle representation](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation) 
+ * New direction is expected in [Axis–angle representation](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation)
  * in the format [axis,rotation angle]
  *
  */
@@ -95,7 +91,7 @@ function fl_direction(
   proto,      // prototype with fl_director and fl_rotor properties
   direction,  // desired direction in axis-angle representation [axis,rotation about]
   default     // default coordinate system by [director,rotor], overrides «proto» settings
-) = 
+) =
   assert(is_list(direction)&&len(direction)==2,str("direction=",direction))
   assert(proto!=undef || default!=undef)
   // echo(default=default,direction=direction)

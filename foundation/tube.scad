@@ -18,18 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <unsafe_defs.scad>
-include <defs.scad>
-use     <2d.scad>
-use     <layout.scad>
-use     <placement.scad>
+
+include <layout.scad>
 
 module fl_tube(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   base,                 // base ellipse in [a,b] form
   r,                    // «base» alternative radius for circular tubes
   d,                    // «base» alternative diameter for circular tubes
-  h,                    // pipe height 
+  h,                    // pipe height
   thick,                // tube thickness
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
@@ -48,7 +45,7 @@ module fl_tube(
   size  = bbox[1]-bbox[0];
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
-  
+
   fl_trace("bbox",bbox);
   fl_trace("size",size);
 
@@ -87,5 +84,3 @@ module fl_tube(
       fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
-
-__test__();

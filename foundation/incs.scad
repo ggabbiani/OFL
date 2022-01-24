@@ -19,17 +19,17 @@
 
 include <defs.scad>
 
-use <2d.scad>
-use <3d.scad>
-use <algo.scad>
-use <connect.scad>
-use <drawio.scad>
-use <fillet.scad>
-use <grid.scad>
-use <layout.scad>
-use <placement.scad>
-use <profile.scad>
-use <symbol.scad>
-use <torus.scad>
-use <tube.scad>
-use <util.scad>
+include <2d.scad>
+include <3d.scad>
+include <algo.scad>
+include <connect.scad>
+include <drawio.scad>
+include <fillet.scad>
+include <grid.scad>
+include <layout.scad>
+include <placement.scad>
+include <profile.scad>
+include <symbol.scad>
+include <torus.scad>
+include <tube.scad>
+include <util.scad>

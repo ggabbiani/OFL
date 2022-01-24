@@ -19,8 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <unsafe_defs.scad>
-use     <type_trait.scad>
+include <type_trait.scad>
 include <3d.scad>
 
 /**
@@ -80,6 +79,6 @@ module fl_holes(
   fl_trace("enable",enable);
   fl_trace("holes",holes);
   fl_lay_holes(holes,enable)
-    translate(NIL*$hole_n) 
+    translate(NIL*$hole_n)
       fl_cylinder(h=$hole_depth+NIL2,d=$hole_d,direction=[-$hole_n,0]);
 }

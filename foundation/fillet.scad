@@ -19,11 +19,8 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <unsafe_defs.scad>
-use     <2d.scad>
-use     <3d.scad>
-use     <layout.scad>
-use     <placement.scad>
+// include <unsafe_defs.scad>
+include <2d.scad>
 
 module fl_vFillet(
   verbs   = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX
@@ -40,8 +37,8 @@ module fl_vFillet(
   bbox    = [[0,0,-h/2],[rx,ry,h/2]];
   M       = octant!=undef     ? fl_octant(octant=octant,bbox=bbox) : I;
   D       = direction!=undef  ? fl_direction(direction=direction,default=default) : I;
-  multmatrix(D) 
-    multmatrix(M) fl_parse(verbs) 
+  multmatrix(D)
+    multmatrix(M) fl_parse(verbs)
         fl_fillet(verbs,r,h,rx,ry,octant=+X);
 }
 
@@ -54,7 +51,7 @@ module fl_hFillet(
   octant      // when undef native positioning is used (+Z)
   ) {
   assert(verbs!=undef,str("verbs=",verbs));
-  
+
   axes    = fl_list_has(verbs,FL_AXES);
   verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
@@ -167,7 +164,7 @@ module fl_90DegFillet(
   module do_add() {
     s   = r/n;    //step size
     eps = 0.001;  // a little overlap between slices
-    for(i = [0 : s : r - s]) 
+    for(i = [0 : s : r - s])
       translate([0, 0, i]) minkowski() {
         linear_extrude(height = eps)
           children();

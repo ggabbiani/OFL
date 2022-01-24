@@ -19,9 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <unsafe_defs.scad>
-use     <2d.scad>
-use     <placement.scad>
+include <2d.scad>
 
 // Y invert and scale to size from draw.io coords
 // Draw.io store geometries in the domain [0..1]
@@ -43,7 +41,7 @@ function dio_polyCoords(points,size) =
 module dio_polyCoords(
   verbs=FL_ADD, // FL_ADD,FL_AXIS,FL_BBOX
   points,       // 2d point list as provided by the Base Polygon Draw.io shape
-  size,         // 2d size 
+  size,         // 2d size
   quadrant      // native positioning when undef
 ) {
   axes    = fl_list_has(verbs,FL_AXES);

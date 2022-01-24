@@ -17,10 +17,8 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <unsafe_defs.scad>
-use     <3d.scad>
-use     <symbol.scad>
-use     <util.scad>
+include <symbol.scad>
+include <util.scad>
 
 //*****************************************************************************
 // Connection properties
@@ -31,7 +29,7 @@ function fl_conn_oy(type,value)   = fl_property(type,"conn/orientation Y",value)
 function fl_conn_pos(type,value)  = fl_property(type,"conn/position",value);
 
 // contructors
-function conn_Plug(id,ox,oy,pos) = 
+function conn_Plug(id,ox,oy,pos) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
@@ -45,7 +43,7 @@ function conn_Plug(id,ox,oy,pos) =
     fl_conn_pos(value=pos),
   ];
 
-function conn_Socket(id,ox,oy,pos) = 
+function conn_Socket(id,ox,oy,pos) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
@@ -71,8 +69,8 @@ function fl_conn_clone(
   ,oy       // OPTIONAL new orientation Y
   ,pos      // OPTIONAL new position
   ,M=I      // OPTIONAL tarnsformation matrix for position transformation
-) = 
-  assert(original!=undef) 
+) =
+  assert(original!=undef)
   assert(ox==undef  || len(ox)==3)
   assert(oy==undef  || len(oy)==3)
   assert(pos==undef || len(pos)==3)
@@ -102,9 +100,9 @@ function fl_conn_clone(
   assert(x_3*y_3==0,"Resulting orientation fl_axes are not orthogonal")
   type=="plug" ? conn_Plug(id,x_3,y_3,p_3) : conn_Socket(id,x_3,y_3,p_3);
 
-// Transforms a child shape to its parent form coherently with 
+// Transforms a child shape to its parent form coherently with
 // their respective connection geometries.
-// Child can be thought as a mobile socket or plug 
+// Child can be thought as a mobile socket or plug
 // jointing a fixed plug or socket.
 module fl_connect(
   son     // socket or plug data for the children shape to be jointed

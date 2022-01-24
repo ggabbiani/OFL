@@ -16,12 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <unsafe_defs.scad>
-use     <3d.scad>
-use     <layout.scad>
-use     <placement.scad>
 
-use     <scad-utils/spline.scad>
+include <layout.scad>
+
 include <NopSCADlib/lib.scad>
 
 // use children(0) for making a rail
@@ -59,7 +56,7 @@ function fl_planeAlign(ax,ay,bx,by,a,b) =
       [ax.z, ay.z,  az.z,  0 ],
       [0,     0,      0,   1 ],
     ],
-    Ainv  = ortho 
+    Ainv  = ortho
       ? [ // actually the transpose matrix since axis are mutually orthogonal
           [ax.x, ax.y,  ax.z,  0 ],
           [ay.x, ay.y,  ay.z,  0 ],
@@ -84,7 +81,7 @@ module fl_planeAlign(ax,ay,bx,by,ech=false) {
 module fl_cutout(
    len          // cutout length
   ,z=Z          // axis to use as Z (detects the cutout plane on Z==0)
-  ,x=X          // axis to use as X 
+  ,x=X          // axis to use as X
   ,trim=[0,0,0] // translation applied BEFORE projection() useful for trimming when cut=true
   ,cut=false    // when true only the cutout plane is used for section
   ,debug=false  // echo of children() when true
@@ -95,7 +92,7 @@ module fl_cutout(
       offset(delta)
         projection(cut)
           fl_planeAlign(z,x,Z,X)
-            translate(trim) 
+            translate(trim)
               children();
   if (debug) #translate(trim) children();
 }
@@ -154,12 +151,12 @@ function fl_folding(
  * 3d surface bending on rectangular cuboid faces.
  *
  * Children context:
- * 
- * 
- *                        N           M               
+ *
+ *
+ *                        N           M
  *                         +=========+                  ✛ ⇐ upper corner
  *                         |         |                     (at sizing x,y)
- *                         |   [4]   |                   
+ *                         |   [4]   |
  *                 D      C|   +Y    |F      H          L
  *                 +=======+=========+=======+==========+
  *                 |       |         |       |          |
@@ -171,20 +168,20 @@ function fl_folding(
  *                         |   -Y    |
  * lower corner ⇒ ✛       +=========+
  * (at origin)            O           P
- * 
+ *
  * $sheet - an object containing the calculated bounding corners of the sheet
  * $A..$N - 3d values of the corresponding points in the above picture
  * $size  - list of six surface sizings in the order shown in the picture
  * $fid   - current face id
- * 
+ *
  */
 module fl_bend(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD, 
+  verbs       = FL_ADD,
   // bend type as constructed from function fl_folding()
   type,
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  // verbs       = FL_ADD, 
+  // verbs       = FL_ADD,
   // key/value list of face sizing:
   // key    = one of the eight cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
   // value  = 3d size [x-size,y-size,z-size]
@@ -193,9 +190,9 @@ module fl_bend(
   // when true children 3d surface is not bent
   flat=false,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,            
+  direction,
   // when undef native positioning is used
-  octant                
+  octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
@@ -220,7 +217,7 @@ module fl_bend(
 
   module do_add() {
     fl_color(material)
-      do_bend() 
+      do_bend()
         children();
   }
 
@@ -244,7 +241,7 @@ module fl_bend(
     $N      = [$C.x,            $M.y,             0];
     $O      = [$B.x,            0,                0];
     $P      = [$O.x+$size[5].x, 0,                0];
-    // translate on -Z when NOT FLAT so the resulting volume is 
+    // translate on -Z when NOT FLAT so the resulting volume is
     // coherent with the bent bounding box
     translate(+Z(flat?0:-flat_bbox[1].z))
     intersection() {
@@ -252,30 +249,30 @@ module fl_bend(
         children();
       translate(translate)
         fl_cube(size=face,octant=+X+Y+Z);
-    } 
+    }
   }
 
   module do_bend() {
     fl_trace("***START***");
     // -X
     let(id=0,f=fcs[id]) if (f.x && f.y)
-      if (flat) 
+      if (flat)
         always(id,translate=[0,fcs[5].y]) children();
       else
-        translate([0,0,-f.x]) rotate(-90,Y) always(id,translate=[0,fcs[5].y]) children(); 
+        translate([0,0,-f.x]) rotate(-90,Y) always(id,translate=[0,fcs[5].y]) children();
 
     // +Z
     let(id=1,f=fcs[id]) if (f.x && f.y)
       if (flat)
         always(id,translate=[fcs[0].x,fcs[5].y]) children();
-      else 
-        translate([-fcs[0].x,0]) always(id,translate=[fcs[0].x,fcs[5].y]) children(); 
+      else
+        translate([-fcs[0].x,0]) always(id,translate=[fcs[0].x,fcs[5].y]) children();
 
     // +X
     let(id=2,f=fcs[id]) if (f.x && f.y)
       if (flat)
         always(id,translate=[fcs[0].x+fcs[1].x,fcs[5].y]) children();
-      else 
+      else
         translate([fcs[1].x,0])
           rotate(90,Y)
             translate([-fcs[0].x-fcs[1].x,0])
@@ -285,7 +282,7 @@ module fl_bend(
     let(id=3,f=fcs[id]) if (f.x && f.y)
       if (flat)
         always(id,translate=[fcs[0].x+fcs[1].x+fcs[2].x,fcs[5].y]) children();
-      else 
+      else
         translate([f.x,0,-max(fcs[0].x,fcs[2].x)])
           rotate(180,Y)
             translate([-fcs[0].x-fcs[1].x-fcs[2].x,0])
@@ -295,7 +292,7 @@ module fl_bend(
     let(id=4,f=fcs[id]) if (f.x && f.y)
       if (flat)
         always(id,translate=[fcs[0].x,fcs[5].y+fcs[1].y]) children();
-      else 
+      else
         translate([-fcs[0].x,fcs[5].y+fcs[1].y])
             rotate(-90,X)
               translate([0,-fcs[5].y-fcs[1].y])
@@ -305,7 +302,7 @@ module fl_bend(
     let(id=5,f=fcs[id]) if (f.x && f.y)
       if (flat)
         always(id,translate=[fcs[0].x,0]) children();
-      else 
+      else
         translate([-fcs[0].x,f.y,-f.y])
           rotate(90,X)
             always(id,translate=[fcs[0].x,0]) children();

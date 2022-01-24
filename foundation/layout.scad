@@ -17,10 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <unsafe_defs.scad>
-use     <2d.scad>
-use     <3d.scad>
-use     <placement.scad>
+include <3d.scad>
 
 /**
  * ... an unveiled mistery ...
@@ -46,7 +43,7 @@ module fl_bb_add(
 ) {
   fl_trace("$FL_ADD",$FL_ADD);
   assert(is_list(corners),corners)
-  translate(corners[0]) 
+  translate(corners[0])
     if (!2d) fl_cube(size=corners[1]-corners[0],octant=+X+Y+Z);
     else fl_square(size=corners[1]-corners[0],quadrant=+X+Y);
 }
@@ -57,7 +54,7 @@ module fl_bb_add(
 function fl_3d_vectorialProjection(
   vector, // 3D vector
   axis    // cartesian axis ([-1,0,0]==[1,0,0]==X)
-) = 
+) =
 assert(len(vector)==3,str("vector=",vector))
 assert(fl_3d_abs(axis)==+X||fl_3d_abs(axis)==+Y||fl_3d_abs(axis)==+Z)
 let(
@@ -76,9 +73,9 @@ function fl_3d_planarProjection(
   ||fl_3d_abs(plane)==+Z+X||fl_3d_abs(plane)==+Z+Y
 ) let(
   plane = fl_3d_abs(plane),
-  x = fl_3d_vectorialProjection(vector,X) * plane * X, 
-  y = fl_3d_vectorialProjection(vector,Y) * plane * Y, 
-  z = fl_3d_vectorialProjection(vector,Z) * plane * Z 
+  x = fl_3d_vectorialProjection(vector,X) * plane * X,
+  y = fl_3d_vectorialProjection(vector,Y) * plane * Y,
+  z = fl_3d_vectorialProjection(vector,Z) * plane * Z
 ) x+y+z;
 
 /*
@@ -127,8 +124,8 @@ function lay_bb_corners(
  * Accumulates a list of bounding boxes along a direction.
  *
  * Recursive algorithm, at each call a bounding box is extracted from «bbcs»
- * and decomposed into axial and planar components. The last bunding box in 
- * the list ended up the recursion and is returned as result. 
+ * and decomposed into axial and planar components. The last bunding box in
+ * the list ended up the recursion and is returned as result.
  * If there are still bounding boxes left, a new call is made and its
  * result, decomposed into the axial and planar components, used to produce a
  * new bounding box as follows:
@@ -140,9 +137,9 @@ function lay_bb_corners(
  *   - positive corner is equal to the current positive corner PLUS the gap and
  *     the axial dimension of the result;
  *   - when axis is negative:
- *     - negative corner is equal to the current one MINUS the gap and the 
+ *     - negative corner is equal to the current one MINUS the gap and the
  *       axial dimension of the result
- *     - the positive corner is equal to the current corner. 
+ *     - the positive corner is equal to the current corner.
  */
 function fl_bb_accum(
   axis,   // cartesian axis ([-1,0,0]==[1,0,0]==X)
@@ -161,7 +158,7 @@ let(
   curr_axis   = [fl_3d_vectorialProjection(curr_result[0],axis),fl_3d_vectorialProjection(curr_result[1],axis)],
 
   rest      = len(bbcs)>1 ? [for(i=[1:len(bbcs)-1]) bbcs[i]] : [],
-  rest_result  = sum 
+  rest_result  = sum
   ? len(rest) ? fl_bb_accum(axis,gap,rest) + [O,gap*axis]: [O,O]
   : len(rest) ? fl_bb_accum(axis,gap,rest) - [O,gap*axis]: [O,O],
   rest_plane  = [fl_3d_planarProjection(rest_result[0],plane),fl_3d_planarProjection(rest_result[1],plane)],
@@ -188,7 +185,7 @@ let(
  *  $item   - equal to types[$i]
  *  $len    - equal to len(types)
  *  $size   - equal to bounding box size of $item
- *  
+ *
  */
 module fl_layout(
   verbs = FL_LAYOUT, // supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
@@ -197,12 +194,12 @@ module fl_layout(
   types,    // list of types to be arranged
   direction,// desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])
   octant    // when undef native positioning is used
-) {  
+) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(len(axis)==3,axis);
   assert(is_num(gap),gap);
   assert(is_list(types),types);
-  
+
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   bbox  = lay_bb_corners(axis,gap,types);
@@ -214,8 +211,8 @@ module fl_layout(
   $len  = len(types);
   sum   = axis*[1,1,1]>0;
   fac   = sum ? 1 : -1;
-  bcs   = [for(t=types) 
-    let(cs=fl_bb_corners(t)) 
+  bcs   = [for(t=types)
+    let(cs=fl_bb_corners(t))
     [fl_3d_vectorialProjection(cs[0],axis),fl_3d_vectorialProjection(cs[1],axis)]];
   // composite sizes list
   sz    = [for(c=bcs) c[1]-c[0]];
@@ -228,7 +225,7 @@ module fl_layout(
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
 
       } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) 
+        fl_modifier($FL_LAYOUT)
           for($i=[0:$len-1]) {
             fl_trace("$i",$i);
             $first  = $i==0;

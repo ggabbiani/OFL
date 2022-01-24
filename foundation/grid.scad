@@ -17,9 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <defs.scad>
-use     <2d.scad>
-use     <layout.scad>
+include <layout.scad>
 
 function fl_grid_quad(
   // bounding box relative grid origin
