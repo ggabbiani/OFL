@@ -734,7 +734,7 @@ module fl_2d_placeIf(
   bbox
 ) {
   assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
-  assert(fl_XOR(octant!=undef,quadrant!=undef));
+  assert(quadrant!=undef);
   fl_trace("type",type);
   fl_trace("bbox",bbox);
   fl_trace("condition",condition);
