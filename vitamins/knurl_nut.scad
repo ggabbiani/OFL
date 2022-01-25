@@ -24,7 +24,7 @@ include <../foundation/unsafe_defs.scad>
 
 use     <../foundation/3d.scad>
 use     <../foundation/layout.scad>
-use     <../foundation/placement.scad>
+// use     <../foundation/placement.scad>
 
 module knut(
   verbs,
@@ -51,7 +51,7 @@ module knut(
 
   fl_trace("bbox",bbox);
   fl_trace("size",size);
-  
+
   module tooth(r,h) {
     assert(r!=undef||h!=undef);
     // echo(str("r=", r));
@@ -94,7 +94,7 @@ module knut(
     fl_color("gold") difference() {
       union() {
         for(ring=rings)
-          translate([0, 0, ring[1]]) 
+          translate([0, 0, ring[1]])
             toothed_nut(r=screw_r,R=r,thick=ring[0],n=teeth);
         cylinder(r=r-tooth_h, h=l);
       }
@@ -123,7 +123,7 @@ module knut(
         fl_modifier($FL_BBOX) do_bbox();
       } else if ($verb==FL_ASSEMBLY) {
         fl_modifier($FL_ASSEMBLY) do_layout()  screw(screw,screw_l);
-      } else if ($verb==FL_LAYOUT) { 
+      } else if ($verb==FL_LAYOUT) {
         fl_modifier($FL_LAYOUT) do_layout() children();
       } else if ($verb==FL_DRILL) {
         fl_modifier($FL_DRILL) do_drill();

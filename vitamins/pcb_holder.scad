@@ -21,7 +21,7 @@ include <../foundation/defs.scad>
 use     <../foundation/2d.scad>
 use     <../foundation/hole.scad>
 use     <../foundation/layout.scad>
-use     <../foundation/placement.scad>
+// use     <../foundation/placement.scad>
 use     <../foundation/tube.scad>
 
 include <../vitamins/pcbs.scad>

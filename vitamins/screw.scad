@@ -23,7 +23,7 @@ include <../foundation/defs.scad>
 
 use     <../foundation/3d.scad>
 use     <../foundation/layout.scad>
-use     <../foundation/placement.scad>
+// use     <../foundation/placement.scad>
 
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
@@ -61,7 +61,7 @@ function fl_screw_l(
 
 /*
  * return a list with layered thickness (according to parameters):
- *  0 overall screw length 
+ *  0 overall screw length
  *  1 passed thickness
  *  2 washer thickness
  *  3 extra waser (spring or star) thickness
@@ -78,15 +78,15 @@ function fl_screw_lens(
   nut     = "no",   // screw nut    : "no","default","nyloc"
   xwasher = "no",   // extra washer : "no","spring","star"
   nwasher = false,  // nut washer
-) = 
+) =
 let(
   description   = type[0],
   no_nut_msg    = str("No possible NUT for screw ",description),
   nyloc         = nut=="nyloc",
   screw_nut     = screw_nut(type),
   screw_washer  = screw_washer(type),
-  thick_nut   = 
-      nut=="no"       ? 0 
+  thick_nut   =
+      nut=="no"       ? 0
     : nut=="default"  ? assert(screw_nut,no_nut_msg) nut_thickness(screw_nut, false)
     : nut=="nyloc"    ? assert(screw_nut,no_nut_msg) nut_thickness(screw_nut, true)
     : assert(false,str("Unknown nut value ",nut)),
@@ -141,7 +141,7 @@ module fl_screw(
   M       = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
 
   module do_assembly() {
-    if (washer!="no") 
+    if (washer!="no")
       if (washer=="default") washer(screw_washer); else penny_washer(screw_washer);
     if (xwasher!="no")
       translate(Z(thick_washer))
@@ -170,15 +170,15 @@ module fl_screw(
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) 
-          translate(Z(thick_washer+thick_xwasher)) 
+        fl_modifier($FL_ADD)
+          translate(Z(thick_washer+thick_xwasher))
             screw(type, length, hob_point = 0, nylon = false);
       } else if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
       } else if ($verb==FL_ASSEMBLY) {
         fl_modifier($FL_ASSEMBLY) do_assembly();
       } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL) 
+        fl_modifier($FL_DRILL)
           fl_cylinder(FL_ADD,h=hole_l,r=hole_r,octant=-Z);
       } else if ($verb==FL_FOOTPRINT) {
         fl_modifier($FL_FOOTPRINT) do_footprint();

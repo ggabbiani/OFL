@@ -21,7 +21,7 @@
 
 include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
-use     <../foundation/placement.scad>
+// use     <../foundation/placement.scad>
 use     <../foundation/layout.scad>
 use     <../foundation/util.scad>
 
@@ -48,10 +48,10 @@ module fl_pinHeader(
   assert(is_list(verbs)||is_string(verbs),verbs);
   // FIXME: when called from fl_pcb the following assert fails
   // assert(fl_XOR(nop!=undef,type!=undef));
-  
+
   axes  = fl_list_has(verbs,FL_AXES);
   verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-  
+
   nop       = type!=undef ? fl_nopSCADlib(type) : nop;
   geometry  = type!=undef ? fl_phdr_geometry(type) : geometry;
   bbox      =  type!=undef ? fl_bb_corners(type) : fl_phdr_nopBBox(nop,geometry);
@@ -83,7 +83,7 @@ module fl_pinHeader(
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
       } else if ($verb==FL_CUTOUT) {
         assert(cut_thick!=undef);
-        fl_modifier($FL_CUTOUT) 
+        fl_modifier($FL_CUTOUT)
           fl_cutout(len=cut_thick,delta=cut_tolerance)
             do_add();
       } else {

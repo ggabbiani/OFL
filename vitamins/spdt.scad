@@ -20,7 +20,7 @@
  */
 
 include <spdts.scad>
-use     <../foundation/placement.scad>
+// use     <../foundation/placement.scad>
 
 include <NopSCADlib/lib.scad>
 
@@ -80,7 +80,7 @@ module fl_spdt(
   }
 
   module do_drill() {
-    let(d=19,h=20) translate(-fl_Z(h)) 
+    let(d=19,h=20) translate(-fl_Z(h))
       cylinder(d=d, h=h);
   }
 

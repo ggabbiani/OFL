@@ -1,6 +1,6 @@
 /*
  * Magnets implementation.
- * 
+ *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -27,7 +27,7 @@ include <magnets.scad>
 use     <screw.scad>
 
 use <../foundation/3d.scad>
-use <../foundation/placement.scad>
+// use <../foundation/placement.scad>
 
 module fl_magnet(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -82,17 +82,17 @@ module fl_magnet(
             translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d);
             fl_cylinder(h=cyl_h,d=d-2*shell_r);
           }
-          translate(+Z(cyl_h+NIL)) fl_cylinder(h=cyl_h,d=d-2*shell_t);  
+          translate(+Z(cyl_h+NIL)) fl_cylinder(h=cyl_h,d=d-2*shell_t);
         }
-        translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d-2*shell_t-2*little);  
+        translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d-2*shell_t-2*little);
       }
 
       fl_trace("FL_ADD",$FL_ADD);
       fl_trace("name",name);
       fl_color(color) difference() {
-        if (name=="mag_M4_cs_d32x6") 
+        if (name=="mag_M4_cs_d32x6")
           mag_M4_cs_d32x6();
-        else 
+        else
           fl_cylinder(d=d, h=h, octant=+Z);
         if (cs!=undef)
             translate(+Z(h+NIL)) fl_countersink(FL_ADD,type=cs);
@@ -134,10 +134,10 @@ module fl_magnet(
       } else if ($verb==FL_FOOTPRINT) {
         fl_modifier($FL_FOOTPRINT) do_footprint();
       } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) 
+        fl_modifier($FL_ASSEMBLY)
           do_layout() fl_screw(type=screw,thick=screw_thick);
       } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL) 
+        fl_modifier($FL_DRILL)
           do_layout() fl_screw(FL_DRILL,screw,thick=screw_thick);
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));

@@ -22,7 +22,7 @@ include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
 use     <../foundation/grid.scad>
 use     <../foundation/hole.scad>
-use     <../foundation/placement.scad>
+// use     <../foundation/placement.scad>
 include <../foundation/type_trait.scad>
 
 use     <ether.scad>
