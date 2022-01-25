@@ -36,48 +36,6 @@ module fl_rail(
       children(0);
 }
 
-/*
- * from [Rotation matrix from plane A to B](https://math.stackexchange.com/questions/1876615/rotation-matrix-from-plane-a-to-b)
- * Returns the rotation matrix R aligning the plane A(ax,ay),to plane B(bx,by)
- * When ax and bx are orthogonal to ay and by respectively calculation are simplified.
- */
-function fl_planeAlign(ax,ay,bx,by,a,b) =
-  assert(fl_XOR(ax && ay,a),str("ax,ay parameters are mutually exclusive with a: ax=",ax,",ay=",ay,",a=",a))
-  assert(fl_XOR(bx && by,b),str("bx,by parameters are mutually exclusive with b: bx=",bx,",by=",by,",b=",b))
-  // assert(!ortho||ax*ay==0,str("ax=",ax," must be orthogonal to ay=",ay))
-  // assert(!ortho||bx*by==0,str("bx=",bx," must be orthogonal to by=",by))
-  let (
-    ax    = fl_versor(a?a.x:ax),ay=fl_versor(a?a.y:ay),bx=fl_versor(b?b.x:bx),by=fl_versor(b?b.y:by),
-    az    = cross(ax,ay),
-    ortho = ax*ay==0 && bx*by==0,
-    A=[
-      [ax.x, ay.x,  az.x,  0 ],
-      [ax.y, ay.y,  az.y,  0 ],
-      [ax.z, ay.z,  az.z,  0 ],
-      [0,     0,      0,   1 ],
-    ],
-    Ainv  = ortho
-      ? [ // actually the transpose matrix since axis are mutually orthogonal
-          [ax.x, ax.y,  ax.z,  0 ],
-          [ay.x, ay.y,  ay.z,  0 ],
-          [az.x, az.y,  az.z,  0 ],
-          [0,    0,     0,     1 ],
-        ]
-      : matrix_invert(A), // otherwise full calculations
-    bz=cross(bx,by),
-    B=[
-      [bx.x, by.x,  bz.x,  0 ],
-      [bx.y, by.y,  bz.y,  0 ],
-      [bx.z, by.z,  bz.z,  0 ],
-      [0,    0,     0,     1 ],
-    ]
-  ) B*Ainv;
-
-module fl_planeAlign(ax,ay,bx,by,ech=false) {
-  multmatrix(fl_planeAlign(ax,ay,bx,by)) children();
-  if (ech) #children();
-}
-
 module fl_cutout(
    len          // cutout length
   ,z=Z          // axis to use as Z (detects the cutout plane on Z==0)

@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <placement.scad>
+include <unsafe_defs.scad>
 
 function __clip__(inf,x,sup) = x<=inf?inf:x>=sup?sup:x;
 
@@ -690,4 +690,54 @@ module fl_square(
   }
   if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
+}
+
+//**** 2d placement ***********************************************************
+
+function fl_quadrant(
+  // type with "bounding corners" property
+  type,
+  // 2d quadrant
+  quadrant,
+  // bounding box corners, overrides «type» settings
+  bbox
+) = let(
+  corner  = bbox ? bbox : fl_bb_corners(type),
+  half    = (corner[1] - corner[0]) / 2,
+  delta   = [sign(quadrant.x) * half.x,sign(quadrant.y) * half.y,0]
+) T(-corner[0]-half+delta);
+
+module fl_2d_place(
+  type,
+  // 2d quadrant
+  quadrant,
+  // bounding box corners
+  bbox
+) {
+  assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
+  assert(fl_XOR(octant!=undef,quadrant!=undef));
+  bbox  = bbox ? bbox : fl_bb_corners(type);
+  M     = fl_quadrant(quadrant=quadrant,bbox=bbox);
+  fl_trace("M",M);
+  fl_trace("bbox",bbox);
+  fl_trace("quadrant",quadrant);
+  multmatrix(M) children();
+}
+
+module fl_2d_placeIf(
+  // when true placement is ignored
+  condition ,
+  type,
+  // 2d quadrant
+  quadrant,
+  // bounding box corners
+  bbox
+) {
+  assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
+  assert(fl_XOR(octant!=undef,quadrant!=undef));
+  fl_trace("type",type);
+  fl_trace("bbox",bbox);
+  fl_trace("condition",condition);
+  if (condition) fl_2d_place(type,quadrant,bbox) children();
+  else children();
 }
