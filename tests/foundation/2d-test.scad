@@ -84,7 +84,7 @@ module __test__() {
   module ipoly() {
     fl_ipoly(verbs,RADIUS,n=IPOLY_N,quadrant=quadrant);
     if (IPOLY_CIRCLE)
-      fl_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(r=RADIUS,n=IPOLY_N)) #fl_circle(FL_ADD,r=RADIUS);
+      fl_2d_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(r=RADIUS,n=IPOLY_N)) #fl_circle(FL_ADD,r=RADIUS);
   }
 
   if      (PRIMITIVE == "circle"            ) fl_circle(verbs,r=RADIUS,quadrant=quadrant);
