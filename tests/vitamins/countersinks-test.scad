@@ -19,17 +19,14 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+include <../../foundation/layout.scad>
+include <../../vitamins/countersinks.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
@@ -74,9 +71,7 @@ verbs=[
 ];
 
 if (SHOW>-1)
-  fl_countersink(verbs,FL_CS_DICT[SHOW],octant=octant,direction=direction,
-                  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+  fl_countersink(verbs,FL_CS_DICT[SHOW],octant=octant,direction=direction);
 else
   fl_layout(axis=X,gap=GAP,types=FL_CS_DICT)
-    fl_countersink(verbs,FL_CS_DICT[$i],octant=octant,direction=direction,
-                  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+    fl_countersink(verbs,FL_CS_DICT[$i],octant=octant,direction=direction);

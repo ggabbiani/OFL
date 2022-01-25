@@ -21,6 +21,7 @@
  */
 
 include <../foundation/defs.scad>
+
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
@@ -46,7 +47,7 @@ function fl_Countersink(
   description,
   d,
   angle
-) = 
+) =
   assert(name!=undef)
   assert(d>0)
   assert(angle>0)
@@ -86,4 +87,34 @@ FL_CS_DICT = [
   ,FL_CS_M20
 ];
 
-use <countersink.scad>
+module fl_countersink(
+  verbs,
+  type,
+  direction,        // desired direction [director,rotation], native direction when undef
+  octant            // when undef native positioning is used (+Z)
+) {
+  assert(verbs!=undef);
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
+  bbox  = fl_bb_corners(type);
+  size  = fl_bb_size(type);
+  d     = fl_cs_d(type);
+  h     = fl_cs_h(type);
+  D     = direction!=undef ? fl_direction(proto=type,direction=direction) : I;
+  M     = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
+  fl_trace("Verbs: ",verbs);
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD)
+        fl_modifier($FL_ADD)
+          fl_cylinder(d1=0,d2=d,h=h,octant=-Z);
+      else if ($verb==FL_BBOX)
+        fl_modifier($FL_BBOX) translate(Z(NIL)) fl_bb_add(bbox);
+      else
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=1.2*size);
+  }
+}

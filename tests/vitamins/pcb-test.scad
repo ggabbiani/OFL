@@ -29,7 +29,7 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-TRACE   = false;
+$FL_TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -106,8 +106,7 @@ module test() {
   module pcb(type) {
     fl_pcb(verbs,type,
       direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction,
-      $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PAYLOAD,
-      $FL_TRACE=TRACE)
+      $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PAYLOAD)
       children();
   }
 
@@ -122,6 +121,6 @@ module test() {
 
 
 test()
-  fl_color($FL_FILAMENT) 
+  fl_color($FL_FILAMENT)
     translate(-Z($hole_depth))
       fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);
