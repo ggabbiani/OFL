@@ -18,8 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+
+// include <../../foundation/incs.scad>
+include <../../vitamins/jacks.scad>
+
+include <NopSCADlib/global_defs.scad>
+use     <NopSCADlib/utils/layout.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

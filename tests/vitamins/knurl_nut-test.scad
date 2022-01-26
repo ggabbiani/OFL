@@ -17,9 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+include <../../vitamins/knurl_nuts.scad>
 
 // TODO: implement a CI-TEST parameter set for all test
 
@@ -103,7 +101,7 @@ module __test__() {
   else
     for(i=[0:len(FL_KNUT_DICT)-1]) let(row=FL_KNUT_DICT[i],l=len(row)) translate(fl_Y(12*i)) {
       fl_trace("len(row)",len(row));
-      fl_layout(axis=+FL_X,gap=3,types=row) { 
+      fl_layout(axis=+FL_X,gap=3,types=row) {
         if (l>0) let(type=row[0]) _knut_(verbs,type);
         if (l>1) let(type=row[1]) _knut_(verbs,type);
         if (l>2) let(type=row[2]) _knut_(verbs,type);

@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/incs.scad>
+// include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
 $fn         = 50;           // [3:100]
@@ -92,13 +92,13 @@ module wrapIt(nop,geometry) {
 }
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-if (type) 
+if (type)
   // predefined
   wrapIt(fl_nopSCADlib(type),fl_phdr_geometry(type));
-else if (SHOW=="all") 
+else if (SHOW=="all")
   // all predefined
   layout([for(type=FL_PHDR_DICT) fl_width(type)], 10)
     let(t=FL_PHDR_DICT[$i]) wrapIt(fl_nopSCADlib(t),fl_phdr_geometry(t));
-else 
+else
   // custom
   wrapIt(2p54header,GEOMETRY);

@@ -20,7 +20,7 @@
  */
 
 include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+// include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
 $fn         = 50;           // [3:100]
@@ -122,6 +122,6 @@ fl_pcb_adapter(verbs,nop,
   payload=payload, direction=direction,octant=octant,thick=T,
   $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PAYLOAD,
   $FL_TRACE=TRACE
-) fl_color($FL_FILAMENT) 
+) fl_color($FL_FILAMENT)
   translate(-Z($hole_depth))
     fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);

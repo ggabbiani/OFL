@@ -20,7 +20,7 @@
  */
 
 include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+// include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
 $fn         = 50;           // [3:100]
@@ -100,7 +100,7 @@ screw = SCREW=="No632_pan_screw" ? No632_pan_screw
       : SCREW=="M3_pan_screw"    ? M3_pan_screw
       : SCREW=="M4_cap_screw"    ? M4_cap_screw
       : SCREW=="M4_cs_cap_screw" ? M4_cs_cap_screw
-      : SCREW=="M4_dome_screw"   ? M4_dome_screw 
+      : SCREW=="M4_dome_screw"   ? M4_dome_screw
       : SCREW=="M4_grub_screw"   ? M4_grub_screw
       : SCREW=="M4_hex_screw"    ? M4_hex_screw
       : SCREW=="M4_pan_screw"    ? M4_pan_screw

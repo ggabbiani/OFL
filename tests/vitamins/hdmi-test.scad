@@ -18,8 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+
+include <../../vitamins/hdmi.scad>
+
+include <NopSCADlib/global_defs.scad>
+use     <NopSCADlib/utils/layout.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -81,8 +84,8 @@ module __test__() {
     if (CUTOUT!="OFF")    FL_CUTOUT,
   ];
   // target object(s)
-  single  = SHOW=="FL_HDMI_TYPE_A"  ? FL_HDMI_TYPE_A 
-          : SHOW=="FL_HDMI_TYPE_C"  ? FL_HDMI_TYPE_C 
+  single  = SHOW=="FL_HDMI_TYPE_A"  ? FL_HDMI_TYPE_A
+          : SHOW=="FL_HDMI_TYPE_C"  ? FL_HDMI_TYPE_C
           : SHOW=="FL_HDMI_TYPE_D"  ? FL_HDMI_TYPE_D
           : undef;
 

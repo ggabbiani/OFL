@@ -1,6 +1,6 @@
 /*
  * Magnet test file.
- * 
+ *
  * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -20,8 +20,8 @@
  */
 
 include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+
+include <../../vitamins/magnets.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

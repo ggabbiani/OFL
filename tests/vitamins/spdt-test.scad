@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/incs.scad>
+// include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
 $fn         = 50;           // [3:100]

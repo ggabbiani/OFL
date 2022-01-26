@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+
+include <../../vitamins/pcb_holder.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

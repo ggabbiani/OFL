@@ -20,7 +20,7 @@
  */
 
 include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+// include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
 $fn         = 50;           // [3:100]

@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 include <../../foundation/unsafe_defs.scad>
-include <../../foundation/incs.scad>
+// include <../../foundation/incs.scad>
 include <../../vitamins/incs.scad>
 
 include <NopSCADlib/core.scad>
