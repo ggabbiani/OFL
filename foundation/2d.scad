@@ -715,7 +715,7 @@ module fl_2d_place(
   bbox
 ) {
   assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
-  assert(fl_XOR(octant!=undef,quadrant!=undef));
+  assert(quadrant!=undef);
   bbox  = bbox ? bbox : fl_bb_corners(type);
   M     = fl_quadrant(quadrant=quadrant,bbox=bbox);
   fl_trace("M",M);

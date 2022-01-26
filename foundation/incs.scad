@@ -26,7 +26,7 @@ include <connect.scad>
 include <drawio.scad>
 include <fillet.scad>
 include <grid.scad>
-include <layout.scad>
+// include <layout.scad>
 // include <placement.scad>
 include <profile.scad>
 include <symbol.scad>

@@ -17,7 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <layout.scad>
+include <3d.scad>
 
 include <NopSCADlib/lib.scad>
 
