@@ -16,17 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../foundation/unsafe_defs.scad>
-include <../foundation/defs.scad>
-use     <../foundation/2d.scad>
-use     <../foundation/hole.scad>
-use     <../foundation/layout.scad>
-// use     <../foundation/placement.scad>
-use     <../foundation/tube.scad>
+
+include <../foundation/hole.scad>
+include <../foundation/tube.scad>
 
 include <../vitamins/pcbs.scad>
-
-include <NopSCADlib/lib.scad>
 
 module screw_and_nylon_washer(screw,len,filament) {
   washer    = screw_washer(screw);

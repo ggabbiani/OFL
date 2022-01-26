@@ -25,7 +25,7 @@ use     <../foundation/hole.scad>
 // use     <../foundation/placement.scad>
 include <../foundation/type_trait.scad>
 
-use     <ether.scad>
+include <ethers.scad>
 include <pin_headers.scad>
 use     <screw.scad>
 

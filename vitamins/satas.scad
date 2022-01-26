@@ -20,7 +20,8 @@
  */
 
 
-include <../foundation/incs.scad>
+include <../foundation/connect.scad>
+include <../foundation/drawio.scad>
 
 FL_SATA_NS  = "sata";
 
@@ -179,7 +180,7 @@ FL_SATA_POWERDATASOCKET = let(
   ["block size",      blk_sz],
   ["side block size", side_blk_sz],
   ["prism l1,l2,h",   [side_blk_sz.x,0.5,side_prism_h]],
-  
+
   ["data plug size",  data_sz],
   ["power plug size", power_sz],
 

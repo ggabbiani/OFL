@@ -20,7 +20,7 @@
  */
 include <../foundation/defs.scad>
 include <../vitamins/ethers.scad>
-include <../vitamins/hdmis.scad>
+include <../vitamins/hdmi.scad>
 include <../vitamins/jacks.scad>
 include <../vitamins/usbs.scad>
 include <pin_headers.scad>

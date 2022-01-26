@@ -18,15 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../foundation/defs.scad>
 
-//*****************************************************************************
-// Jack keys
-// function fl_jack_???KV(value)             = fl_kv("jack/???",value);
-
-//*****************************************************************************
-// Jack getters
-// function fl_jack_type(type)              = fl_get(type,fl_jack_???KV()); 
+include <../foundation/layout.scad>
+include <../foundation/util.scad>
 
 //*****************************************************************************
 // Jack constructors
@@ -49,4 +43,44 @@ FL_JACK_DICT = [
   FL_JACK,
 ];
 
-use     <jack.scad>
+module fl_jack(
+  verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  type,
+  cut_thick,            // thickness for FL_CUTOUT
+  cut_tolerance=0,      // tolerance used during FL_CUTOUT
+  cut_drift=0,          // translation applied to cutout
+  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  octant,               // when undef native positioning is used
+) {
+  assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(type!=undef);
+
+  axes    = fl_list_has(verbs,FL_AXES);
+  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
+  bbox  = fl_bb_corners(type);
+  size  = fl_bb_size(type);
+  D     = direction ? fl_direction(proto=type,direction=direction)  : I;
+  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD)
+          jack();
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      } else if ($verb==FL_CUTOUT) {
+        assert(cut_thick!=undef);
+        fl_modifier($FL_CUTOUT)
+          translate(+X(bbox[1].x-2.5+cut_drift))
+            fl_cutout(len=cut_thick,z=X,x=-Z,delta=cut_tolerance,trim=X(-size.x/2),cut=true)
+              jack();
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
+    }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes([size.x,size.y,1.5*size.z]);
+  }
+}

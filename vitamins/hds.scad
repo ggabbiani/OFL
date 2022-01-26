@@ -19,7 +19,6 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-// include <OFL/foundation/util.scad>
 include <satas.scad>
 
 include <NopSCADlib/core.scad>

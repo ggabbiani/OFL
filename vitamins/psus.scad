@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/incs.scad>
+// include <../foundation/incs.scad>
 
 include <NopSCADlib/lib.scad>
 
@@ -55,7 +55,7 @@ PSU_MeanWell_RS_25_5 = let(
       [-FL_X,[size.z, size.y, t]],
       [+FL_Z,[size.x, size.y, t]],
       [+FL_Y,[size.x, size.z, t]],
-      [-FL_Y,[size.x, 9,      t]], 
+      [-FL_Y,[size.x, 9,      t]],
       [+FL_X,[size.z, size.y, t]],
       [-FL_Z,[size.x, size.y, t]],
     ]],
@@ -78,7 +78,7 @@ PSU_MeanWell_RS_15_5 = let(
     size      = [51,62.5,28],
     pcb_t     = 1.6,
     // sheet metal thickness
-    t         = 1, 
+    t         = 1,
     // TODO: terminal must become a stand-alone vitamin
     term_ways = 5,
     term_step = 7.62,
@@ -91,7 +91,7 @@ PSU_MeanWell_RS_15_5 = let(
     ]),
     fl_screw(value=M3_cs_cap_screw),
     ["pcb thickness",       pcb_t],
-    
+
     ["terminal screw",      M3_pan_screw  ],
     ["terminal ways",       term_ways     ],
     ["terminal step",       term_step     ],
@@ -104,7 +104,7 @@ PSU_MeanWell_RS_15_5 = let(
       [-FL_X,[size.z, size.y, t]],
       [+FL_Z,[size.x, size.y, t]],
       [+FL_Y,[size.x, size.z, t]],
-      [-FL_Y,[size.x, 9,      t]], 
+      [-FL_Y,[size.x, 9,      t]],
       [+FL_X,[size.z, size.y, t]],
       [-FL_Z,[size.x, size.y, t]],
     ]],
@@ -124,7 +124,7 @@ PSU_MeanWell_RS_15_5 = let(
   ];
 
 FL_PSU_DICT = [
-  PSU_MeanWell_RS_25_5, 
+  PSU_MeanWell_RS_25_5,
   PSU_MeanWell_RS_15_5,
 ];
 

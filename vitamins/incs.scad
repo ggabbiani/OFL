@@ -17,11 +17,11 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/incs.scad>
+// include <../foundation/incs.scad>
 
 include <countersinks.scad>
 include <ethers.scad>
-include <hdmis.scad>
+include <hdmi.scad>
 include <heatsinks.scad>
 include <hds.scad>
 include <jacks.scad>

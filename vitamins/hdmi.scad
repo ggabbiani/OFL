@@ -18,14 +18,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../foundation/unsafe_defs.scad>
-include <../foundation/defs.scad>
-include <../foundation/3d.scad>
-include <../foundation/layout.scad>
-use     <../foundation/util.scad>
-include <hdmis.scad>
+
+include <../foundation/util.scad>
 
 use     <NopSCADlib/vitamins/pcb.scad>
+
+function fl_hdmi_new(nop_type) = let(
+    l   = hdmi_depth(nop_type),
+    iw1 = hdmi_width1(nop_type),
+    iw2 = hdmi_width2(nop_type),
+    ih1 = hdmi_height1(nop_type),
+    ih2 = hdmi_height2(nop_type),
+    h   = hdmi_height(nop_type),
+    t   = hdmi_thickness(nop_type),
+    bbox  = let(d=max(iw1,iw2)+2*t) [[-l/2,-d/2,h-2*t-ih2],[+l/2,+d/2,h]]
+) [
+  fl_nopSCADlib(value=nop_type),
+  fl_bb_corners(value=bbox),
+  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+];
+
+// following HDMI socket definitions are taken from NopSCADlib/vitamins/pcb.scad
+FL_HDMI_TYPE_A  = fl_hdmi_new(
+  [ "hdmi_full", "HDMI socket",        12,   14,   10,  3,    4.5, 6.5, 0.5 ]
+);
+FL_HDMI_TYPE_C  = fl_hdmi_new(
+  [ "hdmi_mini", "Mini HDMI socket",    7.5, 10.5, 8.3, 1.28, 2.5, 3.2, 0.35 ]
+);
+FL_HDMI_TYPE_D  = fl_hdmi_new(
+  [ "hdmi_micro", "Micro HDMI socket", 8.5,  5.9, 4.43, 1.4, 2.3, 3,   0.3 ]
+);
+
+FL_HDMI_DICT = [
+  FL_HDMI_TYPE_A,
+  FL_HDMI_TYPE_C,
+  FL_HDMI_TYPE_D
+];
 
 //*****************************************************************************
 // keys
@@ -46,7 +74,7 @@ module fl_hdmi(
   axes    = fl_list_has(verbs,FL_AXES);
   verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  
+
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
@@ -61,7 +89,7 @@ module fl_hdmi(
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
       } else if ($verb==FL_CUTOUT) {
         assert(cut_thick!=undef);
-        fl_modifier($FL_CUTOUT) 
+        fl_modifier($FL_CUTOUT)
         translate(X(0))
           translate(X(size.x/2+cut_drift)) fl_cutout(len=cut_thick,z=X,x=-Z,delta=cut_tolerance) hdmi(nop,false);
       } else {

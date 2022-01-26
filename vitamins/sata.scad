@@ -22,7 +22,7 @@
 include <satas.scad>
 
 include <../foundation/unsafe_defs.scad>
-include <../foundation/incs.scad>
+// include <../foundation/incs.scad>
 
 /****************************************************************************
  * SATA data commons
@@ -38,7 +38,7 @@ function fl_sata_dataCID() = "sata/data connector footprint";
 module fl_sata_dataPlug(
   verbs       = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
   type,
-  connectors  = false,  
+  connectors  = false,
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
@@ -66,8 +66,8 @@ module fl_sata_dataPlug(
 
   module do_add() {
     fl_color("DarkSlateGray") do_footprint();
-    fl_color("gold") 
-      translate(-Y(1.1)+X(1.15+(size.x-1.15-cont_step*6-cont_sz[0][1].x)/2)) rotate(-90,X) 
+    fl_color("gold")
+      translate(-Y(1.1)+X(1.15+(size.x-1.15-cont_step*6-cont_sz[0][1].x)/2)) rotate(-90,X)
         fl_algo_pattern(cts,pattern,cont_sz,[cont_step,0,0],align=-Y,octant=+X);
     if (connectors)
       fl_conn_add(connection,size=2);
@@ -103,7 +103,7 @@ function fl_sata_powerCID() = "sata/power connector footprint";
 module fl_sata_powerPlug(
   verbs       = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
   type,
-  connectors  = false,  
+  connectors  = false,
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
@@ -132,7 +132,7 @@ module fl_sata_powerPlug(
   module do_add() {
     // plug part
     fl_color("DarkSlateGray") do_footprint();
-    fl_color("gold") 
+    fl_color("gold")
       translate(-fl_Y(1.1)+fl_X((size.x-1.15-cont_step*14-cont_sz[0][1].x)/2)) rotate(-90,FL_X)
         fl_algo_pattern(cts,pattern,cont_sz,[cont_step,0,0],align=-FL_Y,octant=+FL_X);
     if (connectors)
@@ -200,7 +200,7 @@ module fl_sata_powerDataPlug(
   module do_footprint() {
     translate(-fl_Z(size.z/2))
     fl_cutout(size.z,delta=fl_JNgauge)
-      linear_extrude(size.z) 
+      linear_extrude(size.z)
         dio_polyCoords(points=dio_ext,size=[size.x,size.y],quadrant=FL_O);
   }
 
@@ -217,9 +217,9 @@ module fl_sata_powerDataPlug(
   module do_add() {
     multmatrix(Md) fl_sata_dataPlug(type=data_plug);
     multmatrix(Mp) fl_sata_powerPlug(type=power_plug);
-    if (connectors) 
+    if (connectors)
       for(c=conns) fl_conn_add(c,size=2);
-    if (shell) 
+    if (shell)
       multmatrix(Ms) shell();
   }
 
@@ -270,7 +270,7 @@ module sata_PowerDataSocket(
 
   data_sz     = fl_get(type,"data plug size");
   power_sz    = fl_get(type,"power plug size");
-  
+
   conns       = fl_sata_conns(type);
   Mdata       = __fl_sata_Mdata__(type);
   Mpower      = __fl_sata_Mpower__(type);
@@ -305,17 +305,17 @@ module sata_PowerDataSocket(
     fl_color("DodgerBlue") difference() {
       union() { // main body
         fl_cube(size=block_sz,octant=FL_O);
-        for (i=[-1,1])   
+        for (i=[-1,1])
           translate(i*fl_X((block_sz.x+sideblk_sz.x)/2)+fl_Z(sideblk_sz.z*3/4))
           rotate(-90,FL_X)
-            rotate(fl_Y(i*3*90)) 
+            rotate(fl_Y(i*3*90))
             rotate(180,FL_X)
               side_plug();
       }
       multmatrix(Mpower)  power_hole();
       multmatrix(Mdata)   data_hole();
     }
-    if (connectors) // adds connectors 
+    if (connectors) // adds connectors
       for(c=conns) fl_conn_add(c,size=2);
   }
 
@@ -343,7 +343,7 @@ module sata_PowerDataSocket(
 module fl_sata(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   type,
-  connectors  = false,  
+  connectors  = false,
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
