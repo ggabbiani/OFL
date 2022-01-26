@@ -20,7 +20,7 @@
  */
 include <../foundation/unsafe_defs.scad>
 include <../foundation/defs.scad>
-include <../foundation/layout.scad>
+include <../foundation/3d.scad>
 use     <../foundation/util.scad>
 include <usbs.scad>
 
@@ -41,7 +41,7 @@ module fl_USB(
   axes    = fl_list_has(verbs,FL_AXES);
   verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
-  
+
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : I;
@@ -61,13 +61,13 @@ module fl_USB(
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) 
+        fl_modifier($FL_ADD)
           wrap();
       } else if ($verb==FL_BBOX) {
         fl_modifier($FL_BBOX) fl_bb_add(bbox);
       } else if ($verb==FL_CUTOUT) {
         assert(cut_thick!=undef);
-        fl_modifier($FL_CUTOUT) 
+        fl_modifier($FL_CUTOUT)
           translate(+X(size.x/2+cut_drift))
             fl_cutout(len=cut_thick,z=X,x=Y,delta=cut_tolerance)
               wrap();
