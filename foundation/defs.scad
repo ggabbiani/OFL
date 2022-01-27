@@ -295,6 +295,7 @@ function fl_has(type,property,check=function(value) true) =
   let(i=search([property],type))
   i != [[]] ? assert(len(type[i[0]])==2,"Malformed type") check(type[i[0]][1]) : false;
 
+// TODO: add a context variable stating current $verb modifier (could be $modifier)
 module fl_parse(verbs) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   for($verb=is_list(verbs) ? verbs : [verbs]) {
