@@ -34,13 +34,13 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -66,26 +66,20 @@ CO_DRIFT = 0; // [-5:0.05:5]
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef         : OCTANT;
-  thick     = CUTOUT!="OFF" ? CO_T          : undef;
-  tolerance = CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
-  drift     = CUTOUT!="OFF" ? CO_DRIFT : undef;
+direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef         : OCTANT;
+thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
+tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
+drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT : undef;
 
-  verbs=[
-    if (ADD!="OFF")       FL_ADD,
-    if (AXES!="OFF")      FL_AXES,
-    if (BBOX!="OFF")      FL_BBOX,
-    if (CUTOUT!="OFF")    FL_CUTOUT,
-  ];
+verbs=[
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
+];
 
-  fl_trace("verbs",verbs);
+fl_trace("verbs",verbs);
 
-  fl_ether(verbs,FL_ETHER_RJ45,
-    direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
-  );
-}
-
-__test__();
+fl_ether(verbs,FL_ETHER_RJ45,
+  direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift);

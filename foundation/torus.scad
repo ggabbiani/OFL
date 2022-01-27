@@ -27,13 +27,9 @@ module fl_torus(
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant                // when undef native positioning is used
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
   assert(r>=a,str("r=",r,",a=",a));
 
   // echo(n=($fn>0?($fn>=3?$fn:3):ceil(max(min(360/$fa,r*2*PI/$fs),5))),a_based=360/$fa,s_based=r*2*PI/$fs);
-
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   ellipse = [a,b];
   bbox    = let(edge=a+r) [[-edge,-edge,-b],[+edge,+edge,+b]];
@@ -46,17 +42,14 @@ module fl_torus(
   fl_trace("D",D);
   fl_trace("M",M);
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) rotate_extrude($fn=$fn) translate(X(r-a)) fl_ellipse(e=ellipse,quadrant=+X,$fn=fn);
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) rotate_extrude($fn=$fn) translate(X(r-a)) fl_ellipse(e=ellipse,quadrant=+X,$fn=fn);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

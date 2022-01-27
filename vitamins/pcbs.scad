@@ -170,9 +170,6 @@ module fl_pcb(
 
   fl_trace("thick",thick);
 
-  axes      = fl_list_has(verbs,FL_AXES);
-  verbs     = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   pcb_t     = fl_pcb_thick(type);
   comps     = fl_pcb_components(type);
   size      = fl_bb_size(type);
@@ -197,11 +194,11 @@ module fl_pcb(
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;
   M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
 
-  fl_trace(fl_pcb_components()[0],comps);
-  fl_trace("type",type);
-  fl_trace("holes",holes);
+  // fl_trace(fl_pcb_components()[0],comps);
+  // fl_trace("type",type);
+  // fl_trace("holes",holes);
   fl_trace("bbox",bbox);
-  fl_trace("grid",grid);
+  // fl_trace("grid",grid);
 
   function fl_pcb_NopHoles(nop) = let(
     pcb_t     = pcb_thickness(nop),
@@ -346,6 +343,9 @@ module fl_pcb(
           fl_pinHeader(FL_ADD,type=type,direction=direction);
         else
           assert(false,str("Unknown engine ",engine));
+  }
+
+  module do_mount() {
     if (holes)
       fl_lay_holes(holes,lay_direction)
         fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
@@ -403,35 +403,35 @@ module fl_pcb(
       fl_bb_add(pload);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) do_add();
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+    } else if ($verb==FL_PAYLOAD) {
+      fl_modifier($FL_PAYLOAD) do_payload();
 
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout("holes")
-          children();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) fl_bb_add(bbox);
 
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_assembly();
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($FL_LAYOUT) do_layout("holes")
+        children();
 
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL) do_drill();
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($FL_ASSEMBLY) do_assembly();
 
-      } else if ($verb==FL_CUTOUT) {
-        fl_modifier($FL_CUTOUT) do_cutout();
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($FL_DRILL) do_drill();
 
-      } else if ($verb==FL_PAYLOAD) {
-        fl_modifier($FL_PAYLOAD) do_payload();
+    } else if ($verb==FL_CUTOUT) {
+      fl_modifier($FL_CUTOUT) do_cutout();
 
-      } else
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size*1.2);
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($FL_MOUNT) do_mount();
+
+    } else
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    fl_modifier($FL_AXES) fl_axes(size=size*1.2);
   }
 }
 

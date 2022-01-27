@@ -119,12 +119,9 @@ module fl_sector(
   angles,
   quadrant
 ) {
-  assert(is_list(verbs)||is_string(verbs));
   assert(is_list(angles),str("angles=",angles));
 
   radius  = d!=undef ? d/2 : r; assert(is_num(radius),str("radius=",radius));
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   points  = fl_sector(r=radius,angles=angles);
   bbox    = fl_bb_sector(r=radius,angles=angles);
   size    = bbox[1] - bbox[0];
@@ -133,9 +130,8 @@ module fl_sector(
   fl_trace("points",points);
   fl_trace("bbox",bbox);
   fl_trace("size",size);
-  fl_trace("axes",axes);
 
-  multmatrix(M) fl_parse(verbs) {
+  fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) polygon(points);
     } else if ($verb==FL_BBOX) {
@@ -143,9 +139,8 @@ module fl_sector(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
+  }
 }
 
 //**** elliptic sector ********************************************************
@@ -247,17 +242,14 @@ module fl_ellipticSector(
   angles,             // start|end angles in whatever order
   quadrant
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
   assert(e!=undef && angles!=undef);
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   a     = e[0];
   b     = e[1];
   bbox  = fl_bb_ellipticSector(e,angles);
   size  = bbox[1]-bbox[0];
   M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
 
-  multmatrix(M) fl_parse(verbs) {
+  fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) polygon(fl_ellipticSector(e,angles));
     } else if ($verb==FL_BBOX) {
@@ -265,9 +257,8 @@ module fl_ellipticSector(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
+  }
 }
 
 //**** elliptic arc ***********************************************************
@@ -301,20 +292,17 @@ module fl_ellipticArc(
   thick,              // added to radius defines the external radius
   quadrant
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
   assert(is_list(e)     ,str("e=",e));
   assert(is_list(angles),str("angles=",angles));
   assert(is_num(thick)  ,str("thick=",thick));
 
   a     = e[0];
   b     = e[1];
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   bbox  = fl_bb_ellipticArc(e,angles,thick);
   size  = bbox[1]-bbox[0];
   M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
 
-  multmatrix(M) fl_parse(verbs) {
+  fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) difference() {
         fl_ellipticSector(verbs=$verb, e=[a+thick,b+thick] ,angles=angles);
@@ -325,9 +313,8 @@ module fl_ellipticArc(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
+  }
 }
 
 //**** elliptic annulus *******************************************************
@@ -409,13 +396,10 @@ module fl_ellipse(
   e,                // ellipse in [a,b] form
   quadrant
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
   assert(e!=undef);
 
   a     = e[0];
   b     = e[1];
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   bbox  = fl_bb_ellipse(e);
   size  = bbox[1]-bbox[0];
   M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
@@ -424,7 +408,7 @@ module fl_ellipse(
   fn    = $fn;
   fs    = $fs;
 
-  multmatrix(M) fl_parse(verbs) {
+  fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) polygon(fl_ellipse(e,$fa=fa,$fn=fn,$fs=fs));
     } else if ($verb==FL_BBOX) {
@@ -432,9 +416,8 @@ module fl_ellipse(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
+  }
 }
 
 //**** circle *****************************************************************
@@ -464,10 +447,6 @@ module fl_circle(
   d,
   quadrant
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   radius  = r!=undef ? r : d/2; assert(is_num(radius));
   bbox    = fl_bb_circle(r=radius);
   size    = bbox[1] - bbox[0];
@@ -475,9 +454,9 @@ module fl_circle(
   fl_trace("quadrant",quadrant);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
-  fl_trace("axes",axes);
 
-  multmatrix(M)  fl_parse(verbs) {
+  fl_manage(verbs,M) {
+
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) polygon(fl_circle(r=radius));
     } else if ($verb==FL_BBOX) {
@@ -485,9 +464,9 @@ module fl_circle(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
+
     fl_modifier($FL_AXES) fl_axes(size=size);
+  }
 }
 
 //**** annulus ****************************************************************
@@ -512,12 +491,8 @@ module fl_arc(
   thick,      // added to radius defines the external radius
   quadrant
   ) {
-  assert(is_list(verbs)||is_string(verbs));
   assert(is_list(angles));
   assert(is_num(thick));
-
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   radius  = r!=undef ? r : d/2; assert(is_num(radius));
   bbox    = fl_bb_arc(r=radius,angles=angles,thick=thick);
@@ -526,7 +501,7 @@ module fl_arc(
 
   fl_trace("radius",radius);
 
-  multmatrix(M) fl_parse(verbs) {
+  fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) difference() {
         fl_sector($verb, r=radius + thick,angles=angles);
@@ -537,9 +512,8 @@ module fl_arc(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
+  }
 }
 
 //**** inscribed polygon ******************************************************
@@ -552,11 +526,7 @@ module fl_ipoly(
   ,n  // number of edges
   ,quadrant
 ) {
-  assert(is_list(verbs)||is_string(verbs));
   assert(fl_XOR(r,d));
-
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   radius  = r!=undef ? r : d/2; assert(is_num(radius));
   points  = fl_circle(r=radius,$fn=n);
@@ -565,9 +535,8 @@ module fl_ipoly(
   size    = bbox[1] - bbox[0];
   M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
   fl_trace("bbox",bbox);
-  fl_trace("axes",axes);
 
-  multmatrix(M) fl_parse(verbs) {
+  fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) polygon(points);
     } else if ($verb==FL_BBOX) {
@@ -575,9 +544,8 @@ module fl_ipoly(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
+  }
 }
 
 //**** square *****************************************************************
@@ -667,9 +635,6 @@ module fl_square(
 ) {
   assert(is_list(verbs)||is_string(verbs));
 
-  axes      = fl_list_has(verbs,FL_AXES);
-  verbs     = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   points  = fl_square(size,corners);
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
   M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
@@ -677,9 +642,8 @@ module fl_square(
   fl_trace("size",size);
   fl_trace("corners",corners);
   fl_trace("points",points);
-  fl_trace("$FL_ADD",$FL_ADD);
 
-  multmatrix(M) fl_parse(verbs) {
+  fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) polygon(points);
     } else if ($verb==FL_BBOX) {
@@ -687,9 +651,8 @@ module fl_square(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
     fl_modifier($FL_AXES) fl_axes(size=size);
+  }
 }
 
 //**** 2d placement ***********************************************************

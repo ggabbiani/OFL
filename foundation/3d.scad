@@ -42,27 +42,21 @@ module fl_cube(
   octant,             // when undef native positioning is used
   direction           // desired direction [director,rotation] or native direction if undef
 ) {
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   size  = is_list(size) ? size : [size,size,size];
   defs  = fl_cube_defaults(size);
 
   D     = direction ? fl_direction(defs,direction=direction)  : I;
   M     = octant    ? fl_octant(defs,octant=octant)           : I;
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) cube(size,false);
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) cube(size);  // center=default=false ⇒ +X+Y+Z
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) cube(size,false);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) cube(size);  // center=default=false ⇒ +X+Y+Z
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -91,8 +85,6 @@ module fl_sphere(
   octant,             // when undef default positioning is used
   direction           // desired direction [director,rotation], default direction if undef
 ) {
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   defs  = fl_sphere_defaults(r,d);
 
   bbox  = fl_bb_corners(defs);
@@ -100,18 +92,15 @@ module fl_sphere(
   D     = direction ? fl_direction(defs,direction=direction)  : I;
   M     = octant    ? fl_octant(defs,octant=octant)           : I;
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) resize(size) sphere();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) cube(size,true);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) resize(size) sphere();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) cube(size,true);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 /*
@@ -169,9 +158,6 @@ module fl_cylinder(
   octant,           // when undef native positioning is used
   direction         // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 ) {
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   r_bot = fl_parse_radius(r,r1,d,d1);
   r_top = fl_parse_radius(r,r2,d,d2);
   defs  = fl_cylinder_defaults(h,r,r1,r2,d,d1,d2);
@@ -184,18 +170,15 @@ module fl_cylinder(
   fl_trace("octant",octant);
   fl_trace("size",size);
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES)) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) multmatrix(Mbbox) %cube(size=size); // center=default=false ⇒ +X+Y+Z
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) multmatrix(Mbbox) %cube(size=size); // center=default=false ⇒ +X+Y+Z
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=[size.x,size.y,5/4*size.z]);
+    fl_modifier($FL_AXES) fl_axes(size=[size.x,size.y,5/4*size.z]);
   }
 }
 
@@ -253,9 +236,6 @@ module fl_prism(
   octant,           // when undef native positioning is used
   direction         // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 ) {
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   defs  = fl_prism_defaults(n,l,l1,l2,h);
   step  = 360/n;
   l_bot = fl_parse_l(l,l1);
@@ -271,18 +251,15 @@ module fl_prism(
   fl_trace("direction",direction);
   fl_trace("size",size);
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs)  {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) multmatrix(Mbbox) %cube(size=size);     // center=default=false ⇒ +X+Y+Z
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D)  {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) multmatrix(Mbbox) %cube(size=size);     // center=default=false ⇒ +X+Y+Z
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -520,13 +497,10 @@ module fl_layout(
   direction,// desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])
   octant    // when undef native positioning is used
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
   assert(len(axis)==3,axis);
   assert(is_num(gap),gap);
   assert(is_list(types),types);
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   bbox  = lay_bb_corners(axis,gap,types);
   size  = bbox[1]-bbox[0]; // resulting size
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
@@ -544,36 +518,33 @@ module fl_layout(
   fl_trace("bcs",bcs);
   fl_trace("sz",sz);
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+  fl_manage(verbs) {
+    if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) fl_bb_add(bbox);
 
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT)
-          for($i=[0:$len-1]) {
-            fl_trace("$i",$i);
-            $first  = $i==0;
-            $last   = $i==$len-1;
-            $item   = types[$i];
-            $size   = let(corner=fl_bb_corners($item)) corner[1]-corner[0];
-            offset = sum
-            ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
-            : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
-            sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : O;
-            fl_trace("sz",sz);
-            fl_trace("delta",$i*gap*axis);
-            fl_trace("offset",offset);
-            translate(offset+fac*sz+$i*gap*axis)
-              if ($children>1) children($i); else children(0);
-          };
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($FL_LAYOUT)
+        for($i=[0:$len-1]) {
+          fl_trace("$i",$i);
+          $first  = $i==0;
+          $last   = $i==$len-1;
+          $item   = types[$i];
+          $size   = let(corner=fl_bb_corners($item)) corner[1]-corner[0];
+          offset = sum
+          ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
+          : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
+          sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : O;
+          fl_trace("sz",sz);
+          fl_trace("delta",$i*gap*axis);
+          fl_trace("offset",offset);
+          translate(offset+fac*sz+$i*gap*axis)
+            if ($children>1) children($i); else children(0);
+        };
 
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 

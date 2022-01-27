@@ -152,11 +152,7 @@ module fl_bend(
   // when undef native positioning is used
   octant
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
-
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   sheet       = fl_bend_sheet(type);
   flat_bbox   = fl_bb_corners(sheet);
@@ -267,20 +263,17 @@ module fl_bend(
     fl_trace("***END***");
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add() children();
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD)
+      fl_modifier($FL_ADD) do_add() children();
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+    else if ($verb==FL_BBOX)
+      fl_modifier($FL_BBOX) fl_bb_add(bbox);
 
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
-    }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=1.2*size);
+    else
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+
+    fl_modifier($FL_AXES) fl_axes(size=1.2*size);
   }
 
 }

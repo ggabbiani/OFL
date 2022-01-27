@@ -65,23 +65,20 @@ module fl_ether(
     fl_square(FL_ADD,size=[size.z,size.y]);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD)
-          rj45();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
-      } else if ($verb==FL_CUTOUT) {
-        assert(cut_thick!=undef);
-        fl_modifier($FL_CUTOUT)
-          translate(+X(bbox[1].x+cut_drift))
-            do_cutout();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD)
+        rj45();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+    } else if ($verb==FL_CUTOUT) {
+      assert(cut_thick!=undef);
+      fl_modifier($FL_CUTOUT)
+        translate(+X(bbox[1].x+cut_drift))
+          do_cutout();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes([size.x,size.y,1.5*size.z]);
+    fl_modifier($FL_AXES) fl_axes([size.x,size.y,1.5*size.z]);
   }
 }

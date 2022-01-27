@@ -63,15 +63,15 @@ FILLET_STEPS  = 20;
 
 /* [Hidden] */
 
-magnet  = MAGNET=="M3_cs_magnet_d10x2"  ? FL_MAG_M3_CS_D10x2 
-        : MAGNET=="M3_cs_magnet_d10x5"  ? FL_MAG_M3_CS_D10x5 
+magnet  = MAGNET=="M3_cs_magnet_d10x2"  ? FL_MAG_M3_CS_D10x2
+        : MAGNET=="M3_cs_magnet_d10x5"  ? FL_MAG_M3_CS_D10x5
         : FL_MAG_M4_CS_D32x6;
 
 function cyl_d(
   magnet,
   edge_thick,
   tolerance
-) = 
+) =
 assert(is_list(magnet),magnet)
 assert(is_num(edge_thick),edge_thick)
 assert(is_num(tolerance),tolerance)
@@ -87,7 +87,7 @@ function bb_element(
   base_thick,
   tolerance,
   horiz_gap
-) = 
+) =
 assert(is_list(magnet),magnet)
 assert(is_num(fill_r),fill_r)
 assert(is_num(fill_n),fill_n)
@@ -135,10 +135,10 @@ module element(
       difference() {
         union() {
           fl_cylinder(d=cyl_d,h=cyl_h,octant=+Z);
-          fl_90DegFillet(r=fill_r,n=fill_n,child_bbox=child_bbox) 
+          fl_90DegFillet(r=fill_r,n=fill_n,child_bbox=child_bbox)
             fl_circle(d=cyl_d);
         }
-        translate(-Z(NIL)) 
+        translate(-Z(NIL))
           fl_magnet([FL_FOOTPRINT,FL_DRILL],magnet,thick=base_thick+NIL,fp_gross=tolerance);
       }
       // base
@@ -151,7 +151,7 @@ module element(
 
   module do_assembly() {
     fl_magnet([FL_ADD,FL_ASSEMBLY],magnet,thick=base_thick);
-    // do_layout() 
+    // do_layout()
     //   fl_screw(FL_ADD,fl_mag_screw(magnet),thick=base_thick,nut="default");
   }
 
@@ -164,7 +164,7 @@ module element(
   }
 
   multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
+    fl_manage(verbs,M) {
       if ($verb==FL_ADD) {
         fl_modifier($FL_ADD) do_add();
       } else if ($verb==FL_BBOX) {
@@ -179,9 +179,8 @@ module element(
       } else {
         assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
       }
-    }
-    if (axes)
       fl_modifier($FL_AXES) fl_axes(size=size);
+    }
   }
 }
 

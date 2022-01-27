@@ -38,8 +38,6 @@ module fl_profile(
   assert((radius == undef) || (2*radius<thick));
   assert(is_string(type) && len(type)==1 && search(type,"ELTU")!=[]);
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   bbox  = [-size/2,+size/2];
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
@@ -116,21 +114,18 @@ module fl_profile(
     }
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) fl_color(material) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) cube(size=size, center=true);
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT)
-          fl_color(material) do_footprint();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) fl_color(material) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) cube(size=size, center=true);
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($FL_FOOTPRINT)
+        fl_color(material) do_footprint();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -152,8 +147,6 @@ module fl_bentPlate(
   assert(size!=undef);
   assert(thick!=undef);
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   bbox  = [-size/2,+size/2];
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
@@ -208,19 +201,16 @@ module fl_bentPlate(
       else assert(false,str("Unsupported bent plate type '",type,"'. Please choose one of the following: L,U"));
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_cube(size=size, octant=FL_O);
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) do_add(footprint=true);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) fl_cube(size=size, octant=FL_O);
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($FL_FOOTPRINT) do_add(footprint=true);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

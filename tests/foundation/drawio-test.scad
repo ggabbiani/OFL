@@ -52,14 +52,10 @@ SIZE        = [100,100];
 
 /* [Hidden] */
 
-module __test__() {
-  verbs = [
-    if ($FL_ADD!="OFF")   FL_ADD,
-    if ($FL_AXES!="OFF")  FL_AXES,
-    if ($FL_BBOX!="OFF")  FL_BBOX,
-  ];
-  quadrant  = PLACE_NATIVE ? undef : QUADRANT;
-  dio_polyCoords(verbs, POLYCOORDS, SIZE, quadrant);
-}
-
-__test__();
+verbs = [
+  if ($FL_ADD!="OFF")   FL_ADD,
+  if ($FL_AXES!="OFF")  FL_AXES,
+  if ($FL_BBOX!="OFF")  FL_BBOX,
+];
+quadrant  = PLACE_NATIVE ? undef : QUADRANT;
+dio_polyCoords(verbs, POLYCOORDS, SIZE, quadrant);

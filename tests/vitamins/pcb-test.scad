@@ -20,37 +20,34 @@
  */
 
 include <../../foundation/unsafe_defs.scad>
-// include <../../foundation/incs.scad>
 include <../../vitamins/pcbs.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-
 /* [Supported verbs] */
 
-// adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// Draw base shape (no components nor screws)
+$FL_ADD        = "ON";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// Draw predefined component shape(s)
+$FL_ASSEMBLY   = "ON";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// assembled shape bounding box
+$FL_BBOX       = "TRANSPARENT"; // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_DRILL     = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws or supports)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a box representing the payload of the shape
-PAYLOAD   = "ON";     // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_LAYOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// add mounting accessories shapes
+$FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// components payload bounding box
+$FL_PAYLOAD    = "OFF";         // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -83,16 +80,21 @@ co_direction  = CO_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2])
 co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
 direction     = DIR_NATIVE        ? undef : [DIR_Z,DIR_R];
 octant        = PLACE_NATIVE      ? undef : OCTANT;
+filament      = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
 verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if (AXES!="OFF")      FL_AXES,
-  if (BBOX!="OFF")      FL_BBOX,
-  if (CUTOUT!="OFF")    FL_CUTOUT,
-  if (DRILL!="OFF")     FL_DRILL,
-  if (LAYOUT!="OFF")    FL_LAYOUT,
-  if (PAYLOAD!="OFF")   FL_PAYLOAD,
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_DRILL!="OFF")     FL_DRILL,
+  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
+  if ($FL_MOUNT!="OFF")     FL_MOUNT,
 ];
+
+fl_trace("***VERBS***",[for(verb=fl_list_flatten(verbs)) split(verb)[0]]);
 
 single  = TYPE=="FL_PCB_RPI4"       ? FL_PCB_RPI4
         : TYPE=="FL_PCB_PERF70x50"  ? FL_PCB_PERF70x50
@@ -102,11 +104,9 @@ single  = TYPE=="FL_PCB_RPI4"       ? FL_PCB_RPI4
         : undef;
 
 module test() {
-
   module pcb(type) {
     fl_pcb(verbs,type,
-      direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction,
-      $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PAYLOAD)
+      direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction)
       children();
   }
 
@@ -121,6 +121,6 @@ module test() {
 
 
 test()
-  fl_color($FL_FILAMENT)
+  fl_color(filament)
     translate(-Z($hole_depth))
       fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);

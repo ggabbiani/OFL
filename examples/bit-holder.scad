@@ -23,26 +23,28 @@ include <../foundation/unsafe_defs.scad>
 include <../foundation/incs.scad>
 include <../vitamins/incs.scad>
 
+/* [Globals] */
+
 $fn         = 50;           // [3:100]
+// May trigger debug statement in client modules / functions
+$FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-TRACE       = false;
-
-FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$FL_TRACE   = false;
+// Filament color used for printed parts
+$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "ON";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Bits (nominal/shank/length,cardinality)] */
 
@@ -75,7 +77,7 @@ HEIGHT      = 20;
 TOLERANCE   = 0.18; // [0:0.05:1]
 // inter holder distance along X axis
 I_holder  = 1;
-// magnet size 
+// magnet size
 MAGNET    = "FL_MAG_RECT_10x5x2"; // [FL_MAG_RECT_10x5x1,FL_MAG_RECT_10x5x2]
 
 /* [Hidden] */
@@ -98,16 +100,10 @@ function bitHolder(name,bit,cardinality,magnet) = let(
     ["magnet",      magnet],
   ];
 
-verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if (BBOX!="OFF")      FL_BBOX,
-];
-
-magnet    = MAGNET=="FL_MAG_RECT_10x5x1" 
-          ? FL_MAG_RECT_10x5x1 
-          : MAGNET=="FL_MAG_RECT_10x5x2" 
-          ? FL_MAG_RECT_10x5x2 
+magnet    = MAGNET=="FL_MAG_RECT_10x5x1"
+          ? FL_MAG_RECT_10x5x1
+          : MAGNET=="FL_MAG_RECT_10x5x2"
+          ? FL_MAG_RECT_10x5x2
           : undef;
 
 SZ_magnet = fl_size(magnet);
@@ -129,43 +125,44 @@ bits = [
   if (check(BIT_14)) let(r=BIT_14)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
   if (check(BIT_15)) let(r=BIT_15)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
 ];
-// let(bit=bits[0]) holder(bitHolder(bit[0],bit[1],bit[2]));
-strip($FL_TRACE=TRACE);
+// let(bit=bits[0]) echo($FL_$FL_ADD=$FL_ADD) holder(FL_ADD,bitHolder(bit[0],bit[1],bit[2]));
+strip();
 
 module strip() {
   if (bits) {
-  strip = let(
-    bhs   = [for(bit=bits) bitHolder(bit[0],bit[1],bit[2],magnet)],
-    bbox  = lay_bb_corners(axis=+X,types=bhs),
-    size  = bbox[1]-bbox[0]
-  ) [ 
-      ["Bit holders",  bhs],
-      ["Bit number",  len(bhs)],
-      fl_bb_corners(value=bbox),
-    ];
-  // fl_trace("strip object",strip);
-  
-  //**** FL_ADD ***************************************************************
-  fl_modifier(ADD) difference() {
-    fl_color($FL_FILAMENT) hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders")) 
-      holder(FL_ADD,$item);
-    fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders")) 
-      holder(FL_DRILL,$item,$FL_DRILL=DRILL);
-  }
-  //**** FL_ASSEMBLY **********************************************************
-  fl_modifier(ASSEMBLY)
-    fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
-      holder(FL_ASSEMBLY,$item,$FL_TRACE=TRACE);
+    strip = let(
+      bhs   = [for(bit=bits) bitHolder(bit[0],bit[1],bit[2],magnet)],
+      bbox  = lay_bb_corners(axis=+X,types=bhs),
+      size  = bbox[1]-bbox[0]
+    ) [
+        ["Bit holders",  bhs],
+        ["Bit number",  len(bhs)],
+        fl_bb_corners(value=bbox),
+      ];
+    // fl_trace("strip object",strip);
 
-  fl_modifier(BBOX) 
-    fl_bb_add(fl_bb_corners(strip));
-}
+    //**** FL_ADD ***************************************************************
+    // $FL_ADD="ON";
+    fl_modifier($FL_ADD) difference() {
+      fl_color($FL_FILAMENT) hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
+        holder(FL_ADD,$item);
+      fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
+        holder(FL_DRILL,$item);
+    }
+    //**** FL_ASSEMBLY **********************************************************
+    fl_modifier($FL_ASSEMBLY)
+      fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
+        holder(FL_ASSEMBLY,$item);
+
+    fl_modifier($FL_BBOX)
+      fl_bb_add(fl_bb_corners(strip));
+  }
 }
 
 module holder(verbs,item) {
   assert(verbs!=undef);
   assert(item!=undef);
-  
+
   module bit(gross=false) {
     assert(is_bool(gross));
     d = bit[0];
@@ -177,8 +174,19 @@ module holder(verbs,item) {
   }
 
   module box() {
-    linear_extrude(h) 
+    linear_extrude(h)
       fl_square(size=size,corners=[0,0,d/2,d/2],quadrant=+X+Y);
+  }
+
+  module do_drill() {
+    // bit
+    multmatrix(Mbit)
+      for(i=[0:card-1]) translate(-Y(i*(T_hole+d)))
+        bit(gross=true);
+    // magnet
+    multmatrix(Mmagnet) {
+      fl_magnet(FL_FOOTPRINT,magnet,fp_gross=TOLERANCE,octant=+X,direction=[-Y,90]);
+    }
   }
 
   bbox    = fl_bb_corners(item);
@@ -197,28 +205,17 @@ module holder(verbs,item) {
   fl_trace("bit",bit);
   fl_trace("magnet",magnet);
 
-  module do_drill() {
-    // bit 
-    multmatrix(Mbit)
-      for(i=[0:card-1]) translate(-Y(i*(T_hole+d))) 
-        bit(gross=true);
-    // magnet
-    multmatrix(Mmagnet) {
-      fl_magnet(FL_FOOTPRINT,magnet,fp_gross=TOLERANCE,octant=+X,direction=[-Y,90]);
-    }
-  }
-
-  fl_parse(verbs) {
+  fl_manage(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) fl_color($FL_FILAMENT)
         multmatrix(Mbox) box();
     } else if ($verb==FL_BBOX) {
-      fl_modifier(BBOX) fl_bb_add(bbox);
+      fl_modifier($FL_BBOX) fl_bb_add(bbox);
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($FL_ASSEMBLY) fl_color("silver") {
-        // bit 
+        // bit
         multmatrix(Mbit)
-          for(i=[0:card-1]) translate(-Y(i*(T_hole+d))) 
+          for(i=[0:card-1]) translate(-Y(i*(T_hole+d)))
             bit();
         // magnet
         multmatrix(Mmagnet)

@@ -30,3 +30,16 @@ let(r=fl_str_2axes([]))                   assert(r==[],r);
 let(r=fl_str_2axes(["+x","-Z"]))          assert(r==[[1,0,0],[0,0,-1]],r);
 let(r=fl_str_2axes(["+x","pippo","-Z"]))  assert(r==-1,r);
 
+
+let(
+  in  = ["one","two",["three","four"],"five","six",["seven","eight"]],
+  out = ["one", "two", "three", "four", "five", "six", "seven", "eight"]
+) assert(fl_list_flatten(in)==out);
+let(
+  in  = [1,2,[3,4],5,6,[7,8]],
+  out = [1, 2, 3, 4, 5, 6, 7, 8]
+) assert(fl_list_flatten(in)==out);
+let(
+  in  = [1,2,[3,4],[5,6,[7,8,["nine",10]]]],
+  out = [1, 2, 3, 4, 5, 6, 7, 8, "nine", 10]
+) assert(fl_list_flatten(in)==out);

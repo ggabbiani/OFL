@@ -29,16 +29,15 @@ module fl_vFillet(
   direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
   octant      // when undef native positioning is used (+Z)
   ) {
-  assert(verbs!=undef,str("verbs=",verbs));
   default = [+Z,+X];  // default director and rotor
   rx      = r ? r : rx;
   ry      = r ? r : ry;
   bbox    = [[0,0,-h/2],[rx,ry,h/2]];
   M       = octant!=undef     ? fl_octant(octant=octant,bbox=bbox) : I;
   D       = direction!=undef  ? fl_direction(direction=direction,default=default) : I;
-  multmatrix(D)
-    multmatrix(M) fl_parse(verbs)
-        fl_fillet(verbs,r,h,rx,ry,octant=+X);
+
+  fl_manage(verbs,M,D)
+    fl_fillet(verbs,r,h,rx,ry,octant=+X);
 }
 
 module fl_hFillet(
@@ -49,11 +48,6 @@ module fl_hFillet(
   direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
   octant      // when undef native positioning is used (+Z)
   ) {
-  assert(verbs!=undef,str("verbs=",verbs));
-
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   default = [+Z,+X];  // default director and rotor
   rx      = r ? r : rx;
   ry      = r ? r : ry;
@@ -68,18 +62,15 @@ module fl_hFillet(
         fl_fillet(FL_ADD,r,h,rx,ry);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
-    }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=1.1*max(size));
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD)
+      fl_modifier($FL_ADD) do_add();
+    else if ($verb==FL_BBOX)
+      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+    else
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+
+    fl_modifier($FL_AXES) fl_axes(size=1.1*max(size));
   }
 }
 
@@ -91,11 +82,6 @@ module fl_fillet(
   direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
   octant      // when undef native positioning is used (+Z)
   ) {
-  assert(verbs!=undef,str("verbs=",verbs));
-
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   default = [+Z,+X];  // default director and rotor
   rx      = r ? r : rx;
   ry      = r ? r : ry;
@@ -114,18 +100,15 @@ module fl_fillet(
     }
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_cube(size=size);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
-    }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD)
+      fl_modifier($FL_ADD) do_add();
+    else if ($verb==FL_BBOX)
+      fl_modifier($FL_BBOX) fl_cube(size=size);
+    else
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -148,8 +131,6 @@ module fl_90DegFillet(
   octant,             // 3d placement, children positioning when undef
 ) {
   assert(child_bbox!=undef);
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   function rad(x) = r - sqrt(pow(r,2) - pow(x - r, 2));
 
@@ -171,17 +152,13 @@ module fl_90DegFillet(
       }
     }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add() children();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) translate(bbox[0]) fl_cube(size=size);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
-    }
-    if (axes)
-      fl_axes(size=size);
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD)
+      fl_modifier($FL_ADD) do_add() children();
+    else if ($verb==FL_BBOX)
+      fl_modifier($FL_BBOX) translate(bbox[0]) fl_cube(size=size);
+    else
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    fl_axes(size=size);
   }
 }

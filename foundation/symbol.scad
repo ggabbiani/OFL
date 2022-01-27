@@ -42,9 +42,6 @@ module fl_symbol(
   ) {
   assert(verbs!=undef);
 
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   sz      = size==undef ? [0.5,0.5,0.5] : is_list(size) ? size : [size,size,size];
   d1      = sz.x * 2/3;
   d2      = 0;
@@ -65,13 +62,12 @@ module fl_symbol(
     %fl_cube(octant=symbol=="plug"?-FL_Z:+FL_Z,size=[sz.x,sz.y,0.1]);
   }
 
-  fl_parse(verbs) {
+  fl_manage(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) do_add();
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
-  if (axes)
     fl_modifier($FL_AXES) fl_axes(size=sz);
+  }
 }

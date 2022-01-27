@@ -66,22 +66,17 @@ N     = 3; // [3:10]
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-    if (BBOX!="OFF")  FL_BBOX,
-  ];
-  fl_trace("PLACE_NATIVE",PLACE_NATIVE);
-  fl_trace("octant",octant);
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+verbs=[
+  if (ADD!="OFF")   FL_ADD,
+  if (AXES!="OFF")  FL_AXES,
+  if (BBOX!="OFF")  FL_BBOX,
+];
+fl_trace("PLACE_NATIVE",PLACE_NATIVE);
+fl_trace("octant",octant);
 
-  $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;
-  if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,octant=octant,direction=direction);
-  else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,octant=octant,direction=direction);
-  else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,octant=octant,direction=direction);
-  else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=SIZE.x,l2=SIZE.y,h=SIZE.z,octant=octant,direction=direction);
-}
-
-__test__();
+if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=SIZE.x,l2=SIZE.y,h=SIZE.z,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);

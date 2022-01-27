@@ -41,20 +41,15 @@ ALIGN       = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
 
-module __test__() {
-  data    = [
-    ["zero",    [1,11,111]],
-    ["first",   [2,22,1]],
-    ["second",  [3,33,1]],
-  ];
-  pattern = [0,1,1,2];
+data    = [
+  ["zero",    [1,11,111]],
+  ["first",   [2,22,1]],
+  ["second",  [3,33,1]],
+];
+pattern = [0,1,1,2];
 
-  fl_trace("result",fl_algo_pattern(10,pattern,data));
-  fl_algo_pattern(10,pattern,data,deployment=DEPLOYMENT,octant=OCTANT,align=ALIGN);
+fl_trace("result",fl_algo_pattern(10,pattern,data));
+fl_algo_pattern(10,pattern,data,deployment=DEPLOYMENT,octant=OCTANT,align=ALIGN);
 
-  if (FL_PLANES)
-    fl_planes(size=200);
-
-}
-
-__test__();
+if (FL_PLANES)
+  fl_planes(size=200);

@@ -133,15 +133,18 @@ function fl_Z(z) = [0,0,z];
 // TODO: make a case insensitive option
 function fl_isSet(flag,list) = search([flag],list)!=[[]];
 
-FL_ADD        = "FL_ADD adds shapes to scene.";
-FL_ASSEMBLY   = "FL_ASSEMBLY layout of predefined auxiliary shapes (like predefined screws).";
+// verbs
+FL_ADD        = "FL_ADD add base shape (no components nor screws)";
+FL_ASSEMBLY   = "FL_ASSEMBLY add predefined component shape(s)";
 FL_AXES       = "FL_AXES draw of local reference axes.";
 FL_BBOX       = "FL_BBOX adds a bounding box containing the object.";
 FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (±X,±Y,±Z).";
+FL_DRAW       = [FL_ADD,FL_ASSEMBLY];
 FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter).";
 FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.";
 FL_HOLDERS    = "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**";
 FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws).";
+FL_MOUNT      = "FL_MOUNT mount shape through predefined screws";
 FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
 FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
 FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
@@ -156,23 +159,23 @@ $FL_DRILL     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_FOOTPRINT = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_HOLDERS   = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_LAYOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_PAYLOAD   = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /*
  * Modifier module for verbs.
  */
 module fl_modifier(
-  behaviour // OFF,ON,ONLY,DEBUG,TRANSPARENT
+  // "OFF","ON","ONLY","DEBUG","TRANSPARENT"
+  behaviour
 ) {
-  if (behaviour==undef||behaviour=="ON")   children();
+  if      (behaviour=="ON")                children();
   else if (behaviour=="OFF")              *children();
   else if (behaviour=="ONLY")             !children();
   else if (behaviour=="DEBUG")            #children();
   else if (behaviour=="TRANSPARENT")      %children();
   else assert(false,str("Unknown behaviour ('",behaviour,"')."));
 }
-
-$FL_FILAMENT  = "DodgerBlue";
 
 // deprecated function call
 function fl_deprecated(bad,value,replacement) = let(
@@ -295,10 +298,38 @@ function fl_has(type,property,check=function(value) true) =
   let(i=search([property],type))
   i != [[]] ? assert(len(type[i[0]])==2,"Malformed type") check(type[i[0]][1]) : false;
 
-// TODO: add a context variable stating current $verb modifier (could be $modifier)
+module fl_manage(verbs,placement,direction) {
+  module orient() {
+    if (direction)
+      multmatrix(direction) children();
+    else
+      children();
+  }
+  module place() {
+    if (placement)
+      multmatrix(placement) children();
+    else
+      children();
+  }
+  orient() fl_context(verbs) {
+    place() fl_parse($verbs) children(0);
+    if ($children>1 && $axes) fl_modifier($FL_AXES) children(1);
+  }
+}
+
+module fl_context(vlist) {
+  assert(is_list(vlist)||is_string(vlist),vlist);
+  flat  = fl_list_flatten(is_list(vlist)?vlist:[vlist]);
+  // TODO: add a context variable stating current $verb modifier (could be $modifier)
+  let(
+    $axes   = fl_list_has(flat,FL_AXES),
+    $verbs  = fl_list_filter(flat,FL_EXCLUDE_ANY,FL_AXES)
+  ) children();
+}
+
 module fl_parse(verbs) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  for($verb=is_list(verbs) ? verbs : [verbs]) {
+  for($verb=verbs) {
     tokens = split($verb);
     fl_trace(tokens[0]);
     if (fl_isSet("**DEPRECATED**",tokens)) {
@@ -435,6 +466,7 @@ module fl_color(color,alpha=1) {
   module do() {color(palette(color),alpha) children();}
 
   if ($FL_DEBUG) #do() children();
+  // if (!is_undef($FL_DEBUG) && $FL_DEBUG) #children();
   else do() children();
 }
 
@@ -476,50 +508,8 @@ function fl_transform(
   assert(is_list(v) && len(v)>2,str("Bad vector v(",v,")"))
   fl_3(M * fl_4(v));
 
-//**** list utils *************************************************************
-
-FL_EXCLUDE_ANY  = ["AND",function(one,other) one!=other];
-FL_INCLUDE_ALL  = ["OR", function(one,other) one==other];
-
-function fl_list_filter(list,operator,compare,__result__=[],__first__=true) =
-// echo(list=list,compare=compare,operator=operator,__result__=__result__,__first__=__first__)
-assert(is_list(list)||is_string(list),list)
-assert(is_list(compare)||is_string(compare),compare)
-let(
-  s_list  = is_list(list) ? list : [list],
-  c_list  = is_string(compare) ? [compare] : compare,
-  len     = len(c_list),
-  logic   = operator[0],
-  f       = operator[1],
-  string  = c_list[0],
-  match   = [for(item=(logic=="OR" || __first__) ? s_list:__result__) if (f(item,string)) item],
-  result  = (logic=="OR") ? concat(__result__,match) : match
-)
-// echo(match=match, result=result)
-len==1 ? result : fl_list_filter(s_list,operator,[for(i=[1:len-1]) c_list[i]],result,false);
-
-function fl_list_has(list,item) = len(fl_list_filter(list,FL_INCLUDE_ALL,item))>0;
-
 //**** math utils *************************************************************
 
 function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
 function fl_accum(v)          = [for(p=v) 1]*v;
 function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
-
-//**** internally used 'lazy' math ************************************************
-
-// function _sum_(x,y) = (x!=undef && y!=undef) ? x + y : undef;
-// function _sub_(x,y) = (x!=undef && y!=undef) ? x - y : undef;
-// function _mul_(x,y) = (x!=undef && y!=undef) ? x * y : undef;
-// function _div_(x,y) = (x!=undef && y!=undef) ? x / y : undef;
-// function _lst_(l)   = fl_accum(l)!=undef ? l : undef;
-
-// function fl_synonymous(syns) =
-//   echo(syns=syns)
-//   syns==[]
-//   ? echo("Empty --> UNDEF") undef
-//   : syns[0]!=undef
-//     ? echo(str("First OK --> syns[0]=",syns[0])) syns[0]
-//     : len(syns)==1
-//       ? echo("Last KO --> UNDEF") undef
-//       : echo("Current KO --> RECURSION") fl_synonymous([for(i=[1:len(syns)-1]) syns[i]]);

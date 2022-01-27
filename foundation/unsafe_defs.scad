@@ -21,7 +21,7 @@
 
 include <defs.scad>
 
-assert(!$FL_SAFE,"Unsafe definitions are not allowed when $FL_SAFE is true!");
+assert(is_undef($FL_SAFE)||!$FL_SAFE,"Unsafe definitions are not allowed when $FL_SAFE is true!");
 
 X = FL_X;
 Y = FL_Y;

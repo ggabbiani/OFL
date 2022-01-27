@@ -31,12 +31,8 @@ module fl_tube(
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
   assert(h!=undef);
   assert(thick!=undef);
-
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   obase = r ? [r,r] : d ? [d/2,d/2] : base;
   assert(obase);
@@ -57,30 +53,17 @@ module fl_tube(
     linear_extrude(height=h)
       fl_ellipse(e=obase);
   }
-  module do_assembly() {}
-  module do_layout() {}
-  module do_drill() {}
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout()
-          children();
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) do_fprint();
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY);
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs) {
+    if ($verb==FL_ADD) {
+      fl_modifier($FL_ADD) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($FL_FOOTPRINT) do_fprint();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
+    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

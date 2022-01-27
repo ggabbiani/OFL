@@ -30,15 +30,34 @@ Any action that modifies the rendering of the scene is called 'Verb'.
 
 A number of predefined verbs are available:
 
-* **FL_ADD** - add shapes to scene;
-* **FL_ASSEMBLY** - layout of predefined auxiliary shapes (like screws and/or components);
-* **FL_AXES** - draw of local (*Object* relative) reference axes;
-* **FL_BBOX** - adds a bounding box containing the *Object*;
-* **FL_CUTOUT** - layout of predefined cutout shapes along any of the Cartesian axes;
-* **FL_DRILL** - layout of predefined drill shapes (generally holes);
+### Shape verbs
+
+* **FL_ADD** - add base shape (no components nor screws);
+* **FL_ASSEMBLY** - add predefined component shape(s);
+* **FL_DRAW** - composite verb, add base and components shapes;
+* **FL_MOUNT** - add mounting accessories shapes;
 * **FL_FOOTPRINT** - adds an *Object* footprint to scene (usually a simplified FL_ADD);
-* **FL_LAYOUT** - layout of children modules (like user defined accessories);
-* **FL_PAYLOAD** - a box representing the payload of the shape (when supported).
+
+### Bounding block verbs
+
+* **FL_PAYLOAD** - components payload bounding box;
+* **FL_BBOX** - assembled shape bounding box;
+
+### Other verbs
+
+* **FL_AXES** - draw local reference axes;
+* **FL_CUTOUT** - layout of predefined cutout shapes (±X,±Y,±Z);
+* **FL_DRILL** - layout of predefined children shapes;
+* **FL_LAYOUT** - layout of custom children shapes;
+
+Relations between draw and bounding box verbs:
+
+| Draw verbs  | BB verbs   |
+| ----------- | ---------- |
+| FL_ADD      | -          |
+| FL_ASSEMBLY | FL_PAYLOAD |
+| FL_DRAW     | FL_BBOX    |
+| FL_MOUNT    | -          |
 
 All *engine* and *primitive* API signatures are standardized in order to respond to the same verbs with the same behaviour/semantic.
 
@@ -51,7 +70,7 @@ When a verb is passed as a single value the verb will be trivially executed.
     include <OFL/foundation/incs.scad>
     include <OFL/foundation/3d.scad>
 
-    // single verb primitive invocation 
+    // single verb primitive invocation
     fl_torus(FL_ADD,a=2,b=3);
     ^         ^     ^   ^
     |         |     |   |
@@ -66,7 +85,7 @@ When a verb is passed as a single value the verb will be trivially executed.
     include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
-    // single verb engine invocation 
+    // single verb engine invocation
     fl_magnet(FL_ADD,FL_MAG_M4_CS_32x6,...);
     ^         ^      ^
     |         |      |
@@ -76,17 +95,16 @@ When a verb is passed as a single value the verb will be trivially executed.
     |
     +---< engine
 
-
 ![Single verb engine invocation](docs/fig-0.png)
 
 ### Multiple verb invocation
 
  When a list of *verbs* is passed, it wil be executed sequentially, as in the following example
- 
+
     include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
-    
-    // multiple verb engine invocation 
+
+    // multiple verb engine invocation
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6);
     ^         ^                                    ^
     |         |                                    |
@@ -97,7 +115,7 @@ When a verb is passed as a single value the verb will be trivially executed.
     +---> engine
 
 so that same invokation of the same primitive will actually perform the following actions:
- 
+
  1. add of a magnet shape to the scene (FL_ADD);
  2. default assembly of its accessories (FL_ASSEMBLY);
  3. draw of local reference axes (FL_AXES);
@@ -122,13 +140,15 @@ The list of modifier variables with their corresponding defaults are listed belo
 | $FL_FOOTPRINT | FL_FOOTPRINT  | "ON"          |
 | $FL_HOLDERS   | FL_HOLDERS    | "ON"          |
 | $FL_LAYOUT    | FL_LAYOUT     | "ON"          |
-| $FL_PAYLOAD   | FL_PAYLOAD    | "DEBUG"       |
+| $FL_MOUNT     | FL_MOUNT      | "ON"          |
+| $FL_PAYLOAD   | FL_PAYLOAD    | "TRANSPARENT" |
 
 The possible values for these special variables are the following:
 
 | Value       | Description                             |
 | ----------- | --------------------------------------- |
-| ON\|undef   | shape is added without modifications    |
+| undef       | default value used                      |
+| ON          | shape is added without modifications    |
 | OFF         | shape is discarded                      |
 | ONLY        | OpenSCAD root modifier is applied       |
 | DEBUG       | OpenSCAD debug modifier is applied      |
@@ -138,15 +158,15 @@ In the previous example we can modify the rendering of the FL_AXES verb
 
     include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
-    
-    // multiple verb engine invocation 
+
+    // multiple verb engine invocation
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,$FL_AXES="DEBUG");
     ^         ^                                    ^                 ^         ^
     |         |                                    |                 |         |
     |         |                                    |                 |         +---> DEBUG rendering
-    |         |                                    |                 |          
-    |         |                                    |                 +---> runtime modifier for FL_AXES verb        
-    |         |                                    |                           
+    |         |                                    |                 |
+    |         |                                    |                 +---> runtime modifier for FL_AXES verb
+    |         |                                    |
     |         |                                    +---> object
     |         |
     |         +---> verb list executed sequentially
@@ -193,10 +213,10 @@ We can pass this value to our example for placing the object in the desired octa
     $FL_SAFE  = false;
 
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=+X+Y+Z);
-    ^         ^                                    ^                 ^         
-    |         |                                    |                 |          
+    ^         ^                                    ^                 ^
+    |         |                                    |                 |
     |         |                                    |                 +---> octant expressed as [1,1,1] ⇒ first octant
-    |         |                                    |                           
+    |         |                                    |
     |         |                                    +---> object
     |         |
     |         +---> verb list executed sequentially
@@ -215,10 +235,10 @@ If we want the object centered along the X axis, the octant will be [0,1,1] ⇒ 
     $FL_SAFE  = false;
 
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=+Y+Z);
-    ^         ^                                    ^                 ^         
-    |         |                                    |                 |          
+    ^         ^                                    ^                 ^
+    |         |                                    |                 |
     |         |                                    |                 +---> octant expressed as [0,1,1] ⇒ x==0 means 'centered'
-    |         |                                    |                           
+    |         |                                    |
     |         |                                    +---> object
     |         |
     |         +---> verb list executed sequentially
@@ -284,7 +304,7 @@ It is possible to combine the change of direction with a rotation around the new
 
 ## API naming convention
 
-In an attempt to avoid name collision between OFL and any other library, every client accessible API is prefixed with **'fl_'** while the rest is in **mixed case** (first letter lowercase and first letter of each internal word capitalised). The only exception are constructors that - after the 'fl_' prefix - are in **camel case**. 
+In an attempt to avoid name collision between OFL and any other library, every client accessible API is prefixed with **'fl_'** while the rest is in **mixed case** (first letter lowercase and first letter of each internal word capitalised). The only exception are constructors that - after the 'fl_' prefix - are in **camel case**.
 
 APIs used internally a file (i.e. not to be used by clients) are prefixed and terminated by **'__'**.
 
@@ -292,16 +312,16 @@ The following example shows some of the APIs for a countersink component, with a
 
     // Constructor
     function fl_Countersink(name,description,d,angle) = ...
-    
+
     // Engine
     module fl_countersink(verbs,type,direction,octant) { ...
-    
+
     // Getter
     function fl_cs_angle(type) = ...
-    
+
     // internal test module NOT to be used by clients
     module __test__() { ...
-    
+
     // internal function  NOT to be used by clients
     function __point__(alpha) = ...
 
@@ -316,11 +336,19 @@ For similar reasons all global constants used in OFL are prefixed with **'FL_'**
     FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z).";
     FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter).";
     FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.";
-    FL_HOLDERS    = "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**";
     FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws).";
     FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
-    FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
-    FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
+
+## $pecial variables
+
+$pecial variables used in OFL follow the same naming convention used for constants.
+
+| Name       | Default | Semantic                                                  |
+| ---------- | ------- | --------------------------------------------------------- |
+| $FL_DEBUG  | false   | May trigger debug statement in client modules / functions |
+| $FL_RENDER | false   | When true, disables PREVIEW corrections like FL_NIL       |
+| $FL_SAFE   | false   | When true, unsafe definitions are not allowed             |
+| $FL_TRACE  | false   | When true, fl_trace() messages are turned on              |
 
 ## File name convention
 
