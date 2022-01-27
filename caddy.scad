@@ -20,12 +20,11 @@
  */
 
 include <foundation/unsafe_defs.scad>
-include <foundation/incs.scad>
-include <vitamins/incs.scad>
+include <foundation/fillet.scad>
 
 /*
- * Builds a caddy around the passed object «type». 
- * Even if not mandatory - when passed - children will be used during 
+ * Builds a caddy around the passed object «type».
+ * Even if not mandatory - when passed - children will be used during
  * FL_ADD (for drilling), FL_ASSEMBLY (for rendering) and FL_LAYOUT.
  *
  * Children must implement the following verbs:
@@ -44,7 +43,7 @@ module fl_caddy(
   type,
   thick,                    // walls thickness in the fixed form: [[-x,+x],[-y,+y],[-z+z]]
                             // Passed as scalar means same thickness for all the six walls:
-                            // [[«thick»,«thick»],[«thick»,«thick»],[«thick»«thick»]]. 
+                            // [[«thick»,«thick»],[«thick»,«thick»],[«thick»«thick»]].
                             // examples:
                             // thick=[[0,2.5],[0,0],[5,0]]
                             // thick=2.5
@@ -92,7 +91,7 @@ module fl_caddy(
     fl_trace("faces",faces);
     difference() {
       translate(bbox[0]) {
-        for(f=faces) 
+        for(f=faces)
           if (f==+FL_X) {
             translate(+fl_X(size.x)) fl_cube(size=[thick.x[1],size.y,size.z],octant=-FL_X+FL_Y+FL_Z);
           } else if (f==-FL_X) {
@@ -141,23 +140,24 @@ module fl_caddy(
   }
 
   module do_layout() {
-    // enrich children context with wall's thickness
-    $thick  = thick+t_deltas;
-    fl_trace("$thick",$thick);
-    children();
+    let(
+      // enrich children context with wall's thickness
+      $thick  = thick+t_deltas
+    ) children();
   }
 
   multmatrix(D) {
     multmatrix(M) fl_parse(verbs) {
       if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) 
+        fl_modifier($FL_ADD)
           fl_color($FL_FILAMENT)
             do_add() children();
 
       } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(corners=bbox);
+        fl_modifier($FL_BBOX) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
 
       } else if ($verb==FL_LAYOUT) {
+        // FIXME: apply right $verbs context value during layout
         fl_modifier($FL_LAYOUT) do_layout()
           children();
 
