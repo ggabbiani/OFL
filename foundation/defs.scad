@@ -34,7 +34,7 @@ function fl_versionNumber() = let(
 // May trigger debug statement in client modules / functions
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER  = !$preview;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
