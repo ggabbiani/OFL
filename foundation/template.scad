@@ -48,7 +48,7 @@ module stub(
       if ($verb==FL_ADD) {
         fl_modifier($FL_ADD) fl_cube(size=size);
       } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_cube(size=size);
+        fl_modifier($FL_BBOX) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
       } else if ($verb==FL_LAYOUT) {
         fl_modifier($FL_LAYOUT) do_layout()
           children();
