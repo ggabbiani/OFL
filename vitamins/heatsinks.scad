@@ -180,6 +180,7 @@ module pimoroni(
   }
 
   module do_layout() {
+    fl_trace("$FL_LAYOUT",$FL_LAYOUT);
     translate(+Z(bottom_sz().z+pcb_t))
       fl_pcb(FL_LAYOUT,rpi4,thick=bot_base_t+bot_holder_t)
         translate(-Z(pcb_t+bot_base_t+bot_holder_t))
@@ -187,7 +188,7 @@ module pimoroni(
   }
 
   module do_drill() {
-    do_layout()
+    do_layout($FL_LAYOUT=$FL_DRILL)
       fl_cylinder(h=thick+bot_fluting_t,r=screw_radius(screw),octant=$normal);
   }
 
@@ -204,12 +205,14 @@ module pimoroni(
           children();
 
       } else if ($verb==FL_FOOTPRINT) {
+        fl_trace("$FL_FOOTPRINT",$FL_FOOTPRINT);
         fl_modifier($FL_FOOTPRINT) fl_bb_add(bbox);
 
       } else if ($verb==FL_ASSEMBLY) {
         fl_modifier($FL_ASSEMBLY) do_assembly();
 
       } else if ($verb==FL_DRILL) {
+        fl_trace("$FL_DRILL",$FL_DRILL);
         fl_modifier($FL_DRILL) do_drill();
 
       } else {
