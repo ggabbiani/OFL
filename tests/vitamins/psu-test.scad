@@ -82,19 +82,15 @@ verbs = [
 ];
 
 // target object(s)
-single  = SHOW=="PSU_MeanWell_RS_25_5"  ? PSU_MeanWell_RS_25_5 
-        : SHOW=="PSU_MeanWell_RS_15_5"  ? PSU_MeanWell_RS_15_5 
+single  = SHOW=="PSU_MeanWell_RS_25_5"  ? PSU_MeanWell_RS_25_5
+        : SHOW=="PSU_MeanWell_RS_15_5"  ? PSU_MeanWell_RS_15_5
         : undef;
 
 // $FL_CUTOUT=CUTOUT;$FL_FOOTPRINT=FPRINT;$FL_PAYLOAD=PLOAD;
 
 if (single)
-  ofl_psu(verbs,single,thick=T,assembly=SCREW_MODE,octant=octant,direction=direction,
-  $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL);
+  ofl_psu(verbs,single,thick=T,assembly=SCREW_MODE,octant=octant,direction=direction);
 else
-  fl_layout(FL_LAYOUT,+X,20,FL_PSU_DICT) 
+  fl_layout(FL_LAYOUT,+X,20,FL_PSU_DICT)
     let(type=FL_PSU_DICT[$i])
-      ofl_psu(verbs,type,thick=T,assembly=SCREW_MODE,octant=octant,direction=direction,
-        $FL_TRACE=TRACE,
-        $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL);
+      ofl_psu(verbs,type,thick=T,assembly=SCREW_MODE,octant=octant,direction=direction);

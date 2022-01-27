@@ -20,7 +20,7 @@
  */
 include <../../foundation/unsafe_defs.scad>
 // include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+include <../../vitamins/pcbs.scad>
 
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/pcbs.scad>

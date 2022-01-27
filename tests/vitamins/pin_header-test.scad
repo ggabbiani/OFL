@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 // include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+include <../../vitamins/pin_headers.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

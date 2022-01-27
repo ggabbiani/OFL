@@ -19,7 +19,10 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 // include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+include <../../vitamins/usbs.scad>
+
+include <NopSCADlib/global_defs.scad>
+use     <NopSCADlib/utils/layout.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

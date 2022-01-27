@@ -20,7 +20,7 @@
  */
 
 // include <../../foundation/incs.scad>
-include <../../vitamins/incs.scad>
+include <../../vitamins/spdts.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -28,7 +28,7 @@ $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
-$FL_SAFE    = true;
+$FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
@@ -58,23 +58,15 @@ OCTANT        = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-    if (BBOX!="OFF")  FL_BBOX,
-    if (DRILL!="OFF") FL_DRILL,
-  ];
-  fl_trace("PLACE_NATIVE",PLACE_NATIVE);
-  fl_trace("octant",octant);
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+verbs=[
+  if (ADD!="OFF")   FL_ADD,
+  if (AXES!="OFF")  FL_AXES,
+  if (BBOX!="OFF")  FL_BBOX,
+  if (DRILL!="OFF") FL_DRILL,
+];
+fl_trace("PLACE_NATIVE",PLACE_NATIVE);
+fl_trace("octant",octant);
 
-  // $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_DRILL=DRILL;
-
-  fl_spdt(verbs,FL_SODAL_SPDT,octant=octant,direction=direction,
-      $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL);
-}
-
-
-__test__();
+fl_spdt(verbs,FL_SODAL_SPDT,octant=octant,direction=direction);

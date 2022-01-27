@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../foundation/defs.scad>
+include <../foundation/util.scad>
 
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/pin_headers.scad>
@@ -40,7 +40,7 @@ function fl_phdr_geometry(type,value)  = fl_property(type,"phdr/size in [cols,ro
 function fl_phdr_nopBBox(
   nop,      // NopSCADlib pin header
   geometry  // pin header size in [cols,rows]
-) = 
+) =
   let(
     w = hdr_pitch(nop)*geometry.x,
     d = hdr_pitch(nop)*geometry.y,
@@ -67,7 +67,7 @@ function fl_phdr_new(
   [
     assert(is_string(name)) fl_name(value=name),
     assert(nop!=undef) fl_nopSCADlib(value=nop),
-    if (description!=undef) 
+    if (description!=undef)
       assert(is_string(description)) fl_description(value=description),
     fl_phdr_geometry(value=geometry),
     fl_bb_corners(value=bbox),
@@ -79,4 +79,67 @@ FL_PHDR_DICT = [
   FL_PHDR_RPIGPIO,
 ];
 
-use     <pin_header.scad>
+module fl_pinHeader(
+  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  type,
+  nop,                  // NopSCADlib header
+  geometry    = [1,1],  // pin header size in [cols,rows]
+  smt         = false,  // surface mount
+  right_angle = false,
+  color,
+  cut_thick,            // thickness for FL_CUTOUT
+  cut_tolerance=0,      // tolerance used during FL_CUTOUT
+  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  octant                // when undef native positioning is used
+) {
+  // echo(nop=nop);
+  // echo(type=type);
+  assert(is_list(verbs)||is_string(verbs),verbs);
+  // FIXME: when called from fl_pcb the following assert fails
+  // assert(fl_XOR(nop!=undef,type!=undef));
+
+  axes  = fl_list_has(verbs,FL_AXES);
+  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
+  nop       = type!=undef ? fl_nopSCADlib(type) : nop;
+  geometry  = type!=undef ? fl_phdr_geometry(type) : geometry;
+  bbox      =  type!=undef ? fl_bb_corners(type) : fl_phdr_nopBBox(nop,geometry);
+  size      = bbox[1]-bbox[0];
+  cols      = geometry.x;
+  rows      = geometry.y;
+
+  D     = direction ? fl_direction(direction=direction,default=[Z,X])  : FL_I;
+  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
+
+  fl_trace("hdr_pin_length",hdr_pin_length(nop));
+  fl_trace("hdr_pin_below",hdr_pin_below(nop));
+  fl_trace("hdr_pin_width",hdr_pin_width(nop));
+  fl_trace("hdr_box_size",hdr_box_size(nop));
+  fl_trace("hdr_box_wall",hdr_box_wall(nop));
+  fl_trace("hdr_pitch",hdr_pitch(nop));
+
+  module do_add() {
+    pin_header(nop, cols, rows,smt=smt,right_angle=right_angle,colour=color);
+  }
+  module do_layout() {}
+  module do_drill() {}
+
+  multmatrix(D) {
+    multmatrix(M) fl_parse(verbs) {
+      if ($verb==FL_ADD) {
+        fl_modifier($FL_ADD) do_add();
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      } else if ($verb==FL_CUTOUT) {
+        assert(cut_thick!=undef);
+        fl_modifier($FL_CUTOUT)
+          fl_cutout(len=cut_thick,delta=cut_tolerance)
+            do_add();
+      } else {
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      }
+    }
+    if (axes)
+      fl_modifier($FL_AXES) fl_axes(size=size);
+  }
+}

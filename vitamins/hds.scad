@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <satas.scad>
+include <sata.scad>
 
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>

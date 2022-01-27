@@ -19,11 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 include <../foundation/unsafe_defs.scad>
-include <../foundation/defs.scad>
-
-use     <../foundation/3d.scad>
-use     <../foundation/layout.scad>
-// use     <../foundation/placement.scad>
+include <../foundation/3d.scad>
 
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
