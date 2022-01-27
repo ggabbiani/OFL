@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-// include <../../foundation/incs.scad>
+
 include <../../vitamins/heatsinks.scad>
 
 $fn         = 50;           // [3:100]
@@ -75,7 +75,7 @@ verbs=[
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
   if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FPRINT!="OFF")    FL_FOOTPRINT,
+  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
 ];
 
