@@ -147,16 +147,16 @@ FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
 FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
 
 // Runtime behaviour defaults
-$FL_ADD       = "ON";
-$FL_ASSEMBLY  = "ON";
-$FL_AXES      = "ON";
-$FL_BBOX      = "TRANSPARENT";
-$FL_CUTOUT    = "ON";
-$FL_DRILL     = "ON";
-$FL_FOOTPRINT = "ON";
-$FL_HOLDERS   = "ON";
-$FL_LAYOUT    = "ON";
-$FL_PAYLOAD   = "DEBUG";
+$FL_ADD       = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "TRANSPARENT";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_DRILL     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_HOLDERS   = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_LAYOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD   = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /*
  * Modifier module for verbs.
