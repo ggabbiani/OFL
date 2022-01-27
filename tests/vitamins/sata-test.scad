@@ -37,15 +37,15 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -66,8 +66,6 @@ PART            = "data plug";  // ["data plug", "power plug", "power data plug"
 SW_SHELL        = true;
 CONTACTS        = true;
 CONNECTORS      = false;
-// tolerance duing FL_FOOTPRINT (fl_JNgauge=0.15)
-TOLERANCE       = 0.15;   // [0:0.05:2]
 
 /* [Hidden] */
 
@@ -76,28 +74,18 @@ fl_trace("OFL version", fl_version());
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (AXES!="OFF")      FL_AXES,
-  if (BBOX!="OFF")      FL_BBOX,
-  if (FPRINT!="OFF")    FL_FOOTPRINT,
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_FPRINT!="OFF")    FL_FOOTPRINT,
 ];
 
-// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-
 if (PART=="data plug") {
-  fl_sata(verbs,FL_SATA_DATAPLUG,connectors=CONNECTORS,octant=octant,direction=direction,
-    $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_FOOTPRINT=FPRINT);
+  fl_sata(verbs,FL_SATA_DATAPLUG,connectors=CONNECTORS,octant=octant,direction=direction);
 } else if (PART=="power plug") {
-  fl_sata_powerPlug(verbs,FL_SATA_POWERPLUG,connectors=CONNECTORS,octant=octant,direction=direction,
-    $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_FOOTPRINT=FPRINT);
+  fl_sata_powerPlug(verbs,FL_SATA_POWERPLUG,connectors=CONNECTORS,octant=octant,direction=direction);
 } else if (PART=="power data plug") {
-    fl_sata_powerDataPlug(verbs,FL_SATA_POWERDATAPLUG,tolerance=TOLERANCE,shell=SW_SHELL,connectors=CONNECTORS,octant=octant,direction=direction,
-    $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_FOOTPRINT=FPRINT);
+    fl_sata_powerDataPlug(verbs,FL_SATA_POWERDATAPLUG,shell=SW_SHELL,connectors=CONNECTORS,octant=octant,direction=direction);
 } else {
-  sata_PowerDataSocket(verbs,FL_SATA_POWERDATASOCKET,connectors=CONNECTORS,octant=octant,direction=direction,
-    $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_FOOTPRINT=FPRINT);
+  sata_PowerDataSocket(verbs,FL_SATA_POWERDATASOCKET,connectors=CONNECTORS,octant=octant,direction=direction);
 }

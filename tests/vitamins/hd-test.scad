@@ -20,15 +20,8 @@
  */
 
 include <../../vitamins/hds.scad>
-
-include <../../foundation/type_trait.scad>
 include <../../vitamins/sata-adapters.scad>
-include <../../foundation/unsafe_defs.scad>
-use     <../../caddy.scad>
-use     <../../vitamins/screw.scad>
-
-// include <OFL/foundation/incs.scad>
-// use     <OFL/foundation/util.scad>
+include <../../vitamins/screw.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -36,26 +29,26 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-TRACE   = false;
+$FL_TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -103,16 +96,14 @@ hd        = HD_EVO860;
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if (AXES!="OFF")      FL_AXES,
-  if (BBOX!="OFF")      FL_BBOX,
-  if (DRILL!="OFF")     FL_DRILL,
-  if (FPRINT!="OFF")    FL_FOOTPRINT,
-  if (LAYOUT!="OFF")    FL_LAYOUT,
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_DRILL!="OFF")     FL_DRILL,
+  if ($FL_FPRINT!="OFF")    FL_FOOTPRINT,
+  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
 ];
-
-// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 
 // thickness matrix built from customizer values
 T         = [T_x,T_y,T_z];
@@ -128,9 +119,6 @@ adp_ctor  = fl_connectors(adp)[0];
 lay_dir     = fl_str_2axes(LAY_DIRECTION);
 fl_trace("lay_dir",lay_dir);
 
-fl_hd( verbs,hd,
-    dri_tolerance=DRI_TOLERANCE,thick=T,lay_direction=lay_dir,add_connectors=SHOW_CONNECTORS,dri_rails=rail,direction=direction,octant=octant,
-    $FL_TRACE=TRACE,
-    $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT)
+fl_hd(verbs,hd,dri_tolerance=DRI_TOLERANCE,thick=T,lay_direction=lay_dir,add_connectors=SHOW_CONNECTORS,dri_rails=rail,direction=direction,octant=octant)
   // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
   fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);

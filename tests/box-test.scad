@@ -20,9 +20,8 @@
  */
 
 include <../foundation/unsafe_defs.scad>
-include <../foundation/incs.scad>
-include <../vitamins/incs.scad>
-use     <../box.scad>
+include <../foundation/fillet.scad>
+include <../box.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -38,15 +37,15 @@ FILAMENT_LOWER  = "SteelBlue";  // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
-PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -68,7 +67,7 @@ LOWER_PART  = true;
 
 /* [Box] */
 
-// thickness 
+// thickness
 T         = 2.5;
 // inner radius for rounded angles (square if undef)
 RADIUS    = 1.1;
@@ -81,40 +80,30 @@ PAY_SIZE  = [100,60,40];
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")       FL_ADD,
-    if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-    if (AXES!="OFF")      FL_AXES,
-    if (BBOX!="OFF")      FL_BBOX,
-    if (PLOAD!="OFF")     FL_PAYLOAD,
-  ];
-  $FL_ADD       = ADD;
-  $FL_ASSEMBLY  = ASSEMBLY;
-  $FL_AXES      = AXES;
-  $FL_BBOX      = BBOX;
-  $FL_PAYLOAD   = PLOAD;
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+verbs=[
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_PLOAD!="OFF")     FL_PAYLOAD,
+];
 
-  radius  = RADIUS!=0 ? RADIUS : undef;
+radius  = RADIUS!=0 ? RADIUS : undef;
 
-  PARTS = (LOWER_PART && UPPER_PART) ? "all" 
-        : LOWER_PART ? "lower" 
-        : UPPER_PART ? "upper"
-        : "none";
+PARTS = (LOWER_PART && UPPER_PART) ? "all"
+      : LOWER_PART ? "lower"
+      : UPPER_PART ? "upper"
+      : "none";
 
-  TREAL = T + TOLERANCE;
+TREAL = T + TOLERANCE;
 
-  Tpl=fl_T([TREAL,TREAL,T+TOLERANCE]);
+Tpl=fl_T([TREAL,TREAL,T+TOLERANCE]);
 
-  size  = PAY_SIZE+[2*TREAL,2*TREAL,2*TREAL];
+size  = PAY_SIZE+[2*TREAL,2*TREAL,2*TREAL];
 
-  fl_trace("$FL_ADD",$FL_ADD);
-  fl_trace("external size",size);
-  // fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[-size/2,+size/2])
-  fl_box(verbs,psize=PAY_SIZE,thick=T,radius=radius,parts=PARTS,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=TOLERANCE,fillet=FILLET,octant=octant,direction=direction,
-  $FL_PAYLOAD=PLOAD);
-}
-
-__test__();
+fl_trace("$FL_ADD",$FL_ADD);
+fl_trace("external size",size);
+// fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[-size/2,+size/2])
+fl_box(verbs,psize=PAY_SIZE,thick=T,radius=radius,parts=PARTS,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=TOLERANCE,fillet=FILLET,octant=octant,direction=direction);
