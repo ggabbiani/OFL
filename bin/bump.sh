@@ -1,4 +1,5 @@
 #/bin/bash.sh
+# TODO: add documents update before release bump
 
 set -e # exit immediately in case of error
 OFL="$(realpath $(dirname $0)/..)"
@@ -59,7 +60,7 @@ while (( "$#" )); do
       ;;
     -M|--major)
       shift
-      if [[ "$MAX" == "0" ]]; then 
+      if [[ "$MAX" == "0" ]]; then
         fail 1 "Only one switch is possible"
       fi
       MAX=0
@@ -68,7 +69,7 @@ while (( "$#" )); do
       ;;
     -m|--minor)
       shift
-      if [[ "$MAX" == "0" ]]; then 
+      if [[ "$MAX" == "0" ]]; then
         fail 1 "Only one switch is possible"
       fi
       MAX=0
@@ -77,7 +78,7 @@ while (( "$#" )); do
       ;;
     -p|--patch)
       shift
-      if [[ "$MAX" == "0" ]]; then 
+      if [[ "$MAX" == "0" ]]; then
         fail 1 "Only one switch is possible"
       fi
       MAX=0
@@ -114,16 +115,16 @@ if [[ "$INCREMENT" != "" ]]; then
   VERSION=$(git_version)
   info "Current version is $VERSION"
   # replace points, split into array
-  V=( ${VERSION//./ } )             
+  V=( ${VERSION//./ } )
   # increment revision (or other part)
   ((V[$I]++))
   # compose new version
-  VERSION="${V[0]}.${V[1]}.${V[2]}" 
+  VERSION="${V[0]}.${V[1]}.${V[2]}"
   info "New version is $VERSION"
 else
   VERSION=$1
   # replace points, split into array
-  V=( ${VERSION//./ } )             
+  V=( ${VERSION//./ } )
 fi
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 info "Current branch is \"$BRANCH\""
