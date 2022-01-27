@@ -19,9 +19,9 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <foundation/unsafe_defs.scad>
-include <foundation/incs.scad>
-include <vitamins/incs.scad>
+include <foundation/profile.scad>
+include <vitamins/knurl_nuts.scad>
+include <vitamins/screw.scad>
 
 // engine for generating boxes
 module fl_box(
@@ -41,7 +41,7 @@ module fl_box(
 ) {
   assert((size==undef && psize!=undef) || (size!=undef && psize==undef));
   assert(thick!=undef);
-  
+
   fl_trace("$FL_ADD",$FL_ADD);
   fl_trace("$FL_PAYLOAD",$FL_PAYLOAD);
 
@@ -67,7 +67,7 @@ module fl_box(
   fl_trace("psize",psize);
   fl_trace("sz",sz);
   fl_trace("bounding box",bbox);
-  
+
   module do_fillet(r) {
     delta = thick - r;
     for(i=[-1,1])
@@ -85,18 +85,18 @@ module fl_box(
   module lower() {
     difference() {
       intersection() {
-        rotate([90,0,90]) 
+        rotate([90,0,90])
           fl_profile(FL_ADD,type="U",size=[sz_low.y,sz_low.z,sz_low.x],thick=thick,radius=undef,material=material_lower);
         if (radius!=undef)
           rotate(-90,FL_X)
             fl_bentPlate(FL_FOOTPRINT,type="U",size=[sz_low.x,sz_low.z,sz_low.y],thick=thick,radius=radius,material=material_lower);
       }
       translate(+Y(Treal+FL_NIL))
-        multmatrix(Mknut) 
-          knut(FL_LAYOUT,knut,direction=[+Y,0],octant=-Z) 
+        multmatrix(Mknut)
+          knut(FL_LAYOUT,knut,direction=[+Y,0],octant=-Z)
             fl_screw(FL_FOOTPRINT,screw,10);
     }
-    if (fillet) 
+    if (fillet)
       fl_color(material_lower) do_fillet(thick);
   }
 
@@ -115,12 +115,12 @@ module fl_box(
 
   module do_assembly() {
     if (parts=="all" || parts=="upper")
-      multmatrix(Mknut) 
+      multmatrix(Mknut)
         knut([FL_ADD,FL_AXES],knut,direction=[+Y,0],octant=-Z) ;
     if (parts=="all" || parts=="lower")
       translate(+Y(Treal+FL_NIL))
-        multmatrix(Mknut) 
-          knut(FL_LAYOUT,knut,direction=[+Y,0],octant=-Z) 
+        multmatrix(Mknut)
+          knut(FL_LAYOUT,knut,direction=[+Y,0],octant=-Z)
             screw(screw,10);
   }
 
