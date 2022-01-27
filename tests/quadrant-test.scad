@@ -38,21 +38,15 @@ SIZE          = [200,100];
 
 /* [Hidden] */
 
-module __test__() {
-
-  module do_square(primus=false) {
-    fl_color("cyan") square(size=SIZE);
-    fl_color("black") {
-      translate([-20,-10]) if (primus) text("C'0"); else text("C0");
-      translate(SIZE) if (primus) text("C'1"); else text("C1");
-    }
-  }
-
-  if (PLACE_NATIVE)
-    do_square();
-  #fl_place(quadrant=QUADRANT,bbox=[FL_O,SIZE]) {
-    do_square(true);
+module do_square(primus=false) {
+  fl_color("cyan") square(size=SIZE);
+  fl_color("black") {
+    translate([-20,-10]) if (primus) text("C'0"); else text("C0");
+    translate(SIZE) if (primus) text("C'1"); else text("C1");
   }
 }
 
-__test__();
+if (PLACE_NATIVE)
+  do_square();
+#fl_2d_place(quadrant=QUADRANT,bbox=[FL_O,SIZE])
+  do_square(true);
