@@ -133,5 +133,5 @@ info "modules: $modules"
 info "includes: $includes"
 info "uses: $uses"
 
-digraph >"$OFL/$MODE/docs/dependencies.dot"
+digraph >"$OFL/$MODE/docs/nogit-dependencies.dot"
 # digraph
