@@ -298,46 +298,84 @@ function fl_has(type,property,check=function(value) true) =
   let(i=search([property],type))
   i != [[]] ? assert(len(type[i[0]])==2,"Malformed type") check(type[i[0]][1]) : false;
 
-module fl_manage(verbs,placement,direction) {
+/**
+ * manage verbs parsing, placement, orientation and fl_axes()
+ *
+ * children context:
+ *  $verb      - current parsed verb
+ *  $modifier  - current verb modifier
+ */
+module fl_manage(
+    // verb list
+    verbs,
+    // placement matrix
+    placement,
+    // orientation matrix
+    direction,
+    // size used for fl_axes()
+    size
+  ) {
+  // TODO: remove the following assert when updated
+  assert($children==1,"temporary assert for change in module fl_manage()");
+
   module orient() {
     if (direction)
       multmatrix(direction) children();
     else
       children();
   }
+
   module place() {
     if (placement)
       multmatrix(placement) children();
     else
       children();
   }
-  orient() fl_context(verbs) {
-    place() fl_parse($verbs) children(0);
-    if ($children>1 && $axes) fl_modifier($FL_AXES) children(1);
+
+  module fl_context(vlist) {
+    assert(is_list(vlist)||is_string(vlist),vlist);
+    flat  = fl_list_flatten(is_list(vlist)?vlist:[vlist]);
+    let(
+      $_axes_   = fl_list_has(flat,FL_AXES),
+      $_verbs_  = fl_list_filter(flat,FL_EXCLUDE_ANY,FL_AXES)
+    ) children();
   }
-}
 
-module fl_context(vlist) {
-  assert(is_list(vlist)||is_string(vlist),vlist);
-  flat  = fl_list_flatten(is_list(vlist)?vlist:[vlist]);
-  // TODO: add a context variable stating current $verb modifier (could be $modifier)
-  let(
-    $axes   = fl_list_has(flat,FL_AXES),
-    $verbs  = fl_list_filter(flat,FL_EXCLUDE_ANY,FL_AXES)
-  ) children();
-}
+  // parse verbs and trigger children with predefined context (see module fl_manage())
+  module fl_parse(verbs) {
 
-module fl_parse(verbs) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
-  for($verb=verbs) {
-    tokens = split($verb);
-    fl_trace(tokens[0]);
-    if (fl_isSet("**DEPRECATED**",tokens)) {
-      fl_trace(str("***WARN*** ", tokens[0], " is marked as DEPRECATED and will be removed in future version!"),always=true);
-    } else if (fl_isSet("**OBSOLETE**",tokens)) {
-      assert(false,str(tokens[0], " is marked as OBSOLETE!"));
+    // given a verb returns the corresponding modifier value
+    function verb2modifier(verb)  =
+        verb==FL_ADD        ? $FL_ADD
+      : verb==FL_ASSEMBLY   ? $FL_ASSEMBLY
+      : verb==FL_AXES       ? $FL_AXES
+      : verb==FL_BBOX       ? $FL_BBOX
+      : verb==FL_CUTOUT     ? $FL_CUTOUT
+      : verb==FL_DRILL      ? $FL_DRILL
+      : verb==FL_FOOTPRINT  ? $FL_FOOTPRINT
+      : verb==FL_HOLDERS    ? $FL_HOLDERS
+      : verb==FL_LAYOUT     ? $FL_LAYOUT
+      : verb==FL_MOUNT      ? $FL_MOUNT
+      : verb==FL_PAYLOAD    ? $FL_PAYLOAD
+      : assert(false,str("Unsupported verb ",verb)) undef;
+
+    assert(is_list(verbs)||is_string(verbs),verbs);
+    for($verb=verbs) {
+      tokens  = split($verb);
+      fl_trace(tokens[0]);
+      if (fl_isSet("**DEPRECATED**",tokens)) {
+        fl_trace(str("***WARN*** ", tokens[0], " is marked as DEPRECATED and will be removed in future version!"),always=true);
+      } else if (fl_isSet("**OBSOLETE**",tokens)) {
+        assert(false,str(tokens[0], " is marked as OBSOLETE!"));
+      } let(
+        $modifier = verb2modifier($verb)
+      ) children();
     }
-    children();
+  }
+
+  orient() fl_context(verbs) {
+    place() fl_parse($_verbs_) children();
+    if ($_axes_ && size) fl_modifier($FL_AXES) fl_axes(size=1.2*size);
   }
 }
 

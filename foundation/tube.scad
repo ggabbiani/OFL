@@ -54,16 +54,15 @@ module fl_tube(
       fl_ellipse(e=obase);
   }
 
-  fl_manage(verbs) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) do_add();
+      fl_modifier($modifier) do_add();
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($FL_FOOTPRINT) do_fprint();
+      fl_modifier($modifier) do_fprint();
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

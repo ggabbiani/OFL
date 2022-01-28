@@ -45,9 +45,6 @@ module fl_box(
   fl_trace("$FL_ADD",$FL_ADD);
   fl_trace("$FL_PAYLOAD",$FL_PAYLOAD);
 
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   Treal   = thick + tolerance;
   deltas  = [2*Treal,2*Treal,2*Treal];  // deltas = size - payload
   sz      = size!=undef ? size : psize + deltas;
@@ -133,22 +130,18 @@ module fl_box(
     fl_cube(size=psz,octant=[0,0,0]);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_cube(size=sz, octant=[0,0,0]);
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_assembly();
-      } else if ($verb==FL_PAYLOAD) {
-        fl_trace("$FL_PAYLOAD",$FL_PAYLOAD);
-        fl_modifier($FL_PAYLOAD) do_pload();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D,sz) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_cube(size=sz, octant=[0,0,0]);
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly();
+    } else if ($verb==FL_PAYLOAD) {
+      fl_trace("$FL_PAYLOAD",$FL_PAYLOAD);
+      fl_modifier($modifier) do_pload();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=sz);
   }
 }

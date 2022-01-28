@@ -38,23 +38,22 @@ module stub(
   module do_layout() {}
   module do_drill() {}
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) fl_cube(size=size);
+      fl_modifier($modifier) fl_cube(size=size);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
+      fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
     } else if ($verb==FL_LAYOUT) {
-      fl_modifier($FL_LAYOUT) do_layout()
+      fl_modifier($modifier) do_layout()
         children();
     } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($FL_FOOTPRINT);
+      fl_modifier($modifier);
     } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($FL_ASSEMBLY);
+      fl_modifier($modifier);
     } else if ($verb==FL_DRILL) {
-      fl_modifier($FL_DRILL);
+      fl_modifier($modifier);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

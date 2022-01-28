@@ -49,9 +49,6 @@ module fl_ether(
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
 
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   bbox  = fl_bb_corners(type);
   size  = bbox[1]-bbox[0];
   D     = direction ? fl_direction(proto=type,direction=direction)  : I;
@@ -65,20 +62,19 @@ module fl_ether(
     fl_square(FL_ADD,size=[size.z,size.y]);
   }
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD)
+      fl_modifier($modifier)
         rj45();
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_CUTOUT) {
       assert(cut_thick!=undef);
-      fl_modifier($FL_CUTOUT)
+      fl_modifier($modifier)
         translate(+X(bbox[1].x+cut_drift))
           do_cutout();
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes([size.x,size.y,1.5*size.z]);
   }
 }

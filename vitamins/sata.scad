@@ -220,8 +220,6 @@ module fl_sata_dataPlug(
   assert(type!=undef);
   fl_trace("verbs",verbs);
 
-  axes        = fl_list_has(verbs,FL_AXES);
-  verbs       = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   size        = fl_size(type);
   points      = fl_get(type,"points");
   connection  = fl_sata_conns(type)[0];
@@ -248,20 +246,16 @@ module fl_sata_dataPlug(
       fl_conn_add(connection,size=2);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) do_footprint();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_footprint();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -283,8 +277,7 @@ module fl_sata_powerPlug(
   octant                // when undef native positioning is used
 ) {
   assert(type!=undef);
-  axes        = fl_list_has(verbs,FL_AXES);
-  verbs       = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
   bbox        = fl_bb_corners(type);
   size        = fl_size(type);
   points      = fl_get(type,"points");
@@ -314,22 +307,17 @@ module fl_sata_powerPlug(
       fl_conn_add(connection,size=2);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) do_footprint();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_footprint();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
   }
-
 }
 
 /****************************************************************************
@@ -351,8 +339,6 @@ module fl_sata_powerDataPlug(
   octant                // when undef native positioning is used
 ) {
   assert(type!=undef);
-  axes        = fl_list_has(verbs,FL_AXES);
-  verbs       = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   power_plug  = fl_get(type,"power plug");
   data_plug   = fl_get(type,"data plug");
@@ -398,23 +384,19 @@ module fl_sata_powerDataPlug(
       multmatrix(Ms) shell();
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
 
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) do_footprint();
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_footprint();
 
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes([size.x/2,size.y,size.z]);
   }
 }
 
@@ -430,8 +412,6 @@ module sata_PowerDataSocket(
   octant                // when undef native positioning is used
 ) {
   assert(type!=undef);
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
 
   size        = fl_size(type);
   points      = fl_get(type,"points");
@@ -498,20 +478,16 @@ module sata_PowerDataSocket(
     translate(fl_Z((size.z-block_sz.z)/2)) fl_cube(size=size,octant=O);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) do_footprint();
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) do_footprint();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) do_footprint();
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_footprint();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes([size.x/2,size.y,size.z]);
   }
 }
 

@@ -73,9 +73,6 @@ module pimoroni(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   bbox      = fl_bb_corners(type);
   size      = fl_bb_size(type);
   corner_r  = fl_get(type,"corner radius");
@@ -192,34 +189,30 @@ module pimoroni(
       fl_cylinder(h=thick+bot_fluting_t,r=screw_radius(screw),octant=$normal);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
 
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout()
-          children();
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout()
+        children();
 
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_trace("$FL_FOOTPRINT",$FL_FOOTPRINT);
-        fl_modifier($FL_FOOTPRINT) fl_bb_add(bbox);
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_trace("$FL_FOOTPRINT",$FL_FOOTPRINT);
+      fl_modifier($modifier) fl_bb_add(bbox);
 
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_assembly();
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly();
 
-      } else if ($verb==FL_DRILL) {
-        fl_trace("$FL_DRILL",$FL_DRILL);
-        fl_modifier($FL_DRILL) do_drill();
+    } else if ($verb==FL_DRILL) {
+      fl_trace("$FL_DRILL",$FL_DRILL);
+      fl_modifier($modifier) do_drill();
 
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=1.2*size);
   }
 }

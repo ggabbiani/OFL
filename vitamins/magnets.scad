@@ -226,29 +226,25 @@ module fl_magnet(
       multmatrix(Mscrew) children();
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES)) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_trace("$FL_BBOX",$FL_BBOX);
-        fl_modifier($FL_BBOX) translate(-Z(NIL)) fl_cube(size=size+Z(2*NIL),octant=+Z);
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT)
-          do_layout() children();
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) do_footprint();
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY)
-          do_layout() fl_screw(type=screw,thick=screw_thick);
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL)
-          do_layout() fl_screw(FL_DRILL,screw,thick=screw_thick);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_trace("$FL_BBOX",$FL_BBOX);
+      fl_modifier($modifier) translate(-Z(NIL)) fl_cube(size=size+Z(2*NIL),octant=+Z);
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier)
+        do_layout() children();
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_footprint();
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier)
+        do_layout() fl_screw(type=screw,thick=screw_thick);
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier)
+        do_layout() fl_screw(FL_DRILL,screw,thick=screw_thick);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (fl_list_has(verbs,FL_AXES))
-      fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

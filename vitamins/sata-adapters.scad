@@ -54,8 +54,7 @@ module sata_adapter(
   octant                // when undef native positioning is used
 ) {
   assert(verbs!=undef);
-  axes        = fl_list_has(verbs,FL_AXES);
-  verbs       = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
+
   handle_size = fl_get(type,"handle size");
   sock        = fl_get(type,"SATA socket");
   sock_size   = fl_size(sock);
@@ -92,18 +91,13 @@ module sata_adapter(
     %translate(fl_Y(sock_size.z))
       fl_cube(size=size,octant=-FL_Y);
   }
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) do_bbox();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) do_bbox();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size/2);
   }
-
 }

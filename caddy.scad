@@ -56,9 +56,6 @@ module fl_caddy(
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(thick);
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   // delta to add to children thicknesses
   t_deltas  = let(d=(tolerance+fillet)) [
     [fl_isSet(-X,faces)?d:0,fl_isSet(+X,faces)?d:0],
@@ -146,38 +143,35 @@ module fl_caddy(
     ) children();
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD)
-          fl_color($FL_FILAMENT)
-            do_add() children();
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_trace(str("$modifier[",split($verb)[0],"]"),$modifier);
+      fl_modifier($modifier)
+        fl_color($FL_FILAMENT)
+          do_add() children();
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
 
-      } else if ($verb==FL_LAYOUT) {
-        // FIXME: apply right $verbs context value during layout
-        fl_modifier($FL_LAYOUT) do_layout()
-          children();
+    } else if ($verb==FL_LAYOUT) {
+      // FIXME: apply right $verbs context value during layout
+      fl_modifier($modifier) do_layout()
+        children();
 
-      } else if ($verb==FL_PAYLOAD) {
-        fl_modifier($FL_PAYLOAD) fl_bb_add(pload);
+    } else if ($verb==FL_PAYLOAD) {
+      fl_modifier($modifier) fl_bb_add(pload);
 
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT);
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier);
 
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_assembly() children();
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly() children();
 
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL) echo(str("***WARN***: ",$verb," not yet implemented"));
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) echo(str("***WARN***: ",$verb," not yet implemented"));
 
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=1.1*size);
   }
 }

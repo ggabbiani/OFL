@@ -62,12 +62,11 @@ module fl_symbol(
     %fl_cube(octant=symbol=="plug"?-FL_Z:+FL_Z,size=[sz.x,sz.y,0.1]);
   }
 
-  fl_manage(verbs) {
+  fl_manage(verbs,size=size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) do_add();
+      fl_modifier($modifier) do_add();
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=sz);
   }
 }

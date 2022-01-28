@@ -42,14 +42,13 @@ module fl_torus(
   fl_trace("D",D);
   fl_trace("M",M);
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) rotate_extrude($fn=$fn) translate(X(r-a)) fl_ellipse(e=ellipse,quadrant=+X,$fn=fn);
+      fl_modifier($modifier) rotate_extrude($fn=$fn) translate(X(r-a)) fl_ellipse(e=ellipse,quadrant=+X,$fn=fn);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

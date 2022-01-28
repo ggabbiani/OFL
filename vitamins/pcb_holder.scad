@@ -79,9 +79,6 @@ module pcb_holder(
   assert(type!=undef);
   assert(frame>=0);
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   screw       = fl_screw(type);
   scr_r       = screw_radius(screw);
 
@@ -143,30 +140,25 @@ module pcb_holder(
   module do_layout()    {}
   module do_drill()     {}
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
+  fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
 
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_assembly()
-          screw_and_nylon_washer(screw,screw_len,filament);
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly()
+        screw_and_nylon_washer(screw,screw_len,filament);
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) do_bbox();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) do_bbox();
 
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout() children();
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout() children();
 
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL) do_drill();
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_drill();
 
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=1.2*(bbox[1]-bbox[0]));
   }
-
 }

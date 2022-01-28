@@ -103,9 +103,6 @@ module blob(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
@@ -117,39 +114,37 @@ module blob(
   module do_layout() {}
   module do_drill() {}
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) fl_cube(size=size);
+  fl_manage(verbs,M,D,size)  {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) fl_cube(size=size);
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_cube(size=size);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_cube(size=size);
 
-      } else if ($verb==FL_CUTOUT) {
-        fl_modifier($FL_CUTOUT)
-          translate([0,size.y/2,size.z/2]) fl_prism(h=thick.x[0],n=5,l=2,octant=-Z,direction=[+X,0]);
+    } else if ($verb==FL_CUTOUT) {
+      fl_trace("$modifier",$modifier);
+      fl_modifier($modifier)
+        translate([0,size.y/2,size.z/2]) fl_prism(h=thick.x[0],n=5,l=2,octant=-Z,direction=[+X,0]);
 
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout()
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout()
 
-          children();
-      } else if ($verb==FL_FOOTPRINT) {
+        children();
+    } else if ($verb==FL_FOOTPRINT) {
 
-        fl_modifier($FL_FOOTPRINT);
-      } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier);
+    } else if ($verb==FL_ASSEMBLY) {
 
-        fl_modifier($FL_ASSEMBLY);
-      } else if ($verb==FL_DRILL) {
-        fl_trace("thick",thick);
-        fl_modifier($FL_DRILL)
-          translate([size.x/2,size.y/2,0])
-            fl_cylinder(h=thick.z[0],r=3,octant=-Z);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+      fl_modifier($modifier);
+    } else if ($verb==FL_DRILL) {
+      fl_trace("$modifier",$modifier);
+      fl_trace("thick",thick);
+      fl_modifier($modifier)
+        translate([size.x/2,size.y/2,0])
+          fl_cylinder(h=thick.z[0],r=3,octant=-Z);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -176,8 +171,8 @@ T     = [T_x,T_y,T_z];
 // 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
 T_NIL = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 
-echo(verbs=verbs,$FL_BBOX=$FL_BBOX)  fl_caddy(verbs,blob,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant)
+fl_caddy(verbs,blob,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant)
   // the children is called with the following special variables set:
   // $verbs ⇒ list of verbs to be executed
   // $thick ⇒ thickness list for DRILL and CUTOUT
-  echo($verbs=$verbs) blob($verbs,blob,thick=$thick+T_NIL,$FL_DRILL="ON",$FL_CUTOUT="ON",$FL_ADD="ON",$FL_ASSEMBLY="ON");
+  blob($verbs,blob,thick=$thick+T_NIL,$FL_DRILL="ON",$FL_CUTOUT="ON",$FL_ADD="ON",$FL_ASSEMBLY="ON");

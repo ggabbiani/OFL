@@ -48,15 +48,14 @@ module fl_cube(
   D     = direction ? fl_direction(defs,direction=direction)  : I;
   M     = octant    ? fl_octant(defs,octant=octant)           : I;
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) cube(size,false);
+      fl_modifier($modifier) cube(size,false);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) cube(size);  // center=default=false ⇒ +X+Y+Z
+      fl_modifier($modifier) cube(size);  // center=default=false ⇒ +X+Y+Z
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -92,15 +91,14 @@ module fl_sphere(
   D     = direction ? fl_direction(defs,direction=direction)  : I;
   M     = octant    ? fl_octant(defs,octant=octant)           : I;
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) resize(size) sphere();
+      fl_modifier($modifier) resize(size) sphere();
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) cube(size,true);
+      fl_modifier($modifier) cube(size,true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 /*
@@ -170,15 +168,14 @@ module fl_cylinder(
   fl_trace("octant",octant);
   fl_trace("size",size);
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
+      fl_modifier($modifier) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) multmatrix(Mbbox) %cube(size=size); // center=default=false ⇒ +X+Y+Z
+      fl_modifier($modifier) multmatrix(Mbbox) %cube(size=size); // center=default=false ⇒ +X+Y+Z
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=[size.x,size.y,5/4*size.z]);
   }
 }
 
@@ -251,15 +248,14 @@ module fl_prism(
   fl_trace("direction",direction);
   fl_trace("size",size);
 
-  fl_manage(verbs,M,D)  {
+  fl_manage(verbs,M,D,size)  {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
+      fl_modifier($modifier) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) multmatrix(Mbbox) %cube(size=size);     // center=default=false ⇒ +X+Y+Z
+      fl_modifier($modifier) multmatrix(Mbbox) %cube(size=size);     // center=default=false ⇒ +X+Y+Z
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -518,12 +514,12 @@ module fl_layout(
   fl_trace("bcs",bcs);
   fl_trace("sz",sz);
 
-  fl_manage(verbs) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox);
 
     } else if ($verb==FL_LAYOUT) {
-      fl_modifier($FL_LAYOUT)
+      fl_modifier($modifier)
         for($i=[0:$len-1]) {
           fl_trace("$i",$i);
           $first  = $i==0;
@@ -544,7 +540,6 @@ module fl_layout(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 

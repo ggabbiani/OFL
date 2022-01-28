@@ -36,6 +36,7 @@ module fl_vFillet(
   M       = octant!=undef     ? fl_octant(octant=octant,bbox=bbox) : I;
   D       = direction!=undef  ? fl_direction(direction=direction,default=default) : I;
 
+  // FIXME
   fl_manage(verbs,M,D)
     fl_fillet(verbs,r,h,rx,ry,octant=+X);
 }
@@ -62,15 +63,13 @@ module fl_hFillet(
         fl_fillet(FL_ADD,r,h,rx,ry);
   }
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD)
-      fl_modifier($FL_ADD) do_add();
+      fl_modifier($modifier) do_add();
     else if ($verb==FL_BBOX)
-      fl_modifier($FL_BBOX) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox);
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-
-    fl_modifier($FL_AXES) fl_axes(size=1.1*max(size));
   }
 }
 
@@ -100,15 +99,13 @@ module fl_fillet(
     }
   }
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD)
-      fl_modifier($FL_ADD) do_add();
+      fl_modifier($modifier) do_add();
     else if ($verb==FL_BBOX)
-      fl_modifier($FL_BBOX) fl_cube(size=size);
+      fl_modifier($modifier) fl_cube(size=size);
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -152,13 +149,12 @@ module fl_90DegFillet(
       }
     }
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD)
-      fl_modifier($FL_ADD) do_add() children();
+      fl_modifier($modifier) do_add() children();
     else if ($verb==FL_BBOX)
-      fl_modifier($FL_BBOX) translate(bbox[0]) fl_cube(size=size);
+      fl_modifier($modifier) translate(bbox[0]) fl_cube(size=size);
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    fl_axes(size=size);
   }
 }

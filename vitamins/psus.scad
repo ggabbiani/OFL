@@ -160,9 +160,6 @@ module ofl_psu(
       term_esz.z
     ];
 
-  axes        = fl_list_has(verbs,FL_AXES);
-  verbs       = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   pcb_color   = "#FCD67E";
   pcb_t       = fl_get(type,"pcb thickness");
   holes       = fl_holes(type);
@@ -287,29 +284,25 @@ module ofl_psu(
       children();
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
+  fl_manage(verbs,M,D,cbox_sz) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) do_bbox();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) do_bbox();
 
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_assembly();
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly();
 
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout() {
-          children();
-        }
-      } else if ($verb==FL_DRILL) {
-        // FIXME: doesn't work properly
-        fl_modifier($FL_DRILL)  do_drill();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout() {
+        children();
       }
+    } else if ($verb==FL_DRILL) {
+      // FIXME: doesn't work properly
+      fl_modifier($modifier)  do_drill();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=1.2*cbox_sz);
   }
 }

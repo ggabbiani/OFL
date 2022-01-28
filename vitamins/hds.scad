@@ -115,8 +115,6 @@ module fl_hd(
     : axis==-Z ? dri_rails.z[0]
     : dri_rails.z[1];
 
-  axes        = fl_list_has(verbs,FL_AXES);
-  verbs       = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   screw       = fl_screw(type);
   screw_r     = screw_radius(screw);
   screw_hole  = fl_get(type,"hole depth");
@@ -188,39 +186,35 @@ module fl_hd(
       cube(size,true);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
 
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($FL_ASSEMBLY) do_layout(lay_direction)
-          fl_screw(type=screw,len=$length,direction=$direction);
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_layout(lay_direction)
+        fl_screw(type=screw,len=$length,direction=$direction);
 
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($FL_LAYOUT) do_layout(lay_direction)
-          children();
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout(lay_direction)
+        children();
 
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL) do_layout(lay_direction)
-          fl_rail(railLen($direction[0]))
-            if ($children) children();
-            else fl_screw(FL_FOOTPRINT,screw,len=$length,direction=$direction);
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_layout(lay_direction)
+        fl_rail(railLen($direction[0]))
+          if ($children) children();
+          else fl_screw(FL_FOOTPRINT,screw,len=$length,direction=$direction);
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) do_bbox();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) do_bbox();
 
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($FL_FOOTPRINT) do_bbox();
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_bbox();
 
-      } else if ($verb==FL_CUTOUT) {
-        // FL_CUTOUT is intentionally a no-op
+    } else if ($verb==FL_CUTOUT) {
+      // FL_CUTOUT is intentionally a no-op
 
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_axes(size*1.2);
   }
 }

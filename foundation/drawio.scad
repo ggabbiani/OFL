@@ -44,8 +44,6 @@ module dio_polyCoords(
   size,         // 2d size
   quadrant      // native positioning when undef
 ) {
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
   points  = dio_polyCoords(points,size);
   bbox    = fl_bb_polygon(points);
   bbsize  = bbox[1]-bbox[0];
@@ -55,15 +53,13 @@ module dio_polyCoords(
   fl_trace("bbox",bbox);
   fl_trace("quadrant",quadrant);
 
-  multmatrix(M) fl_parse(verbs) {
+  fl_manage(verbs,M,size=size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) polygon(points);
+      fl_modifier($modifier) polygon(points);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) translate(bbox[0]) square(size=bbsize, center=false);
+      fl_modifier($modifier) translate(bbox[0]) square(size=bbsize, center=false);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
   }
-  if (axes)
-    fl_modifier($FL_AXES) fl_axes(size=size);
 }

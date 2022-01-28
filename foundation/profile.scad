@@ -114,18 +114,17 @@ module fl_profile(
     }
   }
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) fl_color(material) do_add();
+      fl_modifier($modifier) fl_color(material) do_add();
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) cube(size=size, center=true);
+      fl_modifier($modifier) cube(size=size, center=true);
     } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($FL_FOOTPRINT)
+      fl_modifier($modifier)
         fl_color(material) do_footprint();
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
 
@@ -201,16 +200,15 @@ module fl_bentPlate(
       else assert(false,str("Unsupported bent plate type '",type,"'. Please choose one of the following: L,U"));
   }
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) do_add();
+      fl_modifier($modifier) do_add();
     } else if ($verb==FL_BBOX) {
-      fl_modifier($FL_BBOX) fl_cube(size=size, octant=FL_O);
+      fl_modifier($modifier) fl_cube(size=size, octant=FL_O);
     } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($FL_FOOTPRINT) do_add(footprint=true);
+      fl_modifier($modifier) do_add(footprint=true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

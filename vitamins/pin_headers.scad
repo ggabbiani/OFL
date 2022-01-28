@@ -98,9 +98,6 @@ module fl_pinHeader(
   // FIXME: when called from fl_pcb the following assert fails
   // assert(fl_XOR(nop!=undef,type!=undef));
 
-  axes  = fl_list_has(verbs,FL_AXES);
-  verbs = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   nop       = type!=undef ? fl_nopSCADlib(type) : nop;
   geometry  = type!=undef ? fl_phdr_geometry(type) : geometry;
   bbox      =  type!=undef ? fl_bb_corners(type) : fl_phdr_nopBBox(nop,geometry);
@@ -124,22 +121,18 @@ module fl_pinHeader(
   module do_layout() {}
   module do_drill() {}
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
-      } else if ($verb==FL_CUTOUT) {
-        assert(cut_thick!=undef);
-        fl_modifier($FL_CUTOUT)
-          fl_cutout(len=cut_thick,delta=cut_tolerance)
-            do_add();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+    } else if ($verb==FL_CUTOUT) {
+      assert(cut_thick!=undef);
+      fl_modifier($modifier)
+        fl_cutout(len=cut_thick,delta=cut_tolerance)
+          do_add();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

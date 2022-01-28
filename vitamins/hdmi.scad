@@ -71,32 +71,24 @@ module fl_hdmi(
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
 
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
-
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
   nop   = fl_nopSCADlib(type);
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) hdmi(nop,false);
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) fl_bb_add(bbox);
-      } else if ($verb==FL_CUTOUT) {
-        assert(cut_thick!=undef);
-        fl_modifier($FL_CUTOUT)
-        translate(X(0))
-          translate(X(size.x/2+cut_drift)) fl_cutout(len=cut_thick,z=X,x=-Z,delta=cut_tolerance) hdmi(nop,false);
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) hdmi(nop,false);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+    } else if ($verb==FL_CUTOUT) {
+      assert(cut_thick!=undef);
+      fl_modifier($modifier)
+      translate(X(0))
+        translate(X(size.x/2+cut_drift)) fl_cutout(len=cut_thick,z=X,x=-Z,delta=cut_tolerance) hdmi(nop,false);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }

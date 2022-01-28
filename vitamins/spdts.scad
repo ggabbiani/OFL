@@ -63,9 +63,6 @@ module fl_spdt(
 ) {
   assert(verbs!=undef);
 
-  axes    = fl_list_has(verbs,FL_AXES);
-  verbs   = fl_list_filter(verbs,FL_EXCLUDE_ANY,FL_AXES);
-
   head_h  = fl_spdt_headH(type);
   head_d  = fl_spdt_headD(type);
   bbox    = fl_bb_corners(type);
@@ -110,19 +107,15 @@ module fl_spdt(
       cylinder(d=d, h=h);
   }
 
-  multmatrix(D) {
-    multmatrix(M) fl_parse(verbs) {
-      if ($verb==FL_ADD) {
-        fl_modifier($FL_ADD) do_add();
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($FL_BBOX) translate(bbox[0]) cube(size=size,center=false);
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($FL_DRILL) do_drill();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) translate(bbox[0]) cube(size=size,center=false);
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_drill();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-    if (axes)
-      fl_modifier($FL_AXES) fl_axes(size=size);
   }
 }
