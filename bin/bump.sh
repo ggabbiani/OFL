@@ -123,7 +123,7 @@ if [[ "$INCREMENT" != "" ]]; then
     VERSION="${V[0]}.0.0}"
   elif [ "$INCREMENT" == "MINOR" ]; then
     VERSION="${V[0]}.${V[1]}.0}"
-  else
+  elif [ "$INCREMENT" == "PATCH" ]; then
     VERSION="${V[0]}.${V[1]}.${V[2]}"
   fi
   info "New version is $VERSION"
