@@ -141,4 +141,4 @@ if [ "$DRY" == "ON" ]; then
 else
   digraph | dot -Tsvg -o "$OFL/$MODE/docs/dependencies.svg"
 fi
-exit 1
+exit 0
