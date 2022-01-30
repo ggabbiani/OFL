@@ -119,7 +119,13 @@ if [[ "$INCREMENT" != "" ]]; then
   # increment revision (or other part)
   ((V[$I]++))
   # compose new version
-  VERSION="${V[0]}.${V[1]}.${V[2]}"
+  if [ "$INCREMENT" == "MAJOR" ]; then
+    VERSION="${V[0]}.0.0}"
+  elif [ "$INCREMENT" == "MINOR" ]; then
+    VERSION="${V[0]}.${V[1]}.0}"
+  else
+    VERSION="${V[0]}.${V[1]}.${V[2]}"
+  fi
   info "New version is $VERSION"
 else
   VERSION=$1
