@@ -4,7 +4,7 @@
 
 The OFL foundation provides a uniform API set for base library tasks used by vitamins, replacing part of the OpenSCAD 2d/3d primitives.
 
-![core dependencies](docs/nogit-dependencies.png)
+![core dependencies](docs/dependencies.svg)
 
 ## 'Objects'
 
