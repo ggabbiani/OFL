@@ -69,6 +69,6 @@ warn_read() {
   read
 }
 
-dot() {
+my_dot() {
   sed 's%.*%\.%g' | tr -d '\n'
 }
