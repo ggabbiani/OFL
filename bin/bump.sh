@@ -148,11 +148,11 @@ EOM
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
 # update defs.scad
-sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${V[0]},${V[1]},${V[2]}\];/g" "$DEFS"
+sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${VERSION}\];/g" "$DEFS"
 # update docs (currently $OFL/foundation/docs/dependencies.svg
-$OFL/deps.sh
+$OFL/bin/deps.sh
 # and $OFL/vitamins/docs/dependencies.svg)
-$OFL/deps.sh -v
+$OFL/bin/deps.sh -v
 
 git commit -m "Version $VERSION bumped" "$DEFS"
 git tag -m "Version $VERSION bumped" $TAG $BRANCH
