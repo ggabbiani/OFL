@@ -15,9 +15,10 @@ cat <<EoH
 $(basename $0) [-?|-h|--help] [-f|--foundation] [-v|--vitamins]
 
   -?|-h|--help      this help
-  -f|--foundation   foundation dependencies scan
-  -s|--silent       less verbose
-  -v|--vitamins     vitamins dependencies scan
+  -d|--dry-run      on screen dump only of the generated dot file (default OFF)
+  -f|--foundation   foundation dependencies scan (default ON)
+  -s|--silent       less verbose (default OFF)
+  -v|--vitamins     vitamins dependencies scan (default OFF)
 
 EoH
 exit 0
@@ -70,7 +71,7 @@ $includes
   edge [
     weight = 1,
     penwidth = 2,
-    xlabel = "«use»",
+    label = "«use»",
     color = red,
     style = solid
   ];
@@ -83,6 +84,7 @@ EOF
 
 VERBOSE="1"
 MODE="foundation"
+DRY="OFF"
 
 ##############################################################################
 # parsing
@@ -91,6 +93,10 @@ while (( "$#" )); do
   case "$1" in
     '-?'|-h|--help)
       help
+      shift
+      ;;
+    -d|--dry-run)
+      DRY="ON"
       shift
       ;;
     -f|--foundation)
@@ -122,9 +128,6 @@ done
 # set positional arguments in their proper place
 eval set -- "$POSITIONALS"
 
-# locals
-
-
 modules=$(modules)
 includes=$(locals | grep_no_rc -e '\:include\:' | sed -e 's/^/"/' -e 's/\:include\:/" -> "/g' -e 's/$/"/')
 uses=$(locals | grep_no_rc -e '\:use\:'  | sed -e 's/^/"/' -e 's/\:use\:/" -> "/g' -e 's/$/"/')
@@ -133,5 +136,9 @@ info "modules: $modules"
 info "includes: $includes"
 info "uses: $uses"
 
-digraph >"$OFL/$MODE/docs/nogit-dependencies.dot"
-# digraph
+if [ "$DRY" == "ON" ]; then
+  digraph
+else
+  digraph | dot -Tsvg -o "$OFL/$MODE/docs/dependencies.svg"
+fi
+exit 1
