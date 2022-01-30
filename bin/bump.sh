@@ -142,7 +142,7 @@ this script is going to:
 
   * modify and commit "$DEFS" ($VERSION);
   * annotate local repo as v$VERSION;
-  * push updated "$DEFS" and v$VERSION annotation to remote repo
+  * push updated "$DEFS" and v${VERSION} annotation to remote repo
 
 EOM
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
