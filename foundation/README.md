@@ -1,5 +1,11 @@
 # OpenSCAD Foundation Library
 
+## Overview
+
+The OFL foundation provides a uniform API set for base library tasks used by vitamins, replacing part of the OpenSCAD 2d/3d primitives.
+
+![core dependencies](docs/nogit-dependencies.png)
+
 ## 'Objects'
 
 An Object is a key/value list like the following:
@@ -349,29 +355,3 @@ $pecial variables used in OFL follow the same naming convention used for constan
 | $FL_RENDER | false   | When true, disables PREVIEW corrections like FL_NIL       |
 | $FL_SAFE   | false   | When true, unsafe definitions are not allowed             |
 | $FL_TRACE  | false   | When true, fl_trace() messages are turned on              |
-
-## File name convention
-
-Basically OFL uses three type of files: (Object) definition files,  (Component) implementation and test files.
-
-### Definition files
-
-Files named in plural form, contain *Object* definitions and must be \<included\> by clients. They *can* contain also function helpers, but essentially they export Objects. Valid examples are:
-
-    include <OFL/foundation/defs.scad>
-    include <OFL/vitamins/countersinks.scad>
-
-### Implementation files
-
-Files named in singular form contain the implementation code for components and must be \<used\> by clients. Valid examples are:
-
-    use <OFL/foundation/layout.scad>
-    use <OFL/vitamins/countersink.scad>
-
-### Test files
-
-Test files are available in singular form as standalone units (i.e. loadable from OpenSCAD) in order to:
-
-* provide a functional test of the component features;
-* facilitate component comprehension;
-* act as concrete documentation for the library.
