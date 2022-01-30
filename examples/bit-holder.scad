@@ -19,9 +19,8 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/unsafe_defs.scad>
-include <../foundation/incs.scad>
-include <../vitamins/incs.scad>
+include <../foundation/util.scad>
+include <../vitamins/magnets.scad>
 
 /* [Globals] */
 
@@ -43,8 +42,6 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_ASSEMBLY  = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined drill shapes (like holes with predefined screw diameter)
-$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Bits (nominal/shank/length,cardinality)] */
 
@@ -139,23 +136,21 @@ module strip() {
         ["Bit number",  len(bhs)],
         fl_bb_corners(value=bbox),
       ];
-    // fl_trace("strip object",strip);
 
     //**** FL_ADD ***************************************************************
-    // $FL_ADD="ON";
-    fl_modifier($FL_ADD) difference() {
-      fl_color($FL_FILAMENT) hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
+    if ($FL_ADD!="OFF") difference() {
+      fl_modifier($FL_ADD) fl_color($FL_FILAMENT) hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
         holder(FL_ADD,$item);
       fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
-        holder(FL_DRILL,$item);
+        holder(FL_DRILL,$item,$FL_DRILL="ON");
     }
     //**** FL_ASSEMBLY **********************************************************
     fl_modifier($FL_ASSEMBLY)
       fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
-        holder(FL_ASSEMBLY,$item);
+        holder(FL_ASSEMBLY,$item,$FL_ADD="ON");
 
     fl_modifier($FL_BBOX)
-      fl_bb_add(fl_bb_corners(strip));
+      fl_bb_add(fl_bb_corners(strip),$FL_ADD="ON");
   }
 }
 

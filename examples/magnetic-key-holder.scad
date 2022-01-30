@@ -19,9 +19,8 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/unsafe_defs.scad>
-include <../foundation/incs.scad>
-include <../vitamins/incs.scad>
+include <../foundation/fillet.scad>
+include <../vitamins/magnets.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -36,11 +35,11 @@ FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "ON";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = "ON";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Magnetic Key Holder] */
 
@@ -127,7 +126,7 @@ module element(
   M           = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
 
   module do_add() {
-    fl_color($FL_FILAMENT) {
+    fl_color(FILAMENT) {
       // magnet holder
       difference() {
         union() {
@@ -147,7 +146,7 @@ module element(
   }
 
   module do_assembly() {
-    fl_magnet([FL_ADD,FL_ASSEMBLY],magnet,thick=base_thick);
+    fl_magnet([FL_ADD,FL_ASSEMBLY],magnet,thick=base_thick,$FL_ADD="ON");
     // do_layout()
     //   fl_screw(FL_ADD,fl_mag_screw(magnet),thick=base_thick,nut="default");
   }
@@ -179,9 +178,9 @@ module element(
 }
 
 verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if (BBOX!="OFF")      FL_BBOX,
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
 ];
 
 element=[
@@ -197,4 +196,4 @@ strip_bb =lay_bb_corners(+X,0,strip);
 fl_trace("strip bounding box",strip_bb);
 
 fl_layout(axis=+X,gap=0,types=strip,octant=+Z)
-  element(verbs,magnet,FILLET_R,FILLET_STEPS,HOLDER_T,BASE_T,TOLERANCE,GAP,$FL_ASSEMBLY=ASSEMBLY,$FL_ADD=ADD,$FL_BBOX=BBOX);
+  element(verbs,magnet,FILLET_R,FILLET_STEPS,HOLDER_T,BASE_T,TOLERANCE,GAP);
