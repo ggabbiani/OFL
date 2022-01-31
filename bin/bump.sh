@@ -113,17 +113,28 @@ fi
 if [[ "$INCREMENT" != "" ]]; then
   info "Auto increment of current $INCREMENT version number"
   VERSION=$(git_version)
+  # VERSION="0.0.0"
   info "Current version is $VERSION"
   # replace points, split into array
   V=( ${VERSION//./ } )
   # increment revision (or other part)
-  ((V[$I]++))
+  # ((V[$I]++))
   # compose new version
   if [ "$INCREMENT" == "MAJOR" ]; then
+    # ((V[0]++))
+    var=${V[0]}
+    V[0]=$((++var))
+    # info "var=$var"
     VERSION="${V[0]}.0.0"
   elif [ "$INCREMENT" == "MINOR" ]; then
-    VERSION="${V[0]}.${V[1]}.0}"
+    # ((V[1]++))
+    var=${V[1]}
+    V[1]=$((++var))
+    VERSION="${V[0]}.${V[1]}.0"
   else
+    # ((V[2]++))
+    var=${V[2]}
+    V[2]=$((++var))
     VERSION="${V[0]}.${V[1]}.${V[2]}"
   fi
   info "New version is $VERSION"
@@ -138,17 +149,18 @@ TAG="v$VERSION"
 git_chk
 
 cat <<EOM
+
 this script is going to:
 
-  * modify and commit "$DEFS" ($VERSION);
-  * annotate local repo as v$VERSION;
-  * push updated "$DEFS" and v${VERSION} annotation to remote repo
+  * modify and commit "$DEFS" (${V[0]}.${V[1]}.${V[2]});
+  * annotate local repo as v${V[0]}.${V[1]}.${V[2]};
+  * push updated "$DEFS" and v${V[0]}.${V[1]}.${V[2]} annotation to remote repo
 
 EOM
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
 # update defs.scad
-sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${VERSION}\];/g" "$DEFS"
+sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${V[0]},${V[1]},${V[2]}\];/g" "$DEFS"
 # update docs (currently $OFL/foundation/docs/dependencies.svg
 $OFL/bin/deps.sh
 # and $OFL/vitamins/docs/dependencies.svg)
