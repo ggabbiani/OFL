@@ -166,6 +166,6 @@ $OFL/bin/deps.sh -s
 # and $OFL/vitamins/docs/dependencies.svg)
 $OFL/bin/deps.sh -v -s
 
-git commit -m "Version $VERSION bumped"
+git commit -m "Version $VERSION bumped" -a
 git tag -m "Version $VERSION bumped" $TAG $BRANCH
 git push --follow-tags
