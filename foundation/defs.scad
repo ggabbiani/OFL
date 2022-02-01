@@ -167,8 +167,22 @@ $FL_PAYLOAD   = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
  */
 module fl_modifier(
   // "OFF","ON","ONLY","DEBUG","TRANSPARENT"
-  behaviour
+  behaviour,
+  reset=true
 ) {
+  fl_trace("context reset to",behaviour);
+  // Runtime behaviour reset to behaviour
+  $FL_ADD       = reset ? behaviour : $FL_ADD;
+  $FL_ASSEMBLY  = reset ? behaviour : $FL_ASSEMBLY;
+  $FL_AXES      = reset ? behaviour : $FL_AXES;
+  $FL_BBOX      = reset ? behaviour : $FL_BBOX;
+  $FL_CUTOUT    = reset ? behaviour : $FL_CUTOUT;
+  $FL_DRILL     = reset ? behaviour : $FL_DRILL;
+  $FL_FOOTPRINT = reset ? behaviour : $FL_FOOTPRINT;
+  $FL_HOLDERS   = reset ? behaviour : $FL_HOLDERS;
+  $FL_LAYOUT    = reset ? behaviour : $FL_LAYOUT;
+  $FL_MOUNT     = reset ? behaviour : $FL_MOUNT;
+  $FL_PAYLOAD   = reset ? behaviour : $FL_PAYLOAD;
   if      (behaviour=="ON")                children();
   else if (behaviour=="OFF")              *children();
   else if (behaviour=="ONLY")             !children();

@@ -516,10 +516,9 @@ module fl_layout(
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_modifier($modifier,false) fl_bb_add(bbox);
 
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier)
+    } else if ($verb==FL_LAYOUT) fl_modifier($modifier,false) {
         for($i=[0:$len-1]) {
           fl_trace("$i",$i);
           $first  = $i==0;
