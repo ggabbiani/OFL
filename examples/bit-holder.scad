@@ -122,7 +122,6 @@ bits = [
   if (check(BIT_14)) let(r=BIT_14)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
   if (check(BIT_15)) let(r=BIT_15)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
 ];
-// let(bit=bits[0]) echo($FL_$FL_ADD=$FL_ADD) holder(FL_ADD,bitHolder(bit[0],bit[1],bit[2]));
 strip();
 
 module strip() {
@@ -138,19 +137,19 @@ module strip() {
       ];
 
     //**** FL_ADD ***************************************************************
-    if ($FL_ADD!="OFF") difference() {
-      fl_modifier($FL_ADD) fl_color($FL_FILAMENT) hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
+    if ($FL_ADD!="OFF") fl_modifier($FL_ADD) difference() {
+      fl_color($FL_FILAMENT) hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
         holder(FL_ADD,$item);
       fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
-        holder(FL_DRILL,$item,$FL_DRILL="ON");
+        holder(FL_DRILL,$item);
     }
     //**** FL_ASSEMBLY **********************************************************
-    fl_modifier($FL_ASSEMBLY)
+    if ($FL_ASSEMBLY!="OFF") fl_modifier($FL_ASSEMBLY)
       fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
-        holder(FL_ASSEMBLY,$item,$FL_ADD="ON");
+        holder(FL_ASSEMBLY,$item);
 
-    fl_modifier($FL_BBOX)
-      fl_bb_add(fl_bb_corners(strip),$FL_ADD="ON");
+    if ($FL_BBOX!="OFF") fl_modifier($FL_BBOX)
+      fl_bb_add(fl_bb_corners(strip));
   }
 }
 

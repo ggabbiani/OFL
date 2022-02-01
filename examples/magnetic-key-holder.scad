@@ -146,7 +146,7 @@ module element(
   }
 
   module do_assembly() {
-    fl_magnet([FL_ADD,FL_ASSEMBLY],magnet,thick=base_thick,$FL_ADD="ON");
+    fl_magnet([FL_ADD,FL_ASSEMBLY],magnet,thick=base_thick);
     // do_layout()
     //   fl_screw(FL_ADD,fl_mag_screw(magnet),thick=base_thick,nut="default");
   }
