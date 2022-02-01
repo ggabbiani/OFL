@@ -75,7 +75,7 @@ module fl_box(
   module holder() {
     difference() {
       translate(fl_Z(FL_NIL)) fl_cube(FL_ADD,size=holder_sz,octant=+FL_Z);
-      knut(FL_DRILL,knut);
+      fl_knut(FL_DRILL,knut);
     }
   }
 
@@ -90,7 +90,7 @@ module fl_box(
       }
       translate(+Y(Treal+FL_NIL))
         multmatrix(Mknut)
-          knut(FL_LAYOUT,knut,direction=[+Y,0],octant=-Z)
+          fl_knut(FL_LAYOUT,knut,direction=[+Y,0],octant=-Z)
             fl_screw(FL_FOOTPRINT,screw,10);
     }
     if (fillet)
@@ -113,11 +113,11 @@ module fl_box(
   module do_assembly() {
     if (parts=="all" || parts=="upper")
       multmatrix(Mknut)
-        knut([FL_ADD,FL_AXES],knut,direction=[+Y,0],octant=-Z) ;
+        fl_knut([FL_ADD,FL_AXES],knut,direction=[+Y,0],octant=-Z) ;
     if (parts=="all" || parts=="lower")
       translate(+Y(Treal+FL_NIL))
         multmatrix(Mknut)
-          knut(FL_LAYOUT,knut,direction=[+Y,0],octant=-Z)
+          fl_knut(FL_LAYOUT,knut,direction=[+Y,0],octant=-Z)
             screw(screw,10);
   }
 
