@@ -37,13 +37,13 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -70,38 +70,27 @@ CO_DRIFT = 0; // [-5:0.05:5]
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  cutout    = CUTOUT!="OFF" ? CO_LEN : undef;
-  tolerance = CUTOUT!="OFF" ? CO_TOLERANCE : undef;
-  drift     = CUTOUT!="OFF" ? CO_DRIFT : undef;
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+cutout    = $FL_CUTOUT!="OFF" ? CO_LEN : undef;
+tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE : undef;
+drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT : undef;
 
-  verbs=[
-    if (ADD!="OFF")       FL_ADD,
-    if (AXES!="OFF")      FL_AXES,
-    if (BBOX!="OFF")      FL_BBOX,
-    if (CUTOUT!="OFF")    FL_CUTOUT,
-  ];
-  // target object(s)
-  single  = SHOW=="FL_HDMI_TYPE_A"  ? FL_HDMI_TYPE_A
-          : SHOW=="FL_HDMI_TYPE_C"  ? FL_HDMI_TYPE_C
-          : SHOW=="FL_HDMI_TYPE_D"  ? FL_HDMI_TYPE_D
-          : undef;
+verbs=[
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
+];
+// target object(s)
+single  = SHOW=="FL_HDMI_TYPE_A"  ? FL_HDMI_TYPE_A
+        : SHOW=="FL_HDMI_TYPE_C"  ? FL_HDMI_TYPE_C
+        : SHOW=="FL_HDMI_TYPE_D"  ? FL_HDMI_TYPE_D
+        : undef;
 
-  fl_trace("verbs",verbs);
-  // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-  if (single)
-    fl_hdmi(
-      verbs,single,direction=direction,octant=octant,cut_thick=cutout,cut_tolerance=tolerance,cut_drift=drift,
-      $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
-    );
-  else
-    layout([for(socket=FL_HDMI_DICT) fl_width(socket)], 10)
-      fl_hdmi(
-        verbs,FL_HDMI_DICT[$i],direction=direction,octant=octant,cut_thick=cutout,cut_tolerance=tolerance,cut_drift=drift,
-        $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT
-      );
-}
-
-__test__();
+fl_trace("verbs",verbs);
+if (single)
+  fl_hdmi(verbs,single,direction=direction,octant=octant,cut_thick=cutout,cut_tolerance=tolerance,cut_drift=drift);
+else
+  layout([for(socket=FL_HDMI_DICT) fl_width(socket)], 10)
+    fl_hdmi(verbs,FL_HDMI_DICT[$i],direction=direction,octant=octant,cut_thick=cutout,cut_tolerance=tolerance,cut_drift=drift);

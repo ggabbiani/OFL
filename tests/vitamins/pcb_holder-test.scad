@@ -34,23 +34,23 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
-DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
-LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
-PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -79,15 +79,15 @@ PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PER
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if (AXES!="OFF")      FL_AXES,
-  if (BBOX!="OFF")      FL_BBOX,
-  if (CUTOUT!="OFF")    FL_CUTOUT,
-  if (DRILL!="OFF")     FL_DRILL,
-  if (FPRINT!="OFF")    FL_FOOTPRINT,
-  if (LAYOUT!="OFF")    FL_LAYOUT,
-  if (PLOAD!="OFF")     FL_PAYLOAD,
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
+  if ($FL_DRILL!="OFF")     FL_DRILL,
+  if ($FL_FOOTPRINT!="OFF")    FL_FOOTPRINT,
+  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
+  if ($FL_PLOAD!="OFF")     FL_PAYLOAD,
 ];
 pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
     : PCB=="FL_PCB_PERF70x50"  ? FL_PCB_PERF70x50
@@ -96,13 +96,9 @@ pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
     : PCB=="FL_PCB_PERF80x20"  ? FL_PCB_PERF80x20
     : undef;
 
-// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-
 // screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
 // pcb     = fl_bb_new(size=PCB_SIZE); fl_trace("pcb",pcb);
 
 holder  = fl_pcb_Holder(pcb,h=H);
-pcb_holder(verbs,holder,direction=direction,octant=octant,
-  $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,$FL_DRILL=DRILL,$FL_FOOTPRINT=FPRINT,$FL_LAYOUT=LAYOUT,$FL_PAYLOAD=PLOAD
-  );
+pcb_holder(verbs,holder,direction=direction,octant=octant);
 fl_trace("holder",holder);

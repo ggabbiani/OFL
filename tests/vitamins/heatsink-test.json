@@ -1,0 +1,25 @@
+{
+    "parameterSets": {
+        "TEST": {
+            "$FL_ADD": "DEBUG",
+            "$FL_ASSEMBLY": "ON",
+            "$FL_AXES": "OFF",
+            "$FL_BBOX": "OFF",
+            "$FL_DEBUG": "false",
+            "$FL_DRILL": "OFF",
+            "$FL_FILAMENT": "DodgerBlue",
+            "$FL_FOOTPRINT": "OFF",
+            "$FL_LAYOUT": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_SAFE": "false",
+            "$FL_TRACE": "false",
+            "$fn": "50",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
+            "OCTANT": "[0, 0, 0]",
+            "PLACE_NATIVE": "true"
+        }
+    },
+    "fileFormatVersion": "1"
+}

@@ -19,7 +19,6 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/unsafe_defs.scad>
 include <../../vitamins/pcbs.scad>
 
 $fn         = 50;           // [3:100]
@@ -31,13 +30,13 @@ $FL_TRACE   = false;
 /* [Supported verbs] */
 
 // Draw base shape (no components nor screws)
-$FL_ADD        = "ON";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // Draw predefined component shape(s)
-$FL_ASSEMBLY   = "ON";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 $FL_AXES      = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // assembled shape bounding box
-$FL_BBOX       = "TRANSPARENT"; // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
 $FL_CUTOUT    = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
@@ -47,7 +46,7 @@ $FL_LAYOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // add mounting accessories shapes
 $FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // components payload bounding box
-$FL_PAYLOAD    = "OFF";         // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD   = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 

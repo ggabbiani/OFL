@@ -20,8 +20,8 @@
  */
 
 include <../../vitamins/hds.scad>
-include <../../vitamins/sata-adapters.scad>
-include <../../vitamins/screw.scad>
+// include <../../vitamins/sata-adapters.scad>
+// include <../../vitamins/screw.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -46,7 +46,7 @@ $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-$FL_FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -101,7 +101,7 @@ verbs=[
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
   if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FPRINT!="OFF")    FL_FOOTPRINT,
+  if ($FL_FOOTPRINT!="OFF")    FL_FOOTPRINT,
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
 ];
 
@@ -113,8 +113,8 @@ T_NIL     = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 rail      = [Rail_x,Rail_y,Rail_z];
 
 hd_ctor   = fl_connectors(hd)[0];
-adp       = FL_SADP_ELUTENG;
-adp_ctor  = fl_connectors(adp)[0];
+// adp       = FL_SADP_ELUTENG;
+// adp_ctor  = fl_connectors(adp)[0];
 
 lay_dir     = fl_str_2axes(LAY_DIRECTION);
 fl_trace("lay_dir",lay_dir);

@@ -34,13 +34,13 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -70,25 +70,20 @@ CO_T          = 15;     // [0:0.1:20]
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
-thick     = CUTOUT!="OFF" ? CO_T          : undef;
-tolerance = CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
+thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
+tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = COLOR=="base"?grey(20):COLOR;
 type      = SHOW=="FL_PHDR_RPIGPIO"  ? FL_PHDR_RPIGPIO : undef;
 
 verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (AXES!="OFF")      FL_AXES,
-  if (BBOX!="OFF")      FL_BBOX,
-  if (CUTOUT!="OFF")    FL_CUTOUT,
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
 ];
 
 module wrapIt(nop,geometry) {
-  fl_pinHeader(verbs,nop=nop,
-    geometry=geometry,color=color,cut_thick=thick,cut_tolerance=tolerance,
-    octant=octant,direction=direction,
-    $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX,$FL_CUTOUT=CUTOUT,
-    $FL_TRACE=FL_TRACE
-    );
+  fl_pinHeader(verbs,nop=nop,geometry=geometry,color=color,cut_thick=thick,cut_tolerance=tolerance,octant=octant,direction=direction);
 }
 
 // $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;

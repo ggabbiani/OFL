@@ -45,7 +45,7 @@ $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
 $FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-$FL_FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -77,7 +77,7 @@ verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_FPRINT!="OFF")    FL_FOOTPRINT,
+  if ($FL_FOOTPRINT!="OFF")    FL_FOOTPRINT,
 ];
 
 if (PART=="data plug") {
