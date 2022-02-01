@@ -431,7 +431,6 @@ module fl_pcb(
 
     } else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    // fl_modifier($FL_AXES) fl_axes(size=size*1.2);
   }
 }
 

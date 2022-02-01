@@ -88,7 +88,7 @@ module sata_adapter(
   }
 
   module do_bbox() {
-    %translate(fl_Y(sock_size.z))
+    translate(fl_Y(sock_size.z))
       fl_cube(size=size,octant=-FL_Y);
   }
   fl_manage(verbs,M,D,size) {

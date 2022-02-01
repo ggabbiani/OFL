@@ -20,6 +20,7 @@
  */
 
 include <sata.scad>
+include <screw.scad>
 
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>

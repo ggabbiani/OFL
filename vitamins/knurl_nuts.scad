@@ -20,6 +20,7 @@
  */
 
 include <../foundation/3d.scad>
+include <screw.scad>
 
 include <NopSCADlib/lib.scad>;
 
@@ -97,7 +98,7 @@ FL_KNUT_DICT_1 = [
   FL_KNUT_M5x6x7,   FL_KNUT_M5x8x7,    FL_KNUT_M5x10x7                     ,
 ];
 
-module knut(
+module fl_knut(
   verbs,
   type,
   direction,            // desired direction [director,rotation], native direction when undef ([+Z])
@@ -189,7 +190,7 @@ module knut(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_bbox();
     } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_layout()  screw(screw,screw_l);
+      fl_modifier($modifier) do_layout() fl_screw(type=screw,len=screw_l);
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout() children();
     } else if ($verb==FL_DRILL) {

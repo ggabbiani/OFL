@@ -230,7 +230,6 @@ module fl_magnet(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
     } else if ($verb==FL_BBOX) {
-      fl_trace("$FL_BBOX",$FL_BBOX);
       fl_modifier($modifier) translate(-Z(NIL)) fl_cube(size=size+Z(2*NIL),octant=+Z);
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier)

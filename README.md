@@ -23,4 +23,7 @@ The following libraries are used and must be installed for using all the OFL fea
 
 ## Library documentation
 
-See [foundation/README.md](foundation/README.md) for further documentation.
+OFL comes with two major components:
+
+* [foundation](foundation/README.md) - the core part re-implementing some of the OpenSCAD native 2d/3d modules while adding many new ones;
+* [vitamins](vitamins/README.md) - a number of client vitamin modules leveraging the foundation.
