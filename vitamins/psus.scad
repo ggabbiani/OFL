@@ -283,7 +283,10 @@ module fl_psu(
   }
 
   module do_drill()  {
-    fl_holes(holes);
+    do_layout() let(
+        t = fl_3d_thick($hole_n,thick)
+      ) translate(-grid_t*$hole_n)
+        fl_cylinder(d=$hole_d,h=t+grid_t+NIL,octant=+Z,direction=[$hole_n,0]);
   }
 
   module do_layout() {
@@ -301,7 +304,6 @@ module fl_psu(
       fl_modifier($modifier) do_bbox();
 
     } else if ($verb==FL_DRILL) {
-      // FIXME: doesn't work properly
       fl_modifier($modifier)  do_drill();
 
     } else if ($verb==FL_LAYOUT) {
