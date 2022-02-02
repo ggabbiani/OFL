@@ -65,7 +65,7 @@ module fl_lay_holes(
 }
 
 /**
-  * Layouts holes according to their defined positions and enabled normals.
+  * Layouts holes according to their defined positions, depth and enabled normals.
   *
   * NOTE: supported normals are x,y or z semi-axis ONLY
   */
