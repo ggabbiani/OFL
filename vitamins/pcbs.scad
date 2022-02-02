@@ -29,7 +29,6 @@ include <usbs.scad>
 
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
-// include <NopSCADlib/vitamins/pin_headers.scad>
 
 // namespace for PCB engine
 FL_PCB_NS  = "pcb";
@@ -158,7 +157,8 @@ module fl_pcb(
   cut_direction,
   // FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
-  // FL_ASSEMBLY,FL_LAYOUT enabled directions passed as list of strings
+  // FL_ASSEMBLY,FL_LAYOUT enabled directions passed as list of enabled normals (ex. ["+X","-z"])
+  // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"]) (See also module fl_holes())
   lay_direction="+z",
   // desired direction [director,rotation], native direction when undef
   direction,
