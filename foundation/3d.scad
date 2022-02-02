@@ -615,3 +615,18 @@ function fl_3d_orthoPlane(
 ) = assert(
   fl_3d_abs(axis)==+X||fl_3d_abs(axis)==+Y||fl_3d_abs(axis)==+Z
 ) [axis.x?0:1,axis.y?0:1,axis.z?0:1];
+
+// returns the sign of a semi-axis (-1,+1)
+function fl_3d_sign(semi) = let(
+    s = sign(semi*[1,1,1])
+  ) assert(s!=0) s;
+
+// returns semi-axis thickness
+function fl_3d_thick(
+  // semi axis
+  semi,
+  // full thickness list (see type_trait.scad)
+  thick
+) = let(
+  sgn  = fl_3d_sign(semi)
+) (sgn * semi * thick)[sgn<0?0:1];
