@@ -46,6 +46,8 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// mount shape through predefined screws
+$FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -63,14 +65,20 @@ DIR_R       = 0;        // [0:360]
 /* [PSU] */
 
 SHOW        = "ALL"; // [ALL, PSU_MeanWell_RS_25_5, PSU_MeanWell_RS_15_5]
+// wall thickness on X semi-axes (-X,+X)
+T_x   = [2.5,2.5];  // [0:0.1:10]
+// wall thickness on Y semi-axes (-Y,+Y)
+T_y   = [2.5,2.5];  // [0:0.1:10]
+// wall thickness on Z semi-axes (-Z,+Z)
+T_z   = [2.5,2.5];  // [0:0.1:10]
 
-// Holder thickness
-T           = 2.5;
-// Assembly flags
-SCREW_MODE  = ["-Z","+X","+Y"];
+// layout direction
+LAY_DIRECTION  = ["-Z","+X","+Y"];
 
 /* [Hidden] */
 
+// thickness list built from customizer values
+T         = [T_x,T_y,T_z];
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs = [
@@ -79,6 +87,7 @@ verbs = [
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
   if ($FL_DRILL!="OFF")     FL_DRILL,
+  if ($FL_MOUNT!="OFF")     FL_MOUNT,
 ];
 
 // target object(s)
@@ -89,8 +98,8 @@ single  = SHOW=="PSU_MeanWell_RS_25_5"  ? PSU_MeanWell_RS_25_5
 // $FL_CUTOUT=CUTOUT;$FL_FOOTPRINT=FPRINT;$FL_PAYLOAD=PLOAD;
 
 if (single)
-  ofl_psu(verbs,single,thick=T,assembly=SCREW_MODE,octant=octant,direction=direction);
+  fl_psu(verbs,single,thick=T,lay_direction=LAY_DIRECTION,octant=octant,direction=direction);
 else
   fl_layout(FL_LAYOUT,+X,20,FL_PSU_DICT)
     let(type=FL_PSU_DICT[$i])
-      ofl_psu(verbs,type,thick=T,assembly=SCREW_MODE,octant=octant,direction=direction);
+      fl_psu(verbs,type,thick=T,lay_direction=LAY_DIRECTION,octant=octant,direction=direction);

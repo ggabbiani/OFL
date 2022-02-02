@@ -27,6 +27,9 @@ include <../foundation/unsafe_defs.scad>
 include <screw.scad>
 include <NopSCADlib/lib.scad>
 
+// namespace for PCB engine
+FL_PSU_NS  = "psu";
+
 // ***** PSU MeanWell RS-25-5 25W 5V 5A ***************************************
 
 PSU_MeanWell_RS_25_5 = let(
@@ -132,21 +135,21 @@ FL_PSU_DICT = [
   PSU_MeanWell_RS_15_5,
 ];
 
-module ofl_psu(
+module fl_psu(
   // MANDATORY verb or list of verbs
   verbs,
   // MANDATORY
   type,
-  // holder thickness
-  thick    = 0,
-  // screw versors (as surface normals) ["+X","+Y","-Z"]
-  assembly = ["+X","+Y","-Z"],
+  // FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  thick = 0,
+  // FL_LAYOUT enabled directions passed as list of enabled normals (ex. ["+X","-z"])
+  // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"]) (See also module fl_holes())
+  lay_direction=["+x","+y","-z"],
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   // when undef native positioning is used
   octant
   ) {
-  // $FL_TRACE=true;
   assert(verbs!=undef);
   assert(type!=undef);
 
@@ -166,7 +169,9 @@ module ofl_psu(
 
   screw       = fl_screw(type);
   screw_r     = screw_radius(screw);
-  screw_len   = screw_longer_than(thick+1);
+
+  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
+            : assert(fl_tt_isThickList(thick)) thick;
 
   term_screw  = fl_get(type,"terminal screw");
   term_ways   = fl_get(type,"terminal ways");
@@ -269,10 +274,12 @@ module ofl_psu(
       cube(bbox_sz,true);
   }
 
-  module do_assembly()  {
-    do_layout()
-      translate(thick*$hole_n)
-        fl_screw(type=screw,len=screw_len,direction=[$hole_n,0]);
+  module do_mount()  {
+    do_layout() let(
+        t   = fl_3d_thick($hole_n,thick),
+        len = screw_longer_than(t+grid_t)
+      ) translate(t*$hole_n)
+        fl_screw(type=screw,len=len,direction=[$hole_n,0]);
   }
 
   module do_drill()  {
@@ -280,7 +287,7 @@ module ofl_psu(
   }
 
   module do_layout() {
-    fl_lay_holes(holes,assembly)
+    fl_lay_holes(holes,lay_direction)
       children();
   }
 
@@ -288,19 +295,25 @@ module ofl_psu(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
+    } else if ($verb==FL_ASSEMBLY) {    // intentionally a no-op
+
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_bbox();
 
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
+    } else if ($verb==FL_DRILL) {
+      // FIXME: doesn't work properly
+      fl_modifier($modifier)  do_drill();
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout() {
         children();
       }
-    } else if ($verb==FL_DRILL) {
-      // FIXME: doesn't work properly
-      fl_modifier($modifier)  do_drill();
+
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) do_mount();
+
+    } else if ($verb==FL_CUTOUT) {  // intentionally a no-op
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
