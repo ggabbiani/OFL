@@ -49,6 +49,8 @@ $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// mount shape through predefined screws
+$FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -101,8 +103,9 @@ verbs=[
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
   if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FOOTPRINT!="OFF")    FL_FOOTPRINT,
+  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
+  if ($FL_MOUNT!="OFF")     FL_MOUNT,
 ];
 
 // thickness matrix built from customizer values
@@ -120,5 +123,6 @@ lay_dir     = fl_str_2axes(LAY_DIRECTION);
 fl_trace("lay_dir",lay_dir);
 
 fl_hd(verbs,hd,dri_tolerance=DRI_TOLERANCE,thick=T,lay_direction=lay_dir,add_connectors=SHOW_CONNECTORS,dri_rails=rail,direction=direction,octant=octant)
-  // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
+  // fl_cylinder(h=$hole_depth,r=screw_radius(fl_screw(hd)),direction=[$hole_n,0],octant=-Z);
   fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);
+

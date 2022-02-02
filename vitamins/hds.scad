@@ -19,6 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
+include <../foundation/hole.scad>
 include <sata.scad>
 include <screw.scad>
 
@@ -31,6 +32,8 @@ HD_EVO860 = let(
   size  = [70,100,6.7],
   plug  = FL_SATA_POWERDATAPLUG,
   cid   = fl_sata_powerDataCID(),
+  screw = M3_cs_cap_screw,
+  screw_r = screw_radius(screw),
 
   Mpd   = let(
     w = size.x,
@@ -50,12 +53,22 @@ HD_EVO860 = let(
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   ["offset",            [0,-size.y/2,-size.z/2]],
   ["corner radius",     3],
-  fl_screw(value=M3_cs_cap_screw),
-  ["hole depth",        4],
-  ["screw block upper", [30.86,  90,   2.5]],
-  ["screw block lower", [30.86,  13.5, 2.5]],
+  fl_screw(value=screw),
   fl_sata_instance(value=plug),
   fl_connectors(value=[pc,dc]),
+
+  // each row represents a hole with the following format:
+  // [[point],[normal], diameter, thickness]
+  fl_holes(value=[
+    [[  size.x/2-3.5, 13.5, 0   ], -Z, 3, 2.5+screw_r],
+    [[  size.x/2-3.5, 90,   0   ], -Z, 3, 2.5+screw_r],
+    [[ -size.x/2+3.5, 13.5, 0   ], -Z, 3, 2.5+screw_r],
+    [[ -size.x/2+3.5, 90,   0   ], -Z, 3, 2.5+screw_r],
+    [[  size.x/2,     13.5, 2.5 ], +X, 3, 3.5+screw_r],
+    [[  size.x/2,     90,   2.5 ], +X, 3, 3.5+screw_r],
+    [[ -size.x/2,     13.5, 2.5 ], -X, 3, 3.5+screw_r],
+    [[ -size.x/2,     90,   2.5 ], -X, 3, 3.5+screw_r],
+    ]),
 
   ["Mpd",        Mpd ],
 ];
@@ -82,6 +95,9 @@ module fl_hd(
   type,
   // thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
   thick,
+  // FL_ASSEMBLY,FL_LAYOUT enabled directions passed as list of enabled normals (ex. ["+X","-z"])
+  // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"]) (See also module fl_holes())
+  // lay_direction=["+x","-x","+z"],
   // faces for children FL_LAYOUT
   lay_direction=[-X,+X,-Z],
   // tolerance for FL_DRILL
@@ -112,67 +128,38 @@ module fl_hd(
       axis==-X ? dri_rails.x[0]
     : axis==+X ? dri_rails.x[1]
     : axis==-Y ? dri_rails.y[0]
-    : axis==+Y ? dri_rails.x[1]
+    : axis==+Y ? dri_rails.y[1]
     : axis==-Z ? dri_rails.z[0]
     : dri_rails.z[1];
 
   screw       = fl_screw(type);
   screw_r     = screw_radius(screw);
-  screw_hole  = fl_get(type,"hole depth");
   corner_r    = fl_get(type,"corner radius");
   size        = fl_size(type);
   conns       = fl_connectors(type);
   plug        = fl_sata_instance(type);
   Mpd         = fl_get(type,"Mpd");
-  block_lower = fl_get(type,"screw block lower");
-  block_upper = fl_get(type,"screw block upper");
+  holes       = fl_holes(type);
   D           = direction ? fl_direction(type,direction=direction): I;
   M           = octant    ? fl_octant(type,octant=octant)         : I;
 
-  module do_layout(faces) {
-    assert(faces!=undef);
-    // horizontal layout
-    h_indexes = [
-      if (fl_isSet(-X,faces)) -1,
-      if (fl_isSet(+X,faces)) +1,
-    ];
-    for(i=h_indexes) {
-      $director   = i*X;
-      $direction  = [$director,0];
-      $octant     = undef;
-      $thick      = fl_axisThick($director,thick);
-      $length     = $thick+screw_hole+dri_tolerance;
-      delta       = fl_width(type)/2+fl_axisThick($director,thick)+dri_tolerance;
-      // lower block
-      translate([i*delta,block_lower.y,block_lower.z])
-        children();
-      // upper block
-      translate([i*delta,block_upper.y,block_upper.z])
-        children();
-    }
-    // vertical layout
-    if (fl_isSet(-Z,faces))
-      for(i=[-1,+1]) {
-        $director   = -Z;
-        $direction  = [$director,0];
-        $octant     = undef;
-        $thick      = fl_axisThick($director,thick);
-        $length     = $thick+screw_hole+dri_tolerance;
-        delta       = -(fl_axisThick($director,thick)+dri_tolerance);
-        translate([i*block_lower.x,block_lower.y,delta])
-          children();
-        translate([i*block_upper.x,block_upper.y,delta])
-          children();
-      }
+  module do_layout() {
+    fl_lay_holes(holes,["+x","-x","-z"]) let(
+        $director   = $hole_n,
+        $direction  = [$director,0],
+        $octant     = undef,
+        $thick      = fl_3d_thick($director,thick),
+        $length     = $thick+$hole_depth+dri_tolerance,
+        delta       = (fl_3d_thick($director,thick)+dri_tolerance)
+      ) translate(delta*$director) children();
   }
 
   module do_add() {
     difference() {
       fl_color("dimgray") difference() {
         linear_extrude(height=size.z) fl_square(size=size,corners=corner_r,quadrant=+Y);
-        do_layout([-X,+X,-Z]) let(
-          l = fl_axisThick($director,thick)+screw_hole
-        ) fl_screw(FL_FOOTPRINT,screw,len=l,octant=$octant,direction=[$director,0]);
+        fl_holes(holes,["+x","-x","-z"])
+          children();
       }
       multmatrix(Mpd) fl_sata_powerDataPlug(FL_FOOTPRINT,plug);
     }
@@ -192,16 +179,19 @@ module fl_hd(
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_layout(lay_direction)
+      // intentionally a no-op
+
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) do_layout()
         fl_screw(type=screw,len=$length,direction=$direction);
 
     } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout(lay_direction)
+      fl_modifier($modifier) do_layout()
         children();
 
     } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier) do_layout(lay_direction)
-        fl_rail(railLen($direction[0]))
+      fl_modifier($modifier) do_layout()
+        fl_rail(railLen($director))
           if ($children) children();
           else fl_screw(FL_FOOTPRINT,screw,len=$length,direction=$direction);
 
@@ -212,7 +202,7 @@ module fl_hd(
       fl_modifier($modifier) do_bbox();
 
     } else if ($verb==FL_CUTOUT) {
-      // FL_CUTOUT is intentionally a no-op
+      // intentionally a no-op
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
