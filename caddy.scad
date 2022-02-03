@@ -133,7 +133,7 @@ module fl_caddy(
 
   module do_assembly() {
     // enrich children context with $verbs
-    let($verbs=[FL_ADD,FL_ASSEMBLY]) do_layout() children();
+    let($verbs=[FL_ADD,FL_ASSEMBLY,FL_MOUNT]) do_layout() children();
   }
 
   module do_layout() {
