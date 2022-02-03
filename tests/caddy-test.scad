@@ -19,10 +19,10 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/unsafe_defs.scad>
-// include <../foundation/incs.scad>
+
 include <../vitamins/hds.scad>
 include <../vitamins/pcbs.scad>
+include <../vitamins/psus.scad>
 include <../caddy.scad>
 
 $fn         = 50;           // [3:100]
@@ -71,7 +71,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [Caddy] */
 // the media to be contained
-MEDIUM  = "Raspberry PI4";  // [Raspberry PI4,Hard Disk]
+MEDIUM  = "Raspberry PI4";  // [Raspberry PI4,Hard Disk,PSU]
 // wall thickness on X semi-axes (-X,+X)
 T_x   = [2.5,2.5];  // [0:0.1:10]
 // wall thickness on Y semi-axes (-Y,+Y)
@@ -106,7 +106,7 @@ verbs=[
 // list of normals to faces
 faces     = fl_str_2axes(FACES);
 // the carried item
-medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : HD_EVO860;
+medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : MEDIUM=="Hard Disk" ? HD_EVO860 : PSU_MeanWell_RS_25_5;
 // thickness list built from customizer values
 T         = [T_x,T_y,T_z];
 // 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
@@ -118,7 +118,8 @@ fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,di
   // the children is called with the following special variables set:
   // $verbs ⇒ list of verbs to be executed
   // $thick ⇒ thickness list for DRILL and CUTOUT
-  if (medium==FL_PCB_RPI4) fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE,$FL_DRILL="ON",$FL_CUTOUT="ON");
-  else                     fl_hd($verbs,medium,thick=$thick+T_NIL,lay_direction=faces,dri_tolerance=TOLERANCE,$FL_DRILL="ON",$FL_CUTOUT="ON");
+  if (medium==FL_PCB_RPI4)    fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE);
+  else if (medium==HD_EVO860) fl_hd($verbs,medium,thick=$thick+T_NIL,lay_direction=faces,dri_tolerance=TOLERANCE);
+  else                        fl_psu($verbs,medium,thick=$thick,lay_direction=FACES);
       // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
       // fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);
