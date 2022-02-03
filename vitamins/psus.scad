@@ -163,6 +163,7 @@ module fl_psu(
       term_esz.z
     ];
 
+  echo(lay_direction=lay_direction);
   pcb_color   = "#FCD67E";
   pcb_t       = fl_get(type,"pcb thickness");
   holes       = fl_holes(type);
@@ -278,7 +279,7 @@ module fl_psu(
     do_layout() let(
         t   = fl_3d_thick($hole_n,thick),
         len = screw_longer_than(t+grid_t)
-      ) translate(t*$hole_n)
+      ) translate((t+NIL)*$hole_n)
         fl_screw(type=screw,len=len,direction=[$hole_n,0]);
   }
 
