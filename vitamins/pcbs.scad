@@ -179,7 +179,7 @@ module fl_pcb(
   // FIXME: manage cases in which the imported pcb doesn't have any screw
   screw_r   = screw_radius(screw);
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
-            : assert(fl_tt_isThickList(thick)) thick;
+            : assert(fl_tt_isAxisVList(thick)) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
   cut_thick = thick;
   material  = fl_material(type,default="green");
@@ -515,7 +515,7 @@ module fl_pcb_adapter(
   screw     = pcb_screw(type);
   screw_r   = screw ? screw_radius(screw) : 0;
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
-            : assert(fl_tt_isThickList(thick)) thick;
+            : assert(fl_tt_isAxisVList(thick)) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
   material  = fl_material(type,default="green");
   radius    = pcb_radius(type);

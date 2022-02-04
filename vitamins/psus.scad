@@ -172,7 +172,7 @@ module fl_psu(
   screw_r     = screw_radius(screw);
 
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
-            : assert(fl_tt_isThickList(thick)) thick;
+            : assert(fl_tt_isAxisVList(thick)) thick;
 
   term_screw  = fl_get(type,"terminal screw");
   term_ways   = fl_get(type,"terminal ways");
@@ -277,7 +277,7 @@ module fl_psu(
 
   module do_mount()  {
     do_layout() let(
-        t   = fl_3d_thick($hole_n,thick),
+        t   = fl_3d_axisValue($hole_n,thick),
         len = screw_longer_than(t+grid_t)
       ) translate((t+NIL)*$hole_n)
         fl_screw(type=screw,len=len,direction=[$hole_n,0]);
@@ -285,7 +285,7 @@ module fl_psu(
 
   module do_drill()  {
     do_layout() let(
-        t = fl_3d_thick($hole_n,thick)
+        t = fl_3d_axisValue($hole_n,thick)
       ) translate(-grid_t*$hole_n)
         fl_cylinder(d=$hole_d,h=t+grid_t+NIL,octant=+Z,direction=[$hole_n,0]);
   }
