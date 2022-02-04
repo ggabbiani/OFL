@@ -76,12 +76,11 @@ function fl_tt_isKVList(list,dictionary=[],f=function (value) value!=undef,size)
   fl_tt_isList(list,function(value) fl_tt_isKV(value,dictionary=dictionary,f=f),size);
 
 /*
- * Key/value list of thickness
+ * Semi-axis Key/value list
  *
- * Each item of the list is actually a key/value pair representing thickness
- * along a given semi-axis. The dimension of this representation is floating
- * from 0 (empty list) to 6 (complete list), both of them being valid list
- * values.
+ * Each item of the list is actually a key/value pair representing a value
+ * associated to one semi-axis. The dimension of this representation is floating
+ * from 0 (empty list) to 6 (complete list).
  *
  * example:
  *
@@ -89,34 +88,41 @@ function fl_tt_isKVList(list,dictionary=[],f=function (value) value!=undef,size)
  *
  * indicates a thickness of 3mm along +X and of 1.5mm along +Z.
  */
-function fl_tt_isThickKVList(list) =
+function fl_tt_isAxisKVList(list) =
   assert(len(list)<=6,list)
   fl_tt_isKVList(
     list,
-    dictionary=["-x","+x","-y","+y","-z","+z"],
+    dictionary=["-x","+x","±x","-y","+y","±y","-z","+z","±z"],
     f=function(value) is_num(value)
   );
 
 /*
- * Full thickness list.
+ * Full semi axis value list.
  *
- * Each row is the thickness along one 3d dimension (X,Y and Z) represented as
- * a pair of thickness values for negative/positive direction.
- * Concretely is a 3x2 matrix in which each item is the thickness
- * along one of the six 3d semi-axes.
+ * Each row represents values associated to X,Y and Z semi-axes.
+ *
+ * [
+ *  [«-x value»,«+x value»],
+ *  [«-y value»,«+y value»],
+ *  [«-z value»,«+z value»]
+ * ]
  *
  * example:
  *
- * [[0,3],[0,0],[1.5,0]]
+ * [
+ *  [0,3],
+ *  [0,0],
+ *  [1.5,0]
+ * ]
  *
- * indicates a thickness of 3mm along +X, 1.5mm along -Z and 0mm otherwise.
+ * indicates a value of 3 along +X, 1.5 along -Z and 0 otherwise.
  */
-function fl_tt_isThickList(list) =
+function fl_tt_isAxisVList(list) =
   fl_tt_isList(
     list,size=3,
     f=function(x) fl_tt_isList(
       x,size=2,
-      f=function(x) is_num(x)
+      f=function(x) is_num(x)||is_string(x)||is_bool(x)
       )
     );
 
