@@ -115,23 +115,6 @@ module fl_hd(
   assert(type!=undef);
   assert(is_bool(add_connectors));
 
-  // TODO: make it public somehow
-  function fl_axisThick(axis,thick) =
-      axis==-X ? thick.x[0]
-    : axis==+X ? thick.x[1]
-    : axis==-Y ? thick.y[0]
-    : axis==+Y ? thick.x[1]
-    : axis==-Z ? thick.z[0]
-    : thick.z[1];
-
-  function railLen(axis) =
-      axis==-X ? dri_rails.x[0]
-    : axis==+X ? dri_rails.x[1]
-    : axis==-Y ? dri_rails.y[0]
-    : axis==+Y ? dri_rails.y[1]
-    : axis==-Z ? dri_rails.z[0]
-    : dri_rails.z[1];
-
   screw       = fl_screw(type);
   screw_r     = screw_radius(screw);
   corner_r    = fl_get(type,"corner radius");
@@ -148,9 +131,9 @@ module fl_hd(
         $director   = $hole_n,
         $direction  = [$director,0],
         $octant     = undef,
-        $thick      = fl_3d_thick($director,thick),
+        $thick      = fl_3d_axisValue($director,thick),
         $length     = $thick+$hole_depth+dri_tolerance,
-        delta       = (fl_3d_thick($director,thick)+dri_tolerance)
+        delta       = (fl_3d_axisValue($director,thick)+dri_tolerance)
       ) translate(delta*$director) children();
   }
 
@@ -191,7 +174,7 @@ module fl_hd(
 
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_layout()
-        fl_rail(railLen($director))
+        fl_rail(fl_3d_axisValue($director,dri_rails))
           if ($children) children();
           else fl_screw(FL_FOOTPRINT,screw,len=$length,direction=$direction);
 
