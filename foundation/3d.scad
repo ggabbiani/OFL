@@ -18,6 +18,7 @@
  */
 
 include <2d.scad>
+include <type_trait.scad>
 
 /*
  * cube defaults for positioning (fl_bb_cornersKV)
@@ -561,7 +562,7 @@ module fl_bb_add(
 }
 
 /*****************************************************************************
- * 3d miscellanous
+ * 3d miscellanous functions
  *****************************************************************************/
 
 /*
@@ -617,16 +618,89 @@ function fl_3d_orthoPlane(
 ) [axis.x?0:1,axis.y?0:1,axis.z?0:1];
 
 // returns the sign of a semi-axis (-1,+1)
-function fl_3d_sign(semi) = let(
-    s = sign(semi*[1,1,1])
+function fl_3d_sign(axis) = let(
+    s = sign(axis*[1,1,1])
   ) assert(s!=0) s;
 
-// returns semi-axis thickness
-function fl_3d_thick(
-  // semi axis
-  semi,
-  // full thickness list (see type_trait.scad)
-  thick
-) = let(
-  sgn  = fl_3d_sign(semi)
-) (sgn * semi * thick)[sgn<0?0:1];
+// returns the «axis» value from a full semi-axis value list
+function fl_3d_axisValue(
+    axis,
+    values
+  ) = let(
+    r = axis==-X ? values[0][0]
+      : axis==+X ? values[0][1]
+      : axis==-Y ? values[1][0]
+      : axis==+Y ? values[1][1]
+      : axis==-Z ? values[2][0]
+      : axis==+Z ? values[2][1]
+      : undef
+  ) assert(r,r) r;
+
+/*
+ * Build an full semi-axis value list from the key/value list «kvs».
+ * Build a full boolean semi-axis value list from literal semi-axis list «axes»
+ *
+ * example 1:
+ * values = fl_3d_AxisVList(kvs=[["-x",3],["±Z",4]]);
+ *
+ * is equivalent to:
+ *
+ * values =
+ * [
+ *  [3,0],
+ *  [0,0],
+ *  [4,4]
+ * ];
+ *
+ * example 2:
+ * values = fl_3d_AxisVList(axes=["-x","±Z"]);
+ *
+ * is equivalent to:
+ *
+ * values =
+ * [
+ *  [true,  false],
+ *  [false, false],
+ *  [true,  true]
+ * ];
+ */
+function fl_3d_AxisVList(
+  // semi-axis key/value list (es. [["-x",3],["±Z",4]])
+  kvs,
+  // semi-axis list (es.["-x","±Z"])
+  axes
+) = assert(fl_XOR(kvs!=undef,axes!=undef))
+  let(
+    r= kvs!=undef
+    //          0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17
+    ? search(["-x","+x","±x","-y","+y","±y","-z","+z","±z","-X","+X","±X","-Y","+Y","±Y","-Z","+Z","±Z"],kvs)
+    : search(["-x","+x","±x","-y","+y","±y","-z","+z","±z","-X","+X","±X","-Y","+Y","±Y","-Z","+Z","±Z"],axes)
+  ) kvs!=undef
+  ? [
+      [
+        r[0]!=[] ? kvs[r[0]][1] : r[2]!=[] ? kvs[r[2]][1] : r[0+9]!=[] ? kvs[r[0+9]][1] : r[2+9]!=[] ? kvs[r[2+9]][1] : 0,
+        r[1]!=[] ? kvs[r[1]][1] : r[2]!=[] ? kvs[r[2]][1] : r[1+9]!=[] ? kvs[r[1+9]][1] : r[2+9]!=[] ? kvs[r[2+9]][1] : 0
+      ],
+      [
+        r[3]!=[] ? kvs[r[3]][1] : r[5]!=[] ? kvs[r[5]][1] : r[3+9]!=[] ? kvs[r[3+9]][1] : r[5+9]!=[] ? kvs[r[5+9]][1] : 0,
+        r[4]!=[] ? kvs[r[4]][1] : r[5]!=[] ? kvs[r[5]][1] : r[4+9]!=[] ? kvs[r[4+9]][1] : r[5+9]!=[] ? kvs[r[5+9]][1] : 0
+      ],
+      [
+        r[6]!=[] ? kvs[r[6]][1] : r[8]!=[] ? kvs[r[8]][1] : r[6+9]!=[] ? kvs[r[6+9]][1] : r[8+9]!=[] ? kvs[r[8+9]][1] : 0,
+        r[7]!=[] ? kvs[r[7]][1] : r[8]!=[] ? kvs[r[8]][1] : r[7+9]!=[] ? kvs[r[7+9]][1] : r[8+9]!=[] ? kvs[r[8+9]][1] : 0
+      ]
+    ]
+  : [
+    [
+      r[0]!=[] || r[2]!=[] || r[0+9]!=[] || r[2+9]!=[],
+      r[1]!=[] || r[2]!=[] || r[1+9]!=[] || r[2+9]!=[],
+    ],
+    [
+      r[3]!=[] || r[5]!=[] || r[3+9]!=[] || r[5+9]!=[],
+      r[4]!=[] || r[5]!=[] || r[4+9]!=[] || r[5+9]!=[],
+    ],
+    [
+      r[6]!=[] || r[8]!=[] || r[6+9]!=[] || r[8+9]!=[],
+      r[7]!=[] || r[8]!=[] || r[7+9]!=[] || r[8+9]!=[],
+    ]
+  ];
