@@ -51,21 +51,21 @@ assert(fl_tt_isKV(["key",[1,2,3,4]],f=function (value) is_list(value))==true);
 free_ko = [
 ];
 
-assert(fl_tt_isThickKVList([]));
-assert(fl_tt_isThickKVList([["shit",2]])==false);
-assert(fl_tt_isThickKVList([["-x",2]]));
-assert(fl_tt_isThickKVList([["-x",2],["+Z",3]]));
-assert(fl_tt_isThickKVList([["-x",2],["+Z",3],["-y","wrong"]])==false);
+assert(fl_tt_isAxisKVList([]));
+assert(fl_tt_isAxisKVList([["shit",2]])==false);
+assert(fl_tt_isAxisKVList([["-x",2]]));
+assert(fl_tt_isAxisKVList([["-x",2],["+Z",3]]));
+assert(fl_tt_isAxisKVList([["-x",2],["+Z",3],["-y","wrong"]])==false);
 
 assert(fl_tt_isList([],function (value) is_num(value))==true);
 assert(fl_tt_isList([1,2,3,4],function (value) is_num(value))==true);
 
-assert(fl_tt_isThickList([])==false);
-assert(fl_tt_isThickList([[1,2],[],[5,6]])==false);
-assert(fl_tt_isThickList([[1,2],[3,4],[5]])==false);
-assert(fl_tt_isThickList([[1,2],[3,4],[5,6]]));
-assert(fl_tt_isThickList([[1,2],[5,6]])==false);
-assert(fl_tt_isThickList([[1,"2"],[3,4],[5,6]])==false);
+assert(fl_tt_isAxisVList([])==false);
+assert(fl_tt_isAxisVList([[1,2],[],[5,6]])==false);
+assert(fl_tt_isAxisVList([[1,2],[3,4],[5]])==false);
+assert(fl_tt_isAxisVList([[1,2],[3,4],[5,6]]));
+assert(fl_tt_isAxisVList([[1,2],[5,6]])==false);
+assert(fl_tt_isAxisVList([[1,"2"],[3,4],[5,6]])==true);
 
 
 assert(fl_tt_isPointNormal([[1,2,3],[1,0,0]]));
