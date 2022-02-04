@@ -634,7 +634,7 @@ function fl_3d_axisValue(
       : axis==-Z ? values[2][0]
       : axis==+Z ? values[2][1]
       : undef
-  ) assert(r,r) r;
+  ) assert(r!=undef,r) r;
 
 /*
  * Build an full semi-axis value list from the key/value list «kvs».
