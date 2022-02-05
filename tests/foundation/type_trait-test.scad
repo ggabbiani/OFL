@@ -20,6 +20,7 @@
  */
 
 include <../../foundation/type_trait.scad>
+include <../../foundation/unsafe_defs.scad>
 
 assert(fl_tt_isInDictionary("inexistent",["key1","key2","key3"])==false);
 assert(fl_tt_isInDictionary("key2",["key1","key2","key3"]));
@@ -67,7 +68,6 @@ assert(fl_tt_isAxisVList([[1,2],[3,4],[5,6]]));
 assert(fl_tt_isAxisVList([[1,2],[5,6]])==false);
 assert(fl_tt_isAxisVList([[1,"2"],[3,4],[5,6]])==true);
 
-
 assert(fl_tt_isPointNormal([[1,2,3],[1,0,0]]));
 assert(fl_tt_isPointNormal([[1,2,3],4])==false);
 assert(fl_tt_isPointNormal([3,[1,0,0]])==false);
@@ -85,3 +85,20 @@ assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7])==true);
 assert(fl_tt_isHole([[1,2,3],[1,0,0],"2.7"])==false);
 assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5])==true);
 assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,"5"])==false);
+
+// axis lists
+
+let(
+  axes  = [-X,+X,-Y,+Y,-Z,+Z],
+  r     = fl_tt_isAxisList(axes)
+) echo(r=r) assert(r,axes);
+
+let(
+  axes  = [],
+  r     = fl_tt_isAxisList(axes)
+) echo(r=r) assert(r,axes);
+
+let(
+  axes  = [[1,2,3],-Z],
+  r     = fl_tt_isAxisList(axes)
+) echo(r=r) assert(!r,axes);

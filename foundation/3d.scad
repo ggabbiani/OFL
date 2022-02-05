@@ -704,3 +704,44 @@ function fl_3d_AxisVList(
       r[7]!=[] || r[8]!=[] || r[7+9]!=[] || r[8+9]!=[],
     ]
   ];
+
+/*
+ * Build a floating semi-axis list from literal semi-axis list.
+ *
+ * example:
+ * list = fl_3d_AxisList(axes=["-x","±Z"]);
+ *
+ * is equivalent to:
+ *
+ * list =
+ * [
+ *  [-1, 0,  0],
+ *  [ 0, 0, -1],
+ *  [ 0, 0, +1],
+ * ];
+ *
+ */
+function fl_3d_AxisList(
+  // semi-axis list (es.["-x","±Z"])
+  axes
+) = let(
+    //            0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17
+    r = search(["-x","+x","±x","-y","+y","±y","-z","+z","±z","-X","+X","±X","-Y","+Y","±Y","-Z","+Z","±Z"],axes)
+  ) [
+    if (r[0]!=[] || r[2]!=[] || r[0+9]!=[] || r[2+9]!=[]) -X,
+    if (r[1]!=[] || r[2]!=[] || r[1+9]!=[] || r[2+9]!=[]) +X,
+    if (r[3]!=[] || r[5]!=[] || r[3+9]!=[] || r[5+9]!=[]) -Y,
+    if (r[4]!=[] || r[5]!=[] || r[4+9]!=[] || r[5+9]!=[]) +Y,
+    if (r[6]!=[] || r[8]!=[] || r[6+9]!=[] || r[8+9]!=[]) -Z,
+    if (r[7]!=[] || r[8]!=[] || r[7+9]!=[] || r[8+9]!=[]) +Z,
+  ];
+
+// wether «axis» is present in floating semi-axis list
+function fl_3d_axisIsSet(
+    axis,
+    list
+  ) = assert(axis!=undef) let(
+    len   = len(list),
+    curr  = len ? list[0] : undef,
+    rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
+  ) curr==axis ? true : len>1 ? fl_3d_axisIsSet(axis,rest) :  false;

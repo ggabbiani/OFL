@@ -128,9 +128,9 @@ let(
 let(
   axes      = ["+x","±y"],
   expected  = [
-    [false,true],
-    [true,true],
-    [false,false],
+    [false, true  ],
+    [true,  true  ],
+    [false, false ],
   ],
   result    = fl_3d_AxisVList(axes=axes)
 ) echo(result=result) assert(result==expected,result);
@@ -152,9 +152,9 @@ let(
 
 let(
   values    = [
-    [true,false],
-    [false,true],
-    [false,false],
+    [true,  false ],
+    [false, true  ],
+    [false, false ],
   ],
   axis      = +Y,
   expected  = values[1][1],
@@ -163,11 +163,55 @@ let(
 
 let(
   values    = [
-    ["zero","one"],
-    ["two","three"],
-    ["four","five"],
+    ["zero",  "one"   ],
+    ["two",   "three" ],
+    ["four",  "five"  ],
   ],
   axis      = -Z,
   expected  = values[2][0],
   result    = fl_3d_axisValue(axis,values)
 ) echo(result=result) assert(result==expected,result);
+
+/******************************************************************************
+ * Semi-axis list from axis literals list
+ */
+
+let(
+  values    = [],
+  expected  = [],
+  result    = fl_3d_AxisList(values)
+) echo(result=result) assert(result==expected,result);
+
+let(
+  values    = ["-X","+z","±y"],
+  expected  = [[-1,0,0],[0,-1,0],[0,+1,0],[0,0,+1]],
+  result    = fl_3d_AxisList(values)
+) echo(result=result) assert(result==expected,result);
+
+let(
+  values    = ["-X","+x","±y"],
+  expected  = [[-1,0,0],[+1,0,0],[0,-1,0],[0,+1,0]],
+  result    = fl_3d_AxisList(values)
+) echo(expected=expected) assert(result==expected,result);
+
+let(
+  values    = ["-x","+X","±y"],
+  expected  = [[-1,0,0],[+1,0,0],[0,-1,0],[0,+1,0]],
+  result    = fl_3d_AxisList(values)
+) echo(expected=expected) assert(result==expected,result);
+
+/******************************************************************************
+ * semi-axis lists
+ */
+
+let(
+  list      = fl_3d_AxisList(["-x","+X","±y"]),
+  result    = fl_3d_axisIsSet(-X,list),
+  expected  = true
+) echo(expected=expected) assert(result==expected,result);
+
+let(
+  list      = fl_3d_AxisList(["-x","+X","±y"]),
+  result    = fl_3d_axisIsSet(-Z,list),
+  expected  = false
+) echo(expected=expected) assert(result==expected,result);

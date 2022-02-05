@@ -87,14 +87,14 @@ holes = [
   [SIZE/2*[+0.5,  -1, -0.5],-Y, D, T],
 ];
 
-enable  = [
+enable  = fl_3d_AxisList([
   if (ONE)    "+z",
   if (TWO)    "-z",
   if (THREE)  "+y",
   if (FOUR)   "-x",
   if (FIVE)   "+x",
   if (SIX)    "-y",
-];
+]);
 
 if (MODE=="layout") difference() {
   fl_color("red")

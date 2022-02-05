@@ -142,9 +142,8 @@ module fl_psu(
   type,
   // FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick = 0,
-  // FL_LAYOUT enabled directions passed as list of enabled normals (ex. ["+X","-z"])
-  // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"]) (See also module fl_holes())
-  lay_direction=["+x","+y","-z"],
+  // FL_LAYOUT directions in floating semi-axis list form
+  lay_direction=[+X,+Y,-Z],
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   // when undef native positioning is used
@@ -163,7 +162,6 @@ module fl_psu(
       term_esz.z
     ];
 
-  echo(lay_direction=lay_direction);
   pcb_color   = "#FCD67E";
   pcb_t       = fl_get(type,"pcb thickness");
   holes       = fl_holes(type);

@@ -21,7 +21,7 @@
 
 // converts a list of strings into a list of their represented axes
 // in case of error, a message is printed and the returned value is -1.
-function fl_str_2axes(slist) =
+function fl_str_2axes(slist) = echo("fl_str_2axes() is ***OBSOLETE*** use fl_3d_AxisList() instead")
   let(
     len   = len(slist),
     s     = len>0 ? fl_str_lower(slist[0]) : undef,

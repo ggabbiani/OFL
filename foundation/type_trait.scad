@@ -142,7 +142,7 @@ function fl_tt_isPointNormalList(list) =
 function fl_tt_isAxisString(s) =
   fl_tt_isInDictionary(
     string=s,
-    dictionary=["-x","+x","-y","+y","-z","+z"],
+    dictionary=["-x","+x","±x","-y","+y","±y","-z","+z","±z"],
     nocase=true
   );
 
@@ -160,3 +160,17 @@ function fl_tt_isHole(hole) = let(
 
 function fl_tt_isHoleList(list) =
   fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));
+
+function fl_tt_isAxis(axis) = (axis==-X||axis==+X||axis==-Y||axis==+Y||axis==-Z||axis==+Z);
+
+/*
+ * Floating semi-axis list.
+ *
+ * One row with matricial representation of cartesian semi-axes in whatever order.
+ *
+ * example:
+ *
+ * [-X,+Z,-Y]
+ */
+function fl_tt_isAxisList(list) =
+  fl_tt_isList(list,f=function(axis) fl_tt_isAxis(axis));

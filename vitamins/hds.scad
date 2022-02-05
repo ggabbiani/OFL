@@ -95,17 +95,14 @@ module fl_hd(
   type,
   // thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
   thick,
-  // FL_ASSEMBLY,FL_LAYOUT enabled directions passed as list of enabled normals (ex. ["+X","-z"])
-  // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"]) (See also module fl_holes())
-  // lay_direction=["+x","-x","+z"],
-  // faces for children FL_LAYOUT
-  lay_direction=[-X,+X,-Z],
+  // FL_LAYOUT directions in floating semi-axis list form
+  lay_direction   = [-X,+X,-Z],
   // tolerance for FL_DRILL
   dri_tolerance   = fl_JNgauge,
   // rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
   dri_rails=[[0,0],[0,0],[0,0]],
   // FL_ADD connectors
-  add_connectors = false,
+  add_connectors  = false,
   // desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
   direction,
   // when undef native positioning is used
@@ -127,7 +124,7 @@ module fl_hd(
   M           = octant    ? fl_octant(type,octant=octant)         : I;
 
   module do_layout() {
-    fl_lay_holes(holes,["+x","-x","-z"]) let(
+    fl_lay_holes(holes,lay_direction) let(
         $director   = $hole_n,
         $direction  = [$director,0],
         $octant     = undef,
@@ -141,7 +138,7 @@ module fl_hd(
     difference() {
       fl_color("dimgray") difference() {
         linear_extrude(height=size.z) fl_square(size=size,corners=corner_r,quadrant=+Y);
-        fl_holes(holes,["+x","-x","-z"])
+        fl_holes(holes,[-X,+X,-Z])
           children();
       }
       multmatrix(Mpd) fl_sata_powerDataPlug(FL_FOOTPRINT,plug);
@@ -161,8 +158,7 @@ module fl_hd(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
-    } else if ($verb==FL_ASSEMBLY) {
-      // intentionally a no-op
+    } else if ($verb==FL_ASSEMBLY) {  // intentionally a no-op
 
     } else if ($verb==FL_MOUNT) {
       fl_modifier($modifier) do_layout()

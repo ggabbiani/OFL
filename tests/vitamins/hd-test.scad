@@ -37,9 +37,9 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 // adds shapes to scene.
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
+// add predefined component shape(s)
 $FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds local reference axes
+// draw of local reference axes
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
@@ -119,7 +119,7 @@ hd_ctor   = fl_connectors(hd)[0];
 // adp       = FL_SADP_ELUTENG;
 // adp_ctor  = fl_connectors(adp)[0];
 
-lay_dir     = fl_str_2axes(LAY_DIRECTION);
+lay_dir     = fl_3d_AxisList(LAY_DIRECTION);
 fl_trace("lay_dir",lay_dir);
 
 fl_hd(verbs,hd,dri_tolerance=DRI_TOLERANCE,thick=T,lay_direction=lay_dir,add_connectors=SHOW_CONNECTORS,dri_rails=rail,direction=direction,octant=octant)

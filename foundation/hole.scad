@@ -39,13 +39,11 @@ include <3d.scad>
 module fl_lay_holes(
   // list of hole specs
   holes,
-  // list of enabled normals (ex. ["+X","-z"])
-  // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"])
-  enable  = ["-x","+x","-y","+y","-z","+z"]
+  // enabled normals in floating semi-axis list form
+  enable  = [-X,+X,-Y,+Y,-Z,+Z]
 ) {
   assert(fl_tt_isHoleList(holes),holes);
-  enable  = is_string(enable) ? [enable] : enable;
-  assert(fl_tt_isList(enable,function(s) fl_tt_isAxisString(s)),enable);
+  assert(fl_tt_isAxisList(enable),enable);
 
   for($hole_i=[0:len(holes)-1]) {
     hole        = holes[$hole_i];
@@ -53,12 +51,7 @@ module fl_lay_holes(
     $hole_n     = hole[1];
     $hole_d     = hole[2];
     $hole_depth = len(hole)==4 ? assert(is_num(hole[3])) hole[3] : 0;
-    if ((($hole_n==-X) && fl_tt_isInDictionary("-x",enable))
-    ||  (($hole_n==+X) && fl_tt_isInDictionary("+x",enable))
-    ||  (($hole_n==-Y) && fl_tt_isInDictionary("-y",enable))
-    ||  (($hole_n==+Y) && fl_tt_isInDictionary("+y",enable))
-    ||  (($hole_n==-Z) && fl_tt_isInDictionary("-z",enable))
-    ||  (($hole_n==+Z) && fl_tt_isInDictionary("+z",enable)))
+    if (fl_3d_axisIsSet($hole_n,enable))
       translate(point)
         children();
   }
@@ -72,9 +65,8 @@ module fl_lay_holes(
 module fl_holes(
   // list of holes specs
   holes,
-  // list of enabled normals (ex. ["+X","-z"])
-  // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"])
-  enable  = ["-x","+x","-y","+y","-z","+z"]
+  // enabled normals in floating semi-axis list form
+  enable  = [-X,+X,-Y,+Y,-Z,+Z]
 ) {
   fl_trace("enable",enable);
   fl_trace("holes",holes);

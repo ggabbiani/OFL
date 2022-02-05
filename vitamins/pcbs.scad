@@ -157,9 +157,8 @@ module fl_pcb(
   cut_direction,
   // FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
-  // FL_ASSEMBLY,FL_LAYOUT enabled directions passed as list of enabled normals (ex. ["+X","-z"])
-  // A single string "s" is interpreted as ["s"] (ex. "-y" ⇒ ["-y"]) (See also module fl_holes())
-  lay_direction="+z",
+  // FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
+  lay_direction=[+Z],
   // desired direction [director,rotation], native direction when undef
   direction,
   // when undef native positioning is used
@@ -254,7 +253,7 @@ module fl_pcb(
 
   // TODO: better clarify the kind of native positioning, right now it places pcb on first quadrant
   // then translate according the bounding box. This doesn't match the behaviour followed
-  // for holes, that are instead already placed din the final full 3d space
+  // for holes, that are instead already placed in the final full 3d space
   module do_add() {
     fl_color(material) difference() {
       translate(Z(bbox[0].z)) linear_extrude(pcb_t)
@@ -273,7 +272,7 @@ module fl_pcb(
           }
         }
       if (holes)
-        fl_holes(holes,"+Z");
+        fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z]);
     }
     if (grid)
       grid_plating();
@@ -289,40 +288,40 @@ module fl_pcb(
     fl_trace("children",$children);
 
 
-      if (label) {
-        assert(class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
-        $component  = fl_get(comps,label);
-        $label      = label;
-        position    = $component[1];
-        translate(position) children();
-      } else if (directions) {
-        assert(class=="components",str("Cannot layout BY DIRECTION on class '",class,"'"));
-        for(c=comps) {  // «c» = ["label",component]
-          component = c[1];
-          direction = component[2][0];
-          // triggers a component if its direction matches the direction list
-          if (search([direction],directions)!=[[]]) {
-            $component  = c[1];
-            $label      = c[0];
-            $direction  = direction;  // component direction
-            position    = $component[1];
-            translate(position) children();
-          }
+    if (label) {
+      assert(class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
+      $component  = fl_get(comps,label);
+      $label      = label;
+      position    = $component[1];
+      translate(position) children();
+    } else if (directions) {
+      assert(class=="components",str("Cannot layout BY DIRECTION on class '",class,"'"));
+      for(c=comps) {  // «c» = ["label",component]
+        component = c[1];
+        direction = component[2][0];
+        // triggers a component if its direction matches the direction list
+        if (search([direction],directions)!=[[]]) {
+          $component  = c[1];
+          $label      = c[0];
+          $direction  = direction;  // component direction
+          position    = $component[1];
+          translate(position) children();
         }
-      } else {  // by class
-        if (class=="components")
-          for(c=comps) {  // «c» = ["label",component]
-            $component  = c[1];
-            $label      = c[0];
-            position    = $component[1];
-            translate(position) children();
-          }
-        else if (class=="holes")
-          fl_lay_holes(holes,lay_direction)
-            children();
-        else
-          assert(false,str("unknown component class '",class,"'."));
       }
+    } else {  // by class
+      if (class=="components")
+        for(c=comps) {  // «c» = ["label",component]
+          $component  = c[1];
+          $label      = c[0];
+          position    = $component[1];
+          translate(position) children();
+        }
+      else if (class=="holes")
+        fl_lay_holes(holes,lay_direction)
+          children();
+      else
+        assert(false,str("unknown component class '",class,"'."));
+    }
   }
 
   module do_assembly() {
@@ -352,7 +351,7 @@ module fl_pcb(
   }
 
   module do_drill() {
-    fl_lay_holes(holes,"+z")
+    fl_lay_holes(holes,lay_direction)
       fl_cylinder(d=$hole_d,h=dr_thick+pcb_t,octant=-$hole_n);
   }
 
@@ -537,19 +536,19 @@ module fl_pcb_adapter(
 
   module do_layout() {
     if (holes)
-      fl_lay_holes(holes,"+z")
+      fl_lay_holes(holes,[+Z])
         children();
   }
 
   module do_assembly() {
     if (holes)
-      fl_lay_holes(holes,"+z")
+      fl_lay_holes(holes,[+Z])
         fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
   }
 
   module do_drill() {
     if (holes)
-      fl_lay_holes(holes,"+z")
+      fl_lay_holes(holes,[+Z])
         fl_cylinder(d=$hole_d,h=dr_thick+pcb_t,octant=-$hole_n);
   }
 
