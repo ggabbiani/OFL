@@ -63,7 +63,7 @@ let(
   ["holder/height", h],
 ];
 
-module pcb_holder(
+module fl_pcb_holder(
   verbs,
   // as returned from function fl_pcb_Holder()
   type,
@@ -94,7 +94,7 @@ module pcb_holder(
 
   h    = fl_get(type,"holder/height");
   radius     = wsh_r;
-  // thick = wsh_r - scr_r;
+  thick = wsh_r - scr_r;
 
   holes = fl_holes(pcb);
 
@@ -104,9 +104,10 @@ module pcb_holder(
   module do_add() {
 
     module frame() {
-      translate(bbox[0]-Z*size.z) difference() {
-        cube(size=[bbox.x,bbox.y,thick]);
-        translate([2*holder_R,2*holder_R,-FL_NIL]) cube(size=[bbox.x-4*holder_R,bbox.y-4*holder_R,thick+2*FL_NIL]);
+      translate(bbox[0]-0*Z*size.z) difference() {
+        cube(size=[size.x,size.y,thick]);
+        // translate([2*holder_R,2*holder_R,-FL_NIL])
+        //   cube(size=[bbox.x-4*holder_R,bbox.y-4*holder_R,thick+2*FL_NIL]);
       }
     }
 
@@ -130,7 +131,7 @@ module pcb_holder(
   }
 
   module do_assembly() {
-    fl_pcb([FL_ADD,FL_ASSEMBLY],pcb,thick=h);
+    fl_pcb([FL_ADD,FL_ASSEMBLY,FL_MOUNT],pcb,thick=h);
     // fl_color("green") pcb();
     // fl_trace("Holes size",len(holes));
     // for(i=[0:len(holes)-1])

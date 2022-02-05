@@ -244,7 +244,7 @@ function fl_nopSCADlib(type,value,default)
 function fl_payload(type,value)     = fl_property(type,"payload bounding box",value);
 function fl_rotor(type,value)       = fl_property(type,"rotor",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
-// TODO: implement for pcb_holder
+// TODO: implement for fl_pcb_holder
 // function fl_tolerance(type,value)   = fl_property(type,"tolerance",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 
