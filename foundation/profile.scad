@@ -24,7 +24,7 @@ include <3d.scad>
 // default direction  : [+Z,+X]
 module fl_profile(
   verbs     = FL_ADD,
-  preset,     // preset profiles
+  // preset,     // preset profiles
   type,       // "E","L","T" and "U"
   radius,     // external radius (square if undef)
   size,
@@ -134,7 +134,7 @@ module fl_profile(
 // default direction  : [+Z,+X]
 module fl_bentPlate(
   verbs     = FL_ADD,
-  preset,             // preset profiles
+  // preset,             // preset profiles
   type,               // "L" or "U"
   radius,             // fold internal radius (square if undef)
   size,               // dimensioni del profilato [w,h,d]. Uno scalare s indica [s,s,s]
