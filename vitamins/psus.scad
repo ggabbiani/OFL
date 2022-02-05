@@ -32,7 +32,7 @@ FL_PSU_NS  = "psu";
 
 // ***** PSU MeanWell RS-25-5 25W 5V 5A ***************************************
 
-PSU_MeanWell_RS_25_5 = let(
+FL_PSU_MeanWell_RS_25_5 = let(
     size  = [51,78,28],
     pcb_t = 1.6,
     // sheet metal thickness
@@ -81,7 +81,7 @@ PSU_MeanWell_RS_25_5 = let(
     fl_director(value=-FL_Y),fl_rotor(value=-FL_X),
   ];
 
-PSU_MeanWell_RS_15_5 = let(
+FL_PSU_MeanWell_RS_15_5 = let(
     size      = [51,62.5,28],
     pcb_t     = 1.6,
     // sheet metal thickness
@@ -131,8 +131,8 @@ PSU_MeanWell_RS_15_5 = let(
   ];
 
 FL_PSU_DICT = [
-  PSU_MeanWell_RS_25_5,
-  PSU_MeanWell_RS_15_5,
+  FL_PSU_MeanWell_RS_25_5,
+  FL_PSU_MeanWell_RS_15_5,
 ];
 
 module fl_psu(

@@ -106,7 +106,7 @@ verbs=[
 // list of normals to faces
 faces     = fl_3d_AxisList(FACES);
 // the carried item
-medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : MEDIUM=="Hard Disk" ? HD_EVO860 : PSU_MeanWell_RS_25_5;
+medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : MEDIUM=="Hard Disk" ? HD_EVO860 : FL_PSU_MeanWell_RS_25_5;
 // thickness list built from customizer values
 T         = [T_x,T_y,T_z];
 // 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
