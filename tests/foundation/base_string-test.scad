@@ -26,11 +26,6 @@ s = "I was A Mixed string!";
 assert(fl_str_upper(s)=="I WAS A MIXED STRING!");
 assert(fl_str_lower(s)=="i was a mixed string!");
 
-let(r=fl_str_2axes([]))                   assert(r==[],r);
-let(r=fl_str_2axes(["+x","-Z"]))          assert(r==[[1,0,0],[0,0,-1]],r);
-let(r=fl_str_2axes(["+x","pippo","-Z"]))  assert(r==-1,r);
-
-
 let(
   in  = ["one","two",["three","four"],"five","six",["seven","eight"]],
   out = ["one", "two", "three", "four", "five", "six", "seven", "eight"]

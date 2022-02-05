@@ -31,7 +31,7 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-$FL_TRACE       = false;
+$FL_TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -50,7 +50,7 @@ $FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-$FL_FOOTPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
@@ -104,7 +104,7 @@ verbs=[
   if ($FL_PLOAD!="OFF")     FL_PAYLOAD,
 ];
 // list of normals to faces
-faces     = fl_str_2axes(FACES);
+faces     = fl_3d_AxisList(FACES);
 // the carried item
 medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : MEDIUM=="Hard Disk" ? HD_EVO860 : PSU_MeanWell_RS_25_5;
 // thickness list built from customizer values
@@ -120,6 +120,6 @@ fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,di
   // $thick ⇒ thickness list for DRILL and CUTOUT
   if (medium==FL_PCB_RPI4)    fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE);
   else if (medium==HD_EVO860) fl_hd($verbs,medium,thick=$thick+T_NIL,lay_direction=faces,dri_tolerance=TOLERANCE);
-  else                        fl_psu($verbs,medium,thick=$thick,lay_direction=FACES);
+  else                        fl_psu($verbs,medium,thick=$thick,lay_direction=faces);
       // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
       // fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);
