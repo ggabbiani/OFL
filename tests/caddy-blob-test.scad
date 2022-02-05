@@ -128,14 +128,17 @@ module blob(
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout()
-
         children();
+
     } else if ($verb==FL_FOOTPRINT) {
-
       fl_modifier($modifier);
+
     } else if ($verb==FL_ASSEMBLY) {
-
       fl_modifier($modifier);
+
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier);
+
     } else if ($verb==FL_DRILL) {
       fl_trace("$modifier",$modifier);
       fl_trace("thick",thick);
@@ -157,11 +160,11 @@ verbs=[
   if ($FL_BBOX!="OFF")      FL_BBOX,
   if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
   if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FOOTPRINT!="OFF")    FL_FOOTPRINT,
+  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
   if ($FL_PLOAD!="OFF")     FL_PAYLOAD,
 ];
 // list of normals to faces
-faces = fl_str_2axes(FACES);
+faces = fl_3d_AxisList(FACES);
 // the carried item
 blob  = [
   fl_bb_corners(value=BLOB_BBOX)
