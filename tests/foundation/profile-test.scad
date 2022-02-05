@@ -34,13 +34,13 @@ FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-FPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -68,23 +68,18 @@ SECTION = "L"; // ["E", "L", "T", "U"]
 
 /* [Hidden] */
 
-module __test__() {
-  direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-  octant    = PLACE_NATIVE  ? undef : OCTANT;
-  verbs=[
-    if (ADD!="OFF")     FL_ADD,
-    if (AXES!="OFF")    FL_AXES,
-    if (BBOX!="OFF")    FL_BBOX,
-    if (FPRINT!="OFF")  FL_FOOTPRINT,
-  ];
-  radius  = RADIUS!=0 ? RADIUS : undef;
-  fl_trace("TYPE",TYPE);
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+verbs=[
+  if ($FL_ADD!="OFF")       FL_ADD,
+  if ($FL_AXES!="OFF")      FL_AXES,
+  if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
+];
+radius  = RADIUS!=0 ? RADIUS : undef;
+fl_trace("TYPE",TYPE);
 
-  $FL_ADD=ADD;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_FOOTPRINT=FPRINT;
-  if (TYPE=="Profile")
-    fl_profile(verbs,type=SECTION,size=SIZE,thick=T,radius=radius,material=FILAMENT,octant=octant,direction=direction);
-  else
-    fl_bentPlate(verbs,type=SECTION,size=SIZE,thick=T,radius=radius,material=FILAMENT,octant=octant,direction=direction);
-}
-
-__test__();
+if (TYPE=="Profile")
+  fl_profile(verbs,type=SECTION,size=SIZE,thick=T,radius=radius,material=FILAMENT,octant=octant,direction=direction);
+else
+  fl_bentPlate(verbs,type=SECTION,size=SIZE,thick=T,radius=radius,material=FILAMENT,octant=octant,direction=direction);
