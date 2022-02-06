@@ -67,8 +67,8 @@ module fl_pcb_holder(
   verbs,
   // as returned from function fl_pcb_Holder()
   type,
-  // when >0 a frame is added
-  frame = 0,
+  // frame specs as a list [«height»,«thickness»]
+  frame,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   // when undef native positioning is used
@@ -77,7 +77,7 @@ module fl_pcb_holder(
   // $FL_TRACE=true;
   assert(verbs!=undef);
   assert(type!=undef);
-  assert(frame>=0);
+  assert(frame==undef||len(frame)==2,frame);
 
   screw       = fl_screw(type);
   scr_r       = screw_radius(screw);
@@ -94,7 +94,6 @@ module fl_pcb_holder(
 
   h    = fl_get(type,"holder/height");
   radius     = wsh_r;
-  thick = wsh_r - scr_r;
 
   holes = fl_holes(pcb);
 
@@ -102,15 +101,6 @@ module fl_pcb_holder(
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
   module do_add() {
-
-    module frame() {
-      translate(bbox[0]-0*Z*size.z) difference() {
-        cube(size=[size.x,size.y,thick]);
-        // translate([2*holder_R,2*holder_R,-FL_NIL])
-        //   cube(size=[bbox.x-4*holder_R,bbox.y-4*holder_R,thick+2*FL_NIL]);
-      }
-    }
-
     fl_lay_holes(holes)
       translate(-Z(pcb_t)) let(
           pos = holes[$hole_i][0],
@@ -123,7 +113,9 @@ module fl_pcb_holder(
         ) fl_tube(r=r,h=h,thick=t,octant=-Z);
 
     if (frame)
-      frame();
+      translate(bbox[0])
+        linear_extrude(frame[0])
+          fl_2d_frame(size=size,thick=frame[1],quadrant=+X+Y);
   }
 
   module do_bbox() {

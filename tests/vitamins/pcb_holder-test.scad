@@ -68,8 +68,10 @@ DIR_R       = 0;        // [0:360]
 /* [PCB Holder ]*/
 
 H   = 4;  // [0.1:0.1:5]
-// draw a base frame
-DRAW_FRAME  = false;
+// frame height on Z axis
+FRAME_H  = 0; // [0:0.1:5]
+// frame thickness on XY plane
+FRAME_T  = 0; // [0:0.1:5]
 // frame base thickness
 BASE_T      = 2.5;
 PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20]
@@ -99,6 +101,8 @@ pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
 // screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
 // pcb     = fl_bb_new(size=PCB_SIZE); fl_trace("pcb",pcb);
 
+frame = FRAME_H && FRAME_T ? [FRAME_H,FRAME_T] : undef;
+
 holder  = fl_pcb_Holder(pcb,h=H);
-fl_pcb_holder(verbs,holder,direction=direction,octant=octant);
+fl_pcb_holder(verbs,holder,direction=direction,octant=octant,frame=frame);
 fl_trace("holder",holder);
