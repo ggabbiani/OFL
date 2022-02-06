@@ -233,8 +233,7 @@ module fl_pcb(
             step    = inch(0.1),
             bbox    = bbox+[grid,-grid],
             clip    = false
-          )
-            fl_annulus(d=1-NIL2,thick=0.5);
+          ) fl_annulus(d=2-NIL2,thick=0.5);
 
           // oval lands at the ends
           if (fr4 && len(grid) < 3) {
