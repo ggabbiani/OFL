@@ -36,7 +36,6 @@ module fl_tube(
 
   obase = r ? [r,r] : d ? [d/2,d/2] : base;
   assert(obase);
-  ibase = [obase[0]-thick,obase[1]-thick];
   bbox  = let(bbox=fl_bb_ellipse(obase)) [[bbox[0].x,bbox[0].y,0],[bbox[1].x,bbox[1].y,h]];
   size  = bbox[1]-bbox[0];
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
@@ -47,7 +46,7 @@ module fl_tube(
 
   module do_add() {
     linear_extrude(height=h)
-      fl_ellipticArc(e=ibase,angles=[0,360],thick=thick);
+      fl_ellipticArc(e=obase,angles=[0,360],thick=thick);
   }
   module do_fprint() {
     linear_extrude(height=h)

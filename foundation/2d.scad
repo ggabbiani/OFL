@@ -38,7 +38,7 @@ function fl_bb_ipoly(r,d,n) = let(
 
 // exact sector bounding box
 function fl_bb_sector(
-  r       = 1,
+  r = 1,
   d,
   angles
 ) = let(
@@ -62,23 +62,31 @@ function fl_bb_circle(r=1,d) = let(
 
 // exact arc bounding box
 function fl_bb_arc(r=1,d,angles,thick) =
-assert(is_list(angles),str("angles must be a list (",angles,")"))
-let(
-  radius    = d!=undef ? d/2 : r,
-  interval  = __normalize__(angles),
-  inf       = interval[0],
-  sup       = interval[1],
-  start     = ceil(inf / 90),  // 0 <= start <= 3
-  RADIUS    =
-    assert(is_num(radius),str("«radius» must be a number (",radius,")"))
-    assert(is_num(thick), str("«thick» must be a number (",thick,")"))
-    radius+thick,
-  pts = [
-    if (inf%90!=0) for(r=[radius,RADIUS]) fl_circleXY(r,inf),
-    for(alpha=[90*start:90:90*(start+3)]) if (alpha<=sup) for(r=[radius,RADIUS]) fl_circleXY(r,alpha),
-    if (sup%90!=0) for(r=[radius,RADIUS]) fl_circleXY(r,sup),
-  ]
-) fl_bb_polygon(pts);
+  assert(is_list(angles),angles)
+  let(
+    radius    = d!=undef ? d/2 : r,
+    interval  = __normalize__(angles),
+    inf       = interval[0],
+    sup       = interval[1],
+    start     = ceil(inf / 90),  // 0 <= start <= 3
+    radius_int    =
+      assert(is_num(radius),radius)
+      assert(is_num(thick),thick)
+      assert(thick<radius,str("thick=",thick,",radius=",radius))
+      radius-thick,
+    pts = [
+      if (inf%90!=0)
+        for(r=[radius_int,radius])
+          fl_circleXY(r,inf),
+      for(alpha=[90*start:90:90*(start+3)])
+        if (alpha<=sup)
+          for(r=[radius_int,radius])
+            fl_circleXY(r,alpha),
+      if (sup%90!=0)
+        for(r=[radius_int,radius])
+          fl_circleXY(r,sup),
+    ]
+  ) fl_bb_polygon(pts);
 
 //**** sector *****************************************************************
 
@@ -263,39 +271,53 @@ module fl_ellipticSector(
 
 // Exact elliptic arc bounding box
 function fl_bb_ellipticArc(
-  e,      // ellipse in [a,b] form
-  angles, // start|end angles
-  thick   // added to radius defines the external radius
+  // outer ellipse in [a,b] form
+  e,
+  // start|end angles
+  angles,
+  // subtracted to «e» semi-axes defines the inner ellipse ones
+  thick
 ) =
-assert(is_list(e)     ,str("e=",e))
-assert(is_list(angles),str("angles=",angles))
-assert(is_num(thick)  ,str("thick=",thick))
+assert(is_list(e),e)
+assert(is_list(angles),angles)
+assert(is_num(thick) && thick<min(e),thick)
 let(
   angles    = __normalize__(angles),
   inf       = angles[0],
   sup       = angles[1],
   start     = ceil(inf / 90),
-  E         = e+[thick,thick],
+  e_int     = e-[thick,thick],
   pts = [
-    if (inf%90!=0) for(ellipse=[e,E]) fl_ellipseXY(ellipse,angle=inf),
-    for(alpha=[90*start:90:90*(start+3)]) if (alpha<=sup) for(ellipse=[e,E]) fl_ellipseXY(ellipse,angle=alpha),
-    if (sup%90!=0) for(ellipse=[e,E])   fl_ellipseXY(ellipse,angle=sup),
+    if (inf%90!=0)
+      for(ellipse=[e_int,e])
+        fl_ellipseXY(ellipse,angle=inf),
+    for(alpha=[90*start:90:90*(start+3)])
+      if (alpha<=sup)
+        for(ellipse=[e_int,e])
+          fl_ellipseXY(ellipse,angle=alpha),
+    if (sup%90!=0)
+      for(ellipse=[e_int,e])
+        fl_ellipseXY(ellipse,angle=sup),
   ]
 ) fl_bb_polygon(pts);
 
 module fl_ellipticArc(
-  verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
-  e,                  // ellipse in [a,b] form
-  angles,             // start|end angles
-  thick,              // added to radius defines the external radius
+  // supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  verbs     = FL_ADD,
+  // outer ellipse in [a,b] form
+  e,
+  // start|end angles
+  angles,
+  // subtracted to «e» semi-axes defines the inner ellipse ones
+  thick,
   quadrant
 ) {
-  assert(is_list(e)     ,str("e=",e));
-  assert(is_list(angles),str("angles=",angles));
-  assert(is_num(thick)  ,str("thick=",thick));
+  assert(is_list(e),e);
+  // assert(is_list(angles),angles);
+  // assert(is_num(thick),thick);
 
-  a     = e[0];
-  b     = e[1];
+  a     = e.x;
+  b     = e.y;
   bbox  = fl_bb_ellipticArc(e,angles,thick);
   size  = bbox[1]-bbox[0];
   M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
@@ -303,8 +325,8 @@ module fl_ellipticArc(
   fl_manage(verbs,M,size=size) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
-        fl_ellipticSector(verbs=$verb, e=[a+thick,b+thick] ,angles=angles);
-        fl_ellipticSector(verbs=$verb, e=e, angles=angles);
+        fl_ellipticSector(verbs=$verb, angles=angles, e=e                 );
+        fl_ellipticSector(verbs=$verb, angles=angles, e=[a-thick,b-thick] );
       }
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
@@ -478,10 +500,14 @@ module fl_annulus(
 
 module fl_arc(
   verbs     = FL_ADD,
-  r,          // INTERNAL radius
-  d,          // INTERNAL diameter
-  angles,     // start and stop angles
-  thick,      // added to radius defines the external radius
+  // outer radius
+  r,
+  // outer diameter
+  d,
+  // start and stop angles
+  angles,
+  // subtracted to radius defines the inner one
+  thick,
   quadrant
   ) {
   assert(is_list(angles));
@@ -497,8 +523,8 @@ module fl_arc(
   fl_manage(verbs,M,size=size) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
-        fl_sector($verb, r=radius + thick,angles=angles);
-        fl_sector($verb, r=radius, angles=angles);
+        fl_sector($verb, angles=angles, r=radius      );
+        fl_sector($verb, angles=angles, r=radius-thick);
       }
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) if (size.x>0 && size.y>0) translate(bbox[0]) square(size=size, center=false);

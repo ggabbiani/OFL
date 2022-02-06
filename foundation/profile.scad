@@ -173,7 +173,7 @@ module fl_bentPlate(
         if (footprint)
           fl_sector(r=R,angles=[-90,-180]);
         else
-          fl_arc(r=r,angles=[-90,-180],thick=thick);
+          fl_arc(r=R,angles=[-90,-180],thick=thick);
         // X segment or square when footprint
         let(
           segment = [sz.x-R,thick],
