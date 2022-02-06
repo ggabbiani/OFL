@@ -64,7 +64,7 @@ CORNER_2  = [3,6];
 CORNER_3  = [0,0];
 
 // frame thickness
-T = 2.5;
+T = 2.5;  // [0.1:0.1:5]
 
 /* [Hidden] */
 

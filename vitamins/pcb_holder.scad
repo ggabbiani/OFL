@@ -135,7 +135,7 @@ module fl_pcb_holder(
 
   fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+      fl_modifier($modifier) fl_color($FL_FILAMENT) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly()
