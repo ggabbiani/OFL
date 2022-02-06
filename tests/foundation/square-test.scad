@@ -36,11 +36,11 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD   = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -48,6 +48,9 @@ PLACE_NATIVE  = true;
 QUADRANT      = [0,0];  // [-1:+1]
 
 /* [Square] */
+
+// primitive used
+MODE      = "square";  // ["frame", "square"]
 
 // overall size of the rectangle
 SIZE      = [15,10];
@@ -59,6 +62,9 @@ CORNER_1  = [2,2];
 CORNER_2  = [3,6];
 // Quadrant IV
 CORNER_3  = [0,0];
+
+// frame thickness
+T = 2.5;
 
 /* [Hidden] */
 
@@ -74,16 +80,11 @@ $vpf = 22.5;
 
 quadrant  = PLACE_NATIVE  ? undef : QUADRANT;
 verbs=[
-  if (ADD!="OFF")       FL_ADD,
-  if (AXES!="OFF")      FL_AXES,
-  if (BBOX!="OFF")      FL_BBOX,
+  if ($FL_ADD!="OFF")   FL_ADD,
+  if ($FL_AXES!="OFF")  FL_AXES,
+  if ($FL_BBOX!="OFF")  FL_BBOX,
 ];
 corners  = [CORNER_0,CORNER_1,CORNER_2,CORNER_3];
 
-// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
-fl_square(
-  verbs,
-  size=SIZE,corners=corners,
-  quadrant=quadrant,
-  $FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX
-);
+if (MODE=="square") fl_square(verbs,size=SIZE,corners=corners,quadrant=quadrant);
+else fl_2d_frame(verbs,size=SIZE,corners=corners,thick=T,quadrant=quadrant);

@@ -645,6 +645,67 @@ module fl_square(
   }
 }
 
+//**** frame ******************************************************************
+
+module fl_2d_frame(
+  verbs   = FL_ADD,
+  // INTERNAL size
+  size    = [1,1],
+  // List of four radiuses, one for each quadrant's corners.
+  // Each zero means that the corresponding corner is squared.
+  // Defaults to a 'perfect' rectangle with four squared corners.
+  // One scalar value R means corners=[R,R,R,R]
+  corners = [0,0,0,0],
+  // added to size defines the external size
+  thick,
+  quadrant
+) {
+  assert(is_num(thick));
+
+  function n_versor(n) = [for(i=[1:n]) 1];
+
+  SIZE    = size + 2*[thick,thick];
+  CORNERS = let(
+      delta = [thick,thick],
+      zero  = [0,0]
+    )
+    // corners==scalar
+    is_num(corners) ? let(
+      d = corners>0 ? delta : zero,
+      e = [corners,corners]+d
+    ) [e,e,e,e]
+    // corners==ellipsis ([a,b])
+    : len(corners)==2 ? let(
+      d = corners.x>0 && corners.y>0 ? delta : zero,
+      e = corners+d
+    ) [e,e,e,e]
+    // corners==[scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,]
+    : len(corners)==4 ? [
+      for(v=corners)
+        // scalar
+        is_num(v) ? let(d = v>0 ? delta : zero)  [v,v]+d
+        // ellipsis
+        : let(d = v.x>0 && v.y>0 ? delta : zero) v+d
+    ]
+    : assert(false,corners);
+
+  bbox    = [[-SIZE.x/2,-SIZE.y/2],[+SIZE.x/2,+SIZE.y/2]];
+  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+
+  fl_manage(verbs,M,size=SIZE) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) difference() {
+        fl_square($verb,SIZE,CORNERS);
+        fl_square($verb,size,corners);
+      }
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_square(size=SIZE);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
+
 //**** 2d placement ***********************************************************
 
 function fl_quadrant(
