@@ -67,7 +67,7 @@ SCREW     = "M2_cap_screw"; // [No632_pan_screw,M2_cap_screw,M2_cs_cap_screw,M2_
 FIXED_LEN = 0;
 // thickness
 T       = 10;   // [1:0.1:20]
-WASHER  = "no"; // [no,default,penny]
+WASHER  = "no"; // [no,default,penny,nylon]
 XWASHER = "no"; // [no,spring,star]
 NWASHER = false;
 NUT     = "no"; // [no,default,nyloc]
