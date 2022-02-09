@@ -48,9 +48,9 @@ $FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-$FL_FOOTPRINT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
-$FL_PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -161,7 +161,7 @@ verbs=[
   if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
   if ($FL_DRILL!="OFF")     FL_DRILL,
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
-  if ($FL_PLOAD!="OFF")     FL_PAYLOAD,
+  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 // list of normals to faces
 faces = fl_3d_AxisList(FACES);

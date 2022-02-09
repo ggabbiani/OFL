@@ -54,7 +54,7 @@ $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
-$FL_PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -101,7 +101,7 @@ verbs=[
   if ($FL_DRILL!="OFF")     FL_DRILL,
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-  if ($FL_PLOAD!="OFF")     FL_PAYLOAD,
+  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 // list of normals to faces
 faces     = fl_3d_AxisList(FACES);

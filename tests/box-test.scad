@@ -45,7 +45,7 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
-$FL_PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -87,7 +87,7 @@ verbs=[
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_PLOAD!="OFF")     FL_PAYLOAD,
+  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 
 radius  = RADIUS!=0 ? RADIUS : undef;
