@@ -240,11 +240,12 @@ function fl_material(type,value,default)
 function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,type!=undef?false:undef);
 function fl_nopSCADlib(type,value,default)
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
+function fl_pcb(type,value)         = fl_property(type,"embedded OFL pcb",value);
 // pay-load bounding box, it contributes to the overall bounding box calculation
 function fl_payload(type,value)     = fl_property(type,"payload bounding box",value);
 function fl_rotor(type,value)       = fl_property(type,"rotor",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
-// TODO: implement for fl_pcb_holder
+// TODO: implement for fl_pcb_holeDrivenHolder
 // function fl_tolerance(type,value)   = fl_property(type,"tolerance",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 
