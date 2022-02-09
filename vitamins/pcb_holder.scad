@@ -22,17 +22,12 @@ include <../foundation/tube.scad>
 
 include <../vitamins/pcbs.scad>
 
-module screw_and_nylon_washer(screw,len,filament) {
-  washer    = screw_washer(screw);
-  washer_t  = washer_thickness(washer);
-  screw(screw,len+FL_NIL);
-  fl_color("DarkSlateGray") translate(-fl_Z(washer_t)) washer(washer);
-}
+/******************************************************************************
+ * Hole driven PCB holders
+ *****************************************************************************/
 
-function fl_pcb(type,value)      = fl_property(type,"pcb in OFL format",value);
-
-// contructor
-function fl_pcb_Holder(
+// constructor
+function fl_pcb_HoleDrivenHolder(
   // OFL PCB
   pcb,
   // holder height
@@ -60,16 +55,18 @@ let(
   fl_bb_corners(value=bbox),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_pcb(value=pcb),
-  ["holder/height", h],
+  ["pcb/holder height", h],
 ];
 
-module fl_pcb_holder(
+module fl_pcb_holeDrivenHolder(
   verbs,
-  // as returned from function fl_pcb_Holder()
+  // as returned from function fl_pcb_HoleDrivenHolder()
   type,
-  // frame specs as a list [«height»,«thickness»]
+  // FL_DRILL thickness
+  thick=0,
+  // frame specs as a list [«z height»,«xy thickness»]
   frame,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  // desired direction [director,rotation], native direction when undef
   direction,
   // when undef native positioning is used
   octant,
@@ -79,12 +76,12 @@ module fl_pcb_holder(
   assert(type!=undef);
   assert(frame==undef||len(frame)==2,frame);
 
-  screw       = fl_screw(type);
-  scr_r       = screw_radius(screw);
+  screw   = fl_screw(type);
+  scr_r   = screw_radius(screw);
 
-  washer      = screw_washer(screw);
-  wsh_t    = washer_thickness(washer);
-  wsh_r    = washer_radius(washer);
+  washer  = screw_washer(screw);
+  wsh_t   = washer_thickness(washer);
+  wsh_r   = washer_radius(washer);
 
   bbox    = fl_bb_corners(type);
   size    = bbox[1]-bbox[0];
@@ -92,63 +89,198 @@ module fl_pcb_holder(
   pcb_t   = fl_pcb_thick(pcb);
   pcb_bb  = fl_bb_corners(pcb);
 
-  h    = fl_get(type,"holder/height");
-  radius     = wsh_r;
+  h       = fl_get(type,"pcb/holder height");
+  radius  = wsh_r;
 
-  holes = fl_holes(pcb);
+  holes = [for(hole=fl_holes(pcb)) let(p = hole[0],n = hole[1],d = hole[2]) [p,n,d]];
 
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
   module do_add() {
-    fl_lay_holes(holes)
-      translate(-Z(pcb_t)) let(
-          pos = holes[$hole_i][0],
-          dx0 = abs(abs(pcb_bb[0].x)-abs(pos.x)),
-          dy0 = abs(abs(pcb_bb[0].y)-abs(pos.y)),
-          dx1 = abs(abs(pcb_bb[1].x)-abs(pos.x)),
-          dy1 = abs(abs(pcb_bb[1].y)-abs(pos.y)),
-          r   = min(wsh_r,dx0,dy0,dx1,dy1),
-          t   = r-$hole_d / 2
-        ) fl_tube(r=r,h=h,thick=t,octant=-Z);
-
-    if (frame)
-      translate(bbox[0])
-        linear_extrude(frame[0])
-          fl_2d_frame(size=size,thick=frame[1],quadrant=+X+Y);
+    difference() {
+      union() {
+        fl_lay_holes(holes)
+          translate(-Z(pcb_t)) let(
+              pos = holes[$hole_i][0],
+              dx0 = abs(abs(pcb_bb[0].x)-abs(pos.x)),
+              dy0 = abs(abs(pcb_bb[0].y)-abs(pos.y)),
+              dx1 = abs(abs(pcb_bb[1].x)-abs(pos.x)),
+              dy1 = abs(abs(pcb_bb[1].y)-abs(pos.y)),
+              r   = min(wsh_r,dx0,dy0,dx1,dy1),
+              t   = r-$hole_d / 2
+            ) fl_cylinder(r=r,h=h,octant=-Z);
+        if (frame)
+          translate(bbox[0])
+            linear_extrude(frame[0])
+              fl_2d_frame(size=size,thick=frame[1],quadrant=+X+Y);
+      }
+      fl_pcb(FL_DRILL,pcb,thick=h+NIL);
+    }
   }
 
-  module do_bbox() {
-    fl_bb_add(bbox);
+  module do_drill() {
+    fl_lay_holes(holes,thick=thick)
+      translate(-$hole_n*(h+pcb_t))
+        fl_cylinder(d=$hole_d,h=$hole_depth,octant=-Z);
   }
 
-  module do_assembly() {
-    fl_pcb([FL_ADD,FL_ASSEMBLY,FL_MOUNT],pcb,thick=h);
-    // fl_color("green") pcb();
-    // fl_trace("Holes size",len(holes));
-    // for(i=[0:len(holes)-1])
-    //   translate(fl_2(holes[i])) translate(Z(screw_len)) children();
+  module do_layout() {
+    fl_lay_holes(holes,thick=thick)
+      children();
   }
-
-  module do_layout()    {}
-  module do_drill()     {}
 
   fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) fl_color($FL_FILAMENT) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly()
-        screw_and_nylon_washer(screw,screw_len,filament);
+      fl_modifier($modifier) fl_pcb([FL_ADD,FL_ASSEMBLY],pcb,thick=h);
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) do_bbox();
+      fl_modifier($modifier) fl_bb_add(bbox);
+
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_drill();
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout() children();
 
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) fl_pcb(FL_MOUNT,pcb,thick=h);
+
+    } else if ($verb==FL_PAYLOAD) {
+      fl_modifier($modifier) fl_bb_add(pcb_bb);
+
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
+
+/******************************************************************************
+ * Size driven PCB holders
+ *****************************************************************************/
+
+// TODO: make a constructor
+module fl_pcb_holdBySize(
+  verbs,
+  // OFL native PCB
+  pcb,
+  // height of holders along z axis excluding PCB thickness
+  h,
+  // FL_DRILL thickness
+  thick=0,
+  // frame specs as a list [«z height»,«xy thickness»]
+  // NOTE: «xy thickness» is currently auto calculated (so ignored)
+  frame,
+  tolerance = 0.5,
+  // desired direction [director,rotation], native direction when undef
+  direction,
+  // when undef native positioning is used
+  octant,
+) {
+  assert(verbs!=undef);
+  assert(pcb!=undef);
+  assert(h!=undef);
+  assert(frame==undef||len(frame)==2,frame);
+
+  screw   = M3_cap_screw;
+  scr_r   = screw_radius(screw);
+
+  washer  = screw_washer(screw);
+  wsh_t   = washer_thickness(washer);
+  wsh_r   = washer_radius(washer);
+
+  r       = scr_r;
+  R       = wsh_r+1;
+
+  pcb_t   = fl_pcb_thick(pcb);
+  pcb_bb  = fl_bb_corners(pcb);
+
+  bbox    = let(
+      C0    = pcb_bb[0],
+      C1    = pcb_bb[1],
+      delta = (tolerance+sin(45)*r+R)*[1,1,0]
+    ) [
+    C0-delta-Z(h),
+    C1+delta
+  ];
+  size    = bbox[1]-bbox[0];
+
+  D       = direction ? fl_direction(direction=direction,default=[Z,X])  : FL_I;
+  M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
+
+  holes  = let(
+      C0  = pcb_bb[0],
+      C1  = [pcb_bb[1].x,pcb_bb[1].y,pcb_bb[0].z],
+      r   = scr_r,
+      t   = tolerance,
+      delta = (sin(45)*r+t)
+    ) [
+    // «3d point»,«plane normal»,«diameter»[,«depth»]
+    [C0-delta*[1,1,0]+Z(pcb_t),+Z,2*r,h+pcb_t],
+    [[-C0.x,C0.y,C0.z]-delta*[-1,1,0]+Z(pcb_t),+Z,2*r,h+pcb_t],
+    [C1+delta*[1,1,0]+Z(pcb_t),+Z,2*r,h+pcb_t],
+    [[-C1.x,C1.y,C1.z]+delta*[-1,1,0]+Z(pcb_t),+Z,2*r,h+pcb_t],
+  ];
+
+  module do_add() {
+    difference(){
+      union() {
+        fl_lay_holes(holes)
+          fl_cylinder(r=R,h=h+pcb_t,octant=-Z);
+        if (frame)
+          translate(bbox[0])
+            linear_extrude(frame[0])
+              fl_2d_frame(size=size,thick=R+r*sin(45),corners=R,quadrant=+X+Y);
+      }
+      fl_holes(holes,[+Z]);
+      fl_bb_add([
+        pcb_bb[0]-tolerance*[1,1,0]-Z(NIL),
+        pcb_bb[1]+tolerance*[1,1,0]+Z(NIL)
+      ]);
+    }
+  }
+
+  module do_layout() {
+    fl_lay_holes(holes,thick=thick)
+      children();
+  }
+
+  module do_drill() {
+    fl_lay_holes(holes)
+      translate(-$hole_n*(h+pcb_t))
+        fl_cylinder(r=r,h=thick,octant=-Z);
+  }
+
+  module do_mount() {
+    fl_lay_holes(holes)
+      // translate(Z(washer_thickness(washer)))
+      fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,washer="nylon",thick=h+pcb_t+thick);
+  }
+
+  fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) fl_color($FL_FILAMENT) do_add();
+
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) fl_pcb([FL_ADD,FL_ASSEMBLY],pcb,thick=h);
+
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();
+
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout() children();
+
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) do_mount();
+
+    } else if ($verb==FL_PAYLOAD) {
+      fl_modifier($modifier) fl_bb_add(pcb_bb);
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));

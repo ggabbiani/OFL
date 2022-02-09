@@ -41,16 +41,14 @@ $FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a footprint to scene, usually a simplified FL_ADD
-$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// mount shape through predefined screws
+$FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
-$FL_PLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -65,15 +63,16 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [PCB Holder ]*/
-
+/* [PCB Holder]*/
+TYPE  = "by holes"; // [by holes, by size]
 H   = 4;  // [0.1:0.1:5]
 // frame height on Z axis
-FRAME_H  = 0; // [0:0.1:5]
+FRAME_H  = 0; // [0:0.1:10]
 // frame thickness on XY plane
 FRAME_T  = 0; // [0:0.1:5]
-// frame base thickness
-BASE_T      = 2.5;
+TOLERANCE = 0.5;
+T=2.5;
+
 PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20]
 
 /* [Hidden] */
@@ -85,11 +84,10 @@ verbs=[
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
   if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FOOTPRINT!="OFF")    FL_FOOTPRINT,
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-  if ($FL_PLOAD!="OFF")     FL_PAYLOAD,
+  if ($FL_MOUNT!="OFF")     FL_MOUNT,
+  if ($FL_PAYLOAD!="OFF")     FL_PAYLOAD,
 ];
 pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
     : PCB=="FL_PCB_PERF70x50"  ? FL_PCB_PERF70x50
@@ -99,10 +97,15 @@ pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
     : undef;
 
 // screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
-// pcb     = fl_bb_new(size=PCB_SIZE); fl_trace("pcb",pcb);
 
 frame = FRAME_H && FRAME_T ? [FRAME_H,FRAME_T] : undef;
 
-holder  = fl_pcb_Holder(pcb,h=H);
-fl_pcb_holder(verbs,holder,direction=direction,octant=octant,frame=frame);
-fl_trace("holder",holder);
+if (TYPE=="by holes") {
+  holder  = fl_pcb_HoleDrivenHolder(pcb,h=H);
+  holes   = fl_holes(pcb);
+  fl_trace("holder",holder);
+  fl_trace("PCB holes",holes,$FL_TRACE=true);
+  fl_pcb_holeDrivenHolder(verbs,holder,direction=direction,octant=octant,frame=frame,thick=T);
+} else {
+  fl_pcb_holdBySize(verbs,pcb,direction=direction,octant=octant,frame=frame,tolerance=TOLERANCE,h=H,thick=T);
+}
