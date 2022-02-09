@@ -49,7 +49,7 @@ function fl_screw_l(
   type,
   len,
   thick   = 0,
-  washer  = "no",   // screw washer : "no","default","penny"
+  washer  = "no",   // screw washer : "no","default","penny","nylon"
   nut     = "no",   // screw nut    : "no","default","nyloc"
   xwasher = "no",   // extra washer : "no","spring","star"
   nwasher = false,  // nut washer
@@ -70,7 +70,7 @@ function fl_screw_lens(
   type,
   len,
   thick   = 0,
-  washer  = "no",   // screw washer : "no","default","penny"
+  washer  = "no",   // screw washer : "no","default","penny","nylon"
   nut     = "no",   // screw nut    : "no","default","nyloc"
   xwasher = "no",   // extra washer : "no","spring","star"
   nwasher = false,  // nut washer
@@ -88,7 +88,7 @@ let(
     : assert(false,str("Unknown nut value ",nut)),
   thick_washer  =
       washer=="no"      ? 0
-    : washer=="default" ? washer_thickness(screw_washer)
+    : washer=="default"||washer=="nylon" ? washer_thickness(screw_washer)
     : washer=="penny"   ? washer_thickness(penny_washer(screw_washer))
     : assert(false,str("Unknown washer value ",washer)),
   thick_xwasher =
@@ -105,7 +105,7 @@ module fl_screw(
   type,                 // NopSCADlib screw type
   len,                  // when passed a fixed len will be used instead of fl_screw_len()
   thick   = 0,          // thickness part passed to fl_screw_len() during length calculation
-  washer  = "no",       // screw washer : "no","default","penny"
+  washer  = "no",       // screw washer : "no","default","penny","nylon"
   nut     = "no",       // screw nut    : "no","default","nyloc"
   xwasher = "no",       // extra washer : "no","spring","star"
   nwasher = false,      // nut washer
@@ -136,7 +136,9 @@ module fl_screw(
 
   module do_assembly() {
     if (washer!="no")
-      if (washer=="default") washer(screw_washer); else penny_washer(screw_washer);
+      if (washer=="default") washer(screw_washer);
+      else if (washer=="nylon") fl_color("DarkSlateGray") washer(screw_washer);
+      else penny_washer(screw_washer);
     if (xwasher!="no")
       translate(Z(thick_washer))
         if (xwasher=="spring") spring_washer(screw_washer); else star_washer(screw_washer);
