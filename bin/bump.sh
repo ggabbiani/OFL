@@ -14,11 +14,12 @@ on_exit() {
 
 help() {
 cat <<EOF
-Usage: $(basename $0) [-M|--major] [-m|--minor] [-p|--patch] VERSION
+Usage: $(basename $0) [-d|--dry-run] [-M|--major] [-m|--minor] [-p|--patch] VERSION
 Bump version on remote git origin.
 
 Common flags
   -v, --verbose     guess what ...
+  -d, --dry-run     no concrete modification performed on GIT repo. (default false)
 
 Mutually exclusive optional arguments about VERSION auto increment.
   -M, --major       auto increment current major release number
@@ -32,6 +33,7 @@ Given a version number MAJOR.MINOR.PATCH, increment the:
   MINOR version when you add functionality in a backwards compatible manner, and
   PATCH version when you make backwards compatible bug fixes.
 
+NOTE: this command requires a 'clean' local git status (no modification uncommitted)
 EOF
 }
 
@@ -51,12 +53,17 @@ DEFS="$OFL/foundation/defs.scad"
 MAX=1
 POSITIONALS=""
 VERBOSE="0"
+DRYRUN="0"
 while (( "$#" )); do
   case "$1" in
     '-?'|-h|--help)
       shift
       help
       exit 0
+      ;;
+    -d|--dry-run)
+      shift
+      DRYRUN="1"
       ;;
     -M|--major)
       shift
@@ -124,13 +131,16 @@ if [[ "$INCREMENT" != "" ]]; then
     # ((V[0]++))
     var=${V[0]}
     V[0]=$((++var))
+    V[1]="0"
+    V[2]="0"
     # info "var=$var"
-    VERSION="${V[0]}.0.0"
+    VERSION="${V[0]}.${V[1]}.${V[2]}"
   elif [ "$INCREMENT" == "MINOR" ]; then
     # ((V[1]++))
     var=${V[1]}
     V[1]=$((++var))
-    VERSION="${V[0]}.${V[1]}.0"
+    V[2]="0"
+    VERSION="${V[0]}.${V[1]}.${V[2]}"
   else
     # ((V[2]++))
     var=${V[2]}
@@ -157,6 +167,9 @@ this script is going to:
   * push updated "$DEFS" and v${V[0]}.${V[1]}.${V[2]} annotation to remote repo
 
 EOM
+if [ "$DRYRUN" -eq "1" ]; then
+  exit 0
+fi
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
 # update defs.scad
