@@ -64,7 +64,7 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 DIR_R       = 0;        // [0:360]
 
 /* [PCB Holder]*/
-TYPE  = "by holes"; // [by holes, by size]
+ENGINE  = "by holes"; // [by holes, by size]
 H   = 4;  // [0.1:0.1:5]
 // frame height on Z axis
 FRAME_H  = 0; // [0:0.1:10]
@@ -87,7 +87,7 @@ verbs=[
   if ($FL_DRILL!="OFF")     FL_DRILL,
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
   if ($FL_MOUNT!="OFF")     FL_MOUNT,
-  if ($FL_PAYLOAD!="OFF")     FL_PAYLOAD,
+  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
     : PCB=="FL_PCB_PERF70x50"  ? FL_PCB_PERF70x50
@@ -99,13 +99,6 @@ pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
 // screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
 
 frame = FRAME_H && FRAME_T ? [FRAME_H,FRAME_T] : undef;
+holder  = ENGINE=="by holes" ? fl_pcb_HolderByHoles(pcb,H) : fl_pcb_HolderBySize(pcb,H,TOLERANCE);
 
-if (TYPE=="by holes") {
-  holder  = fl_pcb_HoleDrivenHolder(pcb,h=H);
-  holes   = fl_holes(pcb);
-  fl_trace("holder",holder);
-  fl_trace("PCB holes",holes,$FL_TRACE=true);
-  fl_pcb_holeDrivenHolder(verbs,holder,direction=direction,octant=octant,frame=frame,thick=T);
-} else {
-  fl_pcb_holdBySize(verbs,pcb,direction=direction,octant=octant,frame=frame,tolerance=TOLERANCE,h=H,thick=T);
-}
+fl_pcb_holder(verbs,holder,direction=direction,octant=octant,frame=frame,thick=T);
