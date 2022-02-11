@@ -110,7 +110,7 @@ module fl_USB(
   verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   type,
   cut_thick,            // thickness for FL_CUTOUT
-  cut_tolerance=0,      // tolerance used during FL_CUTOUT
+  tolerance=0,      // tolerance used during FL_CUTOUT
   cut_drift=0,          // translation applied to cutout
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
@@ -144,8 +144,11 @@ module fl_USB(
       assert(cut_thick!=undef);
       fl_modifier($modifier)
         translate(+X(size.x/2+cut_drift))
-          fl_cutout(len=cut_thick,z=X,x=Y,delta=cut_tolerance)
+          fl_cutout(len=cut_thick,z=X,x=Y,delta=tolerance)
             wrap();
+    } else if ($verb==FL_FOOTPRINT) {
+      assert(tolerance!=undef,tolerance);
+      fl_modifier($modifier) fl_bb_add(bbox+tolerance*[[-1,-1,-1],[1,1,1]]);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }

@@ -44,6 +44,8 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
 $FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds a footprint to scene, usually a simplified FL_ADD
+$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -60,20 +62,20 @@ DIR_R       = 0;        // [0:360]
 
 /* [USB] */
 
-SHOW        = "ALL"; // [ALL,FL_USB_TYPE_A,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C]
-// tolerance used during FL_CUTOUT
-CO_TOLERANCE   = 0;  // [0:0.1:5]
+SHOW      = "ALL";  // [ALL,FL_USB_TYPE_A,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C]
+// tolerance used during FL_CUTOUT and FL_FOOTPRINT
+TOLERANCE = 0;      // [0:0.1:5]
 // thickness for FL_CUTOUT
-CO_T  = 2.5;
+CO_T      = 2.5;
 // translation applied to cutout
-CO_DRIFT = 0; // [-5:0.05:5]
+CO_DRIFT  = 0;      // [-5:0.05:5]
 
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef         : OCTANT;
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
-tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
+tolerance = $FL_CUTOUT!="OFF" || $FL_FOOTPRINT!="OFF" ? TOLERANCE : undef;
 drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT : undef;
 
 verbs=[
@@ -81,6 +83,7 @@ verbs=[
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
   if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
+  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
 ];
 // target object(s)
 single  = SHOW=="FL_USB_TYPE_A"   ? FL_USB_TYPE_A
@@ -93,9 +96,8 @@ fl_trace("verbs",verbs);
 fl_trace("single",single);
 fl_trace("FL_USB_DICT",FL_USB_DICT);
 
-// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 if (single)
-  fl_USB(verbs,single,direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift);
+  fl_USB(verbs,single,direction=direction,octant=octant,cut_thick=thick,tolerance=tolerance,cut_drift=drift);
 else
   layout([for(socket=FL_USB_DICT) fl_width(socket)], 10)
-    fl_USB(verbs,FL_USB_DICT[$i],direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift);
+    fl_USB(verbs,FL_USB_DICT[$i],direction=direction,octant=octant,cut_thick=thick,tolerance=tolerance,cut_drift=drift);
