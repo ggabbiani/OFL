@@ -19,7 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/2d.scad>
+include <../foundation/3d.scad>
 
 use     <NopSCADlib/vitamins/pcb.scad>
 
@@ -38,21 +38,29 @@ FL_ETHER_DICT = [
 ];
 
 module fl_ether(
-  verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  verbs       = FL_ADD,
   type,
-  cut_thick,            // thickness for FL_CUTOUT
-  cut_tolerance=0,      // tolerance used during FL_CUTOUT
-  cut_drift=0,          // translation applied to cutout
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  // thickness for FL_CUTOUT
+  cut_thick,
+  // tolerance used during FL_CUTOUT
+  cut_tolerance=0,
+  // translation applied to cutout (default 0)
+  cut_drift=0,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  // when undef native positioning is used
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
 
-  bbox  = fl_bb_corners(type);
-  size  = bbox[1]-bbox[0];
-  D     = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  bbox      = fl_bb_corners(type);
+  size      = bbox[1]-bbox[0];
+  D         = direction ? fl_direction(proto=type,direction=direction)  : I;
+  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+
+  fl_trace("cutout drift",cut_drift);
 
   module do_cutout() {
     translate([cut_thick,0,size.z/2])
@@ -66,13 +74,19 @@ module fl_ether(
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         rj45();
+
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
+
     } else if ($verb==FL_CUTOUT) {
       assert(cut_thick!=undef);
       fl_modifier($modifier)
         translate(+X(bbox[1].x+cut_drift))
           do_cutout();
+
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
