@@ -22,6 +22,8 @@
 include <../foundation/3d.scad>
 include <../foundation/util.scad>
 
+FL_JACK_NS = "jack";
+
 //*****************************************************************************
 // Jack constructors
 function fl_jack_new(utype) = let(
