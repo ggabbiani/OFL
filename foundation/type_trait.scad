@@ -148,8 +148,8 @@ function fl_tt_isAxisString(s) =
 
 /**
  * Hole representation as:
- * «3d point»,«plane normal»,«diameter»[,«depth»]
- * NOTE: «depth» is an optional scalar, when absent means thru-hole
+ * «3d point»,«plane normal»,«diameter»,«depth»
+ * NOTE: «depth» 0 means thru-hole
  */
 function fl_tt_isHole(hole) = let(
     len   = len(hole),
