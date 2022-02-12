@@ -42,6 +42,81 @@ function fl_pcb_radius(type,value)      = fl_property(type,"pcb/corners radius",
 function fl_pcb_thick(type,value)       = fl_property(type,"pcb/thickness",value);
 function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
 
+//*****************************************************************************
+// COMPONENTS (to be moved elsewhere)
+
+// optional getter, no error when property is not found
+// TODO: move it on defs.scad
+function fl_optional(props,key,default) =
+  let(r=search([key],props)) r!=[[]] ? props[r[0]][1] : default;
+
+// trigger children modules with component context
+module fl_comp_Context(
+  component // component definition: ["engine", [position], [[director],rotation], type, properties]
+  ) {
+  $engine     = component[0];
+  $position   = component[1];
+  $direction  = component[2];
+  $director   = $direction[0];
+  $rotation   = $direction[1];
+  $type       = component[3];
+  // properties
+  properties  = component[4];
+  $subtract   = fl_optional(properties,"comp/sub");
+  $drift      = fl_optional(properties,"comp/drift",0);
+  $color      = fl_optional(properties,"comp/color");
+  children();
+}
+
+// trigger children modules with component specifications context
+module fl_comp_Specs(
+  specs // component specifications: ["label",component]
+  ) {
+
+  $label      = specs[0];
+  $component  = specs[1];
+  fl_comp_Context($component) children();
+}
+
+//*****************************************************************************
+
+// base constructor
+function fl_PCB(
+    name,
+    bbox,
+    // pcb thickness
+    thick = 1.6,
+    color  = "green",
+    // corners radius
+    radius,
+    // payload bounding box corners
+    payload,
+    // each row represents a hole with the following format:
+    // [[point],[normal], diameter, thickness]
+    holes = [],
+    // each row represent one component with the following format:
+    // ["label", ["engine", [position], [[director],rotation] type],subtract]
+    components  = [],
+    // grid specs
+    grid,
+    screw
+  ) = let(
+
+  ) [
+    fl_native(value=true),
+    fl_name(value=name),
+    fl_bb_corners(value=bbox),
+    fl_director(value=+Z),fl_rotor(value=+X),
+    fl_pcb_thick(value=thick),
+    fl_pcb_radius(value=radius),
+    fl_payload(value=payload),
+    fl_holes(value=holes),
+    fl_pcb_components(value=components),
+    fl_material(value=color),
+    fl_screw(value=screw),
+    fl_pcb_grid(value=grid),
+  ];
+
 /**
  * PCB constructor from NopSCADlib.
  *
@@ -61,20 +136,7 @@ function fl_pcb_import(nop,payload) = let(
     h         = 0,
     pcb_t     = pcb_thickness(nop),
     bbox      = [[-w/2,-l/2,0],[+w/2,+l/2,pcb_t+h]]
-  )
-  [
-    fl_name(value=nop[1]),
-    fl_bb_corners(value=bbox),
-    fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-    fl_pcb_thick(value=pcb_t),
-    fl_pcb_components(value=[]),
-    fl_screw(value=pcb_screw(nop)),
-    fl_material(value=pcb_colour(nop)),
-    fl_pcb_radius(value=pcb_radius(nop)),
-    fl_holes(value=fl_pcb_NopHoles(nop)),
-    fl_pcb_grid(value=pcb_grid(nop)),
-    fl_payload(value=payload),
-  ];
+  ) fl_PCB(nop[1],bbox,pcb_t,pcb_colour(nop),pcb_radius(nop),payload,fl_pcb_NopHoles(nop),undef,pcb_grid(nop),pcb_screw(nop));
 
 /**
  * Helper for conversion from NopSCADlib hole format to OFL.
@@ -100,37 +162,56 @@ FL_PCB_RPI4 = let(
   pcb_t   = 1.5,
   hole_d  = 2.7,
   bbox    = [[-w/2,0,-pcb_t],[+w/2,l,0+h]],
-  payload = [bbox[0]+fl_Z(pcb_t),bbox[1]]
-) [
-  fl_native(value=true),
-  fl_name(value="RPI4-MODBP-8GB"),
-  fl_bb_corners(value=bbox),
-  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  fl_pcb_thick(value=pcb_t),
-  fl_pcb_radius(value=3),
-  fl_payload(value=payload),
-  fl_holes(value=[
-    // each row represents a hole with the following format:
-    // [[point],[normal], diameter, thickness]
+  payload = [bbox[0]+fl_Z(pcb_t),bbox[1]],
+  holes   = [
     [[ 24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
     [[ 24.5, 61.5, 0 ], +FL_Z, hole_d, pcb_t],
     [[-24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
     [[-24.5, 61.5, 0 ], +FL_Z, hole_d, pcb_t],
-    ]),
-  fl_screw(value=M3_cap_screw),
-  fl_pcb_components(value=[
-    // each row represent one component with the following format:
-    // ["label", ["engine", [position], [[director],rotation] type]]
-    ["POWER IN",  ["USB",       [25.5,      11.2, 0], [+FL_X,0  ], FL_USB_TYPE_C  ]],
-    ["HDMI0",     ["HDMI",      [25,        26,   0], [+FL_X,0  ], FL_HDMI_TYPE_D ]],
-    ["HDMI1",     ["HDMI",      [25,        39.5, 0], [+FL_X,0  ], FL_HDMI_TYPE_D ]],
-    ["A/V",       ["JACK",      [22,        54,   0], [+FL_X,0  ], FL_JACK        ]],
-    ["USB2",      ["USB",       [w/2-9,     79.5, 0], [+FL_Y,0  ], FL_USB_TYPE_Ax2]],
-    ["USB3",      ["USB",       [w/2-27,    79.5, 0], [+FL_Y,0  ], FL_USB_TYPE_Ax2]],
-    ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+FL_Y,0  ], FL_ETHER_RJ45  ]],
-    ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+FL_Z,90 ], FL_PHDR_RPIGPIO]],
-  ]),
-];
+  ],
+  comps = [
+    //["label",   ["engine",    [position],           [[director],rotation] type,           [engine specific parameters]]]
+    ["POWER IN",  [FL_USB_NS,   [25.5,      11.2, 0], [+X,0  ],             FL_USB_TYPE_C  ]],
+    ["HDMI0",     [FL_HDMI_NS,  [25,        26,   0], [+X,0  ],             FL_HDMI_TYPE_D ]],
+    ["HDMI1",     [FL_HDMI_NS,  [25,        39.5, 0], [+X,0  ],             FL_HDMI_TYPE_D ]],
+    ["A/V",       [FL_JACK_NS,  [22,        54,   0], [+X,0  ],             FL_JACK        ]],
+    ["USB2",      [FL_USB_NS,   [w/2-9,     79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
+    ["USB3",      [FL_USB_NS,   [w/2-27,    79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
+    ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+Y,0  ],             FL_ETHER_RJ45  ,[["comp/drift",-3]]]],
+    ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_RPIGPIO]],
+  ]
+) fl_PCB("RPI4-MODBP-8GB",bbox,pcb_t,"green",3,payload,holes,comps,undef,M3_cap_screw);
+
+FL_PCB_MH4PU_P = let(
+    name  = "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port",
+    w     = 84,
+    l     = 39,
+    pcb_t = 1.6,
+    bbox  = [[-w/2,-l/2,-pcb_t],[+w/2,+l/2,0]],
+    pload = undef,
+    holes = [
+      let(r=2)    [[-w/2+r+1,-l/2+r+2,0], +Z, 2*r, pcb_t],
+      let(r=2)    [[+w/2-r-1,-l/2+r+2,0], +Z, 2*r, pcb_t],
+      let(r=2)    [[-w/2+r+1,+l/2-r-2,0], +Z, 2*r, pcb_t],
+      let(r=2)    [[+w/2-r-1,+l/2-r-2,0], +Z, 2*r, pcb_t],
+      let(r=1.25) [[-w/2+r+1,0,0],        +Z, 2*r, pcb_t],
+      let(r=1.25) [[+w/2-r-1,0,0],        +Z, 2*r, pcb_t],
+      let(r=1.25) [[-w/2+r+37.5+r,0,0],   +Z, 2*r, pcb_t],
+    ],
+    sz_A  = fl_size(FL_USB_TYPE_Ax1),
+    sz_uA = fl_size(FL_USB_TYPE_uA),
+    tol   = 0.5,
+    comps = [
+    //["label",     ["engine",  [position],                               [[director],rotation]  type,            [engine specific parameters]]]
+      ["USB3 IN",   [FL_USB_NS, [-w/2+13.5,+l/2-6,-(pcb_t+1)],                    [+Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",0.5],["comp/drift",-2.5],["comp/color","OrangeRed"]]]],
+      ["POWER IN",  [FL_USB_NS, [+w/2-10,+l/2-sz_uA.x/2+0.5,0],                   [+Y,0],       FL_USB_TYPE_uA_NF,  [["comp/drift",-0.5]]]],
+      ["USB3-1",    [FL_USB_NS, [+w/2-(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],        [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
+      ["USB3-2",    [FL_USB_NS, [+w/2-(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
+      ["USB3-3",    [FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
+      ["USB3-4",    [FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],        [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
+    ]
+  ) fl_PCB(name,bbox,pcb_t,"DarkCyan",1,pload,holes,screw=M3_cap_screw,components=comps);
+
 
 FL_PCB_PERF70x50  = fl_pcb_import(PERF70x50);
 FL_PCB_PERF60x40  = fl_pcb_import(PERF60x40);
@@ -143,6 +224,8 @@ FL_PCB_DICT = [
   FL_PCB_PERF60x40,
   FL_PCB_PERF70x30,
   FL_PCB_PERF80x20,
+
+  FL_PCB_MH4PU_P,
 ];
 
 module fl_pcb(
@@ -174,7 +257,10 @@ module fl_pcb(
   size      = fl_bb_size(type);
   bbox      = fl_bb_corners(type);
   holes     = fl_holes(type);
-  screw     = fl_screw(type);
+  // FIXME: when unspecified must be calculated from holes (if any)
+
+
+  screw     = fl_has(type,fl_screw()[0]) ? fl_screw(type) : undef;
   // FIXME: manage cases in which the imported pcb doesn't have any screw
   screw_r   = screw_radius(screw);
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
@@ -192,12 +278,6 @@ module fl_pcb(
 
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;
   M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
-
-  // fl_trace(fl_pcb_components()[0],comps);
-  // fl_trace("type",type);
-  // fl_trace("holes",holes);
-  fl_trace("bbox",bbox);
-  // fl_trace("grid",grid);
 
   function fl_pcb_NopHoles(nop) = let(
     pcb_t     = pcb_thickness(nop),
@@ -270,6 +350,11 @@ module fl_pcb(
               fl_circle(d=1);
           }
         }
+        do_layout("components")
+          if ($subtract!=undef) {
+            // TODO: extend to all the engines once sure FL_FOOTPRINT is implemented for all of them
+            if ($engine==FL_USB_NS) fl_USB(verbs=FL_FOOTPRINT,type=$type,direction=$direction,tolerance=$subtract);
+          }
       if (holes)
         fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z]);
     }
@@ -286,34 +371,24 @@ module fl_pcb(
     fl_trace("label",label);
     fl_trace("children",$children);
 
-
     if (label) {
       assert(class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
-      $component  = fl_get(comps,label);
       $label      = label;
-      position    = $component[1];
-      translate(position) children();
+      $component  = fl_optional(comps,$label);
+      if ($component!=undef) fl_comp_Context($component) translate($position) children();
+      else echo(str("***WARN***: component '",label,"' not found"));
     } else if (directions) {
       assert(class=="components",str("Cannot layout BY DIRECTION on class '",class,"'"));
-      for(c=comps) {  // «c» = ["label",component]
-        component = c[1];
-        direction = component[2][0];
-        // triggers a component if its direction matches the direction list
-        if (search([direction],directions)!=[[]]) {
-          $component  = c[1];
-          $label      = c[0];
-          $direction  = direction;  // component direction
-          position    = $component[1];
-          translate(position) children();
+      for(c=comps) fl_comp_Specs(c) {  // «c» = ["label",component]
+        // triggers a component if its director matches the direction list
+        if (search([$director],directions)!=[[]]) {
+          translate($position) children();
         }
       }
     } else {  // by class
       if (class=="components")
-        for(c=comps) {  // «c» = ["label",component]
-          $component  = c[1];
-          $label      = c[0];
-          position    = $component[1];
-          translate(position) children();
+        for(c=comps) fl_comp_Specs(c) {  // «c» = ["label",component]
+          translate($position) children();
         }
       else if (class=="holes")
         fl_lay_holes(holes,lay_direction)
@@ -325,24 +400,21 @@ module fl_pcb(
 
   module do_assembly() {
     do_layout("components")
-      let(
-        engine    = $component[0],
-        direction = $component[2],
-        type      = $component[3]
-      ) if (engine=="USB")
-          fl_USB(type=type,direction=direction);
-        else if (engine=="HDMI")
-          fl_hdmi(type=type,direction=direction);
-        else if (engine=="JACK")
-          fl_jack(type=type,direction=direction);
-        else if (engine==FL_ETHER_NS)
-          fl_ether(type=type,direction=direction);
-        else if (engine==FL_PHDR_NS)
-          fl_pinHeader(FL_ADD,type=type,direction=direction);
-        else
-          assert(false,str("Unknown engine ",engine));
+      if ($engine==FL_USB_NS)
+        fl_USB(type=$type,direction=$direction,tongue=$color);
+      else if ($engine==FL_HDMI_NS)
+        fl_hdmi(type=$type,direction=$direction);
+      else if ($engine==FL_JACK_NS)
+        fl_jack(type=$type,direction=$direction);
+      else if ($engine==FL_ETHER_NS)
+        fl_ether(type=$type,direction=$direction);
+      else if ($engine==FL_PHDR_NS)
+        fl_pinHeader(FL_ADD,type=$type,direction=$direction);
+      else
+        assert(false,str("Unknown engine ",$engine));
   }
 
+  // FIXME: manage case din which there is no default screw (calculated hole by hole)
   module do_mount() {
     if (holes)
       fl_lay_holes(holes,lay_direction)
@@ -356,15 +428,6 @@ module fl_pcb(
 
   module do_cutout() {
     module trigger(component) {
-
-      function drift(component) = let(
-        position  = component[1],
-        direction = component[2],
-        type      = component[3],
-        sz        = fl_size(type),
-        director  = direction[0]
-      ) -(sz.x/2-((director==X||director==-X ? size/2 : size)-position) * director);
-
       engine    = component[0];
       position  = component[1];
       direction = component[2];
@@ -373,16 +436,15 @@ module fl_pcb(
       cut_thick  = director==+X ? cut_thick.x[1] : director==-X ? cut_thick.x[0]
                 : director==+Y ? cut_thick.y[1] : director==-Y ? cut_thick.y[0]
                 : director==+Z ? cut_thick.z[1] : cut_thick.z[0];
-      if (engine=="USB")
-        let(drift=drift(component)) fl_USB(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
-      else if (engine=="HDMI")
-        let(drift=drift(component)) fl_hdmi(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
-      else if (engine=="JACK")
+      if (engine==FL_USB_NS)
+        fl_USB(FL_CUTOUT,type,cut_thick=cut_thick,tolerance=cut_tolerance,direction=direction,cut_drift=$drift);
+      else if (engine==FL_HDMI_NS)
+        fl_hdmi(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
+      else if (engine==FL_JACK_NS)
         let(drift=0)
           fl_jack(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
       else if (engine==FL_ETHER_NS)
-        let(drift=drift(component))
-          fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
+        fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
       else if (engine==FL_PHDR_NS) let(
           thick = size.z-pcb_t+cut_thick
         ) fl_pinHeader(FL_CUTOUT,type=type,cut_thick=thick,cut_tolerance=cut_tolerance,direction=direction);
@@ -391,7 +453,7 @@ module fl_pcb(
     }
 
     if (cut_label)
-      do_layout("components",cut_label) trigger($component);
+      do_layout("components",cut_label) fl_comp_Context($component) trigger($component);
     else
       do_layout("components",undef,cut_direction) trigger($component);
   }
@@ -405,27 +467,27 @@ module fl_pcb(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
-    } else if ($verb==FL_PAYLOAD) {
-      fl_modifier($modifier) do_payload();
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly();
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
+
+    } else if ($verb==FL_CUTOUT) {
+      fl_modifier($modifier) do_cutout();
+
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_drill();
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout("holes")
         children();
 
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
-
-    } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier) do_drill();
-
-    } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier) do_cutout();
-
     } else if ($verb==FL_MOUNT) {
       fl_modifier($modifier) do_mount();
+
+    } else if ($verb==FL_PAYLOAD) {
+      fl_modifier($modifier) do_payload();
 
     } else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
