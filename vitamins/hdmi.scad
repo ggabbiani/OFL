@@ -23,6 +23,8 @@ include <../foundation/util.scad>
 
 use     <NopSCADlib/vitamins/pcb.scad>
 
+FL_HDMI_NS = "hdmi";
+
 function fl_hdmi_new(nop_type) = let(
     l   = hdmi_depth(nop_type),
     iw1 = hdmi_width1(nop_type),
@@ -60,22 +62,28 @@ FL_HDMI_DICT = [
 function fl_hdmi_nameKV(value)         = fl_kv("name",value);
 
 module fl_hdmi(
-  verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  verbs       = FL_ADD,
   type,
-  cut_thick,            // thickness for FL_CUTOUT
-  cut_tolerance=0,      // tolerance used during FL_CUTOUT
-  cut_drift=0,          // translation applied to cutout
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  // thickness for FL_CUTOUT
+  cut_thick,
+  // tolerance used during FL_CUTOUT
+  cut_tolerance=0,
+  // translation applied to cutout (default 0)
+  cut_drift=0,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  // when undef native positioning is used
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
 
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
-  nop   = fl_nopSCADlib(type);
+  bbox      = fl_bb_corners(type);
+  size      = fl_bb_size(type);
+  D         = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
+  nop       = fl_nopSCADlib(type);
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
