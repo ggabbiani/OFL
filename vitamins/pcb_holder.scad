@@ -128,7 +128,7 @@ module fl_pcb_holderByHoles(
   h       = fl_get(type,"pcb/spacer [height,r,R]")[0];
   radius  = wsh_r;
 
-  holes = [for(hole=fl_holes(pcb)) let(p = hole[0],n = hole[1],d = hole[2]) [p,n,d]];
+  holes = [for(hole=fl_holes(pcb)) let(p = hole[0],n = hole[1],d = hole[2]) [p,n,d,0]];
 
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;

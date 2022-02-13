@@ -148,15 +148,14 @@ function fl_tt_isAxisString(s) =
 
 /**
  * Hole representation as:
- * «3d point»,«plane normal»,«diameter»,«depth»
+ * [[3d point],[plane normal],diameter,depth]
  * NOTE: «depth» 0 means thru-hole
  */
-function fl_tt_isHole(hole) = let(
-    len   = len(hole),
-    depth = len==4 ? hole[3] : 0
-  )  ((len==4 && is_num(depth)) || (len==3 && depth==0))
+function fl_tt_isHole(hole) =
+  len(hole)==4
   && fl_tt_isPointNormal([hole[0],hole[1]])
-  && is_num(hole[2]);
+  && is_num(hole[2])
+  && is_num(hole[3]);
 
 function fl_tt_isHoleList(list) =
   fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));
