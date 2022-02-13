@@ -183,8 +183,8 @@ FL_PCB_MH4PU_P = let(
     w     = 84,
     l     = 39,
     pcb_t = 1.6,
-    bbox  = [[-w/2,-l/2,-pcb_t],[+w/2,+l/2,0]],
-    pload = undef,
+    bare  = [[-w/2,-l/2,-pcb_t],[+w/2,+l/2,0]],
+    pload = bare+[-Z(1),Z(fl_size(FL_USB_TYPE_Ax1_NF).z-pcb_t-1)],
     holes = [
       let(r=2)    [[-w/2+r+1,-l/2+r+2,0], +Z, 2*r, pcb_t],
       let(r=2)    [[+w/2-r-1,-l/2+r+2,0], +Z, 2*r, pcb_t],
@@ -206,7 +206,7 @@ FL_PCB_MH4PU_P = let(
       ["USB3-3",    [FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
       ["USB3-4",    [FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],        [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
     ]
-  ) fl_PCB(name,bbox,pcb_t,"DarkCyan",1,pload,holes,comps,undef,M3_cap_screw);
+  ) fl_PCB(name,pload,pcb_t,"DarkCyan",1,pload,holes,comps,undef,M3_cap_screw);
 
 
 FL_PCB_PERF70x50  = fl_pcb_import(PERF70x50);
@@ -341,9 +341,7 @@ module fl_pcb(
               step    = inch(0.1),
               bbox    = bbox+[grid,-grid],
               clip    = false
-              // $FL_TRACE=true
-            )
-              fl_circle(d=1);
+            ) fl_circle(d=1);
           }
         }
         do_layout("components")
