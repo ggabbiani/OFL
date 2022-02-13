@@ -196,7 +196,13 @@ function fl_deprecated(bad,value,replacement) = let(
     complain  = str("***DEPRECATED***: ", bad, " is deprecated and ", replacement!=undef ? str("will be replaced by ", replacement, " in next major release.") : "WILL NOT BE REPLACED.")
   ) echo(complain) value;
 
+// optional getter, no error when property is not found
+// return «default» when «props» is undef, empty or when «key» is not found
+function fl_optional(props,key,default) =
+  props==undef ? default : let(r=search([key],props)) r!=[[]] ? props[r[0]][1] : default;
+
 // generic property getter with default value when not found
+// Never return undef
 function fl_get(type,key,default) =
   assert(key!=undef)
   assert(type!=undef)
