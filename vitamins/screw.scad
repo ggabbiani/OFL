@@ -60,7 +60,7 @@ function fl_screw_l(
  *  0 overall screw length
  *  1 passed thickness
  *  2 washer thickness
- *  3 extra waser (spring or star) thickness
+ *  3 extra washer (spring or star) thickness
  *  4 nut washer thickness
  *  5 nut thickness
  *
