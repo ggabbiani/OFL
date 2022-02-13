@@ -80,25 +80,29 @@ assert(
   ])
 );
 
+// holes
 assert(fl_tt_isHole([[1,2,3],[1,0,0]])==false);
 assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7])==false);
-assert(fl_tt_isHole([[1,2,3],[1,0,0],"2.7"])==false);
 assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5])==true);
 assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,"5"])==false);
+assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5,[]])==true);
+assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5,"string"])==false);
+assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5,-2])==false);
+assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5,[["key1","value"],["key2",2]]])==true);
 
 // axis lists
 
 let(
   axes  = [-X,+X,-Y,+Y,-Z,+Z],
   r     = fl_tt_isAxisList(axes)
-) echo(r=r) assert(r,axes);
+) assert(r,axes);
 
 let(
   axes  = [],
   r     = fl_tt_isAxisList(axes)
-) echo(r=r) assert(r,axes);
+) assert(r,axes);
 
 let(
   axes  = [[1,2,3],-Z],
   r     = fl_tt_isAxisList(axes)
-) echo(r=r) assert(!r,axes);
+) assert(!r,axes);

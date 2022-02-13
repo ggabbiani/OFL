@@ -23,18 +23,30 @@ include <type_trait.scad>
 include <3d.scad>
 
 /**
+ * prepare context for children() holes
+ *
+ * $hole_depth  - hole depth (set to «thick» for pass-thru)
+ * $hole_d      - hole diameter
+ * $hole_i      - ordinal position (may be undef)
+ * $hole_n      - hole normal
+ */
+module fl_hole_Context(hole,thick,ordinal) {
+  $hole_i       = ordinal;
+  $hole_center  = hole[0];
+  $hole_n       = hole[1];
+  $hole_d       = hole[2];
+  $hole_depth   = hole[3] ? hole[3] : thick;
+  $hole_screw   = fl_optional(hole[4],"hole/screw");
+  children();
+}
+
+/**
   * Layouts children along a list of holes.
   *
-  * Point information is used for positioning.
-  * normals, diameter and depth are passed back to children context.
+  * See fl_hole_Context() for context variables passed to children().
   *
   * NOTE: supported normals are x,y or z semi-axis ONLY
   *
-  * Children context:
-  *  $hole_depth  - hole depth
-  *  $hole_d      - hole diameter
-  *  $hole_i      - ordinal position inside «points»
-  *  $hole_n      - hole normal
   */
 module fl_lay_holes(
   // list of hole specs
@@ -50,16 +62,11 @@ module fl_lay_holes(
   fl_trace("enable",enable);
   fl_trace("holes",holes);
   fl_trace("thick",thick);
-  for($hole_i=[0:len(holes)-1]) {
-    hole        = holes[$hole_i];
-    point       = hole[0];
-    $hole_n     = hole[1];
-    $hole_d     = hole[2];
-    $hole_depth = len(hole)==4 ? assert(is_num(hole[3])) hole[3] : thick;
-    if (fl_3d_axisIsSet($hole_n,enable))
-      translate(point)
-        children();
-  }
+  for($hole_i=[0:len(holes)-1])
+    fl_hole_Context(holes[$hole_i],thick,$hole_i)
+      if (fl_3d_axisIsSet($hole_n,enable))
+        translate($hole_center)
+          children();
 }
 
 /**

@@ -43,14 +43,10 @@ function fl_pcb_thick(type,value)       = fl_property(type,"pcb/thickness",value
 function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
 
 //*****************************************************************************
-// COMPONENTS (to be moved elsewhere)
+// COMPONENTS
+// TODO: move elsewhere
 
-// optional getter, no error when property is not found
-// TODO: move it on defs.scad
-function fl_optional(props,key,default) =
-  let(r=search([key],props)) r!=[[]] ? props[r[0]][1] : default;
-
-// trigger children modules with component context
+// Component context for children()
 module fl_comp_Context(
   component // component definition: ["engine", [position], [[director],rotation], type, properties]
   ) {
@@ -194,9 +190,9 @@ FL_PCB_MH4PU_P = let(
       let(r=2)    [[+w/2-r-1,-l/2+r+2,0], +Z, 2*r, pcb_t],
       let(r=2)    [[-w/2+r+1,+l/2-r-2,0], +Z, 2*r, pcb_t],
       let(r=2)    [[+w/2-r-1,+l/2-r-2,0], +Z, 2*r, pcb_t],
-      let(r=1.25) [[-w/2+r+1,0,0],        +Z, 2*r, pcb_t],
-      let(r=1.25) [[+w/2-r-1,0,0],        +Z, 2*r, pcb_t],
-      let(r=1.25) [[-w/2+r+37.5+r,0,0],   +Z, 2*r, pcb_t],
+      let(r=1.25) [[-w/2+r+1,0,0],        +Z, 2*r, pcb_t, [["hole/screw",M2p5_pan_screw]]],
+      let(r=1.25) [[+w/2-r-1,0,0],        +Z, 2*r, pcb_t, [["hole/screw",M2p5_pan_screw]]],
+      let(r=1.25) [[-w/2+r+37.5+r,0,0],   +Z, 2*r, pcb_t, [["hole/screw",M2p5_pan_screw]]],
     ],
     sz_A  = fl_size(FL_USB_TYPE_Ax1),
     sz_uA = fl_size(FL_USB_TYPE_uA),
@@ -210,7 +206,7 @@ FL_PCB_MH4PU_P = let(
       ["USB3-3",    [FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
       ["USB3-4",    [FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],        [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
     ]
-  ) fl_PCB(name,bbox,pcb_t,"DarkCyan",1,pload,holes,screw=M3_cap_screw,components=comps);
+  ) fl_PCB(name,bbox,pcb_t,"DarkCyan",1,pload,holes,comps,undef,M3_cap_screw);
 
 
 FL_PCB_PERF70x50  = fl_pcb_import(PERF70x50);
@@ -414,11 +410,11 @@ module fl_pcb(
         assert(false,str("Unknown engine ",$engine));
   }
 
-  // FIXME: manage case din which there is no default screw (calculated hole by hole)
   module do_mount() {
     if (holes)
       fl_lay_holes(holes,lay_direction)
-        fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
+        let(scr = is_undef($hole_screw) ? screw : $hole_screw)
+          fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,thick=dr_thick+pcb_t);
   }
 
   module do_drill() {
