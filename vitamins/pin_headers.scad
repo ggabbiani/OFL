@@ -71,6 +71,7 @@ function fl_phdr_new(
       assert(is_string(description)) fl_description(value=description),
     fl_phdr_geometry(value=geometry),
     fl_bb_corners(value=bbox),
+    fl_director(value=+Z),fl_rotor(value=+X),
   ];
 
 FL_PHDR_RPIGPIO = fl_phdr_new("FL_RPI_GPIO","Raspberry PI GPIO",2p54header,[20,2]);
