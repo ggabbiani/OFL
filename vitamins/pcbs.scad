@@ -104,14 +104,15 @@ function fl_comp_BBox(spec_list) =
 // base constructor
 function fl_PCB(
     name,
-    // bare (no payload) bounding box
+    // bare (i.e. no payload) pcb's bounding box
     bare,
     // pcb thickness
     thick = 1.6,
     color  = "green",
     // corners radius
     radius,
-    // optional payload bounding box corners
+    // Optional payload bounding box.
+    // When passed it concurs in pcb's bounding box calculations
     payload,
     // each row represents a hole with the following format:
     // [[point],[normal], diameter, thickness]
@@ -123,15 +124,17 @@ function fl_PCB(
     grid,
     screw
   ) = let(
-
+    pload = payload ? payload : components ? fl_comp_BBox(components) : undef,
+    bbox  = pload ? [bare[0],[bare[1].x,bare[1].y,max(bare[1].z,pload[1].z)]]
+                  : bare
   ) [
     fl_native(value=true),
     fl_name(value=name),
-    fl_bb_corners(value=bare),
+    fl_bb_corners(value=bbox),
     fl_director(value=+Z),fl_rotor(value=+X),
     fl_pcb_thick(value=thick),
     fl_pcb_radius(value=radius),
-    if (payload) fl_payload(value=payload),
+    if (pload) fl_payload(value=pload), // optional payload
     fl_holes(value=holes),
     fl_pcb_components(value=components),
     fl_material(value=color),
@@ -276,10 +279,8 @@ module fl_pcb(
   pcb_t     = fl_pcb_thick(type);
   comps     = fl_pcb_components(type);
   size      = fl_bb_size(type);
-  bare      = fl_bb_corners(type);
-  pload     = fl_has(type,fl_payload()[0]) ? fl_payload(type) : comps ? fl_comp_BBox(comps) : undef;
-  bbox      = pload ? [[bare[0].x,bare[0].y,bare[0].z],[bare[1].x,bare[1].y,max(bare[1].z,pload[1].z)]]
-                    : bare;
+  bbox      = fl_bb_corners(type);
+  pload     = fl_has(type,fl_payload()[0]) ? fl_payload(type) : undef;
   holes     = fl_holes(type);
   screw     = fl_has(type,fl_screw()[0]) ? fl_screw(type) : undef;
   // FIXME: manage cases in which the imported pcb doesn't have any screw
@@ -351,9 +352,9 @@ module fl_pcb(
   // for holes, that are instead already placed in the final full 3d space
   module do_add() {
     fl_color(material) difference() {
-      translate(Z(bare[0].z)) linear_extrude(pcb_t)
+      translate(Z(bbox[0].z)) linear_extrude(pcb_t)
         difference() {
-          translate(bare[0])
+          translate(bbox[0])
             fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
           if (grid) {
             fl_trace("PCB  size:",size);
