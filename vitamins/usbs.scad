@@ -21,8 +21,6 @@
 
 include <../foundation/util.scad>
 
-// use     <NopSCADlib/vitamins/pcb.scad>
-
 FL_USB_NS = "usb";
 
 //*****************************************************************************
@@ -161,7 +159,7 @@ module fl_USB(
   D     = direction ? fl_direction(proto=type,direction=direction)  : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
   utype = fl_USB_type(type);
-
+  fl_trace("D",D);
   fl_trace("cutout drift",cut_drift);
 
   module wrap() {
