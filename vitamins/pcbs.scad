@@ -74,25 +74,51 @@ module fl_comp_Specs(
   fl_comp_Context($component) children();
 }
 
+// exact calculation of the resulting bounding box out of a list of component specifications
+function fl_comp_BBox(spec_list) =
+  assert(len(spec_list)>0,spec_list)
+  let(
+    // list of component bounding boxes translated by their position
+    bboxes = [for(specs=spec_list)
+      let(
+        component = specs[1],
+        position  = component[1],
+        direction = component[2],
+        type      = component[3],
+        // component direction matrix
+        D         = fl_direction(type,direction),
+        // translation by component position
+        T         = T(position),
+        // component bounding box
+        bbox      = fl_bb_corners(type),
+        // transformed bounding box points
+        points    = [for(corner=bbox) fl_transform(T*D,corner)],
+        // build transformed bounding box from points
+        Tbbox     = fl_bb_calc(pts=points)
+      ) Tbbox
+    ]
+  ) fl_bb_calc(bboxes);
+
 //*****************************************************************************
 
 // base constructor
 function fl_PCB(
     name,
-    bbox,
+    // bare (no payload) bounding box
+    bare,
     // pcb thickness
     thick = 1.6,
     color  = "green",
     // corners radius
     radius,
-    // payload bounding box corners
+    // optional payload bounding box corners
     payload,
     // each row represents a hole with the following format:
     // [[point],[normal], diameter, thickness]
     holes = [],
     // each row represent one component with the following format:
     // ["label", ["engine", [position], [[director],rotation] type],subtract]
-    components  = [],
+    components,
     // grid specs
     grid,
     screw
@@ -101,11 +127,11 @@ function fl_PCB(
   ) [
     fl_native(value=true),
     fl_name(value=name),
-    fl_bb_corners(value=bbox),
+    fl_bb_corners(value=bare),
     fl_director(value=+Z),fl_rotor(value=+X),
     fl_pcb_thick(value=thick),
     fl_pcb_radius(value=radius),
-    fl_payload(value=payload),
+    if (payload) fl_payload(value=payload),
     fl_holes(value=holes),
     fl_pcb_components(value=components),
     fl_material(value=color),
@@ -157,8 +183,8 @@ FL_PCB_RPI4 = let(
   h       = 16,
   pcb_t   = 1.5,
   hole_d  = 2.7,
-  bbox    = [[-w/2,0,-pcb_t],[+w/2,l,0+h]],
-  payload = [bbox[0]+fl_Z(pcb_t),bbox[1]],
+  bare    = [[-w/2,0,-pcb_t],[+w/2,l,0]],
+  payload = [[bare[0].x,bare[0].y,0],[bare[1].x,bare[1].y,h]],
   holes   = [
     [[ 24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
     [[ 24.5, 61.5, 0 ], +FL_Z, hole_d, pcb_t],
@@ -176,7 +202,7 @@ FL_PCB_RPI4 = let(
     ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+Y,0  ],             FL_ETHER_RJ45  ,[["comp/drift",-3]]]],
     ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_RPIGPIO]],
   ]
-) fl_PCB("RPI4-MODBP-8GB",bbox,pcb_t,"green",3,payload,holes,comps,undef,M3_cap_screw);
+) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw);
 
 FL_PCB_MH4PU_P = let(
     name  = "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port",
@@ -184,7 +210,6 @@ FL_PCB_MH4PU_P = let(
     l     = 39,
     pcb_t = 1.6,
     bare  = [[-w/2,-l/2,-pcb_t],[+w/2,+l/2,0]],
-    pload = bare+[-Z(1),Z(fl_size(FL_USB_TYPE_Ax1_NF).z-pcb_t-1)],
     holes = [
       let(r=2)    [[-w/2+r+1,-l/2+r+2,0], +Z, 2*r, pcb_t],
       let(r=2)    [[+w/2-r-1,-l/2+r+2,0], +Z, 2*r, pcb_t],
@@ -206,7 +231,7 @@ FL_PCB_MH4PU_P = let(
       ["USB3-3",    [FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
       ["USB3-4",    [FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],        [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
     ]
-  ) fl_PCB(name,pload,pcb_t,"DarkCyan",1,pload,holes,comps,undef,M3_cap_screw);
+  ) fl_PCB(name,bare,pcb_t,"DarkCyan",1,undef,holes,comps,undef,M3_cap_screw);
 
 
 FL_PCB_PERF70x50  = fl_pcb_import(PERF70x50);
@@ -251,11 +276,11 @@ module fl_pcb(
   pcb_t     = fl_pcb_thick(type);
   comps     = fl_pcb_components(type);
   size      = fl_bb_size(type);
-  bbox      = fl_bb_corners(type);
+  bare      = fl_bb_corners(type);
+  pload     = fl_has(type,fl_payload()[0]) ? fl_payload(type) : comps ? fl_comp_BBox(comps) : undef;
+  bbox      = pload ? [[bare[0].x,bare[0].y,bare[0].z],[bare[1].x,bare[1].y,max(bare[1].z,pload[1].z)]]
+                    : bare;
   holes     = fl_holes(type);
-  // FIXME: when unspecified must be calculated from holes (if any)
-
-
   screw     = fl_has(type,fl_screw()[0]) ? fl_screw(type) : undef;
   // FIXME: manage cases in which the imported pcb doesn't have any screw
   screw_r   = screw_radius(screw);
@@ -266,11 +291,6 @@ module fl_pcb(
   material  = fl_material(type,default="green");
   radius    = fl_pcb_radius(type);
   grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
-  pload     = fl_has(type,fl_payload()[0])
-            ? fl_payload(type)
-            : let(
-                h = max([for(i=comps) let(c=i[1][3],bb=fl_bb_corners(c)) bb[1].z-bb[0].z])
-              ) [bbox[0]+Z(pcb_t),[bbox[1].x,bbox[1].y,bbox[0].z+pcb_t+h]];
 
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;
   M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
@@ -331,9 +351,9 @@ module fl_pcb(
   // for holes, that are instead already placed in the final full 3d space
   module do_add() {
     fl_color(material) difference() {
-      translate(Z(bbox[0].z)) linear_extrude(pcb_t)
+      translate(Z(bare[0].z)) linear_extrude(pcb_t)
         difference() {
-          translate(bbox[0])
+          translate(bare[0])
             fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
           if (grid) {
             fl_trace("PCB  size:",size);
@@ -499,8 +519,8 @@ function fl_bb_calc(
     pts
   ) =
   assert(fl_XOR(bbs!=undef,pts!=undef))
-  assert(bbs==undef || is_list(bbs),bbs)
-  assert(pts==undef || is_list(pts),pts)
+  assert(bbs==undef || len(bbs)>0,bbs)
+  assert(pts==undef || len(pts)>0,pts)
   bbs!=undef
   ? let(
     xs  = [for(bb=bbs) bb[0].x],
