@@ -53,7 +53,7 @@ ROTATION    = 0;    // [0:360]
 
 /* [Hidden] */
 
-sheet_metal = [[0,0],[50,50]];
+sheet_metal = [[0,0],[100,100]];
 // the grid bounding box is equal to the sheet metal one reduced by border size
 grid_bbox   = sheet_metal+[BORDER,-BORDER];
 
