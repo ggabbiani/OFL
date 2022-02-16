@@ -340,8 +340,8 @@ module fl_ellipticArc(
 
 module fl_ellipticAnnulus(
   verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
-  e,                  // ellipse in [a,b] form
-  thick,              // added to radius defines the external radius
+  e,                  // outer ellipse in [a,b] form
+  thick,              // subtracted to outer ellipses axes defines the internal one
   quadrant
   ) {
   fl_ellipticArc(verbs,e,[0,360],thick,quadrant);
@@ -490,7 +490,7 @@ module fl_annulus(
   verbs     = FL_ADD,
   r,          // outer radius
   d,          // outer diameter
-  thick,      // added to radius defines the external radius
+  thick,      // subtracted to outer radius defines the internal one
   quadrant
   ) {
   fl_arc(verbs,r,d,[0,360],thick,quadrant);
