@@ -336,9 +336,6 @@ module fl_manage(
     // size used for fl_axes()
     size
   ) {
-  // TODO: remove the following assert when updated
-  assert($children==1,"temporary assert for change in module fl_manage()");
-
   module orient() {
     if (direction)
       multmatrix(direction) children();
