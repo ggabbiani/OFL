@@ -153,8 +153,9 @@ function fl_PCB(
  *  - screw
  *  - grid
  *
- * NO COMPONENT IS CURRENTLY IMPORTED.
+ * NO COMPONENT IS CURRENTLY IMPORTED. STILL A WORK IN PROGRESS USE fl_pcb_adapter instead
  */
+// TODO: fix and complete
 function fl_pcb_import(nop,payload) = let(
     w         = max(pcb_width(nop),pcb_length(nop)),
     l         = min(pcb_width(nop),pcb_length(nop)),
@@ -330,7 +331,10 @@ module fl_pcb(
             step    = inch(0.1),
             bbox    = bbox+[grid,-grid],
             clip    = false
-          ) fl_annulus(d=2-NIL2,thick=0.5);
+          ) difference() {
+            circle(d=2);
+            circle(d=2-NIL2-2*0.5);
+          };
 
           // oval lands at the ends
           if (fr4 && len(grid) < 3) {
@@ -356,14 +360,12 @@ module fl_pcb(
         difference() {
           translate(bbox[0])
             fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
-          if (grid) {
-            fl_trace("PCB  size:",size);
+          if (grid)
             fl_grid_layout(
               step    = inch(0.1),
               bbox    = bbox+[grid,-grid],
               clip    = false
-            ) fl_circle(d=1);
-          }
+            ) circle(d=1);
         }
         do_layout("components")
           if ($subtract!=undef) {
