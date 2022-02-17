@@ -352,7 +352,7 @@ module molex_usb_Ax1(cutout, tongue) { //! Draw Molex USB A connector suitable f
                             difference() {
                                 square([w, h]);
 
-                                 translate([w / 2, h / 2])
+                                  translate([w / 2, h / 2])
                                     square([12.6, 5.08], center = true);
                             }
                     }
