@@ -197,9 +197,9 @@ FL_PCB_RPI4 = let(
   ],
   comps = [
     //["label",   ["engine",    [position],           [[director],rotation] type,           [engine specific parameters]]]
-    ["POWER IN",  [FL_USB_NS,   [25.5,      11.2, 0], [+X,0  ],             FL_USB_TYPE_C  ]],
-    ["HDMI0",     [FL_HDMI_NS,  [25,        26,   0], [+X,0  ],             FL_HDMI_TYPE_D ]],
-    ["HDMI1",     [FL_HDMI_NS,  [25,        39.5, 0], [+X,0  ],             FL_HDMI_TYPE_D ]],
+    ["POWER IN",  [FL_USB_NS,   [25.5,      11.2, 0], [+X,0  ],             FL_USB_TYPE_C  ,[["comp/drift",-1.3]]]],
+    ["HDMI0",     [FL_HDMI_NS,  [25,        26,   0], [+X,0  ],             FL_HDMI_TYPE_D ,[["comp/drift",-1.26]]]],
+    ["HDMI1",     [FL_HDMI_NS,  [25,        39.5, 0], [+X,0  ],             FL_HDMI_TYPE_D ,[["comp/drift",-1.26]]]],
     ["A/V",       [FL_JACK_NS,  [22,        54,   0], [+X,0  ],             FL_JACK        ]],
     ["USB2",      [FL_USB_NS,   [w/2-9,     79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
     ["USB3",      [FL_USB_NS,   [w/2-27,    79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
@@ -454,14 +454,13 @@ module fl_pcb(
                 : director==+Y ? cut_thick.y[1] : director==-Y ? cut_thick.y[0]
                 : director==+Z ? cut_thick.z[1] : cut_thick.z[0];
       if (engine==FL_USB_NS)
-        fl_USB(FL_CUTOUT,type,cut_thick=cut_thick,tolerance=cut_tolerance,direction=direction,cut_drift=$drift);
+        fl_USB(FL_CUTOUT,type,cut_thick=cut_thick-$drift,tolerance=cut_tolerance,direction=direction,cut_drift=$drift);
       else if (engine==FL_HDMI_NS)
-        fl_hdmi(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
+        fl_hdmi(FL_CUTOUT,type=type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
       else if (engine==FL_JACK_NS)
-        let(drift=0)
-          fl_jack(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=drift,direction=direction);
+        fl_jack(FL_CUTOUT,type=type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
       else if (engine==FL_ETHER_NS)
-        fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
+        fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
       else if (engine==FL_PHDR_NS) let(
           thick = size.z-pcb_t+cut_thick
         ) fl_pinHeader(FL_CUTOUT,type=type,cut_thick=thick,cut_tolerance=cut_tolerance,direction=direction);
