@@ -33,10 +33,9 @@ function fl_grid_quad(
   high  = bbox[1],
   step  = is_num(step) ? [step,step] : step
 ) [
-    for(y=[low.y+origin.y:step.y:high.y]) [
-      for(x=[low.x+origin.x:step.x:high.x])
-        generator(x,y,bbox)
-    ]
+    for(y=[low.y+origin.y:step.y:high.y])
+      for(x=[low.x+origin.x:step.x:high.x],p=generator(x,y,bbox))
+        p
   ];
 
 function fl_grid_hex(
@@ -54,10 +53,15 @@ function fl_grid_hex(
     generator = function(x,y,bbox) let(
         center  = [x,y],
         // builds points needed for a circle given «center» and «r»
-        points  = fl_circle(center=center,r=r_step,$fn=edges),
-        clipped = [for(p=points) if (p.x>bbox[0].x && p.y>bbox[0].y && p.x<bbox[1].x && p.y<bbox[1].y) p]
-      ) concat([center],clipped)
-  ) fl_grid_quad(origin,size,bbox,generator);
+        points  = fl_circle(center=center,r=r_step,$fn=edges)
+        // FIXME: eliminate double points algorithmically generated in hex mode
+        // TODO: predictive point clipping (but something about children radius must be passed along)
+        // clipped = [for(p=points) if (p.x>bbox[0].x && p.y>bbox[0].y && p.x<bbox[1].x && p.y<bbox[1].y) p]
+      )
+      // echo(points=points)
+      concat([center],points)
+  )
+  fl_grid_quad(origin,size,bbox,generator);
 
 module fl_grid_layout(
   // grid origin relative to bounding box
@@ -72,21 +76,16 @@ module fl_grid_layout(
 ) {
 
   module grid() {
-    union() for(row=points,set=row,p=set)
+    for(p=points)
       translate(p)
         children();
   }
 
-  // echo($FL_TRACE=$FL_TRACE);
   assert(fl_XOR(step!=undef,r_step!=undef));
-  // fl_trace("$id",$id);
-  // fl_trace("origin",origin);
-  // fl_trace("step",step);
-  // fl_trace("r_step",r_step);
-  // fl_trace("bbox",bbox);
   points  = step!=undef
           ? fl_grid_quad(origin,step,bbox)
           : fl_grid_hex(origin,r_step,bbox);
+  fl_trace("points",points);
   if (clip)
     intersection() {
       grid() children();
