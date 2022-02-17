@@ -31,14 +31,14 @@ $FL_TRACE   = false;
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Grid] */
-
+GRID_SIZE   = [100,100];
 GRID_TYPE   = "quad";   // [quad,hex]
 GRID_CLIP   = false;
 // draw the grid clipping bounding box
 GRID_BBOX   = false;
 BORDER      = [1,1];    // [0:0.05:20]
 TRIM_ORIGIN = [0,0];      // [-10:0.1:+10]
-QUAD_STEP = [6,6];  // [0:0.01:+10]
+QUAD_STEP   = [6,6];  // [0:0.01:+10]
 // radius of the polygon circumcircle used for creating 6 holes for each grid point
 HEX_STEP    = 6;    // [0:0.1:10]
 
@@ -53,7 +53,7 @@ ROTATION    = 0;    // [0:360]
 
 /* [Hidden] */
 
-sheet_metal = [[0,0],[100,100]];
+sheet_metal = [[0,0],GRID_SIZE];
 // the grid bounding box is equal to the sheet metal one reduced by border size
 grid_bbox   = sheet_metal+[BORDER,-BORDER];
 
