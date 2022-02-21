@@ -61,6 +61,7 @@ module fl_comp_Context(
   $subtract   = fl_optional(properties,"comp/sub");
   $drift      = fl_optional(properties,"comp/drift",0);
   $color      = fl_optional(properties,"comp/color");
+  $octant     = fl_optional(properties,"comp/octant");
   children();
 }
 
@@ -81,20 +82,24 @@ function fl_comp_BBox(spec_list) =
     // list of component bounding boxes translated by their position
     bboxes = [for(specs=spec_list)
       let(
-        component = specs[1],
-        position  = component[1],
-        direction = component[2],
-        type      = component[3],
-        // component direction matrix
-        D         = fl_direction(type,direction),
-        // translation by component position
-        T         = T(position),
+        component   = specs[1],
+        position    = component[1],
+        direction   = component[2],
+        type        = component[3],
+        properties  = component[4],
+        octant      = fl_optional(properties,"comp/octant"),
         // component bounding box
-        bbox      = fl_bb_corners(type),
+        bbox        = fl_bb_corners(type),
+        // component direction matrix
+        D           = fl_direction(type,direction),
+        // translation by component position
+        T           = T(position),
+        // eventual component placement
+        M           = octant ? fl_octant(octant=octant,bbox=bbox) : I,
         // transformed bounding box points
-        points    = [for(corner=bbox) fl_transform(T*D,corner)],
+        points      = [for(corner=bbox) fl_transform(T*D*M,corner)],
         // build transformed bounding box from points
-        Tbbox     = fl_bb_calc(pts=points)
+        Tbbox       = fl_bb_calc(pts=points)
       ) Tbbox
     ]
   ) fl_bb_calc(bboxes);
@@ -110,7 +115,7 @@ function fl_PCB(
     thick = 1.6,
     color  = "green",
     // corners radius
-    radius,
+    radius=0,
     // Optional payload bounding box.
     // When passed it concurs in pcb's bounding box calculations
     payload,
@@ -124,7 +129,8 @@ function fl_PCB(
     grid,
     screw
   ) = let(
-    pload = payload ? payload : components ? fl_comp_BBox(components) : undef,
+    comp_bbox = components ? fl_comp_BBox(components) : undef,
+    pload = payload ? payload : comp_bbox,
     bbox  = pload ? [bare[0],[bare[1].x,bare[1].y,max(bare[1].z,pload[1].z)]]
                   : bare
   ) [
@@ -284,8 +290,7 @@ module fl_pcb(
   pload     = fl_has(type,fl_payload()[0]) ? fl_payload(type) : undef;
   holes     = fl_holes(type);
   screw     = fl_has(type,fl_screw()[0]) ? fl_screw(type) : undef;
-  // FIXME: manage cases in which the imported pcb doesn't have any screw
-  screw_r   = screw_radius(screw);
+  screw_r   = screw ? screw_radius(screw) : 0;
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
             : assert(fl_tt_isAxisVList(thick)) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
@@ -373,7 +378,7 @@ module fl_pcb(
             if ($engine==FL_USB_NS) fl_USB(verbs=FL_FOOTPRINT,type=$type,direction=$direction,tolerance=$subtract);
           }
       if (holes)
-        fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z]);
+        fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z],pcb_t);
     }
     if (grid)
       grid_plating();
@@ -427,6 +432,8 @@ module fl_pcb(
         fl_ether(type=$type,direction=$direction);
       else if ($engine==FL_PHDR_NS)
         fl_pinHeader(FL_ADD,type=$type,direction=$direction);
+      else if ($engine==FL_TRIM_NS)
+        fl_trimpot(FL_ADD,type=$type,direction=$direction,octant=$octant);
       else
         assert(false,str("Unknown engine ",$engine));
   }
@@ -445,27 +452,26 @@ module fl_pcb(
 
   module do_cutout() {
     module trigger(component) {
-      engine    = component[0];
-      position  = component[1];
-      direction = component[2];
-      type      = component[3];
-      director  = direction[0];
-      cut_thick  = director==+X ? cut_thick.x[1] : director==-X ? cut_thick.x[0]
-                : director==+Y ? cut_thick.y[1] : director==-Y ? cut_thick.y[0]
-                : director==+Z ? cut_thick.z[1] : cut_thick.z[0];
-      if (engine==FL_USB_NS)
-        fl_USB(FL_CUTOUT,type,cut_thick=cut_thick-$drift,tolerance=cut_tolerance,direction=direction,cut_drift=$drift);
-      else if (engine==FL_HDMI_NS)
-        fl_hdmi(FL_CUTOUT,type=type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
-      else if (engine==FL_JACK_NS)
-        fl_jack(FL_CUTOUT,type=type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
-      else if (engine==FL_ETHER_NS)
-        fl_ether(FL_CUTOUT,type=type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=direction);
-      else if (engine==FL_PHDR_NS) let(
+      cut_thick = $director==+X ? cut_thick.x[1] : $director==-X ? cut_thick.x[0]
+                : $director==+Y ? cut_thick.y[1] : $director==-Y ? cut_thick.y[0]
+                : $director==+Z ? cut_thick.z[1] : cut_thick.z[0];
+      // echo($director=$director,$engine=$engine,cut_thick=cut_thick);
+      if ($engine==FL_USB_NS)
+        fl_USB(FL_CUTOUT,$type,cut_thick=cut_thick-$drift,tolerance=cut_tolerance,direction=$direction,cut_drift=$drift);
+      else if ($engine==FL_HDMI_NS)
+        fl_hdmi(FL_CUTOUT,$type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=$direction);
+      else if ($engine==FL_JACK_NS)
+        fl_jack(FL_CUTOUT,$type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=$direction);
+      else if ($engine==FL_ETHER_NS)
+        fl_ether(FL_CUTOUT,$type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=$direction);
+      else if ($engine==FL_PHDR_NS) let(
           thick = size.z-pcb_t+cut_thick
-        ) fl_pinHeader(FL_CUTOUT,type=type,cut_thick=thick,cut_tolerance=cut_tolerance,direction=direction);
+        ) fl_pinHeader(FL_CUTOUT,$type,cut_thick=thick,cut_tolerance=cut_tolerance,direction=$direction);
+      else if ($engine==FL_TRIM_NS) let(
+          thick = size.z-pcb_t-11.5+cut_thick
+        ) fl_trimpot(FL_CUTOUT,type=$type,cut_thick=thick,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=$direction,octant=$octant);
       else
-        assert(false,str("Unknown engine ",engine));
+        assert(false,str("Unknown engine ",$engine));
     }
 
     if (cut_label)
@@ -663,5 +669,68 @@ module fl_pcb_adapter(
 
     } else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+  }
+}
+
+// TODO: MOVE ME!!!!
+
+FL_TRIM_NS    = "trim";
+
+FL_TRIM_POT10  = let(
+  sz  = [9.5,10+1.5,4.8]
+) [
+  fl_name(value="ten turn trimpot"),
+  fl_bb_corners(value=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]),
+  fl_director(value=+Z),fl_rotor(value=+X),
+];
+
+module fl_trimpot(
+  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
+  type,
+  // thickness for FL_CUTOUT
+  cut_thick,
+  // tolerance used during FL_CUTOUT
+  cut_tolerance=0,
+  // translation applied to cutout (default 0)
+  cut_drift=0,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  // when undef native positioning is used
+  octant
+) {
+  bbox  = fl_bb_corners(type);
+  size  = fl_bb_size(type);
+  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
+
+  module do_add() {
+    trimpot10();
+  }
+  module do_bbox() {}
+  module do_assembly() {}
+  module do_layout() {}
+  module do_drill() {}
+
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) trimpot10();
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout()
+        children();
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier);
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier);
+    } else if ($verb==FL_CUTOUT) {
+      fl_modifier($modifier)
+        translate(-Y(6.5+cut_drift))
+          fl_cutout(len=cut_thick,delta=cut_tolerance,trim=[0,5.1,0],z=-Y,cut=true)
+            do_add();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
   }
 }
