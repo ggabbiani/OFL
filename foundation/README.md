@@ -101,7 +101,7 @@ When a verb is passed as a single value the verb will be trivially executed.
     |
     +---< engine
 
-![Single verb engine invocation](docs/fig-0.png)
+![Single verb engine invocation](docs/pic-0.png)
 
 ### Multiple verb invocation
 
@@ -127,7 +127,7 @@ so that same invokation of the same primitive will actually perform the followin
  3. draw of local reference axes (FL_AXES);
  4. the object bounding box is shown (FL_BBOX).
 
-![Multiple verb invocation](docs/fig-1.png)
+![Multiple verb invocation](docs/pic-1.png)
 
 ### Verbs rendering
 
@@ -181,7 +181,7 @@ In the previous example we can modify the rendering of the FL_AXES verb
 
 obtaining the reference axes rendering in 'debug' mode
 
-![Modified verb invocation](docs/fig-2.png)
+![Modified verb invocation](docs/pic-2.png)
 
 ## 3D positioning and orientation
 
@@ -229,7 +229,7 @@ We can pass this value to our example for placing the object in the desired octa
     |
     +---> engine
 
-![Modified verb invocation](docs/fig-3.png)
+![Modified verb invocation](docs/pic-3.png)
 
 If we want the object centered along the X axis, the octant will be [0,1,1] ⇒ +Y+Z
 
@@ -251,7 +251,7 @@ If we want the object centered along the X axis, the octant will be [0,1,1] ⇒ 
     |
     +---> engine
 
-![Modified verb invocation](docs/fig-4.png)
+![Modified verb invocation](docs/pic-4.png)
 
 If we want the object centered on the origin the octant will be [0,0,0] ⇒ O (**capital 'o'**)
 
@@ -264,7 +264,7 @@ If we want the object centered on the origin the octant will be [0,0,0] ⇒ O (*
 
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=O);
 
-![Modified verb invocation](docs/fig-5.png)
+![Modified verb invocation](docs/pic-5.png)
 
 Of course these setting can be mixed with all the possible combination allowed, for example [0,0,-1] ⇒ -Z
 
@@ -277,13 +277,13 @@ Of course these setting can be mixed with all the possible combination allowed, 
 
     fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=-Z);
 
-![Modified verb invocation](docs/fig-6.png)
+![Modified verb invocation](docs/pic-6.png)
 
 ### Orientation
 
 3D orientation is managed by engines through the **direction** parameter actually constituted by a list containing a vector (director) and a rotation angle. When the direction parameter is undef the default value is used (usually +Z).
 
-![Default direction](docs/fig-7.png)
+![Default direction](docs/pic-7.png)
 
 The following code change the orientation from the default +Z to the [1,1,1] vector.
 
@@ -294,7 +294,7 @@ The following code change the orientation from the default +Z to the [1,1,1] vec
     direction=[1,1,1];
     fl_spdt([FL_ADD,FL_AXES],FL_SODAL_SPDT,direction=[direction,0]);
 
-![Default direction](docs/fig-8.png)
+![Default direction](docs/pic-8.png)
 
 It is possible to combine the change of direction with a rotation around the new axis.
 
@@ -306,7 +306,7 @@ It is possible to combine the change of direction with a rotation around the new
     angle     = 30;
     fl_spdt([FL_ADD,FL_AXES],FL_SODAL_SPDT,direction=[direction,angle]);
 
-![Default direction](docs/fig-9.png)
+![Default direction](docs/pic-9.png)
 
 ## API naming convention
 
