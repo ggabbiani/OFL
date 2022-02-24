@@ -69,7 +69,7 @@ DIR_R       = 0;        // [0:360]
 SHOW      = -1;   // [-1:1:5]
 // extra dimension to be added when FOOTPRINT verb is called
 FP_EXTRA  = 0;    // [0:0.1:3]
-T         = 2.5;  // [0:10]
+T         = 2.5;  // [0:20]
 
 /* [Hidden] */
 
