@@ -29,7 +29,6 @@ include <screw.scad>
 include <NopSCADlib/core.scad>
 
 // namespace for pin headers engine
-// TODO: extend namespace definition to other modules
 FL_MAG_NS  = "mag";
 
 //*****************************************************************************
