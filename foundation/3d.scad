@@ -18,6 +18,7 @@
  */
 
 include <2d.scad>
+include <bbox.scad>
 include <type_trait.scad>
 
 /*

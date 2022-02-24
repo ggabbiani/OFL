@@ -263,51 +263,6 @@ function fl_height(type)  = fl_size(type).y;
 function fl_thick(type)   = fl_size(type).z;
 
 //*****************************************************************************
-// Bounding Box
-
-// when invoked by «type» parameter acts as getter
-// when invoked by «value» parameter acts as property constructor
-function fl_bb_corners(type,value)  = let(key="bb/bounding corners")
-  type!=undef
-  ? let(value = fl_property(type,key)) is_function(value) ? value(type) : value
-  : fl_property(key=key,value=value);
-
-// computes size from the bounding corners.
-function fl_bb_size(type)       = assert(type) let(c=fl_bb_corners(type)) c[1]-c[0];
-
-// functions
-function fl_bb_new(
-  negative  = [0,0,0],
-  size      = [0,0,0],
-  positive
-) = [fl_bb_corners(value=[negative,positive==undef?negative+size:positive])];
-
-// bounding box translation
-function fl_bb_center(type) = let(c=fl_bb_corners(type),sz=fl_bb_size(type)) c[0]+sz/2;
-
-// Converts a bounding box in canonic form into four vertices:
-// a,b,c,d on plane y==bbcorner[0].y
-// A,B,C,D on plane y==bbcorner[1].y
-function fl_bb_vertices(bbcorners) = let(
-  a   = bbcorners[0]
-  ,C  = bbcorners[1]
-  ,b  = [C.x,a.y,a.z]
-  ,c  = [C.x,a.y,C.z]
-  ,d  = [a.x,a.y,C.z]
-  ,A  = [a.x,C.y,a.z]
-  ,B  = [C.x,C.y,a.z]
-  ,D  = [a.x,C.y,C.z]
-) [a,b,c,d,A,B,C,D];
-
-// Applies a transformation matrix «M» to a bounding box
-function fl_bb_transform(M,bbcorners) = let(
-  vertices  = [for(v=fl_bb_vertices(bbcorners)) fl_transform(M,v)]
-  ,Xs       = [for(v=vertices) v.x]
-  ,Ys       = [for(v=vertices) v.y]
-  ,Zs       = [for(v=vertices) v.z]
-) [[min(Xs),min(Ys),min(Zs)],[max(Xs),max(Ys),max(Zs)]];
-
-//*****************************************************************************
 // type check
 function fl_has(type,property,check=function(value) true) =
   assert(is_string(property))

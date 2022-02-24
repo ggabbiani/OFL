@@ -517,34 +517,6 @@ module fl_pcb(
 }
 
 /**
- * Calculates a cubic bounding block from a bounding blocks list or 3d point set
- */
-// TODO: move elsewhere
-function fl_bb_calc(
-    // list of bounding blocks to be included in the new one
-    bbs,
-    // list of 3d points to be included in the new bounding block
-    pts
-  ) =
-  assert(fl_XOR(bbs!=undef,pts!=undef))
-  assert(bbs==undef || len(bbs)>0,bbs)
-  assert(pts==undef || len(pts)>0,pts)
-  bbs!=undef
-  ? let(
-    xs  = [for(bb=bbs) bb[0].x],
-    ys  = [for(bb=bbs) bb[0].y],
-    zs  = [for(bb=bbs) bb[0].z],
-    XS  = [for(bb=bbs) bb[1].x],
-    YS  = [for(bb=bbs) bb[1].y],
-    ZS  = [for(bb=bbs) bb[1].z]
-  ) [[min(xs),min(ys),min(zs)],[max(XS),max(YS),max(ZS)]]
-  : let(
-    xs  = [for(p=pts) p.x],
-    ys  = [for(p=pts) p.y],
-    zs  = [for(p=pts) p.z]
-  ) [[min(xs),min(ys),min(zs)],[max(xs),max(ys),max(zs)]];
-
-/**
  * PCB adapter for NopSCADlib.
  *
  * While full attributes rendering is supported via NopSCADlib APIs, only basic
