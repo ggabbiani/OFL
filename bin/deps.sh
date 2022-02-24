@@ -12,7 +12,7 @@ trap 'on_exit $? $test' EXIT
 help() {
 cat <<EoH
 
-$(basename $0) [-?|-h|--help] [-f|--foundation] [-v|--vitamins]
+$(basename $0) [-?|-h|--help] [-d|--dry-run] [-f|--foundation] [-v|--vitamins] [-s|--silent]
 
   -?|-h|--help      this help
   -d|--dry-run      on screen dump only of the generated dot file (default OFF)

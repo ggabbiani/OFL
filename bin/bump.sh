@@ -174,9 +174,9 @@ warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
 # update defs.scad
 sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${V[0]},${V[1]},${V[2]}\];/g" "$DEFS"
-# update docs (currently $OFL/foundation/docs/dependencies.svg
+# update docs for foundation ($OFL/foundation/docs/dependencies.svg)
 $OFL/bin/deps.sh -s
-# and $OFL/vitamins/docs/dependencies.svg)
+# and vitamins ($OFL/vitamins/docs/dependencies.svg)
 $OFL/bin/deps.sh -v -s
 
 git commit -m "Version $VERSION bumped" -a
