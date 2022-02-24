@@ -1,5 +1,4 @@
 #/bin/bash.sh
-# TODO: add documents update before release bump
 
 set -e # exit immediately in case of error
 OFL="$(realpath $(dirname $0)/..)"

@@ -272,9 +272,6 @@ function fl_bb_corners(type,value)  = let(key="bb/bounding corners")
   ? let(value = fl_property(type,key)) is_function(value) ? value(type) : value
   : fl_property(key=key,value=value);
 
-// TODO: every type implementing FL_FOOTPRINT should have this
-// function fl_bb_fprint(type,value)  = fl_property(type,"bb/footprint bounding corners",value);
-
 // computes size from the bounding corners.
 function fl_bb_size(type)       = assert(type) let(c=fl_bb_corners(type)) c[1]-c[0];
 
