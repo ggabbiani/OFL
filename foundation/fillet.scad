@@ -29,16 +29,10 @@ module fl_vFillet(
   direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
   octant      // when undef native positioning is used (+Z)
   ) {
-  default = [+Z,+X];  // default director and rotor
   rx      = r ? r : rx;
   ry      = r ? r : ry;
-  bbox    = [[0,0,-h/2],[rx,ry,h/2]];
-  M       = octant!=undef     ? fl_octant(octant=octant,bbox=bbox) : I;
-  D       = direction!=undef  ? fl_direction(direction=direction,default=default) : I;
 
-  // FIXME
-  fl_manage(verbs,M,D)
-    fl_fillet(verbs,r,h,rx,ry,octant=+X);
+  fl_fillet(verbs,r,h,rx,ry,octant=+X);
 }
 
 module fl_hFillet(
