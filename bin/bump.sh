@@ -162,7 +162,11 @@ cat <<EOM
 
 this script is going to:
 
-  * modify and commit "$DEFS" (${V[0]}.${V[1]}.${V[2]});
+  * modify and commit:
+    - "$DEFS" (${V[0]}.${V[1]}.${V[2]});
+    - $OFL/foundation/docs/dependencies.svg
+    - $OFL/vitamins/docs/dependencies.svg
+    - pictures in $OFL/foundation/docs/
   * annotate local repo as v${V[0]}.${V[1]}.${V[2]};
   * push updated "$DEFS" and v${V[0]}.${V[1]}.${V[2]} annotation to remote repo
 
@@ -178,6 +182,8 @@ sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:
 $OFL/bin/deps.sh -s
 # and vitamins ($OFL/vitamins/docs/dependencies.svg)
 $OFL/bin/deps.sh -v -s
+# update pictures
+$OFL/bin/make-pics.sh -f
 
 git commit -m "Version $VERSION bumped" -a
 git tag -m "Version $VERSION bumped" $TAG $BRANCH
