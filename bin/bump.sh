@@ -168,7 +168,7 @@ this script is going to:
     - $OFL/vitamins/docs/dependencies.svg
     - pictures in $OFL/foundation/docs/
   * annotate local repo as v${V[0]}.${V[1]}.${V[2]};
-  * push updated "$DEFS" and v${V[0]}.${V[1]}.${V[2]} annotation to remote repo
+  * push updates and v${V[0]}.${V[1]}.${V[2]} annotation to remote repo
 
 EOM
 if [ "$DRYRUN" -eq "1" ]; then
