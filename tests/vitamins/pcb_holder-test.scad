@@ -48,7 +48,7 @@ $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // mount shape through predefined screws
 $FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
-$FL_PAYLOAD     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -73,7 +73,7 @@ FRAME_T  = 0; // [0:0.1:5]
 TOLERANCE = 0.5;
 T=2.5;
 
-PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20]
+PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20, FL_PCB_MH4PU_P]
 
 /* [Hidden] */
 
@@ -89,11 +89,12 @@ verbs=[
   if ($FL_MOUNT!="OFF")     FL_MOUNT,
   if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
-pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
-    : PCB=="FL_PCB_PERF70x50"  ? FL_PCB_PERF70x50
-    : PCB=="FL_PCB_PERF60x40"  ? FL_PCB_PERF60x40
-    : PCB=="FL_PCB_PERF70x30"  ? FL_PCB_PERF70x30
-    : PCB=="FL_PCB_PERF80x20"  ? FL_PCB_PERF80x20
+pcb = PCB=="FL_PCB_RPI4"      ? FL_PCB_RPI4
+    : PCB=="FL_PCB_PERF70x50" ? FL_PCB_PERF70x50
+    : PCB=="FL_PCB_PERF60x40" ? FL_PCB_PERF60x40
+    : PCB=="FL_PCB_PERF70x30" ? FL_PCB_PERF70x30
+    : PCB=="FL_PCB_PERF80x20" ? FL_PCB_PERF80x20
+    : PCB=="FL_PCB_MH4PU_P"   ? FL_PCB_MH4PU_P
     : undef;
 
 // screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
@@ -101,4 +102,5 @@ pcb = PCB=="FL_PCB_RPI4"       ? FL_PCB_RPI4
 frame = FRAME_H && FRAME_T ? [FRAME_H,FRAME_T] : undef;
 holder  = ENGINE=="by holes" ? fl_pcb_HolderByHoles(pcb,H) : fl_pcb_HolderBySize(pcb,H,TOLERANCE);
 
-fl_pcb_holder(verbs,holder,direction=direction,octant=octant,frame=frame,thick=T);
+fl_pcb_holder(verbs,holder,direction=direction,octant=octant,frame=frame,thick=T)
+  fl_screw(type=$hole_screw,thick=H+fl_pcb_thick(pcb)+T);

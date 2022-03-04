@@ -22,7 +22,11 @@ include <../foundation/tube.scad>
 
 include <../vitamins/pcbs.scad>
 
-// Common interface for pcb holder constructors
+/*
+ * Common interface for pcb holder constructors. 
+ *
+ * NOTE: clients should not use this but rather fl_pcb_HolderByHoles() or fl_pcb_HolderBySize()
+ */
 function fl_pcb_Holder(
   name,
   engine,
@@ -62,9 +66,11 @@ module fl_pcb_holder(
 ) {
   engine  = fl_engine(type);
   if (engine=="fl_pcb_holderByHoles")
-    fl_pcb_holderByHoles(verbs,type,thick,frame,direction,octant);
+    fl_pcb_holderByHoles(verbs,type,thick,frame,direction,octant)
+      children();
   else if (engine=="fl_pcb_holderBySize")
-    fl_pcb_holderBySize(verbs,type,thick,frame,direction,octant);
+    fl_pcb_holderBySize(verbs,type,thick,frame,direction,octant)
+      children();
   else
     assert(false,str("Unknown engine '",engine,"'"));
 }
@@ -95,6 +101,13 @@ function fl_pcb_HolderByHoles(
     bbox    = [pcb_bb[0]-Z(h),pcb_bb[1]]
   ) fl_pcb_Holder(name,"fl_pcb_holderByHoles",screw,bbox,pcb,[h]);
 
+/*
+ * engine for pcb holder by holes
+ *
+ * children() context:
+ *
+ * $holder_screw
+ */
 module fl_pcb_holderByHoles(
   verbs,
   // as returned from function fl_pcb_HolderByHoles()
@@ -128,8 +141,7 @@ module fl_pcb_holderByHoles(
   h       = fl_get(type,"pcb/spacer [height,r,R]")[0];
   radius  = wsh_r;
 
-  holes = [for(hole=fl_holes(pcb)) let(p = hole[0],n = hole[1],d = hole[2]) [p,n,d,0]];
-
+  holes = [for(hole=fl_holes(pcb)) let(p = hole[0],n = hole[1],d = hole[2],o=hole[4]) [p,n,d,0,o]];
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
@@ -162,7 +174,7 @@ module fl_pcb_holderByHoles(
   }
 
   module do_layout() {
-    fl_lay_holes(holes,thick=thick)
+    fl_lay_holes(holes,thick=thick,screw=screw)
       children();
   }
 
@@ -183,7 +195,7 @@ module fl_pcb_holderByHoles(
       fl_modifier($modifier) do_layout() children();
 
     } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier) fl_pcb(FL_MOUNT,pcb,thick=h);
+      fl_modifier($modifier) fl_pcb(FL_MOUNT,pcb,thick=h+thick);
 
     } else if ($verb==FL_PAYLOAD) {
       fl_modifier($modifier) fl_bb_add(pcb_bb);
@@ -227,12 +239,19 @@ function fl_pcb_HolderBySize(
     name  = str("Holder by size for ",fl_name(pcb))
   ) fl_pcb_Holder(name,"fl_pcb_holderBySize",screw,bbox,pcb,spacer,tolerance);
 
-// engine for pcb holder by size
+/*
+ * engine for pcb holder by size
+ *
+ * children() context:
+ *
+ * $holder_screw
+ */
 module fl_pcb_holderBySize(
   verbs,
   // as returned from function fl_pcb_HolderBySize()
   type,
   // FL_DRILL thickness
+  // FIXME: rename as dri_thick
   thick=0,
   // frame specs as a list [«z height»,«xy thickness»]
   // NOTE: «xy thickness» is currently auto calculated (so ignored)
@@ -303,7 +322,7 @@ module fl_pcb_holderBySize(
   }
 
   module do_layout() {
-    fl_lay_holes(holes,thick=thick)
+    fl_lay_holes(holes,thick=thick,screw=screw)
       children();
   }
 
@@ -315,7 +334,6 @@ module fl_pcb_holderBySize(
 
   module do_mount() {
     fl_lay_holes(holes)
-      // translate(Z(washer_thickness(washer)))
       fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,washer="nylon",thick=h+pcb_t+thick);
   }
 
