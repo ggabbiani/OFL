@@ -46,7 +46,20 @@ function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
 // COMPONENTS
 // TODO: move elsewhere
 
-// Component context for children()
+/* 
+ * Component context:
+ *
+ * $engine    - engine to be triggered for component rendering
+ * $position  - component position
+ * $direction
+ * $director
+ * $rotation
+ * $type
+ * $subtract  - the tolerance to be used during component FL_FOOTPRINT difference() from parent shape
+ * $drift     - additional positioning during component positioning 
+ * $color      
+ * $octant     
+ */
 module fl_comp_Context(
   component // component definition: ["engine", [position], [[director],rotation], type, properties]
   ) {
@@ -62,10 +75,17 @@ module fl_comp_Context(
   $drift      = fl_optional(properties,"comp/drift",0);
   $color      = fl_optional(properties,"comp/color");
   $octant     = fl_optional(properties,"comp/octant");
+
   children();
 }
 
-// trigger children modules with component specifications context
+/*
+ * Component specifications context:
+ *
+ * $label
+ * $component
+ * plus component context (see module fl_comp_Context())
+ */
 module fl_comp_Specs(
   specs // component specifications: ["label",component]
   ) {
