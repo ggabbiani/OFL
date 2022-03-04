@@ -25,18 +25,28 @@ include <3d.scad>
 /**
  * prepare context for children() holes
  *
- * $hole_depth  - hole depth (set to «thick» for pass-thru)
+ * $hole_center
  * $hole_d      - hole diameter
- * $hole_i      - ordinal position (may be undef)
+ * $hole_depth  - hole depth (set to «thick» for pass-thru)
+ * $hole_i      - OPTIONAL ordinal position
  * $hole_n      - hole normal
+ * $hole_screw  - OPTIONAL hole screw
  */
-module fl_hole_Context(hole,thick,ordinal) {
+module fl_hole_Context(
+  hole,
+  // fallback thickness
+  thick,
+  ordinal,
+  // fallback screw
+  screw
+) {
   $hole_i       = ordinal;
   $hole_center  = hole[0];
   $hole_n       = hole[1];
   $hole_d       = hole[2];
   $hole_depth   = hole[3] ? hole[3] : thick;
-  $hole_screw   = fl_optional(hole[4],"hole/screw");
+  $hole_screw   = let(s=fl_optional(hole[4],"hole/screw")) s ? s : screw;
+  
   children();
 }
 
@@ -54,7 +64,9 @@ module fl_lay_holes(
   // enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
   // thru-hole thickness
-  thick=0
+  thick=0,
+  // fallback screw
+  screw
 ) {
   assert(fl_tt_isHoleList(holes),holes);
   assert(fl_tt_isAxisList(enable),enable);
@@ -63,7 +75,7 @@ module fl_lay_holes(
   fl_trace("holes",holes);
   fl_trace("thick",thick);
   for($hole_i=[0:len(holes)-1])
-    fl_hole_Context(holes[$hole_i],thick,$hole_i)
+    fl_hole_Context(holes[$hole_i],thick,$hole_i,screw)
       if (fl_3d_axisIsSet($hole_n,enable))
         translate($hole_center)
           children();
@@ -80,9 +92,11 @@ module fl_holes(
   // enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
   // thru-hole thickness
-  thick=0
+  thick=0,
+  // fallback screw
+  screw
 ) {
-  fl_lay_holes(holes,enable,thick)
+  fl_lay_holes(holes,enable,thick,screw)
     translate(NIL*$hole_n)
       fl_cylinder(h=$hole_depth+NIL2,d=$hole_d,direction=[-$hole_n,0]);
 }
