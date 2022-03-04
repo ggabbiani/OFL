@@ -130,7 +130,7 @@ function fl_bb_cylinder(
   d1,                 // diameter, bottom of cone. r1 = d1 / 2.
   d2                  // diameter, top of cone. r2 = d2 / 2.
 ) =
-assert(h>=0,"Only positive height are accepted")
+assert(h && h>=0,h)
 let(
   step    = 360/$fn,
   Rbase   = fl_parse_radius(r,r1,d,d1),
