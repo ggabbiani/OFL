@@ -42,13 +42,15 @@ function fl_knut_rings(type,value)  = fl_property(type,"knut/rings array [[heigh
  */
 function fl_Knut(screw,length,diameter,tooth,rings) = let(
   rlen  = len(rings),
-  delta = length/(rlen-1)
+  delta = length/(rlen-1),
+  name  = str("knurl nut ",screw[9][0]," screw, ",length,"mm length, ",diameter,"mm ext. diameter")
 )
 assert(screw!=undef,"screw is undef")
 assert(is_num(length),str("length=",length))
 assert(is_num(diameter),str("diameter=",diameter))
 assert(is_num(tooth),str("tooth=",tooth))
 [
+  fl_name(value=name),
   fl_screw(value=screw),
   fl_knut_thick(value=length),
   fl_knut_r(value=diameter/2),
