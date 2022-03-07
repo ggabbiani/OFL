@@ -174,7 +174,7 @@ module fl_cylinder(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) multmatrix(Mbbox) %cube(size=size); // center=default=false ⇒ +X+Y+Z
+      fl_modifier($modifier) multmatrix(Mbbox) cube(size=size); // center=default=false ⇒ +X+Y+Z
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
@@ -254,7 +254,7 @@ module fl_prism(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) multmatrix(Mbbox) %cube(size=size);     // center=default=false ⇒ +X+Y+Z
+      fl_modifier($modifier) multmatrix(Mbbox) cube(size=size);     // center=default=false ⇒ +X+Y+Z
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
