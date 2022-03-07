@@ -241,9 +241,9 @@ function fl_director(type,value)    = fl_property(type,"director",value);
 function fl_engine(type,value)      = fl_property(type,"engine",value);
 // holes in [«point»,«surface normal»,«diameter»,«optional depth»] format
 function fl_holes(type,value)       = fl_property(type,"holes",value);
-function fl_name(type,value)        = fl_property(type,"name",value);
 function fl_material(type,value,default)
                                     = fl_property(type,"material (actually a color)",value,default);
+function fl_name(type,value)        = fl_property(type,"name",value);
 function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,type!=undef?false:undef);
 function fl_nopSCADlib(type,value,default)
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
