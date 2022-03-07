@@ -22,6 +22,16 @@
 include <type_trait.scad>
 include <3d.scad>
 
+// constructor
+function fl_Hole(
+    position,
+    d,
+    normal  = +Z,
+    // when depth is null hole is pass-through
+    depth = 0,
+    opts  = []
+  ) = [position,normal,d,depth,opts];
+
 /**
  * prepare context for children() holes
  *
@@ -63,7 +73,7 @@ module fl_lay_holes(
   holes,
   // enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
-  // thru-hole thickness
+  // pass-through thickness
   thick=0,
   // fallback screw
   screw
@@ -91,7 +101,7 @@ module fl_holes(
   holes,
   // enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
-  // thru-hole thickness
+  // pass-through thickness
   thick=0,
   // fallback screw
   screw
