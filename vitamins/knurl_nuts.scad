@@ -100,8 +100,34 @@ FL_KNUT_DICT_1 = [
   FL_KNUT_M5x6x7,   FL_KNUT_M5x8x7,    FL_KNUT_M5x10x7                     ,
 ];
 
+// return a knurl nut fitting the passed «screw» and «t»
+// returns undef when not knurl nut is found
+function fl_knut_search(
+    // screw to fit into
+    screw,
+    // Z axis knurl nut thickness
+    t
+  ) = 
+  assert(screw)
+  assert(t)
+  let(
+    r         = screw_radius(screw),
+    row       = let(i=search(r*2,[2,3,4,5])[0]) i!=undef ? FL_KNUT_DICT[i] : undef,
+    max_thick = function(list,current=[-1,undef]) 
+      assert(list!=[]) 
+      let(
+        len   = len(list),
+        first = list[0],
+        max   = first[0]>current[0] ? first : current
+      ) len==1 ? max : max_thick([for(i=[1:len-1]) list[i]],max),
+    list = row ? [
+      for(i=[0:len(row)-1]) 
+        let(thick = fl_knut_thick(row[i])) if (thick<=t) [thick,i]
+      ] : undef
+  ) row && list ? row[max_thick(list)[1]] : undef;
+
 module fl_knut(
-  verbs,
+  verbs=FL_ADD,
   type,
   direction,            // desired direction [director,rotation], native direction when undef ([+Z])
   octant,               // when undef native positioning is used
