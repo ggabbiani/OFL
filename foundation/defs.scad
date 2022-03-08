@@ -39,6 +39,9 @@ $FL_RENDER  = !$preview;
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
+// Default color for printable items (i.e. artifacts)
+$FL_FILAMENT  = "DodgerBlue";
+
 
 // simple workaround for the z-fighting problem during preview
 FL_NIL  = ($preview && !$FL_RENDER ? 0.01 : 0);
