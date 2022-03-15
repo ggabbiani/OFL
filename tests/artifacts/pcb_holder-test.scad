@@ -17,7 +17,8 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../vitamins/pcb_holder.scad>
+include <../../artifacts/pcb_holder.scad>
+include <../../vitamins/pcbs.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -65,13 +66,16 @@ DIR_R       = 0;        // [0:360]
 
 /* [PCB Holder]*/
 ENGINE  = "by holes"; // [by holes, by size]
-H   = 4;  // [0.1:0.1:5]
-// frame height on Z axis
-FRAME_H  = 0; // [0:0.1:10]
-// frame thickness on XY plane
+H   = 4;  // [0.1:0.1:10]
+// frame thickness on Z axis
 FRAME_T  = 0; // [0:0.1:5]
-TOLERANCE = 0.5;
-T=2.5;
+TOLERANCE = 0.5;  // [0:0.1:1]
+// thickness along ±Z semi axes
+Tz = [0,0];  // [0:0.1:10]
+// knurl nut
+KNUT  = false;
+// FL_LAYOUT directions in floating semi-axis list
+LAYOUT_DIRS  = ["±z"];
 
 PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20, FL_PCB_MH4PU_P]
 
@@ -97,10 +101,20 @@ pcb = PCB=="FL_PCB_RPI4"      ? FL_PCB_RPI4
     : PCB=="FL_PCB_MH4PU_P"   ? FL_PCB_MH4PU_P
     : undef;
 
+dirs  = fl_3d_AxisList(LAYOUT_DIRS);
+thick = [[0,0],[0,0],Tz];
+
 // screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
 
-frame = FRAME_H && FRAME_T ? [FRAME_H,FRAME_T] : undef;
-holder  = ENGINE=="by holes" ? fl_pcb_HolderByHoles(pcb,H) : fl_pcb_HolderBySize(pcb,H,TOLERANCE);
+// frame = FRAME_H && FRAME_T ? [FRAME_H,FRAME_T] : undef;
+// holder  = ENGINE=="by holes" ? fl_pcb_HolderByHoles(pcb,H) : fl_pcb_HolderBySize(pcb,H,TOLERANCE);
 
-fl_pcb_holder(verbs,holder,direction=direction,octant=octant,frame=frame,thick=T)
-  fl_screw(type=$hole_screw,thick=H+fl_pcb_thick(pcb)+T);
+// fl_pcb_holder(verbs,holder,direction=direction,octant=octant,frame=frame,thick=T,knut=KNUT)
+//   fl_screw(type=$hole_screw,thick=H+fl_pcb_thick(pcb)+T);
+
+if (ENGINE=="by holes")
+  fl_pcb_holderByHoles(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,direction=direction,octant=octant) 
+      fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+fl_pcb_thick($hld_pcb)+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
+else
+  fl_pcb_holderBySize(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,tolerance=TOLERANCE,direction=direction,octant=octant) 
+    fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
