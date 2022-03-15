@@ -102,11 +102,12 @@ verbs=[
   if ($FL_MOUNT!="OFF")     FL_MOUNT,
 ];
 
-screw   = find_screw(search([SCREW_TYPE],HS_TYPES)[0],SCREW_SIZE);
+screw = SCREW ? find_screw(search([SCREW_TYPE],HS_TYPES)[0],SCREW_SIZE) : undef;
+knut  = SCREW ? KNUT : undef;
+dirs  = fl_3d_AxisList(LAYOUT_DIRS);
+thick = [[0,0],[0,0],Tz];
 
-spacer  = fl_Spacer(H,R,screw=SCREW?screw:undef,knut=SCREW?KNUT:undef);
-
-fl_spacer(verbs,spacer,material=$FL_FILAMENT,thick=[[0,0],[0,0],Tz],lay_direction=fl_3d_AxisList(LAYOUT_DIRS),octant=octant,direction=direction)
-  translate($director*$thick) 
-    fl_screw([FL_ADD,FL_ASSEMBLY],$screw,thick=$h+$thick,washer="nylon",direction=[$director,0]);
+fl_spacer(verbs,H,R,screw=screw,knut=knut,thick=thick,lay_direction=dirs,octant=octant,direction=direction)
+  translate($spc_director*$spc_thick) 
+    fl_screw(FL_DRAW,$spc_screw,thick=$spc_h+$spc_thick,washer="nylon",direction=[$spc_director,0]);
     

@@ -28,62 +28,71 @@ include <../vitamins/knurl_nuts.scad>
 // namespace
 FL_SPC_NS  = "spc";
 
-FL_SPC_DICT = [
-];
+// FL_SPC_DICT = [
+// ];
 
-// constructor
-function fl_Spacer(
-    // thickness along Z axis
-    h,
-    // external radius
-    r,
-    // external diameter (mutually exclusive with «r»)
-    d,
+// no constructor for spacer since no predefined variable
+function fl_bb_spacer(h,r) = fl_bb_cylinder(h,r);
+
+/**
+ * calculates the internal spacer radius.
+ */
+function fl_spc_holeRadius(
+    // optional screw
     screw,
-    knut=false    
+    // optional knurl nut instance
+    knut
   ) = 
-  // assert(!knut || screw)
   let(
-    r     = assert((r && !d) || (!r && d)) r ? r : d/2,
-    name  = str("Cylindric spacer"),
-    bbox  = fl_bb_cylinder(h,r),
-    knut  = knut && screw ? fl_knut_search(screw,h) : undef
-  ) [
-    fl_name(value=name),
-    fl_bb_corners(value=bbox),
-    fl_director(value=+Z),fl_rotor(value=+X),
-    if (screw)  ["screw", screw],
-    if (knut)   ["knurl nut", knut],
-  ];
+    knut  = knut!=undef ? assert(is_list(knut)) knut : undef
+  ) knut ? fl_knut_r(knut)-0.3 : screw ? screw_radius(screw) : undef;
 
+/**
+ * Children context:
+ *
+ * $spc_director - layout direction
+ * $spc_screw    - OPTIONAL screw
+ * $spc_thick    - thickness along $spc_director
+ * $spc_h        - spacer height
+ */
 module fl_spacer(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  type,
-  material,
+  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD, 
+  // height along Z axis
+  h,
+  // external radius
+  r,
+  // external diameter (mutually exclusive with «r»)
+  d,
   // thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
   // FL_LAYOUT directions in floating semi-axis list
   lay_direction=[+Z,-Z],
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  // optional screw
+  screw,
+  // optional knurl nut
+  knut=false,    
+  // desired direction [director,rotation], native direction when undef ([+Z,0])
+  direction,            
+  // when undef native positioning is used
+  octant,               
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  bbox    = fl_bb_corners(type);
+  fl_trace("thick",thick);
+  r       = assert((r && !d) || (!r && d)) r ? r : d/2;
+  bbox    = assert(h!=undef) fl_bb_spacer(h,r);
   size    = bbox[1]-bbox[0];
-  r       = assert(size.x==size.y) size.x/2;
-  h       = size.z;
-  knut    = fl_optional(type,"knurl nut");
-  screw   = fl_optional(type,"screw");
-  hole_r  = knut ? fl_knut_r(knut)-0.3 : screw ? screw_radius(screw) : undef;
+  knut    = knut && screw ? fl_knut_search(screw,h) : undef;
+  hole_r  = fl_spc_holeRadius(screw,knut);
   // thickness along ±Z only
-  thick     = is_num(thick) ? [thick,thick] : assert(fl_tt_isAxisVList(thick)) thick.z; 
-
-  D     = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  thick   = is_num(thick) ? [thick,thick] : assert(fl_tt_isAxisVList(thick)) thick.z; 
+  
+  D       = direction ? fl_direction(default=[+Z,+X],direction=direction) : I;
+  M       = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
 
   module do_add() {
-    fl_color(material)
+    fl_color($FL_FILAMENT)
       if (hole_r) 
         fl_tube(h=h,r=r,thick=r-hole_r); 
       else 
@@ -91,20 +100,20 @@ module fl_spacer(
   }
 
   module do_mount() {
-    t = thick[1];
-    translate(+Z(h+t))
-      fl_screw([FL_ADD,FL_ASSEMBLY],screw,thick=h+t,washer="nylon");
+    if (screw)
+      translate(+Z(h+thick[1]))
+        fl_screw(FL_DRAW,screw,thick=h+thick[0]+thick[1],washer="nylon");
   }
 
   module do_assembly() {
     if (knut)
-      translate(+Z(NIL)) fl_knut(type=knut);
+      translate(+Z(h+NIL)) fl_knut(type=knut,octant=-Z);
   }
 
   module do_layout() {
     if (screw) {
       if (fl_3d_axisIsSet(+Z,lay_direction))
-        context(+Z) translate($director*h) children();
+        context(+Z) translate($spc_director*h) children();
       if (fl_3d_axisIsSet(-Z,lay_direction))
         context(-Z) children();
     }
@@ -115,25 +124,25 @@ module fl_spacer(
   }
 
   module do_drill() {
-      do_layout()
-        if ($thick) fl_cylinder(h=$thick,r=hole_r,octant=$director);
+    do_layout()
+      if ($spc_thick) fl_cylinder(h=$spc_thick,r=hole_r,octant=$spc_director);
   }
 
   /**
   * Set context for children()
   *
-  * $director - layout direction
-  * $screw    - OPTIONAL screw
-  * $thick    - thickness along $director
-  * $h        - spacer height
+  * $spc_director - layout direction
+  * $spc_screw    - OPTIONAL screw
+  * $spc_thick    - thickness along $spc_director
+  * $spc_h        - spacer height
   */
   module context(
     director
   ) {
-    $director  = director;
-    $screw      = screw;
-    $thick      = director==+Z ? thick[1] : thick[0];
-    $h          = h;
+    $spc_director = director;
+    $spc_screw    = screw;
+    $spc_thick    = director==+Z ? thick[1] : thick[0];
+    $spc_h        = h;
     children();
   }
 
