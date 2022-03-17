@@ -19,8 +19,8 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
+use     <../dxf.scad>
 include <pcbs.scad>
-use     <heatsink.scad>
 
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
@@ -39,7 +39,7 @@ FL_HS_PIMORONI = let(
   ]),
   fl_screw(value=M2p5_cap_screw),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
-  ["DXF model",         "pimoroni.dxf"],
+  fl_dxf(value="vitamins/pimoroni.dxf"),
   ["corner radius",      3],
   ["bottom part", [
     ["layer 0 base thickness",    2   ],
@@ -109,16 +109,16 @@ module pimoroni(
           // add holders
           translate(+Z(bot_base_t+bot_fluting_t))
             linear_extrude(bot_holder_t)
-              fl_hs_dxf(file=dxf,layer="0 holders");
+              __dxf__(file=dxf,layer="0 holders");
         }
         // subtracts holes
         translate(-Z(NIL))
           linear_extrude(bot_base_t+bot_fluting_t+NIL2)
-            fl_hs_dxf(file=dxf,layer="0 holes");
+            __dxf__(file=dxf,layer="0 holes");
         // subtracts fluting
         translate(-Z(NIL))
           linear_extrude(bot_fluting_t)
-            fl_hs_dxf(file=dxf,layer="0 fluting");
+            __dxf__(file=dxf,layer="0 fluting");
       }
       // let(
       //   sz  = bottom_sz(),
@@ -133,7 +133,7 @@ module pimoroni(
           union() {
             // add holders
             linear_extrude(top_holder_t)
-              fl_hs_dxf(file=dxf,layer="0 holders");
+              __dxf__(file=dxf,layer="0 holders");
             translate(+Z(top_holder_t)) {
               // metal block
               intersection() {
@@ -143,7 +143,7 @@ module pimoroni(
                     fl_cylinder(r2=0, r1=corner_r, h=2.3);
                   }
                 linear_extrude(top_base_t+top_fluting_t)
-                  fl_hs_dxf(file=dxf,layer="1");
+                  __dxf__(file=dxf,layer="1");
               }
             }
           }
@@ -152,7 +152,7 @@ module pimoroni(
             resize(newsize=[0,70+NIL,0])
               translate(Z(top_base_t+NIL))
                 linear_extrude(top_fluting_t)
-                  fl_hs_dxf(file=dxf,layer="1 fluting");
+                  __dxf__(file=dxf,layer="1 fluting");
           }
           // subtracts GPIO
           fl_pcb([FL_ADD,FL_CUTOUT],rpi4,cut_label="GPIO",thick=5,cut_tolerance=2);

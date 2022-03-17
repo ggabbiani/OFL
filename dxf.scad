@@ -1,5 +1,7 @@
 /*
- * heatsink support module
+ * Due to a bug (see here)[https://github.com/openscad/openscad/issues/217#issuecomment-136832010]
+ * relative path mechanism doesn't work properly for 'included' modules, so we 'use' this module
+ * for correctly resolving relative paths.
  *
  * Copyright © 2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -19,11 +21,6 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-/**
- * Due to a bug (see here)[https://github.com/openscad/openscad/issues/217#issuecomment-136832010]
- * relative path mechanism doesn't work properly for 'included' modules, so we 'use' this module
- * for correctly resolving relative paths.
- */
-module fl_hs_dxf(file,layer) {
+module __dxf__(file,layer) {
   import(file=file,layer=layer);
 }

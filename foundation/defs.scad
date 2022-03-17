@@ -241,6 +241,7 @@ function fl_property(type,key,value,default)  =
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value);
 function fl_director(type,value)    = fl_property(type,"director",value);
+function fl_dxf(type,value)         = fl_property(type,"DXF model",value);
 function fl_engine(type,value)      = fl_property(type,"engine",value);
 // holes in [«point»,«surface normal»,«diameter»,«optional depth»] format
 function fl_holes(type,value)       = fl_property(type,"holes",value);
