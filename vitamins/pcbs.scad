@@ -20,9 +20,12 @@
  */
 include <../foundation/grid.scad>
 include <../foundation/hole.scad>
+use     <../dxf.scad>
+
 include <ethers.scad>
 include <hdmi.scad>
 include <jacks.scad>
+// include <MCXJPHSTEM1.scad>
 include <pin_headers.scad>
 include <screw.scad>
 include <usbs.scad>
@@ -147,7 +150,8 @@ function fl_PCB(
     components,
     // grid specs
     grid,
-    screw
+    screw,
+    dxf
   ) = let(
     comp_bbox = components ? fl_comp_BBox(components) : undef,
     pload = payload ? payload : comp_bbox,
@@ -166,6 +170,7 @@ function fl_PCB(
     fl_material(value=color),
     fl_screw(value=screw),
     fl_pcb_grid(value=grid),
+    if (dxf!=undef) fl_dxf(value=dxf),
   ];
 
 /**
@@ -226,13 +231,31 @@ FL_PCB_RPI4 = let(
     ["POWER IN",  [FL_USB_NS,   [25.5,      11.2, 0], [+X,0  ],             FL_USB_TYPE_C  ,[["comp/drift",-1.3]]]],
     ["HDMI0",     [FL_HDMI_NS,  [25,        26,   0], [+X,0  ],             FL_HDMI_TYPE_D ,[["comp/drift",-1.26]]]],
     ["HDMI1",     [FL_HDMI_NS,  [25,        39.5, 0], [+X,0  ],             FL_HDMI_TYPE_D ,[["comp/drift",-1.26]]]],
-    ["A/V",       [FL_JACK_NS,  [22,        54,   0], [+X,0  ],             FL_JACK        ]],
+    ["A/V",       [FL_JACK_NS,  [22,        54,   0], [+X,0  ],             FL_JACK_BARREL  ]],
     ["USB2",      [FL_USB_NS,   [w/2-9,     79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
     ["USB3",      [FL_USB_NS,   [w/2-27,    79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
     ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+Y,0  ],             FL_ETHER_RJ45  ,[["comp/drift",-3]]]],
     ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_RPIGPIO]],
   ]
 ) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw);
+
+// pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+FL_PCB_RPI_uHAT = let(
+  pcb_t   = 1.6,
+  size  = [65,30,pcb_t],
+  bare  = [[0,0,-pcb_t],[size.x,size.y,0]],
+  hole_d  = 2.75,
+  holes   = [
+    [[ 3.5,         size.y-3.5, 0 ], +Z, hole_d, pcb_t],
+    [[ size.x-3.5,  size.y-3.5, 0 ], +Z, hole_d, pcb_t],
+    [[ size.x-3.5,  3.5,        0 ], +Z, hole_d, pcb_t],
+  ],
+  comps = [
+    //["label",   ["engine",    [position],           [[director],rotation] type,           [engine specific parameters]]]
+    ["ANTENNA",  [FL_JACK_NS,   [0,      15, 0], [-X,0  ],             FL_JACK_MCXJPHSTEM1  ]],
+  ]
+  ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps);
+// echo(FL_PCB_RPI_uHAT=FL_PCB_RPI_uHAT);
 
 FL_PCB_MH4PU_P = let(
     name  = "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port",
@@ -275,8 +298,8 @@ FL_PCB_DICT = [
   FL_PCB_PERF60x40,
   FL_PCB_PERF70x30,
   FL_PCB_PERF80x20,
-
   FL_PCB_MH4PU_P,
+  FL_PCB_RPI_uHAT,
 ];
 
 module fl_pcb(
@@ -318,7 +341,8 @@ module fl_pcb(
   material  = fl_material(type,default="green");
   radius    = fl_pcb_radius(type);
   grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
-
+  dxf       = fl_optional(type,fl_dxf()[0]);
+  
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;
   M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
 
@@ -383,8 +407,11 @@ module fl_pcb(
     fl_color(material) difference() {
       translate(Z(bbox[0].z)) linear_extrude(pcb_t)
         difference() {
-          translate(bbox[0])
-            fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
+          if (dxf) 
+            __dxf__(file=dxf,layer="0");
+          else
+            translate(bbox[0])
+              fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
           if (grid)
             fl_grid_layout(
               step    = inch(0.1),
@@ -397,6 +424,8 @@ module fl_pcb(
             // TODO: extend to all the engines once sure FL_FOOTPRINT is implemented for all of them
             if ($engine==FL_USB_NS) fl_USB(verbs=FL_FOOTPRINT,type=$type,direction=$direction,tolerance=$subtract);
           }
+      // if (dxf)
+      //   translate(-Z(NIL)) linear_extrude(pcb_t+NIL2) __dxf__(dxf,"holes");
       if (holes)
         fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z],pcb_t);
     }
