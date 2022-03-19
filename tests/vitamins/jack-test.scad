@@ -60,7 +60,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [Jack] */
 
-SHOW        = "ALL"; // [ALL,FL_JACK]
+SHOW        = "ALL"; // [ALL,FL_JACK_BARREL,MCXJPHSTEM1]
 // tolerance used during FL_CUTOUT
 CO_TOLERANCE   = 0;  // [0:0.1:5]
 // thickness for FL_CUTOUT
@@ -70,11 +70,11 @@ CO_DRIFT = 0; // [-5:0.05:5]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef         : OCTANT;
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
-drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT : undef;
+drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
@@ -83,7 +83,8 @@ verbs=[
   if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
 ];
 // target object(s)
-single  = SHOW=="FL_JACK"   ? FL_JACK
+single  = SHOW=="FL_JACK_BARREL"  ? FL_JACK_BARREL
+        : SHOW=="MCXJPHSTEM1"     ? FL_JACK_MCXJPHSTEM1
         : undef;
 
 fl_trace("verbs",verbs);
