@@ -40,12 +40,35 @@ module stub(
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
 
   module do_add() {
-    fl_cube(size=size);
   }
 
-  module do_assembly() {}
-  module do_layout() {}
-  module do_drill() {}
+  module do_assembly() {
+
+  }
+
+  module do_cutout() {
+
+  }
+
+  module do_drill() {
+
+  }
+
+  module do_footprint() {
+
+  }
+
+  module do_layout() {
+
+  }
+
+  module do_mount() {
+
+  }
+
+  module do_pload() {
+
+  }
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
@@ -57,15 +80,26 @@ module stub(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
 
+    } else if ($verb==FL_CUTOUT) {
+      fl_modifier($modifier) do_cutout();
+
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_drill();
+
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_footprint();
+
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout()
         children();
 
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier);
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) do_mount()
+        children();
 
-    } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier);
+    } else if ($verb==FL_PAYLOAD) {
+      fl_modifier($modifier) do_pload()
+        children();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
