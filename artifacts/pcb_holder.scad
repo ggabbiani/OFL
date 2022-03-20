@@ -18,11 +18,6 @@
  */
 
 include <spacer.scad>
-// include <../foundation/hole.scad>
-// include <../foundation/tube.scad>
-
-// include <../vitamins/knurl_nuts.scad>
-// include <../vitamins/pcbs.scad>
 
 /*
  * Common interface for pcb holder constructors. 
