@@ -455,7 +455,7 @@ module fl_pcb(
         }
         do_layout("components")
           if ($subtract!=undef) {
-            // TODO: extend to all the engines once sure FL_FOOTPRINT is implemented for all of them
+            // TODO: either extend to all the engines once sure FL_FOOTPRINT is implemented for all of them or eliminate it and use dxf
             if ($engine==FL_USB_NS) fl_USB(verbs=FL_FOOTPRINT,type=$type,direction=$direction,tolerance=$subtract);
           }
       // if (dxf)
