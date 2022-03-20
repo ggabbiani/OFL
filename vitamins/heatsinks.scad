@@ -61,7 +61,9 @@ FL_HS_DICT  = [FL_HS_PIMORONI];
 
 /**
  * FL_LAYOUT,FL_ASSEMBLY children context:
- *   $normal (==-Z)
+ *  $hs_radius  - corner radius
+ *  $hs_normal  - layout normal (always -Z);
+ *  $hs_screw   - mount screw;
  */
 module pimoroni(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -175,7 +177,9 @@ module pimoroni(
   }
 
   module context() {
-    $normal = -Z;
+    $hs_radius  = corner_r;
+    $hs_normal  = -Z;
+    $hs_screw   = screw;
     children();
   }
 

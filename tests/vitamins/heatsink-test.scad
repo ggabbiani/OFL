@@ -83,4 +83,4 @@ verbs=[
 ];
 
 pimoroni(verbs,type=FL_HS_PIMORONI,direction=direction,octant=octant)
-  fl_color($FL_FILAMENT) fl_cylinder(h=10,d=5,octant=$normal);
+  fl_color($FL_FILAMENT) fl_cylinder(h=10,d=5,octant=$hs_normal);
