@@ -25,9 +25,9 @@ use     <../dxf.scad>
 include <ethers.scad>
 include <hdmi.scad>
 include <jacks.scad>
-// include <MCXJPHSTEM1.scad>
 include <pin_headers.scad>
 include <screw.scad>
+include <trimpot.scad>
 include <usbs.scad>
 
 include <NopSCADlib/lib.scad>
@@ -151,7 +151,10 @@ function fl_PCB(
     // grid specs
     grid,
     screw,
-    dxf
+    dxf,
+    vendors,
+    director=+Z,
+    rotor=+X
   ) = let(
     comp_bbox = components ? fl_comp_BBox(components) : undef,
     pload = payload ? payload : comp_bbox,
@@ -161,7 +164,7 @@ function fl_PCB(
     fl_native(value=true),
     fl_name(value=name),
     fl_bb_corners(value=bbox),
-    fl_director(value=+Z),fl_rotor(value=+X),
+    fl_director(value=director),fl_rotor(value=rotor),
     fl_pcb_thick(value=thick),
     fl_pcb_radius(value=radius),
     if (pload) fl_payload(value=pload), // optional payload
@@ -171,6 +174,7 @@ function fl_PCB(
     fl_screw(value=screw),
     fl_pcb_grid(value=grid),
     if (dxf!=undef) fl_dxf(value=dxf),
+    if (vendors) fl_vendor(value=vendors),
   ];
 
 /**
@@ -236,8 +240,9 @@ FL_PCB_RPI4 = let(
     ["USB3",      [FL_USB_NS,   [w/2-27,    79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
     ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+Y,0  ],             FL_ETHER_RJ45  ,[["comp/drift",-3]]]],
     ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_RPIGPIO]],
-  ]
-) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw);
+  ],
+  vendors=[["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]]
+) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors);
 
 // pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
 FL_PCB_RPI_uHAT = let(
@@ -251,11 +256,13 @@ FL_PCB_RPI_uHAT = let(
     [[ size.x-3.5,  3.5,        0 ], +Z, hole_d, pcb_t],
   ],
   comps = [
-    //["label",   ["engine",    [position],           [[director],rotation] type,           [engine specific parameters]]]
-    ["ANTENNA",  [FL_JACK_NS,   [0,      15, 0], [-X,0  ],             FL_JACK_MCXJPHSTEM1  ]],
-  ]
-  ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps);
-// echo(FL_PCB_RPI_uHAT=FL_PCB_RPI_uHAT);
+  //["label",  ["engine",     [position],      [[director],rotation] type,                [engine specific parameters]]]
+    ["RF IN",  [FL_JACK_NS,   [0,      15, 0], [-X,0  ],             FL_JACK_MCXJPHSTEM1  ]],
+  ],
+  vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]]
+  ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",
+      dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,
+      director=-X,rotor=-Y);
 
 FL_PCB_MH4PU_P = let(
     name  = "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port",
@@ -283,8 +290,34 @@ FL_PCB_MH4PU_P = let(
       ["USB3-2",    [FL_USB_NS, [+w/2-(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
       ["USB3-3",    [FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
       ["USB3-4",    [FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],        [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],["comp/drift",-2.5],["comp/color","DodgerBlue"]]]],
+    ],
+    vendors=[["Amazon","https://www.amazon.it/gp/product/B07VQLXCTB"]]
+  ) fl_PCB(name,bare,pcb_t,"DarkCyan",1,undef,holes,comps,undef,M3_cap_screw,vendors=vendors);
+
+FL_PCB_HILETGO_SX1308 = let(
+    pcb_t = 1.6,
+    sz    = [23,16,pcb_t],
+    // holes positions
+    holes = [for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5]) [x,y,0]],
+    1PIN  = fl_phdr_new("1-pin",nop=2p54header),
+    comps = [
+      //["label", ["engine",   [position        ],  [[director],rotation],  type,           [engine specific parameters]]]
+      ["TRIMPOT", [FL_TRIM_NS, [-5,-sz.y/2+0.5,0],  [+Y,0],                 FL_TRIM_POT10,  [["comp/octant",+X-Y+Z]]  ]],
+      // create four component specifications, one for each hole position, labelled as "PIN-0", "PIN-1", "PIN-2", "PIN-3"
+      for(i=[0:len(holes)-1]) let(label=str("PIN-",i))
+        [label,   [FL_PHDR_NS, holes[i],            [+Z,0],                 1PIN]],
     ]
-  ) fl_PCB(name,bare,pcb_t,"DarkCyan",1,undef,holes,comps,undef,M3_cap_screw);
+  ) fl_PCB(
+    name  = "HiLetgo SX1308 DC-DC Step up power module",
+    // bare (i.e. no payload) pcb's bounding box
+    bare  = [[-sz.x/2,-sz.y/2,-sz.z],[+sz.x/2,+sz.y/2,0]],
+    // pcb thickness
+    thick = pcb_t,
+    color  = "DarkCyan",
+    holes = let(r=0.75,d=r*2/* ,specs=[["hole/screw",M2_cap_screw]] */) [for(i=[0:len(holes)-1]) [holes[i],+Z,d,0/* ,specs */]],
+    components=comps,
+    vendors=[["Amazon","https://www.amazon.it/gp/product/B07ZYW68C4"]]
+  );
 
 
 FL_PCB_PERF70x50  = fl_pcb_import(PERF70x50);
@@ -293,13 +326,14 @@ FL_PCB_PERF70x30  = fl_pcb_import(PERF70x30);
 FL_PCB_PERF80x20  = fl_pcb_import(PERF80x20);
 
 FL_PCB_DICT = [
-  FL_PCB_RPI4,
-  FL_PCB_PERF70x50,
-  FL_PCB_PERF60x40,
-  FL_PCB_PERF70x30,
-  FL_PCB_PERF80x20,
-  FL_PCB_MH4PU_P,
-  FL_PCB_RPI_uHAT,
+      FL_PCB_HILETGO_SX1308,
+      FL_PCB_MH4PU_P,
+      FL_PCB_PERF70x50,
+      FL_PCB_PERF60x40,
+      FL_PCB_PERF70x30,
+      FL_PCB_PERF80x20,
+      FL_PCB_RPI4,
+      FL_PCB_RPI_uHAT,
 ];
 
 module fl_pcb(
@@ -491,7 +525,7 @@ module fl_pcb(
     if (holes)
       fl_lay_holes(holes,lay_direction)
         let(scr = is_undef($hole_screw) ? screw : $hole_screw)
-          fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,thick=dr_thick+pcb_t);
+          if (scr) fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,thick=dr_thick+pcb_t);
   }
 
   module do_drill() {
@@ -693,65 +727,3 @@ module fl_pcb_adapter(
   }
 }
 
-// TODO: MOVE ME!!!!
-
-FL_TRIM_NS    = "trim";
-
-FL_TRIM_POT10  = let(
-  sz  = [9.5,10+1.5,4.8]
-) [
-  fl_name(value="ten turn trimpot"),
-  fl_bb_corners(value=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]),
-  fl_director(value=+Z),fl_rotor(value=+X),
-];
-
-module fl_trimpot(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD,
-  type,
-  // thickness for FL_CUTOUT
-  cut_thick,
-  // tolerance used during FL_CUTOUT
-  cut_tolerance=0,
-  // translation applied to cutout (default 0)
-  cut_drift=0,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
-  // when undef native positioning is used
-  octant
-) {
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
-
-  module do_add() {
-    trimpot10();
-  }
-  module do_bbox() {}
-  module do_assembly() {}
-  module do_layout() {}
-  module do_drill() {}
-
-  fl_manage(verbs,M,D,size) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) trimpot10();
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
-        children();
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier);
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier);
-    } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier)
-        translate(-Y(6.5+cut_drift))
-          fl_cutout(len=cut_thick,delta=cut_tolerance,trim=[0,5.1,0],z=-Y,cut=true)
-            do_add();
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    }
-  }
-}
