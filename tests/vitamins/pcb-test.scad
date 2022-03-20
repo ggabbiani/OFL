@@ -63,7 +63,8 @@ DIR_R       = 0;        // [0:360]
 
 /* [PCB] */
 
-TYPE  = "FL_PCB_RPI4";  // [FL_PCB_RPI_uHAT, FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20, FL_PCB_MH4PU_P, ALL]
+TYPE  = "FL_PCB_HILETGO_SX1308";  // [FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,ALL]
+
 // FL_DRILL and FL_CUTOUT thickness
 T             = 2.5;
 // FL_CUTOUT tolerance
@@ -95,14 +96,16 @@ verbs=[
 
 fl_trace("***VERBS***",[for(verb=fl_list_flatten(verbs)) split(verb)[0]]);
 
-single  = TYPE=="FL_PCB_RPI4"       ? FL_PCB_RPI4
-        : TYPE=="FL_PCB_PERF70x50"  ? FL_PCB_PERF70x50
-        : TYPE=="FL_PCB_PERF60x40"  ? FL_PCB_PERF60x40
-        : TYPE=="FL_PCB_PERF70x30"  ? FL_PCB_PERF70x30
-        : TYPE=="FL_PCB_PERF80x20"  ? FL_PCB_PERF80x20
-        : TYPE=="FL_PCB_MH4PU_P"    ? FL_PCB_MH4PU_P
-        : TYPE=="FL_PCB_RPI_uHAT"   ? FL_PCB_RPI_uHAT
+single  = TYPE=="FL_PCB_HILETGO_SX1308"  ? FL_PCB_HILETGO_SX1308
+        : TYPE=="FL_PCB_MH4PU_P"         ? FL_PCB_MH4PU_P
+        : TYPE=="FL_PCB_PERF70x50"       ? FL_PCB_PERF70x50
+        : TYPE=="FL_PCB_PERF60x40"       ? FL_PCB_PERF60x40
+        : TYPE=="FL_PCB_PERF70x30"       ? FL_PCB_PERF70x30
+        : TYPE=="FL_PCB_PERF80x20"       ? FL_PCB_PERF80x20
+        : TYPE=="FL_PCB_RPI4"            ? FL_PCB_RPI4
+        : TYPE=="FL_PCB_RPI_uHAT"        ? FL_PCB_RPI_uHAT
         : undef;
+
 
 module test() {
   module pcb(type) {
