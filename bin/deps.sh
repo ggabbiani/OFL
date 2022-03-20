@@ -12,10 +12,11 @@ trap 'on_exit $? $test' EXIT
 help() {
 cat <<EoH
 
-$(basename $0) [-?|-h|--help] [-d|--dry-run] [-f|--foundation] [-v|--vitamins] [-s|--silent]
+$(basename $0) [-?|-h|--help] [-a|--artifacts] [-d|--dry-run] [-f|--foundation] [-v|--vitamins] [-s|--silent]
 
   -?|-h|--help      this help
   -d|--dry-run      on screen dump only of the generated dot file (default OFF)
+  -a|--artifacts    artifacts dependencies scan (default OFF)
   -f|--foundation   foundation dependencies scan (default ON)
   -s|--silent       less verbose (default OFF)
   -v|--vitamins     vitamins dependencies scan (default OFF)
@@ -93,6 +94,10 @@ while (( "$#" )); do
   case "$1" in
     '-?'|-h|--help)
       help
+      shift
+      ;;
+    -a|--artifacts)
+      MODE="artifacts"
       shift
       ;;
     -d|--dry-run)

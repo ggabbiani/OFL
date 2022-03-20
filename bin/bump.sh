@@ -179,6 +179,8 @@ warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${V[0]},${V[1]},${V[2]}\];/g" "$DEFS"
 # update docs for foundation ($OFL/foundation/docs/dependencies.svg)
 $OFL/bin/deps.sh -s
+# artifacts ($OFL/artifacts/docs/dependencies.svg)
+$OFL/bin/deps.sh -a -s
 # and vitamins ($OFL/vitamins/docs/dependencies.svg)
 $OFL/bin/deps.sh -v -s
 # update pictures
