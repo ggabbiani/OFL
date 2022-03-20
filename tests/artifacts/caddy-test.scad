@@ -19,9 +19,11 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/unsafe_defs.scad>
-// include <../vitamins/incs.scad>
-include <../caddy.scad>
+
+include <../../vitamins/hds.scad>
+include <../../vitamins/pcbs.scad>
+include <../../vitamins/psus.scad>
+include <../../artifacts/caddy.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -29,7 +31,7 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-$FL_TRACE       = false;
+$FL_TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -49,6 +51,8 @@ $FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of user passed accessories (like alternative screws)
+$FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -66,90 +70,25 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 DIR_R       = 0;        // [0:360]
 
 /* [Caddy] */
+// the media to be contained
+MEDIUM  = "Raspberry PI4";  // [Raspberry PI4,Hard Disk,PSU]
 // wall thickness on X semi-axes (-X,+X)
 T_x   = [2.5,2.5];  // [0:0.1:10]
 // wall thickness on Y semi-axes (-Y,+Y)
 T_y   = [2.5,2.5];  // [0:0.1:10]
 // wall thickness on Z semi-axes (-Z,+Z)
 T_z   = [2.5,2.5];  // [0:0.1:10]
+
 FACES = ["+X","-X","-Z"];
 
 // CUT OUT tolerance
-CO_TOLERANCE  = 0.5;
+CUT_TOLERANCE = 0.5;
 // Internal tolerance (fl_JNgauge=0.15mm)
 TOLERANCE     = 0.15;
 // fillet radius
 FILLET_R      = 0;  // [0:0.1:5]
 
-/* [blob] */
-
-BLOB_BBOX  = [[0,0,0],[30,20,10]];
-
 /* [Hidden] */
-
-module blob(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  type,
-  thick,                // walls thickness in the form:
-                        // [["+X",«+X thick value»],["-X",«-X thick value»],["+Y",«+Y thick value»],["-Y",«-Y thick value»],["+Z",«+Z thick value»],["-Z",«-Z thick value»]].
-                        // Passing a scalar means same thickness for all the six walls:
-                        // [["+X",«thick»],["-X",«thick»],["+Y",«thick»],["-Y",«thick»],["+X",«thick»],["-X",«thick»]].
-                        // NOTE: any missing semi-axis thickness is set to 0
-                        // example:
-                        // thick=[["+X",2.5],["-Z",5]]
-                        // thick=2.5
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
-) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
-
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
-
-  module do_add() {}
-  module do_bbox() {}
-  module do_assembly() {}
-  module do_layout() {}
-  module do_drill() {}
-
-  fl_manage(verbs,M,D,size)  {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) fl_cube(size=size);
-
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_cube(size=size);
-
-    } else if ($verb==FL_CUTOUT) {
-      fl_trace("$modifier",$modifier);
-      fl_modifier($modifier)
-        translate([0,size.y/2,size.z/2]) fl_prism(h=thick.x[0],n=5,l=2,octant=-Z,direction=[+X,0]);
-
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
-        children();
-
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier);
-
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier);
-
-    } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier);
-
-    } else if ($verb==FL_DRILL) {
-      fl_trace("$modifier",$modifier);
-      fl_trace("thick",thick);
-      fl_modifier($modifier)
-        translate([size.x/2,size.y/2,0])
-          fl_cylinder(h=thick.z[0],r=3,octant=-Z);
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    }
-  }
-}
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
@@ -161,21 +100,26 @@ verbs=[
   if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
   if ($FL_DRILL!="OFF")     FL_DRILL,
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
+  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
   if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 // list of normals to faces
-faces = fl_3d_AxisList(FACES);
+faces     = fl_3d_AxisList(FACES);
 // the carried item
-blob  = [
-  fl_bb_corners(value=BLOB_BBOX)
-];
+medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : MEDIUM=="Hard Disk" ? HD_EVO860 : FL_PSU_MeanWell_RS_25_5;
 // thickness list built from customizer values
-T     = [T_x,T_y,T_z];
+T         = [T_x,T_y,T_z];
 // 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
-T_NIL = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
+T_NIL     = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 
-fl_caddy(verbs,blob,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant)
+fl_trace("faces",faces);
+
+fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant)
   // the children is called with the following special variables set:
   // $verbs ⇒ list of verbs to be executed
   // $thick ⇒ thickness list for DRILL and CUTOUT
-  blob($verbs,blob,thick=$thick+T_NIL,$FL_DRILL="ON",$FL_CUTOUT="ON",$FL_ADD="ON",$FL_ASSEMBLY="ON");
+  if (medium==FL_PCB_RPI4)    fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE);
+  else if (medium==HD_EVO860) fl_hd($verbs,medium,thick=$thick+T_NIL,lay_direction=faces,dri_tolerance=TOLERANCE);
+  else                        fl_psu($verbs,medium,thick=$thick,lay_direction=faces);
+      // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
+      // fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);

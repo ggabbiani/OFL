@@ -19,8 +19,8 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <foundation/unsafe_defs.scad>
-include <foundation/fillet.scad>
+include <../foundation/unsafe_defs.scad>
+include <../foundation/fillet.scad>
 
 /*
  * Builds a caddy around the passed object «type».

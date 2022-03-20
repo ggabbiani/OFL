@@ -19,9 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../foundation/unsafe_defs.scad>
-include <../foundation/fillet.scad>
-include <../box.scad>
+include <../../artifacts/box.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

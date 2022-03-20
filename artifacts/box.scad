@@ -19,10 +19,10 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <foundation/fillet.scad>
-include <foundation/profile.scad>
-include <vitamins/knurl_nuts.scad>
-include <vitamins/screw.scad>
+include <../foundation/fillet.scad>
+include <../foundation/profile.scad>
+include <../vitamins/knurl_nuts.scad>
+include <../vitamins/screw.scad>
 
 // engine for generating boxes
 module fl_box(
