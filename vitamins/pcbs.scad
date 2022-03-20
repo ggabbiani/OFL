@@ -47,7 +47,7 @@ function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
 
 //*****************************************************************************
 // COMPONENTS
-// TODO: move elsewhere
+// TODO: abstract components from PCBs and move alone
 
 /* 
  * Component context:
