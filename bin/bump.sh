@@ -162,8 +162,9 @@ cat <<EOM
 this script is going to:
 
   * modify and commit:
-    - "$DEFS" (${V[0]}.${V[1]}.${V[2]});
+    - $DEFS (${V[0]}.${V[1]}.${V[2]});
     - $OFL/foundation/docs/dependencies.svg
+    - $OFL/artifacts/docs/dependencies.svg
     - $OFL/vitamins/docs/dependencies.svg
     - pictures in $OFL/foundation/docs/
   * annotate local repo as v${V[0]}.${V[1]}.${V[2]};
