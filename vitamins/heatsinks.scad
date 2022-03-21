@@ -194,12 +194,12 @@ module pimoroni(
 
   module do_drill() {
     do_layout($FL_LAYOUT=$FL_DRILL)
-      fl_cylinder(h=thick+bot_fluting_t,r=screw_radius(screw),octant=$normal);
+      fl_cylinder(h=thick+bot_fluting_t,r=screw_radius(screw),octant=$hs_normal);
   }
 
   module do_mount() {
     do_layout() fl_color("DarkSlateGray")
-      fl_screw(type=M2p5_cap_screw,len=10,direction=[$normal,0]);
+      fl_screw(type=M2p5_cap_screw,len=10,direction=[$hs_normal,0]);
   }
 
   fl_manage(verbs,M,D,size) {
