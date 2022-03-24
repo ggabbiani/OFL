@@ -260,7 +260,7 @@ FL_PCB_RPI_uHAT = let(
     ["RF IN",  [FL_JACK_NS,   [0,      15, 0], [-X,0  ],             FL_JACK_MCXJPHSTEM1  ]],
   ],
   vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]]
-  ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",
+  ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,
       dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,
       director=-X,rotor=-Y);
 
@@ -336,6 +336,10 @@ FL_PCB_DICT = [
       FL_PCB_RPI_uHAT,
 ];
 
+/**
+ * children context is the complete hole context plus:
+ *  $pcb_radius - pcb radius
+ */
 module fl_pcb(
   // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
   verbs=FL_ADD,
@@ -467,6 +471,11 @@ module fl_pcb(
       grid_plating();
   }
 
+  module context() {
+    $pcb_radius = radius;
+    children();
+  }
+
   module do_layout(class,label,directions) {
     assert(is_string(class));
     assert(label==undef||is_string(label));
@@ -496,8 +505,8 @@ module fl_pcb(
           translate($position) children();
         }
       else if (class=="holes")
-        fl_lay_holes(holes,lay_direction)
-          children();
+        fl_lay_holes(holes,lay_direction,screw=screw)
+          context() children();
       else
         assert(false,str("unknown component class '",class,"'."));
     }
