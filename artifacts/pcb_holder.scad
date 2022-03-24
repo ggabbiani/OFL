@@ -19,54 +19,6 @@
 
 include <spacer.scad>
 
-/*
- * Common interface for pcb holder constructors. 
- *
- * NOTE: clients should not use this but rather fl_pcb_HolderByHoles() or fl_pcb_HolderBySize()
- */
-function fl_pcb_Holder(
-  name,
-  engine,
-  screw,
-  bbox,
-  pcb,
-  tolerance=0
-) =
-  [
-    fl_name(value=name),
-    fl_engine(value=engine),
-    fl_screw(value=screw),
-    fl_bb_corners(value=bbox),
-    fl_director(value=+Z),fl_rotor(value=+X),
-    fl_pcb(value=pcb),
-    fl_tolerance(value=tolerance),
-  ];
-
-// PCB holder proxy actually triggering the type embedded engine
-module fl_pcb_holder(
-  verbs,
-  // as returned from function fl_pcb_HolderBySize()
-  type,
-  // FL_DRILL thickness
-  thick=0,
-  // knurl nut
-  knut=false,
-  // desired direction [director,rotation], native direction when undef
-  direction,
-  // when undef native positioning is used
-  octant,
-) {
-  engine  = fl_engine(type);
-  if (engine=="by holes")
-    fl_pcb_holderByHoles(verbs,type,thick,frame,knut,direction,octant)
-      children();
-  else if (engine=="by size")
-    fl_pcb_holderBySize(verbs,type,thick,frame,knut,direction,octant)
-      children();
-  else
-    assert(false,str("Unknown engine '",engine,"'"));
-}
-
 /******************************************************************************
  * Hole driven PCB holders
  *****************************************************************************/
