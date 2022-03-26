@@ -76,11 +76,11 @@ T_z   = [2.5,2.5];  // [0:0.1:10]
 
 /* [ Rails (FL_DRILL) ] */
 
-// [-X,+X]
+// rail along [-X,+X] faces
 Rail_x   = [0,0];  // [0:0.1:10]
-// [-Y,+Y]
+// rail along [-Y,+Y] faces
 Rail_y   = [0,0];  // [0:0.1:10]
-// [-Z,+Z]
+// rail along [-Z,+Z] faces
 Rail_z   = [0,0];  // [0:0.1:10]
 
 /* [ Hard Disk ] */
@@ -116,13 +116,10 @@ T_NIL     = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 rail      = [Rail_x,Rail_y,Rail_z];
 
 hd_ctor   = fl_connectors(hd)[0];
-// adp       = FL_SADP_ELUTENG;
-// adp_ctor  = fl_connectors(adp)[0];
 
 lay_dir     = fl_3d_AxisList(LAY_DIRECTION);
 fl_trace("lay_dir",lay_dir);
 
 fl_hd(verbs,hd,dri_tolerance=DRI_TOLERANCE,thick=T,lay_direction=lay_dir,add_connectors=SHOW_CONNECTORS,dri_rails=rail,direction=direction,octant=octant)
-  // fl_cylinder(h=$hole_depth,r=screw_radius(fl_screw(hd)),direction=[$hole_n,0],octant=-Z);
-  fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);
+  fl_cylinder(h=$hd_screw_len,d=$hole_d,direction=$hole_direction,octant=-Z);
 

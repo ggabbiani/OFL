@@ -75,20 +75,12 @@ HD_EVO860 = let(
 
 FL_HD_DICT  = [ HD_EVO860 ];
 
-//*****************************************************************************
-// HD properties
-// when invoked by «type» parameter act as getters
-// when invoked by «value» parameter act as property constructors
-function hd_screw_len(type,t)   = assert(t!=undef) screw_longer_than(fl_get(type,"hole depth")+t);
-
 /*
- * Context passed to children (screws):
+ * Children context during FL_LAYOUT (in addition to holes' context):
  *
- *  $director   - screw direction vector
- *  $direction  - [$director,0]
- *  $octant     - undef
- *  $thick      - thickness along current direction
- *  $length     - screw length
+ *  $hd_thick     - scalar thickness along hole normal
+ *  $hd_screw_len - screw length along hole normal comprehensive of hole depth and tolerance
+ *  
  */
 module fl_hd(
   verbs,
@@ -123,23 +115,23 @@ module fl_hd(
   D           = direction ? fl_direction(type,direction=direction): I;
   M           = octant    ? fl_octant(type,octant=octant)         : I;
 
+  module context() {
+    $hd_thick     = $hole_n ? fl_3d_axisValue($hole_n,thick) : undef;
+    $hd_screw_len = ($hd_thick!=undef && $hole_depth!=undef) ? $hd_thick+$hole_depth+dri_tolerance : undef;
+    children();
+  }
+
   module do_layout() {
-    fl_lay_holes(holes,lay_direction) let(
-        $director   = $hole_n,
-        $direction  = [$director,0],
-        $octant     = undef,
-        $thick      = fl_3d_axisValue($director,thick),
-        $length     = $thick+$hole_depth+dri_tolerance,
-        delta       = (fl_3d_axisValue($director,thick)+dri_tolerance)
-      ) translate(delta*$director) children();
+    fl_lay_holes(holes,lay_direction) 
+      context() translate(($hd_thick+dri_tolerance)*$hole_n) 
+        children();
   }
 
   module do_add() {
     difference() {
       fl_color("dimgray") difference() {
         linear_extrude(height=size.z) fl_square(size=size,corners=corner_r,quadrant=+Y);
-        fl_holes(holes,[-X,+X,-Z])
-          children();
+        fl_holes(holes,[-X,+X,-Z]);
       }
       multmatrix(Mpd) fl_sata_powerDataPlug(FL_FOOTPRINT,plug);
     }
@@ -162,7 +154,7 @@ module fl_hd(
 
     } else if ($verb==FL_MOUNT) {
       fl_modifier($modifier) do_layout()
-        fl_screw(type=screw,len=$length,direction=$direction);
+        fl_screw(type=screw,len=$hd_screw_len,direction=$hole_direction);
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout()
@@ -170,9 +162,9 @@ module fl_hd(
 
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_layout()
-        fl_rail(fl_3d_axisValue($director,dri_rails))
+        fl_rail(fl_3d_axisValue($hole_n,dri_rails))
           if ($children) children();
-          else fl_screw(FL_FOOTPRINT,screw,len=$length,direction=$direction);
+          else fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_bbox();
