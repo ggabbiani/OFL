@@ -343,10 +343,11 @@ module fl_manage(
         assert(false,str(tokens[0], " is marked as OBSOLETE!"));
       } let(
         $modifier = verb2modifier($verb)
-      ) children();
+      ) if ($modifier!="OFF") children();
     }
   }
 
+  fl_trace("$FL_DRILL",$FL_DRILL,$FL_TRACE=true);
   orient() fl_context(verbs) {
     place() fl_parse($_verbs_) children();
     if ($_axes_ && size) fl_modifier($FL_AXES) fl_axes(size=1.2*size);
