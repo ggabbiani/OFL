@@ -108,7 +108,7 @@ verbs=[
 // list of normals to faces
 faces     = fl_3d_AxisList(FACES);
 // the carried item
-medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : MEDIUM=="Hard Disk" ? HD_EVO860 : FL_PSU_MeanWell_RS_25_5;
+medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : MEDIUM=="Hard Disk" ? FL_HD_EVO860 : FL_PSU_MeanWell_RS_25_5;
 // thickness list built from customizer values
 T         = [T_x,T_y,T_z];
 // 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
@@ -119,7 +119,7 @@ fl_trace("faces",faces);
 module medium() {
   if (medium==FL_PCB_RPI4)    fl_pcb($cad_verbs,medium,thick=$cad_thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE)
     children();
-  else if (medium==HD_EVO860) fl_hd($cad_verbs,medium,thick=$cad_thick+T_NIL,lay_direction=faces,dri_tolerance=$cad_tolerance)
+  else if (medium==FL_HD_EVO860) fl_hd($cad_verbs,medium,thick=$cad_thick+T_NIL,lay_direction=faces,dri_tolerance=$cad_tolerance)
     children();
   else                        fl_psu($cad_verbs,medium,thick=$cad_thick,lay_direction=faces)
     children();

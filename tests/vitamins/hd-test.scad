@@ -94,7 +94,7 @@ LAY_DIRECTION     = ["-X","+X","-Z"];
 
 /* [Hidden] */
 
-hd        = HD_EVO860;
+hd        = FL_HD_EVO860;
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[

@@ -28,7 +28,7 @@ include <NopSCADlib/vitamins/screws.scad>
 
 FL_HD_NS  = "hd";
 
-HD_EVO860 = let(
+FL_HD_EVO860 = let(
   size  = [70,100,6.7],
   plug  = FL_SATA_POWERDATAPLUG,
   cid   = fl_sata_powerDataCID(),
@@ -73,7 +73,7 @@ HD_EVO860 = let(
   ["Mpd",        Mpd ],
 ];
 
-FL_HD_DICT  = [ HD_EVO860 ];
+FL_HD_DICT  = [ FL_HD_EVO860 ];
 
 /*
  * Children context during FL_LAYOUT (in addition to holes' context):
