@@ -347,7 +347,6 @@ module fl_manage(
     }
   }
 
-  fl_trace("$FL_DRILL",$FL_DRILL,$FL_TRACE=true);
   orient() fl_context(verbs) {
     place() fl_parse($_verbs_) children();
     if ($_axes_ && size) fl_modifier($FL_AXES) fl_axes(size=1.2*size);
