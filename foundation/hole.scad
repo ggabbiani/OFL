@@ -36,11 +36,12 @@ function fl_Hole(
  * prepare context for children() holes
  *
  * $hole_center
- * $hole_d      - hole diameter
- * $hole_depth  - hole depth (set to «thick» for pass-thru)
- * $hole_i      - OPTIONAL ordinal position
- * $hole_n      - hole normal
- * $hole_screw  - OPTIONAL hole screw
+ * $hole_d          - hole diameter
+ * $hole_depth      - hole depth (set to «thick» for pass-thru)
+ * $hole_direction  - [$hole_n,0]
+ * $hole_i          - OPTIONAL ordinal position
+ * $hole_n          - hole normal
+ * $hole_screw      - OPTIONAL hole screw
  */
 module fl_hole_Context(
   hole,
@@ -53,6 +54,7 @@ module fl_hole_Context(
   $hole_i       = ordinal;
   $hole_center  = hole[0];
   $hole_n       = hole[1];
+  $hole_direction  = [$hole_n,0];
   $hole_d       = hole[2];
   $hole_depth   = hole[3] ? hole[3] : thick;
   $hole_screw   = let(s=fl_optional(hole[4],"hole/screw")) s ? s : screw;
