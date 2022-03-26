@@ -53,6 +53,8 @@ $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// mount shape through predefined screws
+$FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -114,12 +116,15 @@ T_NIL     = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 
 fl_trace("faces",faces);
 
-fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant)
-  // the children is called with the following special variables set:
-  // $verbs ⇒ list of verbs to be executed
-  // $thick ⇒ thickness list for DRILL and CUTOUT
-  if (medium==FL_PCB_RPI4)    fl_pcb($verbs,medium,thick=$thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE);
-  else if (medium==HD_EVO860) fl_hd($verbs,medium,thick=$thick+T_NIL,lay_direction=faces,dri_tolerance=TOLERANCE);
-  else                        fl_psu($verbs,medium,thick=$thick,lay_direction=faces);
-      // fl_screw(type=M3_cap_screw,len=$length,direction=$direction);
-      // fl_cylinder(h=$length,r=screw_radius(fl_screw(hd)),direction=$direction,octant=-Z);
+module medium() {
+  if (medium==FL_PCB_RPI4)    fl_pcb($cad_verbs,medium,thick=$cad_thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE)
+    children();
+  else if (medium==HD_EVO860) fl_hd($cad_verbs,medium,thick=$cad_thick+T_NIL,lay_direction=faces,dri_tolerance=$cad_tolerance)
+    children();
+  else                        fl_psu($cad_verbs,medium,thick=$cad_thick,lay_direction=faces)
+    children();
+}
+
+fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,lay_verbs=[FL_LAYOUT],direction=direction,octant=octant)
+  medium() 
+    fl_cylinder(h=5,d=$hole_d,direction=$hole_direction);

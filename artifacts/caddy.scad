@@ -22,6 +22,9 @@
 include <../foundation/unsafe_defs.scad>
 include <../foundation/fillet.scad>
 
+// Caddy's namespace
+FL_NS_CAD = "cad";
+
 /*
  * Builds a caddy around the passed object «type».
  * Even if not mandatory - when passed - children will be used during
@@ -33,25 +36,35 @@ include <../foundation/fillet.scad>
  *
  * Context passed to children:
  *
- * $thick - see «thick» parameter
- * $verbs - list of verbs to be executed
+ * $cad_thick     - see «thick» parameter
+ * $cad_tolerance - see tolerance
+ * $cad_verbs     - list of verbs to be executed by children()
  *
  * TODO: FL_DRILL implementation
  */
 module fl_caddy(
-  verbs       = FL_ADD,     // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
+  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,     
   type,
-  thick,                    // walls thickness in the fixed form: [[-x,+x],[-y,+y],[-z+z]]
-                            // Passed as scalar means same thickness for all the six walls:
-                            // [[«thick»,«thick»],[«thick»,«thick»],[«thick»«thick»]].
-                            // examples:
-                            // thick=[[0,2.5],[0,0],[5,0]]
-                            // thick=2.5
-  faces,                    // faces defined by their othonormal axis
-  tolerance   = fl_JNgauge, // SCALAR added to each internal payload dimension.
-  fillet      = 0,          // fillet radius, when > 0 a fillet is inserted where needed
-  direction,                // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,                   // when undef native positioning is used
+  // walls thickness in the fixed form: [[-x,+x],[-y,+y],[-z+z]]
+  // Passed as scalar means same thickness for all the six walls:
+  // [[«thick»,«thick»],[«thick»,«thick»],[«thick»«thick»]].
+  // examples:
+  // thick=[[0,2.5],[0,0],[5,0]]
+  // thick=2.5
+  thick,                    
+  // faces defined by their othonormal axis
+  faces,                    
+  // SCALAR added to each internal payload dimension.
+  tolerance   = fl_JNgauge, 
+  // fillet radius, when > 0 a fillet is inserted where needed
+  fillet      = 0,          
+  // defines the value of $cad_verbs passed to children
+  lay_verbs   =[],
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,                
+  // when undef native positioning is used
+  octant,                   
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(thick);
@@ -83,6 +96,13 @@ module fl_caddy(
   M         = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
 
   fl_trace("thick",thick);
+
+  module context(verbs=[]) {
+    $cad_thick      = thick+t_deltas;
+    $cad_tolerance  = tolerance;
+    $cad_verbs      = verbs;
+    children();
+  }
 
   module do_add() {
     fl_trace("faces",faces);
@@ -121,54 +141,41 @@ module fl_caddy(
             translate([0,size.y-thick.y[1],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,+180]);
         }
       }
-      let(
-        $verbs  = [FL_DRILL,FL_CUTOUT],
-        // children thickness must include also tolerance and fillet
-        $thick  = thick+t_deltas
-      ) children();
+      context([FL_DRILL,FL_CUTOUT])  children();
     }
   }
-  module do_bbox() {}
-  module do_drill() {}
-
-  module do_assembly() {
-    // enrich children context with $verbs
-    let($verbs=[FL_ADD,FL_ASSEMBLY,FL_MOUNT]) do_layout() children();
-  }
-
-  module do_layout() {
-    let(
-      // enrich children context with wall's thickness
-      $thick  = thick+t_deltas
-    ) children();
-  }
+  
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_trace(str("$modifier[",split($verb)[0],"]"),$modifier);
       fl_modifier($modifier)
         fl_color($FL_FILAMENT)
           do_add() children();
 
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) context(FL_DRAW) children();
+
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
 
+    } else if ($verb==FL_CUTOUT) {
+      fl_modifier($modifier) context([FL_CUTOUT]) children();
+
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) context([FL_DRILL]) children();
+
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) context(lay_verbs) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
+
     } else if ($verb==FL_LAYOUT) {
-      // FIXME: apply right $verbs context value during layout
-      fl_modifier($modifier) do_layout()
-        children();
+      fl_modifier($modifier) context(lay_verbs) children();
+
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) context([FL_MOUNT]) children();
 
     } else if ($verb==FL_PAYLOAD) {
       fl_modifier($modifier) fl_bb_add(pload);
 
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier);
-
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly() children();
-
-    } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier) echo(str("***WARN***: ",$verb," not yet implemented"));
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
