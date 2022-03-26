@@ -163,8 +163,7 @@ module fl_hd(
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_layout()
         fl_rail(fl_3d_axisValue($hole_n,dri_rails))
-          if ($children) children();
-          else fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction);
+          fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_bbox();
