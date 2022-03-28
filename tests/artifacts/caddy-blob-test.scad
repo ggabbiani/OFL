@@ -175,6 +175,6 @@ T_NIL = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 
 fl_caddy(verbs,blob,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant)
   // the children is called with the following special variables set:
-  // $verbs ⇒ list of verbs to be executed
-  // $thick ⇒ thickness list for DRILL and CUTOUT
-  blob($verbs,blob,thick=$thick+T_NIL,$FL_DRILL="ON",$FL_CUTOUT="ON",$FL_ADD="ON",$FL_ASSEMBLY="ON");
+  // $cad_verbs ⇒ list of verbs to be executed
+  // $cad_thick ⇒ thickness list for DRILL and CUTOUT
+  blob($cad_verbs,blob,thick=$cad_thick+T_NIL,$FL_DRILL="ON",$FL_CUTOUT="ON",$FL_ADD="ON",$FL_ASSEMBLY="ON");
