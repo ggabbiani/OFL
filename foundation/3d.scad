@@ -490,7 +490,7 @@ let(
 module fl_layout(
   // supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
   verbs = FL_LAYOUT, 
-  // layout direction
+  // layout direction vector
   axis,     
   // gap inserted along «axis»
   gap=0,    
@@ -532,37 +532,43 @@ module fl_layout(
   fl_trace("bcs",bcs);
   fl_trace("sz",sz);
 
+  module context() {
+    for($i=[0:$len-1]) {
+      fl_trace("$i",$i);
+      $first  = $i!=undef ? $i==0 : undef;
+      $last   = $i!=undef ? $i==$len-1 : undef;
+      $item   = $i!=undef ? types[$i] : undef;
+      $bbox   = $i!=undef ? fl_bb_corners($item) : undef;
+      $size   = $i!=undef ? $bbox[1]-$bbox[0] : undef;
+      offset  = sum
+      ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
+      : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
+      sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : O;
+      fl_trace("sz",sz);
+      fl_trace("delta",$i*gap*axis);
+      fl_trace("offset",offset);
+      
+      
+      Talign  = let(delta=bbox-$bbox) [
+        align.x<0 ? delta[0].x : align.x>0 ? delta[1].x : 0,
+        align.y<0 ? delta[0].y : align.y>0 ? delta[1].y : 0,
+        align.z<0 ? delta[0].z : align.z>0 ? delta[1].z : 0,
+      ];
+      translate(offset+fac*sz+$i*gap*axis+Talign)
+        children();
+    }
+  }
+
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_BBOX) {
       fl_modifier($modifier,false) fl_bb_add(bbox);
 
     } else if ($verb==FL_LAYOUT) fl_modifier($modifier,false) {
       assert(axis*align==0,"Alignment and layout direction must be orthogonal");
-      for($i=[0:$len-1]) {
-        fl_trace("$i",$i);
-        $first  = $i==0;
-        $last   = $i==$len-1;
-        $item   = types[$i];
-        $bbox   = fl_bb_corners($item);
-        $size   = $bbox[1]-$bbox[0];
-        offset  = sum
-        ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
-        : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
-        sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : O;
-        fl_trace("sz",sz);
-        fl_trace("delta",$i*gap*axis);
-        fl_trace("offset",offset);
-        
-        Talign  = let(delta=bbox-$bbox) [
-          align.x<0 ? delta[0].x : align.x>0 ? delta[1].x : 0,
-          align.y<0 ? delta[0].y : align.y>0 ? delta[1].y : 0,
-          align.z<0 ? delta[0].z : align.z>0 ? delta[1].z : 0,
-        ];
-        translate(offset+fac*sz+$i*gap*axis+Talign)
-          if ($children>1) children($i); else children();
-      };
+      context() children();
 
     } else {
+      // fl_modifier($modifier,false) context() children();
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
   }
