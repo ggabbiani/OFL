@@ -59,7 +59,7 @@ DIR_R       = 0;        // [0:360]
 GAP     = 5;
 AXIS    = "+X";   // [+X, -X, +Y, -Y, +Z, -Z]
 RENDER  = "ADD"; // [DRAW, ADD, BBOX]
-ALIGN   = [0,0,0];  // [-1,0,+1]
+ALIGN   = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
 
@@ -85,8 +85,6 @@ module object(object) {
   $FL_ADD       = "ON";
   $FL_ASSEMBLY  = "ON";
   $FL_BBOX      = "DEBUG";
-  bbox          = fl_bb_corners(object);
-  echo(bbox=bbox)
   if (engine==FL_PCB_NS)
     fl_pcb(overbs,object,octant=octant);
   else if (engine==FL_HD_NS)

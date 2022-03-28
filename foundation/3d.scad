@@ -553,12 +553,11 @@ module fl_layout(
         fl_trace("delta",$i*gap*axis);
         fl_trace("offset",offset);
         
-        Talign  = let(delta=bbox-$bbox) echo(delta=delta) [
+        Talign  = let(delta=bbox-$bbox) [
           align.x<0 ? delta[0].x : align.x>0 ? delta[1].x : 0,
           align.y<0 ? delta[0].y : align.y>0 ? delta[1].y : 0,
           align.z<0 ? delta[0].z : align.z>0 ? delta[1].z : 0,
         ];
-        echo(align=align,Talign=Talign);
         translate(offset+fac*sz+$i*gap*axis+Talign)
           if ($children>1) children($i); else children();
       };
