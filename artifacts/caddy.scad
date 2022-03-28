@@ -53,7 +53,7 @@ module fl_caddy(
   // thick=[[0,2.5],[0,0],[5,0]]
   // thick=2.5
   thick,                    
-  // faces defined by their othonormal axis
+  // faces defined by their othonormal axis in floating semi-axis list format
   faces,                    
   // SCALAR added to each internal payload dimension.
   tolerance   = fl_JNgauge, 
@@ -68,6 +68,7 @@ module fl_caddy(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(thick);
+  assert(faces);
 
   // delta to add to children thicknesses
   t_deltas  = let(d=(tolerance+fillet)) [
@@ -96,6 +97,8 @@ module fl_caddy(
   M         = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
 
   fl_trace("thick",thick);
+  fl_trace("bbox",bbox);
+  fl_trace("size",size);
 
   module context(verbs=[]) {
     $cad_thick      = thick+t_deltas;
@@ -145,7 +148,6 @@ module fl_caddy(
     }
   }
   
-
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
