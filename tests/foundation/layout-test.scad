@@ -18,6 +18,9 @@
  */
 
 include <../../foundation/3d.scad>
+include <../../vitamins/hds.scad>
+include <../../vitamins/pcbs.scad>
+include <../../vitamins/psus.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -53,8 +56,10 @@ DIR_R       = 0;        // [0:360]
 
 /* [Layout] */
 
-GAP           = 5;
-AXIS          = "+X"; // [+X, -X, +Y, -Y, +Z, -Z]
+GAP     = 5;
+AXIS    = "+X";   // [+X, -X, +Y, -Y, +Z, -Z]
+RENDER  = "ADD"; // [DRAW, ADD, BBOX]
+ALIGN   = [0,0,0];  // [-1,0,+1]
 
 /* [Hidden] */
 
@@ -66,37 +71,31 @@ verbs=[
   if ($FL_LAYOUT!="OFF")  FL_LAYOUT,
 ];
 
-psu= [
-  ["name", "PSU MeanWell RS-25-5 25W 5V 5A"],
-  fl_bb_corners(value=[
-      [-51/2, -11,   0],  // negative corner
-      [+51/2,  78,  28],  // positive corner
-    ]),
+types   = [FL_PCB_RPI4,FL_HD_EVO860,FL_HD_EVO860,FL_PSU_MeanWell_RS_25_5];
+axis    = fl_3d_AxisList([AXIS])[0];
+overbs  = [
+  if (RENDER=="DRAW"||RENDER=="ADD") FL_ADD,
+  if (RENDER=="DRAW"||RENDER=="ASSEMBLY") FL_ASSEMBLY,
+  if (RENDER=="BBOX") FL_BBOX,
 ];
 
-hd = [
-  ["name",  "Samsung V-NAND SSD 860 EVO"],
-  fl_bb_corners(value=[
-    [-69/2,-(13+3),0],  // negative corner
-    [69/2,100,6.7],     // positive corner
-  ]),
-];
-
-rpi = [
-  ["name",                "RPI4-MODBP-8GB"],
-  fl_bb_corners(value=[
-    [-56/2-2.5,  -3, -1.5],     // negative corner
-    [+56/2,     85,  -1.5+16],  // positive corner
-  ]),
-];
-
-types   = [rpi,hd,hd,psu];
-bcs     = [for(t=types) fl_bb_corners(t)];
-axis    = AXIS=="+X" ? +X : AXIS=="-X" ? -X : AXIS=="+Y" ? +Y : AXIS=="-Y" ? -Y : AXIS=="+Z" ? +Z : -Z;
-
-fl_layout(verbs,axis,GAP,types,octant=octant,direction=direction) {
-  let(type=rpi, bc=fl_bb_corners(type)) fl_bb_add(bc);
-  let(type=hd,  bc=fl_bb_corners(type)) fl_bb_add(bc);
-  let(type=hd,  bc=fl_bb_corners(type)) fl_bb_add(bc);
-  let(type=psu, bc=fl_bb_corners(type)) fl_bb_add(bc);
+module object(object) {
+  engine        = fl_engine(object);
+  octant        = undef;
+  $FL_ADD       = "ON";
+  $FL_ASSEMBLY  = "ON";
+  $FL_BBOX      = "DEBUG";
+  bbox          = fl_bb_corners(object);
+  echo(bbox=bbox)
+  if (engine==FL_PCB_NS)
+    fl_pcb(overbs,object,octant=octant);
+  else if (engine==FL_HD_NS)
+    fl_hd(overbs,object,octant=octant);
+  else if (engine==FL_PSU_NS)
+    fl_psu(overbs,object,octant=octant);
+  else
+    assert(false,str("Engine ",engine," UNKNOWN."));
 }
+
+fl_layout(verbs,axis,GAP,types,align=ALIGN,octant=octant,direction=direction)
+  object($item);

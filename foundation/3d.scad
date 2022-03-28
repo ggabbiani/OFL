@@ -488,17 +488,33 @@ let(
  *
  */
 module fl_layout(
-  verbs = FL_LAYOUT, // supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
-  axis,     // layout direction
-  gap=0,    // gap inserted along «axis»
-  types,    // list of types to be arranged
-  direction,// desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])
-  octant    // when undef native positioning is used
+  // supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
+  verbs = FL_LAYOUT, 
+  // layout direction
+  axis,     
+  // gap inserted along «axis»
+  gap=0,    
+  // list of types to be arranged
+  types,    
+  /**
+   * internal type alignment into the resulting bounding box surfaces.
+   * Is managed through a vector whose x,y,z components are [-1,0,+1] values.
+   * [-1,0,+1] means aligned to the -X and +Z surfaces, centered on y axis.
+   * Passing a scalar means [scalar,scalar,scala]
+   */
+  align=0,
+  // desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])
+  direction,
+  // when undef native positioning is used
+  octant    
 ) {
   assert(len(axis)==3,axis);
   assert(is_num(gap),gap);
   assert(is_list(types),types);
 
+  align = is_num(align) 
+        ? assert(align==-1||align==0||align==+1) [align,align,align] 
+        : assert(len(align)==3) align;
   bbox  = lay_bb_corners(axis,gap,types);
   size  = bbox[1]-bbox[0]; // resulting size
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
@@ -521,22 +537,31 @@ module fl_layout(
       fl_modifier($modifier,false) fl_bb_add(bbox);
 
     } else if ($verb==FL_LAYOUT) fl_modifier($modifier,false) {
-        for($i=[0:$len-1]) {
-          fl_trace("$i",$i);
-          $first  = $i==0;
-          $last   = $i==$len-1;
-          $item   = types[$i];
-          $size   = let(corner=fl_bb_corners($item)) corner[1]-corner[0];
-          offset = sum
-          ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
-          : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
-          sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : O;
-          fl_trace("sz",sz);
-          fl_trace("delta",$i*gap*axis);
-          fl_trace("offset",offset);
-          translate(offset+fac*sz+$i*gap*axis)
-            if ($children>1) children($i); else children(0);
-        };
+      assert(axis*align==0,"Alignment and layout direction must be orthogonal");
+      for($i=[0:$len-1]) {
+        fl_trace("$i",$i);
+        $first  = $i==0;
+        $last   = $i==$len-1;
+        $item   = types[$i];
+        $bbox   = fl_bb_corners($item);
+        $size   = $bbox[1]-$bbox[0];
+        offset  = sum
+        ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
+        : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
+        sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : O;
+        fl_trace("sz",sz);
+        fl_trace("delta",$i*gap*axis);
+        fl_trace("offset",offset);
+        
+        Talign  = let(delta=bbox-$bbox) echo(delta=delta) [
+          align.x<0 ? delta[0].x : align.x>0 ? delta[1].x : 0,
+          align.y<0 ? delta[0].y : align.y>0 ? delta[1].y : 0,
+          align.z<0 ? delta[0].z : align.z>0 ? delta[1].z : 0,
+        ];
+        echo(align=align,Talign=Talign);
+        translate(offset+fac*sz+$i*gap*axis+Talign)
+          if ($children>1) children($i); else children();
+      };
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
