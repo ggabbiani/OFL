@@ -87,6 +87,7 @@ module fl_hd(
   verbs,
   type,
   // thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
+  // scalar «t» means [[t,t],[t,t],[t,t]]
   thick,
   // FL_LAYOUT directions in floating semi-axis list form
   lay_direction   = [-X,+X,-Z],
@@ -105,6 +106,7 @@ module fl_hd(
   assert(type!=undef);
   assert(is_bool(add_connectors));
 
+  thick       = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
   screw       = fl_screw(type);
   screw_r     = screw_radius(screw);
   corner_r    = fl_get(type,"corner radius");
@@ -162,6 +164,7 @@ module fl_hd(
         children();
 
     } else if ($verb==FL_DRILL) {
+      assert(thick)
       fl_modifier($modifier) do_layout()
         fl_rail(fl_3d_axisValue($hole_n,dri_rails))
           fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction);
