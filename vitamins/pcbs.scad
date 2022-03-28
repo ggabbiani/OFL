@@ -165,6 +165,7 @@ function fl_PCB(
     fl_name(value=name),
     fl_bb_corners(value=bbox),
     fl_director(value=director),fl_rotor(value=rotor),
+    fl_engine(value=FL_PCB_NS),
     fl_pcb_thick(value=thick),
     fl_pcb_radius(value=radius),
     if (pload) fl_payload(value=pload), // optional payload
@@ -380,9 +381,9 @@ module fl_pcb(
   radius    = fl_pcb_radius(type);
   grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
   dxf       = fl_optional(type,fl_dxf()[0]);
-  
-  D         = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+
+  M         = octant ? fl_octant(octant=octant,bbox=bbox) : I;
+  D         = direction ? fl_direction(type,direction=direction)  : I;
 
   function fl_pcb_NopHoles(nop) = let(
     pcb_t     = pcb_thickness(nop),

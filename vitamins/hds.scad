@@ -46,6 +46,7 @@ FL_HD_EVO860 = let(
   dc      = fl_conn_clone(conns[1],M=Mpd)
 ) [
   fl_name(value="Samsung V-NAND SSD 860 EVO"),
+  fl_engine(value=FL_HD_NS),
   fl_bb_corners(value=[
     [-size.x/2, 0,      0       ],  // negative corner
     [+size.x/2, +size.y,+size.z ],  // positive corner

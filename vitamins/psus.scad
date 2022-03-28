@@ -40,13 +40,15 @@ FL_PSU_MeanWell_RS_25_5 = let(
     // TODO: terminal must become a stand-alone vitamin
     term_ways = 5,
     term_step = 7.62,
-    term_esz  = [1.62,11,12]
-  ) [
-    ["name",                "PSU MeanWell RS-25-5 25W 5V 5A"],
-    fl_bb_corners(value=[
+    term_esz  = [1.62,11,12],
+    bbox      = [
       [-size.x/2, -term_esz.y,  0     ],  // negative corner
       [+size.x/2,  size.y,      size.z],  // positive corner
-    ]),
+    ]
+  ) [
+    ["name",                "PSU MeanWell RS-25-5 25W 5V 5A"],
+    fl_engine(value=FL_PSU_NS),
+    fl_bb_corners(value=bbox),
     fl_screw(value=M3_cs_cap_screw),
     ["pcb thickness",       pcb_t],
 
@@ -89,13 +91,15 @@ FL_PSU_MeanWell_RS_15_5 = let(
     // TODO: terminal must become a stand-alone vitamin
     term_ways = 5,
     term_step = 7.62,
-    term_esz  = [1.62,11,12]
+    term_esz  = [1.62,11,12],
+    bbox      = [
+      [-size.x/2, -term_esz.y,  0     ],  // negative corner
+      [+size.x/2,  size.y,      size.z],  // positive corner
+    ]
   ) [
     ["name",                "PSU MeanWell RS-15-5 15W 5V 3A"],
-    fl_bb_corners(value=[
-      [-size.x/2, -term_esz.y,  0     ],  // negative corner
-      [+size.x/2, size.y,       size.z],  // positive corner
-    ]),
+    fl_engine(value=FL_PSU_NS),
+    fl_bb_corners(value=bbox),
     fl_screw(value=M3_cs_cap_screw),
     ["pcb thickness",       pcb_t],
 
@@ -191,8 +195,8 @@ module fl_psu(
 
   pcb_size    = [cbox_sz.x-2*grid_t,cbox_sz.y-grid_t,pcb_t];
 
-  D           = direction ? fl_direction(proto=type,direction=direction)      : I;
-  M           = octant    ? fl_octant(octant=octant,bbox=fl_bb_corners(type)) : I;
+  D           = direction ? fl_direction(type,direction=direction): I;
+  M           = octant    ? fl_octant(octant=octant,bbox=bbox)    : I;
 
   fl_trace("grid shift",grid_shift);
 
@@ -269,8 +273,7 @@ module fl_psu(
   }
 
   module do_bbox() {
-    translate([0,bbox_sz.y/2+fl_bb_corners(type)[0].y,bbox_sz.z/2])
-      cube(bbox_sz,true);
+    fl_bb_add(bbox);
   }
 
   module do_mount()  {
