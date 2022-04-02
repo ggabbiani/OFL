@@ -17,7 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <3d.scad>
+include <torus.scad>
 
 module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
   fl_symbol(verbs,type,size,"plug");
@@ -45,9 +45,10 @@ module fl_symbol(
   sz      = size==undef ? [0.5,0.5,0.5] : is_list(size) ? size : [size,size,size];
   d1      = sz.x * 2/3;
   d2      = 0;
-  fl_overlap = sz.z / 5;
-  h       = (sz.z + 2 * fl_overlap) / 3;
-  delta   = h - fl_overlap;
+  overlap = sz.z / 5;
+  h       = (sz.z + 2 * overlap) / 3;
+  delta   = h - overlap;
+  fl_trace("verbs",verbs);
   fl_trace("size",size);
   fl_trace("sz",sz);
 
@@ -65,6 +66,113 @@ module fl_symbol(
   fl_manage(verbs,size=size) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
+
+module fl_sym_hole(
+  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
+  verbs       = FL_ADD, 
+  // hole specs
+  hole,
+  // desired direction [director,rotation], hole normal when undef
+  direction,            
+  // when undef hole center positioning is used
+  octant                
+) {
+  assert(hole);
+  
+  center    = hole[0];
+  normal    = hole[1];
+  diameter  = hole[2];
+  radius    = diameter/2;
+  depth     = hole[3];
+
+  Dhole = fl_align(from=+Z,to=normal);
+  rotor = fl_transform(Dhole,+X);
+  Mhole = T(center);
+
+  bbox  = [
+    fl_transform(Mhole,[-radius,-radius,-depth]),
+    fl_transform(Mhole,[+radius,+radius,0])
+  ];
+  size  = bbox[1]-bbox[0];
+
+  D     = (direction ? fl_direction(direction=direction,default=[normal,rotor]) : I)
+        * Dhole;
+  M     = (octant ? fl_octant(octant=octant,bbox=bbox) : I)
+        * Mhole;
+
+  module do_add() {
+    fl_color("black") 
+      fl_cylinder(r=radius,h=depth,octant=-Z);
+    fl_color("yellow")
+      fl_vector(depth*Z);
+  }
+
+  module do_assembly() {
+
+  }
+
+  module do_bbox() {
+
+  }
+
+  module do_cutout() {
+
+  }
+
+  module do_drill() {
+
+  }
+
+  module do_fprint() {
+
+  }
+
+  module do_layout() {
+    children();
+  }
+
+  module do_mount() {
+
+  }
+
+  module do_pload() {
+
+  }
+
+  fl_manage(verbs,M,D,size) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly();
+
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
+
+    } else if ($verb==FL_CUTOUT) {
+      fl_modifier($modifier) do_cutout();
+
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_drill();
+
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_fprint();
+
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout()
+        children();
+
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) do_mount();
+
+    } else if ($verb==FL_PAYLOAD) {
+      fl_modifier($modifier) do_pload();
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }

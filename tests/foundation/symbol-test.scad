@@ -29,28 +29,57 @@ $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
+/* [Supported verbs] */
+
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+
+/* [Placement] */
+
+PLACE_NATIVE  = true;
+OCTANT        = [0,0,0];  // [-1:+1]
+
+/* [Direction] */
+
+DIR_NATIVE  = true;
+// ARBITRARY direction vector
+DIR_Z       = [0,0,1];  // [-1:0.1:+1]
+// rotation around
+DIR_R       = 0;        // [0:360]
+
+/* [Hole] */
+
+// center
+HOLE_C  = [0,0,0];
+// diameter
+HOLE_D  = 1;
+// normal
+HOLE_N  = [0,0,1];
+// depth
+HOLE_DEPTH  = 2.5;
 
 /* [Symbol] */
+
 SIZE_TYPE       = "default";  // [default,scalar,fl_vector]
 SIZE_SCALAR     = 0.5;
 SIZE_VECTOR     = [1.0,1.0,0.5];
-SYMBOL          = "plug";  // [plug,socket]
+SYMBOL          = "plug";  // [plug,socket,hole]
 
 /* [Hidden] */
 
-module __test__() {
-  verbs=[
-    if (ADD!="OFF")   FL_ADD,
-    if (AXES!="OFF")  FL_AXES,
-  ];
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+verbs=[
+  if ($FL_ADD!="OFF")   FL_ADD,
+  if ($FL_AXES!="OFF")  FL_AXES,
+];
 
-  size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
+size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
 
-  fl_symbol(verbs=verbs,size=size,symbol=SYMBOL,$FL_ADD=ADD,$FL_AXES=AXES);
-}
+if (SYMBOL=="hole")
+  fl_sym_hole(verbs,hole=[HOLE_C,HOLE_N,HOLE_D,HOLE_DEPTH],direction=direction,octant=octant);
+else
+  fl_symbol(verbs=verbs,size=size,symbol=SYMBOL);
 
-__test__();
