@@ -54,7 +54,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [Torus] */
 
-// Torus radius
+// distance from the center of the tube to the center of the torus
 R = 5;                // [0:+100]
 // Ellipse horiz. semi axis
 A = 2;                // [0:+10]
@@ -71,4 +71,4 @@ verbs=[
   if ($FL_BBOX!="OFF")      FL_BBOX,
 ];
 
-fl_torus(verbs,r=R,a=A,b=B,octant=octant,direction=direction);
+fl_torus(verbs,R=R,e=[A,B],octant=octant,direction=direction);

@@ -19,20 +19,41 @@
 
 include <3d.scad>
 
+function fl_bb_torus(
+  // radius of the circular tube.
+  r,
+  // elliptic tube [a,b] form
+  e,
+  // distance from the center of the tube to the center of the torus
+  R
+) = let(
+  e     = r ? assert(!e) [r,r] : assert(len(e)==2) e,
+  a     = e[0],
+  b     = e[1],
+  edge  = assert(R>=a,str("R=",R,",a=",a)) a+R
+) [[-edge,-edge,-b],[+edge,+edge,+b]];
+
+/**
+ * «e» and «R» are mutually exclusive parameters
+ */
 module fl_torus(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
-  r           = 1,
-  a,
-  b,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant                // when undef native positioning is used
+  // supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  verbs       = FL_ADD, 
+  // radius of the circular tube.
+  r,
+  // elliptic tube [a,b] form
+  e,
+  // distance from the center of the tube to the center of the torus
+  R,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,            
+  // when undef native positioning is used
+  octant                
 ) {
-  assert(r>=a,str("r=",r,",a=",a));
-
-  // echo(n=($fn>0?($fn>=3?$fn:3):ceil(max(min(360/$fa,r*2*PI/$fs),5))),a_based=360/$fa,s_based=r*2*PI/$fs);
-
-  ellipse = [a,b];
-  bbox    = let(edge=a+r) [[-edge,-edge,-b],[+edge,+edge,+b]];
+  bbox    = fl_bb_torus(r,e,R);
+  e       = r ? [r,r] : e;
+  a       = e[0];
+  b       = e[1];
   size    = bbox[1]-bbox[0];
   D       = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
   M       = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
@@ -44,7 +65,7 @@ module fl_torus(
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) rotate_extrude($fn=$fn) translate(X(r-a)) fl_ellipse(e=ellipse,quadrant=+X,$fn=fn);
+      fl_modifier($modifier) rotate_extrude($fn=$fn) translate(X(R-a)) fl_ellipse(e=e,quadrant=+X,$fn=fn);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else {
