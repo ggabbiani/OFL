@@ -22,12 +22,15 @@ include <3d.scad>
 function fl_bb_torus(
   // radius of the circular tube.
   r,
+  // diameter of the circular tube.
+  d,
   // elliptic tube [a,b] form
   e,
   // distance from the center of the tube to the center of the torus
   R
 ) = let(
-  e     = r ? assert(!e) [r,r] : assert(len(e)==2) e,
+  // e     = r ? assert(!e) [r,r] : assert(len(e)==2) e,
+  e       = r ? assert(!e && !d) [r,r] : d ? assert(!e && !r) [d/2,d/2] : assert(!r && !d && len(e)==2) e,
   a     = e[0],
   b     = e[1],
   edge  = assert(R>=a,str("R=",R,",a=",a)) a+R
@@ -41,6 +44,8 @@ module fl_torus(
   verbs       = FL_ADD, 
   // radius of the circular tube.
   r,
+  // diameter of the circular tube.
+  d,
   // elliptic tube [a,b] form
   e,
   // distance from the center of the tube to the center of the torus
@@ -50,8 +55,8 @@ module fl_torus(
   // when undef native positioning is used
   octant                
 ) {
-  bbox    = fl_bb_torus(r,e,R);
-  e       = r ? [r,r] : e;
+  bbox    = fl_bb_torus(r,d,e,R);
+  e       = r ? [r,r] : d ? [d/2,d/2] : e;
   a       = e[0];
   b       = e[1];
   size    = bbox[1]-bbox[0];
