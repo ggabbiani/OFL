@@ -126,5 +126,6 @@ module medium() {
 }
 
 fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,lay_verbs=[FL_LAYOUT],direction=direction,octant=octant)
+    echo($cad_verbs=$cad_verbs) 
   medium() 
     fl_cylinder(h=5,d=$hole_d,direction=$hole_direction);
