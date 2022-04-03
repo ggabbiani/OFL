@@ -22,6 +22,8 @@
 include <../../vitamins/pcbs.scad>
 
 $fn         = 50;           // [3:100]
+// Debug statements are turned on
+$FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // When true, fl_trace() mesages are turned on
@@ -42,7 +44,7 @@ $FL_CUTOUT    = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws or supports)
-$FL_LAYOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_LAYOUT    = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // add mounting accessories shapes
 $FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // components payload bounding box
@@ -64,6 +66,9 @@ DIR_R       = 0;        // [0:360]
 /* [PCB] */
 
 TYPE  = "FL_PCB_HILETGO_SX1308";  // [FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,ALL]
+
+// when true hole symbols are added to scene
+HOLE_SYMBOLS  = false;
 
 // FL_DRILL and FL_CUTOUT thickness
 T             = 2.5;
@@ -110,7 +115,7 @@ single  = TYPE=="FL_PCB_HILETGO_SX1308"  ? FL_PCB_HILETGO_SX1308
 module test() {
   module pcb(type) {
     fl_pcb(verbs,type,
-      direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction)
+      direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction,$hole_syms=HOLE_SYMBOLS)
       children();
   }
 

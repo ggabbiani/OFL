@@ -338,7 +338,11 @@ FL_PCB_DICT = [
 ];
 
 /**
- * children context is the complete hole context plus:
+ * CONTEXT FROM PARENT:
+ *  $hole_syms - (OPTIONAL bool) enables hole symbles
+ *
+ * CONTEXT TO CHILDREN: 
+ *  complete hole context
  *  $pcb_radius - pcb radius
  */
 module fl_pcb(
@@ -577,6 +581,10 @@ module fl_pcb(
     if (pload)
       fl_bb_add(pload);
   }
+
+  if (!is_undef($hole_syms) && $hole_syms==true)
+    multmatrix(D*M)
+      fl_hole_debug(holes=holes);
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
