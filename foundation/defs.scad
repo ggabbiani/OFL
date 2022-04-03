@@ -460,12 +460,6 @@ module fl_axes(size=1,reverse=false) {
   if (sz.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
 
-/* A do-nothing helper */
-// module fl_nop() {
-//   sphere(0);
-// }
-
-// debug switch on $FL_DEBUG
 module fl_color(color,alpha=1) {
 
   function palette(name) =
@@ -475,11 +469,7 @@ module fl_color(color,alpha=1) {
     : name=="pale copper" ? "#DA8A67"
     : name;
 
-  module do() {color(palette(color),alpha) children();}
-
-  if ($FL_DEBUG) #do() children();
-  // if (!is_undef($FL_DEBUG) && $FL_DEBUG) #children();
-  else do() children();
+  color(palette(color),alpha) children();
 }
 
 function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : undef));
