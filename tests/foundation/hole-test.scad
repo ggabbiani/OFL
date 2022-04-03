@@ -29,7 +29,7 @@ include <NopSCADlib/vitamins/screws.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
-$FL_DEBUG   = false;
+$FL_DEBUG   = true;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
@@ -41,50 +41,50 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Holes] */
 
-SIZE  = 20;       // [20:30]
 // hole depth
-T     = 0.7;      // [0.7:0.1:3]
+DEPTH     = 0.7;      // [0.7:0.1:3]
 // hole diameter
 D     = 2;        // [2:4]
-MODE  = "holes";  // [layout,holes]
 
-ONE   = true;
-TWO   = true;
-THREE = true;
-FOUR  = true;
-FIVE  = true;
+ONE   = false;
+TWO   = false;
+THREE = false;
+FOUR  = false;
+FIVE  = false;
 SIX   = true;
 
 /* [Hidden] */
 
+size  = 20;
+
 holes = [
   // ONE
-  [SIZE/2*[0,0,1],+Z, D, T],
+  [size/2*[0,0,1],+Z, D, DEPTH],
   // TWO
-  [SIZE/2*[+0.5,+0.5,-1],-Z, D, T],
-  [SIZE/2*[-0.5,-0.5,-1],-Z, D, T],
+  [size/2*[+0.5,+0.5,-1],-Z, D, DEPTH],
+  [size/2*[-0.5,-0.5,-1],-Z, D, DEPTH],
   // THREE
-  [SIZE/2*[ 0,    1,   0  ],  +Y, D, T],
-  [SIZE/2*[+0.5,  1,  +0.5],  +Y, D, T],
-  [SIZE/2*[-0.5,  1,  -0.5],  +Y, D, T],
+  [size/2*[ 0,    1,   0  ],  +Y, D, DEPTH],
+  [size/2*[+0.5,  1,  +0.5],  +Y, D, DEPTH],
+  [size/2*[-0.5,  1,  -0.5],  +Y, D, DEPTH],
   // FOUR
-  [SIZE/2*[-1,   0.5,  0.5 ],-X, D, T],
-  [SIZE/2*[-1,  -0.5,  0.5 ],-X, D, T],
-  [SIZE/2*[-1,  -0.5, -0.5 ],-X, D, T],
-  [SIZE/2*[-1,   0.5, -0.5 ],-X, D, T],
+  [size/2*[-1,   0.5,  0.5 ],-X, D, DEPTH],
+  [size/2*[-1,  -0.5,  0.5 ],-X, D, DEPTH],
+  [size/2*[-1,  -0.5, -0.5 ],-X, D, DEPTH],
+  [size/2*[-1,   0.5, -0.5 ],-X, D, DEPTH],
   // FIVE
-  [SIZE/2*[1,   0,  0   ],+X, D, T],
-  [SIZE/2*[1, 0.5,  0.5 ],+X, D, T],
-  [SIZE/2*[1,-0.5,  0.5 ],+X, D, T],
-  [SIZE/2*[1,-0.5, -0.5 ],+X, D, T],
-  [SIZE/2*[1, 0.5, -0.5 ],+X, D, T],
+  [size/2*[1,   0,  0   ],+X, D, DEPTH],
+  [size/2*[1, 0.5,  0.5 ],+X, D, DEPTH],
+  [size/2*[1,-0.5,  0.5 ],+X, D, DEPTH],
+  [size/2*[1,-0.5, -0.5 ],+X, D, DEPTH],
+  [size/2*[1, 0.5, -0.5 ],+X, D, DEPTH],
   // SIX
-  [SIZE/2*[+0.5,  -1,  0  ],-Y, D, T],
-  [SIZE/2*[-0.5,  -1,  0  ],-Y, D, T],
-  [SIZE/2*[+0.5,  -1,  0.5],-Y, D, T],
-  [SIZE/2*[-0.5,  -1,  0.5],-Y, D, T],
-  [SIZE/2*[-0.5,  -1, -0.5],-Y, D, T],
-  [SIZE/2*[+0.5,  -1, -0.5],-Y, D, T],
+  [size/2*[+0.5,  -1,  0  ],-Y, D, DEPTH],
+  [size/2*[-0.5,  -1,  0  ],-Y, D, DEPTH],
+  [size/2*[+0.5,  -1,  0.5],-Y, D, DEPTH],
+  [size/2*[-0.5,  -1,  0.5],-Y, D, DEPTH],
+  [size/2*[-0.5,  -1, -0.5],-Y, D, DEPTH],
+  [size/2*[+0.5,  -1, -0.5],-Y, D, DEPTH],
 ];
 
 enable  = fl_3d_AxisList([
@@ -96,18 +96,17 @@ enable  = fl_3d_AxisList([
   if (SIX)    "-y",
 ]);
 
-if (MODE=="layout") difference() {
-  fl_color("red")
-    fl_cube(size=SIZE,octant=O);
-  fl_lay_holes(holes=holes,enable=enable)
-    translate(NIL*$hole_n)
-      let(
-        screw = $hole_d==2 ? M2_cs_cap_screw
-              : $hole_d==3 ? M3_cs_cap_screw
-              : M4_cs_cap_screw
-      ) fl_screw(FL_FOOTPRINT,type=screw,len=$hole_depth,direction=[$hole_n,0]);
-} else difference() {
-  fl_color("red")
-    fl_cube(size=SIZE,octant=O);
-  fl_holes(holes=holes,enable=enable);
+module do() {
+  if ($FL_DEBUG)
+    #children();
+  else
+    children();
 }
+
+do() fl_color($FL_FILAMENT)
+  difference() {
+    fl_cube(size=size,octant=O);
+    fl_holes(holes=holes,enable=enable);
+  }
+if ($FL_DEBUG)
+  fl_hole_debug(holes=holes,enable=enable);

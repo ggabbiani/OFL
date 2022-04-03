@@ -19,8 +19,9 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <type_trait.scad>
 include <3d.scad>
+include <symbol.scad>
+include <type_trait.scad>
 
 // constructor
 function fl_Hole(
@@ -86,6 +87,7 @@ module fl_lay_holes(
   fl_trace("enable",enable);
   fl_trace("holes",holes);
   fl_trace("thick",thick);
+
   for($hole_i=[0:len(holes)-1])
     fl_hole_Context(holes[$hole_i],thick,$hole_i,screw)
       if (fl_3d_axisIsSet($hole_n,enable))
@@ -111,4 +113,24 @@ module fl_holes(
   fl_lay_holes(holes,enable,thick,screw)
     translate(NIL*$hole_n)
       fl_cylinder(h=$hole_depth+NIL2,d=$hole_d,direction=[-$hole_n,0]);
+}
+
+/**
+  * Layouts of hole symbols
+  *
+  * NOTE: supported normals are x,y or z semi-axis ONLY
+  */
+module fl_hole_debug(
+  // list of holes specs
+  holes,
+  // enabled normals in floating semi-axis list form
+  enable  = [-X,+X,-Y,+Y,-Z,+Z],
+  // pass-through thickness
+  thick=0,
+  // fallback screw
+  screw
+) {
+  fl_lay_holes(holes,enable,thick,screw)
+    translate(NIL*$hole_n)
+      fl_sym_hole($FL_ADD="ON");
 }
