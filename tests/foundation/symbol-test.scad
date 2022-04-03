@@ -17,6 +17,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
+include <../../foundation/hole.scad>
 include <../../foundation/symbol.scad>
 
 $fn         = 50;           // [3:100]
@@ -36,20 +37,7 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
-
-/* [Direction] */
-
-DIR_NATIVE  = true;
-// ARBITRARY direction vector
-DIR_Z       = [0,0,1];  // [-1:0.1:+1]
-// rotation around
-DIR_R       = 0;        // [0:360]
-
-/* [Hole] */
+/* [Test hole] */
 
 // center
 HOLE_C  = [0,0,0];
@@ -69,17 +57,15 @@ SYMBOL          = "plug";  // [plug,socket,hole]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
   if ($FL_ADD!="OFF")   FL_ADD,
   if ($FL_AXES!="OFF")  FL_AXES,
 ];
 
 size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
-
+hole  = [HOLE_C,HOLE_N,HOLE_D,HOLE_DEPTH];
 if (SYMBOL=="hole")
-  fl_sym_hole(verbs,hole=[HOLE_C,HOLE_N,HOLE_D,HOLE_DEPTH],direction=direction,octant=octant);
+  fl_hole_Context(hole) fl_sym_hole(verbs);
 else
   fl_symbol(verbs=verbs,size=size,symbol=SYMBOL);
 

@@ -71,107 +71,46 @@ module fl_symbol(
     }
   }
 }
-
+/**
+ * this symbol uses as input a complete node context.
+ * The symbol is oriented according to the hole normal. 
+ */
 module fl_sym_hole(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
-  verbs       = FL_ADD, 
-  // hole specs
-  hole,
-  // desired direction [director,rotation], hole normal when undef
-  direction,            
-  // when undef hole center positioning is used
-  octant                
+  verbs = FL_ADD
 ) {
-  assert(hole);
-  
-  center    = hole[0];
-  normal    = hole[1];
-  diameter  = hole[2];
-  radius    = diameter/2;
-  depth     = hole[3];
-
-  Dhole = fl_align(from=+Z,to=normal);
-  rotor = fl_transform(Dhole,+X);
-  Mhole = T(center);
-
-  bbox  = [
-    fl_transform(Mhole,[-radius,-radius,-depth]),
-    fl_transform(Mhole,[+radius,+radius,0])
+  radius  = $hole_d/2;
+  D       = fl_align(from=+Z,to=$hole_n);
+  rotor   = fl_transform(D,+X);
+  bbox    = [
+    [-radius,-radius,-$hole_depth],
+    [+radius,+radius,0]
   ];
-  size  = bbox[1]-bbox[0];
-
-  D     = (direction ? fl_direction(direction=direction,default=[normal,rotor]) : I)
-        * Dhole;
-  M     = (octant ? fl_octant(octant=octant,bbox=bbox) : I)
-        * Mhole;
+  size    = bbox[1]-bbox[0];
+  fl_trace("verbs",verbs);
 
   module do_add() {
-    fl_color("black") 
-      fl_cylinder(r=radius,h=depth,octant=-Z);
-    fl_color("yellow")
-      fl_vector(depth*Z);
+    let(l=$hole_d*3/2,r=radius/20) {
+      fl_color("red")
+        translate(-X(l/2))
+          fl_cylinder(r=r,h=l,direction=[+X,0]);
+      fl_color("green")
+        translate(-Y(l/2))
+          fl_cylinder(r=r,h=l,direction=[+Y,0]);
+      fl_color("black")
+        for(z=[0,-$hole_depth])
+          translate(Z(z))
+            fl_torus(r=r,R=$hole_d/2);
+    }
+    if ($hole_depth)
+      %fl_cylinder(d=$hole_d,h=$hole_depth,octant=-Z);
+    fl_color("blue")
+      fl_vector($hole_depth*Z);
   }
 
-  module do_assembly() {
-
-  }
-
-  module do_bbox() {
-
-  }
-
-  module do_cutout() {
-
-  }
-
-  module do_drill() {
-
-  }
-
-  module do_fprint() {
-
-  }
-
-  module do_layout() {
-    children();
-  }
-
-  module do_mount() {
-
-  }
-
-  module do_pload() {
-
-  }
-
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,direction=D,size=size) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
-
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
-
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
-
-    } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier) do_cutout();
-
-    } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier) do_drill();
-
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) do_fprint();
-
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
-        children();
-
-    } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier) do_mount();
-
-    } else if ($verb==FL_PAYLOAD) {
-      fl_modifier($modifier) do_pload();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
