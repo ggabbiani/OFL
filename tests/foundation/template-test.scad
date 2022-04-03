@@ -51,6 +51,8 @@ $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// mount shape through predefined screws
+$FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -69,6 +71,20 @@ DIR_R       = 0;        // [0:360]
 
 /* [Test] */
 
+$hole_syms   = true;
+
+/* [Bounding box] */
+
+BB_NEGATIVE = [-1,-1,-0.5]; // [-1:0.1:1]
+BB_POSITIVE = [1,1,0];      // [-1:0.1:1]
+
+/* [hole] */
+
+HOLE_CENTER = [0,0,0];  // [0:0.1:1]
+HOLE_N      = [0,0,1];  // [-1:+1]
+HOLE_D      = 0.5;        // [0.1:0.1:1]
+HOLE_DEPTH  = 0.5;        // [0:0.1:1.5]
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
@@ -82,8 +98,13 @@ verbs=[
   if ($FL_DRILL!="OFF")     FL_DRILL,
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
+  if ($FL_MOUNT!="OFF")     FL_MOUNT,
   if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
+bbox  = [BB_NEGATIVE,BB_POSITIVE];
 
-type  = concat(fl_bb_new(size=[10,10,10]),[fl_director(value=FL_Z),fl_rotor(value=FL_X),]);
+holes = [fl_Hole(HOLE_CENTER,HOLE_D,HOLE_N,HOLE_DEPTH)];
+type  = constructor("Test type",bbox=bbox,holes=holes);
+
+translate(X(3))
 stub(verbs,type,direction=direction,octant=octant);
