@@ -1,7 +1,7 @@
 /*
  * PSU test.
  *
- * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
+ * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'Raspberry PI4' (RPI4) project.
  *

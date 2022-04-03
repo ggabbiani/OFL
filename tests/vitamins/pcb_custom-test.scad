@@ -2,7 +2,7 @@
  * HiLetgo SX1308 DC-DC Step up power module is built as a custom pcb.
  * See https://www.amazon.it/gp/product/B07ZYW68C4/ for the stepup specs
  *
- * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
+ * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *

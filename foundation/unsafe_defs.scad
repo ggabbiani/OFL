@@ -1,7 +1,7 @@
 /*
  * UNPORTABLE DEFINITIONS, DON'T USE TOGETHER OTHER LIBRARIES INCLUDES.
  *
- * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org).
+ * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org).
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *

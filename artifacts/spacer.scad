@@ -1,7 +1,7 @@
 /*
  * Spacers with optional screw and knurl nuts.
  *
- * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
+ * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *

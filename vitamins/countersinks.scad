@@ -2,7 +2,7 @@
  * Countersink definitions, data taken from:
  * https://www.sailornautica.it/viti-metallo-inox-aisi-316-e-304/927-vite-testa-svasata-piana-esagono-incassato-m3-uni-5933-acciaio-inox-aisi-316.html
  *
- * Copyright © 2021 Giampiero Gabbiani (giampiero@gabbiani.org)
+ * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
