@@ -424,10 +424,10 @@ module fl_overlap(u1,u2,position) {
 }
 
 // Draws a fl_vector [out|in]ward P
-module fl_vector(P,outward=true,endpoint="arrow") {
+module fl_vector(P,outward=true,endpoint="arrow",ratio=20) {
   assert(is_list(P));
   length  = norm(P);
-  d       = length / 20;
+  d       = length / ratio;
   head_r  = 1.5 * d;
 
   if (norm(P)>0) {
@@ -515,3 +515,6 @@ function fl_transform(
 function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
 function fl_accum(v)          = [for(p=v) 1]*v;
 function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
+
+//**** dictionary *************************************************************
+function fl_dict_search(dictionary,name) = [for(item=dictionary) let(n=fl_name(item)) if (name==n) item];
