@@ -100,13 +100,26 @@ function fl_conn_clone(
   assert(x_3*y_3==0,"Resulting orientation fl_axes are not orthogonal")
   type=="plug" ? conn_Plug(id,x_3,y_3,p_3) : conn_Socket(id,x_3,y_3,p_3);
 
-// Transforms a child shape to its parent form coherently with
-// their respective connection geometries.
-// Child can be thought as a mobile socket or plug
-// jointing a fixed plug or socket.
+/**
+ * Transforms a child shape to its parent coherently with their respective
+ * connection geometries.
+ * Child can be thought as a mobile socket (or plug) jointing a fixed plug (or
+ * socket).
+ * The transformations applied to children are:
+ *
+ * 1. move children connector to origin
+ * 2. align children axes to parent connector axes
+ * 3. move children connector to parent connector position
+ *
+ * TODO: symbol orientation is managed by passing x and y plane while
+ * calculating z consequently. It should be managed through the couple
+ * [director,rotor] instead.
+ */
 module fl_connect(
-  son     // socket or plug data for the children shape to be jointed
-  ,parent // plug or socket data for the fixed part
+  // children connector to be moved
+  son,
+  // fixed parent connector
+  parent
   ) {
   son_type      = fl_conn_type(son);
   son_footprint = fl_conn_id(son);
