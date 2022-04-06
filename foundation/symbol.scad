@@ -35,7 +35,7 @@ module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
 //        Its canonical form implies an orientation of the piece coherent
 //        with its fitting movement along -Z axis.
 module fl_symbol(
-  verbs   = [FL_ADD,FL_AXES],
+  verbs   = FL_ADD,
   type    = undef,// really needed?
   size    = 0.5,  // default size given as a scalar
   symbol          // currently "plug" or "socket"
@@ -60,7 +60,11 @@ module fl_symbol(
       for(i=symbol=="plug"?[0:+2]:[-2:0])
         translate(fl_Z(i*delta))
           fl_cylinder(d1=d1,d2=d2,h=h);
-    %fl_cube(octant=symbol=="plug"?-FL_Z:+FL_Z,size=[sz.x,sz.y,0.1]);
+    %fl_cube(octant=symbol=="plug"?-Z:+Z,size=[sz.x,sz.y,0.1]);
+    let(sz=2*sz) {
+      fl_color("red") translate(-X(sz.x/2)) fl_vector(X(sz.x),ratio=30);
+      fl_color("green") translate(-Y(sz.y/2)) fl_vector(Y(sz.y),ratio=30);
+    }
   }
 
   fl_manage(verbs,size=size) {
@@ -73,7 +77,7 @@ module fl_symbol(
 }
 /**
  * this symbol uses as input a complete node context.
- * The symbol is oriented according to the hole normal. 
+ * The symbol is oriented according to the hole normal.
  */
 module fl_sym_hole(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
