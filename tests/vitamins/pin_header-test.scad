@@ -27,7 +27,7 @@ $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
-FL_TRACE   = false;
+$FL_TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -57,23 +57,30 @@ DIR_R       = 0;        // [0:360]
 
 /* [Pin Header] */
 
+// enable debug
+DEBUG         = false;
+SHOW          = "all"; // [all,custom,FL_PHDR_GPIOHDR,FL_PHDR_GPIOHDR_F,FL_PHDR_GPIOHDR_FL]
+// ... guess what
 COLOR         = "base";   // [base,red]
-SHOW          = "custom"; // [all,custom,FL_PHDR_RPIGPIO]
-// size in columns x rows
-GEOMETRY          = [10,1]; // [1:20]
 // tolerance used during FL_CUTOUT
 CO_TOLERANCE  = 0.5;      // [0:0.1:5]
 // thickness for FL_CUTOUT
 CO_T          = 15;     // [0:0.1:20]
 
+/* [Custom pin header] */
+
+TYPE  = "female"; // [male,female]
+// size in columns x rows
+GEOMETRY          = [10,1]; // [1:20]
+
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+$direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+$octant    = PLACE_NATIVE  ? undef : OCTANT;
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = COLOR=="base"?grey(20):COLOR;
-type      = SHOW=="FL_PHDR_RPIGPIO"  ? FL_PHDR_RPIGPIO : undef;
+type      = fl_dict_search(FL_PHDR_DICT,SHOW)[0];
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
@@ -82,18 +89,22 @@ verbs=[
   if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
 ];
 
-module wrapIt(nop,geometry) {
-  fl_pinHeader(verbs,nop=nop,geometry=geometry,color=color,cut_thick=thick,cut_tolerance=tolerance,octant=octant,direction=direction);
+module wrapIt(type) {
+  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,$debug=DEBUG);
 }
 
-// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
+// one predefined
 if (type)
-  // predefined
-  wrapIt(fl_nopSCADlib(type),fl_phdr_geometry(type));
+  wrapIt(type);
+
+// all predefined
 else if (SHOW=="all")
-  // all predefined
   layout([for(type=FL_PHDR_DICT) fl_width(type)], 10)
-    let(t=FL_PHDR_DICT[$i]) wrapIt(fl_nopSCADlib(t),fl_phdr_geometry(t));
+    let(t=FL_PHDR_DICT[$i])
+      wrapIt(t);
+
+// custom
 else
-  // custom
-  wrapIt(2p54header,GEOMETRY);
+  let(
+    type  = fl_PinHeader("test header",nop=2p54header,geometry=GEOMETRY,engine=TYPE)
+  )   wrapIt(type);

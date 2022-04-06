@@ -49,7 +49,7 @@ function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
 // COMPONENTS
 // TODO: abstract components from PCBs and move alone
 
-/* 
+/*
  * Component context:
  *
  * $engine    - engine to be triggered for component rendering
@@ -59,9 +59,9 @@ function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
  * $rotation
  * $type
  * $subtract  - the tolerance to be used during component FL_FOOTPRINT difference() from parent shape
- * $drift     - additional positioning during component positioning 
- * $color      
- * $octant     
+ * $drift     - additional positioning during component positioning
+ * $color
+ * $octant
  */
 module fl_comp_Context(
   component // component definition: ["engine", [position], [[director],rotation], type, properties]
@@ -240,7 +240,7 @@ FL_PCB_RPI4 = let(
     ["USB2",      [FL_USB_NS,   [w/2-9,     79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
     ["USB3",      [FL_USB_NS,   [w/2-27,    79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
     ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+Y,0  ],             FL_ETHER_RJ45  ,[["comp/drift",-3]]]],
-    ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_RPIGPIO]],
+    ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_GPIOHDR]],
   ],
   vendors=[["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]]
 ) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors);
@@ -300,7 +300,7 @@ FL_PCB_HILETGO_SX1308 = let(
     sz    = [23,16,pcb_t],
     // holes positions
     holes = [for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5]) [x,y,0]],
-    1PIN  = fl_phdr_new("1-pin",nop=2p54header),
+    1PIN  = fl_PinHeader("1-pin",nop=2p54header),
     comps = [
       //["label", ["engine",   [position        ],  [[director],rotation],  type,           [engine specific parameters]]]
       ["TRIMPOT", [FL_TRIM_NS, [-5,-sz.y/2+0.5,0],  [+Y,0],                 FL_TRIM_POT10,  [["comp/octant",+X-Y+Z]]  ]],
@@ -341,7 +341,7 @@ FL_PCB_DICT = [
  * CONTEXT FROM PARENT:
  *  $hole_syms - (OPTIONAL bool) enables hole symbles
  *
- * CONTEXT TO CHILDREN: 
+ * CONTEXT TO CHILDREN:
  *  complete hole context
  *  $pcb_radius - pcb radius
  */
@@ -450,7 +450,7 @@ module fl_pcb(
     fl_color(material) difference() {
       translate(Z(bbox[0].z)) linear_extrude(pcb_t)
         difference() {
-          if (dxf) 
+          if (dxf)
             __dxf__(file=dxf,layer="0");
           else
             translate(bbox[0])

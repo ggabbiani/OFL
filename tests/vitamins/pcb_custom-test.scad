@@ -93,7 +93,7 @@ pcb = let(
     sz    = [23,16,pcb_t],
     // holes positions
     holes = [for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5]) [x,y,0]],
-    1PIN  = fl_phdr_new("1-pin",nop=2p54header),
+    1PIN  = fl_PinHeader("1-pin",nop=2p54header),
     comps = [
       //["label", ["engine",   [position        ],  [[director],rotation],  type,           [engine specific parameters]]]
       ["TRIMPOT", [FL_TRIM_NS, [-5,-sz.y/2+0.5,0],  [+Y,0],                 FL_TRIM_POT10,  [["comp/octant",+X-Y+Z]]  ]],
