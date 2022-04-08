@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../foundation/base_parms.scad>
+include <../foundation/defs.scad>
 include <../foundation/connect.scad>
 include <../foundation/util.scad>
 
@@ -81,14 +81,20 @@ function fl_PinHeader(
   nop,
   // pin header size in [cols,rows]
   geometry  = [1,1],
-  // can be "female" or "male"
+  // smt
+  smt=false,
+  // "female" or "male"
   engine,
+  // pass-through (in that case pin numbers are inverted)
+  through=false,
   // vendor list
   vendors   = []
-) = let(
+) = assert(is_string(engine))
+let(
   bbox      = fl_bb_nopPinHeader(nop,geometry,engine),
   pitch     = hdr_pitch(nop),
   pin_1_hi  = [-(geometry.x-1)*pitch/2,-(geometry.y-1)*pitch/2,engine=="male" ? pitch : hdr_socket_depth(nop)],
+  pin_1_lo  = [pin_1_hi.x,pin_1_hi.y,0],
   pin_2_lo  = [pin_1_hi.x,-pin_1_hi.y,0],
   pin_2_hi  = [pin_1_hi.x,-pin_1_hi.y,pin_1_hi.z],
   cid       = fl_phdr_cid(nop,geometry)
@@ -101,25 +107,31 @@ function fl_PinHeader(
     fl_bb_corners(value=bbox),
     fl_director(value=+Z),fl_rotor(value=+X),
     fl_connectors(value=[
-      engine=="male" ? conn_Plug(cid,+X,+Y, pin_1_hi) : conn_Socket(cid,+X,-Y,pin_2_hi),
-      conn_Plug(cid,+X,-Y,pin_2_lo),
+      engine=="male"||through ? conn_Plug(cid,+X,+Y, pin_1_hi) :  conn_Socket(cid,+X,-Y,pin_2_hi),
+      through ? conn_Socket(cid,+X,+Y,pin_1_lo) : conn_Plug(cid,+X,-Y,pin_2_lo),
+      if (through) conn_Socket(cid,+X,-Y,pin_2_hi),
+      if (through) conn_Plug(cid,+X,-Y,pin_2_lo),
     ]),
+    ["phdr/smt", smt],
+    ["phdr/pass-through", through],
     if (vendors!=[]) fl_vendor(value=vendors),
   ];
 
 /**
- * special parameters (see foundation/base_parms.scad for their meaning):
  *
- *   $debug
- *   $direction
- *   $octant
  */
 module fl_pinHeader(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_BBOX, FL_CUTOUT
   type,
   color,
   cut_thick,            // thickness for FL_CUTOUT
-  cut_tolerance=0       // tolerance used during FL_CUTOUT
+  cut_tolerance=0,      // tolerance used during FL_CUTOUT
+  // when true local debug is enabled
+  debug,
+  // when undef native positioning is used
+  octant,
+  // desired direction [director,rotation], native direction when undef
+  direction
 ) {
   assert(type);
   assert(is_list(verbs)||is_string(verbs),verbs);
@@ -133,11 +145,7 @@ module fl_pinHeader(
   conns     = fl_connectors(type);
   pitch_sz  = hdr_pitch(nop);
   engine    = fl_engine(type);
-
-  // special parameters semantic
-  debug     = fl_parm_debug();
-  direction = fl_parm_direction();
-  octant    = fl_parm_octant();
+  smt       = fl_property(type,"phdr/smt");
 
   D     = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)              : I;
@@ -154,20 +162,20 @@ module fl_pinHeader(
 
     module male() {
       if (debug) {
-        #pin_header(nop, cols, rows,colour=color);
+        #pin_header(nop, cols, rows,colour=color, smt=smt);
         for(connection=conns)
           fl_conn_add(connection,pitch_sz);
       } else
-        pin_header(nop, cols, rows,colour=color);
+        pin_header(nop, cols, rows,colour=color, smt=smt);
     }
 
     module female() {
       if (debug) {
-        #pin_socket(nop, cols, rows,colour=color);
+        #pin_socket(nop, cols, rows,colour=color, smt=smt);
         for(connection=conns)
           fl_conn_add(connection,pitch_sz);
       } else
-        pin_socket(nop, cols, rows,colour=color);
+        pin_socket(nop, cols, rows,colour=color, smt=smt);
     }
 
     if (engine=="male")
@@ -212,7 +220,7 @@ FL_PHDR_GPIOHDR_F       = fl_PinHeader(
   engine      = "female"
 );
 FL_PHDR_GPIOHDR_FL  = let(
-  // Longer pins for joining PCBs
+  // Longer pins for stacking
   nop  = ["2p54long",   2.54, 19.6, 11, 0.66, gold,   grey(20), 8.5, [0,   0,    8.7], 2.4, 0,     0,    0  ]
 ) fl_PinHeader(
   name        = "FL_PHDR_GPIOHDR_FL",
@@ -225,8 +233,22 @@ FL_PHDR_GPIOHDR_FL  = let(
   ]
 );
 
+FL_PHDR_GPIOHDR_F_SMT_LOW  = let(
+  // smt low profile pins
+  nop        = ["2p54smtlow",   2.54, 11.6, 3.2, 0.66, gold,   grey(20),   4, [0,   0,    8.7], 2.4, 0,     0,    0  ]
+) fl_PinHeader(
+  name        = "FL_PHDR_GPIOHDR_F_SMT_LOW",
+  description = "GPIO female low pin pass-through header",
+  nop         = nop,
+  geometry    = [20,2],
+  smt         = true,
+  engine      = "female",
+  through     = true
+);
+
 FL_PHDR_DICT = [
   FL_PHDR_GPIOHDR,
   FL_PHDR_GPIOHDR_F,
   FL_PHDR_GPIOHDR_FL,
+  FL_PHDR_GPIOHDR_F_SMT_LOW,
 ];
