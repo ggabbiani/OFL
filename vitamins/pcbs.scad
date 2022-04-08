@@ -127,6 +127,28 @@ function fl_comp_BBox(spec_list) =
     ]
   ) fl_bb_calc(bboxes);
 
+/**
+ * returns the component with «label»
+ * NOTE: error when label is not unique
+ */
+function fl_comp_search(type,label) = let(
+  components  = fl_pcb_components(type),
+  result      = [for(specs=components) if (label==specs[0]) specs[1]]
+) assert(len(result)==1,"component label must be unique") result[0];
+
+/**
+ * returns «component» connectors
+ */
+function fl_comp_connectors(component)  = let(
+  position    = component[1],
+  direction   = component[2],
+  type        = component[3],
+  T           = T(position),
+  D           = fl_direction(proto=type,direction=direction),
+  M           = T*D,
+  connectors  = fl_connectors(type)
+) fl_conn_import(connectors,M);
+
 //*****************************************************************************
 
 // base constructor
@@ -153,6 +175,7 @@ function fl_PCB(
     screw,
     dxf,
     vendors,
+    connectors,
     director=+Z,
     rotor=+X
   ) = let(
@@ -176,6 +199,7 @@ function fl_PCB(
     fl_pcb_grid(value=grid),
     if (dxf!=undef) fl_dxf(value=dxf),
     if (vendors) fl_vendor(value=vendors),
+    if (connectors) fl_connectors(value=connectors),
   ];
 
 /**
@@ -257,8 +281,9 @@ FL_PCB_RPI_uHAT = let(
     [[ size.x-3.5,  3.5,        0 ], +Z, hole_d, pcb_t],
   ],
   comps = [
-  //["label",  ["engine",     [position],      [[director],rotation] type,                [engine specific parameters]]]
-    ["RF IN",  [FL_JACK_NS,   [0,      15, 0], [-X,0  ],             FL_JACK_MCXJPHSTEM1  ]],
+  //["label",  ["engine",     [position],              [[director],rotation] type,                [engine specific parameters]]]
+    ["RF IN",  [FL_JACK_NS,   [0,      15, 0],         [-X,0  ],             FL_JACK_MCXJPHSTEM1      ]],
+    ["GPIO",   [FL_PHDR_NS,   [32.5,   size.y-3.5, 0], [+Z,0 ],              FL_PHDR_GPIOHDR_F_SMT_LOW]],
   ],
   vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]]
   ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,
@@ -300,7 +325,7 @@ FL_PCB_HILETGO_SX1308 = let(
     sz    = [23,16,pcb_t],
     // holes positions
     holes = [for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5]) [x,y,0]],
-    1PIN  = fl_PinHeader("1-pin",nop=2p54header),
+    1PIN  = fl_PinHeader("1-pin",nop=2p54header,engine="male"),
     comps = [
       //["label", ["engine",   [position        ],  [[director],rotation],  type,           [engine specific parameters]]]
       ["TRIMPOT", [FL_TRIM_NS, [-5,-sz.y/2+0.5,0],  [+Y,0],                 FL_TRIM_POT10,  [["comp/octant",+X-Y+Z]]  ]],
@@ -528,7 +553,8 @@ module fl_pcb(
       else if ($engine==FL_ETHER_NS)
         fl_ether(type=$type,direction=$direction);
       else if ($engine==FL_PHDR_NS)
-        fl_pinHeader(FL_ADD,type=$type,direction=$direction);
+        // FIXME: add namespace to context variables in order to avoid common parameters collision
+        fl_pinHeader(FL_ADD,type=$type,octant=$octant,direction=$direction);
       else if ($engine==FL_TRIM_NS)
         fl_trimpot(FL_ADD,type=$type,direction=$direction,octant=$octant);
       else
@@ -563,7 +589,7 @@ module fl_pcb(
         fl_ether(FL_CUTOUT,$type,cut_thick=cut_thick-$drift,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=$direction);
       else if ($engine==FL_PHDR_NS) let(
           thick = size.z-pcb_t+cut_thick
-        ) fl_pinHeader(FL_CUTOUT,$type,cut_thick=thick,cut_tolerance=cut_tolerance,direction=$direction);
+        ) fl_pinHeader(FL_CUTOUT,$type,cut_thick=thick,cut_tolerance=cut_tolerance,octant=$octant,direction=$direction);
       else if ($engine==FL_TRIM_NS) let(
           thick = size.z-pcb_t-11.5+cut_thick
         ) fl_trimpot(FL_CUTOUT,type=$type,cut_thick=thick,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=$direction,octant=$octant);
