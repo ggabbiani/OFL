@@ -41,6 +41,8 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
 $FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of predefined drill shapes (like holes with predefined screw diameter)
+$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -77,7 +79,7 @@ GEOMETRY          = [10,1]; // [1:20]
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
-thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
+thick     = $FL_CUTOUT!="OFF"||$FL_DRILL!="OFF" ? CO_T : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = COLOR=="base"?grey(20):COLOR;
 type      = fl_dict_search(FL_PHDR_DICT,SHOW)[0];
@@ -87,6 +89,7 @@ verbs=[
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
   if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
+  if ($FL_DRILL!="OFF")     FL_DRILL,
 ];
 
 module wrapIt(type) {

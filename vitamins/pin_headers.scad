@@ -146,6 +146,7 @@ module fl_pinHeader(
   pitch_sz  = hdr_pitch(nop);
   engine    = fl_engine(type);
   smt       = fl_property(type,"phdr/smt");
+  pin_sz    = let(w=hdr_pin_width(nop),l=hdr_pin_below(nop)) [w,w,l];
 
   D     = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)              : I;
@@ -183,8 +184,12 @@ module fl_pinHeader(
     else
       female();
   }
-  module do_layout() {}
-  module do_drill() {}
+
+  module do_drill() {
+    for(x=[0:geometry.x-1],y=[0:geometry.y-1])
+      translate([pitch_sz * (x - (geometry.x - 1) / 2), pitch_sz * (y - (geometry.y - 1) / 2)])
+        fl_cube(size=pin_sz,octant=-Z);
+  }
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
@@ -198,6 +203,10 @@ module fl_pinHeader(
       fl_modifier($modifier)
         fl_cutout(len=cut_thick,delta=cut_tolerance)
           do_add();
+
+    } else if ($verb==FL_DRILL) {
+      assert(cut_thick!=undef);
+      fl_modifier($modifier) do_drill();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
