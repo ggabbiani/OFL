@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-// include <../../foundation/incs.scad>
+
 include <../../vitamins/pin_headers.scad>
 
 $fn         = 50;           // [3:100]
@@ -59,7 +59,7 @@ DIR_R       = 0;        // [0:360]
 
 // enable debug
 DEBUG         = false;
-SHOW          = "all"; // [all,custom,FL_PHDR_GPIOHDR,FL_PHDR_GPIOHDR_F,FL_PHDR_GPIOHDR_FL]
+SHOW          = "all"; // [all,custom,FL_PHDR_GPIOHDR,FL_PHDR_GPIOHDR_F,FL_PHDR_GPIOHDR_FL,FL_PHDR_GPIOHDR_F_SMT_LOW]
 // ... guess what
 COLOR         = "base";   // [base,red]
 // tolerance used during FL_CUTOUT
@@ -75,8 +75,8 @@ GEOMETRY          = [10,1]; // [1:20]
 
 /* [Hidden] */
 
-$direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-$octant    = PLACE_NATIVE  ? undef : OCTANT;
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = COLOR=="base"?grey(20):COLOR;
@@ -90,7 +90,7 @@ verbs=[
 ];
 
 module wrapIt(type) {
-  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,$debug=DEBUG);
+  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,debug=DEBUG,octant=octant,direction=direction);
 }
 
 // one predefined
