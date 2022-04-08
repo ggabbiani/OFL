@@ -286,6 +286,8 @@ FL_PCB_RPI_uHAT = let(
     ["GPIO",   [FL_PHDR_NS,   [32.5,   size.y-3.5, 0], [+Z,0 ],              FL_PHDR_GPIOHDR_F_SMT_LOW]],
   ],
   vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]]
+  // TODO: finish PCB connectors
+  // connectors=[conn_Socket(fl_phdr_cid(2p54header,[20,2]))]
   ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,
       dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,
       director=-X,rotor=-Y);
@@ -492,10 +494,16 @@ module fl_pcb(
             // TODO: either extend to all the engines once sure FL_FOOTPRINT is implemented for all of them or eliminate it and use dxf
             if ($engine==FL_USB_NS) fl_USB(verbs=FL_FOOTPRINT,type=$type,direction=$direction,tolerance=$subtract);
           }
-      // if (dxf)
-      //   translate(-Z(NIL)) linear_extrude(pcb_t+NIL2) __dxf__(dxf,"holes");
       if (holes)
         fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z],pcb_t);
+
+      // generates drills on pcb from components
+      // TODO: extends to all the supported components
+      do_layout("components")
+        if ($director==+Z||$director==-Z)
+          if ($engine==FL_PHDR_NS)
+            translate(+Z(FL_NIL)) fl_pinHeader([FL_DRILL],$type,cut_thick=dr_thick,octant=$octant,direction=$direction);
+
     }
     if (grid)
       grid_plating();
