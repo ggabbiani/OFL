@@ -292,19 +292,8 @@ module fl_manage(
     // size used for fl_axes()
     size
   ) {
-  module orient() {
-    if (direction)
-      multmatrix(direction) children();
-    else
-      children();
-  }
-
-  module place() {
-    if (placement)
-      multmatrix(placement) children();
-    else
-      children();
-  }
+    placement = placement ? placement : FL_I;
+    direction = direction ? direction : FL_I;
 
   module fl_context(vlist) {
     assert(is_list(vlist)||is_string(vlist),vlist);
@@ -347,8 +336,8 @@ module fl_manage(
     }
   }
 
-  orient() fl_context(verbs) {
-    place() fl_parse($_verbs_) children();
+  multmatrix(direction) fl_context(verbs) {
+    multmatrix(placement) fl_parse($_verbs_) children();
     if ($_axes_ && size) fl_modifier($FL_AXES) fl_axes(size=1.2*size);
   }
 }
