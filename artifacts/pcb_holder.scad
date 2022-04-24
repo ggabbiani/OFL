@@ -78,7 +78,7 @@ module fl_pcb_holderByHoles(
   size    = bbox[1]-bbox[0];
 
   // NOTE: thickness along ±Z only
-  thick   = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : assert(fl_tt_isAxisVList(thick)) thick; 
+  thick   = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : assert(fl_tt_isAxisVList(thick)) thick;
 
   // echo(holes=fl_holes(pcb));
   holes = [for(hole=fl_holes(pcb)) let(point = [hole[0].x,hole[0].y,0],normal = hole[1],d = hole[2],options=hole[4]) [
@@ -115,40 +115,40 @@ module fl_pcb_holderByHoles(
   }
 
   module do_add() {
-    fl_lay_holes(holes) 
+    fl_lay_holes(holes)
       context()
-        spacer(FL_ADD,position=$hole_center,screw=$hld_screw);
+        spacer(FL_ADD,position=$hole_pos,screw=$hld_screw);
 
     if (frame) difference() {
       translate(bbox[0]) fl_color($FL_FILAMENT) linear_extrude(frame)
         fl_square(size=[pcb_sz.x,pcb_sz.y],corners=pcb_r,quadrant=+X+Y);
-      translate(+Z(frame)) 
+      translate(+Z(frame))
         fl_lay_holes(holes)
           context()
             translate(+Z(NIL))
-              spacer(FL_DRILL,position=$hole_center,screw=$hld_screw,dirs=[-Z],Zt=[frame+NIL2,0]);
+              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[frame+NIL2,0]);
     }
   }
 
   module do_drill() {
     fl_lay_holes(holes,thick=thick)
       context()
-        spacer(FL_DRILL,$hole_center,screw=$hld_screw);  
+        spacer(FL_DRILL,$hole_pos,screw=$hld_screw);
   }
 
   module do_layout() {
     fl_lay_holes(holes,thick=thick,screw=screw)
       let(s=$hole_screw ? $hole_screw : screw)
-        spacer(FL_LAYOUT,$hole_center,s) 
-          translate($spc_director*$spc_thick) 
-            context() 
+        spacer(FL_LAYOUT,$hole_pos,s)
+          translate($spc_director*$spc_thick)
+            context()
               children();
   }
 
   module do_mount() {
     fl_lay_holes(holes,thick=thick)
       context()
-        spacer(FL_MOUNT,$hole_center,screw=$hld_screw);
+        spacer(FL_MOUNT,$hole_pos,screw=$hld_screw);
   }
 
   module do_assembly() {
@@ -157,7 +157,7 @@ module fl_pcb_holderByHoles(
       fl_pcb(FL_DRAW,pcb,thick=h);
     fl_lay_holes(holes)
       context()
-        spacer(FL_ASSEMBLY,position=$hole_center,screw=$hld_screw);
+        spacer(FL_ASSEMBLY,position=$hole_pos,screw=$hld_screw);
   }
 
   fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
@@ -204,7 +204,7 @@ function fl_bb_holderBySize(
     screw = M3_cap_screw,
     // knurl nut
     knut=false
-  ) = 
+  ) =
   assert(pcb)
   assert(h)
   assert(is_bool(knut))
@@ -230,7 +230,7 @@ function __deltaXY__(
     screw = M3_cap_screw,
     // knurl nut
     knut=false
-  ) = 
+  ) =
   assert(h)
   assert(is_bool(knut))
   let(
@@ -309,14 +309,14 @@ module fl_pcb_holderBySize(
       high      = pcb_bb[1],
       delta     = __deltaXY__(h,tolerance,screw,knut!=undef),
       quad_I    = [high.x+delta,high.y+delta,0],
-      quad_II   = [low.x-delta,quad_I.y,0],    
-      quad_III  = [quad_II.x,low.y-delta,0],  
-      quad_IV   = [quad_I.x,quad_III.y,0]      
+      quad_II   = [low.x-delta,quad_I.y,0],
+      quad_III  = [quad_II.x,low.y-delta,0],
+      quad_IV   = [quad_I.x,quad_III.y,0]
     ) [
-    [quad_I,  normal,diameter,depth], 
+    [quad_I,  normal,diameter,depth],
     [quad_II, normal,diameter,depth],
     [quad_III,normal,diameter,depth],
-    [quad_IV, normal,diameter,depth], 
+    [quad_IV, normal,diameter,depth],
   ];
   echo(holes=holes,bbox=bbox);
 
@@ -337,9 +337,9 @@ module fl_pcb_holderBySize(
 
   module do_add() {
     difference() {
-      fl_lay_holes(holes) 
+      fl_lay_holes(holes)
         context()
-          spacer(FL_ADD,position=$hole_center,screw=$hld_screw);
+          spacer(FL_ADD,position=$hole_pos,screw=$hld_screw);
       multmatrix(Mpcb)
         fl_bb_add([
           pcb_bb[0]-tolerance*[1,1,0]-Z(NIL),
@@ -350,33 +350,33 @@ module fl_pcb_holderBySize(
       translate(bbox[0]) fl_color($FL_FILAMENT) linear_extrude(frame)
         // fl_square(size=[pcb_sz.x,pcb_sz.y],corners=pcb_r,quadrant=+X+Y);
         fl_2d_frame(size=size,thick=R+r_knut*sin(45),corners=R,quadrant=+X+Y);
-      translate(+Z(frame)) 
+      translate(+Z(frame))
         fl_lay_holes(holes)
           context()
             translate(+Z(NIL))
-              spacer(FL_DRILL,position=$hole_center,screw=$hld_screw,dirs=[-Z],Zt=[frame+NIL2,0]);
+              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[frame+NIL2,0]);
     }
   }
 
   module do_layout() {
     fl_lay_holes(holes,thick=thick,screw=screw)
       let(s=screw)
-        spacer(FL_LAYOUT,$hole_center,s) 
-          translate($spc_director*$spc_thick) 
-            context() 
+        spacer(FL_LAYOUT,$hole_pos,s)
+          translate($spc_director*$spc_thick)
+            context()
               children();
   }
 
   module do_drill() {
     fl_lay_holes(holes)
       context()
-        spacer(FL_DRILL,$hole_center,screw=$hld_screw);  
+        spacer(FL_DRILL,$hole_pos,screw=$hld_screw);
   }
 
   module do_mount() {
     fl_lay_holes(holes)
       context()
-        spacer(FL_MOUNT,$hole_center,screw=$hld_screw);
+        spacer(FL_MOUNT,$hole_pos,screw=$hld_screw);
   }
 
   module do_assembly() {
@@ -384,7 +384,7 @@ module fl_pcb_holderBySize(
       fl_pcb(FL_DRAW,pcb,thick=h);
     fl_lay_holes(holes)
       context()
-        spacer(FL_ASSEMBLY,position=$hole_center,screw=$hld_screw);
+        spacer(FL_ASSEMBLY,position=$hole_pos,screw=$hld_screw);
   }
 
   fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
