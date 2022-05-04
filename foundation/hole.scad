@@ -36,11 +36,12 @@ function fl_Hole(
 /**
  * prepare context for children() holes
  *
- * $hole_center
+ * $hole_pos
  * $hole_d          - hole diameter
  * $hole_depth      - hole depth (set to «thick» for pass-thru)
  * $hole_direction  - [$hole_n,0]
- * $hole_i          - OPTIONAL ordinal position
+ * $hole_i          - OPTIONAL hole number
+ * $hole_label      - OPTIONAL string label
  * $hole_n          - hole normal
  * $hole_screw      - OPTIONAL hole screw
  */
@@ -48,29 +49,31 @@ module fl_hole_Context(
   hole,
   // fallback thickness
   thick,
+  // OPTIONAL hole number
   ordinal,
   // fallback screw
   screw
 ) {
-  $hole_i       = ordinal;
-  $hole_center  = hole[0];
-  $hole_n       = hole[1];
-  $hole_direction  = [$hole_n,0];
-  $hole_d       = hole[2];
-  $hole_depth   = hole[3] ? hole[3] : thick;
-  $hole_screw   = let(s=fl_optional(hole[4],"hole/screw")) s ? s : screw;
-  
+  $hole_i         = ordinal;
+  $hole_pos       = hole[0];
+  $hole_n         = hole[1];
+  $hole_direction = [$hole_n,0];
+  $hole_d         = hole[2];
+  $hole_depth     = hole[3] ? hole[3] : thick;
+  $hole_screw     = let(s=fl_optional(hole[4],"hole/screw")) s ? s : screw;
+  $hole_label     = is_num(ordinal) ? str("H",ordinal) : undef;
+
   children();
 }
 
 /**
-  * Layouts children along a list of holes.
-  *
-  * See fl_hole_Context() for context variables passed to children().
-  *
-  * NOTE: supported normals are x,y or z semi-axis ONLY
-  *
-  */
+ * Layouts children along a list of holes.
+ *
+ * See fl_hole_Context() for context variables passed to children().
+ *
+ * NOTE: supported normals are x,y or z semi-axis ONLY
+ *
+ */
 module fl_lay_holes(
   // list of hole specs
   holes,
@@ -88,18 +91,18 @@ module fl_lay_holes(
   fl_trace("holes",holes);
   fl_trace("thick",thick);
 
-  for($hole_i=[0:len(holes)-1])
-    fl_hole_Context(holes[$hole_i],thick,$hole_i,screw)
+  for(i=[0:len(holes)-1])
+    fl_hole_Context(holes[i],thick,i,screw)
       if (fl_3d_axisIsSet($hole_n,enable))
-        translate($hole_center)
+        translate($hole_pos)
           children();
 }
 
 /**
-  * Layouts holes according to their defined positions, depth and enabled normals.
-  *
-  * NOTE: supported normals are x,y or z semi-axis ONLY
-  */
+ * Layouts holes according to their defined positions, depth and enabled normals.
+ *
+ * NOTE: supported normals are x,y or z semi-axis ONLY
+ */
 module fl_holes(
   // list of holes specs
   holes,
@@ -109,11 +112,9 @@ module fl_holes(
   thick=0,
   // fallback screw
   screw
-) {
-  fl_lay_holes(holes,enable,thick,screw)
+) fl_lay_holes(holes,enable,thick,screw)
     translate(NIL*$hole_n)
       fl_cylinder(h=$hole_depth+NIL2,d=$hole_d,direction=[-$hole_n,0]);
-}
 
 /**
   * Layouts of hole symbols
@@ -129,8 +130,6 @@ module fl_hole_debug(
   thick=0,
   // fallback screw
   screw
-) {
-  fl_lay_holes(holes,enable,thick,screw)
+) fl_lay_holes(holes,enable,thick,screw)
     translate(NIL*$hole_n)
       fl_sym_hole($FL_ADD="ON");
-}
