@@ -133,13 +133,13 @@ function fl_comp_BBox(spec_list) =
  * returns the component with «label»
  * NOTE: error when label is not unique
  */
-function fl_comp_search(type,label) = let(
-  components  = fl_pcb_components(type),
+function fl_comp_search(type,label,comps) = let(
+  components  = comps ? comps : assert(type) fl_pcb_components(type),
   result      = [for(specs=components) if (label==specs[0]) specs[1]]
-) assert(len(result)==1,"component label must be unique") result[0];
+) assert(len(result)==1,result) result[0];
 
 /**
- * returns «component» connectors
+ * returns «component» connectors transformed according to component position/orientation
  */
 function fl_comp_connectors(component)  = let(
   position    = component[1],
@@ -268,8 +268,12 @@ FL_PCB_RPI4 = let(
     ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+Y,0  ],             FL_ETHER_RJ45  ,[["comp/drift",-3]]]],
     ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_GPIOHDR]],
   ],
-  vendors=[["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]]
-) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors);
+  vendors=[["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],
+  gpio_conn_pos  = fl_conn_pos(fl_comp_connectors(comps[7][1])[0]),
+  connectors  = [
+    conn_Plug(fl_phdr_cid(2p54header,[20,2]),+Y,-X,gpio_conn_pos),
+  ]
+) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=connectors);
 
 // pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
 FL_PCB_RPI_uHAT = let(
@@ -289,10 +293,9 @@ FL_PCB_RPI_uHAT = let(
   ],
   vendors = [["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],
   gpio_conn_pos  = fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),
-  // TODO: finish PCB connectors
   connectors  = [
-    conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t],size=2.54),
-    conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4],size=2.54),
+    conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t]),
+    conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4]),
   ]
   ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,
       dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,connectors=connectors);
@@ -662,7 +665,8 @@ module fl_pcb(
                 rotate(180,X)
                   fl_label(string=label,size=0.6*$conn_size,thick=0.1);
           else
-            assert(false,"NOT YET IMPLEMENTED");
+            translate([$conn_size/2,-$conn_size/4])
+              fl_label(string=label,size=0.6*$conn_size,thick=0.1);
         }
     }
 
