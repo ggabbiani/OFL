@@ -39,8 +39,6 @@ $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a bounding box containing the object
-$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -57,9 +55,9 @@ DIR_R       = 0;        // [0:360]
 
 /* [Label] */
 
-STRING  = "Ciao";
-SIZE   = [0,0,0];  // [0:0.1:20]
-AUTO   = [0,0,0];  // [0:1]
+STRING  = "Ciao!";
+SIZE    = 10; // [1:30]
+T       = 1;  // [0.1:0.1:10]
 
 /* [Hidden] */
 
@@ -68,12 +66,6 @@ octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
 ];
-size = SIZE!=[0,0,0] ? SIZE : undef;
-auto = [for(i=[0:2]) AUTO[i]!=0];
 
-if (size)
-  fl_label(verbs,string=STRING,size=size,auto=auto,octant=octant,direction=direction);
-else
-  fl_label(verbs,string=STRING,octant=octant,direction=direction);
+fl_label(verbs,STRING,size=SIZE,thick=T,octant=octant,direction=direction);
