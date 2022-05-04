@@ -36,9 +36,12 @@ module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
 //        with its fitting movement along -Z axis.
 module fl_symbol(
   verbs   = FL_ADD,
-  type    = undef,// really needed?
-  size    = 0.5,  // default size given as a scalar
-  symbol          // currently "plug" or "socket"
+  // really needed?
+  type    = undef,
+  // default size given as a scalar
+  size    = 0.5,
+  // currently "plug" or "socket"
+  symbol
   ) {
   assert(verbs!=undef);
 
@@ -80,7 +83,7 @@ module fl_symbol(
  * The symbol is oriented according to the hole normal.
  */
 module fl_sym_hole(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
+  // supported verbs: FL_ADD
   verbs = FL_ADD
 ) {
   radius  = $hole_d/2;
