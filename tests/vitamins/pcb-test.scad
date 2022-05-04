@@ -19,6 +19,7 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
+include <../../foundation/parameters.scad>
 include <../../vitamins/pcbs.scad>
 
 $fn         = 50;           // [3:100]
@@ -63,12 +64,14 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
+/* [DEBUG] */
+
+LABELS      = false;
+SYMBOLS     = false;
+
 /* [PCB] */
 
 TYPE  = "FL_PCB_HILETGO_SX1308";  // [FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,ALL]
-
-// when true hole symbols are added to scene
-HOLE_SYMBOLS  = false;
 
 // FL_DRILL and FL_CUTOUT thickness
 T             = 2.5;
@@ -86,6 +89,7 @@ co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
 direction     = DIR_NATIVE        ? undef : [DIR_Z,DIR_R];
 octant        = PLACE_NATIVE      ? undef : OCTANT;
 filament      = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+debug         = fl_parm_setDebug(labels=LABELS,symbols=SYMBOLS);
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
@@ -115,7 +119,7 @@ single  = TYPE=="FL_PCB_HILETGO_SX1308"  ? FL_PCB_HILETGO_SX1308
 module test() {
   module pcb(type) {
     fl_pcb(verbs,type,
-      direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction,$hole_syms=HOLE_SYMBOLS)
+      direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction,debug=debug)
       children();
   }
 
@@ -127,7 +131,6 @@ module test() {
       pcb(FL_PCB_DICT[$i])
         children();
 }
-
 
 test()
   fl_color(filament)
