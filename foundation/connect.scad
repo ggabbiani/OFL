@@ -201,7 +201,6 @@ module fl_lay_connectors(
  */
 module fl_conn_debug(
   // list of connectors
-  conns,
-  labels  = false
+  conns
 ) fl_lay_connectors(conns)
-    fl_symbol(size=2.54,symbol=$conn_type,label=labels?$conn_label:undef);
+    fl_symbol(size=2.54,symbol=$conn_type);
