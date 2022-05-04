@@ -154,7 +154,7 @@ module fl_conn_add(connector,size,label) {
   assert(connector!=undef);
   fl_conn_Context(connector)
     multmatrix(T($conn_pos)*fl_planeAlign(X,Y,$conn_ox,$conn_oy))
-      fl_symbol(size=size,symbol=$conn_type,label=label);
+      fl_symbol(size=size,symbol=$conn_type);
 }
 
 /**
