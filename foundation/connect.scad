@@ -30,7 +30,7 @@ function fl_conn_size(type,value) = fl_property(type,"conn/size",value);
 function fl_conn_type(type,value) = fl_property(type,"conn/type",value);
 
 // contructors
-function conn_Plug(id,ox,oy,pos,size) =
+function conn_Plug(id,ox,oy,pos,size=2.54) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
@@ -46,7 +46,7 @@ function conn_Plug(id,ox,oy,pos,size) =
     fl_conn_size(value=size),
   ];
 
-function conn_Socket(id,ox,oy,pos,size) =
+function conn_Socket(id,ox,oy,pos,size=2.54) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
