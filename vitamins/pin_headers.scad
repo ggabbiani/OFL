@@ -212,8 +212,7 @@ module fl_pinHeader(
                 fl_label(string=label,size=0.6*$conn_size,thick=0.1,octant=+X);
           else
             translate(X($conn_size/2))
-              rotate(180,X)
-                fl_label(string=label,size=0.6*$conn_size,thick=0.1,octant=+X);
+              fl_label(string=label,size=0.6*$conn_size,thick=0.1,octant=+X);
         }
     }
 
