@@ -21,6 +21,7 @@
 include <../foundation/grid.scad>
 include <../foundation/hole.scad>
 include <../foundation/label.scad>
+include <../foundation/parameters.scad>
 use     <../dxf.scad>
 
 include <ethers.scad>
