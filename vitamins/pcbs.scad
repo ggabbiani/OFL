@@ -20,6 +20,7 @@
  */
 include <../foundation/grid.scad>
 include <../foundation/hole.scad>
+include <../foundation/label.scad>
 use     <../dxf.scad>
 
 include <ethers.scad>
@@ -272,25 +273,28 @@ FL_PCB_RPI4 = let(
 // pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
 FL_PCB_RPI_uHAT = let(
   pcb_t   = 1.6,
-  size  = [65,30,pcb_t],
-  bare  = [[0,0,-pcb_t],[size.x,size.y,0]],
+  size    = [65,30,pcb_t],
+  bare    = [[0,0,-pcb_t],[size.x,size.y,0]],
   hole_d  = 2.75,
   holes   = [
     [[ 3.5,         size.y-3.5, 0 ], +Z, hole_d, pcb_t],
     [[ size.x-3.5,  size.y-3.5, 0 ], +Z, hole_d, pcb_t],
     [[ size.x-3.5,  3.5,        0 ], +Z, hole_d, pcb_t],
   ],
-  comps = [
+  comps   = [
   //["label",  ["engine",     [position],              [[director],rotation] type,                [engine specific parameters]]]
     ["RF IN",  [FL_JACK_NS,   [0,      15, 0],         [-X,0  ],             FL_JACK_MCXJPHSTEM1      ]],
     ["GPIO",   [FL_PHDR_NS,   [32.5,   size.y-3.5, 0], [+Z,0 ],              FL_PHDR_GPIOHDR_F_SMT_LOW]],
   ],
-  vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]]
+  vendors = [["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],
+  gpio_conn_pos  = fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),
   // TODO: finish PCB connectors
-  // connectors=[conn_Socket(fl_phdr_cid(2p54header,[20,2]))]
+  connectors  = [
+    conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t],size=2.54),
+    conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4],size=2.54),
+  ]
   ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,
-      dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,
-      director=-X,rotor=-Y);
+      dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,connectors=connectors);
 
 FL_PCB_MH4PU_P = let(
     name  = "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port",
@@ -386,6 +390,8 @@ module fl_pcb(
   thick=0,
   // FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
   lay_direction=[+Z],
+  // when true local debug is enabled
+  debug,
   // desired direction [director,rotation], native direction when undef
   direction,
   // when undef native positioning is used
@@ -412,6 +418,7 @@ module fl_pcb(
   radius    = fl_pcb_radius(type);
   grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
   dxf       = fl_optional(type,fl_dxf()[0]);
+  conns     = fl_optional(type,fl_connectors()[0]);
 
   M         = octant ? fl_octant(octant=octant,bbox=bbox) : I;
   D         = direction ? fl_direction(type,direction=direction)  : I;
@@ -507,6 +514,7 @@ module fl_pcb(
     }
     if (grid)
       grid_plating();
+
   }
 
   module context() {
@@ -616,9 +624,51 @@ module fl_pcb(
       fl_bb_add(pload);
   }
 
-  if (!is_undef($hole_syms) && $hole_syms==true)
-    multmatrix(D*M)
-      fl_hole_debug(holes=holes);
+  // TODO: extends on templates
+  module do_debug() {
+    labels      = fl_parm_getDebug(debug,"labels");
+    symbols     = fl_parm_getDebug(debug,"symbols");
+
+    if (symbols) {
+      if (holes)
+        fl_hole_debug(holes);
+      if (conns)
+        fl_conn_debug(conns);
+    }
+
+    if (labels) {
+      // holes
+      if (holes)
+        fl_lay_holes(holes) {
+          // calculate label octant as the farest from bounding box edges on XY plane
+          // TODO: extend to 3 axes and move in algos
+          d0      = $hole_pos-bbox[0];
+          d1      = bbox[1]-$hole_pos;
+          octant  = sign(d1.x-d0.x)*X + sign(d1.y-d0.y)*Y;
+          // move label position on radius at 45° or 0°
+          delta   = $hole_d/2*(octant.x && octant.y ? cos(45) : 1)+0.2;
+          label   = str("H",$hole_i);
+          translate(delta*octant)
+            fl_label(string=label,size=0.6*$hole_d,thick=0.1,octant=octant);
+        }
+      // connectors
+      if (conns)
+        fl_lay_connectors(conns) {
+          label = str("C",$conn_i);
+          if ($conn_type=="socket")
+            rotate(180,Z)
+              translate([$conn_size/2,-$conn_size/2])
+                rotate(180,X)
+                  fl_label(string=label,size=0.6*$conn_size,thick=0.1);
+          else
+            assert(false,"NOT YET IMPLEMENTED");
+        }
+    }
+
+  }
+
+  multmatrix(D*M)
+    do_debug();
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
