@@ -391,7 +391,7 @@ module fl_pcb(
   thick=0,
   // FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
   lay_direction=[+Z],
-  // when true local debug is enabled
+  // see function fl_parm_setDebug()
   debug,
   // desired direction [director,rotation], native direction when undef
   direction,
@@ -627,8 +627,8 @@ module fl_pcb(
 
   // TODO: extends on templates
   module do_debug() {
-    labels      = fl_parm_getDebug(debug,"labels");
-    symbols     = fl_parm_getDebug(debug,"symbols");
+    labels  = fl_parm_getDebug(debug,"labels");
+    symbols = fl_parm_getDebug(debug,"symbols");
 
     if (symbols) {
       if (holes)
