@@ -22,39 +22,44 @@ include <util.scad>
 
 //*****************************************************************************
 // Connection properties
-function fl_conn_type(type,value) = fl_property(type,"conn/type",value);
 function fl_conn_id(type,value)   = fl_property(type,"conn/id",value);
 function fl_conn_ox(type,value)   = fl_property(type,"conn/orientation X",value);
 function fl_conn_oy(type,value)   = fl_property(type,"conn/orientation Y",value);
 function fl_conn_pos(type,value)  = fl_property(type,"conn/position",value);
+function fl_conn_size(type,value) = fl_property(type,"conn/size",value);
+function fl_conn_type(type,value) = fl_property(type,"conn/type",value);
 
 // contructors
-function conn_Plug(id,ox,oy,pos) =
+function conn_Plug(id,ox,oy,pos,size) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
   assert(ox*oy==0,str("ox=",ox,",oy=",oy))
   assert(is_list(pos))
+  assert(is_num(size))
   [
     fl_conn_type(value="plug"),
     fl_conn_id(value=id),
     fl_conn_ox(value=ox),
     fl_conn_oy(value=oy),
     fl_conn_pos(value=pos),
+    fl_conn_size(value=size),
   ];
 
-function conn_Socket(id,ox,oy,pos) =
+function conn_Socket(id,ox,oy,pos,size) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
   assert(ox*oy==0,str("ox=",ox,",oy=",oy))
   assert(is_list(pos))
+  assert(is_num(size))
   [
     fl_conn_type(value="socket"),
     fl_conn_id(value=id),
     fl_conn_ox(value=ox),
     fl_conn_oy(value=oy),
     fl_conn_pos(value=pos),
+    fl_conn_size(value=size),
   ];
 
 // massive connection clone eventually transformed
@@ -68,17 +73,18 @@ function fl_conn_clone(
   ,ox       // OPTIONAL new orientation X
   ,oy       // OPTIONAL new orientation Y
   ,pos      // OPTIONAL new position
-  ,M=I      // OPTIONAL tarnsformation matrix for position transformation
+  ,M=I      // OPTIONAL transformation matrix for position transformation
 ) =
   assert(original!=undef)
   assert(ox==undef  || len(ox)==3)
   assert(oy==undef  || len(oy)==3)
   assert(pos==undef || len(pos)==3)
   let(
-    type         = type==undef   ? fl_conn_type(original) : type,
-    id         = id==undef ? fl_conn_id(original) : id,
+    type      = type==undef   ? fl_conn_type(original) : type,
+    id        = id==undef ? fl_conn_id(original) : id,
     orig_ox_3 = fl_conn_ox(original),
     orig_oy_3 = fl_conn_oy(original),
+    orig_size = fl_conn_size(original),
     tran_ox_4 = fl_transform(M,orig_ox_3),
     tran_oy_4 = fl_transform(M,orig_oy_3),
     trans_O_4 = fl_transform(M,O),
@@ -98,7 +104,7 @@ function fl_conn_clone(
   assert(norm(y_3)==1)
   assert(orig_ox_3*orig_oy_3==0,"Original orientation fl_axes are not orthogonal")
   assert(x_3*y_3==0,"Resulting orientation fl_axes are not orthogonal")
-  type=="plug" ? conn_Plug(id,x_3,y_3,p_3) : conn_Socket(id,x_3,y_3,p_3);
+  type=="plug" ? conn_Plug(id,x_3,y_3,p_3,orig_size) : conn_Socket(id,x_3,y_3,p_3,orig_size);
 
 /**
  * Transforms a child shape to its parent coherently with their respective
@@ -137,17 +143,65 @@ module fl_connect(
               * fl_planeAlign(son_ox,son_oy,par_ox,par_oy)
               * T(-son_pos);
 
-  assert(son_type!=par_type);
+  assert(son_type!=par_type,str("son:",son_type,",parent:",par_type));
   assert(son_footprint==par_footprint,str("Trying to connect '",son_footprint,"'' with '",par_footprint,"'."));
 
   multmatrix(M) children();
 }
 
 // Adds proper connection symbol (plug or socket) to the scene
-module fl_conn_add(connector,size) {
+module fl_conn_add(connector,size,label) {
   assert(connector!=undef);
-  M = T(fl_conn_pos(connector))
-    * fl_planeAlign(X,Y,fl_conn_ox(connector),fl_conn_oy(connector));
-  multmatrix(M)
-    fl_symbol(size=size,symbol=fl_conn_type(connector));
+  fl_conn_Context(connector)
+    multmatrix(T($conn_pos)*fl_planeAlign(X,Y,$conn_ox,$conn_oy))
+      fl_symbol(size=size,symbol=$conn_type,label=label);
 }
+
+/**
+ * Prepares context for children() connectors
+ *
+ * $conn_i      - OPTIONAL connection number
+ * $conn_ox     - X axis
+ * $conn_oy     - Y axis
+ * $conn_label  - OPTIONAL string label
+ * $conn_pos    - position
+ * $conn_size   - OPTIONAL connector size
+ * $conn_type   - connector type
+ */
+module fl_conn_Context(
+  connector,
+  // OPTIONAL connection number
+  ordinal
+) {
+  $conn_i     = ordinal;
+  $conn_pos   = fl_conn_pos(connector);
+  $conn_ox    = fl_conn_ox(connector);
+  $conn_oy    = fl_conn_oy(connector);
+  $conn_type  = fl_conn_type(connector);
+  $conn_size  = fl_optional(connector,fl_conn_size()[0]);
+  $conn_label = is_num(ordinal) ? str("C",ordinal) : undef;
+
+  children();
+}
+
+/**
+ * Layouts children along a list of connectors.
+ * See fl_conn_Context() for context variables passed to children().
+ */
+module fl_lay_connectors(
+  // list of connectors
+  conns
+) for(i=[0:len(conns)-1])
+    fl_conn_Context(conns[i],i)
+      multmatrix(T($conn_pos)*fl_planeAlign(X,Y,$conn_ox,$conn_oy))
+        children();
+
+/**
+ * Layouts connector symbols
+ */
+module fl_conn_debug(
+  // list of connectors
+  conns,
+  labels  = false
+) fl_lay_connectors(conns)
+    fl_symbol(size=2.54,symbol=$conn_type,label=labels?$conn_label:undef);
