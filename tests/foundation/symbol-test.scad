@@ -64,6 +64,7 @@ verbs=[
 
 size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
 hole  = [HOLE_C,HOLE_N,HOLE_D,HOLE_DEPTH];
+
 if (SYMBOL=="hole")
   fl_hole_Context(hole) fl_sym_hole(verbs);
 else
