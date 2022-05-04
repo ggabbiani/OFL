@@ -20,6 +20,8 @@
  */
 include <../foundation/defs.scad>
 include <../foundation/connect.scad>
+include <../foundation/label.scad>
+include <../foundation/parameters.scad>
 include <../foundation/util.scad>
 
 include <NopSCADlib/lib.scad>
@@ -126,7 +128,7 @@ module fl_pinHeader(
   color,
   cut_thick,            // thickness for FL_CUTOUT
   cut_tolerance=0,      // tolerance used during FL_CUTOUT
-  // when true local debug is enabled
+  // see function fl_parm_setDebug()
   debug,
   // when undef native positioning is used
   octant,
@@ -162,20 +164,20 @@ module fl_pinHeader(
   module do_add() {
 
     module male() {
-      if (debug) {
-        #pin_header(nop, cols, rows,colour=color, smt=smt);
-        for(connection=conns)
-          fl_conn_add(connection,pitch_sz);
-      } else
+      // if (debug) {
+      //   #pin_header(nop, cols, rows,colour=color, smt=smt);
+      //   for(connection=conns)
+      //     fl_conn_add(connection,pitch_sz);
+      // } else
         pin_header(nop, cols, rows,colour=color, smt=smt);
     }
 
     module female() {
-      if (debug) {
-        #pin_socket(nop, cols, rows,colour=color, smt=smt);
-        for(connection=conns)
-          fl_conn_add(connection,pitch_sz);
-      } else
+      // if (debug) {
+      //   #pin_socket(nop, cols, rows,colour=color, smt=smt);
+      //   for(connection=conns)
+      //     fl_conn_add(connection,pitch_sz);
+      // } else
         pin_socket(nop, cols, rows,colour=color, smt=smt);
     }
 
@@ -190,6 +192,35 @@ module fl_pinHeader(
       translate([pitch_sz * (x - (geometry.x - 1) / 2), pitch_sz * (y - (geometry.y - 1) / 2)])
         fl_cube(size=pin_sz,octant=-Z);
   }
+
+  module do_debug() {
+    labels  = fl_parm_getDebug(debug,"labels");
+    symbols = fl_parm_getDebug(debug,"symbols");
+
+    if (symbols)
+      if (conns)
+        fl_conn_debug(conns);
+
+    if (labels) {
+      // connectors
+      if (conns)
+        fl_lay_connectors(conns) {
+          label = str("C",$conn_i);
+          if ($conn_type=="socket")
+            translate(X($conn_size/2))
+              rotate(180,X)
+                fl_label(string=label,size=0.6*$conn_size,thick=0.1,octant=+X);
+          else
+            translate(X($conn_size/2))
+              rotate(180,X)
+                fl_label(string=label,size=0.6*$conn_size,thick=0.1,octant=+X);
+        }
+    }
+
+  }
+
+  multmatrix(D*M)
+    do_debug();
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {

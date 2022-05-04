@@ -57,10 +57,13 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
+/* [DEBUG] */
+
+LABELS      = false;
+SYMBOLS     = false;
+
 /* [Pin Header] */
 
-// enable debug
-DEBUG         = false;
 SHOW          = "all"; // [all,custom,FL_PHDR_GPIOHDR,FL_PHDR_GPIOHDR_F,FL_PHDR_GPIOHDR_FL,FL_PHDR_GPIOHDR_F_SMT_LOW]
 // ... guess what
 COLOR         = "base";   // [base,red]
@@ -83,6 +86,7 @@ thick     = $FL_CUTOUT!="OFF"||$FL_DRILL!="OFF" ? CO_T : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = COLOR=="base"?grey(20):COLOR;
 type      = fl_dict_search(FL_PHDR_DICT,SHOW)[0];
+debug     = fl_parm_setDebug(labels=LABELS,symbols=SYMBOLS);
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
@@ -93,7 +97,7 @@ verbs=[
 ];
 
 module wrapIt(type) {
-  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,debug=DEBUG,octant=octant,direction=direction);
+  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,debug=debug,octant=octant,direction=direction);
 }
 
 // one predefined
