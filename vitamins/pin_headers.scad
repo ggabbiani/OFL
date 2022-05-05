@@ -148,7 +148,6 @@ module fl_pinHeader(
   pitch_sz  = hdr_pitch(nop);
   engine    = fl_engine(type);
   smt       = fl_property(type,"phdr/smt");
-  pin_sz    = let(w=hdr_pin_width(nop),l=hdr_pin_below(nop)) [w,w,l];
 
   D     = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)              : I;
@@ -188,6 +187,8 @@ module fl_pinHeader(
   }
 
   module do_drill() {
+    fl_trace("pin_sz",pin_sz);
+    pin_sz  = let(w=hdr_pin_width(nop),l=hdr_pin_below(nop)) [w,w,cut_thick];
     for(x=[0:geometry.x-1],y=[0:geometry.y-1])
       translate([pitch_sz * (x - (geometry.x - 1) / 2), pitch_sz * (y - (geometry.y - 1) / 2)])
         fl_cube(size=pin_sz,octant=-Z);
@@ -288,7 +289,7 @@ FL_PHDR_GPIOHDR_F_SMT_LOW  = let(
   //                      h     l     w    w      c                     s                 t    y
   //                                                         c     h    z                             o
   //                                                                                                  f
-  nop = ["2p54smtlow",   2.54, 11.6, 3.2, 0.66, gold,   grey(20),   4, [0,   0,    8.7], 2.4, 0,     0,    0  ]
+  nop = ["2p54smtlow",   2.54,  4,     0, 0.66, gold,   grey(20),   4, [0,   0,    8.7], 2.4, 0,     0,    0  ]
 ) fl_PinHeader(
   name        = "FL_PHDR_GPIOHDR_F_SMT_LOW",
   description = "GPIO female low pin pass-through header",
