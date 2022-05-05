@@ -644,7 +644,7 @@ module fl_pcb(
     if (labels) {
       // holes
       if (holes)
-        fl_lay_holes(holes) {
+        fl_lay_holes(holes) union() {
           // calculate label octant as the farest from bounding box edges on XY plane
           // TODO: extend to 3 axes and move in algos
           d0      = $hole_pos-bbox[0];
@@ -658,7 +658,7 @@ module fl_pcb(
         }
       // connectors
       if (conns)
-        fl_lay_connectors(conns) {
+        fl_lay_connectors(conns) union() {
           label = str("C",$conn_i);
           if ($conn_type=="socket")
             rotate(180,Z)
