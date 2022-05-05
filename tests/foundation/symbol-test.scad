@@ -34,13 +34,9 @@ $FL_TRACE   = false;
 
 // adds shapes to scene.
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds local reference axes
-$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Test hole] */
 
-// center
-HOLE_C  = [0,0,0];
 // diameter
 HOLE_D  = 1;
 // normal
@@ -63,10 +59,9 @@ verbs=[
 ];
 
 size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
-hole  = [HOLE_C,HOLE_N,HOLE_D,HOLE_DEPTH];
 
 if (SYMBOL=="hole")
-  fl_hole_Context(hole) fl_sym_hole(verbs);
+  fl_hole_Context([O,HOLE_N,HOLE_D,HOLE_DEPTH]) fl_sym_hole(verbs);
 else
   fl_symbol(verbs=verbs,size=size,symbol=SYMBOL);
 

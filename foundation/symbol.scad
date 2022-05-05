@@ -58,11 +58,14 @@ module fl_symbol(
   module do_add() {
     fl_trace("d1",d1);
     fl_trace("d2",d2);
-    fl_color("blue") resize(sz)
-      translate(fl_Z(symbol=="socket"?-h:0))
-      for(i=symbol=="plug"?[0:+2]:[-2:0])
-        translate(fl_Z(i*delta))
-          fl_cylinder(d1=d1,d2=d2,h=h);
+
+    fl_color("blue")
+      resize(sz)
+        translate(Z(symbol=="socket"?-h:0))
+          for(i=symbol=="plug"?[0:+2]:[-2:0])
+            translate(Z(i*delta))
+              fl_cylinder(d1=d1,d2=d2,h=h);
+
     %fl_cube(octant=symbol=="plug"?-Z:+Z,size=[sz.x,sz.y,0.1]);
     let(sz=2*sz) {
       fl_color("red") translate(-X(sz.x/2)) fl_vector(X(sz.x),ratio=30);
@@ -70,7 +73,7 @@ module fl_symbol(
     }
   }
 
-  fl_manage(verbs,size=size) {
+  fl_manage(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
     } else {
@@ -115,7 +118,7 @@ module fl_sym_hole(
       fl_vector($hole_depth*Z);
   }
 
-  fl_manage(verbs,direction=D,size=size) {
+  fl_manage(verbs,direction=D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
