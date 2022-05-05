@@ -65,6 +65,7 @@ function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
  * $color
  * $octant
  */
+// TODO: prepend component namespace to context variable name
 module fl_comp_Context(
   component // component definition: ["engine", [position], [[director],rotation], type, properties]
   ) {
@@ -513,7 +514,7 @@ module fl_pcb(
       do_layout("components")
         if ($director==+Z||$director==-Z)
           if ($engine==FL_PHDR_NS)
-            translate(+Z(FL_NIL)) fl_pinHeader([FL_DRILL],$type,cut_thick=dr_thick,octant=$octant,direction=$direction);
+            translate(+Z(FL_NIL)) fl_pinHeader([FL_DRILL],$type,cut_thick=pcb_t+NIL2,octant=$octant,direction=$direction);
 
     }
     if (grid)
