@@ -260,7 +260,14 @@ FL_PHDR_GPIOHDR_F       = fl_PinHeader(
 );
 FL_PHDR_GPIOHDR_FL  = let(
   // Longer pins for stacking
-  nop  = ["2p54long",   2.54, 19.6, 11, 0.66, gold,   grey(20), 8.5, [0,   0,    8.7], 2.4, 0,     0,    0  ]
+  //                      p     p     b    p      p          b     s    b                 b    p      r   r
+  //                      i     i     e    i      i          a     o    o                 o    i      a   a
+  //                      t     n     l    n      n          s     c    x                 x    n
+  //                      c           o                      e     k                                  b   h
+  //                      h     l     w    w      c                     s                 t    y
+  //                                                         c     h    z                             o
+  //                                                                                                  f
+  nop  = ["2p54long",   2.54, 19.6,  11,  0.66, gold,   grey(20), 8.6, [0,   0,    8.7], 2.4, 0,     0,   0  ]
 ) fl_PinHeader(
   name        = "FL_PHDR_GPIOHDR_FL",
   description = "GPIO female long pin header",
@@ -274,7 +281,14 @@ FL_PHDR_GPIOHDR_FL  = let(
 
 FL_PHDR_GPIOHDR_F_SMT_LOW  = let(
   // smt low profile pins
-  nop        = ["2p54smtlow",   2.54, 11.6, 3.2, 0.66, gold,   grey(20),   4, [0,   0,    8.7], 2.4, 0,     0,    0  ]
+  //                      p     p     b    p      p          b     s    b                 b    p      r   r
+  //                      i     i     e    i      i          a     o    o                 o    i      a   a
+  //                      t     n     l    n      n          s     c    x                 x    n
+  //                      c           o                      e     k                                  b   h
+  //                      h     l     w    w      c                     s                 t    y
+  //                                                         c     h    z                             o
+  //                                                                                                  f
+  nop = ["2p54smtlow",   2.54, 11.6, 3.2, 0.66, gold,   grey(20),   4, [0,   0,    8.7], 2.4, 0,     0,    0  ]
 ) fl_PinHeader(
   name        = "FL_PHDR_GPIOHDR_F_SMT_LOW",
   description = "GPIO female low pin pass-through header",
