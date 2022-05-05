@@ -268,12 +268,12 @@ FL_PCB_RPI4 = let(
     ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+Y,0  ],             FL_ETHER_RJ45  ,[["comp/drift",-3]]]],
     ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_GPIOHDR]],
   ],
-  vendors=[["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],
-  gpio_conn_pos  = fl_conn_pos(fl_comp_connectors(comps[7][1])[0]),
-  connectors  = [
-    conn_Plug(fl_phdr_cid(2p54header,[20,2]),+Y,-X,gpio_conn_pos),
+  vendors = [["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],
+  gpio_c  = fl_comp_connectors(comps[7][1])[0],
+  conns   = [
+    fl_conn_clone(gpio_c,type="plug"),
   ]
-) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=connectors);
+) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=conns);
 
 // pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
 FL_PCB_RPI_uHAT = let(
