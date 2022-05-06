@@ -184,8 +184,13 @@ function fl_PCB(
   ) = let(
     comp_bbox = components ? fl_comp_BBox(components) : undef,
     pload = payload ? payload : comp_bbox,
-    bbox  = pload ? [bare[0],[bare[1].x,bare[1].y,max(bare[1].z,pload[1].z)]]
-                  : bare
+    bbox  = pload
+          ? [
+              // bare[0],
+              [bare[0].x,bare[0].y,min(bare[0].z,pload[0].z)],
+              [bare[1].x,bare[1].y,max(bare[1].z,pload[1].z)]
+            ]
+          : bare
   ) [
     fl_native(value=true),
     fl_name(value=name),
@@ -224,7 +229,7 @@ function fl_pcb_import(nop,payload) = let(
     l         = min(pcb_width(nop),pcb_length(nop)),
     h         = 0,
     pcb_t     = pcb_thickness(nop),
-    bbox      = [[-w/2,-l/2,0],[+w/2,+l/2,pcb_t+h]]
+    bbox      = [[-w/2,-l/2,-pcb_t],[+w/2,+l/2,h]]
   ) fl_PCB(nop[1],bbox,pcb_t,pcb_colour(nop),pcb_radius(nop),payload,fl_pcb_NopHoles(nop),undef,pcb_grid(nop),pcb_screw(nop));
 
 /**
@@ -236,7 +241,7 @@ function fl_pcb_NopHoles(nop) = let(
   nop_holes = pcb_holes(nop),
   holes     = [
     for(h=nop_holes) [
-      let(p=pcb_coord(nop, h)) [p.x,p.y,pcb_t],  // 3d point
+      let(p=pcb_coord(nop, h)) [p.x,p.y,0],  // 3d point
       +FL_Z,  // plane normal
       hole_d, // hole diameter
       pcb_t   // hole depth
@@ -417,7 +422,8 @@ module fl_pcb(
   screw_r   = screw ? screw_radius(screw) : 0;
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
             : assert(fl_tt_isAxisVList(thick)) thick;
-  dr_thick  = thick.z[0]; // thickness along -Z
+  neg_delta = -pcb_t-bbox[0].z;
+  dr_thick  = echo(bbox=bbox,pcb_t=pcb_t,delta=neg_delta,thick=thick.z[0]) pcb_t+neg_delta+thick.z[0]; // thickness along -Z
   cut_thick = thick;
   material  = fl_material(type,default="green");
   radius    = fl_pcb_radius(type);
@@ -487,7 +493,7 @@ module fl_pcb(
   // for holes, that are instead already placed in the final full 3d space
   module do_add() {
     fl_color(material) difference() {
-      translate(Z(bbox[0].z)) linear_extrude(pcb_t)
+      translate(-Z(pcb_t)) linear_extrude(pcb_t)
         difference() {
           if (dxf)
             __dxf__(file=dxf,layer="0");
@@ -518,7 +524,7 @@ module fl_pcb(
 
     }
     if (grid)
-      grid_plating();
+      translate(-Z(pcb_t)) grid_plating();
 
   }
 
@@ -586,12 +592,12 @@ module fl_pcb(
     if (holes)
       fl_lay_holes(holes,lay_direction)
         let(scr = is_undef($hole_screw) ? screw : $hole_screw)
-          if (scr) fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,thick=dr_thick+pcb_t);
+          if (scr) fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,thick=dr_thick);
   }
 
   module do_drill() {
     fl_lay_holes(holes,lay_direction)
-      fl_cylinder(d=$hole_d,h=dr_thick+pcb_t,octant=-$hole_n);
+      fl_cylinder(d=$hole_d,h=dr_thick,octant=-$hole_n);
   }
 
   module do_cutout() {

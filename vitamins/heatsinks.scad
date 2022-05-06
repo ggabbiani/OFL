@@ -70,13 +70,15 @@ function fl_bb_pimoroni(
   bottom    = true,
 ) = let(
   bb    = fl_bb_corners(type),
+  pcb_bb  = fl_bb_corners(FL_PCB_RPI4),
+  pcb_t  = fl_pcb_thick(FL_PCB_RPI4),
   bot_p = fl_get(type,"bottom part"),
   bot_t = fl_get(bot_p,"layer 0 base thickness") + fl_get(bot_p,"layer 0 fluting thickness") + fl_get(bot_p,"layer 0 holders thickness"),
   top_p = fl_get(type,"top part"),
   top_t = fl_get(top_p,"layer 1 base thickness") + fl_get(top_p,"layer 1 fluting thickness") + fl_get(top_p,"layer 1 holders thickness")
 ) [
-  [bb[0].x,bb[0].y,bb[0].z+(bottom ? 0 : bot_t)],
-  [bb[1].x,bb[1].y,bb[1].z-0*(top    ? 0 : top_t)]
+  [bb[0].x,bb[0].y,bottom ? bb[0].z : bot_t+pcb_bb[0].z+pcb_t],
+  [bb[1].x,bb[1].y-(bottom ? 0 : 2),bb[1].z-0*(top    ? 0 : top_t)]
 ];
 
 /**
