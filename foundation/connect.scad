@@ -107,10 +107,11 @@ function fl_conn_clone(
   type=="plug" ? conn_Plug(id,x_3,y_3,p_3,orig_size) : conn_Socket(id,x_3,y_3,p_3,orig_size);
 
 /**
- * Transforms a child shape to its parent coherently with their respective
- * connection geometries.
- * Child can be thought as a mobile socket (or plug) jointing a fixed plug (or
- * socket).
+ * Returns the transformation matrix moving child shape to its parent
+ * coherently with their respective connection geometries.
+ * Child can be thought as a mobile socket/plug jointing a fixed plug/socket
+ * (the parent).
+ *
  * The transformations applied to children are:
  *
  * 1. move children connector to origin
@@ -120,6 +121,27 @@ function fl_conn_clone(
  * TODO: symbol orientation is managed by passing x and y plane while
  * calculating z consequently. It should be managed through the couple
  * [director,rotor] instead.
+ */
+function fl_connect(
+  // child to be moved, either a connector or a list [child object,connector number]
+  son,
+  // fixed parent, either a connector or a list [parent object,connector number]
+  parent
+  ) = let(
+    son_c = len(son)==2     ? fl_connectors(son[0])[son[1]]       : son,
+    par_c = len(parent)==2  ? fl_connectors(parent[0])[parent[1]] : parent,
+
+    son_ox        = fl_conn_ox(son_c),
+    son_oy        = fl_conn_oy(son_c),
+    son_pos       = fl_conn_pos(son_c),
+
+    par_ox        = fl_conn_ox(par_c),
+    par_oy        = fl_conn_oy(par_c),
+    par_pos       = fl_conn_pos(par_c)
+  ) T(+par_pos) * fl_planeAlign(son_ox,son_oy,par_ox,par_oy) * T(-son_pos);
+
+/**
+ * See function fl_connect() for docs.
  *
  * Children context:
  * $con_child   - OPTIONAL child object (undef when direct connector is passed)
@@ -131,28 +153,19 @@ module fl_connect(
   // fixed parent, can be either a connector or a list [object,connector number]
   parent
   ) {
-  son_c = len(son)==2 ? fl_connectors(son[0])[son[1]] : son;
-  par_c = len(parent)==2 ? fl_connectors(parent[0])[parent[1]] : parent;
+  son_c       = len(son)==2 ? fl_connectors(son[0])[son[1]] : son;
+  par_c       = len(parent)==2 ? fl_connectors(parent[0])[parent[1]] : parent;
 
-  son_type      = fl_conn_type(son_c);
-  son_footprint = fl_conn_id(son_c);
-  son_ox        = fl_conn_ox(son_c);
-  son_oy        = fl_conn_oy(son_c);
-  son_pos       = fl_conn_pos(son_c);
+  son_type    = fl_conn_type(son_c);
+  son_fprint  = fl_conn_id(son_c);
 
-  par_type      = fl_conn_type(par_c);
-  par_footprint = fl_conn_id(par_c);
-  par_ox        = fl_conn_ox(par_c);
-  par_oy        = fl_conn_oy(par_c);
-  par_pos       = fl_conn_pos(par_c);
+  par_type    = fl_conn_type(par_c);
+  par_fprint  = fl_conn_id(par_c);
 
-  M           = T(+par_pos)
-              * fl_planeAlign(son_ox,son_oy,par_ox,par_oy)
-              * T(-son_pos);
+  M           = fl_connect(son,parent);
 
   assert(son_type!=par_type,str("son:",son_type,",parent:",par_type));
-  assert(son_footprint==par_footprint,str("Trying to connect '",son_footprint,"'' with '",par_footprint,"'."));
-
+  assert(son_fprint==par_fprint,str("Trying to connect '",son_fprint,"'' with '",par_fprint,"'."));
   let(
     $con_child  = len(son)==2 ?     son[0]    : undef,
     $con_parent = len(parent)==2 ?  parent[0] : undef
