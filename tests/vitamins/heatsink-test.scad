@@ -65,7 +65,10 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [Stub] */
+/* [Pimoroni] */
+
+TOP     = true;
+BOTTOM  = true;
 
 /* [Hidden] */
 
@@ -82,5 +85,5 @@ verbs=[
   if ($FL_MOUNT!="OFF")     FL_MOUNT,
 ];
 
-pimoroni(verbs,type=FL_HS_PIMORONI,direction=direction,octant=octant)
+fl_pimoroni(verbs,type=FL_HS_PIMORONI,top=TOP,bottom=BOTTOM,direction=direction,octant=octant)
   fl_color($FL_FILAMENT) fl_cylinder(h=10,d=5,octant=$hs_normal);

@@ -60,37 +60,67 @@ FL_HS_PIMORONI = let(
 FL_HS_DICT  = [FL_HS_PIMORONI];
 
 /**
+ * calculates Pimoroni's bounding box
+ */
+function fl_bb_pimoroni(
+  type,
+  // top part
+  top       = true,
+  // bottom part
+  bottom    = true,
+) = let(
+  bb    = fl_bb_corners(type),
+  bot_p = fl_get(type,"bottom part"),
+  bot_t = fl_get(bot_p,"layer 0 base thickness") + fl_get(bot_p,"layer 0 fluting thickness") + fl_get(bot_p,"layer 0 holders thickness"),
+  top_p = fl_get(type,"top part"),
+  top_t = fl_get(top_p,"layer 1 base thickness") + fl_get(top_p,"layer 1 fluting thickness") + fl_get(top_p,"layer 1 holders thickness")
+) [
+  [bb[0].x,bb[0].y,bb[0].z+(bottom ? 0 : bot_t)],
+  [bb[1].x,bb[1].y,bb[1].z-0*(top    ? 0 : top_t)]
+];
+
+/**
  * FL_LAYOUT,FL_ASSEMBLY children context:
  *  $hs_radius  - corner radius
  *  $hs_normal  - layout normal (always -Z);
  *  $hs_screw   - mount screw;
  */
-module pimoroni(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+module fl_pimoroni(
+  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
   type,
   // FL_DRILL thickness in scalar form for -Z normal
   thick=0,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  // either "mount" or "assembly"
+  lay_what  = "mount",
+  // top part
+  top       = true,
+  // bottom part
+  bottom    = true,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  // when undef native positioning is used
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(is_undef(lay_what)||lay_what=="mount"||lay_what=="assembly");
 
-  bbox      = fl_bb_corners(type);
+  bbox      = fl_bb_pimoroni(type,top=top,bottom=bottom);
   size      = fl_bb_size(type);
   corner_r  = fl_get(type,"corner radius");
-  bottom    = fl_get(type,"bottom part");
-  top       = fl_get(type,"top part");
+  bottom_p  = fl_get(type,"bottom part");
+  top_p     = fl_get(type,"top part");
   rpi4      = FL_PCB_RPI4;
   pcb_t     = fl_pcb_thick(rpi4);
   screw     = fl_screw(type);
   dxf       = fl_get(type,"DXF model");
 
-  bot_base_t    = fl_get(bottom,"layer 0 base thickness");
-  bot_fluting_t = fl_get(bottom,"layer 0 fluting thickness");
-  bot_holder_t  = fl_get(bottom,"layer 0 holders thickness");
-  top_base_t    = fl_get(top,"layer 1 base thickness");
-  top_fluting_t = fl_get(top,"layer 1 fluting thickness");
-  top_holder_t  = fl_get(top,"layer 1 holders thickness");
+  bot_base_t    = fl_get(bottom_p,"layer 0 base thickness");
+  bot_fluting_t = fl_get(bottom_p,"layer 0 fluting thickness");
+  bot_holder_t  = fl_get(bottom_p,"layer 0 holders thickness");
+  top_base_t    = fl_get(top_p,"layer 1 base thickness");
+  top_fluting_t = fl_get(top_p,"layer 1 fluting thickness");
+  top_holder_t  = fl_get(top_p,"layer 1 holders thickness");
 
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;
   M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
@@ -166,8 +196,10 @@ module pimoroni(
       // ) #fl_bb_add(bb);
     }
 
-    bottom();
-    top();
+    if (bottom)
+      bottom();
+    if (top)
+      top();
   }
 
   module do_assembly() {
@@ -186,10 +218,13 @@ module pimoroni(
   module do_layout() {
     fl_trace("$FL_LAYOUT",$FL_LAYOUT);
     translate(+Z(bottom_sz().z+pcb_t))
-      fl_pcb(FL_LAYOUT,rpi4,thick=bot_base_t+bot_holder_t)
-        translate(-Z(pcb_t+bot_base_t+bot_holder_t))
-          context()
-            children();
+      if (lay_what=="mount")
+        fl_pcb(FL_LAYOUT,rpi4,thick=bot_base_t+bot_holder_t)
+          translate(-Z(pcb_t+(bottom?bot_base_t+bot_holder_t:0)))
+            context()
+              children();
+      else
+        children();
   }
 
   module do_drill() {
