@@ -99,10 +99,6 @@ if (obj)
 else
   for(i=[0:len(FL_KNUT_DICT)-1]) let(row=FL_KNUT_DICT[i],l=len(row)) translate(fl_Y(12*i)) {
     fl_trace("len(row)",len(row));
-    fl_layout(axis=+FL_X,gap=3,types=row) {
-      if (l>0) let(type=row[0]) fl_knut(verbs,type,octant=octant,direction=direction);
-      if (l>1) let(type=row[1]) fl_knut(verbs,type,octant=octant,direction=direction);
-      if (l>2) let(type=row[2]) fl_knut(verbs,type,octant=octant,direction=direction);
-      if (l>3) let(type=row[3]) fl_knut(verbs,type,octant=octant,direction=direction);
-    }
+    fl_layout(axis=+FL_X,gap=3,types=row)
+      fl_knut(verbs,$item,octant=octant,direction=direction);
   }
