@@ -487,15 +487,16 @@ let(
  *  $size   - equal to bounding box size of $item
  *
  */
+ // TODO: add namespace
 module fl_layout(
   // supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
-  verbs = FL_LAYOUT, 
+  verbs = FL_LAYOUT,
   // layout direction vector
-  axis,     
+  axis,
   // gap inserted along «axis»
-  gap=0,    
+  gap=0,
   // list of types to be arranged
-  types,    
+  types,
   /**
    * internal type alignment into the resulting bounding box surfaces.
    * Is managed through a vector whose x,y,z components are [-1,0,+1] values.
@@ -506,14 +507,14 @@ module fl_layout(
   // desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])
   direction,
   // when undef native positioning is used
-  octant    
+  octant
 ) {
   assert(len(axis)==3,axis);
   assert(is_num(gap),gap);
   assert(is_list(types),types);
 
-  align = is_num(align) 
-        ? assert(align==-1||align==0||align==+1) [align,align,align] 
+  align = is_num(align)
+        ? assert(align==-1||align==0||align==+1) [align,align,align]
         : assert(len(align)==3) align;
   bbox  = lay_bb_corners(axis,gap,types);
   size  = bbox[1]-bbox[0]; // resulting size
@@ -547,8 +548,8 @@ module fl_layout(
       fl_trace("sz",sz);
       fl_trace("delta",$i*gap*axis);
       fl_trace("offset",offset);
-      
-      
+
+
       Talign  = let(delta=bbox-$bbox) [
         align.x<0 ? delta[0].x : align.x>0 ? delta[1].x : 0,
         align.y<0 ? delta[0].y : align.y>0 ? delta[1].y : 0,
