@@ -42,7 +42,7 @@ function fl_spc_holeRadius(
     screw,
     // optional knurl nut instance
     knut
-  ) = 
+  ) =
   let(
     knut  = knut!=undef ? assert(is_list(knut)) knut : undef
   ) knut ? fl_knut_r(knut)-0.3 : screw ? screw_radius(screw) : undef;
@@ -57,7 +57,7 @@ function fl_spc_holeRadius(
  */
 module fl_spacer(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD, 
+  verbs       = FL_ADD,
   // height along Z axis
   h,
   // external radius
@@ -71,11 +71,11 @@ module fl_spacer(
   // optional screw
   screw,
   // optional knurl nut
-  knut=false,    
+  knut=false,
   // desired direction [director,rotation], native direction when undef ([+Z,0])
-  direction,            
+  direction,
   // when undef native positioning is used
-  octant,               
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
@@ -86,23 +86,25 @@ module fl_spacer(
   knut    = knut && screw ? fl_knut_search(screw,h) : undef;
   hole_r  = fl_spc_holeRadius(screw,knut);
   // thickness along ±Z only
-  thick   = is_num(thick) ? [thick,thick] : assert(fl_tt_isAxisVList(thick)) thick.z; 
-  
+  thick   = is_num(thick) ? [thick,thick] : assert(fl_tt_isAxisVList(thick)) thick.z;
+
   D       = direction ? fl_direction(default=[+Z,+X],direction=direction) : I;
   M       = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
 
   module do_add() {
     fl_color($FL_FILAMENT)
-      if (hole_r) 
-        fl_tube(h=h,r=r,thick=r-hole_r); 
-      else 
+      if (hole_r)
+        fl_tube(h=h,r=r,thick=r-hole_r);
+      else
         fl_cylinder(h=h,r=r);
   }
 
   module do_mount() {
-    if (screw)
+    if (screw) {
+      washer  = let(htyp=screw_head_type(screw)) htyp==hs_cs||htyp==hs_cs_cap ? "no" : "nylon";
       translate(+Z(h+thick[1]))
-        fl_screw(FL_DRAW,screw,thick=h+thick[0]+thick[1],washer="nylon");
+        fl_screw(FL_DRAW,screw,thick=h+thick[0]+thick[1],washer=washer);
+    }
   }
 
   module do_assembly() {
@@ -111,14 +113,14 @@ module fl_spacer(
   }
 
   module do_layout() {
-    if (screw) {
+    // if (screw) {
       if (fl_3d_axisIsSet(+Z,lay_direction))
         context(+Z) translate($spc_director*h) children();
       if (fl_3d_axisIsSet(-Z,lay_direction))
         context(-Z) children();
-    }
+    // }
   }
- 
+
   module do_footprint() {
     fl_cylinder(h=h,r=r);
   }
