@@ -29,9 +29,6 @@ $FL_SAFE    = false;
 // When true, fl_trace() mesages are turned on
 $FL_TRACE   = false;
 
-FILAMENT_UPPER  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-FILAMENT_LOWER  = "SteelBlue";  // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-
 /* [Supported verbs] */
 
 // adds shapes to scene.
@@ -58,23 +55,30 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [Parts] */
-
-UPPER_PART  = true;
-LOWER_PART  = true;
-
 /* [Box] */
 
-// thickness
-T         = 2.5;
-// inner radius for rounded angles (square if undef)
-RADIUS    = 1.1;
-EXPLODE   = 7.5;
-TOLERANCE = 0.3;
-FILLET    = false;
+// external dimensions
+XSIZE           = [100,60,40];
+// internal payload size
+ISIZE           = [100,60,40];
+// internal bounding box low corner
+PLOAD_0         = [0,0,0];
+// internal bounding box high corner
+PLOAD_1         = [100,60,40];
+// select the input to use
+SIZE_BY         = "XSIZE";  // [XSIZE,ISIZE,PLOAD]
+// sheet thickness
+THICK           = 2.5;
+// fold internal radius (square if undef)
+RADIUS          = 1.1;
 
-// Internal payload size
-PAY_SIZE  = [100,60,40];
+PARTS           = "all";    // [all,upper,lower]
+TOLERANCE       = 0.3;
+// upper side color
+MATERIAL_UPPER  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// lower side color
+MATERIAL_LOWER  = "SteelBlue";  // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+FILLET          = true;
 
 /* [Hidden] */
 
@@ -88,20 +92,16 @@ verbs=[
   if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 
-radius  = RADIUS!=0 ? RADIUS : undef;
-
-PARTS = (LOWER_PART && UPPER_PART) ? "all"
-      : LOWER_PART ? "lower"
-      : UPPER_PART ? "upper"
-      : "none";
-
-TREAL = T + TOLERANCE;
-
-Tpl=fl_T([TREAL,TREAL,T+TOLERANCE]);
-
-size  = PAY_SIZE+[2*TREAL,2*TREAL,2*TREAL];
-
-fl_trace("$FL_ADD",$FL_ADD);
-fl_trace("external size",size);
-// fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[-size/2,+size/2])
-fl_box(verbs,psize=PAY_SIZE,thick=T,radius=radius,parts=PARTS,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=TOLERANCE,fillet=FILLET,octant=octant,direction=direction);
+fl_box(verbs,
+  xsize=SIZE_BY=="XSIZE"?XSIZE:undef,
+  isize=SIZE_BY=="ISIZE"?ISIZE:undef,
+  pload=SIZE_BY=="PLOAD"?[PLOAD_0,PLOAD_1]:undef,
+  thick=THICK,
+  radius=RADIUS?RADIUS:undef,
+  parts=PARTS,
+  material_upper=MATERIAL_UPPER,
+  material_lower=MATERIAL_LOWER,
+  tolerance=TOLERANCE,
+  fillet=FILLET,
+  octant=octant,direction=direction
+);
