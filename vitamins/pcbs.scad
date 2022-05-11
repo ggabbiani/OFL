@@ -423,7 +423,7 @@ module fl_pcb(
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
             : assert(fl_tt_isAxisVList(thick)) thick;
   neg_delta = -pcb_t-bbox[0].z;
-  dr_thick  = echo(bbox=bbox,pcb_t=pcb_t,delta=neg_delta,thick=thick.z[0]) pcb_t+neg_delta+thick.z[0]; // thickness along -Z
+  dr_thick  = pcb_t+neg_delta+thick.z[0]; // thickness along -Z
   cut_thick = thick;
   material  = fl_material(type,default="green");
   radius    = fl_pcb_radius(type);
