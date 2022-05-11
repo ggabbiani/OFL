@@ -205,7 +205,7 @@ module fl_pinHeader(
     if (labels) {
       // connectors
       if (conns)
-        fl_lay_connectors(conns) {
+        fl_lay_connectors(conns) union() {
           label = str("C",$conn_i);
           if ($conn_type=="socket")
             translate(X($conn_size/2))
