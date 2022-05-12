@@ -49,7 +49,7 @@ function fl_repos(oldpos,oldsize,newsize) =
   ) [for(i=[0:len-1]) facts[i]*oldpos[i]];
 
 module fl_label(
-  // supported verbs: FL_ADD, FL_AXES, FL_BBOX,
+  // supported verbs: FL_ADD, FL_AXES
   verbs   = FL_ADD,
   string,
   fg      = "white",
@@ -57,6 +57,8 @@ module fl_label(
   size,
   // depth along z-axis
   thick,
+  // extra delta to add to octant placement
+  extra=0,
   // when undef native positioning is used
   octant,
   // desired direction [director,rotation] or native direction if undef
@@ -66,7 +68,7 @@ module fl_label(
   assert(is_num(thick));
 
   bbox  = [O,Z(thick)];
-  M     = octant ? fl_octant(octant=[0,0,octant.z],bbox=bbox) : I;
+  M     = octant ? T(extra*[sign(octant.x),sign(octant.y),sign(octant.z)]) * fl_octant(octant=[0,0,octant.z],bbox=bbox) : I;
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
 
   halign  = is_undef(octant) || octant.x==1 ? "left"    : !octant.x ? "center" : "right";
