@@ -74,8 +74,6 @@ module fl_box(
   D       = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
   M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
 
-  echo(bbox=bbox,deltas=deltas);
-
   module do_fillet(r) {
     delta = thick - r;
     for(i=[-1,1])
@@ -143,10 +141,6 @@ module fl_box(
       if (parts=="all" || parts=="upper")
         multmatrix(Mknut2)
           fl_spacer([FL_ASSEMBLY],holder_sz.z,4,screw=screw,knut=true,thick=Treal,octant=-Z,direction=[+Y,0],$FL_FILAMENT=undef);
-      if (parts=="all" || parts=="lower")
-        multmatrix(Mknut2)
-          fl_spacer([FL_MOUNT],holder_sz.z,4,screw=screw,knut=true,thick=Treal,lay_direction=+Z,octant=-Z,direction=[+Y,0],$FL_FILAMENT=undef)
-            screw(screw,10);
     }
   }
 
@@ -160,6 +154,15 @@ module fl_box(
     }
   }
 
+  module do_mount() {
+    translate(bbox[0]) {
+      if (parts=="all" || parts=="lower")
+        multmatrix(Mknut2)
+          fl_spacer([FL_MOUNT],holder_sz.z,4,screw=screw,knut=true,thick=Treal,lay_direction=+Z,octant=-Z,direction=[+Y,0],$FL_FILAMENT=undef)
+            screw(screw,10);
+    }
+  }
+
   module do_pload() {
     fl_bb_add([bbox[0]+deltas/2,bbox[1]-deltas/2]);
   }
@@ -167,12 +170,19 @@ module fl_box(
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();
+
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) do_mount();
+
     } else if ($verb==FL_PAYLOAD) {
       fl_modifier($modifier) do_pload();
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }

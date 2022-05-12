@@ -39,6 +39,8 @@ $FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// mount shape through predefined screws
+$FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -89,6 +91,7 @@ verbs=[
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_MOUNT!="OFF")     FL_MOUNT,
   if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 
