@@ -58,6 +58,11 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
+/* [DEBUG] */
+
+LABELS      = false;
+SYMBOLS     = false;
+
 /* [Jack] */
 
 SHOW        = "ALL"; // [ALL,FL_JACK_BARREL,MCXJPHSTEM1]
@@ -75,6 +80,7 @@ octant    = PLACE_NATIVE  ? undef : OCTANT;
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
+debug     = fl_parm_setDebug(labels=LABELS,symbols=SYMBOLS);
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
@@ -93,8 +99,8 @@ fl_trace("FL_JACK_DICT",FL_JACK_DICT);
 
 if (single)
   fl_jack(verbs,single,
-    direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift);
+    direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift,debug=debug);
 else
   layout([for(socket=FL_JACK_DICT) fl_width(socket)], 10)
     fl_jack(verbs,FL_JACK_DICT[$i],
-      direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift);
+      direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift,debug=debug);

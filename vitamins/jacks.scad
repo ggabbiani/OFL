@@ -20,6 +20,9 @@
  */
 
 include <../foundation/3d.scad>
+include <../foundation/connect.scad>
+include <../foundation/label.scad>
+include <../foundation/parameters.scad>
 include <../foundation/tube.scad>
 include <../foundation/util.scad>
 
@@ -45,7 +48,7 @@ FL_JACK_MCXJPHSTEM1 = let(
   l     = 9.3,
   h     = 5,
   sz    = [w,l,h],
-  axis  = [0,0,0.5],
+  axis  = [0,0,0.4],
   bbox  = [[-w/2,0,-h/2+axis.z],[+w/2,l,+h/2+axis.z]],
   d_ext = 6.7,
   head  = 6.25,
@@ -56,6 +59,9 @@ FL_JACK_MCXJPHSTEM1 = let(
   fl_bb_corners(value=bbox),
   fl_director(value=-Y),fl_rotor(value=+X),
   fl_engine(value="fl_jack_mcxjphstem1Engine"),
+  fl_connectors(value=[
+    conn_Socket("antenna",+X,-Z,[0,0,axis.z],size=3.45,octant=-X-Y,direction=[-Z,180])
+  ]),
   ["axis of symmetry",  axis],
   ["external diameter", d_ext],
   ["head",              head],
@@ -74,6 +80,8 @@ module fl_jack(
   cut_thick,            // thickness for FL_CUTOUT
   cut_tolerance=0,      // tolerance used during FL_CUTOUT
   cut_drift=0,          // translation applied to cutout
+  // see function fl_parm_setDebug()
+  debug,
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
 ) {
@@ -81,27 +89,29 @@ module fl_jack(
   assert(type!=undef);
   engine  = fl_engine(type);
   if (engine=="fl_jack_barrelEngine")
-    fl_jack_barrelEngine(verbs,type,cut_thick,cut_tolerance,cut_drift,direction,octant);
+    fl_jack_barrelEngine(verbs,type,cut_thick,cut_tolerance,cut_drift,debug,direction,octant);
   else if (engine=="fl_jack_mcxjphstem1Engine")
-    fl_jack_mcxjphstem1Engine(verbs,type,cut_thick,cut_tolerance,cut_drift,direction,octant);
+    fl_jack_mcxjphstem1Engine(verbs,type,cut_thick,cut_tolerance,cut_drift,debug,direction,octant);
   else
     assert(false,str("Engine '",engine,"' unknown."));
 }
 
 module fl_jack_barrelEngine(
   // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
-  verbs       = FL_ADD, 
+  verbs       = FL_ADD,
   type,
   // thickness for FL_CUTOUT
-  cut_thick,            
+  cut_thick,
   // tolerance used during FL_CUTOUT
-  cut_tolerance=0,      
+  cut_tolerance=0,
   // translation applied to cutout
-  cut_drift=0,          
+  cut_drift=0,
+  // see function fl_parm_setDebug()
+  debug,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,            
+  direction,
   // when undef native positioning is used
-  octant,               
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
@@ -136,31 +146,35 @@ module fl_jack_barrelEngine(
  */
 module fl_jack_mcxjphstem1Engine(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD, 
+  verbs       = FL_ADD,
   type,
   // thickness for FL_CUTOUT
-  cut_thick,            
+  cut_thick,
   // tolerance used during FL_CUTOUT
-  cut_tolerance=0,      
+  cut_tolerance=0,
   // translation applied to cutout
-  cut_drift=0,          
+  cut_drift=0,
+  // see function fl_parm_setDebug()
+  debug,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,            
+  direction,
   // when undef native positioning is used
-  octant,               
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  d_ext = fl_get(type,"external diameter");
-  axis  = fl_get(type, "axis of symmetry");
-  head  = fl_get(type,"head");
-  tail  = fl_get(type,"tail");
-  jack  = fl_get(type,"jack length");
+  bbox    = fl_bb_corners(type);
+  size    = fl_bb_size(type);
+  d_ext   = fl_get(type,"external diameter");
+  axis    = fl_get(type, "axis of symmetry");
+  head    = fl_get(type,"head");
+  tail    = fl_get(type,"tail");
+  jack    = fl_get(type,"jack length");
   Mshape  = T(+Y(size.y)) * Rx(90);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  conns   = fl_connectors(type);
+  echo(debug=debug);
+  D       = direction ? fl_direction(proto=type,direction=direction)  : I;
+  M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
 
   module do_add() {
     multmatrix(Mshape) {
@@ -190,7 +204,7 @@ module fl_jack_mcxjphstem1Engine(
   module do_cutout() {
     assert(cut_thick);
     translate(-Y(cut_drift))
-      multmatrix(Mshape) 
+      multmatrix(Mshape)
         translate([0,axis.z,size.y])
           fl_cylinder(d=3.45+cut_tolerance*2,h=cut_thick);
   }
@@ -209,11 +223,11 @@ module fl_jack_mcxjphstem1Engine(
   }
 
   module do_footprint() {
-    multmatrix(Mshape) 
+    multmatrix(Mshape)
       fprint();
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D,size,debug,connectors=conns) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
