@@ -109,10 +109,10 @@ let(
     fl_bb_corners(value=bbox),
     fl_director(value=+Z),fl_rotor(value=+X),
     fl_connectors(value=[
-      engine=="male"||through ? conn_Plug(cid,+X,+Y, pin_1_hi,size=pitch) :  conn_Socket(cid,+X,-Y,pin_2_hi,size=pitch),
-      through ? conn_Socket(cid,+X,+Y,pin_1_lo,size=pitch) : conn_Plug(cid,+X,-Y,pin_2_lo,size=pitch),
-      if (through) conn_Socket(cid,+X,-Y,pin_2_hi,size=pitch),
-      if (through) conn_Plug(cid,+X,-Y,pin_2_lo,size=pitch),
+      engine=="male"||through ? conn_Plug(cid,+X,+Y, pin_1_hi,size=pitch,octant=engine=="male"?-X:+X) :  conn_Socket(cid,+X,-Y,pin_2_hi,size=pitch,octant=+X),
+      through ? conn_Socket(cid,+X,+Y,pin_1_lo,size=pitch,octant=+X,direction=[-Z,180]) : conn_Plug(cid,+X,-Y,pin_2_lo,size=pitch,octant=-X),
+      if (through) conn_Socket(cid,+X,-Y,pin_2_hi,size=pitch,octant=+X,direction=[-Z,180]),
+      if (through) conn_Plug(cid,+X,-Y,pin_2_lo,size=pitch,octant=+X),
     ]),
     ["phdr/smt", smt],
     ["phdr/pass-through", through],
@@ -194,35 +194,7 @@ module fl_pinHeader(
         fl_cube(size=pin_sz,octant=-Z);
   }
 
-  module do_debug() {
-    labels  = fl_parm_getDebug(debug,"labels");
-    symbols = fl_parm_getDebug(debug,"symbols");
-
-    if (symbols)
-      if (conns)
-        fl_conn_debug(conns);
-
-    if (labels) {
-      // connectors
-      if (conns)
-        fl_lay_connectors(conns) union() {
-          label = str("C",$conn_i);
-          if ($conn_type=="socket")
-            translate(X($conn_size/2))
-              rotate(180,X)
-                fl_label(string=label,size=0.6*$conn_size,thick=0.1,octant=+X);
-          else
-            translate(X($conn_size/2))
-              fl_label(string=label,size=0.6*$conn_size,thick=0.1,octant=+X);
-        }
-    }
-
-  }
-
-  multmatrix(D*M)
-    do_debug();
-
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D,size,debug,connectors=conns) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
