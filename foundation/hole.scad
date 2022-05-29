@@ -134,21 +134,17 @@ module fl_hole_Context(
 ) {
   opts            = hole[4];
   $hole_i         = ordinal;
-  // $hole_pos       = hole[0];
   $hole_pos       = fl_hole_pos(hole);
   $hole_n         = fl_hole_n(hole);
   $hole_direction = [$hole_n,0];
   $hole_d         = fl_hole_d(hole);
-  $hole_depth     = let(depth=fl_hole_d(hole)) depth ? depth : thick;
-  // $hole_screw     = let(s=fl_optional(opts,"hole/screw")) s ? s : screw;
+  $hole_depth     = let(depth=fl_hole_depth(hole)) depth ? depth : thick;
   $hole_screw     = fl_hole_screw(hole,default=screw);
   $hole_label     = is_num(ordinal) ? str("H",ordinal) : undef;
-  // $hole_ldir      = fl_optional(opts,"hole/label [direction,rotation]");
   $hole_ldir      = fl_hole_ldir(hole);
-  // $hole_loct      = fl_optional(opts,"hole/label octant");
   $hole_loct      = fl_hole_loct(hole);
 
-  // echo($hole_i=$hole_i,$hole_ldir=$hole_ldir,$hole_loct=$hole_loct,$hole_screw=$hole_screw,screw=screw);
+  // echo($hole_i=$hole_i,$hole_depth=$hole_depth,$hole_ldir=$hole_ldir,$hole_loct=$hole_loct,$hole_screw=$hole_screw,screw=screw);
 
   children();
 }
