@@ -240,12 +240,12 @@ function fl_pcb_NopHoles(nop) = let(
   hole_d    = pcb_hole_d(nop),
   nop_holes = pcb_holes(nop),
   holes     = [
-    for(h=nop_holes) [
-      let(p=pcb_coord(nop, h)) [p.x,p.y,0],  // 3d point
-      +FL_Z,  // plane normal
-      hole_d, // hole diameter
-      pcb_t   // hole depth
-    ]
+    for(h=nop_holes) fl_Hole(
+      position  = let(p=pcb_coord(nop, h)) [p.x,p.y,0],
+      d         = hole_d,
+      normal    = +Z,
+      depth     = pcb_t
+    )
   ]
 ) holes;
 
@@ -258,12 +258,13 @@ FL_PCB_RPI4 = let(
   bare    = [[-w/2,0,-pcb_t],[+w/2,l,0]],
   payload = [[bare[0].x,bare[0].y,0],[bare[1].x,bare[1].y,h]],
   holes   = [
-    [[ 24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
-    [[ 24.5, 61.5, 0 ], +FL_Z, hole_d, pcb_t],
-    [[-24.5, 3.5,  0 ], +FL_Z, hole_d, pcb_t],
-    [[-24.5, 61.5, 0 ], +FL_Z, hole_d, pcb_t],
+    fl_Hole([ 24.5, 3.5,  0 ], hole_d,  depth=pcb_t,  loct=-X),
+    fl_Hole([ 24.5, 61.5, 0 ], hole_d,  +Z, pcb_t,loct=+Y),
+    fl_Hole([-24.5, 3.5,  0 ], hole_d,  +Z, pcb_t,loct=+X),
+    fl_Hole([-24.5, 61.5, 0 ], hole_d,  +Z, pcb_t,loct=+Y),
   ],
   comps = [
+    //TODO: engine can be retrieved from type
     //["label",   ["engine",    [position],           [[director],rotation] type,           [engine specific parameters]]]
     ["POWER IN",  [FL_USB_NS,   [25.5,      11.2, 0], [+X,0  ],             FL_USB_TYPE_C  ,[["comp/drift",-1.3]]]],
     ["HDMI0",     [FL_HDMI_NS,  [25,        26,   0], [+X,0  ],             FL_HDMI_TYPE_D ,[["comp/drift",-1.26]]]],
@@ -277,7 +278,7 @@ FL_PCB_RPI4 = let(
   vendors = [["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],
   gpio_c  = fl_comp_connectors(comps[7][1])[0],
   conns   = [
-    fl_conn_clone(gpio_c,type="plug"),
+    fl_conn_clone(gpio_c,type="plug",direction=[+Z,-90],octant=-X-Y),
   ]
 ) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=conns);
 
@@ -288,9 +289,9 @@ FL_PCB_RPI_uHAT = let(
   bare    = [[0,0,-pcb_t],[size.x,size.y,0]],
   hole_d  = 2.75,
   holes   = [
-    [[ 3.5,         size.y-3.5, 0 ], +Z, hole_d, pcb_t],
-    [[ size.x-3.5,  size.y-3.5, 0 ], +Z, hole_d, pcb_t],
-    [[ size.x-3.5,  3.5,        0 ], +Z, hole_d, pcb_t],
+    fl_Hole([ 3.5,         size.y-3.5, 0 ], hole_d, +Z, pcb_t,loct=-Y),
+    fl_Hole([ size.x-3.5,  size.y-3.5, 0 ], hole_d, +Z, pcb_t,loct=-Y),
+    fl_Hole([ size.x-3.5,  3.5,        0 ], hole_d, +Z, pcb_t,loct=+Y),
   ],
   comps   = [
   //["label",  ["engine",     [position],              [[director],rotation] type,                [engine specific parameters]]]
@@ -298,10 +299,12 @@ FL_PCB_RPI_uHAT = let(
     ["GPIO",   [FL_PHDR_NS,   [32.5,   size.y-3.5, 0], [+Z,0 ],              FL_PHDR_GPIOHDR_F_SMT_LOW]],
   ],
   vendors = [["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],
-  gpio_conn_pos  = fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),
+  gpio_conn_pos = fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),
+  rf_conn_pos   = fl_conn_pos(fl_comp_connectors(comps[0][1])[0]),
   connectors  = [
-    conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t]),
-    conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4]),
+    conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t],octant=+X+Y,direction=[-Z,180]),
+    conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4],octant=+X+Y,direction=[-Z,0]),
+    conn_Socket("antenna",-Z,+Y,rf_conn_pos,octant=+X+Y,direction=[-Z,-90]),
   ]
   ) fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,
       dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,connectors=connectors);
@@ -313,13 +316,13 @@ FL_PCB_MH4PU_P = let(
     pcb_t = 1.6,
     bare  = [[-w/2,-l/2,-pcb_t],[+w/2,+l/2,0]],
     holes = [
-      let(r=2)    [[-w/2+r+1,-l/2+r+2,0], +Z, 2*r, pcb_t],
-      let(r=2)    [[+w/2-r-1,-l/2+r+2,0], +Z, 2*r, pcb_t],
-      let(r=2)    [[-w/2+r+1,+l/2-r-2,0], +Z, 2*r, pcb_t],
-      let(r=2)    [[+w/2-r-1,+l/2-r-2,0], +Z, 2*r, pcb_t],
-      let(r=1.25) [[-w/2+r+1,0,0],        +Z, 2*r, pcb_t, [["hole/screw",M2p5_pan_screw]]],
-      let(r=1.25) [[+w/2-r-1,0,0],        +Z, 2*r, pcb_t, [["hole/screw",M2p5_pan_screw]]],
-      let(r=1.25) [[-w/2+r+37.5+r,0,0],   +Z, 2*r, pcb_t, [["hole/screw",M2p5_pan_screw]]],
+      let(r=2)    fl_Hole([-w/2+r+1,-l/2+r+2,0],  2*r,+Z, pcb_t,  loct=+Y),
+      let(r=2)    fl_Hole([+w/2-r-1,-l/2+r+2,0],  2*r,+Z, pcb_t,  loct=+Y),
+      let(r=2)    fl_Hole([-w/2+r+1,+l/2-r-2,0],  2*r,+Z, pcb_t,  loct=-Y),
+      let(r=2)    fl_Hole([+w/2-r-1,+l/2-r-2,0],  2*r,+Z, pcb_t,  loct=-Y),
+      let(r=1.25) fl_Hole([-w/2+r+1,0,0],         2*r,+Z, pcb_t,  loct=+X,  screw=M2p5_pan_screw),
+      let(r=1.25) fl_Hole([+w/2-r-1,0,0],         2*r,+Z, pcb_t,  loct=-X,  screw=M2p5_pan_screw),
+      let(r=1.25) fl_Hole([-w/2+r+37.5+r,0,0],    2*r,+Z, pcb_t,  loct=+Y,  screw=M2p5_pan_screw),
     ],
     sz_A  = fl_size(FL_USB_TYPE_Ax1),
     sz_uA = fl_size(FL_USB_TYPE_uA),
@@ -356,7 +359,11 @@ FL_PCB_HILETGO_SX1308 = let(
     // pcb thickness
     thick = pcb_t,
     color  = "DarkCyan",
-    holes = let(r=0.75,d=r*2/* ,specs=[["hole/screw",M2_cap_screw]] */) [for(i=[0:len(holes)-1]) [holes[i],+Z,d,0/* ,specs */]],
+    holes = let(r=0.75,d=r*2) [
+      for(i=[0:len(holes)-1])
+        let(pos=holes[i])
+          fl_Hole(pos,d,+Z,0,loct=-sign(pos.x)*X-sign(pos.y)*Y)
+    ],
     components=comps,
     vendors=[["Amazon","https://www.amazon.it/gp/product/B07ZYW68C4"]]
   );
@@ -635,54 +642,7 @@ module fl_pcb(
       fl_bb_add(pload);
   }
 
-  // TODO: extends on templates
-  module do_debug() {
-    labels  = fl_parm_getDebug(debug,"labels");
-    symbols = fl_parm_getDebug(debug,"symbols");
-
-    if (symbols) {
-      if (holes)
-        fl_hole_debug(holes);
-      if (conns)
-        fl_conn_debug(conns);
-    }
-
-    if (labels) {
-      // holes
-      if (holes)
-        fl_lay_holes(holes) union() {
-          // calculate label octant as the farest from bounding box edges on XY plane
-          // TODO: extend to 3 axes and move in algos
-          d0      = $hole_pos-bbox[0];
-          d1      = bbox[1]-$hole_pos;
-          octant  = sign(d1.x-d0.x)*X + sign(d1.y-d0.y)*Y;
-          // move label position on radius at 45° or 0°
-          delta   = $hole_d/2*(octant.x && octant.y ? cos(45) : 1)+0.2;
-          label   = str("H",$hole_i);
-          translate(delta*octant)
-            fl_label(string=label,size=0.6*$hole_d,thick=0.1,octant=octant);
-        }
-      // connectors
-      if (conns)
-        fl_lay_connectors(conns) union() {
-          label = str("C",$conn_i);
-          if ($conn_type=="socket")
-            rotate(180,Z)
-              translate([$conn_size/2,-$conn_size/2])
-                rotate(180,X)
-                  fl_label(string=label,size=0.6*$conn_size,thick=0.1);
-          else
-            translate([$conn_size/2,-$conn_size/4])
-              fl_label(string=label,size=0.6*$conn_size,thick=0.1);
-        }
-    }
-
-  }
-
-  multmatrix(D*M)
-    do_debug();
-
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D,size,debug,connectors=conns,holes=holes) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
