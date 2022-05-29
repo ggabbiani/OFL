@@ -18,6 +18,7 @@
  */
 
 include <../../foundation/hole.scad>
+include <../../foundation/label.scad>
 include <../../foundation/symbol.scad>
 
 $fn         = 50;           // [3:100]
@@ -34,6 +35,8 @@ $FL_TRACE   = false;
 
 // adds shapes to scene.
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of user passed accessories (like alternative screws)
+$FL_LAYOUT    = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Test hole] */
 
@@ -56,6 +59,7 @@ SYMBOL          = "plug";  // [plug,socket,hole]
 verbs=[
   if ($FL_ADD!="OFF")   FL_ADD,
   if ($FL_AXES!="OFF")  FL_AXES,
+  if ($FL_LAYOUT!="OFF")  FL_LAYOUT,
 ];
 
 size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
@@ -63,5 +67,6 @@ size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_
 if (SYMBOL=="hole")
   fl_hole_Context([O,HOLE_N,HOLE_D,HOLE_DEPTH]) fl_sym_hole(verbs);
 else
-  fl_symbol(verbs=verbs,size=size,symbol=SYMBOL);
+  fl_symbol(verbs=verbs,size=size,symbol=SYMBOL)
+    fl_label(FL_ADD,"Ciao!",size=$sym_size.y,thick=0.1,direction=$sym_ldir);
 

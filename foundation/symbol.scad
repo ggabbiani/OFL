@@ -27,14 +27,24 @@ module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
   fl_symbol(verbs,type,size,"socket");
 }
 
-// provides the symbol required in its 'canonical' form:
-// "plug": 'a piece that fits into a hole in order to close it'
-//        Its canonical form implies an orientation of the piece coherent
-//        with its insertion movement along +Z axis.
-// "socket": 'a part of the body into which another part fits'
-//        Its canonical form implies an orientation of the piece coherent
-//        with its fitting movement along -Z axis.
+/**
+ * provides the symbol required in its 'canonical' form:
+ * "plug": 'a piece that fits into a hole in order to close it'
+ *        Its canonical form implies an orientation of the piece coherent
+ *        with its insertion movement along +Z axis.
+ * "socket": 'a part of the body into which another part fits'
+ *        Its canonical form implies an orientation of the piece coherent
+ *        with its fitting movement along -Z axis.
+ *
+ * FL_LAYOUT is used for proper label orientation
+ *
+ * Children context:
+ *
+ * $sym_ldir  - [axis,angle]
+ * $sym_size  - size in 3d format
+ */
 module fl_symbol(
+  // supported verbs: FL_ADD, FL_LAYOUT
   verbs   = FL_ADD,
   // really needed?
   type    = undef,
@@ -55,6 +65,13 @@ module fl_symbol(
   fl_trace("size",size);
   fl_trace("sz",sz);
 
+  module context() {
+    $sym_ldir = symbol=="plug" ? [+Z,0] : [-Z,180];
+    $sym_size = sz;
+
+    children();
+  }
+
   module do_add() {
     fl_trace("d1",d1);
     fl_trace("d2",d2);
@@ -73,14 +90,23 @@ module fl_symbol(
     }
   }
 
+  module do_layout() {
+    context() children();
+  }
+
   fl_manage(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout() children();
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
   }
 }
+
 /**
  * this symbol uses as input a complete node context.
  * The symbol is oriented according to the hole normal.
