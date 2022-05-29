@@ -26,11 +26,13 @@ function fl_conn_id(type,value)   = fl_property(type,"conn/id",value);
 function fl_conn_ox(type,value)   = fl_property(type,"conn/orientation X",value);
 function fl_conn_oy(type,value)   = fl_property(type,"conn/orientation Y",value);
 function fl_conn_pos(type,value)  = fl_property(type,"conn/position",value);
-function fl_conn_size(type,value) = fl_property(type,"conn/size",value);
+function fl_conn_size(type,value) = fl_property(type,"conn/scalar size",value);
 function fl_conn_type(type,value) = fl_property(type,"conn/type",value);
+function fl_conn_ldir(type,value) = fl_property(type,"conn/label [direction,rotation]",value);
+function fl_conn_loct(type,value) = fl_property(type,"conn/label octant",value);
 
 // contructors
-function conn_Plug(id,ox,oy,pos,size=2.54) =
+function conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0]) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
@@ -44,9 +46,11 @@ function conn_Plug(id,ox,oy,pos,size=2.54) =
     fl_conn_oy(value=oy),
     fl_conn_pos(value=pos),
     fl_conn_size(value=size),
+    fl_conn_ldir(value=direction),
+    fl_conn_loct(value=octant),
   ];
 
-function conn_Socket(id,ox,oy,pos,size=2.54) =
+function conn_Socket(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0]) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
@@ -60,6 +64,8 @@ function conn_Socket(id,ox,oy,pos,size=2.54) =
     fl_conn_oy(value=oy),
     fl_conn_pos(value=pos),
     fl_conn_size(value=size),
+    fl_conn_ldir(value=direction),
+    fl_conn_loct(value=octant),
   ];
 
 // massive connection clone eventually transformed
@@ -67,13 +73,26 @@ function fl_conn_import(conns,M) = [for(c=conns) fl_conn_clone(c,M=M)];
 
 // returns a copy of the given connection with eventual rewriting of attributes
 function fl_conn_clone(
-  original  // MANDATORY original connection to be cloned
-  ,type     // OPTIONAL new connection type ("socket" or "plug")
-  ,id       // OPTIONAL new connection id
-  ,ox       // OPTIONAL new orientation X
-  ,oy       // OPTIONAL new orientation Y
-  ,pos      // OPTIONAL new position
-  ,M=I      // OPTIONAL transformation matrix for position transformation
+  // MANDATORY original connection to be cloned
+  original,
+  // OPTIONAL new connection type ("socket" or "plug")
+  type,
+  // OPTIONAL new connection id
+  id,
+  // OPTIONAL new orientation X
+  ox,
+  // OPTIONAL new orientation Y
+  oy,
+  // OPTIONAL new position
+  pos,
+  // OPTIONAL new size
+  size,
+  // OPTIONAL label octant
+  octant,
+  // OPTIONAL label [direction,rotation]
+  direction,
+  // OPTIONAL transformation matrix for position transformation
+  M=I
 ) =
   assert(original!=undef)
   assert(ox==undef  || len(ox)==3)
@@ -84,10 +103,13 @@ function fl_conn_clone(
     id        = id==undef ? fl_conn_id(original) : id,
     orig_ox_3 = fl_conn_ox(original),
     orig_oy_3 = fl_conn_oy(original),
-    orig_size = fl_conn_size(original),
     tran_ox_4 = fl_transform(M,orig_ox_3),
     tran_oy_4 = fl_transform(M,orig_oy_3),
     trans_O_4 = fl_transform(M,O),
+
+    size      = size ? size : fl_conn_size(original),
+    octant    = octant ? octant : fl_conn_loct(original),
+    direction = direction ? direction : fl_conn_ldir(original),
 
     x_3   = ox!=undef     ? ox  :  fl_3(tran_ox_4) - fl_3(trans_O_4),
     y_3   = oy!=undef     ? oy  :  fl_3(tran_oy_4) - fl_3(trans_O_4),
@@ -104,7 +126,7 @@ function fl_conn_clone(
   assert(norm(y_3)==1)
   assert(orig_ox_3*orig_oy_3==0,"Original orientation fl_axes are not orthogonal")
   assert(x_3*y_3==0,"Resulting orientation fl_axes are not orthogonal")
-  type=="plug" ? conn_Plug(id,x_3,y_3,p_3,orig_size) : conn_Socket(id,x_3,y_3,p_3,orig_size);
+  type=="plug" ? conn_Plug(id,x_3,y_3,p_3,size,octant,direction) : conn_Socket(id,x_3,y_3,p_3,size,octant,direction);
 
 /**
  * Returns the transformation matrix moving child shape to its parent
@@ -187,6 +209,8 @@ module fl_conn_add(connector,size,label) {
  * $conn_ox     - X axis
  * $conn_oy     - Y axis
  * $conn_label  - OPTIONAL string label
+ * $conn_ldir   - [direction,rotation]
+ * $conn_loct   - label octant
  * $conn_pos    - position
  * $conn_size   - OPTIONAL connector size
  * $conn_type   - connector type
@@ -203,6 +227,8 @@ module fl_conn_Context(
   $conn_type  = fl_conn_type(connector);
   $conn_size  = fl_optional(connector,fl_conn_size()[0]);
   $conn_label = is_num(ordinal) ? str("C",ordinal) : undef;
+  $conn_ldir  = fl_conn_ldir(connector);
+  $conn_loct  = fl_conn_loct(connector);
 
   children();
 }
@@ -224,6 +250,18 @@ module fl_lay_connectors(
  */
 module fl_conn_debug(
   // list of connectors
-  conns
-) fl_lay_connectors(conns)
-    fl_symbol(size=2.54,symbol=$conn_type);
+  conns,
+  // see function fl_parm_setDebug()
+  debug
+) {
+    labels  = fl_parm_getDebug(debug,"labels");
+    symbols = fl_parm_getDebug(debug,"symbols");
+    fl_lay_connectors(conns) union() {
+      if (symbols)
+        fl_symbol(FL_ADD,size=$conn_size,symbol=$conn_type,$FL_ADD="ON");
+      if (labels)
+        echo($conn_label=$conn_label,$conn_loct=$conn_loct,$conn_ldir=$conn_ldir)
+        // multmatrix(T(0.6*$conn_size*[sign($conn_loct.x),sign($conn_loct.y),sign($conn_loct.z)]))
+          fl_label([FL_ADD,FL_AXES],$conn_label,size=0.6*$conn_size,thick=0.1,octant=$conn_loct,direction=$conn_ldir,extra=$conn_size,$FL_ADD="ON",$FL_AXES="ON");
+    }
+  }
