@@ -39,6 +39,11 @@ $FL_TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
+/* [DEBUG] */
+
+LABELS      = false;
+SYMBOLS     = false;
+
 /* [Holes] */
 
 // hole depth
@@ -56,35 +61,36 @@ SIX   = true;
 /* [Hidden] */
 
 size  = 20;
+debug = fl_parm_setDebug(labels=LABELS,symbols=SYMBOLS);
 
 holes = [
   // ONE
-  [size/2*[0,0,1],+Z, D, DEPTH],
+  fl_Hole(size/2*[0,0,1], D, +Z, DEPTH),
   // TWO
-  [size/2*[+0.5,+0.5,-1],-Z, D, DEPTH],
-  [size/2*[-0.5,-0.5,-1],-Z, D, DEPTH],
+  fl_Hole(size/2*[+0.5,+0.5,-1],D,-Z, DEPTH, ldir=[-Z,180]),
+  fl_Hole(size/2*[-0.5,-0.5,-1],D,-Z, DEPTH, ldir=[-Z,180]),
   // THREE
-  [size/2*[ 0,    1,   0  ],  +Y, D, DEPTH],
-  [size/2*[+0.5,  1,  +0.5],  +Y, D, DEPTH],
-  [size/2*[-0.5,  1,  -0.5],  +Y, D, DEPTH],
+  fl_Hole(size/2*[ 0,    1,   0  ],D,  +Y, DEPTH, ldir=[+Y,0]),
+  fl_Hole(size/2*[+0.5,  1,  +0.5],D,  +Y, DEPTH, ldir=[+Y,0]),
+  fl_Hole(size/2*[-0.5,  1,  -0.5],D,  +Y, DEPTH, ldir=[+Y,0]),
   // FOUR
-  [size/2*[-1,   0.5,  0.5 ],-X, D, DEPTH],
-  [size/2*[-1,  -0.5,  0.5 ],-X, D, DEPTH],
-  [size/2*[-1,  -0.5, -0.5 ],-X, D, DEPTH],
-  [size/2*[-1,   0.5, -0.5 ],-X, D, DEPTH],
+  fl_Hole(size/2*[-1,   0.5,  0.5 ],D,-X, DEPTH, ldir=[-X,-90]),
+  fl_Hole(size/2*[-1,  -0.5,  0.5 ],D,-X, DEPTH, ldir=[-X,-90]),
+  fl_Hole(size/2*[-1,  -0.5, -0.5 ],D,-X, DEPTH, ldir=[-X,-90]),
+  fl_Hole(size/2*[-1,   0.5, -0.5 ],D,-X, DEPTH, ldir=[-X,-90]),
   // FIVE
-  [size/2*[1,   0,  0   ],+X, D, DEPTH],
-  [size/2*[1, 0.5,  0.5 ],+X, D, DEPTH],
-  [size/2*[1,-0.5,  0.5 ],+X, D, DEPTH],
-  [size/2*[1,-0.5, -0.5 ],+X, D, DEPTH],
-  [size/2*[1, 0.5, -0.5 ],+X, D, DEPTH],
+  fl_Hole(size/2*[1,   0,  0   ],D,+X, DEPTH, ldir=[+X,-90]),
+  fl_Hole(size/2*[1, 0.5,  0.5 ],D,+X, DEPTH, ldir=[+X,-90]),
+  fl_Hole(size/2*[1,-0.5,  0.5 ],D,+X, DEPTH, ldir=[+X,-90]),
+  fl_Hole(size/2*[1,-0.5, -0.5 ],D,+X, DEPTH, ldir=[+X,-90]),
+  fl_Hole(size/2*[1, 0.5, -0.5 ],D,+X, DEPTH, ldir=[+X,-90]),
   // SIX
-  [size/2*[+0.5,  -1,  0  ],-Y, D, DEPTH],
-  [size/2*[-0.5,  -1,  0  ],-Y, D, DEPTH],
-  [size/2*[+0.5,  -1,  0.5],-Y, D, DEPTH],
-  [size/2*[-0.5,  -1,  0.5],-Y, D, DEPTH],
-  [size/2*[-0.5,  -1, -0.5],-Y, D, DEPTH],
-  [size/2*[+0.5,  -1, -0.5],-Y, D, DEPTH],
+  fl_Hole(size/2*[+0.5,  -1,  0  ],D,-Y, DEPTH, ldir=[-Y,-180]),
+  fl_Hole(size/2*[-0.5,  -1,  0  ],D,-Y, DEPTH, ldir=[-Y,-180]),
+  fl_Hole(size/2*[+0.5,  -1,  0.5],D,-Y, DEPTH, ldir=[-Y,-180]),
+  fl_Hole(size/2*[-0.5,  -1,  0.5],D,-Y, DEPTH, ldir=[-Y,-180]),
+  fl_Hole(size/2*[-0.5,  -1, -0.5],D,-Y, DEPTH, ldir=[-Y,-180]),
+  fl_Hole(size/2*[+0.5,  -1, -0.5],D,-Y, DEPTH, ldir=[-Y,-180]),
 ];
 
 enable  = fl_3d_AxisList([
@@ -109,4 +115,4 @@ do() fl_color($FL_FILAMENT)
     fl_holes(holes=holes,enable=enable);
   }
 if ($FL_DEBUG)
-  fl_hole_debug(holes=holes,enable=enable);
+  fl_hole_debug(holes=holes,enable=enable,debug=debug);

@@ -21,6 +21,7 @@
 
 include <../../foundation/type_trait.scad>
 include <../../foundation/unsafe_defs.scad>
+// include <../../foundation/hole.scad>
 
 assert(fl_tt_isInDictionary("inexistent",["key1","key2","key3"])==false);
 assert(fl_tt_isInDictionary("key2",["key1","key2","key3"]));
@@ -81,14 +82,15 @@ assert(
 );
 
 // holes
-assert(fl_tt_isHole([[1,2,3],[1,0,0]])==false);
-assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7])==false);
-assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5])==true);
-assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,"5"])==false);
-assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5,[]])==true);
-assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5,"string"])==false);
-assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5,-2])==false);
-assert(fl_tt_isHole([[1,2,3],[1,0,0],2.7,5,[["key1","value"],["key2",2]]])==true);
+// assert(fl_tt_isHole(fl_Hole([1,2,3]))==false);
+// assert(fl_tt_isHole(fl_Hole(2.7))==false);
+// assert(fl_tt_isHole(fl_Hole([1,2,3],2.7,[1,0,0]))==true);
+// assert(fl_tt_isHole(fl_Hole([1,2,3],2.7,[1,0,0],5))==true);
+// assert(fl_tt_isHole(fl_Hole([1,2,3],2.7,[1,0,0],"5"))==false);
+// assert(fl_tt_isHole(fl_Hole([1,2,3],2.7,[1,0,0],5,[]))==false);
+// assert(fl_tt_isHole(fl_Hole([1,2,3],2.7,[1,0,0],5,"string"))==false);
+// assert(fl_tt_isHole(fl_Hole([1,2,3],2.7,[1,0,0],5,-2))==false);
+// assert(fl_tt_isHole(fl_Hole([1,2,3],2.7,[1,0,0],5,[["key1","value"],["key2",2]]))==true);
 
 // axis lists
 

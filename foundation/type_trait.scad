@@ -146,28 +146,6 @@ function fl_tt_isAxisString(s) =
     nocase=true
   );
 
-/**
- * Hole representation as:
- * [3d point,plane normal,diameter,depth,optional key/value list]
- * NOTE: 0 «depth» means thru-hole
- */
-function fl_tt_isHole(hole) = let(
-    len       = len(hole),
-    3dpoint   = hole[0],
-    normal    = hole[1],
-    diameter  = hole[2],
-    depth     = hole[3],
-    optionals = hole[4]
-  )
-  len>=4 && len<=5
-  && fl_tt_isPointNormal([3dpoint,normal])
-  && is_num(diameter)
-  && is_num(depth)
-  && is_undef(optionals) || is_list(optionals);
-
-function fl_tt_isHoleList(list) =
-  fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));
-
 function fl_tt_isAxis(axis) = (axis==-X||axis==+X||axis==-Y||axis==+Y||axis==-Z||axis==+Z);
 
 /*

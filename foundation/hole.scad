@@ -20,28 +20,106 @@
  */
 
 include <3d.scad>
+include <label.scad>
+include <parameters.scad>
 include <symbol.scad>
 include <type_trait.scad>
 
+//*****************************************************************************
+// General properties
+function fl_holes(type,value)               = assert(is_undef(value)||fl_tt_isHoleList(value),value) fl_property(type,"holes",value);
+
+//*****************************************************************************
+// Hole properties
+
+function fl_hole_d(hole,value)              = fl_property(hole,"hole/diameter",value);
+function fl_hole_depth(hole,value)          = fl_property(hole,"hole/depth",value);
+function fl_hole_n(hole,value)              = fl_property(hole,"hole/normal",value);
+function fl_hole_pos(hole,value)            = fl_property(hole,"hole/position",value);
+function fl_hole_ldir(hole,value)           = fl_optProperty(hole,"hole/label [direction,rotation]",value);
+function fl_hole_loct(hole,value)           = fl_optProperty(hole,"hole/label octant",value);
+function fl_hole_screw(hole,value,default)  = fl_optProperty(hole,"hole/screw",value,default);
+
+//*****************************************************************************
+// type traits
+
+function fl_tt_is3d(3d) = len(3d)==3;
+
+function fl_tt_isOctant(3d) =
+  fl_tt_is3d(3d)
+  && (3d.x==0 || abs(3d.x)==1)
+  && (3d.y==0 || abs(3d.y)==1)
+  && (3d.z==0 || abs(3d.z)==1);
+
+function fl_tt_isDirectionRotation(value) = let(
+    direction = value[0],
+    rotation  = value[1]
+  )  (len(value)==2)
+  && (fl_tt_is3d(direction))
+  && (is_num(rotation));
+
+/**
+ * Hole representation as mandatory properties check:
+ * 3d     ↦ hole position
+ * n      ↦ applied surface normal
+ * d      ↦ hole diameter
+ * depth  ↦ hole depth (0 means pass-thru hole)
+ */
+function fl_tt_isHole(hole) = let(
+    3d    = fl_hole_pos(hole),
+    d     = fl_hole_d(hole),
+    n     = fl_hole_n(hole),
+    depth = fl_hole_depth(hole),
+    ldir  = fl_hole_ldir(hole),
+    loct  = fl_hole_loct(hole),
+    screw = fl_hole_screw(hole)
+  ) fl_tt_isPointNormal([3d,n])
+  && is_num(d)
+  && is_num(depth)
+  && (is_undef(ldir) || fl_tt_isDirectionRotation(ldir))
+  && (is_undef(loct) || fl_tt_isOctant(loct));
+
+function fl_tt_isHoleList(list) = fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));
+
 // constructor
 function fl_Hole(
-    position,
-    d,
-    normal  = +Z,
-    // when depth is null hole is pass-through
-    depth = 0,
-    opts  = []
-  ) = [position,normal,d,depth,opts];
+  // 3d hole position
+  position,
+  // diameter
+  d,
+  // normal
+  normal  = +Z,
+  // when depth is null hole is pass-through
+  depth = 0,
+  // OPTIONAL label direction in [direction,rotation] format
+  ldir,
+  // OPTIONAL label octant
+  loct,
+  // OPTIONAL screw
+  screw
+) = let(
+    hole  = assert(fl_tt_isPointNormal([position,normal]),[position,normal]) [
+      fl_hole_pos(value=position),
+      fl_hole_n(value=normal),
+      assert(is_num(d)) fl_hole_d(value=d),
+      assert(is_num(depth)) fl_hole_depth(value=depth),
+      if (ldir) fl_hole_ldir(value=ldir),
+      if (loct) fl_hole_loct(value=loct),
+      if (screw) fl_hole_screw(value=screw),
+    ]
+  ) hole;
 
 /**
  * prepare context for children() holes
  *
- * $hole_pos
+ * $hole_pos        - hole position
  * $hole_d          - hole diameter
  * $hole_depth      - hole depth (set to «thick» for pass-thru)
  * $hole_direction  - [$hole_n,0]
  * $hole_i          - OPTIONAL hole number
  * $hole_label      - OPTIONAL string label
+ * $hole_ldir       - [direction,rotation]
+ * $hole_loct       - label octant
  * $hole_n          - hole normal
  * $hole_screw      - OPTIONAL hole screw
  */
@@ -54,14 +132,23 @@ module fl_hole_Context(
   // fallback screw
   screw
 ) {
+  opts            = hole[4];
   $hole_i         = ordinal;
-  $hole_pos       = hole[0];
-  $hole_n         = hole[1];
+  // $hole_pos       = hole[0];
+  $hole_pos       = fl_hole_pos(hole);
+  $hole_n         = fl_hole_n(hole);
   $hole_direction = [$hole_n,0];
-  $hole_d         = hole[2];
-  $hole_depth     = hole[3] ? hole[3] : thick;
-  $hole_screw     = let(s=fl_optional(hole[4],"hole/screw")) s ? s : screw;
+  $hole_d         = fl_hole_d(hole);
+  $hole_depth     = let(depth=fl_hole_d(hole)) depth ? depth : thick;
+  // $hole_screw     = let(s=fl_optional(opts,"hole/screw")) s ? s : screw;
+  $hole_screw     = fl_hole_screw(hole,default=screw);
   $hole_label     = is_num(ordinal) ? str("H",ordinal) : undef;
+  // $hole_ldir      = fl_optional(opts,"hole/label [direction,rotation]");
+  $hole_ldir      = fl_hole_ldir(hole);
+  // $hole_loct      = fl_optional(opts,"hole/label octant");
+  $hole_loct      = fl_hole_loct(hole);
+
+  // echo($hole_i=$hole_i,$hole_ldir=$hole_ldir,$hole_loct=$hole_loct,$hole_screw=$hole_screw,screw=screw);
 
   children();
 }
@@ -129,7 +216,17 @@ module fl_hole_debug(
   // pass-through thickness
   thick=0,
   // fallback screw
-  screw
-) fl_lay_holes(holes,enable,thick,screw)
-    translate(NIL*$hole_n)
-      fl_sym_hole($FL_ADD="ON");
+  screw,
+  // see function fl_parm_setDebug()
+  debug
+) {
+    labels  = fl_parm_getDebug(debug,"labels");
+    symbols = fl_parm_getDebug(debug,"symbols");
+    fl_lay_holes(holes,enable,thick,screw) union() {
+      if (symbols)
+        translate(NIL*$hole_n)
+          fl_sym_hole($FL_ADD="ON");
+      if (labels)
+        fl_label(FL_ADD,$hole_label,size=0.6*$hole_d,thick=0.1,octant=$hole_loct,direction=$hole_ldir,extra=$hole_d,$FL_ADD="ON");
+    }
+  }

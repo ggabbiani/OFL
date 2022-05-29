@@ -69,11 +69,11 @@ FL_PSU_MeanWell_RS_25_5 = let(
       [-FL_Z,[size.x, size.y, t]],
     ]],
     fl_holes(value=[
-      [[25.5,8.75,14                ],+FL_X, 3, pcb_t],
-      [[25.5,75,14                  ],+FL_X, 3, pcb_t],
-      [[0,12,0                      ],-FL_Z, 3, pcb_t],
-      [[0,67,0                      ],-FL_Z, 3, pcb_t],
-      [[-size.x/2+6.2,  size.y, 10  ],+FL_Y, 3, pcb_t],
+      fl_Hole([25.5,8.75,14], 3,  +X, pcb_t),
+      fl_Hole([25.5,75,14],   3,  +X, pcb_t),
+      fl_Hole([0,12,0],       3,  -Z, pcb_t),
+      fl_Hole([0,67,0],       3,  -Z, pcb_t),
+      fl_Hole([-size.x/2+6.2,size.y,10],3,+Y,pcb_t),
     ]),
     fl_vendor(value=
       [
@@ -120,11 +120,11 @@ FL_PSU_MeanWell_RS_15_5 = let(
       [-FL_Z,[size.x, size.y, t]],
     ]],
     fl_holes(value=[
-      [[size.x/2,     11.9,   15.1  ],+FL_X, 3, pcb_t],
-      [[size.x/2,     size.x, 15.1  ],+FL_X, 3, pcb_t],
-      [[0,            8.75,   0     ],-FL_Z, 3, pcb_t],
-      [[0,            47.85,  0     ],-FL_Z, 3, pcb_t],
-      [[-size.x/2+6.2,  size.y, 10  ],+FL_Y, 3, pcb_t],
+      fl_Hole([size.x/2,     11.9,   15.1  ],3,+X, pcb_t),
+      fl_Hole([size.x/2,     size.x, 15.1  ],3,+X, pcb_t),
+      fl_Hole([0,            8.75,   0     ],3,-Z, pcb_t),
+      fl_Hole([0,            47.85,  0     ],3,-Z, pcb_t),
+      fl_Hole([-size.x/2+6.2,  size.y, 10  ],3,+Y, pcb_t),
     ]),
     fl_vendor(value=
       [

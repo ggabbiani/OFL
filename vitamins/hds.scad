@@ -61,14 +61,14 @@ FL_HD_EVO860 = let(
   // each row represents a hole with the following format:
   // [[point],[normal], diameter, thickness]
   fl_holes(value=[
-    [[  size.x/2-3.5, 13.5, 0   ], -Z, 3, 2.5+screw_r],
-    [[  size.x/2-3.5, 90,   0   ], -Z, 3, 2.5+screw_r],
-    [[ -size.x/2+3.5, 13.5, 0   ], -Z, 3, 2.5+screw_r],
-    [[ -size.x/2+3.5, 90,   0   ], -Z, 3, 2.5+screw_r],
-    [[  size.x/2,     13.5, 2.5 ], +X, 3, 3.5+screw_r],
-    [[  size.x/2,     90,   2.5 ], +X, 3, 3.5+screw_r],
-    [[ -size.x/2,     13.5, 2.5 ], -X, 3, 3.5+screw_r],
-    [[ -size.x/2,     90,   2.5 ], -X, 3, 3.5+screw_r],
+    fl_Hole([  size.x/2-3.5, 13.5, 0   ], 3, -Z, 2.5+screw_r),
+    fl_Hole([  size.x/2-3.5, 90,   0   ], 3, -Z, 2.5+screw_r),
+    fl_Hole([ -size.x/2+3.5, 13.5, 0   ], 3, -Z, 2.5+screw_r),
+    fl_Hole([ -size.x/2+3.5, 90,   0   ], 3, -Z, 2.5+screw_r),
+    fl_Hole([  size.x/2,     13.5, 2.5 ], 3, +X, 3.5+screw_r),
+    fl_Hole([  size.x/2,     90,   2.5 ], 3, +X, 3.5+screw_r),
+    fl_Hole([ -size.x/2,     13.5, 2.5 ], 3, -X, 3.5+screw_r),
+    fl_Hole([ -size.x/2,     90,   2.5 ], 3, -X, 3.5+screw_r),
     ]),
 
   ["Mpd",        Mpd ],
@@ -81,7 +81,7 @@ FL_HD_DICT  = [ FL_HD_EVO860 ];
  *
  *  $hd_thick     - scalar thickness along hole normal
  *  $hd_screw_len - screw length along hole normal comprehensive of hole depth and tolerance
- *  
+ *
  */
 module fl_hd(
   verbs,
@@ -125,8 +125,8 @@ module fl_hd(
   }
 
   module do_layout() {
-    fl_lay_holes(holes,lay_direction) 
-      context() translate(($hd_thick+dri_tolerance)*$hole_n) 
+    fl_lay_holes(holes,lay_direction)
+      context() translate(($hd_thick+dri_tolerance)*$hole_n)
         children();
   }
 

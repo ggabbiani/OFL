@@ -81,9 +81,17 @@ module fl_pcb_holderByHoles(
   thick   = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : assert(fl_tt_isAxisVList(thick)) thick;
 
   // echo(holes=fl_holes(pcb));
-  holes = [for(hole=fl_holes(pcb)) let(point = [hole[0].x,hole[0].y,0],normal = hole[1],d = hole[2],options=hole[4]) [
-      point,normal,d,0,options]
-    ];
+  holes = [
+    for(hole=fl_holes(pcb)) let(
+        p     = let(p=fl_hole_pos(hole)) [p.x,p.y,0],
+        n     = fl_hole_n(hole),
+        d     = fl_hole_d(hole),
+        ldir  = fl_hole_ldir(hole),
+        loct  = fl_hole_loct(hole),
+        screw = fl_hole_screw(hole)
+      ) fl_Hole(p,d,n,0,ldir,loct,screw)
+  ];
+  echo(holes=holes);
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
   Mpcb  = T(Z(h-pcb_bb[0].z));
