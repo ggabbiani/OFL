@@ -68,7 +68,7 @@ module fl_label(
   assert(is_num(thick));
 
   bbox  = [O,Z(thick)];
-  M     = octant ? T(extra*[sign(octant.x),sign(octant.y),sign(octant.z)]) * fl_octant(octant=[0,0,octant.z],bbox=bbox) : I;
+  M     = octant ? T(0.6*extra*[sign(octant.x),sign(octant.y),sign(octant.z)]) * fl_octant(octant=[0,0,octant.z],bbox=bbox) : I;
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
 
   halign  = is_undef(octant) || octant.x==1 ? "left"    : !octant.x ? "center" : "right";
