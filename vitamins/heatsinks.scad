@@ -81,6 +81,48 @@ function fl_bb_pimoroni(
   [bb[1].x,bb[1].y-(bottom ? 0 : 2),bb[1].z-0*(top    ? 0 : top_t)]
 ];
 
+function fl_pimoroni(
+  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verb      = FL_ADD,
+  type,
+  // FL_DRILL thickness in scalar form for -Z normal
+  thick=0,
+  // either "mount" or "assembly"
+  lay_what  = "mount",
+  // top part
+  top       = true,
+  // bottom part
+  bottom    = true,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  // when undef native positioning is used
+  octant
+) = let(
+  bbox      = fl_bb_pimoroni(type,top=top,bottom=bottom),
+  size      = fl_bb_size(type),
+  corner_r  = fl_get(type,"corner radius"),
+  bottom_p  = fl_get(type,"bottom part"),
+  top_p     = fl_get(type,"top part"),
+  rpi4      = FL_PCB_RPI4,
+  pcb_t     = fl_pcb_thick(rpi4),
+  screw     = fl_screw(type),
+  dxf       = fl_get(type,"DXF model"),
+
+  bot_base_t    = fl_get(bottom_p,"layer 0 base thickness"),
+  bot_fluting_t = fl_get(bottom_p,"layer 0 fluting thickness"),
+  bot_holder_t  = fl_get(bottom_p,"layer 0 holders thickness"),
+  top_base_t    = fl_get(top_p,"layer 1 base thickness"),
+  top_fluting_t = fl_get(top_p,"layer 1 fluting thickness"),
+  top_holder_t  = fl_get(top_p,"layer 1 holders thickness"),
+
+  D         = direction ? fl_direction(proto=type,direction=direction)  : I,
+  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I,
+
+  bottom_sz = function() [size.x,size.y,bot_base_t+bot_fluting_t+bot_holder_t]
+
+) verb==FL_LAYOUT ? T(+Z(bottom_sz().z+pcb_t))
+: undef;
+
 /**
  * FL_LAYOUT,FL_ASSEMBLY children context:
  *  $hs_radius  - corner radius
@@ -102,7 +144,7 @@ module fl_pimoroni(
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   // when undef native positioning is used
-  octant,
+  octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(is_undef(lay_what)||lay_what=="mount"||lay_what=="assembly");
