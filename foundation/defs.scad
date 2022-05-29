@@ -23,6 +23,7 @@ include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 include <base_geo.scad>
+include <base_kv.scad>
 include <base_string.scad>
 
 function fl_version() = [3,5,1];
@@ -199,36 +200,6 @@ function fl_deprecated(bad,value,replacement) = let(
     complain  = str("***DEPRECATED***: ", bad, " is deprecated and ", replacement!=undef ? str("will be replaced by ", replacement, " in next major release.") : "WILL NOT BE REPLACED.")
   ) echo(complain) value;
 
-// optional getter, no error when property is not found
-// return «default» when «props» is undef, empty or when «key» is not found
-function fl_optional(props,key,default) =
-  props==undef ? default : let(r=search([key],props)) r!=[[]] ? props[r[0]][1] : default;
-
-// generic property getter with default value when not found
-// Never return undef
-function fl_get(type,key,default) =
-  assert(key!=undef)
-  assert(type!=undef)
-  let(index_list=search([key],type))
-  index_list != [[]]
-  ? type[index_list[0]][1]
-  : assert(default!=undef,str("Key not found ***",key,"***")) default;
-
-/**
- * 'bipolar' property helper:
- *
- * type/key{/default} ↦ value       (property getter)
- * key{/value}        ↦ [key,value] (property constructor)
- *
- * It concentrates property key definition reducing possible mismatch when
- * referring to property key in the more usual getter/setter function pair.
- */
-function fl_property(type,key,value,default)  =
-  assert(key!=undef)
-  type!=undef
-  ? fl_get(type,key,default)              // property getter
-  : assert(default==undef)  [key,value];  // property constructor
-
 //*****************************************************************************
 // General properties
 // when invoked by «type» parameter act as getters
@@ -238,13 +209,12 @@ function fl_property(type,key,value,default)  =
 // indexing, as in the following examples:
 // fl_connectors()[0]   ↦ "connectors"
 // fl_description()[0]  ↦ "description"
+
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value);
 function fl_director(type,value)    = fl_property(type,"director",value);
 function fl_dxf(type,value)         = fl_property(type,"DXF model",value);
 function fl_engine(type,value)      = fl_property(type,"engine",value);
-// holes in [«point»,«surface normal»,«diameter»,«optional depth»] format
-function fl_holes(type,value)       = fl_property(type,"holes",value);
 function fl_material(type,value,default)
                                     = fl_property(type,"material (actually a color)",value,default);
 function fl_name(type,value)        = fl_property(type,"name",value);
@@ -290,12 +260,18 @@ module fl_manage(
     // orientation matrix
     direction,
     // size used for fl_axes()
-    size
+    size,
+    // see function fl_parm_setDebug()
+    debug,
+    // list of connectors to debug
+    connectors,
+    // list of holes to debug
+    holes
   ) {
     placement = placement ? placement : FL_I;
     direction = direction ? direction : FL_I;
 
-  module fl_context(vlist) {
+  module context(vlist) {
     assert(is_list(vlist)||is_string(vlist),vlist);
     flat  = fl_list_flatten(is_list(vlist)?vlist:[vlist]);
     let(
@@ -336,8 +312,16 @@ module fl_manage(
     }
   }
 
-  multmatrix(direction) fl_context(verbs) {
-    multmatrix(placement) fl_parse($_verbs_) children();
+  multmatrix(direction) context(verbs) union() {
+    multmatrix(placement) union() {
+      if (debug) {
+        if (connectors)
+          fl_conn_debug(connectors,debug=debug);
+        if (holes)
+          fl_hole_debug(holes,debug=debug);
+      }
+      fl_parse($_verbs_) children();
+    }
     if ($_axes_ && size) fl_modifier($FL_AXES) fl_axes(size=1.2*size);
   }
 }
