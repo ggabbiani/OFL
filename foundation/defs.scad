@@ -32,6 +32,9 @@ function fl_versionNumber() = let(
   version = fl_version()
 ) version.x*10000+version.y*100+version.z;
 
+//*****************************************************************************
+// OFL GLOBALS
+
 // May trigger debug statement in client modules / functions
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
