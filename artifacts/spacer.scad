@@ -50,10 +50,11 @@ function fl_spc_holeRadius(
 /**
  * Children context:
  *
- * $spc_director - layout direction
- * $spc_screw    - OPTIONAL screw
- * $spc_thick    - thickness along $spc_director
- * $spc_h        - spacer height
+ * $spc_director  - layout direction
+ * $spc_screw     - OPTIONAL screw
+ * $spc_thick     - thickness along $spc_director
+ * $spc_h         - spacer height
+ * $spc_holeR     - OPTIONAL internal hole radius
  */
 module fl_spacer(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -137,6 +138,7 @@ module fl_spacer(
   * $spc_screw    - OPTIONAL screw
   * $spc_thick    - thickness along $spc_director
   * $spc_h        - spacer height
+  * $spc_holeR    - OPTIONAL internal hole radius
   */
   module context(
     director
@@ -145,6 +147,7 @@ module fl_spacer(
     $spc_screw    = screw;
     $spc_thick    = director==+Z ? thick[1] : thick[0];
     $spc_h        = h;
+    $spc_holeR    = hole_r;
     children();
   }
 
