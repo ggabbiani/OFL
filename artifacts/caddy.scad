@@ -44,7 +44,7 @@ FL_NS_CAD = "cad";
  */
 module fl_caddy(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD,     
+  verbs       = FL_ADD,
   type,
   // walls thickness in the fixed form: [[-x,+x],[-y,+y],[-z+z]]
   // Passed as scalar means same thickness for all the six walls:
@@ -52,19 +52,19 @@ module fl_caddy(
   // examples:
   // thick=[[0,2.5],[0,0],[5,0]]
   // thick=2.5
-  thick,                    
+  thick,
   // faces defined by their othonormal axis in floating semi-axis list format
-  faces,                    
+  faces,
   // SCALAR added to each internal payload dimension.
-  tolerance   = fl_JNgauge, 
+  tolerance   = fl_JNgauge,
   // fillet radius, when > 0 a fillet is inserted where needed
-  fillet      = 0,          
+  fillet      = 0,
   // defines the value of $cad_verbs passed to children
   lay_verbs   =[],
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,                
+  direction,
   // when undef native positioning is used
-  octant,                   
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(thick);
@@ -147,11 +147,11 @@ module fl_caddy(
       context([FL_DRILL,FL_CUTOUT])  children();
     }
   }
-  
+
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
-        fl_color($FL_FILAMENT)
+        fl_color()
           do_add() children();
 
     } else if ($verb==FL_ASSEMBLY) {

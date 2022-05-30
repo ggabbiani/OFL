@@ -73,9 +73,6 @@ function fl_push(list,item) = [each list,item];
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = !$preview;
-// Default color for printable items (i.e. artifacts)
-$FL_FILAMENT  = "DodgerBlue";
-
 
 // simple workaround for the z-fighting problem during preview
 FL_NIL  = ($preview && !$FL_RENDER ? 0.01 : 0);
@@ -466,13 +463,14 @@ module fl_axes(size=1,reverse=false) {
   if (sz.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
 
-module fl_color(color,alpha=1) {
+// Set current «color», uses $fl_filament if nothing else is passed
+module fl_color(color=fl_filament(),alpha=1) {
 
   function palette(name) =
-    name=="bronze"        ? "#CD7F32"
-    : name=="copper red"  ? "#CB6D51"
-    : name=="copper penny"? "#AD6F69"
-    : name=="pale copper" ? "#DA8A67"
+      name=="bronze"        ? "#CD7F32"
+    : name=="copper red"    ? "#CB6D51"
+    : name=="copper penny"  ? "#AD6F69"
+    : name=="pale copper"   ? "#DA8A67"
     : name;
 
   color(palette(color),alpha) children();

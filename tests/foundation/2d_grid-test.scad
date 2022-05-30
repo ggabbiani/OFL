@@ -26,7 +26,7 @@ $FL_RENDER  = false;
 // When true, trace messages are turned on
 $fl_traces   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Grid] */
 GRID_SIZE   = [100,100];

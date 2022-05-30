@@ -93,7 +93,7 @@ module fl_spacer(
   M       = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
 
   module do_add() {
-    fl_color($FL_FILAMENT)
+    fl_color()
       if (hole_r)
         fl_tube(h=h,r=r,thick=r-hole_r);
       else

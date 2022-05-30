@@ -29,7 +29,7 @@ $FL_RENDER  = false;
 // When true, trace messages are turned on
 $fl_traces   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */
 
@@ -84,4 +84,4 @@ verbs=[
 ];
 
 fl_pimoroni(verbs,type=FL_HS_PIMORONI,top=TOP,bottom=BOTTOM,direction=direction,octant=octant)
-  fl_color($FL_FILAMENT) fl_cylinder(h=10,d=5,octant=$hs_normal);
+  fl_color() fl_cylinder(h=10,d=5,octant=$hs_normal);

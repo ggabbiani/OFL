@@ -30,8 +30,6 @@ $FL_RENDER  = false;
 // When true, trace messages are turned on
 $fl_traces   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-
 /* [Supported verbs] */
 
 // adds shapes to scene.

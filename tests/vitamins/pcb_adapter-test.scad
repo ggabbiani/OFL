@@ -28,7 +28,7 @@ $FL_RENDER  = false;
 // When true, trace messages are turned on
 TRACE   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */
 
@@ -115,6 +115,5 @@ payload = let(
     bare  = [[-sz.x/2,-sz.y/2,0],[+sz.x/2,+sz.y/2,+sz.z]]
   ) [[bare[0].x-PAY_LOAD.x,bare[0].y-PAY_LOAD.y,bare[1].z],[bare[1].x+PAY_LOAD.x,bare[1].y+PAY_LOAD.y,bare[1].z+PAY_LOAD.z]];
 
-fl_pcb_adapter(verbs,nop,payload=payload, direction=direction,octant=octant,thick=T) fl_color($FL_FILAMENT)
-  translate(-Z($hole_depth))
-    fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);
+fl_pcb_adapter(verbs,nop,payload=payload, direction=direction,octant=octant,thick=T) fl_color()
+  fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);

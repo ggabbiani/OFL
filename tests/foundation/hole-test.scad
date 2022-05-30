@@ -35,7 +35,7 @@ $FL_RENDER  = false;
 // When true, trace messages are turned on
 $fl_traces   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [DEBUG] */
 
@@ -107,7 +107,7 @@ module do() {
     children();
 }
 
-do() fl_color($FL_FILAMENT)
+fl_color()
   difference() {
     fl_cube(size=size,octant=O);
     fl_holes(holes=holes,enable=enable);

@@ -37,8 +37,11 @@ function fl_parm_getDebug(value,sub) = let(
   : sub=="symbols"  ? symbols
   : assert(false,str("Unknown sub parameter '",sub,"'")) false;
 
-// getter for $fl_asserts
+// When true fl_assert() is enabled
 function fl_asserts() = is_undef($fl_asserts) ? false : $fl_asserts;
 
-// getter for $fl_traces
+// When true fl_trace() is enabled
 function fl_traces() = is_undef($fl_traces) ? false : $fl_traces;
+
+// Default color for printable items (i.e. artifacts)
+function fl_filament() = is_undef($fl_filament) ? "DodgerBlue" : $fl_filament;

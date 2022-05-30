@@ -128,7 +128,7 @@ module fl_pcb_holderByHoles(
         spacer(FL_ADD,position=$hole_pos,screw=$hld_screw);
 
     if (frame) difference() {
-      translate(bbox[0]) fl_color($FL_FILAMENT) linear_extrude(frame)
+      translate(bbox[0]) fl_color() linear_extrude(frame)
         fl_square(size=[pcb_sz.x,pcb_sz.y],corners=pcb_r,quadrant=+X+Y);
       translate(+Z(frame))
         fl_lay_holes(holes)
@@ -355,7 +355,7 @@ module fl_pcb_holderBySize(
         ]);
     }
     if (frame) difference() {
-      translate(bbox[0]) fl_color($FL_FILAMENT) linear_extrude(frame)
+      translate(bbox[0]) fl_color() linear_extrude(frame)
         // fl_square(size=[pcb_sz.x,pcb_sz.y],corners=pcb_r,quadrant=+X+Y);
         fl_2d_frame(size=size,thick=R+r_knut*sin(45),corners=R,quadrant=+X+Y);
       translate(+Z(frame))
@@ -397,7 +397,7 @@ module fl_pcb_holderBySize(
 
   fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) fl_color($FL_FILAMENT) do_add();
+      fl_modifier($modifier) fl_color() do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();

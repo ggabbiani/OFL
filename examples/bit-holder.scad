@@ -32,7 +32,7 @@ $FL_RENDER  = false;
 // When true, trace messages are turned on
 $fl_traces   = false;
 // Filament color used for printed parts
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */
 
@@ -138,7 +138,7 @@ module strip() {
 
     //**** FL_ADD ***************************************************************
     if ($FL_ADD!="OFF") fl_modifier($FL_ADD) difference() {
-      fl_color($FL_FILAMENT) hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
+      fl_color() hull() fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
         holder(FL_ADD,$item);
       fl_layout(FL_LAYOUT,axis=+X,types=fl_get(strip,"Bit holders"))
         holder(FL_DRILL,$item);
@@ -201,7 +201,7 @@ module holder(verbs,item) {
 
   fl_manage(verbs) {
     if ($verb==FL_ADD) {
-      fl_modifier($FL_ADD) fl_color($FL_FILAMENT)
+      fl_modifier($FL_ADD) fl_color()
         multmatrix(Mbox) box();
     } else if ($verb==FL_BBOX) {
       fl_modifier($FL_BBOX) fl_bb_add(bbox);

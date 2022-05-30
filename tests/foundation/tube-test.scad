@@ -29,7 +29,7 @@ $FL_RENDER  = false;
 // When true, trace messages are turned on
 $fl_traces   = false;
 
-$FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */
 
@@ -73,4 +73,5 @@ verbs=[
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
 ];
 
-fl_tube(verbs,base=[A,B],h=H,thick=T,direction=direction,octant=octant);
+fl_color()
+  fl_tube(verbs,base=[A,B],h=H,thick=T,direction=direction,octant=octant);
