@@ -326,7 +326,7 @@ module fl_pcb_holderBySize(
     [quad_III,normal,diameter,depth],
     [quad_IV, normal,diameter,depth],
   ];
-  echo(holes=holes,bbox=bbox);
+  // echo(holes=holes,bbox=bbox);
 
   module context() {
     $hld_thick  = thick;

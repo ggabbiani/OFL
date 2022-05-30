@@ -58,7 +58,7 @@ module fl_box(
 
   Treal   = thick + tolerance;
   deltas  = [2*Treal,2*Treal,2*Treal];  // deltas = «external size» - «payload»
-  size    = xsize  ? assert(is_undef(isize) && is_undef(pload)) xsize
+  size    = xsize ? assert(is_undef(isize) && is_undef(pload)) xsize
           : isize ? assert(is_undef(pload)) isize + deltas
           : pload[1]-pload[0]+deltas;
 
