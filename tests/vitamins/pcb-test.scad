@@ -19,7 +19,6 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-include <../../foundation/parameters.scad>
 include <../../vitamins/pcbs.scad>
 
 $fn         = 50;           // [3:100]
