@@ -24,8 +24,8 @@ include <../../foundation/2d.scad>
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+// When true, trace messages are turned on
+$fl_traces   = false;
 
 /* [Supported verbs] */
 

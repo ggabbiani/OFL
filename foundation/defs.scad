@@ -75,8 +75,6 @@ $FL_DEBUG   = false;
 $FL_RENDER  = !$preview;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
 // Default color for printable items (i.e. artifacts)
 $FL_FILAMENT  = "DodgerBlue";
 
@@ -369,7 +367,7 @@ function fl_trace(a1,a2,n=0,always=false) =
 
 module fl_trace(a1,a2,n=1,always=false) {
   assert(a1!=undef);
-  if ($FL_TRACE||always) echo(fl_trace(a1,a2,n,always));
+  if (fl_traces()||always) echo(fl_trace(a1,a2,n,always));
 }
 
 /*

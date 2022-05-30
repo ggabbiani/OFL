@@ -27,8 +27,8 @@ $FL_DEBUG   = false;
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+// When true, trace messages are turned on
+$fl_traces   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -115,8 +115,8 @@ thick = [[0,0],[0,0],Tz];
 //   fl_screw(type=$hole_screw,thick=H+fl_pcb_thick(pcb)+T);
 
 if (ENGINE=="by holes")
-  fl_pcb_holderByHoles(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,direction=direction,octant=octant) 
+  fl_pcb_holderByHoles(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,direction=direction,octant=octant)
       fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+fl_pcb_thick($hld_pcb)+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
 else
-  fl_pcb_holderBySize(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,tolerance=TOLERANCE,direction=direction,octant=octant) 
+  fl_pcb_holderBySize(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,tolerance=TOLERANCE,direction=direction,octant=octant)
     fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);

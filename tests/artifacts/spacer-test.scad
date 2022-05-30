@@ -27,8 +27,8 @@ $FL_DEBUG   = false;
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+// When true, trace messages are turned on
+$fl_traces   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -76,7 +76,7 @@ SCREW       = true;
 SCREW_TYPE  = "hs_cap";  // [hs_cap,hs_pan,hs_cs,hs_hex,hs_grub,hs_cs_cap,hs_dome]
 SCREW_SIZE  = 2;         // [2,2.5,3,3.5,4,4.2,5,6,7,8]
 
-// when true tries to find a screw fitting knurl nut  
+// when true tries to find a screw fitting knurl nut
 KNUT  = false;
 
 // thickness along ±Z semi axes
@@ -108,6 +108,5 @@ dirs  = fl_3d_AxisList(LAYOUT_DIRS);
 thick = [[0,0],[0,0],Tz];
 
 fl_spacer(verbs,H,R,screw=screw,knut=knut,thick=thick,lay_direction=dirs,octant=octant,direction=direction)
-  translate($spc_director*$spc_thick) 
+  translate($spc_director*$spc_thick)
     fl_screw(FL_DRAW,$spc_screw,thick=$spc_h+$spc_thick,washer="nylon",direction=[$spc_director,0]);
-    

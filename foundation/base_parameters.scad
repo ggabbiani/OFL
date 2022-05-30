@@ -37,5 +37,8 @@ function fl_parm_getDebug(value,sub) = let(
   : sub=="symbols"  ? symbols
   : assert(false,str("Unknown sub parameter '",sub,"'")) false;
 
-// $fl_asserts getter
+// getter for $fl_asserts
 function fl_asserts() = is_undef($fl_asserts) ? false : $fl_asserts;
+
+// getter for $fl_traces
+function fl_traces() = is_undef($fl_traces) ? false : $fl_traces;

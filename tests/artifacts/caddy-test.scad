@@ -30,8 +30,8 @@ $fn         = 50;           // [3:100]
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
-// When true, fl_trace() mesages are turned on
-$FL_TRACE   = false;
+// When true, trace messages are turned on
+$fl_traces   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
@@ -126,6 +126,6 @@ module medium() {
 }
 
 fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,lay_verbs=[FL_LAYOUT],direction=direction,octant=octant)
-    echo($cad_verbs=$cad_verbs) 
-  medium() 
+    echo($cad_verbs=$cad_verbs)
+  medium()
     fl_cylinder(h=5,d=$hole_d,direction=$hole_direction);

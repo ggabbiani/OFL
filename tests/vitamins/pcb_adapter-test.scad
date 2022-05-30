@@ -27,7 +27,7 @@ $fn         = 50;           // [3:100]
 $FL_RENDER  = false;
 // When true, unsafe definitions are not allowed
 $FL_SAFE    = false;
-// When true, fl_trace() mesages are turned on
+// When true, trace messages are turned on
 TRACE   = false;
 
 $FL_FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
