@@ -24,13 +24,47 @@ use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 include <base_geo.scad>
 include <base_kv.scad>
+include <base_parameters.scad>
 include <base_string.scad>
+
+//*****************************************************************************
+// versioning
 
 function fl_version() = [3,5,1];
 
 function fl_versionNumber() = let(
   version = fl_version()
 ) version.x*10000+version.y*100+version.z;
+
+//*****************************************************************************
+// assertions
+
+module fl_assert(condition, message) {
+  // echo($fl_asserts=$fl_asserts,condition=condition,message=message);
+  if (fl_asserts())
+    /* echo("assertions enabled") */ assert(condition,str("****ASSERT****: ",message));
+  children();
+}
+
+function fl_assert(condition,message,result) =
+  // echo($fl_asserts=$fl_asserts,condition=condition,message=message,result=result)
+  fl_asserts()
+    ? is_list(condition)
+      ? assert(is_list(message)) condition ? assert(condition[0],message[0]) fl_assert(fl_pop(condition),message?fl_pop(message):[],result) : result
+      : assert(condition,str("****ASSERT****: ",message)) result
+    : result;
+
+//*****************************************************************************
+// lists
+
+// removes till the i-indexed element from a list
+function fl_pop(l,i=0) =
+  // echo(l=l,i=i)
+  let(len=len(l))
+  assert(!is_undef(len) && len>i,str("i=",i," len=",len))
+  i>len-2 ? [] : [for(j=[i+1:len(l)-1]) l[j]];
+
+function fl_push(list,item) = [each list,item];
 
 //*****************************************************************************
 // OFL GLOBALS

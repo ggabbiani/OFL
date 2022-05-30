@@ -21,7 +21,6 @@
 include <../foundation/defs.scad>
 include <../foundation/connect.scad>
 include <../foundation/label.scad>
-include <../foundation/parameters.scad>
 include <../foundation/util.scad>
 
 include <NopSCADlib/lib.scad>

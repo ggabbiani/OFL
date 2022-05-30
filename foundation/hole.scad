@@ -21,7 +21,6 @@
 
 include <3d.scad>
 include <label.scad>
-include <parameters.scad>
 include <symbol.scad>
 include <type_trait.scad>
 
