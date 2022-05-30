@@ -73,8 +73,6 @@ function fl_push(list,item) = [each list,item];
 $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = !$preview;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
 // Default color for printable items (i.e. artifacts)
 $FL_FILAMENT  = "DodgerBlue";
 

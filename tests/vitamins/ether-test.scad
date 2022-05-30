@@ -24,8 +24,6 @@ include <../../vitamins/ethers.scad>
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
-// When true, unsafe definitions are not allowed
-$FL_SAFE    = false;
 // When true, trace messages are turned on
 $fl_traces   = false;
 
