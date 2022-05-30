@@ -1,5 +1,5 @@
 /*
- * Empty file description
+ * Example representing a box built around a Raspberry Pi4 with TV uHat
  *
  * Copyright © 2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
