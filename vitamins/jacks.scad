@@ -171,7 +171,6 @@ module fl_jack_mcxjphstem1Engine(
   jack    = fl_get(type,"jack length");
   Mshape  = T(+Y(size.y)) * Rx(90);
   conns   = fl_connectors(type);
-  echo(debug=debug);
   D       = direction ? fl_direction(proto=type,direction=direction)  : I;
   M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
 
