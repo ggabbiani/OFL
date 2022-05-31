@@ -28,7 +28,7 @@ $FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // When true, trace messages are turned on
-TRACE       = false;
+$fl_traces       = false;
 
 /* [Supported verbs] */
 

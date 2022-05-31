@@ -32,10 +32,10 @@ $fn         = 50;           // [3:100]
 $FL_DEBUG   = true;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // When true, trace messages are turned on
 $fl_traces   = false;
-
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [DEBUG] */
 

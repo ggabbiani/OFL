@@ -27,7 +27,7 @@ $fn         = 50;           // [3:100]
 $FL_RENDER  = false;
 // When true, trace messages are turned on
 $fl_traces       = false;
-
+// Default color for printable items (i.e. artifacts)
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */

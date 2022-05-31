@@ -22,17 +22,15 @@
 include <../foundation/util.scad>
 include <../vitamins/magnets.scad>
 
-/* [Globals] */
-
-$fn         = 50;           // [3:100]
+$fn           = 50;           // [3:100]
 // May trigger debug statement in client modules / functions
-$FL_DEBUG   = false;
+$FL_DEBUG     = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// When true, trace messages are turned on
-$fl_traces   = false;
-// Filament color used for printed parts
+$FL_RENDER    = false;
+// Default color for printable items (i.e. artifacts)
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When true, trace messages are turned on
+$fl_traces    = false;
 
 /* [Supported verbs] */
 

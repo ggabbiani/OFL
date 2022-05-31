@@ -27,15 +27,15 @@ include <../vitamins/hds.scad>
 include <../artifacts/caddy.scad>
 // include <OFL/vitamins/pcbs.scad>
 
-$fn         = 50;           // [3:100]
+$fn           = 50;           // [3:100]
 // Debug statements are turned on
-$FL_DEBUG   = false;
+$FL_DEBUG     = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// When true, trace messages are turned on
-$fl_traces   = false;
-
+$FL_RENDER    = false;
+// Default color for printable items (i.e. artifacts)
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When true, trace messages are turned on
+$fl_traces    = false;
 
 /* [meta verbs] */
 
