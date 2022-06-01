@@ -360,6 +360,7 @@ function fl_trace(a1,a2,n=0,always=false) =
   a2!=undef ? str(strcat([for (i=[$parent_modules-1:-1:n]) parent_module(i)],"->"),": ",str(a1,"==",a2))
   : str(strcat([for (i=[$parent_modules-1:-1:n]) parent_module(i)],"->"),": ",a1);
 
+// TODO: implement an integer value meaning the trace level to be enabled (0⇒no trace)
 module fl_trace(a1,a2,n=1,always=false) {
   assert(a1!=undef);
   if (fl_traces()||always) echo(fl_trace(a1,a2,n,always));
