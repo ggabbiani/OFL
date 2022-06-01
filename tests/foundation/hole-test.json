@@ -1,0 +1,23 @@
+{
+    "parameterSets": {
+        "design default values": {
+            "$FL_DEBUG": "true",
+            "$FL_RENDER": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fl_traces": "false",
+            "$fn": "50",
+            "D": "2",
+            "DEPTH": "0.7",
+            "FIVE": "false",
+            "FOUR": "false",
+            "LABELS": "true",
+            "ONE": "true",
+            "SIX": "true",
+            "SYMBOLS": "true",
+            "THREE": "false",
+            "TWO": "false",
+            "size": "20"
+        }
+    },
+    "fileFormatVersion": "1"
+}
