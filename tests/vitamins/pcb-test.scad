@@ -88,7 +88,7 @@ co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
 direction     = DIR_NATIVE        ? undef : [DIR_Z,DIR_R];
 octant        = PLACE_NATIVE      ? undef : OCTANT;
 filament      = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-debug         = fl_parm_setDebug(labels=LABELS,symbols=SYMBOLS);
+debug         = fl_parm_Debug(labels=LABELS,symbols=SYMBOLS);
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,

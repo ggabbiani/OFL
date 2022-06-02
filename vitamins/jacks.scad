@@ -73,13 +73,16 @@ FL_JACK_DICT = [
   FL_JACK_MCXJPHSTEM1,
 ];
 
+/**
+ * Jack engine.
+ */
 module fl_jack(
   verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   type,
   cut_thick,            // thickness for FL_CUTOUT
   cut_tolerance=0,      // tolerance used during FL_CUTOUT
   cut_drift=0,          // translation applied to cutout
-  // see function fl_parm_setDebug()
+  // see constructor fl_parm_Debug()
   debug,
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
@@ -95,6 +98,9 @@ module fl_jack(
     assert(false,str("Engine '",engine,"' unknown."));
 }
 
+/**
+ * Barrel jack engine.
+ */
 module fl_jack_barrelEngine(
   // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   verbs       = FL_ADD,
@@ -105,7 +111,7 @@ module fl_jack_barrelEngine(
   cut_tolerance=0,
   // translation applied to cutout
   cut_drift=0,
-  // see function fl_parm_setDebug()
+  // see constructor fl_parm_Debug()
   debug,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
@@ -153,7 +159,7 @@ module fl_jack_mcxjphstem1Engine(
   cut_tolerance=0,
   // translation applied to cutout
   cut_drift=0,
-  // see function fl_parm_setDebug()
+  // see constructor fl_parm_Debug()
   debug,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,

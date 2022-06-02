@@ -289,7 +289,7 @@ module fl_manage(
     direction,
     // size used for fl_axes()
     size,
-    // see function fl_parm_setDebug()
+    // see constructor fl_parm_Debug()
     debug,
     // list of connectors to debug
     connectors,

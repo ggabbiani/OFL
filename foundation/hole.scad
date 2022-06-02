@@ -212,16 +212,14 @@ module fl_hole_debug(
   thick=0,
   // fallback screw
   screw,
-  // see function fl_parm_setDebug()
+  // see constructor fl_parm_Debug()
   debug
 ) {
-    labels  = fl_parm_getDebug(debug,"labels");
-    symbols = fl_parm_getDebug(debug,"symbols");
     fl_lay_holes(holes,enable,thick,screw) union() {
-      if (symbols)
+      if (fl_parm_symbols(debug))
         translate(NIL*$hole_n)
           fl_sym_hole($FL_ADD="ON",$fl_debug=false);
-      if (labels)
+      if (fl_parm_labels(debug))
         fl_label(FL_ADD,$hole_label,size=0.6*$hole_d,thick=0.1,octant=$hole_loct,direction=$hole_ldir,extra=$hole_d,$FL_ADD="ON",$fl_debug=false);
     }
   }

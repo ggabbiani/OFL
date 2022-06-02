@@ -19,23 +19,11 @@
  * along with RPI4.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-/**
- * debug setter
- */
-function fl_parm_setDebug(labels=false,symbols=false) = [
-  labels,
-  symbols
-];
-
-/**
- * debug getter
- */
-function fl_parm_getDebug(value,sub) = let(
-  labels      = value[0],
-  symbols     = value[1]
-)   sub=="labels"   ? labels
-  : sub=="symbols"  ? symbols
-  : assert(false,str("Unknown sub parameter '",sub,"'")) false;
+// contructor for debug context parameter
+function fl_parm_Debug(
+  labels  = false,
+  symbols = false
+) = [labels,symbols];
 
 // When true fl_assert() is enabled
 function fl_asserts() = is_undef($fl_asserts) ? false : assert(is_bool($fl_asserts)) $fl_asserts;
@@ -45,6 +33,12 @@ function fl_debug() = is_undef($fl_debug) ? false : assert(is_bool($fl_debug)) $
 
 // Default color for printable items (i.e. artifacts)
 function fl_filament() = is_undef($fl_filament) ? "DodgerBlue" : assert(is_string($fl_filament)) $fl_filament;
+
+// When true debug labels are turned on
+function fl_parm_labels(value) = is_undef(value) ? false : assert(is_bool(value[0])) value[0];
+
+// When true debug symbols are turned on
+function fl_parm_symbols(value) = is_undef(value) ? false : assert(is_bool(value[1])) value[1];
 
 // When true fl_trace() is enabled
 function fl_traces() = is_undef($fl_traces) ? false : assert(is_bool($fl_traces)) $fl_traces;

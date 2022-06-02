@@ -27,7 +27,7 @@ include <../../vitamins/screw.scad>
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
-$fn         = 50;           // [3:100]
+$fn           = 50;           // [3:100]
 // When true debug statements are turned on
 $fl_debug     = true;
 // When true, disables PREVIEW corrections like FL_NIL
@@ -39,13 +39,13 @@ $fl_traces    = false;
 
 /* [DEBUG] */
 
-LABELS      = false;
-SYMBOLS     = false;
+LABELS  = false;
+SYMBOLS = false;
 
 /* [Holes] */
 
 // hole depth
-DEPTH     = 0.7;      // [0.7:0.1:3]
+DEPTH = 0.7;      // [0.7:0.1:3]
 // hole diameter
 D     = 2;        // [2:4]
 
@@ -59,7 +59,7 @@ SIX   = true;
 /* [Hidden] */
 
 size  = 20;
-debug = fl_parm_setDebug(labels=LABELS,symbols=SYMBOLS);
+debug = fl_parm_Debug(labels=LABELS,symbols=SYMBOLS);
 
 holes = [
   // ONE
@@ -105,5 +105,4 @@ fl_color()
     fl_cube(size=size,octant=O);
     fl_holes(holes=holes,enable=enable);
   }
-if ($fl_debug)
-  fl_hole_debug(holes=holes,enable=enable,debug=debug);
+fl_hole_debug(holes=holes,enable=enable,debug=debug);

@@ -78,7 +78,7 @@ octant    = PLACE_NATIVE  ? undef : OCTANT;
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
-debug     = fl_parm_setDebug(labels=LABELS,symbols=SYMBOLS);
+debug     = fl_parm_Debug(labels=LABELS,symbols=SYMBOLS);
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,

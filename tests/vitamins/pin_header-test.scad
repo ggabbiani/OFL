@@ -84,7 +84,7 @@ thick     = $FL_CUTOUT!="OFF"||$FL_DRILL!="OFF" ? CO_T : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = COLOR=="base"?grey(20):COLOR;
 type      = fl_dict_search(FL_PHDR_DICT,SHOW)[0];
-debug     = fl_parm_setDebug(labels=LABELS,symbols=SYMBOLS);
+debug     = fl_parm_Debug(labels=LABELS,symbols=SYMBOLS);
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,

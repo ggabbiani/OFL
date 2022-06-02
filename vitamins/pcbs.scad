@@ -385,6 +385,8 @@ FL_PCB_DICT = [
 ];
 
 /**
+ * PCB engine.
+ *
  * CONTEXT FROM PARENT:
  *  $hole_syms - (OPTIONAL bool) enables hole symbles
  *
@@ -406,7 +408,7 @@ module fl_pcb(
   thick=0,
   // FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
   lay_direction=[+Z],
-  // see function fl_parm_setDebug()
+  // see constructor fl_parm_Debug()
   debug,
   // desired direction [director,rotation], native direction when undef
   direction,
@@ -481,7 +483,7 @@ module fl_pcb(
 
           // oval lands at the ends
           if (fr4 && len(grid) < 3) {
-            screw_x = holes[0][0].x;
+            screw_x = fl_hole_pos(holes[0]).x;
             y0      = grid.y;
             rows    = fl_grid_geometry(grid,size).y;
             for(end = [-1, 1], y = [1 : rows - 1])

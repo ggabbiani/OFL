@@ -119,7 +119,7 @@ let(
   ];
 
 /**
- *
+ * Pin headers engine.
  */
 module fl_pinHeader(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_BBOX, FL_CUTOUT
@@ -127,7 +127,7 @@ module fl_pinHeader(
   color,
   cut_thick,            // thickness for FL_CUTOUT
   cut_tolerance=0,      // tolerance used during FL_CUTOUT
-  // see function fl_parm_setDebug()
+  // see constructor fl_parm_Debug()
   debug,
   // when undef native positioning is used
   octant,
@@ -160,29 +160,10 @@ module fl_pinHeader(
   fl_trace("hdr_pitch",hdr_pitch(nop));
 
   module do_add() {
-
-    module male() {
-      // if (debug) {
-      //   #pin_header(nop, cols, rows,colour=color, smt=smt);
-      //   for(connection=conns)
-      //     fl_conn_add(connection,pitch_sz);
-      // } else
-        pin_header(nop, cols, rows,colour=color, smt=smt);
-    }
-
-    module female() {
-      // if (debug) {
-      //   #pin_socket(nop, cols, rows,colour=color, smt=smt);
-      //   for(connection=conns)
-      //     fl_conn_add(connection,pitch_sz);
-      // } else
-        pin_socket(nop, cols, rows,colour=color, smt=smt);
-    }
-
     if (engine=="male")
-      male();
+      pin_header(nop, cols, rows,colour=color, smt=smt);
     else
-      female();
+      pin_socket(nop, cols, rows,colour=color, smt=smt);
   }
 
   module do_drill() {
