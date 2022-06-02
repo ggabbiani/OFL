@@ -24,7 +24,7 @@ include <../../vitamins/countersinks.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
-$FL_DEBUG   = false;
+$fl_debug   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // Default color for printable items (i.e. artifacts)

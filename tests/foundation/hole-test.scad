@@ -28,14 +28,14 @@ include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
 $fn         = 50;           // [3:100]
-// Debug statements are turned on
-$FL_DEBUG   = true;
+// When true debug statements are turned on
+$fl_debug     = true;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER    = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // When true, trace messages are turned on
-$fl_traces   = false;
+$fl_traces    = false;
 
 /* [DEBUG] */
 
@@ -100,17 +100,10 @@ enable  = fl_3d_AxisList([
   if (SIX)    "-y",
 ]);
 
-module do() {
-  if ($FL_DEBUG)
-    #children();
-  else
-    children();
-}
-
 fl_color()
   difference() {
     fl_cube(size=size,octant=O);
     fl_holes(holes=holes,enable=enable);
   }
-if ($FL_DEBUG)
+if ($fl_debug)
   fl_hole_debug(holes=holes,enable=enable,debug=debug);

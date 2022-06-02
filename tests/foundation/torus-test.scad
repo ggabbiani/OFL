@@ -22,7 +22,7 @@ include <../../foundation/torus.scad>
 $fn         = 50;           // [3:100]
 $fs         = 50;           // [3:100]
 // Debug statements are turned on
-$FL_DEBUG   = false;
+$fl_debug   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
 // When true, trace messages are turned on

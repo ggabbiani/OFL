@@ -69,8 +69,6 @@ function fl_push(list,item) = [each list,item];
 //*****************************************************************************
 // OFL GLOBALS
 
-// May trigger debug statement in client modules / functions
-$FL_DEBUG   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = !$preview;
 
@@ -464,7 +462,11 @@ module fl_axes(size=1,reverse=false) {
   if (sz.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
 
-// Set current «color», uses $fl_filament if nothing else is passed
+/*
+ * Set current color and alpha channel, using $fl_filament when «color» is
+ * undef. When $fl_debug is true, color information is ignored and debug
+ * modifier is applied to children().
+ */
 module fl_color(color=fl_filament(),alpha=1) {
 
   function palette(name) =
@@ -474,7 +476,10 @@ module fl_color(color=fl_filament(),alpha=1) {
     : name=="pale copper"   ? "#DA8A67"
     : name;
 
-  color(palette(color),alpha) children();
+  if (fl_debug())
+    #children();
+  else
+    color(palette(color),alpha) children();
 }
 
 function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : undef));
