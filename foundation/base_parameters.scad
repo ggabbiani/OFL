@@ -40,11 +40,11 @@ function fl_parm_getDebug(value,sub) = let(
 // When true fl_assert() is enabled
 function fl_asserts() = is_undef($fl_asserts) ? false : assert(is_bool($fl_asserts)) $fl_asserts;
 
-// When true fl_trace() is enabled
-function fl_traces() = is_undef($fl_traces) ? false : assert(is_bool($fl_traces)) $fl_traces;
+// When true debug statements are turned on
+function fl_debug() = is_undef($fl_debug) ? false : assert(is_bool($fl_debug)) $fl_debug;
 
 // Default color for printable items (i.e. artifacts)
 function fl_filament() = is_undef($fl_filament) ? "DodgerBlue" : assert(is_string($fl_filament)) $fl_filament;
 
-// When true debug statements are turned on
-function fl_debug() = is_undef($fl_debug) ? false : assert(is_bool($fl_debug)) $fl_debug;
+// When true fl_trace() is enabled
+function fl_traces() = is_undef($fl_traces) ? false : assert(is_bool($fl_traces)) $fl_traces;
