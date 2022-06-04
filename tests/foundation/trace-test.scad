@@ -1,8 +1,7 @@
 /*
- * Template file for OpenSCAD Founfation Library.
- * Created on Fri Jul 16 2021.
+ * Trace test.
  *
- * Copyright © 2021 Giampiero Gabbiani.
+ * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *
@@ -19,27 +18,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-include <../foundation/3d.scad>
+include <../../foundation/base_trace.scad>
 
-$fn         = 50;           // [3:50]
-// Debug statements are turned on
-$fl_debug   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
-
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
-SIZE          = [1,2,3];
+$FL_TRACES  = -2;  // [-2:10]
 
 /* [Hidden] */
 
-module __test__() {
-  fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[FL_O,SIZE])
-    cube(size=SIZE);
+module one() {
+  fl_trace("Module one message!");
+  two();
 }
 
-__test__();
+module two() {
+  fl_trace("Module two message!");
+  three();
+}
+
+module three() {
+  function test() = let(
+    result  = -1
+  ) fl_trace("Function test() result",result);
+
+  dummy=test();echo(dummy=dummy);
+  fl_trace("dummy",dummy);
+  fl_trace("Mandatory message from module three!",always=true);
+}
+
+fl_trace("Program root message!");
+one();

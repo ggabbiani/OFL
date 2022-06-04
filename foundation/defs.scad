@@ -26,6 +26,7 @@ include <base_geo.scad>
 include <base_kv.scad>
 include <base_parameters.scad>
 include <base_string.scad>
+include <base_trace.scad>
 
 //*****************************************************************************
 // versioning
@@ -202,7 +203,7 @@ module fl_modifier(
   behaviour,
   reset=true
 ) {
-  fl_trace("context reset to",behaviour);
+  fl_trace("behaviour",behaviour);
   // Runtime behaviour reset to behaviour
   $FL_ADD       = reset ? behaviour : $FL_ADD;
   $FL_ASSEMBLY  = reset ? behaviour : $FL_ASSEMBLY;
@@ -352,16 +353,6 @@ module fl_manage(
     }
     if ($_axes_ && size) fl_modifier($FL_AXES) fl_axes(size=1.2*size);
   }
-}
-
-function fl_trace(a1,a2,n=0,always=false) =
-  a2!=undef ? str(strcat([for (i=[$parent_modules-1:-1:n]) parent_module(i)],"->"),": ",str(a1,"==",a2))
-  : str(strcat([for (i=[$parent_modules-1:-1:n]) parent_module(i)],"->"),": ",a1);
-
-// TODO: implement an integer value meaning the trace level to be enabled (0⇒no trace)
-module fl_trace(a1,a2,n=1,always=false) {
-  assert(a1!=undef);
-  if (fl_traces()||always) echo(fl_trace(a1,a2,n,always));
 }
 
 /*

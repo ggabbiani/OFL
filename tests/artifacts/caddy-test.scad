@@ -30,8 +30,8 @@ $fn         = 50;           // [3:100]
 $FL_RENDER  = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-// When true, trace messages are turned on
-$fl_traces   = false;
+// -2⇒none, -1⇒all, [0..)⇒max depth allowed
+$FL_TRACES  = -2;     // [-2:10]
 
 /* [Supported verbs] */
 
@@ -124,6 +124,6 @@ module medium() {
 }
 
 fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,lay_verbs=[FL_LAYOUT],direction=direction,octant=octant)
-    echo($cad_verbs=$cad_verbs)
-  medium()
-    fl_cylinder(h=5,d=$hole_d,direction=$hole_direction);
+  fl_trace("$cad_verbs",$cad_verbs)
+    medium()
+      fl_cylinder(h=5,d=$hole_d,direction=$hole_direction);

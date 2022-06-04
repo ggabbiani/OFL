@@ -91,7 +91,7 @@ module fl_pcb_holderByHoles(
         screw = fl_hole_screw(hole)
       ) fl_Hole(p,d,n,0,ldir,loct,screw)
   ];
-  echo(holes=holes);
+  // echo(holes=holes);
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
   M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
   Mpcb  = T(Z(h-pcb_bb[0].z));
