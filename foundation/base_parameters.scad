@@ -19,11 +19,7 @@
  * along with RPI4.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-// contructor for debug context parameter
-function fl_parm_Debug(
-  labels  = false,
-  symbols = false
-) = [labels,symbols];
+//**** Global getters *********************************************************
 
 // When true fl_assert() is enabled
 function fl_asserts() = is_undef($fl_asserts) ? false : assert(is_bool($fl_asserts)) $fl_asserts;
@@ -33,6 +29,14 @@ function fl_debug() = is_undef($fl_debug) ? false : assert(is_bool($fl_debug)) $
 
 // Default color for printable items (i.e. artifacts)
 function fl_filament() = is_undef($fl_filament) ? "DodgerBlue" : assert(is_string($fl_filament)) $fl_filament;
+
+//**** Common parameters ******************************************************
+
+// contructor for debug context parameter
+function fl_parm_Debug(
+  labels  = false,
+  symbols = false
+) = [labels,symbols];
 
 // When true debug labels are turned on
 function fl_parm_labels(debug) = is_undef(debug) ? false : assert(is_bool(debug[0])) debug[0];

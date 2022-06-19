@@ -47,7 +47,7 @@ module dio_polyCoords(
   points  = dio_polyCoords(points,size);
   bbox    = fl_bb_polygon(points);
   bbsize  = bbox[1]-bbox[0];
-  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : I;
+  M       = fl_quadrant(quadrant,bbox=bbox);
 
   fl_trace("points",points);
   fl_trace("bbox",bbox);

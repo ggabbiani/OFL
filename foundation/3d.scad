@@ -286,7 +286,7 @@ module fl_place(
   bbox  = bbox!=undef ? bbox : fl_bb_corners(type);
   M     = octant!=undef
     ? fl_octant(octant=octant,bbox=bbox)
-    : fl_quadrant(quadrant=quadrant,bbox=bbox);
+    : fl_quadrant(quadrant,bbox=bbox);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
   fl_trace("octant",octant);

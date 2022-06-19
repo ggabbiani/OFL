@@ -133,7 +133,7 @@ module fl_sector(
   points  = fl_sector(r=radius,angles=angles);
   bbox    = fl_bb_sector(r=radius,angles=angles);
   size    = bbox[1] - bbox[0];
-  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M       = fl_quadrant(quadrant,bbox=bbox);
   fl_trace("radius",radius);
   fl_trace("points",points);
   fl_trace("bbox",bbox);
@@ -323,7 +323,7 @@ module fl_ellipticSector(
   b     = e[1];
   bbox  = fl_bb_ellipticSector(e,angles);
   size  = bbox[1]-bbox[0];
-  M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M     = fl_quadrant(quadrant,bbox=bbox);
 
   fl_manage(verbs,M,size=size) {
     if ($verb==FL_ADD) {
@@ -389,7 +389,7 @@ module fl_ellipticArc(
   b     = e.y;
   bbox  = fl_bb_ellipticArc(e,angles,thick);
   size  = bbox[1]-bbox[0];
-  M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M     = fl_quadrant(quadrant,bbox=bbox);
 
   fl_manage(verbs,M,size=size) {
     if ($verb==FL_ADD) {
@@ -490,7 +490,7 @@ module fl_ellipse(
   b     = e[1];
   bbox  = fl_bb_ellipse(e);
   size  = bbox[1]-bbox[0];
-  M     = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M     = fl_quadrant(quadrant,bbox=bbox);
 
   fa    = $fa;
   fn    = $fn;
@@ -537,7 +537,7 @@ module fl_circle(
   radius  = r!=undef ? r : d/2; assert(is_num(radius));
   bbox    = fl_bb_circle(r=radius);
   size    = bbox[1] - bbox[0];
-  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M       = fl_quadrant(quadrant,bbox=bbox);
   fl_trace("quadrant",quadrant);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
@@ -585,7 +585,7 @@ module fl_arc(
   radius  = r!=undef ? r : d/2; assert(is_num(radius));
   bbox    = fl_bb_arc(r=radius,angles=angles,thick=thick);
   size    = bbox[1] - bbox[0];
-  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M       = fl_quadrant(quadrant,bbox=bbox);
 
   fl_trace("radius",radius);
 
@@ -620,7 +620,7 @@ module fl_ipoly(
 
   bbox    = fl_bb_polygon(points);
   size    = bbox[1] - bbox[0];
-  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M       = fl_quadrant(quadrant,bbox=bbox);
   fl_trace("bbox",bbox);
 
   fl_manage(verbs,M,size=size) {
@@ -723,7 +723,7 @@ module fl_square(
 
   points  = fl_square(size,corners);
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
-  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M       = fl_quadrant(quadrant,bbox=bbox);
 
   fl_trace("size",size);
   fl_trace("corners",corners);
@@ -781,7 +781,7 @@ module fl_2d_frame(
     : assert(false,corners);
 
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
-  M       = quadrant ? fl_quadrant(quadrant=quadrant,bbox=bbox) : FL_I;
+  M       = fl_quadrant(quadrant,bbox=bbox);
 
   fl_manage(verbs,M,size=size) {
     if ($verb==FL_ADD) {
@@ -799,18 +799,25 @@ module fl_2d_frame(
 
 //**** 2d placement ***********************************************************
 
+/**
+ * Calculates the translation matrix needed for moving a shape in the provided
+ * 2d quadrant.
+ */
 function fl_quadrant(
-  // type with "bounding corners" property
-  type,
   // 2d quadrant
   quadrant,
+  // type with "bounding corners" property
+  type,
   // bounding box corners, overrides «type» settings
-  bbox
-) = let(
-  corner  = bbox ? bbox : fl_bb_corners(type),
-  half    = (corner[1] - corner[0]) / 2,
-  delta   = [sign(quadrant.x) * half.x,sign(quadrant.y) * half.y,0]
-) T(-corner[0]-half+delta);
+  bbox,
+  // returned matrix if «quadrant» is undef
+  default=I
+) = quadrant ? let(
+    corner  = bbox ? bbox : fl_bb_corners(type),
+    half    = (corner[1] - corner[0]) / 2,
+    delta   = [sign(quadrant.x) * half.x,sign(quadrant.y) * half.y,0]
+  ) T(-corner[0]-half+delta)
+  : assert(default) default;
 
 module fl_2d_place(
   type,
@@ -820,9 +827,8 @@ module fl_2d_place(
   bbox
 ) {
   assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
-  assert(quadrant!=undef);
   bbox  = bbox ? bbox : fl_bb_corners(type);
-  M     = fl_quadrant(quadrant=quadrant,bbox=bbox);
+  M     = fl_quadrant(quadrant,bbox=bbox,default=undef);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
   fl_trace("quadrant",quadrant);
@@ -839,7 +845,6 @@ module fl_2d_placeIf(
   bbox
 ) {
   assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
-  assert(quadrant!=undef);
   fl_trace("type",type);
   fl_trace("bbox",bbox);
   fl_trace("condition",condition);
