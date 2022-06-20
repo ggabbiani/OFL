@@ -58,7 +58,7 @@ module fl_ether(
   bbox      = fl_bb_corners(type);
   size      = bbox[1]-bbox[0];
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  M         = fl_octant(octant,bbox=bbox);
 
   fl_trace("cutout drift",cut_drift);
 

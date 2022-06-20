@@ -121,7 +121,7 @@ module element(
   bbox        = bb_element(magnet,fill_r,fill_n,edge_thick,base_thick,tolerance,horiz_gap);
   size        = bbox[1]-bbox[0];
   D           = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
-  M           = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M           = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     fl_color(FILAMENT) {

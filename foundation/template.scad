@@ -36,18 +36,18 @@ function constructor(description,bbox,holes)  = let(
  */
 module stub(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
-  verbs       = FL_ADD, 
+  verbs       = FL_ADD,
   type,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,            
+  direction,
   // when undef native positioning is used
-  octant                
+  octant
 ) {
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   holes = fl_optional(type,fl_holes()[0]);
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
+  M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     difference() {
@@ -91,7 +91,7 @@ module stub(
   if (!is_undef($hole_syms) && $hole_syms==true)
     multmatrix(D*M)
       fl_hole_debug(holes=holes);
-      
+
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();

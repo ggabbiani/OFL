@@ -72,7 +72,7 @@ module fl_box(
   Mknut2  = T([size.x/2,size.y-thick-tolerance,Treal+sz_up.z-(holder_sz.y+thick-tolerance)/2]);
   // Mholder = Mknut * Rx(90);
   D       = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  M       = fl_octant(octant,bbox=bbox);
 
   module do_fillet(r) {
     delta = thick - r;

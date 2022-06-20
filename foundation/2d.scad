@@ -826,8 +826,7 @@ module fl_2d_place(
   // bounding box corners
   bbox
 ) {
-  assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
-  bbox  = bbox ? bbox : fl_bb_corners(type);
+  bbox  = bbox ? bbox : assert(type) fl_bb_corners(type);
   M     = fl_quadrant(quadrant,bbox=bbox,default=undef);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
@@ -844,7 +843,6 @@ module fl_2d_placeIf(
   // bounding box corners
   bbox
 ) {
-  assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
   fl_trace("type",type);
   fl_trace("bbox",bbox);
   fl_trace("condition",condition);

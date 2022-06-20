@@ -28,19 +28,19 @@ FL_ART_DICT = [
 
 module artifact(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD, 
+  verbs       = FL_ADD,
   type,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,            
+  direction,
   // when undef native positioning is used
-  octant,               
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     fl_cube(size=size);

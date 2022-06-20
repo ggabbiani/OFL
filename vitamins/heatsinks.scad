@@ -116,7 +116,7 @@ function fl_pimoroni(
   top_holder_t  = fl_get(top_p,"layer 1 holders thickness"),
 
   D         = direction ? fl_direction(proto=type,direction=direction)  : I,
-  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I,
+  M         = fl_octant(octant,bbox=bbox),
 
   bottom_sz = function() [size.x,size.y,bot_base_t+bot_fluting_t+bot_holder_t]
 
@@ -167,7 +167,7 @@ module fl_pimoroni(
   top_holder_t  = fl_get(top_p,"layer 1 holders thickness");
 
   D         = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M         = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  M         = fl_octant(octant,bbox=bbox);
 
   function bottom_sz() = [size.x,size.y,bot_base_t+bot_fluting_t+bot_holder_t];
 

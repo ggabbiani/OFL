@@ -90,7 +90,7 @@ module fl_spacer(
   thick   = is_num(thick) ? [thick,thick] : assert(fl_tt_isAxisVList(thick)) thick.z;
 
   D       = direction ? fl_direction(default=[+Z,+X],direction=direction) : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M       = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     fl_color()

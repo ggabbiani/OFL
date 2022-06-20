@@ -157,7 +157,7 @@ module fl_USB(
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  M     = fl_octant(octant,bbox=bbox);
   utype = fl_USB_type(type);
   fl_trace("D",D);
   fl_trace("cutout drift",cut_drift);

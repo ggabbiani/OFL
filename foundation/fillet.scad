@@ -130,7 +130,7 @@ module fl_90DegFillet(
   bbox    = fl_bb_90DegFillet(r,n,child_bbox);
   size    = bbox[1]-bbox[0];
   D       = direction ? fl_direction(direction=direction,default=default) : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
+  M       = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     s   = r/n;    //step size

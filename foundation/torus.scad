@@ -41,7 +41,7 @@ function fl_bb_torus(
  */
 module fl_torus(
   // supported verbs: FL_ADD, FL_AXES, FL_BBOX
-  verbs       = FL_ADD, 
+  verbs       = FL_ADD,
   // radius of the circular tube.
   r,
   // diameter of the circular tube.
@@ -51,9 +51,9 @@ module fl_torus(
   // distance from the center of the tube to the center of the torus
   R,
   // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,            
+  direction,
   // when undef native positioning is used
-  octant                
+  octant
 ) {
   bbox    = fl_bb_torus(r,d,e,R);
   e       = r ? [r,r] : d ? [d/2,d/2] : e;
@@ -61,7 +61,7 @@ module fl_torus(
   b       = e[1];
   size    = bbox[1]-bbox[0];
   D       = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M       = fl_octant(octant,bbox=bbox);
 
   fn      = $fn;
 

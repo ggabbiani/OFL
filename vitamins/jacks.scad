@@ -124,7 +124,7 @@ module fl_jack_barrelEngine(
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  M     = fl_octant(octant,bbox=bbox);
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
@@ -178,7 +178,7 @@ module fl_jack_mcxjphstem1Engine(
   Mshape  = T(+Y(size.y)) * Rx(90);
   conns   = fl_connectors(type);
   D       = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox)            : I;
+  M       = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     multmatrix(Mshape) {

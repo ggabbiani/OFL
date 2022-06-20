@@ -37,7 +37,7 @@ module stub(
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)            : FL_I;
+  M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
   }

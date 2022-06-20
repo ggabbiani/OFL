@@ -132,7 +132,7 @@ module fl_screw(
   hole_r  = screw_clearance_radius(type);
   hole_l  = length-(thick_washer+thick_xwasher);
   D       = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
+  M       = fl_octant(octant,bbox=bbox);
 
   module do_assembly() {
     if (washer!="no")

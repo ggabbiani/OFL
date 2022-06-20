@@ -149,7 +149,7 @@ module fl_pinHeader(
   smt       = fl_property(type,"phdr/smt");
 
   D     = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)              : I;
+  M     = fl_octant(octant,bbox=bbox);
 
   fl_trace("conns",conns);
   fl_trace("hdr_pin_length",hdr_pin_length(nop));

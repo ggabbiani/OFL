@@ -29,7 +29,7 @@ let(
   handle_size = [47,37,11.6],
   socket_size = fl_size(socket),
   size        = [handle_size.x,handle_size.y+socket_size.z,handle_size.z],
-  Mpd         = fl_T(-fl_Y(FL_NIL)) * fl_Ry(180) * fl_Rx(-90) * fl_octant(socket,+FL_Z-FL_Y)
+  Mpd         = fl_T(-fl_Y(FL_NIL)) * fl_Ry(180) * fl_Rx(-90) * fl_octant(+Z-Y,type=socket)
 )
 [
   fl_name(value="ELUTENG USB 3.0 TO SATA ADAPTER"),
@@ -62,7 +62,7 @@ module sata_adapter(
   Mpd         = fl_get(type,"Mpd");
   connectors  = fl_connectors(type);
   D           = direction ? fl_direction(type,direction=direction)  : FL_I;
-  M           = octant    ? fl_octant(type,octant=octant)           : FL_I;
+  M           = fl_octant(octant,type=type);
 
   module sata_handle() {
     // transformation matrix for converting from Draw.io coord-system to OpenSCAD

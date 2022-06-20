@@ -39,7 +39,7 @@ FL_HD_EVO860 = let(
     w = size.x,
     l = fl_size(plug).x,
     d = 7
-  ) fl_T(fl_X((l-w+2*d)/2)-fl_Z(FL_NIL)) * fl_Rx(90) * fl_octant(plug,octant=+FL_Y-FL_Z),
+  ) fl_T(fl_X((l-w+2*d)/2)-fl_Z(FL_NIL)) * fl_Rx(90) * fl_octant(+Y-Z,type=plug),
 
   conns   = fl_sata_conns(plug),
   pc      = fl_conn_clone(conns[0],M=Mpd),
@@ -116,7 +116,7 @@ module fl_hd(
   Mpd         = fl_get(type,"Mpd");
   holes       = fl_holes(type);
   D           = direction ? fl_direction(type,direction=direction): I;
-  M           = octant    ? fl_octant(type,octant=octant)         : I;
+  M           = fl_octant(octant,type=type);
 
   module context() {
     $hd_thick     = $hole_n ? fl_3d_axisValue($hole_n,thick) : undef;

@@ -39,7 +39,7 @@ module fl_tube(
   bbox  = let(bbox=fl_bb_ellipse(obase)) [[bbox[0].x,bbox[0].y,0],[bbox[1].x,bbox[1].y,h]];
   size  = bbox[1]-bbox[0];
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M     = fl_octant(octant,bbox=bbox);
 
   fl_trace("bbox",bbox);
   fl_trace("size",size);

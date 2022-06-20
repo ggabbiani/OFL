@@ -229,7 +229,7 @@ module fl_sata_dataPlug(
   pattern     = fl_get(type,"contact pattern");
   bbox        = fl_bb_corners(type);
   D           = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M           = octant    ? fl_octant(type,octant=octant)                 : I;
+  M           = fl_octant(octant,type=type);
 
   fl_trace("type",type);
 
@@ -287,7 +287,7 @@ module fl_sata_powerPlug(
   pattern     = fl_get(type,"contact pattern");
   connection  = fl_sata_conns(type)[0];
   D           = direction ? fl_direction(type,direction=direction)  : I;
-  M           = octant    ? fl_octant(type,octant=octant)           : I;
+  M           = fl_octant(octant,type=type);
 
   fl_trace("type",type);
   fl_trace("connection",connection);
@@ -351,7 +351,7 @@ module fl_sata_powerDataPlug(
   Mp          = __fl_sata_Mpower__(type);
   Ms          = __fl_sata_Mshell__(type);
   D           = direction ? fl_direction(type,direction=direction)  : I;
-  M           = octant    ? fl_octant(type,octant=octant)           : I;
+  M           = fl_octant(octant,type=type);
 
   dio_int = [[0.06,0],[0.94,0],[0.94,0.38],[1,0.38],[1,0.86],[0.94,0.86],[0.94,1],[0.06,1],[0.06,0.86],[0,0.86],[0,0.38],[0.06,0.38],[0.06,0]];
   dio_ext = [[0.02,0],[0.98,0],[1,0.18],[1,1],[0,1],[0,0.18],[0.02,0]];
@@ -430,7 +430,7 @@ module sata_PowerDataSocket(
   Mdata       = __fl_sata_Mdata__(type);
   Mpower      = __fl_sata_Mpower__(type);
   D           = direction ? fl_direction(type,direction=direction)  : I;
-  M           = octant    ? fl_octant(type,octant=octant)           : I;
+  M           = fl_octant(octant,type=type);
 
   fl_trace("type",type);
 

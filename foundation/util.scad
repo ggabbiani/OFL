@@ -167,7 +167,7 @@ module fl_bend(
   material    = fl_material(type);
 
   D = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
+  M = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     fl_color(material)

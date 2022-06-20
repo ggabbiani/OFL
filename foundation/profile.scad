@@ -40,7 +40,7 @@ module fl_profile(
 
   bbox  = [-size/2,+size/2];
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M     = fl_octant(octant,bbox=bbox);
 
   r     = radius ? radius : 0;
   points  = type=="E" ? [
@@ -148,7 +148,7 @@ module fl_bentPlate(
 
   bbox  = [-size/2,+size/2];
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M     = fl_octant(octant,bbox=bbox);
 
   r   = radius == undef ? 0 : radius;
   R   = r+thick;

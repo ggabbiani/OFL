@@ -48,7 +48,7 @@ module fl_cube(
   defs  = fl_cube_defaults(size);
 
   D     = direction ? fl_direction(defs,direction=direction)  : I;
-  M     = octant    ? fl_octant(defs,octant=octant)           : I;
+  M     = fl_octant(octant,type=defs);
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
@@ -91,7 +91,7 @@ module fl_sphere(
   bbox  = fl_bb_corners(defs);
   size  = fl_bb_size(defs); // bbox[1] - bbox[0];
   D     = direction ? fl_direction(defs,direction=direction)  : I;
-  M     = octant    ? fl_octant(defs,octant=octant)           : I;
+  M     = fl_octant(octant,type=defs);
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
@@ -165,7 +165,7 @@ module fl_cylinder(
   step  = 360/$fn;
   R     = max(r_bot,r_top);
   D     = direction ? fl_direction(defs,direction=direction)  : I;
-  M     = octant    ? fl_octant(defs,octant=octant)           : I;
+  M     = fl_octant(octant,type=defs);
   Mbbox = fl_T(-[size.x/2,size.y/2,0]);
   fl_trace("octant",octant);
   fl_trace("size",size);
@@ -244,7 +244,7 @@ module fl_prism(
   R     = max(Rbase,Rtop);
   size  = fl_bb_size(defs);
   D     = direction ? fl_direction(defs,direction=direction): I;
-  M     = octant    ? fl_octant(defs,octant=octant)         : I;
+  M     = fl_octant(octant,type=defs);
   Mbbox = fl_T([-size.x+R,-size.y/2,0]);
   fl_trace("octant",octant);
   fl_trace("direction",direction);
@@ -264,29 +264,33 @@ module fl_prism(
 //**** 3d placement ***********************************************************
 
 function fl_octant(
-  type    // type with "bounding corners" property
-  ,octant // 3d octant
-  ,bbox   // bounding box corners, overrides «type» settings
-) = assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox))
-let(
-  corner  = bbox!=undef ? bbox : fl_bb_corners(type),
-  size    = assert(corner!=undef) corner[1] - corner[0],
-  half    = size / 2,
-  delta   = [sign(octant.x) * half.x,sign(octant.y) * half.y,sign(octant.z) * half.z]
-) T(-corner[0]-half+delta);
+  // 3d octant
+  octant,
+  // type with "bounding corners" property
+  type,
+  // bounding box corners, overrides «type» settings
+  bbox,
+  // returned matrix if «octant» is undef
+  default=I
+) = octant ? let(
+    corner  = bbox ? bbox : fl_bb_corners(type),
+    half    = (corner[1] - corner[0]) / 2,
+    delta   = [sign(octant.x) * half.x,sign(octant.y) * half.y,sign(octant.z) * half.z]
+  ) T(-corner[0]-half+delta)
+  : assert(default) default;
 
 module fl_place(
-  type
-  ,octant   // 3d octant
-  ,quadrant // 2d quadrant
-  ,bbox     // bounding box corners
+  type,
+  // 3d octant
+  octant,
+  // 2d quadrant
+  quadrant,
+  // bounding box corners
+  bbox
 ) {
-  assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
-  assert(fl_XOR(octant!=undef,quadrant!=undef));
-  bbox  = bbox!=undef ? bbox : fl_bb_corners(type);
-  M     = octant!=undef
-    ? fl_octant(octant=octant,bbox=bbox)
-    : fl_quadrant(quadrant,bbox=bbox);
+  bbox  = bbox ? bbox : assert(type) fl_bb_corners(type);
+  M     = octant  ? assert(!quadrant) fl_octant(octant,bbox=bbox)
+                  : assert(quadrant)  fl_quadrant(quadrant,bbox=bbox);
   fl_trace("M",M);
   fl_trace("bbox",bbox);
   fl_trace("octant",octant);
@@ -294,18 +298,20 @@ module fl_place(
 }
 
 module fl_placeIf(
-  condition // when true placement is ignored
-  ,type
-  ,octant   // 3d octant
-  ,quadrant // 2d quadrant
-  ,bbox     // bounding box corners
+  // when true placement is ignored
+  condition,
+  type,
+  // 3d octant
+  octant,
+  // 2d quadrant
+  quadrant,
+  // bounding box corners
+  bbox
 ) {
-  assert(type!=undef || bbox!=undef,str("type=",type,", bbox=",bbox));
-  assert(fl_XOR(octant!=undef,quadrant!=undef));
   fl_trace("type",type);
   fl_trace("bbox",bbox);
   fl_trace("condition",condition);
-  if (condition) fl_place(type=type,octant=octant,quadrant=quadrant,bbox=bbox) children();
+  if (condition) fl_place(type,octant,quadrant,bbox) children();
   else children();
 }
 
@@ -519,7 +525,7 @@ module fl_layout(
   bbox  = lay_bb_corners(axis,gap,types);
   size  = bbox[1]-bbox[0]; // resulting size
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M     = fl_octant(octant,bbox=bbox);
 
   fl_trace("$children",$children);
   $len  = len(types);

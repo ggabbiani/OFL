@@ -94,7 +94,7 @@ module fl_caddy(
                   ]) [pload[0]-delta[0],pload[1]+delta[1]];
   size      = bbox[1]-bbox[0];
   D         = direction ? fl_direction(default=[+Z,+X],direction=direction) : I;
-  M         = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M         = fl_octant(octant,bbox=bbox);
 
   fl_trace("thick",thick);
   fl_trace("bbox",bbox);

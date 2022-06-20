@@ -93,7 +93,7 @@ module fl_pcb_holderByHoles(
   ];
   // echo(holes=holes);
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
-  M     = octant    ? fl_octant(octant=octant,bbox=bbox)                : I;
+  M     = fl_octant(octant,bbox=bbox);
   Mpcb  = T(Z(h-pcb_bb[0].z));
 
   module context() {
@@ -306,7 +306,7 @@ module fl_pcb_holderBySize(
   pcb_sz  = pcb_bb[1]-pcb_bb[0];
 
   D       = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox)              : I;
+  M       = fl_octant(octant,bbox=bbox);
   Mpcb    = T(Z(h-pcb_bb[0].z-pcb_t));
 
   holes  = let(

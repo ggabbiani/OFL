@@ -120,7 +120,7 @@ function fl_comp_BBox(spec_list) =
         // translation by component position
         T           = T(position),
         // eventual component placement
-        M           = octant ? fl_octant(octant=octant,bbox=bbox) : I,
+        M           = fl_octant(octant,bbox=bbox),
         // transformed bounding box points
         points      = [for(corner=bbox) fl_transform(T*D*M,corner)],
         // build transformed bounding box from points
@@ -439,7 +439,7 @@ module fl_pcb(
   dxf       = fl_optional(type,fl_dxf()[0]);
   conns     = fl_optional(type,fl_connectors()[0]);
 
-  M         = octant ? fl_octant(octant=octant,bbox=bbox) : I;
+  M         = fl_octant(octant,bbox=bbox);
   D         = direction ? fl_direction(type,direction=direction)  : I;
 
   function fl_pcb_NopHoles(nop) = let(
@@ -734,7 +734,7 @@ module fl_pcb_adapter(
   grid      = pcb_grid(type);
 
   D         = direction ? fl_direction(proto=type,direction=direction,default=[+Z,+X])  : I;
-  M         = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
+  M         = fl_octant(octant,bbox=bbox);
 
   fl_trace("screw",screw);
   fl_trace("components",comps);
