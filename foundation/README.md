@@ -355,3 +355,7 @@ $pecial variables used in OFL follow the same naming convention used for constan
 | $FL_RENDER | false   | When true, disables PREVIEW corrections like FL_NIL       |
 | $FL_SAFE   | false   | When true, unsafe definitions are not allowed             |
 | $FL_TRACE  | false   | When true, fl_trace() messages are turned on              |
+
+## OrthoDocs - API documentation
+
+An alpha release of the API documentation can be found [here](../orthodocs/foundation/toc.md).
