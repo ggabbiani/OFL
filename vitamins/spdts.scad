@@ -24,10 +24,10 @@ include <../foundation/3d.scad>
 include <NopSCADlib/vitamins/spades.scad>
 
 FL_SODAL_SPDT = let(
-  ,len    = 40
-  ,d      = 19
-  ,head_d = 22
-  ,head_h = +2
+  len    = 40,
+  d      = 19,
+  head_d = 22,
+  head_h = +2
 ) [
   fl_name(value="B077HJT92M"),
   fl_description(value="SODIAL(R) SPDT Button Switch 220V"),

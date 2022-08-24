@@ -1,6 +1,4 @@
 /*
- * 2D primitives.
- *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -19,27 +17,44 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
+//! 2D primitives.
+
+
 include <unsafe_defs.scad>
 
 function __clip__(inf,x,sup) = x<=inf?inf:x>=sup?sup:x;
 
 //**** 2d bounding box calculations *******************************************
 
-// general 2d polygon bounding box
+//! general 2d polygon bounding box
 function fl_bb_polygon(points) = let(
   x = [for(p=points) p.x],
   y = [for(p=points) p.y]
 ) [[min(x),min(y)],[max(x),max(y)]];
 
-// exact inscribed polygon bounding box
-function fl_bb_ipoly(r,d,n) = let(
+/*!
+ * Calculates the exact bounding box of a polygon inscribed in a circumference.
+ * See also [fl_bb_polygon()](#function-fl_bb_polygon).
+ *
+ * __NOTE__: «r» and «d» are mutually exclusive.
+ */
+function fl_bb_ipoly(
+  //! radius of the circumference
+  r,
+  //! diameter of the circumference
+  d,
+  //! number of edges for the inscribed polygon
+  n) = let(
   radius  = r!=undef ? r : d
 ) assert(is_num(radius),str("radius=",radius)) fl_bb_polygon(fl_circle(r=radius,$fn=n));
 
-// exact sector bounding box
+//! Returns the exact bounding box of a sector.
 function fl_bb_sector(
+  //! radius of the sector
   r = 1,
+  //! diameter of the sector
   d,
+  //!
   angles
 ) = let(
   radius    = d!=undef ? d/2 : r,
@@ -55,12 +70,12 @@ function fl_bb_sector(
   ]
 ) assert(is_num(radius),str("radius=",radius)) fl_bb_polygon(pts);
 
-// exact circle bounding box
+//! exact circle bounding box
 function fl_bb_circle(r=1,d) = let(
   radius  = d!=undef ? d/2 : r
 ) assert(is_num(radius),str("radius=",radius)) [[-radius,-radius],[+radius,+radius]];
 
-// exact arc bounding box
+//! exact arc bounding box
 function fl_bb_arc(r=1,d,angles,thick) =
   assert(is_list(angles),angles)
   let(
@@ -90,12 +105,14 @@ function fl_bb_arc(r=1,d,angles,thick) =
 
 //**** sector *****************************************************************
 
-// reduces an angular interval in the form [inf,sup] with:
-// sup ≥ inf
-// distance = sup - inf
-//    0° ≤ distance ≤ +360°
-//    0° ≤   inf    < +360°
-//    0° ≤   sup    < +720°
+/*!
+ * reduces an angular interval in the form [inf,sup] with:
+ * sup ≥ inf
+ * distance = sup - inf
+ *   0° ≤ distance ≤ +360°
+ *   0° ≤   inf    < +360°
+ *   0° ≤   sup    < +720°
+ */
 function __normalize__(angles) =
   assert(is_list(angles),str("angles=",angles))
   let(
@@ -112,7 +129,8 @@ function __normalize__(angles) =
 function fl_sector(
   r=1,
   d,
-  angles  // start|end angles in whatever order
+  //! start|end angles in whatever order
+  angles
 ) = let(
   radius  = d!=undef ? d/2 : r
 ) assert($fn>2)
@@ -152,10 +170,22 @@ module fl_sector(
 
 //**** elliptic sector ********************************************************
 
-// Exact elliptic sector bounding box
+//! Exact elliptic sector bounding box
 function fl_bb_ellipticSector(
-  e,      // ellipse in [a,b] form
-  angles  // start|end angles
+  //! ellipse in [a,b] form
+  e,
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE__: the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
+  angles
 ) =
   assert(len(e)==2,str("e=",e))
   assert(len(angles)==2,str("angles=",angles))
@@ -179,12 +209,16 @@ function __frags__(perimeter) =
     ?  max(min(360 / $fa, perimeter / $fs), 5)
     :  $fn >= 3 ? $fn : 3;
 
-// line to line intersection as from https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+//! line to line intersection as from [Line–line intersection](https://en.wikipedia.org/wiki/Line-line_intersection)
 function fl_intersection(
-  line1,          // first line in [P0,P1] format
-  line2,          // second line in [P0,P1] format
-  in1     = true, // solution valid if inside segment 1
-  in2     = true  // solution valid if inside segment 2
+  //! first line in [P0,P1] format
+  line1,
+  //! second line in [P0,P1] format
+  line2,
+  //! solution valid if inside segment 1
+  in1     = true,
+  //! solution valid if inside segment 2
+  in2     = true
 ) = let(
   x1  = line1[0].x,
   y1  = line1[0].y,
@@ -205,7 +239,25 @@ function fl_intersection(
   assert(c2,line2)  // intersection outside segment 2
   [x1+t*(x2-x1),y1+t*(y2-y1)];
 
-function fl_ellipticSector(e,angles) =
+/*!
+ * Calculates the point of an elliptic sectors.
+ */
+function fl_ellipticSector(
+  //! ellipses in [a,b] form
+  e,
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE__: the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
+  angles
+) =
   assert(is_list(e),str("e=",e))
   assert(is_list(angles),str("angles=",angles))
   let(
@@ -313,9 +365,12 @@ function fl_ellipticSector(e,angles) =
     ) pts;
 
 module fl_ellipticSector(
-  verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX,
-  e,                  // ellipse in [a,b] form
-  angles,             // start|end angles in whatever order
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  verbs     = FL_ADD,
+  //! ellipse in [a,b] form
+  e,
+  //! start|end angles in whatever order
+  angles,
   quadrant
 ) {
   assert(e!=undef && angles!=undef);
@@ -338,13 +393,13 @@ module fl_ellipticSector(
 
 //**** elliptic arc ***********************************************************
 
-// Exact elliptic arc bounding box
+//! Exact elliptic arc bounding box
 function fl_bb_ellipticArc(
-  // outer ellipse in [a,b] form
+  //! outer ellipse in [a,b] form
   e,
-  // start|end angles
+  //! start|end angles
   angles,
-  // subtracted to «e» semi-axes defines the inner ellipse ones
+  //! subtracted to «e» semi-axes defines the inner ellipse ones
   thick
 ) =
 assert(is_list(e),e)
@@ -371,13 +426,13 @@ let(
 ) fl_bb_polygon(pts);
 
 module fl_ellipticArc(
-  // supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
   verbs     = FL_ADD,
-  // outer ellipse in [a,b] form
+  //! outer ellipse in [a,b] form
   e,
-  // start|end angles
+  //! start|end angles
   angles,
-  // subtracted to «e» semi-axes defines the inner ellipse ones
+  //! subtracted to «e» semi-axes defines the inner ellipse ones
   thick,
   quadrant
 ) {
@@ -408,9 +463,12 @@ module fl_ellipticArc(
 //**** elliptic annulus *******************************************************
 
 module fl_ellipticAnnulus(
-  verbs     = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
-  e,                  // outer ellipse in [a,b] form
-  thick,              // subtracted to outer ellipses axes defines the internal one
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  verbs     = FL_ADD,
+  //! outer ellipse in [a,b] form
+  e,
+  //! subtracted to outer ellipses axes defines the internal one
+  thick,
   quadrant
   ) {
   fl_ellipticArc(verbs,e,[0,360],thick,quadrant);
@@ -418,7 +476,7 @@ module fl_ellipticAnnulus(
 
 //**** ellipse ****************************************************************
 
-// r(θ): polar equation of ellipse «e» by «θ»
+//! r(θ): polar equation of ellipse «e» by «θ»
 function fl_ellipseR(e,theta) = let(
     a           = e[0],
     b           = e[1],
@@ -426,11 +484,14 @@ function fl_ellipseR(e,theta) = let(
     a_sin_theta = a*sin(theta)
   ) a*b / sqrt(b_cos_theta*b_cos_theta+a_sin_theta*a_sin_theta);
 
-// [x,y]: rectangular value of ellipse «e» by «t» (parametric) or «angle» (polar) input
+//! Returns a 2d list [x,y]: rectangular value of ellipse «e» by «t» (parametric) or «angle» (polar) input
 function fl_ellipseXY(
-  e,    // ellipse in [a,b] form
-  t,    // parametric input 0≤t<360
-  angle // polar input 0≤angle<360
+  //! ellipse in [a,b] form
+  e,
+  //! parametric input 0≤t<360
+  t,
+  //! polar input 0≤angle<360
+  angle
 ) =
 assert(is_list(e))
 assert(fl_XOR(t!=undef,angle!=undef))
@@ -440,7 +501,7 @@ let(
   parametric  = t!=undef
 ) parametric ? [a*cos(t),b*sin(t)] : fl_ellipseXY(e,t=fl_ellipseT(e,angle=angle));
 
-// APPROXIMATED ellipse perimeter
+//! APPROXIMATED ellipse perimeter
 function fl_ellipseP(e) =
 assert(e[0]>0 && e[1]>0,str("e=",e))
 let(
@@ -454,9 +515,12 @@ function ramp(angle) = 180*floor((angle+90)/180);
 // function step(angle) = cos(angle)>=0 ? 1 : -1;
 function step(angle) = sin(angle/3)==1 ? 1 : cos(angle)>0 ? 1 : -1;
 
-// converts «θ» value to the corresponding ellipse «t» parameter
-// NOTE: we need to extend the theoretical function behiond ±π/2 codomain,
-// for that we use ramp() and step() function accordingly.
+/*!
+ * Converts «θ» value to the corresponding ellipse «t» parameter
+ *
+ * __NOTE__: we need to extend the theoretical function behiond ±π/2 codomain,
+ * for that we use ramp() and step() function accordingly.
+ */
 function fl_ellipseT(e,angle) =
 assert(is_list(e),str("e=",e))
 assert(is_num(angle),str("angle=",angle))
@@ -468,20 +532,24 @@ let(
   step  = step(angle)
 ) ramp+step*t;
 
-// Exact ellipse bounding box
+//! Exact ellipse bounding box
 function fl_bb_ellipse(
-  e // ellipse in [a,b] form
+  //! ellipse in [a,b] form
+  e
 ) = let(a=e[0],b=e[1]) assert(is_list(e),str("e=",e)) [[-a,-b],[+a,+b]];
 
 function fl_ellipse(
-  e // ellipse in [a,b] form
+  //! ellipse in [a,b] form
+  e
 ) = let(
   a=e[0],b=e[1],fa=$fa,fn=$fn,fs=$fs
   ) fl_ellipticSector([a,b],[0,360],$fa=fa,$fn=fn,$fs=fs);
 
 module fl_ellipse(
-  verbs   = FL_ADD, // supported verbs: FL_ADD, FL_AXES, FL_BBOX
-  e,                // ellipse in [a,b] form
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  verbs   = FL_ADD,
+  //! ellipse in [a,b] form
+  e,
   quadrant
 ) {
   assert(e!=undef);
@@ -509,10 +577,12 @@ module fl_ellipse(
 
 //**** circle *****************************************************************
 
-// Rectangular value [x,y] of circle of ray «r» by «t» (parametric)
+//! Rectangular value [x,y] of circle of ray «r» by «t» (parametric)
 function fl_circleXY(
-  r,  // radius of the circle
-  t   // 0≤t<360, angle that the ray from (0,0) to (x,y) makes with +X
+  //! radius of the circle
+  r,
+  //! 0≤t<360, angle that the ray from (0,0) to (x,y) makes with +X
+  t
 ) = r*[cos(t),sin(t)];
 
 // function fl_circle(r=1) = fl_sector(r=r,angles=[0,360]);
@@ -557,9 +627,12 @@ module fl_circle(
 
 module fl_annulus(
   verbs     = FL_ADD,
-  r,          // outer radius
-  d,          // outer diameter
-  thick,      // subtracted to outer radius defines the internal one
+  //! outer radius
+  r,
+  //! outer diameter
+  d,
+  //! subtracted to outer radius defines the internal one
+  thick,
   quadrant
   ) {
   fl_arc(verbs,r,d,[0,360],thick,quadrant);
@@ -569,13 +642,13 @@ module fl_annulus(
 
 module fl_arc(
   verbs     = FL_ADD,
-  // outer radius
+  //! outer radius
   r,
-  // outer diameter
+  //! outer diameter
   d,
-  // start and stop angles
+  //! start and stop angles
   angles,
-  // subtracted to radius defines the inner one
+  //! subtracted to radius defines the inner one
   thick,
   quadrant
   ) {
@@ -605,13 +678,16 @@ module fl_arc(
 
 //**** inscribed polygon ******************************************************
 
-// Regular polygon inscribed a circonference
+//! Regular polygon inscribed a circonference
 module fl_ipoly(
-  verbs   = FL_ADD
-  ,r  // circumscribed circle radius
-  ,d  // circumscribed circle diameter
-  ,n  // number of edges
-  ,quadrant
+  verbs   = FL_ADD,
+  //! circumscribed circle radius
+  r,
+  //! circumscribed circle diameter
+  d,
+  //! number of edges
+  n,
+  quadrant
 ) {
   assert(fl_XOR(r,d));
 
@@ -638,14 +714,26 @@ module fl_ipoly(
 
 function fl_square(
   size      = [1,1],
-  // List of four values (one for each quadrant) each in the following format:
-  //   [a,b]    ⇒ ellipse with semi-axis a and b
-  //   scalar r ⇒ circle of radius r (or ellipse with a==b==r)
-  // corners=R         ⇒ corners=[R,R,R,R] == corners=[[R,R],[R,R],[R,R],[R,R]] == rounded rectangle with FOUR CIRCULAR ARCS with radius=R
-  // corners=[a,b]     ⇒ corners=[[a,b],[a,b],[a,b],[a,b]] == rounded rectangle with FOUR ELLIPTICAL ARCS with e=[a,b]
-  // Default corners=0 ⇒ corners=[0,0,0,0] == corners=[[0,0],[0,0],[0,0],[0,0]]) == squared rectangle
-  // any combination is allowed i.e.
-  // corners=[r,[a,b],0,0] ⇒ corners=[[r,r],[a,b],[0,0],[0,0]] == rectangle with circular arc on quadrant I, elliptical arc on quadrant II and squared on quadrants III,IV
+  /*!
+   * List of four values (one for each quadrant). Each of them can be passed in
+   * one of the following formats:
+   *
+   *     [a,b]    ⇒ ellipse with semi-axis a and b
+   *     scalar r ⇒ circle of radius r (or ellipse with a==b==r)
+   *
+   * It is also possible to use some shortcuts like the following:
+   *
+   *     corners=R      ⇒ corners=[R,R,R,R] == corners=[[R,R],[R,R],[R,R],[R,R]] == rounded rectangle with FOUR CIRCULAR ARCS with radius=R
+   *     corners=[a,b]  ⇒ corners=[[a,b],[a,b],[a,b],[a,b]] == rounded rectangle with FOUR ELLIPTICAL ARCS with e=[a,b]
+   *
+   * Default
+   *
+   *     corners=0      ⇒ corners=[0,0,0,0] == corners=[[0,0],[0,0],[0,0],[0,0]]) == squared rectangle
+   *
+   * Aany combination is allowed i.e.
+   *
+   *     corners=[r,[a,b],0,0] ⇒ corners=[[r,r],[a,b],[0,0],[0,0]] == rectangle with circular arc on quadrant I, elliptical arc on quadrant II and squared on quadrants III,IV
+   */
   corners  = [0,0,0,0]
 ) =
   assert(is_num(corners) || len(corners)==2 || len(corners)==4)
@@ -713,10 +801,15 @@ function fl_square(
 module fl_square(
   verbs   = FL_ADD,
   size    = [1,1],
-  corners = [0,0,0,0],// List of four radiuses, one for each quadrant's corners.
-                        // Each zero means that the corresponding corner is squared.
-                        // Defaults to a 'perfect' rectangle with four squared corners.
-                        // Scalar value R for «vertices» means corners=[R,R,R,R]
+  /*!
+   * List of four radiuses, one for each quadrant's corners.
+   * Each zero means that the corresponding corner is squared.
+   * Defaults to a 'perfect' rectangle with four squared corners.
+   * Scalar value R for «vertices» means corners=[R,R,R,R]
+   *
+   * See also [function fl_square()](#function-fl_square) for more complete examples.
+  */
+  corners = [0,0,0,0],
   quadrant
 ) {
   assert(is_list(verbs)||is_string(verbs));
@@ -744,14 +837,16 @@ module fl_square(
 
 module fl_2d_frame(
   verbs   = FL_ADD,
-  // outer size
+  //! outer size
   size    = [1,1],
-  // List of four radiuses, one for each quadrant's corners.
-  // Each zero means that the corresponding corner is squared.
-  // Defaults to a 'perfect' rectangle with four squared corners.
-  // One scalar value R means corners=[R,R,R,R]
+  /*!
+  List of four radiuses, one for each quadrant's corners.
+  Each zero means that the corresponding corner is squared.
+  Defaults to a 'perfect' rectangle with four squared corners.
+  One scalar value R means corners=[R,R,R,R]
+  */
   corners = [0,0,0,0],
-  // subtracted to size defines the internal size
+  //! subtracted to size defines the internal size
   thick,
   quadrant
 ) {
@@ -799,18 +894,18 @@ module fl_2d_frame(
 
 //**** 2d placement ***********************************************************
 
-/**
+/*!
  * Calculates the translation matrix needed for moving a shape in the provided
  * 2d quadrant.
  */
 function fl_quadrant(
-  // 2d quadrant
+  //! 2d quadrant
   quadrant,
-  // type with "bounding corners" property
+  //! type with "bounding corners" property
   type,
-  // bounding box corners, overrides «type» settings
+  //! bounding box corners, overrides «type» settings
   bbox,
-  // returned matrix if «quadrant» is undef
+  //! returned matrix if «quadrant» is undef
   default=I
 ) = quadrant ? let(
     corner  = bbox ? bbox : fl_bb_corners(type),
@@ -821,9 +916,9 @@ function fl_quadrant(
 
 module fl_2d_place(
   type,
-  // 2d quadrant
+  //! 2d quadrant
   quadrant,
-  // bounding box corners
+  //! bounding box corners
   bbox
 ) {
   bbox  = bbox ? bbox : assert(type) fl_bb_corners(type);
@@ -835,12 +930,12 @@ module fl_2d_place(
 }
 
 module fl_2d_placeIf(
-  // when true placement is ignored
+  //! when true placement is ignored
   condition ,
   type,
-  // 2d quadrant
+  //! 2d quadrant
   quadrant,
-  // bounding box corners
+  //! bounding box corners
   bbox
 ) {
   fl_trace("type",type);

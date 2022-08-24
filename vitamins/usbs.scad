@@ -214,11 +214,13 @@ module usb_A_tongue(color) {
                 }
 }
 
-module usb_Ax1(cutout = false,tongue="white",flange=true) { //! Draw USB type A single socket
+//! Draw USB type A single socket
+module usb_Ax1(cutout = false,tongue="white",flange=true) {
     usb_A(h = 6.5, v_flange_l = 4.5, bar = 0, cutout = cutout, tongue=tongue, flange=flange);
 }
 
-module usb_Ax2(cutout = false,tongue="white") { //! Draw USB type A dual socket
+//! Draw USB type A dual socket
+module usb_Ax2(cutout = false,tongue="white") {
     usb_A(h = 15.6, v_flange_l = 12.15, bar = 3.4, cutout = cutout, tongue=tongue);
 }
 
@@ -267,7 +269,8 @@ module usb_A(h, v_flange_l, bar, cutout, tongue, flange=true) {
             }
 }
 
-module molex_usb_Ax2(cutout, tongue) { //! Draw Molex dual USB A connector suitable for perf board
+//! Draw Molex dual USB A connector suitable for perf board
+module molex_usb_Ax2(cutout, tongue) {
     w = 15.9;
     h = 16.6;
     l = 17;
@@ -327,7 +330,8 @@ module molex_usb_Ax2(cutout, tongue) { //! Draw Molex dual USB A connector suita
     }
 }
 
-module molex_usb_Ax1(cutout, tongue) { //! Draw Molex USB A connector suitable for perf board
+//! Draw Molex USB A connector suitable for perf board
+module molex_usb_Ax1(cutout, tongue) {
     w = 15.3;
     h = 7.7;
     l = 14.5;
@@ -384,7 +388,8 @@ module molex_usb_Ax1(cutout, tongue) { //! Draw Molex USB A connector suitable f
     }
 }
 
-module usb_uA(cutout = false, flange = true) { //! Draw USB micro A connector
+//! Draw USB micro A connector
+module usb_uA(cutout = false, flange = true) {
     l = 6;
     iw1 = 7;
     iw2 = 5.7;
@@ -442,7 +447,8 @@ module usb_uA(cutout = false, flange = true) { //! Draw USB micro A connector
         }
 }
 
-module usb_C(cutout = false) { //! Draw USB C connector
+//! Draw USB C connector
+module usb_C(cutout = false) {
     l = 7.35;
     w = 8.94;
     h = 3.26;
@@ -475,7 +481,9 @@ module usb_C(cutout = false) { //! Draw USB C connector
 
         }
 }
-module usb_B(cutout = false) {  //! Draw USB B connector
+
+//! Draw USB B connector
+module usb_B(cutout = false) {
     l = 16.4;
     w = 12.2;
     h = 11;

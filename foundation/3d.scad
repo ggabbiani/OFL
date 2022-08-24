@@ -21,7 +21,7 @@ include <2d.scad>
 include <bbox.scad>
 include <type_trait.scad>
 
-/*
+/*!
  * cube defaults for positioning (fl_bb_cornersKV)
  * and direction (fl_directorKV, fl_rotorKV).
  */
@@ -35,14 +35,17 @@ function fl_cube_defaults(
   fl_rotor(value=+X),
 ];
 
-/*
+/*!
  * cube replacement
  */
 module fl_cube(
-  verbs     = FL_ADD, // FL_ADD,FL_AXES,FL_BBOX
+  //! FL_ADD,FL_AXES,FL_BBOX
+  verbs     = FL_ADD,
   size      = [1,1,1],
-  octant,             // when undef native positioning is used
-  direction           // desired direction [director,rotation] or native direction if undef
+  //! when undef native positioning is used
+  octant,
+  //! desired direction [director,rotation] or native direction if undef
+  direction
 ) {
   size  = is_list(size) ? size : [size,size,size];
   defs  = fl_cube_defaults(size);
@@ -61,7 +64,7 @@ module fl_cube(
   }
 }
 
-/*
+/*!
  * sphere defaults for positioning (fl_bb_cornersKV)
  * and direction (fl_directorKV, fl_rotorKV).
  */
@@ -76,15 +79,18 @@ function fl_sphere_defaults(
   fl_rotor(value=+X),
 ];
 
-/*
+/*!
  * sphere replacement.
  */
 module fl_sphere(
-  verbs   = FL_ADD,   // FL_ADD,FL_AXES,FL_BBOX
+  //! FL_ADD,FL_AXES,FL_BBOX
+  verbs   = FL_ADD,
   r       = [1,1,1],
   d,
-  octant,             // when undef default positioning is used
-  direction           // desired direction [director,rotation], default direction if undef
+  //! when undef default positioning is used
+  octant,
+  //! desired direction [director,rotation], default direction if undef
+  direction
 ) {
   defs  = fl_sphere_defaults(r,d);
 
@@ -103,18 +109,26 @@ module fl_sphere(
     }
   }
 }
-/*
+
+/*!
  * cylinder defaults for positioning (fl_bb_cornersKV)
  * and direction (fl_directorKV, fl_rotorKV).
  */
 function fl_cylinder_defaults(
-  h,                  // height of the cylinder or cone
-  r,                  // radius of cylinder. r1 = r2 = r.
-  r1,                 // radius, bottom of cone.
-  r2,                 // radius, top of cone.
-  d,                  // diameter of cylinder. r1 = r2 = d / 2.
-  d1,                 // diameter, bottom of cone. r1 = d1 / 2.
-  d2                  // diameter, top of cone. r2 = d2 / 2.
+  //! height of the cylinder or cone
+  h,
+  //! radius of cylinder. r1 = r2 = r.
+  r,
+  //! radius, bottom of cone.
+  r1,
+  //! radius, top of cone.
+  r2,
+  //! diameter of cylinder. r1 = r2 = d / 2.
+  d,
+  //! diameter, bottom of cone. r1 = d1 / 2.
+  d1,
+  //! diameter, top of cone. r2 = d2 / 2.
+  d2
 ) = [
   fl_bb_corners(value=fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
   fl_director(value=+Z),
@@ -122,13 +136,20 @@ function fl_cylinder_defaults(
 ];
 
 function fl_bb_cylinder(
-  h,                  // height of the cylinder or cone
-  r,                  // radius of cylinder. r1 = r2 = r.
-  r1,                 // radius, bottom of cone.
-  r2,                 // radius, top of cone.
-  d,                  // diameter of cylinder. r1 = r2 = d / 2.
-  d1,                 // diameter, bottom of cone. r1 = d1 / 2.
-  d2                  // diameter, top of cone. r2 = d2 / 2.
+  //! height of the cylinder or cone
+  h,
+  //! radius of cylinder. r1 = r2 = r.
+  r,
+  //! radius, bottom of cone.
+  r1,
+  //! radius, top of cone.
+  r2,
+  //! diameter of cylinder. r1 = r2 = d / 2.
+  d,
+  //! diameter, bottom of cone. r1 = d1 / 2.
+  d1,
+  //! diameter, top of cone. r2 = d2 / 2.
+  d2
 ) =
 assert(h && h>=0,h)
 let(
@@ -143,20 +164,30 @@ let(
   z       = [for(p=points) p.z]
 ) [[min(x),min(y),min(z)],[max(x),max(y),max(z)]];
 
-/*
+/*!
  * cylinder replacement
  */
 module fl_cylinder(
-  verbs  = FL_ADD,  // FL_ADD,FL_AXES,FL_BBOX
-  h,                // height of the cylinder or cone
-  r,                // radius of cylinder. r1 = r2 = r.
-  r1,               // radius, bottom of cone.
-  r2,               // radius, top of cone.
-  d,                // diameter of cylinder. r1 = r2 = d / 2.
-  d1,               // diameter, bottom of cone. r1 = d1 / 2.
-  d2,               // diameter, top of cone. r2 = d2 / 2.
-  octant,           // when undef native positioning is used
-  direction         // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! FL_ADD,FL_AXES,FL_BBOX
+  verbs  = FL_ADD,
+  //! height of the cylinder or cone
+  h,
+  //! radius of cylinder. r1 = r2 = r.
+  r,
+  //! radius, bottom of cone.
+  r1,
+  //! radius, top of cone.
+  r2,
+  //! diameter of cylinder. r1 = r2 = d / 2.
+  d,
+  //! diameter, bottom of cone. r1 = d1 / 2.
+  d1,
+  //! diameter, top of cone. r2 = d2 / 2.
+  d2,
+  //! when undef native positioning is used
+  octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
   r_bot = fl_parse_radius(r,r1,d,d1);
   r_top = fl_parse_radius(r,r2,d,d2);
@@ -181,16 +212,21 @@ module fl_cylinder(
   }
 }
 
-/*
+/*!
  * prism defaults for positioning (fl_bb_cornersKV)
  * and direction (fl_directorKV, fl_rotorKV).
  */
 function fl_prism_defaults(
-  n,  // edge number
-  l,  // edge length
-  l1, // edge length, bottom
-  l2, // edge length, top
-  h   // height of the prism
+  //! edge number
+  n,
+  //! edge length
+  l,
+  //! edge length, bottom
+  l1,
+  //! edge length, top
+  l2,
+  //! height of the prism
+  h
 ) = [
   fl_bb_corners(value=fl_bb_prism(n,l,l1,l2,h)),  // placement: +Z
   fl_director(value=+Z),
@@ -198,11 +234,16 @@ function fl_prism_defaults(
 ];
 
 function fl_bb_prism(
-  n,  // edge number
-  l,  // edge length
-  l1, // edge length, bottom
-  l2, // edge length, top
-  h   // height of the prism
+  //! edge number
+  n,
+  //! edge length
+  l,
+  //! edge length, bottom
+  l1,
+  //! edge length, top
+  l2,
+  //! height of the prism
+  h
 ) =
 assert(h>=0)
 assert(n>2)
@@ -220,20 +261,29 @@ let(
   z       = [for(p=points) p.z]
 ) [[min(x),min(y),min(z)],[max(x),max(y),max(z)]];
 
-/*
+/*!
  * prism
- * native positioning : +Z
- * native direction   : [+Z,+X]
+ *
+ *    native positioning : +Z
+ *    native direction   : [+Z,+X]
  */
 module fl_prism(
-  verbs  = FL_ADD,  // FL_ADD,FL_AXES,FL_BBOX
-  n,                // edge number
-  l,                // edge length
-  l1,               // edge length, bottom
-  l2,               // edge length, top
-  h,                // height
-  octant,           // when undef native positioning is used
-  direction         // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  // FL_ADD,FL_AXES,FL_BBOX
+  verbs  = FL_ADD,
+  // edge number
+  n,
+  // edge length
+  l,
+  // edge length, bottom
+  l1,
+  // edge length, top
+  l2,
+  // height
+  h,
+  // when undef native positioning is used
+  octant,
+  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
   defs  = fl_prism_defaults(n,l,l1,l2,h);
   step  = 360/n;
@@ -264,13 +314,13 @@ module fl_prism(
 //**** 3d placement ***********************************************************
 
 function fl_octant(
-  // 3d octant
+  //! 3d octant
   octant,
-  // type with "bounding corners" property
+  //! type with "bounding corners" property
   type,
-  // bounding box corners, overrides «type» settings
+  //! bounding box corners, overrides «type» settings
   bbox,
-  // returned matrix if «octant» is undef
+  //! returned matrix if «octant» is undef
   default=I
 ) = octant ? let(
     corner  = bbox ? bbox : fl_bb_corners(type),
@@ -281,11 +331,11 @@ function fl_octant(
 
 module fl_place(
   type,
-  // 3d octant
+  //! 3d octant
   octant,
-  // 2d quadrant
+  //! 2d quadrant
   quadrant,
-  // bounding box corners
+  //! bounding box corners
   bbox
 ) {
   bbox  = bbox ? bbox : assert(type) fl_bb_corners(type);
@@ -298,14 +348,14 @@ module fl_place(
 }
 
 module fl_placeIf(
-  // when true placement is ignored
+  //! when true placement is ignored
   condition,
   type,
-  // 3d octant
+  //! 3d octant
   octant,
-  // 2d quadrant
+  //! 2d quadrant
   quadrant,
-  // bounding box corners
+  //! bounding box corners
   bbox
 ) {
   fl_trace("type",type);
@@ -315,21 +365,27 @@ module fl_placeIf(
   else children();
 }
 
-/*
+/*!
  * Direction matrix transforming native coordinates along new direction.
  *
  * Native coordinate system is represented by two vectors either retrieved
  * from «proto» or passed explicitly through «default» in the format
- * [direction axis (director),orthonormal vector (rotor)]
+ *
+ *     [direction axis (director),orthonormal vector (rotor)]
  *
  * New direction is expected in [Axis–angle representation](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation)
- * in the format [axis,rotation angle]
+ * in the format
+ *
+ *     [axis,rotation angle]
  *
  */
 function fl_direction(
-  proto,      // prototype with fl_director and fl_rotor properties
-  direction,  // desired direction in axis-angle representation [axis,rotation about]
-  default     // default coordinate system by [director,rotor], overrides «proto» settings
+  //! prototype with fl_director and fl_rotor properties
+  proto,
+  //! desired direction in axis-angle representation [axis,rotation about]
+  direction,
+  //! default coordinate system by [director,rotor], overrides «proto» settings
+  default
 ) =
   assert(is_list(direction)&&len(direction)==2,str("direction=",direction))
   assert(proto!=undef || default!=undef)
@@ -343,20 +399,24 @@ function fl_direction(
   ) R(new_dir,alpha)                                // rotate «alpha» degrees around «new_dir»
   * fl_planeAlign(def_dir,def_rot,new_dir,new_rot); // align direction
 
-/*
+/*!
  * Applies a direction matrix to its children.
  * See also fl_direction() function comments.
  */
 module fl_direct(
-  proto,      // prototype for native coordinate system
-  direction,  // desired direction in axis-angle representation [axis,rotation about]
-  default     // default coordinate system by [director,rotor], overrides «proto» settings
+  //! prototype for native coordinate system
+  proto,
+  //! desired direction in axis-angle representation [axis,rotation about]
+  direction,
+  //! default coordinate system by [director,rotor], overrides «proto» settings
+  default
 ) {
   multmatrix(fl_direction(proto,direction,default)) children();
 }
 
-/*
- * from [Rotation matrix from plane A to B](https://math.stackexchange.com/questions/1876615/rotation-matrix-from-plane-a-to-b)
+/*!
+ * From [Rotation matrix from plane A to B](https://math.stackexchange.com/questions/1876615/rotation-matrix-from-plane-a-to-b)
+ *
  * Returns the rotation matrix R aligning the plane A(ax,ay),to plane B(bx,by)
  * When ax and bx are orthogonal to ay and by respectively calculation are simplified.
  */
@@ -401,23 +461,26 @@ module fl_planeAlign(ax,ay,bx,by,ech=false) {
  * layout
  *****************************************************************************/
 
-/**
+/*!
  * calculates the overall bounding box size of a layout
  */
 function lay_bb_size(axis,gap,types) = let(c = lay_bb_corners(axis,gap,types)) c[1]-c[0];
 
-/**
+/*!
  * creates a group with the resulting bounding box corners of a layout
  */
 function lay_group(axis,gap,types) = [fl_bb_corners(value=lay_bb_corners(axis,gap,types))];
 
-/**
+/*!
  * returns the bounding box corners of a layout
  */
 function lay_bb_corners(
-  axis, // cartesian axis ([-1,0,0]==[1,0,0]==X)
-  gap=0,// gap to be inserted between bounding boxes along axis
-  types // list of types
+  //! cartesian axis ([-1,0,0]==[1,0,0]==X)
+  axis,
+  //! gap to be inserted between bounding boxes along axis
+  gap=0,
+  //! list of types
+  types
 ) =
   assert(is_list(axis)&&len(axis)==3,str("axis=",axis))
   assert(is_num(gap),gap)
@@ -426,7 +489,7 @@ function lay_bb_corners(
     bbcs = [for(t=types) fl_bb_corners(t)]
   ) fl_bb_accum(axis,gap,bbcs);
 
-/**
+/*!
  * Accumulates a list of bounding boxes along a direction.
  *
  * Recursive algorithm, at each call a bounding box is extracted from «bbcs»
@@ -435,6 +498,7 @@ function lay_bb_corners(
  * If there are still bounding boxes left, a new call is made and its
  * result, decomposed into the axial and planar components, used to produce a
  * new bounding box as follows:
+ *
  * - for planar component, the new negative and positive corners are calculated
  *   with the minimum dimensions between the current one and the result of the
  *   recursive call;
@@ -448,9 +512,12 @@ function lay_bb_corners(
  *     - the positive corner is equal to the current corner.
  */
 function fl_bb_accum(
-  axis,   // cartesian axis ([-1,0,0]==[1,0,0]==X)
-  gap=0,  // gap to be inserted between bounding boxes along axis
-  bbcs    // bounding box corners
+  //! cartesian axis ([-1,0,0]==[1,0,0]==X)
+  axis,
+  //! gap to be inserted between bounding boxes along axis
+  gap=0,
+  //! bounding box corners
+  bbcs
 ) =
 assert(fl_3d_abs(axis)==+X||fl_3d_abs(axis)==+Y||fl_3d_abs(axis)==+Z)
 assert(len(bbcs))
@@ -477,42 +544,49 @@ let(
   : [curr_axis[0]-result_axis_size,curr_axis[1]]
 ) result_plane + result_axis;
 
-/**
- * layout of types along a direction.
+/*!
+ * Layout of types along a direction.
+ *
  * There are basically two methods of invokation call:
+ *
  * - with as many children as the length of types: in this case each children will
  *   be called explicitly in turn with children($i)
  * - with one child only called repetitely through children(0) with $i equal to the
  *   current execution number.
+ *
  * Called children can use the following special variables:
- *  $i      - current item index
- *  $first  - true when $i==0
- *  $last   - true when $i==len(types)-1
- *  $item   - equal to types[$i]
- *  $len    - equal to len(types)
- *  $size   - equal to bounding box size of $item
+ *
+ *     $i      - current item index
+ *     $first  - true when $i==0
+ *     $last   - true when $i==len(types)-1
+ *     $item   - equal to types[$i]
+ *     $len    - equal to len(types)
+ *     $size   - equal to bounding box size of $item
  *
  */
  // TODO: add namespace
 module fl_layout(
-  // supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
+  //! supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
   verbs = FL_LAYOUT,
-  // layout direction vector
+  //! layout direction vector
   axis,
-  // gap inserted along «axis»
+  //! gap inserted along «axis»
   gap=0,
-  // list of types to be arranged
+  //! list of types to be arranged
   types,
-  /**
-   * internal type alignment into the resulting bounding box surfaces.
-   * Is managed through a vector whose x,y,z components are [-1,0,+1] values.
+  /*!
+   * Internal type alignment into the resulting bounding box surfaces.
+   *
+   * Is managed through a vector whose x,y,z components can assume -1,0 or +1 values.
+   *
    * [-1,0,+1] means aligned to the -X and +Z surfaces, centered on y axis.
-   * Passing a scalar means [scalar,scalar,scala]
+   *
+   * Passing a scalar means [scalar,scalar,scalar]
    */
   align=0,
-  // desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])
+  //! desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   assert(len(axis)==3,axis);
@@ -585,11 +659,12 @@ module fl_layout(
  * bounding box
  *****************************************************************************/
 
-/**
+/*!
  * add a bounding box shape
  */
 module fl_bb_add(
-  corners, // bounding box corners,
+  //! bounding box corners
+  corners,
   2d=false
 ) {
   fl_trace("$FL_ADD",$FL_ADD);
@@ -603,12 +678,14 @@ module fl_bb_add(
  * 3d miscellanous functions
  *****************************************************************************/
 
-/*
+/*!
  * Projection of «vector» onto a cartesian «axis»
  */
 function fl_3d_vectorialProjection(
-  vector, // 3D vector
-  axis    // cartesian axis ([-1,0,0]==[1,0,0]==X)
+  //! 3D vector
+  vector,
+  //! cartesian axis ([-1,0,0]==[1,0,0]==X)
+  axis
 ) =
 assert(len(vector)==3,str("vector=",vector))
 assert(fl_3d_abs(axis)==+X||fl_3d_abs(axis)==+Y||fl_3d_abs(axis)==+Z)
@@ -616,12 +693,14 @@ let(
   axis=fl_3d_abs(axis)
 ) (vector*axis)*axis;
 
-/*
+/*!
  * Projection of «vector» onto a cartesian «plane»
  */
 function fl_3d_planarProjection(
-  vector, // 3D vector
-  plane   // cartesian plane by vector with ([-1,+1,0]==[1,1,0]==XY)
+  //! 3D vector
+  vector,
+  //! cartesian plane by vector with ([-1,+1,0]==[1,1,0]==XY)
+  plane
 ) = assert(
     fl_3d_abs(plane)==+X+Y||fl_3d_abs(plane)==+X+Z
   ||fl_3d_abs(plane)==+Y+X||fl_3d_abs(plane)==+Y+Z
@@ -633,20 +712,22 @@ function fl_3d_planarProjection(
   z = fl_3d_vectorialProjection(vector,Z) * plane * Z
 ) x+y+z;
 
-/*
+/*!
  * Transforms a vector inside the +X+Y+Z octant
  */
 function fl_3d_abs(a) = [abs(a.x),abs(a.y),abs(a.z)];
 
-/**
+/*!
  * Builds a minor vector
  */
 function fl_3d_min(a,b) = [min(a.x,b.x),min(a.y,b.y),min(a.z,b.z)];
-/**
+
+/*!
  * Builds a max vector
  */
 function fl_3d_max(a,b) = [max(a.x,b.x),max(a.y,b.y),max(a.z,b.z)];
-/*
+
+/*!
  * Cartesian plane from axis
  */
 function fl_3d_orthoPlane(
@@ -655,12 +736,12 @@ function fl_3d_orthoPlane(
   fl_3d_abs(axis)==+X||fl_3d_abs(axis)==+Y||fl_3d_abs(axis)==+Z
 ) [axis.x?0:1,axis.y?0:1,axis.z?0:1];
 
-// returns the sign of a semi-axis (-1,+1)
+//! returns the sign of a semi-axis (-1,+1)
 function fl_3d_sign(axis) = let(
     s = sign(axis*[1,1,1])
   ) assert(s!=0) s;
 
-// returns the «axis» value from a full semi-axis value list
+//! returns the «axis» value from a full semi-axis value list
 function fl_3d_axisValue(
     axis,
     values
@@ -674,38 +755,40 @@ function fl_3d_axisValue(
       : undef
   ) assert(r!=undef,r) r;
 
-/*
+/*!
  * Build an full semi-axis value list from the key/value list «kvs».
  * Build a full boolean semi-axis value list from literal semi-axis list «axes»
  *
  * example 1:
- * values = fl_3d_AxisVList(kvs=[["-x",3],["±Z",4]]);
+ *
+ *     values = fl_3d_AxisVList(kvs=[["-x",3],["±Z",4]]);
  *
  * is equivalent to:
  *
- * values =
- * [
- *  [3,0],
- *  [0,0],
- *  [4,4]
- * ];
+ *     values =
+ *     [
+ *      [3,0],
+ *      [0,0],
+ *      [4,4]
+ *     ];
  *
  * example 2:
- * values = fl_3d_AxisVList(axes=["-x","±Z"]);
+ *
+ *     values = fl_3d_AxisVList(axes=["-x","±Z"]);
  *
  * is equivalent to:
  *
- * values =
- * [
- *  [true,  false],
- *  [false, false],
- *  [true,  true]
- * ];
+ *     values =
+ *     [
+ *      [true,  false],
+ *      [false, false],
+ *      [true,  true]
+ *     ];
  */
 function fl_3d_AxisVList(
-  // semi-axis key/value list (es. [["-x",3],["±Z",4]])
+  //! semi-axis key/value list (es. [["-x",3],["±Z",4]])
   kvs,
-  // semi-axis list (es.["-x","±Z"])
+  //! semi-axis list (es.["-x","±Z"])
   axes
 ) = assert(fl_XOR(kvs!=undef,axes!=undef))
   let(
@@ -743,24 +826,24 @@ function fl_3d_AxisVList(
     ]
   ];
 
-/*
+/*!
  * Build a floating semi-axis list from literal semi-axis list.
  *
  * example:
- * list = fl_3d_AxisList(axes=["-x","±Z"]);
+ *
+ *     list = fl_3d_AxisList(axes=["-x","±Z"]);
  *
  * is equivalent to:
  *
- * list =
- * [
- *  [-1, 0,  0],
- *  [ 0, 0, -1],
- *  [ 0, 0, +1],
- * ];
- *
+ *     list =
+ *     [
+ *      [-1, 0,  0],
+ *      [ 0, 0, -1],
+ *      [ 0, 0, +1],
+ *     ];
  */
 function fl_3d_AxisList(
-  // semi-axis list (es.["-x","±Z"])
+  //! semi-axis list (es.["-x","±Z"])
   axes
 ) = let(
     //            0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17
@@ -774,7 +857,7 @@ function fl_3d_AxisList(
     if (r[7]!=[] || r[8]!=[] || r[7+9]!=[] || r[8+9]!=[]) +Z,
   ];
 
-// wether «axis» is present in floating semi-axis list
+//! wether «axis» is present in floating semi-axis list
 function fl_3d_axisIsSet(
     axis,
     list
