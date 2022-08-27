@@ -129,7 +129,7 @@ function fl_comp_BBox(spec_list) =
     ]
   ) fl_bb_calc(bboxes);
 
-/**
+/*!
  * returns the component with «label»
  * NOTE: error when label is not unique
  */

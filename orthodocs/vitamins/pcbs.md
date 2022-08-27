@@ -119,6 +119,10 @@ __Syntax:__
 
     fl_comp_search(type,label,comps)
 
+returns the component with «label»
+NOTE: error when label is not unique
+
+
 ---
 
 ### function fl_grid_geometry
