@@ -679,6 +679,11 @@ __Syntax:__
 
     fl_transform(M,v)
 
+Returns M * v , actually transforming v by M.
+
+:memo: **NOTE:** result in 3d format
+
+
 ---
 
 ### function fl_vendor
