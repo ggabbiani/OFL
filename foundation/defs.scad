@@ -501,8 +501,11 @@ function fl_4(v)  =
   assert(len(v)>2)
   len(v)==3 ? [v.x,v.y,v.z,1] : v / v[3];
 
-// Returns M * v , actually transforming v by M.
-// NOTE: result in 3d format
+/*!
+ * Returns M * v , actually transforming v by M.
+ *
+ * **NOTE:** result in 3d format
+ */
 function fl_transform(
   M,// 4x4 transformation matrix
   v // fl_vector (in homogeneous or 3d format)

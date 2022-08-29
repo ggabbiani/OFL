@@ -19,7 +19,6 @@
 
 //! 2D primitives.
 
-
 include <unsafe_defs.scad>
 
 function __clip__(inf,x,sup) = x<=inf?inf:x>=sup?sup:x;
