@@ -176,7 +176,7 @@ function fl_bb_ellipticSector(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE__: the provided angles are always reduced in the form [inf,sup] with:
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
