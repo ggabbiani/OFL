@@ -1,5 +1,9 @@
-# package sata-adapters
+# package vitamins/sata-adapters
 
+
+__Includes:__
+
+    vitamins/sata
 
 ## Variables
 

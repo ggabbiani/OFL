@@ -1,5 +1,9 @@
-# package type_trait
+# package foundation/type_trait
 
+
+__Includes:__
+
+    foundation/base_string
 
 ## Functions
 

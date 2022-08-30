@@ -1,5 +1,9 @@
-# package template
+# package vitamins/template
 
+
+__Includes:__
+
+    foundation/defs
 
 ## Variables
 

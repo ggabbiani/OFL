@@ -1,5 +1,9 @@
-# package fillet
+# package foundation/fillet
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Functions
 

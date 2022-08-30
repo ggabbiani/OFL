@@ -1,5 +1,9 @@
-# package util
+# package foundation/util
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Functions
 

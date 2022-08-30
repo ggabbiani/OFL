@@ -1,5 +1,11 @@
-# package sata
+# package vitamins/sata
 
+
+__Includes:__
+
+    foundation/algo
+    foundation/connect
+    foundation/drawio
 
 ## Variables
 

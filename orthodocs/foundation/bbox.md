@@ -1,5 +1,9 @@
-# package bbox
+# package foundation/bbox
 
+
+__Includes:__
+
+    foundation/defs
 
 ## Functions
 

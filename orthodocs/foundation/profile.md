@@ -1,5 +1,9 @@
-# package profile
+# package foundation/profile
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Modules
 

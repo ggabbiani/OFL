@@ -1,4 +1,4 @@
-# package base_string
+# package foundation/base_string
 
 
 ## Variables

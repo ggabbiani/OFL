@@ -1,5 +1,13 @@
-# package defs
+# package foundation/defs
 
+
+__Includes:__
+
+    foundation/base_geo
+    foundation/base_kv
+    foundation/base_parameters
+    foundation/base_string
+    foundation/base_trace
 
 ## Variables
 

@@ -1,5 +1,22 @@
-# package pcbs
+# package vitamins/pcbs
 
+
+__Includes:__
+
+    foundation/grid
+    foundation/hole
+    foundation/label
+    vitamins/ethers
+    vitamins/hdmi
+    vitamins/jacks
+    vitamins/pin_headers
+    vitamins/screw
+    vitamins/trimpot
+    vitamins/usbs
+
+__Uses:__
+
+    dxf
 
 ## Variables
 

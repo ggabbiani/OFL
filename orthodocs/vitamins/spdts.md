@@ -1,5 +1,9 @@
-# package spdts
+# package vitamins/spdts
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Variables
 

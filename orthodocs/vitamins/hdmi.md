@@ -1,5 +1,9 @@
-# package hdmi
+# package vitamins/hdmi
 
+
+__Includes:__
+
+    foundation/util
 
 ## Variables
 

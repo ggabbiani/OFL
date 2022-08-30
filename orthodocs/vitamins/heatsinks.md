@@ -1,5 +1,13 @@
-# package heatsinks
+# package vitamins/heatsinks
 
+
+__Includes:__
+
+    vitamins/pcbs
+
+__Uses:__
+
+    dxf
 
 ## Variables
 

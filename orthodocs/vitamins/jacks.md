@@ -1,5 +1,13 @@
-# package jacks
+# package vitamins/jacks
 
+
+__Includes:__
+
+    foundation/3d
+    foundation/connect
+    foundation/label
+    foundation/tube
+    foundation/util
 
 ## Variables
 

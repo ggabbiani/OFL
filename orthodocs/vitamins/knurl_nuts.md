@@ -1,5 +1,10 @@
-# package knurl_nuts
+# package vitamins/knurl_nuts
 
+
+__Includes:__
+
+    foundation/3d
+    vitamins/screw
 
 ## Variables
 

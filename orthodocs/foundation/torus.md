@@ -1,5 +1,9 @@
-# package torus
+# package foundation/torus
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Functions
 

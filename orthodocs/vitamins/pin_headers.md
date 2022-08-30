@@ -1,5 +1,12 @@
-# package pin_headers
+# package vitamins/pin_headers
 
+
+__Includes:__
+
+    foundation/connect
+    foundation/defs
+    foundation/label
+    foundation/util
 
 ## Variables
 

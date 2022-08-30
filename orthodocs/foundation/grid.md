@@ -1,5 +1,9 @@
-# package grid
+# package foundation/grid
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Functions
 

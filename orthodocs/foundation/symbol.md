@@ -1,5 +1,9 @@
-# package symbol
+# package foundation/symbol
 
+
+__Includes:__
+
+    foundation/torus
 
 ## Modules
 

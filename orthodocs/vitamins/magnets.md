@@ -1,5 +1,11 @@
-# package magnets
+# package vitamins/magnets
 
+
+__Includes:__
+
+    foundation/3d
+    vitamins/countersinks
+    vitamins/screw
 
 ## Variables
 

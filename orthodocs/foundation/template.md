@@ -1,5 +1,9 @@
-# package template
+# package foundation/template
 
+
+__Includes:__
+
+    foundation/hole
 
 ## Functions
 

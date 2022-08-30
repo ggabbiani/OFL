@@ -1,5 +1,10 @@
-# package connect
+# package foundation/connect
 
+
+__Includes:__
+
+    foundation/symbol
+    foundation/util
 
 ## Functions
 

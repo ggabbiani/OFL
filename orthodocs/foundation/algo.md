@@ -1,5 +1,9 @@
-# package algo
+# package foundation/algo
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Functions
 

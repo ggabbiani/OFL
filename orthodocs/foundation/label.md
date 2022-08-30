@@ -1,5 +1,9 @@
-# package label
+# package foundation/label
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Functions
 

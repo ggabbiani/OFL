@@ -1,5 +1,12 @@
-# package hole
+# package foundation/hole
 
+
+__Includes:__
+
+    foundation/3d
+    foundation/label
+    foundation/symbol
+    foundation/type_trait
 
 ## Functions
 

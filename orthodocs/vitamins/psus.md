@@ -1,5 +1,13 @@
-# package psus
+# package vitamins/psus
 
+
+__Includes:__
+
+    foundation/grid
+    foundation/hole
+    foundation/unsafe_defs
+    foundation/util
+    vitamins/screw
 
 ## Variables
 

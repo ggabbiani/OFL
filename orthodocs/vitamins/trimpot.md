@@ -1,5 +1,12 @@
-# package trimpot
+# package vitamins/trimpot
 
+
+__Includes:__
+
+    foundation/3d
+    foundation/bbox
+    foundation/unsafe_defs
+    foundation/util
 
 ## Variables
 

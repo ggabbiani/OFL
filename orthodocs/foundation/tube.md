@@ -1,5 +1,9 @@
-# package tube
+# package foundation/tube
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Modules
 

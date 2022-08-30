@@ -1,5 +1,9 @@
-# package ethers
+# package vitamins/ethers
 
+
+__Includes:__
+
+    foundation/3d
 
 ## Variables
 
