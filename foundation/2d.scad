@@ -25,8 +25,16 @@ function __clip__(inf,x,sup) = x<=inf?inf:x>=sup?sup:x;
 
 //**** 2d bounding box calculations *******************************************
 
-//! general 2d polygon bounding box
-function fl_bb_polygon(points) = let(
+/*!
+ * Returns the bounding box of a 2d polygon.
+ */
+function fl_bb_polygon(
+  /*!
+   * list of x,y points of the polygon to be used with
+   * [polygon](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#polygon)
+   */
+  points
+) = let(
   x = [for(p=points) p.x],
   y = [for(p=points) p.y]
 ) [[min(x),min(y)],[max(x),max(y)]];
