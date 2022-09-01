@@ -1,10 +1,10 @@
 # package vitamins/sata-adapters
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/sata-adapters] --o|include| A2[vitamins/sata]
 ```
 

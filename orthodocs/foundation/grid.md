@@ -1,10 +1,10 @@
 # package foundation/grid
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/grid] --o|include| A2[foundation/3d]
 ```
 

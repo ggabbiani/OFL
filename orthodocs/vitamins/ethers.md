@@ -1,10 +1,10 @@
 # package vitamins/ethers
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/ethers] --o|include| A2[foundation/3d]
 ```
 

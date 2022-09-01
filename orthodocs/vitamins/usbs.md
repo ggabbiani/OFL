@@ -1,10 +1,10 @@
 # package vitamins/usbs
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/usbs] --o|include| A2[foundation/util]
 ```
 

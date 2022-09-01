@@ -1,10 +1,10 @@
 # package vitamins/pin_headers
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/pin_headers] --o|include| A2[foundation/connect]
     A1 --o|include| A3[foundation/defs]
     A1 --o|include| A4[foundation/label]

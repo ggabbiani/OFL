@@ -1,10 +1,10 @@
 # package vitamins/screw
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/screw] --o|include| A2[foundation/3d]
     A1 --o|include| A3[foundation/unsafe_defs]
 ```

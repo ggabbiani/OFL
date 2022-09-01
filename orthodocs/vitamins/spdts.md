@@ -1,10 +1,10 @@
 # package vitamins/spdts
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/spdts] --o|include| A2[foundation/3d]
 ```
 

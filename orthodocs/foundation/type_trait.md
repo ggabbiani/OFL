@@ -1,10 +1,10 @@
 # package foundation/type_trait
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/type_trait] --o|include| A2[foundation/base_string]
 ```
 

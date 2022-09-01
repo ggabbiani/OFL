@@ -1,10 +1,10 @@
 # package foundation/bbox
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/bbox] --o|include| A2[foundation/defs]
 ```
 

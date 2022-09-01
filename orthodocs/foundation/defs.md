@@ -1,10 +1,10 @@
 # package foundation/defs
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/defs] --o|include| A2[foundation/base_geo]
     A1 --o|include| A3[foundation/base_kv]
     A1 --o|include| A4[foundation/base_parameters]

@@ -1,10 +1,10 @@
 # package vitamins/countersinks
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/countersinks] --o|include| A2[foundation/defs]
 ```
 

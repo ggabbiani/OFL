@@ -1,10 +1,10 @@
 # package vitamins/jacks
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/jacks] --o|include| A2[foundation/3d]
     A1 --o|include| A3[foundation/connect]
     A1 --o|include| A4[foundation/label]

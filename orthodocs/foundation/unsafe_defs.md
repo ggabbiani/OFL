@@ -1,10 +1,10 @@
 # package foundation/unsafe_defs
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/unsafe_defs] --o|include| A2[foundation/defs]
 ```
 

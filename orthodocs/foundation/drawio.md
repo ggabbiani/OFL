@@ -1,10 +1,10 @@
 # package foundation/drawio
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/drawio] --o|include| A2[foundation/2d]
 ```
 

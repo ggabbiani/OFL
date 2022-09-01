@@ -1,10 +1,10 @@
 # package foundation/template
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/template] --o|include| A2[foundation/hole]
 ```
 

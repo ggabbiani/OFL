@@ -1,10 +1,10 @@
 # package foundation/algo
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/algo] --o|include| A2[foundation/3d]
 ```
 

@@ -1,10 +1,10 @@
 # package vitamins/trimpot
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/trimpot] --o|include| A2[foundation/3d]
     A1 --o|include| A3[foundation/bbox]
     A1 --o|include| A4[foundation/unsafe_defs]

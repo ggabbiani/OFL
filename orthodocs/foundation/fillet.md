@@ -1,10 +1,10 @@
 # package foundation/fillet
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/fillet] --o|include| A2[foundation/3d]
 ```
 

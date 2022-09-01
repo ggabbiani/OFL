@@ -1,10 +1,10 @@
 # package vitamins/psus
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/psus] --o|include| A2[foundation/grid]
     A1 --o|include| A3[foundation/hole]
     A1 --o|include| A4[foundation/unsafe_defs]

@@ -1,10 +1,10 @@
 # package foundation/hole
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/hole] --o|include| A2[foundation/3d]
     A1 --o|include| A3[foundation/label]
     A1 --o|include| A4[foundation/symbol]

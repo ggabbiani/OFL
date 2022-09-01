@@ -1,10 +1,10 @@
 # package foundation/tube
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/tube] --o|include| A2[foundation/3d]
 ```
 

@@ -1,10 +1,10 @@
 # package vitamins/hdmi
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/hdmi] --o|include| A2[foundation/util]
 ```
 

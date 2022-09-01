@@ -1,10 +1,10 @@
 # package vitamins/heatsinks
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/heatsinks] --o|include| A2[vitamins/pcbs]
     A1 --o|use| A3[dxf]
 ```

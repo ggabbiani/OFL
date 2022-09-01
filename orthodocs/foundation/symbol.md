@@ -1,10 +1,10 @@
 # package foundation/symbol
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[foundation/symbol] --o|include| A2[foundation/torus]
 ```
 

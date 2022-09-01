@@ -1,10 +1,10 @@
 # package vitamins/sata
 
 
-## System Context
+## Dependencies
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/sata] --o|include| A2[foundation/algo]
     A1 --o|include| A3[foundation/connect]
     A1 --o|include| A4[foundation/drawio]
