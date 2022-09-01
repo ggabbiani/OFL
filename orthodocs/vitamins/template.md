@@ -1,9 +1,12 @@
 # package vitamins/template
 
 
-__Includes:__
+## System Context
 
-    foundation/defs
+```mermaid
+graph TD
+    A1[vitamins/template] --o|include| A2[foundation/defs]
+```
 
 ## Variables
 

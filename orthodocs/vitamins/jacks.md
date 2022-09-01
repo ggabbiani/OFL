@@ -1,13 +1,16 @@
 # package vitamins/jacks
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
-    foundation/connect
-    foundation/label
-    foundation/tube
-    foundation/util
+```mermaid
+graph TD
+    A1[vitamins/jacks] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[foundation/connect]
+    A1 --o|include| A4[foundation/label]
+    A1 --o|include| A5[foundation/tube]
+    A1 --o|include| A6[foundation/util]
+```
 
 ## Variables
 

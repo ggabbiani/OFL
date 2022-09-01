@@ -1,9 +1,12 @@
 # package vitamins/hdmi
 
 
-__Includes:__
+## System Context
 
-    foundation/util
+```mermaid
+graph TD
+    A1[vitamins/hdmi] --o|include| A2[foundation/util]
+```
 
 ## Variables
 

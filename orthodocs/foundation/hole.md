@@ -1,12 +1,15 @@
 # package foundation/hole
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
-    foundation/label
-    foundation/symbol
-    foundation/type_trait
+```mermaid
+graph TD
+    A1[foundation/hole] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[foundation/label]
+    A1 --o|include| A4[foundation/symbol]
+    A1 --o|include| A5[foundation/type_trait]
+```
 
 ## Functions
 

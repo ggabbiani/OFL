@@ -1,9 +1,12 @@
 # package vitamins/countersinks
 
 
-__Includes:__
+## System Context
 
-    foundation/defs
+```mermaid
+graph TD
+    A1[vitamins/countersinks] --o|include| A2[foundation/defs]
+```
 
 ## Variables
 

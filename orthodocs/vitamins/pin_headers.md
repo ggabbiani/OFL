@@ -1,12 +1,15 @@
 # package vitamins/pin_headers
 
 
-__Includes:__
+## System Context
 
-    foundation/connect
-    foundation/defs
-    foundation/label
-    foundation/util
+```mermaid
+graph TD
+    A1[vitamins/pin_headers] --o|include| A2[foundation/connect]
+    A1 --o|include| A3[foundation/defs]
+    A1 --o|include| A4[foundation/label]
+    A1 --o|include| A5[foundation/util]
+```
 
 ## Variables
 

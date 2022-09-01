@@ -1,9 +1,12 @@
 # package foundation/symbol
 
 
-__Includes:__
+## System Context
 
-    foundation/torus
+```mermaid
+graph TD
+    A1[foundation/symbol] --o|include| A2[foundation/torus]
+```
 
 ## Modules
 

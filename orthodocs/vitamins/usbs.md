@@ -1,9 +1,12 @@
 # package vitamins/usbs
 
 
-__Includes:__
+## System Context
 
-    foundation/util
+```mermaid
+graph TD
+    A1[vitamins/usbs] --o|include| A2[foundation/util]
+```
 
 ## Variables
 

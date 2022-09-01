@@ -1,11 +1,14 @@
 # package vitamins/hds
 
 
-__Includes:__
+## System Context
 
-    foundation/hole
-    vitamins/sata
-    vitamins/screw
+```mermaid
+graph TD
+    A1[vitamins/hds] --o|include| A2[foundation/hole]
+    A1 --o|include| A3[vitamins/sata]
+    A1 --o|include| A4[vitamins/screw]
+```
 
 ## Variables
 

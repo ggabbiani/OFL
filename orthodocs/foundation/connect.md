@@ -1,10 +1,13 @@
 # package foundation/connect
 
 
-__Includes:__
+## System Context
 
-    foundation/symbol
-    foundation/util
+```mermaid
+graph TD
+    A1[foundation/connect] --o|include| A2[foundation/symbol]
+    A1 --o|include| A3[foundation/util]
+```
 
 ## Functions
 

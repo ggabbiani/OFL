@@ -1,9 +1,12 @@
 # package foundation/type_trait
 
 
-__Includes:__
+## System Context
 
-    foundation/base_string
+```mermaid
+graph TD
+    A1[foundation/type_trait] --o|include| A2[foundation/base_string]
+```
 
 ## Functions
 

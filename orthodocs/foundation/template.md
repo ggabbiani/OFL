@@ -1,9 +1,12 @@
 # package foundation/template
 
 
-__Includes:__
+## System Context
 
-    foundation/hole
+```mermaid
+graph TD
+    A1[foundation/template] --o|include| A2[foundation/hole]
+```
 
 ## Functions
 

@@ -1,13 +1,16 @@
 # package foundation/defs
 
 
-__Includes:__
+## System Context
 
-    foundation/base_geo
-    foundation/base_kv
-    foundation/base_parameters
-    foundation/base_string
-    foundation/base_trace
+```mermaid
+graph TD
+    A1[foundation/defs] --o|include| A2[foundation/base_geo]
+    A1 --o|include| A3[foundation/base_kv]
+    A1 --o|include| A4[foundation/base_parameters]
+    A1 --o|include| A5[foundation/base_string]
+    A1 --o|include| A6[foundation/base_trace]
+```
 
 ## Variables
 

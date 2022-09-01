@@ -1,9 +1,12 @@
 # package foundation/algo
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
+```mermaid
+graph TD
+    A1[foundation/algo] --o|include| A2[foundation/3d]
+```
 
 ## Functions
 

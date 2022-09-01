@@ -1,13 +1,13 @@
 # package vitamins/heatsinks
 
 
-__Includes:__
+## System Context
 
-    vitamins/pcbs
-
-__Uses:__
-
-    dxf
+```mermaid
+graph TD
+    A1[vitamins/heatsinks] --o|include| A2[vitamins/pcbs]
+    A1 --o|include| A3[dxf]
+```
 
 ## Variables
 

@@ -1,13 +1,16 @@
 # package vitamins/psus
 
 
-__Includes:__
+## System Context
 
-    foundation/grid
-    foundation/hole
-    foundation/unsafe_defs
-    foundation/util
-    vitamins/screw
+```mermaid
+graph TD
+    A1[vitamins/psus] --o|include| A2[foundation/grid]
+    A1 --o|include| A3[foundation/hole]
+    A1 --o|include| A4[foundation/unsafe_defs]
+    A1 --o|include| A5[foundation/util]
+    A1 --o|include| A6[vitamins/screw]
+```
 
 ## Variables
 

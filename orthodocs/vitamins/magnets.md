@@ -1,11 +1,14 @@
 # package vitamins/magnets
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
-    vitamins/countersinks
-    vitamins/screw
+```mermaid
+graph TD
+    A1[vitamins/magnets] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[vitamins/countersinks]
+    A1 --o|include| A4[vitamins/screw]
+```
 
 ## Variables
 

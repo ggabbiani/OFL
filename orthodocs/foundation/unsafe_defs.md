@@ -1,9 +1,12 @@
 # package foundation/unsafe_defs
 
 
-__Includes:__
+## System Context
 
-    foundation/defs
+```mermaid
+graph TD
+    A1[foundation/unsafe_defs] --o|include| A2[foundation/defs]
+```
 
 ## Variables
 

@@ -1,9 +1,12 @@
 # package foundation/bbox
 
 
-__Includes:__
+## System Context
 
-    foundation/defs
+```mermaid
+graph TD
+    A1[foundation/bbox] --o|include| A2[foundation/defs]
+```
 
 ## Functions
 

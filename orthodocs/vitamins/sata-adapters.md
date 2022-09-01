@@ -1,9 +1,12 @@
 # package vitamins/sata-adapters
 
 
-__Includes:__
+## System Context
 
-    vitamins/sata
+```mermaid
+graph TD
+    A1[vitamins/sata-adapters] --o|include| A2[vitamins/sata]
+```
 
 ## Variables
 

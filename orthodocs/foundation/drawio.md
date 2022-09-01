@@ -1,9 +1,12 @@
 # package foundation/drawio
 
 
-__Includes:__
+## System Context
 
-    foundation/2d
+```mermaid
+graph TD
+    A1[foundation/drawio] --o|include| A2[foundation/2d]
+```
 
 ## Functions
 

@@ -1,12 +1,15 @@
 # package vitamins/trimpot
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
-    foundation/bbox
-    foundation/unsafe_defs
-    foundation/util
+```mermaid
+graph TD
+    A1[vitamins/trimpot] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[foundation/bbox]
+    A1 --o|include| A4[foundation/unsafe_defs]
+    A1 --o|include| A5[foundation/util]
+```
 
 ## Variables
 

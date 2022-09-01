@@ -1,9 +1,12 @@
 # package vitamins/spdts
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
+```mermaid
+graph TD
+    A1[vitamins/spdts] --o|include| A2[foundation/3d]
+```
 
 ## Variables
 

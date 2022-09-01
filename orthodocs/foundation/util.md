@@ -1,9 +1,12 @@
 # package foundation/util
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
+```mermaid
+graph TD
+    A1[foundation/util] --o|include| A2[foundation/3d]
+```
 
 ## Functions
 

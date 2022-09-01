@@ -1,10 +1,13 @@
 # package vitamins/screw
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
-    foundation/unsafe_defs
+```mermaid
+graph TD
+    A1[vitamins/screw] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[foundation/unsafe_defs]
+```
 
 ## Functions
 

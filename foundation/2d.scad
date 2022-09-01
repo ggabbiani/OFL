@@ -43,7 +43,7 @@ function fl_bb_polygon(
  * Calculates the exact bounding box of a polygon inscribed in a circumference.
  * See also [fl_bb_polygon()](#function-fl_bb_polygon).
  *
- * __NOTE__: «r» and «d» are mutually exclusive.
+ * __NOTE:__ «r» and «d» are mutually exclusive.
  */
 function fl_bb_ipoly(
   //! radius of the circumference
@@ -61,7 +61,17 @@ function fl_bb_sector(
   r = 1,
   //! diameter of the sector
   d,
-  //!
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
   angles
 ) = let(
   radius    = d!=undef ? d/2 : r,
@@ -136,7 +146,17 @@ function __normalize__(angles) =
 function fl_sector(
   r=1,
   d,
-  //! start|end angles in whatever order
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
   angles
 ) = let(
   radius  = d!=undef ? d/2 : r
@@ -149,6 +169,17 @@ module fl_sector(
   verbs = FL_ADD,
   r     = 1,
   d,
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
   angles,
   quadrant
 ) {
@@ -216,7 +247,9 @@ function __frags__(perimeter) =
     ?  max(min(360 / $fa, perimeter / $fs), 5)
     :  $fn >= 3 ? $fn : 3;
 
-//! line to line intersection as from [Line–line intersection](https://en.wikipedia.org/wiki/Line-line_intersection)
+/*!
+ * line to line intersection as from [Line–line intersection](https://en.wikipedia.org/wiki/Line-line_intersection)
+ */
 function fl_intersection(
   //! first line in [P0,P1] format
   line1,
@@ -255,7 +288,7 @@ function fl_ellipticSector(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE__: the provided angles are always reduced in the form [inf,sup] with:
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -374,9 +407,24 @@ function fl_ellipticSector(
 module fl_ellipticSector(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
   verbs     = FL_ADD,
-  //! ellipse in [a,b] form
+  /*!
+   * ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
   e,
-  //! start|end angles in whatever order
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
   angles,
   quadrant
 ) {
@@ -402,9 +450,24 @@ module fl_ellipticSector(
 
 //! Exact elliptic arc bounding box
 function fl_bb_ellipticArc(
-  //! outer ellipse in [a,b] form
+  /*!
+   * outer ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
   e,
-  //! start|end angles
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
   angles,
   //! subtracted to «e» semi-axes defines the inner ellipse ones
   thick
@@ -435,9 +498,24 @@ let(
 module fl_ellipticArc(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
   verbs     = FL_ADD,
-  //! outer ellipse in [a,b] form
+  /*!
+   * outer ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
   e,
-  //! start|end angles
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
   angles,
   //! subtracted to «e» semi-axes defines the inner ellipse ones
   thick,
@@ -472,7 +550,12 @@ module fl_ellipticArc(
 module fl_ellipticAnnulus(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
   verbs     = FL_ADD,
-  //! outer ellipse in [a,b] form
+  /*!
+   * outer ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
   e,
   //! subtracted to outer ellipses axes defines the internal one
   thick,
@@ -484,7 +567,16 @@ module fl_ellipticAnnulus(
 //**** ellipse ****************************************************************
 
 //! r(θ): polar equation of ellipse «e» by «θ»
-function fl_ellipseR(e,theta) = let(
+function fl_ellipseR(
+  /*!
+   * ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
+  e,
+  theta
+) = let(
     a           = e[0],
     b           = e[1],
     b_cos_theta = b*cos(theta),
@@ -493,7 +585,12 @@ function fl_ellipseR(e,theta) = let(
 
 //! Returns a 2d list [x,y]: rectangular value of ellipse «e» by «t» (parametric) or «angle» (polar) input
 function fl_ellipseXY(
-  //! ellipse in [a,b] form
+  /*!
+   * ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
   e,
   //! parametric input 0≤t<360
   t,
@@ -517,16 +614,16 @@ let(
   h = (a-b)*(a-b)/(a+b)/(a+b)
 ) PI*(a+b)*(1+3*h/(10+sqrt(4-3*h)));
 
-function ramp(angle) = 180*floor((angle+90)/180);
+function __ramp__(angle) = 180*floor((angle+90)/180);
 
-// function step(angle) = cos(angle)>=0 ? 1 : -1;
-function step(angle) = sin(angle/3)==1 ? 1 : cos(angle)>0 ? 1 : -1;
+// function __step__(angle) = cos(angle)>=0 ? 1 : -1;
+function __step__(angle) = sin(angle/3)==1 ? 1 : cos(angle)>0 ? 1 : -1;
 
 /*!
  * Converts «θ» value to the corresponding ellipse «t» parameter
  *
- * __NOTE__: we need to extend the theoretical function behiond ±π/2 codomain,
- * for that we use ramp() and step() function accordingly.
+ * __NOTE:__ we need to extend the theoretical function behiond ±π/2 codomain,
+ * for that we use __ramp__() and __step__() function accordingly.
  */
 function fl_ellipseT(e,angle) =
 assert(is_list(e),str("e=",e))
@@ -535,18 +632,28 @@ let(
   a     = e[0],
   b     = e[1],
   t     = asin(__clip__(-1,fl_ellipseR(e,angle)*sin(angle)/b,1)),
-  ramp  = ramp(angle),
-  step  = step(angle)
+  ramp  = __ramp__(angle),
+  step  = __step__(angle)
 ) ramp+step*t;
 
 //! Exact ellipse bounding box
 function fl_bb_ellipse(
-  //! ellipse in [a,b] form
+  /*!
+   * ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
   e
 ) = let(a=e[0],b=e[1]) assert(is_list(e),str("e=",e)) [[-a,-b],[+a,+b]];
 
 function fl_ellipse(
-  //! ellipse in [a,b] form
+  /*!
+   * ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
   e
 ) = let(
   a=e[0],b=e[1],fa=$fa,fn=$fn,fs=$fs
@@ -555,7 +662,12 @@ function fl_ellipse(
 module fl_ellipse(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
   verbs   = FL_ADD,
-  //! ellipse in [a,b] form
+  /*!
+   * ellipse in [a,b] form with
+   *
+   * - a: length of the X semi-axis
+   * - b: length of the Y semi-axis
+   */
   e,
   quadrant
 ) {
@@ -653,7 +765,17 @@ module fl_arc(
   r,
   //! outer diameter
   d,
-  //! start and stop angles
+  /*!
+   * list containing the start and ending angles for the sector.
+   *
+   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   *
+   *     sup ≥ inf
+   *     distance = sup - inf
+   *       0° ≤ distance ≤ +360°
+   *       0° ≤   inf    < +360°
+   *       0° ≤   sup    < +720°
+   */
   angles,
   //! subtracted to radius defines the inner one
   thick,
@@ -847,11 +969,11 @@ module fl_2d_frame(
   //! outer size
   size    = [1,1],
   /*!
-  List of four radiuses, one for each quadrant's corners.
-  Each zero means that the corresponding corner is squared.
-  Defaults to a 'perfect' rectangle with four squared corners.
-  One scalar value R means corners=[R,R,R,R]
-  */
+   * List of four radiuses, one for each quadrant's corners.
+   * Each zero means that the corresponding corner is squared.
+   * Defaults to a 'perfect' rectangle with four squared corners.
+   * One scalar value R means corners=[R,R,R,R]
+   */
   corners = [0,0,0,0],
   //! subtracted to size defines the internal size
   thick,

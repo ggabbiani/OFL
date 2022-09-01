@@ -1,11 +1,14 @@
 # package vitamins/sata
 
 
-__Includes:__
+## System Context
 
-    foundation/algo
-    foundation/connect
-    foundation/drawio
+```mermaid
+graph TD
+    A1[vitamins/sata] --o|include| A2[foundation/algo]
+    A1 --o|include| A3[foundation/connect]
+    A1 --o|include| A4[foundation/drawio]
+```
 
 ## Variables
 

@@ -1,22 +1,22 @@
 # package vitamins/pcbs
 
 
-__Includes:__
+## System Context
 
-    foundation/grid
-    foundation/hole
-    foundation/label
-    vitamins/ethers
-    vitamins/hdmi
-    vitamins/jacks
-    vitamins/pin_headers
-    vitamins/screw
-    vitamins/trimpot
-    vitamins/usbs
-
-__Uses:__
-
-    dxf
+```mermaid
+graph TD
+    A1[vitamins/pcbs] --o|include| A2[foundation/grid]
+    A1 --o|include| A3[foundation/hole]
+    A1 --o|include| A4[foundation/label]
+    A1 --o|include| A5[vitamins/ethers]
+    A1 --o|include| A6[vitamins/hdmi]
+    A1 --o|include| A7[vitamins/jacks]
+    A1 --o|include| A8[vitamins/pin_headers]
+    A1 --o|include| A9[vitamins/screw]
+    A1 --o|include| A10[vitamins/trimpot]
+    A1 --o|include| A11[vitamins/usbs]
+    A1 --o|include| A12[dxf]
+```
 
 ## Variables
 

@@ -1,10 +1,13 @@
 # package vitamins/knurl_nuts
 
 
-__Includes:__
+## System Context
 
-    foundation/3d
-    vitamins/screw
+```mermaid
+graph TD
+    A1[vitamins/knurl_nuts] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[vitamins/screw]
+```
 
 ## Variables
 
