@@ -6,7 +6,7 @@
 ```mermaid
 graph TD
     A1[vitamins/heatsinks] --o|include| A2[vitamins/pcbs]
-    A1 --o|include| A3[dxf]
+    A1 --o|use| A3[dxf]
 ```
 
 ## Variables

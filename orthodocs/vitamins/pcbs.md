@@ -4,7 +4,7 @@
 ## System Context
 
 ```mermaid
-graph TD
+graph LR
     A1[vitamins/pcbs] --o|include| A2[foundation/grid]
     A1 --o|include| A3[foundation/hole]
     A1 --o|include| A4[foundation/label]
@@ -15,7 +15,7 @@ graph TD
     A1 --o|include| A9[vitamins/screw]
     A1 --o|include| A10[vitamins/trimpot]
     A1 --o|include| A11[vitamins/usbs]
-    A1 --o|include| A12[dxf]
+    A1 --o|use| A12[dxf]
 ```
 
 ## Variables
