@@ -13,14 +13,6 @@ graph LR
 
 ---
 
-### function _3d_
-
-__Syntax:__
-
-    _3d_(p)
-
----
-
 ### function fl_bb_90DegFillet
 
 __Syntax:__

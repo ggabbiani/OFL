@@ -47,10 +47,6 @@
 
 - [fl_90DegFillet (module)](foundation/fillet.md#module-fl_90DegFillet)
 
-## _
-
-- [_3d_ (function)](foundation/fillet.md#function-_3d_)
-
 ## A
 
 - [FL_ADD (variable)](foundation/defs.md#variable-FL_ADD)
