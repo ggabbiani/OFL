@@ -38,9 +38,12 @@ module fl_planes(size=1,alpha=0.2) {
 }
 
 function fl_algo_pattern(
-  n         // number of items to be taken from data
-  ,pattern  // data index pattern
-  ,data     // list of item containing 2d/3d data in their 2nd element
+  //! number of items to be taken from data
+  n,
+  //! data index pattern
+  pattern,
+  // list of item containing 2d/3d data in their 2nd element
+  data
 ) =
   assert(n!=undef)
   assert(pattern!=undef)
@@ -54,12 +57,17 @@ function fl_algo_pattern(
   ) /* echo(pattern=pattern) echo(i=i) echo(index=index) echo(d=d) */ d ];
 
 module fl_algo_pattern(
-  n           // number of items to be taken from data
-  ,pattern    // data index pattern
-  ,data       // data
-  ,deployment // spatial drift between centers
-  ,align  = O // internal alignment
-  ,octant = O
+  //! number of items to be taken from data
+  n,
+  //! data index pattern
+  pattern,
+  //! data
+  data,
+  //! spatial drift between centers
+  deployment,
+  //! internal alignment
+  align  = O,
+  octant = O
 ) {
 
   function sz(step,items,prev_steps=[0,0,0]) =

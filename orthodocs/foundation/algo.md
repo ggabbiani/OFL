@@ -19,6 +19,15 @@ __Syntax:__
 
     fl_algo_pattern(n,pattern,data)
 
+__Parameters:__
+
+__n__  
+number of items to be taken from data
+
+__pattern__  
+data index pattern
+
+
 ---
 
 ### function sz
@@ -37,6 +46,24 @@ __Syntax:__
 __Syntax:__
 
     fl_algo_pattern(n,pattern,data,deployment,align=O,octant=O)
+
+__Parameters:__
+
+__n__  
+number of items to be taken from data
+
+__pattern__  
+data index pattern
+
+__data__  
+data
+
+__deployment__  
+spatial drift between centers
+
+__align__  
+internal alignment
+
 
 ---
 
