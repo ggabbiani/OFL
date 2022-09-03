@@ -1,6 +1,5 @@
 # package vitamins/heatsinks
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,7 +9,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -38,14 +36,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function bottom_sz
 
 __Syntax:__
 
-    bottom_sz()
+```text
+bottom_sz()
+```
 
 ---
 
@@ -53,7 +52,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_bb_pimoroni(type,top=true,bottom=true)
+```text
+fl_bb_pimoroni(type,top=true,bottom=true)
+```
 
 ---
 
@@ -61,7 +62,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pimoroni(verb=FL_ADD,type,thick=0,lay_what="mount",top=true,bottom=true,direction,octant)
+```text
+fl_pimoroni(verb=FL_ADD,type,thick=0,lay_what="mount",top=true,bottom=true,direction,octant)
+```
 
 ## Modules
 

@@ -1,6 +1,5 @@
 # package foundation/util
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_bend_faceSet
 
 __Syntax:__
 
-    fl_bend_faceSet(type,value)
+```text
+fl_bend_faceSet(type,value)
+```
 
 ---
 
@@ -25,7 +25,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_bend_sheet(type,value)
+```text
+fl_bend_sheet(type,value)
+```
 
 ---
 
@@ -33,7 +35,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_folding(faces,material="silver")
+```text
+fl_folding(faces,material="silver")
+```
 
 ## Modules
 

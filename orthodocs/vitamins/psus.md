@@ -1,6 +1,5 @@
 # package vitamins/psus
 
-
 ## Dependencies
 
 ```mermaid
@@ -13,7 +12,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -49,14 +47,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function terminal_size
 
 __Syntax:__
 
-    terminal_size(type)
+```text
+terminal_size(type)
+```
 
 ## Modules
 

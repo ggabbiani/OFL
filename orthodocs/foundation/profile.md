@@ -1,6 +1,5 @@
 # package foundation/profile
 
-
 ## Dependencies
 
 ```mermaid

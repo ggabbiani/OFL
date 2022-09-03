@@ -1,6 +1,5 @@
 # package foundation/algo
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_algo_pattern
 
 __Syntax:__
 
-    fl_algo_pattern(n,pattern,data)
+```text
+fl_algo_pattern(n,pattern,data)
+```
 
 __Parameters:__
 
@@ -34,7 +34,9 @@ data index pattern
 
 __Syntax:__
 
-    sz(step,items,prev_steps=[0,0,0])
+```text
+sz(step,items,prev_steps=[0,0,0])
+```
 
 ## Modules
 

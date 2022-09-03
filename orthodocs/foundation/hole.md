@@ -1,6 +1,5 @@
 # package foundation/hole
 
-
 ## Dependencies
 
 ```mermaid
@@ -13,14 +12,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_Hole
 
 __Syntax:__
 
-    fl_Hole(position,d,normal=+Z,depth=0,ldir,loct,screw)
+```text
+fl_Hole(position,d,normal=+Z,depth=0,ldir,loct,screw)
+```
 
 ---
 
@@ -28,7 +28,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_hole_d(hole,value)
+```text
+fl_hole_d(hole,value)
+```
 
 ---
 
@@ -36,7 +38,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_hole_depth(hole,value)
+```text
+fl_hole_depth(hole,value)
+```
 
 ---
 
@@ -44,7 +48,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_hole_ldir(hole,value)
+```text
+fl_hole_ldir(hole,value)
+```
 
 ---
 
@@ -52,7 +58,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_hole_loct(hole,value)
+```text
+fl_hole_loct(hole,value)
+```
 
 ---
 
@@ -60,7 +68,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_hole_n(hole,value)
+```text
+fl_hole_n(hole,value)
+```
 
 ---
 
@@ -68,7 +78,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_hole_pos(hole,value)
+```text
+fl_hole_pos(hole,value)
+```
 
 ---
 
@@ -76,7 +88,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_hole_screw(hole,value,default)
+```text
+fl_hole_screw(hole,value,default)
+```
 
 ---
 
@@ -84,7 +98,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_holes(type,value)
+```text
+fl_holes(type,value)
+```
 
 ---
 
@@ -92,7 +108,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_is3d(3d)
+```text
+fl_tt_is3d(3d)
+```
 
 ---
 
@@ -100,7 +118,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isDirectionRotation(value)
+```text
+fl_tt_isDirectionRotation(value)
+```
 
 ---
 
@@ -108,7 +128,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isHole(hole)
+```text
+fl_tt_isHole(hole)
+```
 
 ---
 
@@ -116,7 +138,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isHoleList(list)
+```text
+fl_tt_isHoleList(list)
+```
 
 ---
 
@@ -124,7 +148,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isOctant(3d)
+```text
+fl_tt_isOctant(3d)
+```
 
 ## Modules
 

@@ -1,6 +1,5 @@
 # package vitamins/pin_headers
 
-
 ## Dependencies
 
 ```mermaid
@@ -12,7 +11,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -64,14 +62,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_PinHeader
 
 __Syntax:__
 
-    fl_PinHeader(name,description,nop,geometry=[1,1],smt=false,engine,through=false,vendors=[])
+```text
+fl_PinHeader(name,description,nop,geometry=[1,1],smt=false,engine,through=false,vendors=[])
+```
 
 ---
 
@@ -79,7 +78,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_bb_nopPinHeader(nop,geometry,engine)
+```text
+fl_bb_nopPinHeader(nop,geometry,engine)
+```
 
 ---
 
@@ -87,7 +88,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_phdr_cid(nop,geometry)
+```text
+fl_phdr_cid(nop,geometry)
+```
 
 ---
 
@@ -95,7 +98,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_phdr_geometry(type,value)
+```text
+fl_phdr_geometry(type,value)
+```
 
 ---
 
@@ -103,7 +108,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_phdr_nopSize(nop,geometry,engine)
+```text
+fl_phdr_nopSize(nop,geometry,engine)
+```
 
 ## Modules
 

@@ -1,6 +1,5 @@
 # package artifacts/box
 
-
 ## Dependencies
 
 ```mermaid

@@ -1,6 +1,5 @@
 # package vitamins/jacks
 
-
 ## Dependencies
 
 ```mermaid
@@ -13,7 +12,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 

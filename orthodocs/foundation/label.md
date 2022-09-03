@@ -1,6 +1,5 @@
 # package foundation/label
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_repos
 
 __Syntax:__
 
-    fl_repos(oldpos,oldsize,newsize)
+```text
+fl_repos(oldpos,oldsize,newsize)
+```
 
 ---
 
@@ -25,7 +25,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_resize(oldsize,newsize,auto=false)
+```text
+fl_resize(oldsize,newsize,auto=false)
+```
 
 ## Modules
 

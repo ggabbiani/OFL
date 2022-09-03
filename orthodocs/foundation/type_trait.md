@@ -1,6 +1,5 @@
 # package foundation/type_trait
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_tt_isAxis
 
 __Syntax:__
 
-    fl_tt_isAxis(axis)
+```text
+fl_tt_isAxis(axis)
+```
 
 ---
 
@@ -25,7 +25,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isAxisKVList(list)
+```text
+fl_tt_isAxisKVList(list)
+```
 
 ---
 
@@ -33,7 +35,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isAxisList(list)
+```text
+fl_tt_isAxisList(list)
+```
 
 ---
 
@@ -41,7 +45,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isAxisString(s)
+```text
+fl_tt_isAxisString(s)
+```
 
 ---
 
@@ -49,7 +55,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isAxisVList(list)
+```text
+fl_tt_isAxisVList(list)
+```
 
 ---
 
@@ -57,7 +65,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isInDictionary(string,dictionary,nocase=true)
+```text
+fl_tt_isInDictionary(string,dictionary,nocase=true)
+```
 
 ---
 
@@ -65,7 +75,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isKV(kv,dictionary=[],f=function(value)value!=undef)
+```text
+fl_tt_isKV(kv,dictionary=[],f=function(value)value!=undef)
+```
 
 ---
 
@@ -73,7 +85,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isKVList(list,dictionary=[],f=function(value)value!=undef,size)
+```text
+fl_tt_isKVList(list,dictionary=[],f=function(value)value!=undef,size)
+```
 
 ---
 
@@ -81,7 +95,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isList(list,f=function(value)true,size)
+```text
+fl_tt_isList(list,f=function(value)true,size)
+```
 
 ---
 
@@ -89,7 +105,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isPointNormal(plane)
+```text
+fl_tt_isPointNormal(plane)
+```
 
 ---
 
@@ -97,5 +115,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tt_isPointNormalList(list)
+```text
+fl_tt_isPointNormalList(list)
+```
 

@@ -1,9 +1,6 @@
 # package foundation/base_geo
 
-
-
 ## Functions
-
 
 ---
 
@@ -11,7 +8,9 @@
 
 __Syntax:__
 
-    fl_isOrthogonal(a,b)
+```text
+fl_isOrthogonal(a,b)
+```
 
 ---
 
@@ -19,7 +18,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_isParallel(a,b,exact=true)
+```text
+fl_isParallel(a,b,exact=true)
+```
 
 ---
 
@@ -27,5 +28,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_versor(v)
+```text
+fl_versor(v)
+```
 

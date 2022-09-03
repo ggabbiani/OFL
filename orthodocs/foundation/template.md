@@ -1,6 +1,5 @@
 # package foundation/template
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function constructor
 
 __Syntax:__
 
-    constructor(description,bbox,holes)
+```text
+constructor(description,bbox,holes)
+```
 
 ## Modules
 

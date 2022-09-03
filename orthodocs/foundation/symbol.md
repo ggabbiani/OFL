@@ -1,6 +1,5 @@
 # package foundation/symbol
 
-
 ## Dependencies
 
 ```mermaid

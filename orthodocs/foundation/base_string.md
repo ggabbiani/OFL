@@ -1,9 +1,6 @@
 # package foundation/base_string
 
-
-
 ## Variables
-
 
 ---
 
@@ -23,14 +20,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_list_filter
 
 __Syntax:__
 
-    fl_list_filter(list,operator,compare,__result__=[],__first__=true)
+```text
+fl_list_filter(list,operator,compare,__result__=[],__first__=true)
+```
 
 ---
 
@@ -38,7 +36,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_list_flatten(list)
+```text
+fl_list_flatten(list)
+```
 
 ---
 
@@ -46,7 +46,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_list_has(list,item)
+```text
+fl_list_has(list,item)
+```
 
 ---
 
@@ -54,7 +56,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_str_lower(s)
+```text
+fl_str_lower(s)
+```
 
 ---
 
@@ -62,5 +66,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_str_upper(s)
+```text
+fl_str_upper(s)
+```
 

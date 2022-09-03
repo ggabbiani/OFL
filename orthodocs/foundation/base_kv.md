@@ -1,9 +1,6 @@
 # package foundation/base_kv
 
-
-
 ## Functions
-
 
 ---
 
@@ -11,7 +8,9 @@
 
 __Syntax:__
 
-    fl_get(type,key,default)
+```text
+fl_get(type,key,default)
+```
 
 ---
 
@@ -19,7 +18,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_optProperty(type,key,value,default)
+```text
+fl_optProperty(type,key,value,default)
+```
 
 ---
 
@@ -27,7 +28,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_optional(props,key,default)
+```text
+fl_optional(props,key,default)
+```
 
 ---
 
@@ -35,5 +38,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_property(type,key,value,default)
+```text
+fl_property(type,key,value,default)
+```
 

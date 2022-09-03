@@ -1,6 +1,5 @@
 # package foundation/grid
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_grid_hex
 
 __Syntax:__
 
-    fl_grid_hex(origin=[0,0],r_step,bbox)
+```text
+fl_grid_hex(origin=[0,0],r_step,bbox)
+```
 
 ---
 
@@ -25,7 +25,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_grid_quad(origin=[0,0],step,bbox,generator=function(x,y,bbox)[[x,y]])
+```text
+fl_grid_quad(origin=[0,0],step,bbox,generator=function(x,y,bbox)[[x,y]])
+```
 
 ## Modules
 

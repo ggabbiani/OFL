@@ -1,6 +1,5 @@
 # package vitamins/spdts
 
-
 ## Dependencies
 
 ```mermaid
@@ -9,7 +8,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -29,14 +27,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_spdt_d
 
 __Syntax:__
 
-    fl_spdt_d(type)
+```text
+fl_spdt_d(type)
+```
 
 ---
 
@@ -44,7 +43,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_spdt_headD(type)
+```text
+fl_spdt_headD(type)
+```
 
 ---
 
@@ -52,7 +53,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_spdt_headH(type)
+```text
+fl_spdt_headH(type)
+```
 
 ---
 
@@ -60,7 +63,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_spdt_l(type)
+```text
+fl_spdt_l(type)
+```
 
 ## Modules
 

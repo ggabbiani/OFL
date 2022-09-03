@@ -1,6 +1,5 @@
 # package foundation/fillet
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_bb_90DegFillet
 
 __Syntax:__
 
-    fl_bb_90DegFillet(r,n,child_bbox)
+```text
+fl_bb_90DegFillet(r,n,child_bbox)
+```
 
 ---
 
@@ -25,7 +25,9 @@ __Syntax:__
 
 __Syntax:__
 
-    rad(x)
+```text
+rad(x)
+```
 
 ## Modules
 

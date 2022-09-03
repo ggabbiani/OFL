@@ -1,9 +1,6 @@
 # package foundation/base_trace
 
-
-
 ## Functions
-
 
 ---
 
@@ -11,7 +8,9 @@
 
 __Syntax:__
 
-    fl_trace(msg,result,always=false)
+```text
+fl_trace(msg,result,always=false)
+```
 
 ## Modules
 

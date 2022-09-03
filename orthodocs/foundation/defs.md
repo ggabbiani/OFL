@@ -1,6 +1,5 @@
 # package foundation/defs
 
-
 ## Dependencies
 
 ```mermaid
@@ -13,7 +12,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -305,14 +303,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_2
 
 __Syntax:__
 
-    fl_2(v)
+```text
+fl_2(v)
+```
 
 ---
 
@@ -320,7 +319,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_3(v)
+```text
+fl_3(v)
+```
 
 ---
 
@@ -328,7 +329,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_4(v)
+```text
+fl_4(v)
+```
 
 ---
 
@@ -336,7 +339,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_R(u,theta)
+```text
+fl_R(u,theta)
+```
 
 ---
 
@@ -344,7 +349,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_Rx(theta)
+```text
+fl_Rx(theta)
+```
 
 ---
 
@@ -352,7 +359,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_Rxyz(angle)
+```text
+fl_Rxyz(angle)
+```
 
 ---
 
@@ -360,7 +369,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_Ry(theta)
+```text
+fl_Ry(theta)
+```
 
 ---
 
@@ -368,7 +379,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_Rz(theta)
+```text
+fl_Rz(theta)
+```
 
 ---
 
@@ -376,7 +389,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_S(s)
+```text
+fl_S(s)
+```
 
 ---
 
@@ -384,7 +399,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_T(t)
+```text
+fl_T(t)
+```
 
 ---
 
@@ -392,7 +409,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_X(x)
+```text
+fl_X(x)
+```
 
 ---
 
@@ -400,7 +419,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_XOR(c1,c2)
+```text
+fl_XOR(c1,c2)
+```
 
 ---
 
@@ -408,7 +429,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_Y(y)
+```text
+fl_Y(y)
+```
 
 ---
 
@@ -416,7 +439,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_Z(z)
+```text
+fl_Z(z)
+```
 
 ---
 
@@ -424,7 +449,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_accum(v)
+```text
+fl_accum(v)
+```
 
 ---
 
@@ -432,7 +459,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_align(from,to)
+```text
+fl_align(from,to)
+```
 
 ---
 
@@ -440,7 +469,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_assert(condition,message,result)
+```text
+fl_assert(condition,message,result)
+```
 
 ---
 
@@ -448,7 +479,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_connectors(type,value)
+```text
+fl_connectors(type,value)
+```
 
 ---
 
@@ -456,7 +489,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_deprecated(bad,value,replacement)
+```text
+fl_deprecated(bad,value,replacement)
+```
 
 ---
 
@@ -464,7 +499,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_description(type,value)
+```text
+fl_description(type,value)
+```
 
 ---
 
@@ -472,7 +509,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_dict_search(dictionary,name)
+```text
+fl_dict_search(dictionary,name)
+```
 
 ---
 
@@ -480,7 +519,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_director(type,value)
+```text
+fl_director(type,value)
+```
 
 ---
 
@@ -488,7 +529,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_dxf(type,value)
+```text
+fl_dxf(type,value)
+```
 
 ---
 
@@ -496,7 +539,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_engine(type,value)
+```text
+fl_engine(type,value)
+```
 
 ---
 
@@ -504,7 +549,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_has(type,property,check=function(value)true)
+```text
+fl_has(type,property,check=function(value)true)
+```
 
 ---
 
@@ -512,7 +559,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_height(type)
+```text
+fl_height(type)
+```
 
 ---
 
@@ -520,7 +569,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_isEven(n)
+```text
+fl_isEven(n)
+```
 
 ---
 
@@ -528,7 +579,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_isMultiple(n,m)
+```text
+fl_isMultiple(n,m)
+```
 
 ---
 
@@ -536,7 +589,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_isOdd(n)
+```text
+fl_isOdd(n)
+```
 
 ---
 
@@ -544,7 +599,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_isSet(flag,list)
+```text
+fl_isSet(flag,list)
+```
 
 ---
 
@@ -552,7 +609,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_material(type,value,default)
+```text
+fl_material(type,value,default)
+```
 
 ---
 
@@ -560,7 +619,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_name(type,value)
+```text
+fl_name(type,value)
+```
 
 ---
 
@@ -568,7 +629,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_native(type,value)
+```text
+fl_native(type,value)
+```
 
 ---
 
@@ -576,7 +639,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_nopSCADlib(type,value,default)
+```text
+fl_nopSCADlib(type,value,default)
+```
 
 ---
 
@@ -584,7 +649,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_parse_diameter(r,r1,d,d1,def)
+```text
+fl_parse_diameter(r,r1,d,d1,def)
+```
 
 ---
 
@@ -592,7 +659,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_parse_l(l,l1,def)
+```text
+fl_parse_l(l,l1,def)
+```
 
 ---
 
@@ -600,7 +669,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_parse_radius(r,r1,d,d1,def)
+```text
+fl_parse_radius(r,r1,d,d1,def)
+```
 
 ---
 
@@ -608,7 +679,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_payload(type,value)
+```text
+fl_payload(type,value)
+```
 
 ---
 
@@ -616,7 +689,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pcb(type,value)
+```text
+fl_pcb(type,value)
+```
 
 ---
 
@@ -624,7 +699,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pop(l,i=0)
+```text
+fl_pop(l,i=0)
+```
 
 ---
 
@@ -632,7 +709,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_push(list,item)
+```text
+fl_push(list,item)
+```
 
 ---
 
@@ -640,7 +719,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_rotor(type,value)
+```text
+fl_rotor(type,value)
+```
 
 ---
 
@@ -648,7 +729,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_screw(type,value)
+```text
+fl_screw(type,value)
+```
 
 ---
 
@@ -656,7 +739,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_size(type)
+```text
+fl_size(type)
+```
 
 ---
 
@@ -664,7 +749,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_sub(list,from,to)
+```text
+fl_sub(list,from,to)
+```
 
 ---
 
@@ -672,7 +759,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_thick(type)
+```text
+fl_thick(type)
+```
 
 ---
 
@@ -680,7 +769,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_tolerance(type,value)
+```text
+fl_tolerance(type,value)
+```
 
 ---
 
@@ -688,7 +779,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_transform(M,v)
+```text
+fl_transform(M,v)
+```
 
 Returns M * v , actually transforming v by M.
 
@@ -701,7 +794,9 @@ Returns M * v , actually transforming v by M.
 
 __Syntax:__
 
-    fl_vendor(type,value)
+```text
+fl_vendor(type,value)
+```
 
 ---
 
@@ -709,7 +804,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_version()
+```text
+fl_version()
+```
 
 ---
 
@@ -717,7 +814,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_versionNumber()
+```text
+fl_versionNumber()
+```
 
 ---
 
@@ -725,7 +824,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_width(type)
+```text
+fl_width(type)
+```
 
 ---
 
@@ -733,7 +834,9 @@ __Syntax:__
 
 __Syntax:__
 
-    palette(name)
+```text
+palette(name)
+```
 
 ---
 
@@ -741,7 +844,9 @@ __Syntax:__
 
 __Syntax:__
 
-    verb2modifier(verb)
+```text
+verb2modifier(verb)
+```
 
 ## Modules
 

@@ -1,6 +1,5 @@
 # package artifacts/caddy
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,7 +9,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 

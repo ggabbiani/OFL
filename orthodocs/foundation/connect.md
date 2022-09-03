@@ -1,6 +1,5 @@
 # package foundation/connect
 
-
 ## Dependencies
 
 ```mermaid
@@ -11,14 +10,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function conn_Plug
 
 __Syntax:__
 
-    conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0])
+```text
+conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0])
+```
 
 ---
 
@@ -26,7 +26,9 @@ __Syntax:__
 
 __Syntax:__
 
-    conn_Socket(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0])
+```text
+conn_Socket(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0])
+```
 
 ---
 
@@ -34,7 +36,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_clone(original,type,id,ox,oy,pos,size,octant,direction,M=I)
+```text
+fl_conn_clone(original,type,id,ox,oy,pos,size,octant,direction,M=I)
+```
 
 ---
 
@@ -42,7 +46,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_id(type,value)
+```text
+fl_conn_id(type,value)
+```
 
 ---
 
@@ -50,7 +56,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_import(conns,M)
+```text
+fl_conn_import(conns,M)
+```
 
 ---
 
@@ -58,7 +66,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_ldir(type,value)
+```text
+fl_conn_ldir(type,value)
+```
 
 ---
 
@@ -66,7 +76,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_loct(type,value)
+```text
+fl_conn_loct(type,value)
+```
 
 ---
 
@@ -74,7 +86,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_ox(type,value)
+```text
+fl_conn_ox(type,value)
+```
 
 ---
 
@@ -82,7 +96,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_oy(type,value)
+```text
+fl_conn_oy(type,value)
+```
 
 ---
 
@@ -90,7 +106,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_pos(type,value)
+```text
+fl_conn_pos(type,value)
+```
 
 ---
 
@@ -98,7 +116,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_size(type,value)
+```text
+fl_conn_size(type,value)
+```
 
 ---
 
@@ -106,7 +126,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_conn_type(type,value)
+```text
+fl_conn_type(type,value)
+```
 
 ---
 
@@ -114,7 +136,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_connect(son,parent)
+```text
+fl_connect(son,parent)
+```
 
 ## Modules
 

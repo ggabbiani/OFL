@@ -1,6 +1,5 @@
 # package foundation/torus
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_bb_torus
 
 __Syntax:__
 
-    fl_bb_torus(r,d,e,R)
+```text
+fl_bb_torus(r,d,e,R)
+```
 
 ## Modules
 

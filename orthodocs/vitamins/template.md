@@ -1,6 +1,5 @@
 # package vitamins/template
 
-
 ## Dependencies
 
 ```mermaid
@@ -9,7 +8,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 

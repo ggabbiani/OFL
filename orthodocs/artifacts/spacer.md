@@ -1,6 +1,5 @@
 # package artifacts/spacer
 
-
 ## Dependencies
 
 ```mermaid
@@ -13,7 +12,6 @@ graph LR
 
 ## Variables
 
-
 ---
 
 ### variable FL_SPC_NS
@@ -24,14 +22,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_bb_spacer
 
 __Syntax:__
 
-    fl_bb_spacer(h,r)
+```text
+fl_bb_spacer(h,r)
+```
 
 ---
 
@@ -39,7 +38,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_spc_holeRadius(screw,knut)
+```text
+fl_spc_holeRadius(screw,knut)
+```
 
 ## Modules
 

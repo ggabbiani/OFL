@@ -1,6 +1,5 @@
 # package vitamins/magnets
 
-
 ## Dependencies
 
 ```mermaid
@@ -11,7 +10,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -79,14 +77,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_Magnet
 
 __Syntax:__
 
-    fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors)
+```text
+fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors)
+```
 
 ---
 
@@ -94,7 +93,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_mag_cs(type,value)
+```text
+fl_mag_cs(type,value)
+```
 
 ---
 
@@ -102,7 +103,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_mag_csH(type,value)
+```text
+fl_mag_csH(type,value)
+```
 
 ---
 
@@ -110,7 +113,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_mag_d(type,value)
+```text
+fl_mag_d(type,value)
+```
 
 ---
 
@@ -118,7 +123,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_mag_engine(type,value)
+```text
+fl_mag_engine(type,value)
+```
 
 ## Modules
 

@@ -1,6 +1,5 @@
 # package foundation/drawio
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function dio_polyCoords
 
 __Syntax:__
 
-    dio_polyCoords(points,size)
+```text
+dio_polyCoords(points,size)
+```
 
 ## Modules
 

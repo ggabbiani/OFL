@@ -1,6 +1,5 @@
 # package foundation/unsafe_defs
 
-
 ## Dependencies
 
 ```mermaid
@@ -9,7 +8,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -69,14 +67,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function R
 
 __Syntax:__
 
-    R(u,theta)
+```text
+R(u,theta)
+```
 
 ---
 
@@ -84,7 +83,9 @@ __Syntax:__
 
 __Syntax:__
 
-    Rx(alpha)
+```text
+Rx(alpha)
+```
 
 ---
 
@@ -92,7 +93,9 @@ __Syntax:__
 
 __Syntax:__
 
-    Rxyz(alpha)
+```text
+Rxyz(alpha)
+```
 
 ---
 
@@ -100,7 +103,9 @@ __Syntax:__
 
 __Syntax:__
 
-    Ry(alpha)
+```text
+Ry(alpha)
+```
 
 ---
 
@@ -108,7 +113,9 @@ __Syntax:__
 
 __Syntax:__
 
-    Rz(alpha)
+```text
+Rz(alpha)
+```
 
 ---
 
@@ -116,7 +123,9 @@ __Syntax:__
 
 __Syntax:__
 
-    S(s)
+```text
+S(s)
+```
 
 ---
 
@@ -124,7 +133,9 @@ __Syntax:__
 
 __Syntax:__
 
-    T(t)
+```text
+T(t)
+```
 
 ---
 
@@ -132,7 +143,9 @@ __Syntax:__
 
 __Syntax:__
 
-    X(x)
+```text
+X(x)
+```
 
 ---
 
@@ -140,7 +153,9 @@ __Syntax:__
 
 __Syntax:__
 
-    Y(y)
+```text
+Y(y)
+```
 
 ---
 
@@ -148,5 +163,7 @@ __Syntax:__
 
 __Syntax:__
 
-    Z(z)
+```text
+Z(z)
+```
 

@@ -1,6 +1,5 @@
 # package vitamins/hdmi
 
-
 ## Dependencies
 
 ```mermaid
@@ -9,7 +8,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -53,14 +51,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_hdmi_nameKV
 
 __Syntax:__
 
-    fl_hdmi_nameKV(value)
+```text
+fl_hdmi_nameKV(value)
+```
 
 ---
 
@@ -68,7 +67,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_hdmi_new(nop_type)
+```text
+fl_hdmi_new(nop_type)
+```
 
 ## Modules
 

@@ -1,6 +1,5 @@
 # package vitamins/trimpot
 
-
 ## Dependencies
 
 ```mermaid
@@ -12,7 +11,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 

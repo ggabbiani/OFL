@@ -1,6 +1,5 @@
 # package vitamins/hds
 
-
 ## Dependencies
 
 ```mermaid
@@ -11,7 +10,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 

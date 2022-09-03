@@ -1,6 +1,5 @@
 # package vitamins/usbs
 
-
 ## Dependencies
 
 ```mermaid
@@ -9,7 +8,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -85,14 +83,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_USB_flange
 
 __Syntax:__
 
-    fl_USB_flange(type,value)
+```text
+fl_USB_flange(type,value)
+```
 
 ---
 
@@ -100,7 +99,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_USB_new(utype,flange=true)
+```text
+fl_USB_new(utype,flange=true)
+```
 
 ---
 
@@ -108,7 +109,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_USB_type(type,value)
+```text
+fl_USB_type(type,value)
+```
 
 ## Modules
 

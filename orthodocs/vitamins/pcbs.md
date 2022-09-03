@@ -1,6 +1,5 @@
 # package vitamins/pcbs
 
-
 ## Dependencies
 
 ```mermaid
@@ -19,7 +18,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -103,14 +101,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_PCB
 
 __Syntax:__
 
-    fl_PCB(name,bare,thick=1.6,color="green",radius=0,payload,holes=[],components,grid,screw,dxf,vendors,connectors,director=+Z,rotor=+X)
+```text
+fl_PCB(name,bare,thick=1.6,color="green",radius=0,payload,holes=[],components,grid,screw,dxf,vendors,connectors,director=+Z,rotor=+X)
+```
 
 ---
 
@@ -118,7 +117,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_comp_BBox(spec_list)
+```text
+fl_comp_BBox(spec_list)
+```
 
 ---
 
@@ -126,7 +127,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_comp_connectors(component)
+```text
+fl_comp_connectors(component)
+```
 
 ---
 
@@ -134,7 +137,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_comp_search(type,label,comps)
+```text
+fl_comp_search(type,label,comps)
+```
 
 returns the component with «label»
 NOTE: error when label is not unique
@@ -146,7 +151,9 @@ NOTE: error when label is not unique
 
 __Syntax:__
 
-    fl_grid_geometry(grid,size)
+```text
+fl_grid_geometry(grid,size)
+```
 
 ---
 
@@ -154,7 +161,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pcb_NopHoles(nop)
+```text
+fl_pcb_NopHoles(nop)
+```
 
 ---
 
@@ -162,7 +171,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pcb_components(type,value)
+```text
+fl_pcb_components(type,value)
+```
 
 ---
 
@@ -170,7 +181,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pcb_grid(type,value)
+```text
+fl_pcb_grid(type,value)
+```
 
 ---
 
@@ -178,7 +191,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pcb_import(nop,payload)
+```text
+fl_pcb_import(nop,payload)
+```
 
 ---
 
@@ -186,7 +201,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pcb_radius(type,value)
+```text
+fl_pcb_radius(type,value)
+```
 
 ---
 
@@ -194,7 +211,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_pcb_thick(type,value)
+```text
+fl_pcb_thick(type,value)
+```
 
 ## Modules
 

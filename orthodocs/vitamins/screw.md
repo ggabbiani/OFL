@@ -1,6 +1,5 @@
 # package vitamins/screw
 
-
 ## Dependencies
 
 ```mermaid
@@ -11,14 +10,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_bb_screw
 
 __Syntax:__
 
-    fl_bb_screw(type,length)
+```text
+fl_bb_screw(type,length)
+```
 
 ---
 
@@ -26,7 +26,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_screw_l(type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false)
+```text
+fl_screw_l(type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false)
+```
 
 ---
 
@@ -34,7 +36,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_screw_lens(type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false)
+```text
+fl_screw_lens(type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false)
+```
 
 ---
 
@@ -42,7 +46,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_screw_size(type,length)
+```text
+fl_screw_size(type,length)
+```
 
 ## Modules
 

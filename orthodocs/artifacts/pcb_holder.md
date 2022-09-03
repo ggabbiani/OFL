@@ -1,6 +1,5 @@
 # package artifacts/pcb_holder
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,14 +9,15 @@ graph LR
 
 ## Functions
 
-
 ---
 
 ### function fl_bb_holderByHoles
 
 __Syntax:__
 
-    fl_bb_holderByHoles(pcb,h)
+```text
+fl_bb_holderByHoles(pcb,h)
+```
 
 ---
 
@@ -25,7 +25,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_bb_holderBySize(pcb,h,tolerance=0.5,screw=M3_cap_screw,knut=false)
+```text
+fl_bb_holderBySize(pcb,h,tolerance=0.5,screw=M3_cap_screw,knut=false)
+```
 
 ---
 
@@ -33,7 +35,9 @@ __Syntax:__
 
 __Syntax:__
 
-    optimal_r(center,bb,screw)
+```text
+optimal_r(center,bb,screw)
+```
 
 ## Modules
 

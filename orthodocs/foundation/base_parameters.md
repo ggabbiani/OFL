@@ -1,9 +1,6 @@
 # package foundation/base_parameters
 
-
-
 ## Functions
-
 
 ---
 
@@ -11,7 +8,9 @@
 
 __Syntax:__
 
-    fl_asserts()
+```text
+fl_asserts()
+```
 
 ---
 
@@ -19,7 +18,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_debug()
+```text
+fl_debug()
+```
 
 ---
 
@@ -27,7 +28,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_filament()
+```text
+fl_filament()
+```
 
 ---
 
@@ -35,7 +38,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_parm_Debug(labels=false,symbols=false)
+```text
+fl_parm_Debug(labels=false,symbols=false)
+```
 
 ---
 
@@ -43,7 +48,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_parm_labels(debug)
+```text
+fl_parm_labels(debug)
+```
 
 ---
 
@@ -51,5 +58,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_parm_symbols(debug)
+```text
+fl_parm_symbols(debug)
+```
 

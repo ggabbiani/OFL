@@ -1,6 +1,5 @@
 # package vitamins/knurl_nuts
 
-
 ## Dependencies
 
 ```mermaid
@@ -10,7 +9,6 @@ graph LR
 ```
 
 ## Variables
-
 
 ---
 
@@ -150,14 +148,15 @@ __Default:__
 
 ## Functions
 
-
 ---
 
 ### function fl_Knut
 
 __Syntax:__
 
-    fl_Knut(screw,length,diameter,tooth,rings)
+```text
+fl_Knut(screw,length,diameter,tooth,rings)
+```
 
 ---
 
@@ -165,7 +164,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_knut_r(type,value)
+```text
+fl_knut_r(type,value)
+```
 
 ---
 
@@ -173,7 +174,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_knut_rings(type,value)
+```text
+fl_knut_rings(type,value)
+```
 
 ---
 
@@ -181,7 +184,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_knut_search(screw,t)
+```text
+fl_knut_search(screw,t)
+```
 
 ---
 
@@ -189,7 +194,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_knut_teeth(type,value)
+```text
+fl_knut_teeth(type,value)
+```
 
 ---
 
@@ -197,7 +204,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_knut_thick(type,value)
+```text
+fl_knut_thick(type,value)
+```
 
 ---
 
@@ -205,7 +214,9 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_knut_tooth(type,value)
+```text
+fl_knut_tooth(type,value)
+```
 
 ## Modules
 
