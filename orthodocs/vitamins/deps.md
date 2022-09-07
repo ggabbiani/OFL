@@ -2,20 +2,31 @@
 
 ```mermaid
 graph TD
-    A1[vitamins/hds] --o|include| A2[vitamins/sata]
-    A1 --o|include| A3[vitamins/screw]
-    A4[vitamins/heatsinks] --o|include| A5[vitamins/pcbs]
-    A6[vitamins/knurl_nuts] --o|include| A3
-    A7[vitamins/magnets] --o|include| A8[vitamins/countersinks]
-    A7 --o|include| A3
-    A5 --o|include| A9[vitamins/ethers]
-    A5 --o|include| A10[vitamins/hdmi]
-    A5 --o|include| A11[vitamins/jacks]
-    A5 --o|include| A12[vitamins/pin_headers]
-    A5 --o|include| A3
-    A5 --o|include| A13[vitamins/trimpot]
-    A5 --o|include| A14[vitamins/usbs]
-    A15[vitamins/psus] --o|include| A3
-    A16[vitamins/sata-adapters] --o|include| A2
+    A1[vitamins/countersinks]
+    A2[vitamins/ethers]
+    A3[vitamins/hdmi]
+    A4[vitamins/hds] --o|include| A5[vitamins/sata]
+    A4 --o|include| A6[vitamins/screw]
+    A7[vitamins/heatsinks] --o|include| A8[vitamins/pcbs]
+    A9[vitamins/jacks]
+    A10[vitamins/knurl_nuts] --o|include| A6
+    A11[vitamins/magnets] --o|include| A1
+    A11 --o|include| A6
+    A8 --o|include| A2
+    A8 --o|include| A3
+    A8 --o|include| A9
+    A8 --o|include| A12[vitamins/pin_headers]
+    A8 --o|include| A6
+    A8 --o|include| A13[vitamins/trimpot]
+    A8 --o|include| A14[vitamins/usbs]
+    A12
+    A15[vitamins/psus] --o|include| A6
+    A5
+    A16[vitamins/sata-adapters] --o|include| A5
+    A6
+    A17[vitamins/spdts]
+    A18[vitamins/template]
+    A13
+    A14
 ```
 
