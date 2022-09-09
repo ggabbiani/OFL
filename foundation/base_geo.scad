@@ -1,4 +1,4 @@
-/*
+/*!
  * Base geometry.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)

@@ -1,4 +1,6 @@
-/*
+/*!
+ * 3d primitives
+ *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).

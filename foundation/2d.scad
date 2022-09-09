@@ -1,4 +1,6 @@
-/*
+/*! 
+ * 2D primitives.
+ *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -16,8 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
-
-//! 2D primitives.
 
 include <unsafe_defs.scad>
 

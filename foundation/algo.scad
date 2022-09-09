@@ -1,4 +1,11 @@
-/*
+/*!
+ * General algorithm package.
+ *
+ * __TODO:__
+ *
+ * 1) better example (SATA plug?)
+ * 2) orientation?
+ *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -17,15 +24,16 @@
  * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
  */
 
-/*
- * TODO:
- * 1) better example (SATA plug?)
- * 2) orientation?
- */
-
 include <3d.scad>
 
-module fl_planes(size=1,alpha=0.2) {
+/*!
+ * draws the three orthogonal planes dividing space into octants
+ */
+module fl_planes(
+  size=1,
+  //! alpha channel for transparency
+  alpha=0.2
+) {
   nil = 0.01;
   fl_trace("size",size);
   sz  = is_list(size)
@@ -37,12 +45,15 @@ module fl_planes(size=1,alpha=0.2) {
   color("blue",alpha=alpha)  fl_cube(size=[sz.x,nil,sz.z],octant=O);
 }
 
+/*!
+ * build a 2d/3d pattern from data 
+ */
 function fl_algo_pattern(
   //! number of items to be taken from data
   n,
   //! data index pattern
   pattern,
-  // list of item containing 2d/3d data in their 2nd element
+  //! list of item containing 2d/3d data in their 2nd element
   data
 ) =
   assert(n!=undef)
@@ -56,6 +67,9 @@ function fl_algo_pattern(
     d     = data[index][1]
   ) /* echo(pattern=pattern) echo(i=i) echo(index=index) echo(d=d) */ d ];
 
+/*!
+ * add a 2d/3d pattern from data 
+ */
 module fl_algo_pattern(
   //! number of items to be taken from data
   n,
@@ -91,8 +105,6 @@ module fl_algo_pattern(
   // verifico che il prodotto scalare sia uguale a zero
   // ossia che il dispiegamento e l'allineamento siano ORTOGONALI
   assert(deployment*align==0,"Alignment and deployment must be orthogonal");
-
-
 
   fl_trace("octant",octant);
   bbox=[-size/2,size/2];
