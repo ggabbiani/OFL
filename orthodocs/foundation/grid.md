@@ -31,7 +31,6 @@ fl_grid_quad(origin=[0,0],step,bbox,generator=function(x,y,bbox)[[x,y]])
 
 ## Modules
 
-
 ---
 
 ### module fl_grid_layout

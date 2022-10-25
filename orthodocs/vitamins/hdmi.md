@@ -73,7 +73,6 @@ fl_hdmi_new(nop_type)
 
 ## Modules
 
-
 ---
 
 ### module fl_hdmi

@@ -147,16 +147,6 @@ NOTE: error when label is not unique
 
 ---
 
-### function fl_grid_geometry
-
-__Syntax:__
-
-```text
-fl_grid_geometry(grid,size)
-```
-
----
-
 ### function fl_pcb_NopHoles
 
 __Syntax:__
@@ -216,7 +206,6 @@ fl_pcb_thick(type,value)
 ```
 
 ## Modules
-
 
 ---
 

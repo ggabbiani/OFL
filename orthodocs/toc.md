@@ -1,20 +1,5 @@
 # Table of Contents
 
-## $
-
-- [$FL_ADD (variable)](foundation/defs.md#variable-$FL_ADD)
-- [$FL_ASSEMBLY (variable)](foundation/defs.md#variable-$FL_ASSEMBLY)
-- [$FL_AXES (variable)](foundation/defs.md#variable-$FL_AXES)
-- [$FL_BBOX (variable)](foundation/defs.md#variable-$FL_BBOX)
-- [$FL_CUTOUT (variable)](foundation/defs.md#variable-$FL_CUTOUT)
-- [$FL_DRILL (variable)](foundation/defs.md#variable-$FL_DRILL)
-- [$FL_FOOTPRINT (variable)](foundation/defs.md#variable-$FL_FOOTPRINT)
-- [$FL_HOLDERS (variable)](foundation/defs.md#variable-$FL_HOLDERS)
-- [$FL_LAYOUT (variable)](foundation/defs.md#variable-$FL_LAYOUT)
-- [$FL_MOUNT (variable)](foundation/defs.md#variable-$FL_MOUNT)
-- [$FL_PAYLOAD (variable)](foundation/defs.md#variable-$FL_PAYLOAD)
-- [$FL_RENDER (variable)](foundation/defs.md#variable-$FL_RENDER)
-
 ## 2
 
 - [fl_2 (function)](foundation/defs.md#function-fl_2)
@@ -50,6 +35,7 @@
 ## A
 
 - [fl_accum (function)](foundation/defs.md#function-fl_accum)
+- [$FL_ADD (variable)](foundation/defs.md#variable-$FL_ADD)
 - [FL_ADD (variable)](foundation/defs.md#variable-FL_ADD)
 - [foundation/algo (package)](foundation/algo.md#package-foundationalgo)
 - [fl_algo_pattern (function)](foundation/algo.md#function-fl_algo_pattern)
@@ -61,11 +47,13 @@
 - [FL_ART_DICT (variable)](artifacts/template.md#variable-FL_ART_DICT)
 - [FL_ART_NS (variable)](artifacts/template.md#variable-FL_ART_NS)
 - [artifact (module)](artifacts/template.md#module-artifact)
+- [$FL_ASSEMBLY (variable)](foundation/defs.md#variable-$FL_ASSEMBLY)
 - [FL_ASSEMBLY (variable)](foundation/defs.md#variable-FL_ASSEMBLY)
 - [fl_assert (function)](foundation/defs.md#function-fl_assert)
 - [fl_assert (module)](foundation/defs.md#module-fl_assert)
 - [fl_asserts (function)](foundation/base_parameters.md#function-fl_asserts)
 - [fl_axes (module)](foundation/defs.md#module-fl_axes)
+- [$FL_AXES (variable)](foundation/defs.md#variable-$FL_AXES)
 - [FL_AXES (variable)](foundation/defs.md#variable-FL_AXES)
 
 ## B
@@ -103,12 +91,12 @@
 - [fl_bb_transform (function)](foundation/bbox.md#function-fl_bb_transform)
 - [fl_bb_vertices (function)](foundation/bbox.md#function-fl_bb_vertices)
 - [foundation/bbox (package)](foundation/bbox.md#package-foundationbbox)
+- [$FL_BBOX (variable)](foundation/defs.md#variable-$FL_BBOX)
 - [FL_BBOX (variable)](foundation/defs.md#variable-FL_BBOX)
 - [fl_bend (module)](foundation/util.md#module-fl_bend)
 - [fl_bend_faceSet (function)](foundation/util.md#function-fl_bend_faceSet)
 - [fl_bend_sheet (function)](foundation/util.md#function-fl_bend_sheet)
 - [fl_bentPlate (module)](foundation/profile.md#module-fl_bentPlate)
-- [bottom_sz (function)](vitamins/heatsinks.md#function-bottom_sz)
 - [fl_box (module)](artifacts/box.md#module-fl_box)
 - [artifacts/box (package)](artifacts/box.md#package-artifactsbox)
 
@@ -165,6 +153,7 @@
 - [fl_cube (module)](foundation/3d.md#module-fl_cube)
 - [fl_cube_defaults (function)](foundation/3d.md#function-fl_cube_defaults)
 - [fl_cutout (module)](foundation/util.md#module-fl_cutout)
+- [$FL_CUTOUT (variable)](foundation/defs.md#variable-$FL_CUTOUT)
 - [FL_CUTOUT (variable)](foundation/defs.md#variable-FL_CUTOUT)
 - [fl_cylinder (module)](foundation/3d.md#module-fl_cylinder)
 - [fl_cylinder_defaults (function)](foundation/3d.md#function-fl_cylinder_defaults)
@@ -184,6 +173,7 @@
 - [fl_director (function)](foundation/defs.md#function-fl_director)
 - [FL_DRAW (variable)](foundation/defs.md#variable-FL_DRAW)
 - [foundation/drawio (package)](foundation/drawio.md#package-foundationdrawio)
+- [$FL_DRILL (variable)](foundation/defs.md#variable-$FL_DRILL)
 - [FL_DRILL (variable)](foundation/defs.md#variable-FL_DRILL)
 - [fl_dxf (function)](foundation/defs.md#function-fl_dxf)
 - [dxf (package)](dxf.md#package-dxf)
@@ -215,13 +205,13 @@
 - [fl_fillet (module)](foundation/fillet.md#module-fl_fillet)
 - [foundation/fillet (package)](foundation/fillet.md#package-foundationfillet)
 - [fl_folding (function)](foundation/util.md#function-fl_folding)
+- [$FL_FOOTPRINT (variable)](foundation/defs.md#variable-$FL_FOOTPRINT)
 - [FL_FOOTPRINT (variable)](foundation/defs.md#variable-FL_FOOTPRINT)
 
 ## G
 
 - [fl_get (function)](foundation/base_kv.md#function-fl_get)
 - [foundation/grid (package)](foundation/grid.md#package-foundationgrid)
-- [fl_grid_geometry (function)](vitamins/pcbs.md#function-fl_grid_geometry)
 - [fl_grid_hex (function)](foundation/grid.md#function-fl_grid_hex)
 - [fl_grid_layout (module)](foundation/grid.md#module-fl_grid_layout)
 - [fl_grid_quad (function)](foundation/grid.md#function-fl_grid_quad)
@@ -246,6 +236,7 @@
 - [vitamins/heatsinks (package)](vitamins/heatsinks.md#package-vitaminsheatsinks)
 - [fl_height (function)](foundation/defs.md#function-fl_height)
 - [fl_hFillet (module)](foundation/fillet.md#module-fl_hFillet)
+- [$FL_HOLDERS (variable)](foundation/defs.md#variable-$FL_HOLDERS)
 - [FL_HOLDERS (variable)](foundation/defs.md#variable-FL_HOLDERS)
 - [fl_Hole (function)](foundation/hole.md#function-fl_Hole)
 - [foundation/hole (package)](foundation/hole.md#package-foundationhole)
@@ -329,6 +320,7 @@
 - [lay_group (function)](foundation/3d.md#function-lay_group)
 - [fl_lay_holes (module)](foundation/hole.md#module-fl_lay_holes)
 - [fl_layout (module)](foundation/3d.md#module-fl_layout)
+- [$FL_LAYOUT (variable)](foundation/defs.md#variable-$FL_LAYOUT)
 - [FL_LAYOUT (variable)](foundation/defs.md#variable-FL_LAYOUT)
 - [fl_list_filter (function)](foundation/base_string.md#function-fl_list_filter)
 - [fl_list_flatten (function)](foundation/base_string.md#function-fl_list_flatten)
@@ -356,6 +348,7 @@
 - [fl_modifier (module)](foundation/defs.md#module-fl_modifier)
 - [molex_usb_Ax1 (module)](vitamins/usbs.md#module-molex_usb_Ax1)
 - [molex_usb_Ax2 (module)](vitamins/usbs.md#module-molex_usb_Ax2)
+- [$FL_MOUNT (variable)](foundation/defs.md#variable-$FL_MOUNT)
 - [FL_MOUNT (variable)](foundation/defs.md#variable-FL_MOUNT)
 - [fl_MVgauge (variable)](foundation/defs.md#variable-fl_MVgauge)
 
@@ -376,14 +369,12 @@
 - [O (variable)](foundation/unsafe_defs.md#variable-O)
 - [FL_OBSOLETE (variable)](foundation/defs.md#variable-FL_OBSOLETE)
 - [fl_octant (function)](foundation/3d.md#function-fl_octant)
-- [optimal_r (function)](artifacts/pcb_holder.md#function-optimal_r)
 - [fl_optional (function)](foundation/base_kv.md#function-fl_optional)
 - [fl_optProperty (function)](foundation/base_kv.md#function-fl_optProperty)
 - [fl_overlap (module)](foundation/defs.md#module-fl_overlap)
 
 ## P
 
-- [palette (function)](foundation/defs.md#function-palette)
 - [fl_parm_Debug (function)](foundation/base_parameters.md#function-fl_parm_Debug)
 - [fl_parm_labels (function)](foundation/base_parameters.md#function-fl_parm_labels)
 - [fl_parm_symbols (function)](foundation/base_parameters.md#function-fl_parm_symbols)
@@ -391,6 +382,7 @@
 - [fl_parse_l (function)](foundation/defs.md#function-fl_parse_l)
 - [fl_parse_radius (function)](foundation/defs.md#function-fl_parse_radius)
 - [fl_payload (function)](foundation/defs.md#function-fl_payload)
+- [$FL_PAYLOAD (variable)](foundation/defs.md#variable-$FL_PAYLOAD)
 - [FL_PAYLOAD (variable)](foundation/defs.md#variable-FL_PAYLOAD)
 - [fl_pcb (function)](foundation/defs.md#function-fl_pcb)
 - [fl_PCB (function)](vitamins/pcbs.md#function-fl_PCB)
@@ -457,8 +449,8 @@
 
 - [fl_R (function)](foundation/defs.md#function-fl_R)
 - [R (function)](foundation/unsafe_defs.md#function-R)
-- [rad (function)](foundation/fillet.md#function-rad)
 - [fl_rail (module)](foundation/util.md#module-fl_rail)
+- [$FL_RENDER (variable)](foundation/defs.md#variable-$FL_RENDER)
 - [fl_repos (function)](foundation/label.md#function-fl_repos)
 - [fl_resize (function)](foundation/label.md#function-fl_resize)
 - [fl_rotor (function)](foundation/defs.md#function-fl_rotor)
@@ -534,7 +526,6 @@
 - [fl_sym_socket (module)](foundation/symbol.md#module-fl_sym_socket)
 - [fl_symbol (module)](foundation/symbol.md#module-fl_symbol)
 - [foundation/symbol (package)](foundation/symbol.md#package-foundationsymbol)
-- [sz (function)](foundation/algo.md#function-sz)
 
 ## T
 
@@ -545,7 +536,6 @@
 - [artifacts/template (package)](artifacts/template.md#package-artifactstemplate)
 - [foundation/template (package)](foundation/template.md#package-foundationtemplate)
 - [vitamins/template (package)](vitamins/template.md#package-vitaminstemplate)
-- [terminal_size (function)](vitamins/psus.md#function-terminal_size)
 - [fl_thick (function)](foundation/defs.md#function-fl_thick)
 - [fl_tolerance (function)](foundation/defs.md#function-fl_tolerance)
 - [fl_torus (module)](foundation/torus.md#module-fl_torus)
@@ -607,7 +597,6 @@
 
 - [fl_vector (module)](foundation/defs.md#module-fl_vector)
 - [fl_vendor (function)](foundation/defs.md#function-fl_vendor)
-- [verb2modifier (function)](foundation/defs.md#function-verb2modifier)
 - [fl_version (function)](foundation/defs.md#function-fl_version)
 - [fl_versionNumber (function)](foundation/defs.md#function-fl_versionNumber)
 - [fl_versor (function)](foundation/base_geo.md#function-fl_versor)

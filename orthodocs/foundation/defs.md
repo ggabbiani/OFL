@@ -785,7 +785,7 @@ fl_transform(M,v)
 
 Returns M * v , actually transforming v by M.
 
-:memo: **NOTE:** result in 3d format
+**NOTE:** result in 3d format
 
 
 ---
@@ -828,28 +828,7 @@ __Syntax:__
 fl_width(type)
 ```
 
----
-
-### function palette
-
-__Syntax:__
-
-```text
-palette(name)
-```
-
----
-
-### function verb2modifier
-
-__Syntax:__
-
-```text
-verb2modifier(verb)
-```
-
 ## Modules
-
 
 ---
 

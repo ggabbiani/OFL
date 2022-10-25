@@ -38,16 +38,6 @@ __Default:__
 
 ---
 
-### function bottom_sz
-
-__Syntax:__
-
-```text
-bottom_sz()
-```
-
----
-
 ### function fl_bb_pimoroni
 
 __Syntax:__
@@ -67,7 +57,6 @@ fl_pimoroni(verb=FL_ADD,type,thick=0,lay_what="mount",top=true,bottom=true,direc
 ```
 
 ## Modules
-
 
 ---
 

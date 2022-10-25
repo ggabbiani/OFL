@@ -69,7 +69,6 @@ fl_spdt_l(type)
 
 ## Modules
 
-
 ---
 
 ### module fl_spdt

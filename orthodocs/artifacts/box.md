@@ -12,8 +12,13 @@ graph LR
     A1 --o|include| A7[vitamins/screw]
 ```
 
-## Modules
+Box artifact.
 
+
+
+*Published under __GNU General Public License v3__*
+
+## Modules
 
 ---
 

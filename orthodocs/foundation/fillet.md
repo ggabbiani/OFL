@@ -19,18 +19,7 @@ __Syntax:__
 fl_bb_90DegFillet(r,n,child_bbox)
 ```
 
----
-
-### function rad
-
-__Syntax:__
-
-```text
-rad(x)
-```
-
 ## Modules
-
 
 ---
 

@@ -45,20 +45,7 @@ __Default:__
 
     "psu"
 
-## Functions
-
----
-
-### function terminal_size
-
-__Syntax:__
-
-```text
-terminal_size(type)
-```
-
 ## Modules
-
 
 ---
 

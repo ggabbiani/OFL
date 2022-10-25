@@ -29,18 +29,7 @@ __Syntax:__
 fl_bb_holderBySize(pcb,h,tolerance=0.5,screw=M3_cap_screw,knut=false)
 ```
 
----
-
-### function optimal_r
-
-__Syntax:__
-
-```text
-optimal_r(center,bb,screw)
-```
-
 ## Modules
-
 
 ---
 
