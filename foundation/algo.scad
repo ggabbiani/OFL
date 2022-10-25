@@ -21,7 +21,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
+ * along with OFL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 include <3d.scad>
@@ -46,7 +46,7 @@ module fl_planes(
 }
 
 /*!
- * build a 2d/3d pattern from data 
+ * build a 2d/3d pattern from data
  */
 function fl_algo_pattern(
   //! number of items to be taken from data
@@ -68,7 +68,7 @@ function fl_algo_pattern(
   ) /* echo(pattern=pattern) echo(i=i) echo(index=index) echo(d=d) */ d ];
 
 /*!
- * add a 2d/3d pattern from data 
+ * add a 2d/3d pattern from data
  */
 module fl_algo_pattern(
   //! number of items to be taken from data

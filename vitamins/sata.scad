@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OFL.  If not, see <http: //www.gnu.org/licenses/>.
+ * along with OFL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
@@ -200,13 +200,6 @@ FL_SATA_DICT = [
 ];
 
 /****************************************************************************
- * SATA data commons
- */
-
-// TODO: change to CONSTANT?
-function fl_sata_dataCID() = "sata/data connector footprint";
-
-/****************************************************************************
  * SATA data plug
  */
 
@@ -258,12 +251,6 @@ module fl_sata_dataPlug(
     }
   }
 }
-
-/****************************************************************************
- * SATA power commons
- */
-
-function fl_sata_powerCID() = "sata/power connector footprint";
 
 /****************************************************************************
  * SATA power plug
@@ -319,12 +306,6 @@ module fl_sata_powerPlug(
     }
   }
 }
-
-/****************************************************************************
- * SATA power+data commons
- */
-
-function fl_sata_powerDataCID()  = "sata/power-data connector footprint";
 
 /****************************************************************************
  * SATA power+data plug
