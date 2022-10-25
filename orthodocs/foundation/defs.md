@@ -109,6 +109,8 @@ __Default:__
 
     !$preview
 
+When true, disables PREVIEW corrections (see [variable FL_NIL](foundation/defs.md#variable-FL_NIL))
+
 ---
 
 ### variable FL_ADD
@@ -116,6 +118,8 @@ __Default:__
 __Default:__
 
     "FL_ADD add base shape (no components nor screws)"
+
+add a base shape (with no components nor screws)
 
 ---
 
@@ -125,6 +129,10 @@ __Default:__
 
     "FL_ASSEMBLY add predefined component shape(s)"
 
+add predefined component shape(s).
+__NOTE:__ this operation doesn't include screws, for these see [variable FL_MOUNT](foundation/defs.md#variable-FL_MOUNT)
+
+
 ---
 
 ### variable FL_AXES
@@ -132,6 +140,8 @@ __Default:__
 __Default:__
 
     "FL_AXES draw of local reference axes"
+
+draws local reference axes
 
 ---
 
@@ -141,6 +151,8 @@ __Default:__
 
     "FL_BBOX adds a bounding box containing the object"
 
+adds a bounding box containing the object
+
 ---
 
 ### variable FL_CUTOUT
@@ -148,6 +160,8 @@ __Default:__
 __Default:__
 
     "FL_CUTOUT layout of predefined cutout shapes (±X,±Y,±Z)."
+
+layout of predefined cutout shapes (±X,±Y,±Z)
 
 ---
 
@@ -165,6 +179,10 @@ __Default:__
 
     [FL_ADD,FL_ASSEMBLY]
 
+composite verb serializing one ADD and ASSEMBLY operation.
+See also [variable FL_ADD](foundation/defs.md#variable-FL_ADD) and [variable FL_ASSEMBLY](foundation/defs.md#variable-FL_ASSEMBLY)
+
+
 ---
 
 ### variable FL_DRILL
@@ -173,6 +191,8 @@ __Default:__
 
     "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter)"
 
+layout of predefined drill shapes (like holes with predefined screw diameter)
+
 ---
 
 ### variable FL_FOOTPRINT
@@ -180,6 +200,8 @@ __Default:__
 __Default:__
 
     "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD"
+
+adds a footprint to scene, usually a simplified ADD operation (see [variable FL_ADD](foundation/defs.md#variable-FL_ADD))
 
 ---
 
@@ -196,6 +218,8 @@ __Default:__
 __Default:__
 
     [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1],]
+
+identity matrix in homogeneous coordinates
 
 ---
 
@@ -221,6 +245,8 @@ __Default:__
 
     ($preview&&!$FL_RENDER?0.01:0)
 
+simple workaround for the z-fighting problem during preview
+
 ---
 
 ### variable FL_NIL2
@@ -236,6 +262,8 @@ __Default:__
 __Default:__
 
     [0,0,0]
+
+Origin
 
 ---
 
@@ -261,6 +289,8 @@ __Default:__
 
     [1,0,0]
 
+X axis
+
 ---
 
 ### variable FL_Y
@@ -268,6 +298,8 @@ __Default:__
 __Default:__
 
     [0,1,0]
+
+Y axis
 
 ---
 
@@ -277,6 +309,8 @@ __Default:__
 
     [0,0,1]
 
+Z axis
+
 ---
 
 ### variable fl_FDMtolerance
@@ -284,6 +318,8 @@ __Default:__
 __Default:__
 
     0.5
+
+Recommended tolerance for FDM as stated in [How do you design snap-fit joints for 3D printing?](https://www.3dhubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/)
 
 ---
 
@@ -293,6 +329,8 @@ __Default:__
 
     fl_MVgauge/4
 
+PER SURFACE distance in case of jointed parts to be doubled when applied to a diameter
+
 ---
 
 ### variable fl_MVgauge
@@ -300,6 +338,8 @@ __Default:__
 __Default:__
 
     0.6
+
+PER SURFACE distance in case of movable parts to be doubled when applied to a diameter
 
 ## Functions
 
@@ -353,6 +393,8 @@ __Syntax:__
 fl_Rx(theta)
 ```
 
+rotation around X matrix
+
 ---
 
 ### function fl_Rxyz
@@ -362,6 +404,8 @@ __Syntax:__
 ```text
 fl_Rxyz(angle)
 ```
+
+composite rotation around X then Y then Z axis
 
 ---
 
@@ -373,6 +417,8 @@ __Syntax:__
 fl_Ry(theta)
 ```
 
+rotation around Y matrix
+
 ---
 
 ### function fl_Rz
@@ -382,6 +428,8 @@ __Syntax:__
 ```text
 fl_Rz(theta)
 ```
+
+rotation around Z matrix
 
 ---
 
@@ -393,6 +441,8 @@ __Syntax:__
 fl_S(s)
 ```
 
+scale matrix in homogeneous coordinates
+
 ---
 
 ### function fl_T
@@ -403,6 +453,8 @@ __Syntax:__
 fl_T(t)
 ```
 
+translation matrix in homogeneous coordinates
+
 ---
 
 ### function fl_X
@@ -412,6 +464,8 @@ __Syntax:__
 ```text
 fl_X(x)
 ```
+
+Axis X * scalar «x». Generally used for X translation
 
 ---
 
@@ -433,6 +487,8 @@ __Syntax:__
 fl_Y(y)
 ```
 
+Axis X * scalar «y». Generally used for y translation
+
 ---
 
 ### function fl_Z
@@ -442,6 +498,8 @@ __Syntax:__
 ```text
 fl_Z(z)
 ```
+
+Axis X * scalar «z». Generally used for Z translation
 
 ---
 
@@ -603,6 +661,10 @@ __Syntax:__
 fl_isSet(flag,list)
 ```
 
+return true if «flag» is present in «list».
+TODO: make a case insensitive option
+
+
 ---
 
 ### function fl_material
@@ -703,6 +765,8 @@ __Syntax:__
 fl_pop(l,i=0)
 ```
 
+removes till the i-indexed element from the top of list «l»
+
 ---
 
 ### function fl_push
@@ -712,6 +776,8 @@ __Syntax:__
 ```text
 fl_push(list,item)
 ```
+
+push «item» on tail of list «l»
 
 ---
 

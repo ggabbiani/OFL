@@ -58,40 +58,45 @@ function fl_assert(condition,message,result) =
 //*****************************************************************************
 // lists
 
-// removes till the i-indexed element from a list
+//! removes till the i-indexed element from the top of list «l»
 function fl_pop(l,i=0) =
   // echo(l=l,i=i)
   let(len=len(l))
   assert(!is_undef(len) && len>i,str("i=",i," len=",len))
   i>len-2 ? [] : [for(j=[i+1:len(l)-1]) l[j]];
 
+//! push «item» on tail of list «l»
 function fl_push(list,item) = [each list,item];
 
 //*****************************************************************************
 // OFL GLOBALS
 
-// When true, disables PREVIEW corrections like FL_NIL
+//! When true, disables PREVIEW corrections (see variable FL_NIL)
 $FL_RENDER  = !$preview;
 
-// simple workaround for the z-fighting problem during preview
+//! simple workaround for the z-fighting problem during preview
 FL_NIL  = ($preview && !$FL_RENDER ? 0.01 : 0);
 FL_NIL2 = 2*FL_NIL;
 
-// PER SURFACE distance in case of movable parts to be doubled when applied to a diameter
+//! PER SURFACE distance in case of movable parts to be doubled when applied to a diameter
 fl_MVgauge  = 0.6;
 
-// PER SURFACE distance in case of jointed parts to be doubled when applied to a diameter
+//! PER SURFACE distance in case of jointed parts to be doubled when applied to a diameter
 fl_JNgauge  = fl_MVgauge/4;
 
-// Recommended tolerance for FDM as stated in https://www.3dhubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/
+//! Recommended tolerance for FDM as stated in [How do you design snap-fit joints for 3D printing?](https://www.3dhubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/)
 fl_FDMtolerance = 0.5;
 
+//! X axis
 FL_X = [1,0,0];
+//! Y axis
 FL_Y = [0,1,0];
+//! Z axis
 FL_Z = [0,0,1];
+//! Origin
 FL_O = [0,0,0];
 
-// identity matrix in homogeneous coordinates
+//! identity matrix in homogeneous coordinates
 FL_I=[
   [1,0,0,0],
   [0,1,0,0],
@@ -99,7 +104,7 @@ FL_I=[
   [0,0,0,1],
 ];
 
-// translation matrix in homogeneous coordinates
+//! translation matrix in homogeneous coordinates
 function fl_T(t) = is_list(t)
   ? [
       [1,0,0, t.x ],
@@ -109,7 +114,7 @@ function fl_T(t) = is_list(t)
     ]
   : fl_T([t,t,t]);
 
-// scale matrix in homogeneous coordinates
+//! scale matrix in homogeneous coordinates
 function fl_S(s) = is_list(s)
   ? [
       [s.x, 0,    0,    0 ],
@@ -119,7 +124,7 @@ function fl_S(s) = is_list(s)
     ]
   : fl_S([s,s,s]);
 
-// rotation around X matrix
+//! rotation around X matrix
 function fl_Rx(theta) =
 [
   [1,           0,            0,           0],
@@ -128,7 +133,7 @@ function fl_Rx(theta) =
   [0,           0,            0,           1]
 ];
 
-// rotation around Y matrix
+//! rotation around Y matrix
 function fl_Ry(theta) = [
   [cos(theta),  0,            sin(theta),  0],
   [0,           1,            0,           0],
@@ -136,7 +141,7 @@ function fl_Ry(theta) = [
   [0,           0,            0,           1]
 ];
 
-// rotation around Z matrix
+//! rotation around Z matrix
 function fl_Rz(theta) = [
   [cos(theta),  -sin(theta),  0,  0],
   [sin(theta),  cos(theta),   0,  0],
@@ -144,6 +149,7 @@ function fl_Rz(theta) = [
   [0,           0,            0,  1]
 ];
 
+//! composite rotation around X then Y then Z axis
 function fl_Rxyz(angle) = fl_Rz(angle.z) * fl_Ry(angle.y) * fl_Rx(angle.x);
 
 /*
@@ -159,21 +165,44 @@ function fl_R(
   * fl_Rx(theta)    // rotate «theta» about X
   * M;              // align «u» to X
 
+//! Axis X * scalar «x». Generally used for X translation
 function fl_X(x) = [x,0,0];
+//! Axis X * scalar «y». Generally used for y translation
 function fl_Y(y) = [0,y,0];
+//! Axis X * scalar «z». Generally used for Z translation
 function fl_Z(z) = [0,0,z];
 
-// TODO: make a case insensitive option
+/*!
+ * return true if «flag» is present in «list».
+ * TODO: make a case insensitive option
+ */
 function fl_isSet(flag,list) = search([flag],list)!=[[]];
 
-// verbs
+/******************************************************************************
+ * verbs
+ *****************************************************************************/
+
+//! add a base shape (with no components nor screws)
 FL_ADD        = "FL_ADD add base shape (no components nor screws)";
+/*!
+ * add predefined component shape(s).
+ * __NOTE:__ this operation doesn't include screws, for these see variable FL_MOUNT
+ */
 FL_ASSEMBLY   = "FL_ASSEMBLY add predefined component shape(s)";
+//! draws local reference axes
 FL_AXES       = "FL_AXES draw of local reference axes";
+//! adds a bounding box containing the object
 FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
+//! layout of predefined cutout shapes (±X,±Y,±Z)
 FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (±X,±Y,±Z).";
+/*!
+ * composite verb serializing one ADD and ASSEMBLY operation.
+ * See also variable FL_ADD and variable FL_ASSEMBLY
+ */
 FL_DRAW       = [FL_ADD,FL_ASSEMBLY];
+//! layout of predefined drill shapes (like holes with predefined screw diameter)
 FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter)";
+//! adds a footprint to scene, usually a simplified ADD operation (see variable FL_ADD)
 FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD";
 FL_HOLDERS    = "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**";
 FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws)";
