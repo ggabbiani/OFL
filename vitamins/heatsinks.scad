@@ -1,4 +1,4 @@
-/*
+/*!
  * Heatsinks definition file.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -25,7 +25,7 @@ include <pcbs.scad>
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
-// namespace
+//! namespace
 FL_HS_NS  = "hs";
 
 FL_HS_PIMORONI = let(
@@ -59,7 +59,7 @@ FL_HS_PIMORONI = let(
 
 FL_HS_DICT  = [FL_HS_PIMORONI];
 
-/**
+/*!
  * calculates Pimoroni's bounding box
  */
 function fl_bb_pimoroni(
@@ -82,20 +82,20 @@ function fl_bb_pimoroni(
 ];
 
 function fl_pimoroni(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verb      = FL_ADD,
   type,
-  // FL_DRILL thickness in scalar form for -Z normal
+  //! FL_DRILL thickness in scalar form for -Z normal
   thick=0,
-  // either "mount" or "assembly"
+  //! either "mount" or "assembly"
   lay_what  = "mount",
-  // top part
+  //! top part
   top       = true,
-  // bottom part
+  //! bottom part
   bottom    = true,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) = let(
   bbox      = fl_bb_pimoroni(type,top=top,bottom=bottom),
@@ -123,7 +123,7 @@ function fl_pimoroni(
 ) verb==FL_LAYOUT ? T(+Z(bottom_sz().z+pcb_t))
 : undef;
 
-/**
+/*!
  * FL_LAYOUT,FL_ASSEMBLY children context:
  *  $hs_radius  - corner radius
  *  $hs_normal  - layout normal (always -Z);

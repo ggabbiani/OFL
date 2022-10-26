@@ -1,4 +1,4 @@
-/*
+/*!
  * NopSCADlib pin header wrapper definitions.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -26,7 +26,7 @@ include <../foundation/util.scad>
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/pin_headers.scad>
 
-// namespace for pin headers engine
+//! namespace for pin headers engine
 FL_PHDR_NS  = "phdr";
 
 //*****************************************************************************
@@ -40,13 +40,13 @@ function fl_phdr_geometry(type,value)  = fl_property(type,"phdr/size in [cols,ro
 
 function fl_phdr_cid(nop,geometry)  = str("PIN HEADER pitch ",hdr_pitch(nop)," ",geometry.x,"x",geometry.y);
 
-// return the nop bounding box from its geometry
+//! return the nop bounding box from its geometry
 function fl_bb_nopPinHeader(
-  // NopSCADlib pin header
+  //! NopSCADlib pin header
   nop,
-  // pin header size in [cols,rows]
+  //! pin header size in [cols,rows]
   geometry,
-  // can be "female" or "male"
+  //! can be "female" or "male"
   engine
 ) = engine=="male"
   ? let(
@@ -62,33 +62,33 @@ function fl_bb_nopPinHeader(
     b = hdr_pin_below(nop)
   ) [[-w/2,-d/2,-b],[+w/2,+d/2,h-b]];
 
-// return the nop size from its geometry
+//! return the nop size from its geometry
 function fl_phdr_nopSize(
-  // NopSCADlib pin header
+  //! NopSCADlib pin header
   nop,
-  // pin header size in [cols,rows]
+  //! pin header size in [cols,rows]
   geometry,
-  // "female" or "male"
+  //! "female" or "male"
   engine
 ) = let(bbox = fl_bb_nopPinHeader(nop,geometry,engine)) bbox[1]-bbox[0];
 
 //*****************************************************************************
-// PinHeader constructor
+//! PinHeader constructor
 function fl_PinHeader(
   name,
-  // optional description string
+  //! optional description string
   description,
-  // NopSCADlib base type
+  //! NopSCADlib base type
   nop,
-  // pin header size in [cols,rows]
+  //! pin header size in [cols,rows]
   geometry  = [1,1],
-  // smt
+  //! smt
   smt=false,
-  // "female" or "male"
+  //! "female" or "male"
   engine,
-  // pass-through (in that case pin numbers are inverted)
+  //! pass-through (in that case pin numbers are inverted)
   through=false,
-  // vendor list
+  //! vendor list
   vendors   = []
 ) = assert(is_string(engine))
 let(
@@ -118,20 +118,23 @@ let(
     if (vendors!=[]) fl_vendor(value=vendors),
   ];
 
-/**
+/*!
  * Pin headers engine.
  */
 module fl_pinHeader(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_BBOX, FL_CUTOUT
+  //! supported verbs: FL_ADD, FL_BBOX, FL_CUTOUT
+  verbs       = FL_ADD,
   type,
   color,
-  cut_thick,            // thickness for FL_CUTOUT
-  cut_tolerance=0,      // tolerance used during FL_CUTOUT
-  // see constructor fl_parm_Debug()
+  //! thickness for FL_CUTOUT
+  cut_thick,
+  //! tolerance used during FL_CUTOUT
+  cut_tolerance=0,
+  //! see constructor fl_parm_Debug()
   debug,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
-  // desired direction [director,rotation], native direction when undef
+  //! desired direction [director,rotation], native direction when undef
   direction
 ) {
   assert(type);

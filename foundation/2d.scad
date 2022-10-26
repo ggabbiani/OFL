@@ -41,7 +41,7 @@ function fl_bb_polygon(
 
 /*!
  * Calculates the exact bounding box of a polygon inscribed in a circumference.
- * See also [fl_bb_polygon()](#function-fl_bb_polygon).
+ * See also fl_bb_polygon().
  *
  * __NOTE:__ «r» and «d» are mutually exclusive.
  */

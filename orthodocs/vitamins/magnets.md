@@ -9,6 +9,28 @@ graph LR
     A1 --o|include| A4[vitamins/screw]
 ```
 
+Magnets definitions.
+
+Created  : on Mon Aug 30 2021.
+Copyright: © 2021 Giampiero Gabbiani.
+Email    : giampiero@gabbiani.org
+
+This file is part of the 'OpenSCAD Foundation Library' (OFL).
+
+OFL is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OFL is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with OFL.  If not, see <http://www.gnu.org/licenses/>.
+
+
 ## Variables
 
 ---
@@ -59,6 +81,8 @@ __Default:__
 
     "mag"
 
+namespace for pin headers engine
+
 ---
 
 ### variable FL_MAG_RECT_10x5x1
@@ -86,6 +110,8 @@ __Syntax:__
 ```text
 fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors)
 ```
+
+constructor
 
 ---
 
@@ -136,4 +162,25 @@ fl_mag_engine(type,value)
 __Syntax:__
 
     fl_magnet(verbs=FL_ADD,type,fp_gross=0,thick=0,direction,octant)
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+
+__type__  
+magnet object
+
+__fp_gross__  
+quantity to add to the footprint dimensions
+
+__thick__  
+thickness for screws
+
+__direction__  
+desired direction [director,rotation], native direction when undef
+
+__octant__  
+when undef native positioning is used (+Z)
+
 

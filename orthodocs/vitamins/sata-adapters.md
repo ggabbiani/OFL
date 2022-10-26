@@ -7,6 +7,12 @@ graph LR
     A1[vitamins/sata-adapters] --o|include| A2[vitamins/sata]
 ```
 
+'Naive' SATA adapter definition file.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---

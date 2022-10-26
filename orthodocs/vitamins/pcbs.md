@@ -17,6 +17,12 @@ graph LR
     A1 --o|use| A12[dxf]
 ```
 
+PCB definition file.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -50,6 +56,8 @@ __Default:__
 __Default:__
 
     "pcb"
+
+namespace for PCB engine
 
 ---
 
@@ -99,6 +107,8 @@ __Default:__
 
     let(pcb_t=1.6,size=[65,30,pcb_t],bare=[[0,0,-pcb_t],[size.x,size.y,0]],hole_d=2.75,holes=[fl_Hole([3.5,size.y-3.5,0],hole_d,+Z,pcb_t,loct=-Y),fl_Hole([size.x-3.5,size.y-3.5,0],hole_d,+Z,pcb_t,loct=-Y),fl_Hole([size.x-3.5,3.5,0],hole_d,+Z,pcb_t,loct=+Y),],comps=[["RF IN",[FL_JACK_NS,[0,15,0],[-X,0],FL_JACK_MCXJPHSTEM1]],["GPIO",[FL_PHDR_NS,[32.5,size.y-3.5,0],[+Z,0],FL_PHDR_GPIOHDR_F_SMT_LOW]],],vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],gpio_conn_pos=fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),rf_conn_pos=fl_conn_pos(fl_comp_connectors(comps[0][1])[0]),connectors=[conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t],octant=+X+Y,direction=[-Z,180]),conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4],octant=+X+Y,direction=[-Z,0]),conn_Socket("antenna",-Z,+Y,rf_conn_pos,octant=+X+Y,direction=[-Z,-90]),])fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,connectors=connectors)
 
+pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+
 ## Functions
 
 ---
@@ -111,6 +121,8 @@ __Syntax:__
 fl_PCB(name,bare,thick=1.6,color="green",radius=0,payload,holes=[],components,grid,screw,dxf,vendors,connectors,director=+Z,rotor=+X)
 ```
 
+base constructor
+
 ---
 
 ### function fl_comp_BBox
@@ -121,6 +133,8 @@ __Syntax:__
 fl_comp_BBox(spec_list)
 ```
 
+exact calculation of the resulting bounding box out of a list of component specifications
+
 ---
 
 ### function fl_comp_connectors
@@ -130,6 +144,9 @@ __Syntax:__
 ```text
 fl_comp_connectors(component)
 ```
+
+returns «component» connectors transformed according to component position/orientation
+
 
 ---
 
@@ -154,6 +171,9 @@ __Syntax:__
 ```text
 fl_pcb_NopHoles(nop)
 ```
+
+Helper for conversion from NopSCADlib hole format to OFL.
+
 
 ---
 
@@ -185,6 +205,19 @@ __Syntax:__
 fl_pcb_import(nop,payload)
 ```
 
+PCB constructor from NopSCADlib.
+
+Only basic PCB attributes are imported from NopSCADlib types:
+
+ - sizing
+ - material
+ - holes
+ - screw
+ - grid
+
+NO COMPONENT IS CURRENTLY IMPORTED. STILL A WORK IN PROGRESS USE fl_pcb_adapter instead
+
+
 ---
 
 ### function fl_pcb_radius
@@ -215,6 +248,20 @@ __Syntax:__
 
     fl_comp_Context(component)
 
+Component context:
+
+$engine    - engine to be triggered for component rendering
+$position  - component position
+$direction
+$director
+$rotation
+$type
+$subtract  - the tolerance to be used during component FL_FOOTPRINT difference() from parent shape
+$drift     - additional positioning during component positioning
+$color
+$octant
+
+
 ---
 
 ### module fl_comp_Specs
@@ -222,6 +269,19 @@ __Syntax:__
 __Syntax:__
 
     fl_comp_Specs(specs)
+
+Component specifications context:
+
+$label
+$component
+plus component context (see module fl_comp_Context())
+
+
+__Parameters:__
+
+__specs__  
+component specifications: ["label",component]
+
 
 ---
 
@@ -231,6 +291,46 @@ __Syntax:__
 
     fl_pcb(verbs=FL_ADD,type,cut_tolerance=0,cut_label,cut_direction,thick=0,lay_direction=[+Z],debug,direction,octant)
 
+PCB engine.
+
+CONTEXT FROM PARENT:
+ $hole_syms - (OPTIONAL bool) enables hole symbles
+
+CONTEXT TO CHILDREN:
+ complete hole context
+ $pcb_radius - pcb radius
+
+
+__Parameters:__
+
+__verbs__  
+FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
+
+__cut_tolerance__  
+FL_CUTOUT tolerance
+
+__cut_label__  
+FL_CUTOUT component filter by label
+
+__cut_direction__  
+FL_CUTOUT component filter by direction (+X,+Y or +Z)
+
+__thick__  
+FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+
+__lay_direction__  
+FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
+
+__debug__  
+see constructor [fl_parm_Debug()](foundation/base_parameters.md#function-fl_parm_debug)
+
+__direction__  
+desired direction [director,rotation], native direction when undef
+
+__octant__  
+when undef native positioning is used
+
+
 ---
 
 ### module fl_pcb_adapter
@@ -238,4 +338,50 @@ __Syntax:__
 __Syntax:__
 
     fl_pcb_adapter(verbs=FL_ADD,type,thick=0,payload,direction,octant)
+
+PCB adapter for NopSCADlib.
+
+While full attributes rendering is supported via NopSCADlib APIs, only basic
+support is provided to OFL verbs, sometimes even with different behaviour:
+
+FL_ADD       - being impossible to render NopSCADlib pcbs without components,
+               this verb always renders components too;
+FL_ASSEMBLY  - only screws are added during assembly, since
+               components are always rendered during FL_ADD;
+FL_AXES      - no changes;
+FL_BBOX      - while OFL native PCBs includes also components sizing in
+               bounding box calculations, the adapter bounding box is
+               'reduced' to pcb only. The only way to mimic OFL native
+               behaviour is to explicity add the payload capacity through
+               the «payload» parameter.
+FL_CUTOUT    - always applied to all the components, it's not possible to
+               reduce component triggering by label nor direction.
+               No cutout tolerance is provided either;
+FL_DRILL     - no changes
+FL_LAYOUT    - no changes
+FL_PAYLOAD   - unsupported by native OFL PCBs
+
+Others:
+
+Placement    - working with the FL_BBOX limitations
+Orientation  - no changes
+
+
+__Parameters:__
+
+__verbs__  
+FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
+
+__thick__  
+FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+
+__payload__  
+pay-load bounding box, is added to the overall bounding box calculation
+
+__direction__  
+desired direction [director,rotation], native direction when undef
+
+__octant__  
+when undef native positioning is used
+
 

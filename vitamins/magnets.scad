@@ -1,4 +1,4 @@
-/*
+/*!
  * Magnets definitions.
  *
  * Created  : on Mon Aug 30 2021.
@@ -28,7 +28,7 @@ include <screw.scad>
 
 include <NopSCADlib/core.scad>
 
-// namespace for pin headers engine
+//! namespace for pin headers engine
 FL_MAG_NS  = "mag";
 
 //*****************************************************************************
@@ -41,7 +41,7 @@ function fl_mag_cs(type,value)      = fl_property(type,"mag/counter sink type",v
 function fl_mag_engine(type,value)  = fl_property(type,"mag/__internal engine type__",value);
 
 //*****************************************************************************
-// constructor
+//! constructor
 function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
   assert(thick!=undef || size!=undef)
   let(
@@ -134,12 +134,18 @@ FL_MAG_DICT = [
 ];
 
 module fl_magnet(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  type,                 // magnet object
-  fp_gross    = 0,      // quantity to add to the footprint dimensions
-  thick       = 0,      // thickness for screws
-  direction,            // desired direction [director,rotation], native direction when undef
-  octant                // when undef native positioning is used (+Z)
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
+  //! magnet object
+  type,
+  //! quantity to add to the footprint dimensions
+  fp_gross    = 0,
+  //! thickness for screws
+  thick       = 0,
+  //! desired direction [director,rotation], native direction when undef
+  direction,
+  //! when undef native positioning is used (+Z)
+  octant
 ) {
   assert(verbs!=undef);
   assert(type!=undef);

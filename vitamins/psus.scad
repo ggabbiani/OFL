@@ -1,4 +1,4 @@
-/*
+/*!
  * PSU vitamin definitions.
  *
  * Copyright © 2021 Giampiero Gabbiani.
@@ -27,7 +27,7 @@ include <../foundation/unsafe_defs.scad>
 include <screw.scad>
 include <NopSCADlib/lib.scad>
 
-// namespace for PCB engine
+//! namespace for PCB engine
 FL_PSU_NS  = "psu";
 
 // ***** PSU MeanWell RS-25-5 25W 5V 5A ***************************************
@@ -140,17 +140,17 @@ FL_PSU_DICT = [
 ];
 
 module fl_psu(
-  // MANDATORY verb or list of verbs
+  //! MANDATORY verb or list of verbs
   verbs,
-  // MANDATORY
+  //! MANDATORY
   type,
-  // FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  //! FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick = 0,
-  // FL_LAYOUT directions in floating semi-axis list form
+  //! FL_LAYOUT directions in floating semi-axis list form
   lay_direction=[+X,+Y,-Z],
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
   ) {
   assert(verbs!=undef);

@@ -1,4 +1,4 @@
-/*
+/*!
  * Countersink definitions, data taken from:
  * https://www.sailornautica.it/viti-metallo-inox-aisi-316-e-304/927-vite-testa-svasata-piana-esagono-incassato-m3-uni-5933-acciaio-inox-aisi-316.html
  *
@@ -25,7 +25,7 @@ include <../foundation/defs.scad>
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
-// countersinks namespace
+//! countersinks namespace
 FL_CS_NS  = "cs";
 
 //*****************************************************************************
@@ -90,8 +90,10 @@ FL_CS_DICT = [
 module fl_countersink(
   verbs,
   type,
-  direction,        // desired direction [director,rotation], native direction when undef
-  octant            // when undef native positioning is used (+Z)
+  //! desired direction [director,rotation], native direction when undef
+  direction,
+  //! when undef native positioning is used (+Z)
+  octant
 ) {
   assert(verbs!=undef);
 

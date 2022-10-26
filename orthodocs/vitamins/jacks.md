@@ -11,6 +11,12 @@ graph LR
     A1 --o|include| A6[foundation/util]
 ```
 
+NopACADlib Jack definitions wrapper.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -55,6 +61,33 @@ __Syntax:__
 
     fl_jack(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,debug,direction,octant)
 
+Jack engine.
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+
+__cut_thick__  
+thickness for FL_CUTOUT
+
+__cut_tolerance__  
+tolerance used during FL_CUTOUT
+
+__cut_drift__  
+translation applied to cutout
+
+__debug__  
+see constructor [fl_parm_Debug()](foundation/base_parameters.md#function-fl_parm_debug)
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
+
 ---
 
 ### module fl_jack_barrelEngine
@@ -63,6 +96,33 @@ __Syntax:__
 
     fl_jack_barrelEngine(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,debug,direction,octant)
 
+Barrel jack engine.
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+
+__cut_thick__  
+thickness for FL_CUTOUT
+
+__cut_tolerance__  
+tolerance used during FL_CUTOUT
+
+__cut_drift__  
+translation applied to cutout
+
+__debug__  
+see constructor [fl_parm_Debug()](foundation/base_parameters.md#function-fl_parm_debug)
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
+
 ---
 
 ### module fl_jack_mcxjphstem1Engine
@@ -70,4 +130,32 @@ __Syntax:__
 __Syntax:__
 
     fl_jack_mcxjphstem1Engine(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,debug,direction,octant)
+
+Engine for RF MCX edge mount jack pcb connector
+specs taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+
+__cut_thick__  
+thickness for FL_CUTOUT
+
+__cut_tolerance__  
+tolerance used during FL_CUTOUT
+
+__cut_drift__  
+translation applied to cutout
+
+__debug__  
+see constructor [fl_parm_Debug()](foundation/base_parameters.md#function-fl_parm_debug)
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 

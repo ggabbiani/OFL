@@ -7,6 +7,12 @@ graph LR
     A1[vitamins/usbs] --o|include| A2[foundation/util]
 ```
 
+NopACADlib USB definitions wrapper.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -122,6 +128,30 @@ fl_USB_type(type,value)
 __Syntax:__
 
     fl_USB(verbs=FL_ADD,type,cut_thick,tolerance=0,cut_drift=0,tongue,direction,octant)
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+
+__cut_thick__  
+thickness for FL_CUTOUT
+
+__tolerance__  
+tolerance used during FL_CUTOUT
+
+__cut_drift__  
+translation applied to cutout (default 0)
+
+__tongue__  
+tongue color (default "white")
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 
 ---
 

@@ -1,4 +1,4 @@
-/*
+/*!
  * NopACADlib HDMI engine wrapper.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -62,18 +62,18 @@ FL_HDMI_DICT = [
 function fl_hdmi_nameKV(value)         = fl_kv("name",value);
 
 module fl_hdmi(
-  // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   verbs       = FL_ADD,
   type,
-  // thickness for FL_CUTOUT
+  //! thickness for FL_CUTOUT (see variable FL_CUTOUT)
   cut_thick,
-  // tolerance used during FL_CUTOUT
+  //! tolerance used during FL_CUTOUT (see variable FL_CUTOUT)
   cut_tolerance=0,
-  // translation applied to cutout (default 0)
+  //! translation applied to cutout
   cut_drift=0,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);

@@ -1,4 +1,4 @@
-/*
+/*!
  * PCB definition file.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -34,7 +34,7 @@ include <usbs.scad>
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
-// namespace for PCB engine
+//! namespace for PCB engine
 FL_PCB_NS  = "pcb";
 
 //*****************************************************************************
@@ -50,7 +50,7 @@ function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
 // COMPONENTS
 // TODO: abstract components from PCBs and move alone
 
-/*
+/*!
  * Component context:
  *
  * $engine    - engine to be triggered for component rendering
@@ -84,7 +84,7 @@ module fl_comp_Context(
   children();
 }
 
-/*
+/*!
  * Component specifications context:
  *
  * $label
@@ -92,7 +92,8 @@ module fl_comp_Context(
  * plus component context (see module fl_comp_Context())
  */
 module fl_comp_Specs(
-  specs // component specifications: ["label",component]
+  //! component specifications: ["label",component]
+  specs
   ) {
 
   $label      = specs[0];
@@ -100,7 +101,7 @@ module fl_comp_Specs(
   fl_comp_Context($component) children();
 }
 
-// exact calculation of the resulting bounding box out of a list of component specifications
+//! exact calculation of the resulting bounding box out of a list of component specifications
 function fl_comp_BBox(spec_list) =
   assert(len(spec_list)>0,spec_list)
   let(
@@ -138,7 +139,7 @@ function fl_comp_search(type,label,comps) = let(
   result      = [for(specs=components) if (label==specs[0]) specs[1]]
 ) assert(len(result)==1,result) result[0];
 
-/**
+/*!
  * returns «component» connectors transformed according to component position/orientation
  */
 function fl_comp_connectors(component)  = let(
@@ -153,7 +154,7 @@ function fl_comp_connectors(component)  = let(
 
 //*****************************************************************************
 
-// base constructor
+//! base constructor
 function fl_PCB(
     name,
     // bare (i.e. no payload) pcb's bounding box
@@ -209,7 +210,7 @@ function fl_PCB(
     if (connectors) fl_connectors(value=connectors),
   ];
 
-/**
+/*!
  * PCB constructor from NopSCADlib.
  *
  * Only basic PCB attributes are imported from NopSCADlib types:
@@ -231,7 +232,7 @@ function fl_pcb_import(nop,payload) = let(
     bbox      = [[-w/2,-l/2,-pcb_t],[+w/2,+l/2,h]]
   ) fl_PCB(nop[1],bbox,pcb_t,pcb_colour(nop),pcb_radius(nop),payload,fl_pcb_NopHoles(nop),undef,pcb_grid(nop),pcb_screw(nop));
 
-/**
+/*!
  * Helper for conversion from NopSCADlib hole format to OFL.
  */
 function fl_pcb_NopHoles(nop) = let(
@@ -281,7 +282,7 @@ FL_PCB_RPI4 = let(
   ]
 ) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=conns);
 
-// pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+//! pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
 FL_PCB_RPI_uHAT = let(
   pcb_t   = 1.6,
   size    = [65,30,pcb_t],
@@ -384,7 +385,7 @@ FL_PCB_DICT = [
       FL_PCB_RPI_uHAT,
 ];
 
-/**
+/*!
  * PCB engine.
  *
  * CONTEXT FROM PARENT:
@@ -395,24 +396,24 @@ FL_PCB_DICT = [
  *  $pcb_radius - pcb radius
  */
 module fl_pcb(
-  // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
+  //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
   verbs=FL_ADD,
   type,
-  // FL_CUTOUT tolerance
+  //! FL_CUTOUT tolerance
   cut_tolerance=0,
-  // FL_CUTOUT component filter by label
+  //! FL_CUTOUT component filter by label
   cut_label,
-  // FL_CUTOUT component filter by direction (+X,+Y or +Z)
+  //! FL_CUTOUT component filter by direction (+X,+Y or +Z)
   cut_direction,
-  // FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  //! FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
-  // FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
+  //! FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
   lay_direction=[+Z],
-  // see constructor fl_parm_Debug()
+  //! see constructor fl_parm_Debug()
   debug,
-  // desired direction [director,rotation], native direction when undef
+  //! desired direction [director,rotation], native direction when undef
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
@@ -674,7 +675,7 @@ module fl_pcb(
   }
 }
 
-/**
+/*!
  * PCB adapter for NopSCADlib.
  *
  * While full attributes rendering is supported via NopSCADlib APIs, only basic
@@ -703,16 +704,16 @@ module fl_pcb(
  * Orientation  - no changes
  */
 module fl_pcb_adapter(
-  // FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
+  //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
   verbs=FL_ADD,
   type,
-  // FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  //! FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
-  // pay-load bounding box, is added to the overall bounding box calculation
+  //! pay-load bounding box, is added to the overall bounding box calculation
   payload,
-  // desired direction [director,rotation], native direction when undef
+  //! desired direction [director,rotation], native direction when undef
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);

@@ -1,4 +1,4 @@
-/*
+/*!
  * Knurl nuts (aka 'inserts') definition module.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -37,7 +37,7 @@ function fl_knut_rings(type,value)  = fl_property(type,"knut/rings array [[heigh
 //*****************************************************************************
 // key values
 
-/**
+/*!
  * contructor
  */
 function fl_Knut(screw,length,diameter,tooth,rings) = let(
@@ -100,12 +100,14 @@ FL_KNUT_DICT_1 = [
   FL_KNUT_M5x6x7,   FL_KNUT_M5x8x7,    FL_KNUT_M5x10x7                     ,
 ];
 
-// return a knurl nut fitting the passed «screw» and «t»
-// returns undef when not knurl nut is found
+/*!
+ * return a knurl nut fitting the passed «screw» and «t»
+ * returns undef when not knurl nut is found
+ */
 function fl_knut_search(
-    // screw to fit into
+    //! screw to fit into
     screw,
-    // Z axis knurl nut thickness
+    //! Z axis knurl nut thickness
     t
   ) =
   assert(screw)
@@ -129,8 +131,10 @@ function fl_knut_search(
 module fl_knut(
   verbs=FL_ADD,
   type,
-  direction,            // desired direction [director,rotation], native direction when undef ([+Z])
-  octant,               // when undef native positioning is used
+  //! desired direction [director,rotation], native direction when undef ([+Z])
+  direction,
+  //! when undef native positioning is used
+  octant,
 ) {
   assert(verbs!=undef);
 

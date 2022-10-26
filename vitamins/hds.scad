@@ -1,4 +1,4 @@
-/*
+/*!
  * Hard disk definition file.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -76,7 +76,7 @@ FL_HD_EVO860 = let(
 
 FL_HD_DICT  = [ FL_HD_EVO860 ];
 
-/*
+/*!
  * Children context during FL_LAYOUT (in addition to holes' context):
  *
  *  $hd_thick     - scalar thickness along hole normal
@@ -86,20 +86,22 @@ FL_HD_DICT  = [ FL_HD_EVO860 ];
 module fl_hd(
   verbs,
   type,
-  // thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
-  // scalar «t» means [[t,t],[t,t],[t,t]]
+  /*!
+   * thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
+   * scalar «t» means [[t,t],[t,t],[t,t]]
+   */
   thick,
-  // FL_LAYOUT directions in floating semi-axis list form
+  //! FL_LAYOUT directions in floating semi-axis list form
   lay_direction   = [-X,+X,-Z],
-  // tolerance for FL_DRILL
+  //! tolerance for FL_DRILL
   dri_tolerance   = fl_JNgauge,
-  // rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
+  //! rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
   dri_rails=[[0,0],[0,0],[0,0]],
-  // FL_ADD connectors
+  //! FL_ADD connectors
   add_connectors  = false,
-  // desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
   ) {
   assert(verbs!=undef);

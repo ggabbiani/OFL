@@ -1,4 +1,4 @@
-/*
+/*!
  * Single pole, double throw switch.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -56,10 +56,14 @@ function fl_spdt_headH(type)  = fl_get(type,"head height");
 function fl_spdt_headD(type)  = fl_get(type,"head diameter");
 
 module fl_spdt(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_BBOX, FL_DRILL
-  type,                 // prototype
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant               // when undef native positioning is used
+  //! supported verbs: FL_ADD, FL_BBOX, FL_DRILL
+  verbs       = FL_ADD,
+  //! prototype
+  type,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant
 ) {
   assert(verbs!=undef);
 

@@ -1,4 +1,4 @@
-/*
+/*!
  * NopACADlib Jack definitions wrapper.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -73,19 +73,25 @@ FL_JACK_DICT = [
   FL_JACK_MCXJPHSTEM1,
 ];
 
-/**
+/*!
  * Jack engine.
  */
 module fl_jack(
-  verbs       = FL_ADD, // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  verbs       = FL_ADD,
   type,
-  cut_thick,            // thickness for FL_CUTOUT
-  cut_tolerance=0,      // tolerance used during FL_CUTOUT
-  cut_drift=0,          // translation applied to cutout
-  // see constructor fl_parm_Debug()
+  //! thickness for FL_CUTOUT
+  cut_thick,
+  //! tolerance used during FL_CUTOUT
+  cut_tolerance=0,
+  //! translation applied to cutout
+  cut_drift=0,
+  //! see constructor fl_parm_Debug()
   debug,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
@@ -98,24 +104,24 @@ module fl_jack(
     assert(false,str("Engine '",engine,"' unknown."));
 }
 
-/**
+/*!
  * Barrel jack engine.
  */
 module fl_jack_barrelEngine(
-  // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   verbs       = FL_ADD,
   type,
-  // thickness for FL_CUTOUT
+  //! thickness for FL_CUTOUT
   cut_thick,
-  // tolerance used during FL_CUTOUT
+  //! tolerance used during FL_CUTOUT
   cut_tolerance=0,
-  // translation applied to cutout
+  //! translation applied to cutout
   cut_drift=0,
-  // see constructor fl_parm_Debug()
+  //! see constructor fl_parm_Debug()
   debug,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
@@ -145,25 +151,25 @@ module fl_jack_barrelEngine(
 }
 
 // FIXME: issue when directioning, likely to be related to the 'D' matrix when director is not +Z
-/**
+/*!
  * Engine for RF MCX edge mount jack pcb connector
  * specs taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
  */
 module fl_jack_mcxjphstem1Engine(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   type,
-  // thickness for FL_CUTOUT
+  //! thickness for FL_CUTOUT
   cut_thick,
-  // tolerance used during FL_CUTOUT
+  //! tolerance used during FL_CUTOUT
   cut_tolerance=0,
-  // translation applied to cutout
+  //! translation applied to cutout
   cut_drift=0,
-  // see constructor fl_parm_Debug()
+  //! see constructor fl_parm_Debug()
   debug,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);

@@ -9,6 +9,12 @@ graph LR
     A1 --o|include| A4[vitamins/screw]
 ```
 
+Hard disk definition file.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -44,4 +50,37 @@ __Default:__
 __Syntax:__
 
     fl_hd(verbs,type,thick,lay_direction=[-X,+X,-Z],dri_tolerance=fl_JNgauge,dri_rails=[[0,0],[0,0],[0,0]],add_connectors=false,direction,octant)
+
+Children context during FL_LAYOUT (in addition to holes' context):
+
+ $hd_thick     - scalar thickness along hole normal
+ $hd_screw_len - screw length along hole normal comprehensive of hole depth and tolerance
+
+
+
+__Parameters:__
+
+__thick__  
+thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
+scalar «t» means [[t,t],[t,t],[t,t]]
+
+
+__lay_direction__  
+FL_LAYOUT directions in floating semi-axis list form
+
+__dri_tolerance__  
+tolerance for FL_DRILL
+
+__dri_rails__  
+rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
+
+__add_connectors__  
+FL_ADD connectors
+
+__direction__  
+desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 

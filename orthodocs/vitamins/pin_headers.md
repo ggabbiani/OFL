@@ -10,6 +10,12 @@ graph LR
     A1 --o|include| A5[foundation/util]
 ```
 
+NopSCADlib pin header wrapper definitions.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -60,6 +66,8 @@ __Default:__
 
     "phdr"
 
+namespace for pin headers engine
+
 ## Functions
 
 ---
@@ -72,6 +80,32 @@ __Syntax:__
 fl_PinHeader(name,description,nop,geometry=[1,1],smt=false,engine,through=false,vendors=[])
 ```
 
+PinHeader constructor
+
+__Parameters:__
+
+__description__  
+optional description string
+
+__nop__  
+NopSCADlib base type
+
+__geometry__  
+pin header size in [cols,rows]
+
+__smt__  
+smt
+
+__engine__  
+"female" or "male"
+
+__through__  
+pass-through (in that case pin numbers are inverted)
+
+__vendors__  
+vendor list
+
+
 ---
 
 ### function fl_bb_nopPinHeader
@@ -81,6 +115,20 @@ __Syntax:__
 ```text
 fl_bb_nopPinHeader(nop,geometry,engine)
 ```
+
+return the nop bounding box from its geometry
+
+__Parameters:__
+
+__nop__  
+NopSCADlib pin header
+
+__geometry__  
+pin header size in [cols,rows]
+
+__engine__  
+can be "female" or "male"
+
 
 ---
 
@@ -112,6 +160,20 @@ __Syntax:__
 fl_phdr_nopSize(nop,geometry,engine)
 ```
 
+return the nop size from its geometry
+
+__Parameters:__
+
+__nop__  
+NopSCADlib pin header
+
+__geometry__  
+pin header size in [cols,rows]
+
+__engine__  
+"female" or "male"
+
+
 ## Modules
 
 ---
@@ -121,4 +183,28 @@ fl_phdr_nopSize(nop,geometry,engine)
 __Syntax:__
 
     fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,debug,octant,direction)
+
+Pin headers engine.
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_BBOX, FL_CUTOUT
+
+__cut_thick__  
+thickness for FL_CUTOUT
+
+__cut_tolerance__  
+tolerance used during FL_CUTOUT
+
+__debug__  
+see constructor [fl_parm_Debug()](foundation/base_parameters.md#function-fl_parm_debug)
+
+__octant__  
+when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef
+
 

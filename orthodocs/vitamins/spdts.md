@@ -7,6 +7,12 @@ graph LR
     A1[vitamins/spdts] --o|include| A2[foundation/3d]
 ```
 
+Single pole, double throw switch.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -76,4 +82,19 @@ fl_spdt_l(type)
 __Syntax:__
 
     fl_spdt(verbs=FL_ADD,type,direction,octant)
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_BBOX, FL_DRILL
+
+__type__  
+prototype
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 

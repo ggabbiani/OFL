@@ -109,7 +109,7 @@ __Default:__
 
     !$preview
 
-When true, disables PREVIEW corrections (see [variable FL_NIL](foundation/defs.md#variable-FL_NIL))
+When true, disables PREVIEW corrections (see [variable FL_NIL](#variable-fl_nil))
 
 ---
 
@@ -130,7 +130,7 @@ __Default:__
     "FL_ASSEMBLY add predefined component shape(s)"
 
 add predefined component shape(s).
-__NOTE:__ this operation doesn't include screws, for these see [variable FL_MOUNT](foundation/defs.md#variable-FL_MOUNT)
+__NOTE:__ this operation doesn't include screws, for these see [variable FL_MOUNT](#variable-fl_mount)
 
 
 ---
@@ -180,7 +180,7 @@ __Default:__
     [FL_ADD,FL_ASSEMBLY]
 
 composite verb serializing one ADD and ASSEMBLY operation.
-See also [variable FL_ADD](foundation/defs.md#variable-FL_ADD) and [variable FL_ASSEMBLY](foundation/defs.md#variable-FL_ASSEMBLY)
+See also [variable FL_ADD](#variable-fl_add) and [variable FL_ASSEMBLY](#variable-fl_assembly)
 
 
 ---
@@ -201,7 +201,7 @@ __Default:__
 
     "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD"
 
-adds a footprint to scene, usually a simplified ADD operation (see [variable FL_ADD](foundation/defs.md#variable-FL_ADD))
+adds a footprint to scene, usually a simplified ADD operation (see [variable FL_ADD](#variable-fl_add))
 
 ---
 

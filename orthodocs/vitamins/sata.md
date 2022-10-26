@@ -9,6 +9,12 @@ graph LR
     A1 --o|include| A4[foundation/drawio]
 ```
 
+'Naive' SATA plug & socket definition.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -141,6 +147,18 @@ __Syntax:__
 
     fl_sata(verbs=FL_ADD,type,connectors=false,direction,octant)
 
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
+
 ---
 
 ### module fl_sata_dataPlug
@@ -148,6 +166,18 @@ __Syntax:__
 __Syntax:__
 
     fl_sata_dataPlug(verbs=FL_ADD,type,connectors=false,direction,octant)
+
+__Parameters:__
+
+__verbs__  
+FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 
 ---
 
@@ -157,6 +187,15 @@ __Syntax:__
 
     fl_sata_powerDataPlug(verbs=FL_ADD,type,connectors=false,shell=true,direction,octant)
 
+__Parameters:__
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
+
 ---
 
 ### module fl_sata_powerPlug
@@ -165,6 +204,18 @@ __Syntax:__
 
     fl_sata_powerPlug(verbs=FL_ADD,type,connectors=false,direction,octant)
 
+__Parameters:__
+
+__verbs__  
+FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
+
 ---
 
 ### module sata_PowerDataSocket
@@ -172,4 +223,13 @@ __Syntax:__
 __Syntax:__
 
     sata_PowerDataSocket(verbs=FL_ADD,type,connectors=false,direction,octant)
+
+__Parameters:__
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 

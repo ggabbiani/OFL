@@ -7,6 +7,12 @@ graph LR
     A1[vitamins/ethers] --o|include| A2[foundation/3d]
 ```
 
+Ethernet.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -25,6 +31,8 @@ __Default:__
 
     "ether"
 
+ethernet namespace
+
 ---
 
 ### variable FL_ETHER_RJ45
@@ -42,4 +50,25 @@ __Default:__
 __Syntax:__
 
     fl_ether(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+
+__cut_thick__  
+thickness for FL_CUTOUT
+
+__cut_tolerance__  
+tolerance used during FL_CUTOUT
+
+__cut_drift__  
+translation applied to cutout (default 0)
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 

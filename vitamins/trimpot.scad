@@ -1,4 +1,4 @@
-/*
+/*!
  * trimpot engine file
  *
  * Copyright © 2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -26,7 +26,7 @@ include <../foundation/util.scad>
 
 include <NopSCADlib/lib.scad>
 
-// namespace
+//! namespace
 FL_TRIM_NS    = "trim";
 
 FL_TRIM_POT10  = let(
@@ -38,18 +38,18 @@ FL_TRIM_POT10  = let(
 ];
 
 module fl_trimpot(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   type,
-  // thickness for FL_CUTOUT
+  //! thickness for FL_CUTOUT
   cut_thick,
-  // tolerance used during FL_CUTOUT
+  //! tolerance used during FL_CUTOUT
   cut_tolerance=0,
-  // translation applied to cutout (default 0)
+  //! translation applied to cutout (default 0)
   cut_drift=0,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   bbox  = fl_bb_corners(type);

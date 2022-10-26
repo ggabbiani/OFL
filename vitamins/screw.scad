@@ -1,4 +1,4 @@
-/*
+/*!
  * Screw implementation file for OpenSCAD Foundation Library.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -25,7 +25,7 @@ include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
 //*****************************************************************************
-// bounding box
+//! bounding box
 function fl_bb_screw(type,length) =
   assert(type!=undef && is_list(type) && !is_string(type),type)
   assert(is_num(length),length)
@@ -44,18 +44,22 @@ function fl_screw_size(type,length) = let(
   bbox  = fl_bb_screw(type,length)
 ) bbox[1]-bbox[0];
 
-// return the overall length of a screw (according to parameters)
+//! return the overall length of a screw (according to parameters)
 function fl_screw_l(
   type,
   len,
   thick   = 0,
-  washer  = "no",   // screw washer : "no","default","penny","nylon"
-  nut     = "no",   // screw nut    : "no","default","nyloc"
-  xwasher = "no",   // extra washer : "no","spring","star"
-  nwasher = false,  // nut washer
+  //! screw washer : "no","default","penny","nylon"
+  washer  = "no",
+  //! screw nut    : "no","default","nyloc"
+  nut     = "no",
+  //! extra washer : "no","spring","star"
+  xwasher = "no",
+  //! nut washer
+  nwasher = false,
 ) = fl_screw_lens(type,len,thick,washer,nut,xwasher,nwasher)[0];
 
-/*
+/*!
  * return a list with layered thickness (according to parameters):
  *  0 overall screw length
  *  1 passed thickness
@@ -70,10 +74,14 @@ function fl_screw_lens(
   type,
   len,
   thick   = 0,
-  washer  = "no",   // screw washer : "no","default","penny","nylon"
-  nut     = "no",   // screw nut    : "no","default","nyloc"
-  xwasher = "no",   // extra washer : "no","spring","star"
-  nwasher = false,  // nut washer
+  //! screw washer : "no","default","penny","nylon"
+  washer  = "no",
+  //! screw nut    : "no","default","nyloc"
+  nut     = "no",
+  //! extra washer : "no","spring","star"
+  xwasher = "no",
+  //! nut washer
+  nwasher = false,
 ) =
 let(
   description   = type[0],

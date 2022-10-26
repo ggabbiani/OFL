@@ -7,6 +7,13 @@ graph LR
     A1[vitamins/countersinks] --o|include| A2[foundation/defs]
 ```
 
+Countersink definitions, data taken from:
+https://www.sailornautica.it/viti-metallo-inox-aisi-316-e-304/927-vite-testa-svasata-piana-esagono-incassato-m3-uni-5933-acciaio-inox-aisi-316.html
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -97,6 +104,8 @@ __Default:__
 
     "cs"
 
+countersinks namespace
+
 ## Functions
 
 ---
@@ -148,4 +157,13 @@ fl_cs_h(type)
 __Syntax:__
 
     fl_countersink(verbs,type,direction,octant)
+
+__Parameters:__
+
+__direction__  
+desired direction [director,rotation], native direction when undef
+
+__octant__  
+when undef native positioning is used (+Z)
+
 

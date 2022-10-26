@@ -1,4 +1,4 @@
-/*
+/*!
  * 'Naive' SATA plug & socket definition.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -204,11 +204,14 @@ FL_SATA_DICT = [
  */
 
 module fl_sata_dataPlug(
-  verbs       = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+  //! FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+  verbs       = FL_ADD,
   type,
   connectors  = false,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant                // when undef native positioning is used
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant
 ) {
   assert(type!=undef);
   fl_trace("verbs",verbs);
@@ -257,11 +260,14 @@ module fl_sata_dataPlug(
  */
 
 module fl_sata_powerPlug(
-  verbs       = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+  //! FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+  verbs       = FL_ADD,
   type,
   connectors  = false,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant                // when undef native positioning is used
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant
 ) {
   assert(type!=undef);
 
@@ -315,9 +321,12 @@ module fl_sata_powerDataPlug(
   verbs       = FL_ADD,
   type,
   connectors  =false,
-  shell       =true,    // FIXME: really useful?
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant                // when undef native positioning is used
+  // FIXME: really useful?
+  shell       =true,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant
 ) {
   assert(type!=undef);
 
@@ -389,8 +398,10 @@ module sata_PowerDataSocket(
   verbs     = FL_ADD,
   type,
   connectors = false,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant                // when undef native positioning is used
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant
 ) {
   assert(type!=undef);
 
@@ -473,11 +484,14 @@ module sata_PowerDataSocket(
 }
 
 module fl_sata(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
   type,
   connectors  = false,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant                // when undef native positioning is used
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant
 ) {
   if      (fl_sata_type(type)=="data plug")         fl_sata_dataPlug(verbs,type,connectors,direction,octant);
   else if (fl_sata_type(type)=="power plug")        fl_sata_powerPlug(verbs,type,connectors,direction,octant);

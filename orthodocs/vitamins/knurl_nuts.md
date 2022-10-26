@@ -8,6 +8,12 @@ graph LR
     A1 --o|include| A3[vitamins/screw]
 ```
 
+Knurl nuts (aka 'inserts') definition module.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -158,6 +164,9 @@ __Syntax:__
 fl_Knut(screw,length,diameter,tooth,rings)
 ```
 
+contructor
+
+
 ---
 
 ### function fl_knut_r
@@ -187,6 +196,19 @@ __Syntax:__
 ```text
 fl_knut_search(screw,t)
 ```
+
+return a knurl nut fitting the passed «screw» and «t»
+returns undef when not knurl nut is found
+
+
+__Parameters:__
+
+__screw__  
+screw to fit into
+
+__t__  
+Z axis knurl nut thickness
+
 
 ---
 
@@ -227,4 +249,13 @@ fl_knut_tooth(type,value)
 __Syntax:__
 
     fl_knut(verbs=FL_ADD,type,direction,octant)
+
+__Parameters:__
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+Z])
+
+__octant__  
+when undef native positioning is used
+
 

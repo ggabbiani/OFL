@@ -11,6 +11,12 @@ graph LR
     A1 --o|include| A6[vitamins/screw]
 ```
 
+PSU vitamin definitions.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -45,6 +51,8 @@ __Default:__
 
     "psu"
 
+namespace for PCB engine
+
 ## Modules
 
 ---
@@ -54,4 +62,25 @@ __Default:__
 __Syntax:__
 
     fl_psu(verbs,type,thick=0,lay_direction=[+X,+Y,-Z],direction,octant)
+
+__Parameters:__
+
+__verbs__  
+MANDATORY verb or list of verbs
+
+__type__  
+MANDATORY
+
+__thick__  
+FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+
+__lay_direction__  
+FL_LAYOUT directions in floating semi-axis list form
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 

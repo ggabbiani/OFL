@@ -7,6 +7,12 @@ graph LR
     A1[vitamins/hdmi] --o|include| A2[foundation/util]
 ```
 
+NopACADlib HDMI engine wrapper.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -80,4 +86,25 @@ fl_hdmi_new(nop_type)
 __Syntax:__
 
     fl_hdmi(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+
+__cut_thick__  
+thickness for FL_CUTOUT (see [variable FL_CUTOUT](foundation/defs.md#variable-fl_cutout))
+
+__cut_tolerance__  
+tolerance used during FL_CUTOUT (see [variable FL_CUTOUT](foundation/defs.md#variable-fl_cutout))
+
+__cut_drift__  
+translation applied to cutout
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 
