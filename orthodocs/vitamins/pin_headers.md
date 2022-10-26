@@ -199,7 +199,7 @@ __cut_tolerance__
 tolerance used during FL_CUTOUT
 
 __debug__  
-see constructor [fl_parm_Debug()](foundation/base_parameters.md#function-fl_parm_debug)
+see constructor [fl_parm_Debug()](../foundation/base_parameters.md#function-fl_parm_debug)
 
 __octant__  
 when undef native positioning is used

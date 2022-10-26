@@ -93,10 +93,10 @@ __verbs__
 supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
 
 __cut_thick__  
-thickness for FL_CUTOUT (see [variable FL_CUTOUT](foundation/defs.md#variable-fl_cutout))
+thickness for FL_CUTOUT (see [variable FL_CUTOUT](../foundation/defs.md#variable-fl_cutout))
 
 __cut_tolerance__  
-tolerance used during FL_CUTOUT (see [variable FL_CUTOUT](foundation/defs.md#variable-fl_cutout))
+tolerance used during FL_CUTOUT (see [variable FL_CUTOUT](../foundation/defs.md#variable-fl_cutout))
 
 __cut_drift__  
 translation applied to cutout

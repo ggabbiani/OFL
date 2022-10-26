@@ -1,5 +1,5 @@
 /*!
- * NopACADlib Jack definitions wrapper.
+ * NopSCADlib Jack definitions wrapper.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
