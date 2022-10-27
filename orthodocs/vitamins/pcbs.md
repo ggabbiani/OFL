@@ -309,7 +309,7 @@ Component specifications context:
  - $label
  - $component
 
-plus component context (see module fl_comp_Context())
+plus component context (see [fl_comp_Context{}](#module-fl_comp_context))
 
 
 __Parameters:__

@@ -113,9 +113,9 @@ module fl_screw(
   verbs       = FL_ADD,
   //! NopSCADlib screw type
   type,
-  //! when passed a fixed len will be used instead of fl_screw_len()
+  //! when passed a fixed len will be used instead of fl_screw_l()
   len,
-  //! thickness part passed to fl_screw_len() during length calculation
+  //! thickness part passed to fl_screw_l() during length calculation
   thick   = 0,
   //! screw washer : "no","default","penny","nylon"
   washer  = "no",

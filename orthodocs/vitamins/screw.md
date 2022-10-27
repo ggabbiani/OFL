@@ -120,10 +120,10 @@ __type__
 NopSCADlib screw type
 
 __len__  
-when passed a fixed len will be used instead of fl_screw_len()
+when passed a fixed len will be used instead of [fl_screw_l()](#function-fl_screw_l)
 
 __thick__  
-thickness part passed to fl_screw_len() during length calculation
+thickness part passed to [fl_screw_l()](#function-fl_screw_l) during length calculation
 
 __washer__  
 screw washer : "no","default","penny","nylon"
