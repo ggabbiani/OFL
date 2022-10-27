@@ -123,6 +123,38 @@ fl_PCB(name,bare,thick=1.6,color="green",radius=0,payload,holes=[],components,gr
 
 base constructor
 
+__Parameters:__
+
+__bare__  
+bare (i.e. no payload) pcb's bounding box
+
+__thick__  
+pcb thickness
+
+__radius__  
+corners radius
+
+__payload__  
+Optional payload bounding box.
+When passed it concurs in pcb's bounding box calculations
+
+
+__holes__  
+each row represents a hole with the following format:
+
+`[[point],[normal], diameter, thickness]`
+
+
+__components__  
+each row represent one component with the following format:
+
+`["label", ["engine", [position], [[director],rotation] type],subtract]`
+
+
+__grid__  
+grid specs
+
+
 ---
 
 ### function fl_comp_BBox
@@ -159,6 +191,7 @@ fl_comp_search(type,label,comps)
 ```
 
 returns the component with «label»
+
 NOTE: error when label is not unique
 
 
@@ -215,7 +248,7 @@ Only basic PCB attributes are imported from NopSCADlib types:
  - screw
  - grid
 
-NO COMPONENT IS CURRENTLY IMPORTED. STILL A WORK IN PROGRESS USE fl_pcb_adapter instead
+WARNING: NO COMPONENT IS CURRENTLY IMPORTED. STILL A WORK IN PROGRESS USE [fl_pcb_adapter{}](#module-fl_pcb_adapter) instead
 
 
 ---
@@ -250,16 +283,16 @@ __Syntax:__
 
 Component context:
 
-$engine    - engine to be triggered for component rendering
-$position  - component position
-$direction
-$director
-$rotation
-$type
-$subtract  - the tolerance to be used during component FL_FOOTPRINT difference() from parent shape
-$drift     - additional positioning during component positioning
-$color
-$octant
+ - $engine    : engine to be triggered for component rendering
+ - $position  : component position
+ - $direction
+ - $director
+ - $rotation
+ - $type
+ - $subtract  : the tolerance to be used during component FL_FOOTPRINT difference() from parent shape
+ - $drift     : additional positioning during component positioning
+ - $color
+ - $octant
 
 
 ---
@@ -272,8 +305,9 @@ __Syntax:__
 
 Component specifications context:
 
-$label
-$component
+ - $label
+ - $component
+
 plus component context (see module fl_comp_Context())
 
 
@@ -294,11 +328,11 @@ __Syntax:__
 PCB engine.
 
 CONTEXT FROM PARENT:
- $hole_syms - (OPTIONAL bool) enables hole symbles
+ - $hole_syms - (OPTIONAL bool) enables hole symbles
 
 CONTEXT TO CHILDREN:
- complete hole context
- $pcb_radius - pcb radius
+ - complete hole context
+ - $pcb_radius - pcb radius
 
 
 __Parameters:__
@@ -344,27 +378,27 @@ PCB adapter for NopSCADlib.
 While full attributes rendering is supported via NopSCADlib APIs, only basic
 support is provided to OFL verbs, sometimes even with different behaviour:
 
-FL_ADD       - being impossible to render NopSCADlib pcbs without components,
-               this verb always renders components too;
-FL_ASSEMBLY  - only screws are added during assembly, since
-               components are always rendered during FL_ADD;
-FL_AXES      - no changes;
-FL_BBOX      - while OFL native PCBs includes also components sizing in
-               bounding box calculations, the adapter bounding box is
-               'reduced' to pcb only. The only way to mimic OFL native
-               behaviour is to explicity add the payload capacity through
-               the «payload» parameter.
-FL_CUTOUT    - always applied to all the components, it's not possible to
-               reduce component triggering by label nor direction.
-               No cutout tolerance is provided either;
-FL_DRILL     - no changes
-FL_LAYOUT    - no changes
-FL_PAYLOAD   - unsupported by native OFL PCBs
+- FL_ADD       : being impossible to render NopSCADlib pcbs without components,
+                 this verb always renders components too;
+- FL_ASSEMBLY  : only screws are added during assembly, since
+                 components are always rendered during FL_ADD;
+- FL_AXES      : no changes;
+- FL_BBOX      : while OFL native PCBs includes also components sizing in
+                 bounding box calculations, the adapter bounding box is
+                 'reduced' to pcb only. The only way to mimic OFL native
+                 behaviour is to explicity add the payload capacity through
+                 the «payload» parameter.
+- FL_CUTOUT    : always applied to all the components, it's not possible to
+                 reduce component triggering by label nor direction.
+                 No cutout tolerance is provided either;
+- FL_DRILL     : no changes
+- FL_LAYOUT    : no changes
+- FL_PAYLOAD   : unsupported by native OFL PCBs
 
 Others:
 
-Placement    - working with the FL_BBOX limitations
-Orientation  - no changes
+- Placement    : working with the FL_BBOX limitations
+- Orientation  : no changes
 
 
 __Parameters:__

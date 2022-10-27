@@ -51,7 +51,7 @@ __Default:__
 
     "psu"
 
-namespace for PCB engine
+namespace for PSU engine
 
 ## Modules
 

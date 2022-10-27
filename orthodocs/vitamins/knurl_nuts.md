@@ -197,8 +197,9 @@ __Syntax:__
 fl_knut_search(screw,t)
 ```
 
-return a knurl nut fitting the passed «screw» and «t»
-returns undef when not knurl nut is found
+return a knurl nut fitting the passed «screw» and «t».
+
+returns undef when no knurl nut is found.
 
 
 __Parameters:__

@@ -102,8 +102,8 @@ __Syntax:__
     fl_pimoroni(verbs=FL_ADD,type,thick=0,lay_what="mount",top=true,bottom=true,direction,octant)
 
 FL_LAYOUT,FL_ASSEMBLY children context:
- $hs_radius  - corner radius
- $hs_normal  - layout normal (always -Z);
- $hs_screw   - mount screw;
+  - $hs_radius: corner radius
+  - $hs_normal: layout normal (always -Z);
+  - $hs_screw : mount screw;
 
 

@@ -49,3 +49,12 @@ __Syntax:__
 
     sata_adapter(verbs,type,locators=false,direction,octant)
 
+__Parameters:__
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
+
