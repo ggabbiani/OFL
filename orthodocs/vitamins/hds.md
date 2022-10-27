@@ -53,8 +53,8 @@ __Syntax:__
 
 Children context during FL_LAYOUT (in addition to holes' context):
 
- $hd_thick     - scalar thickness along hole normal
- $hd_screw_len - screw length along hole normal comprehensive of hole depth and tolerance
+ - $hd_thick     : scalar thickness along hole normal
+ - $hd_screw_len : screw length along hole normal comprehensive of hole depth and tolerance
 
 
 
