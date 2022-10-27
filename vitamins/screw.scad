@@ -61,14 +61,14 @@ function fl_screw_l(
 
 /*!
  * return a list with layered thickness (according to parameters):
- *  0 overall screw length
- *  1 passed thickness
- *  2 washer thickness
- *  3 extra washer (spring or star) thickness
- *  4 nut washer thickness
- *  5 nut thickness
+ * - 0 overall screw length
+ * - 1 passed thickness
+ * - 2 washer thickness
+ * - 3 extra washer (spring or star) thickness
+ * - 4 nut washer thickness
+ * - 5 nut thickness
  *
- * Note: if one layer is "off", the corresponding thickness will be 0
+ * **Note:** if one layer is "off", the corresponding thickness will be 0
  */
 function fl_screw_lens(
   type,
@@ -109,16 +109,26 @@ let(
 ) [len!=undef?len:thick_all,thick,thick_washer,thick_xwasher,thick_nwasher,thick_nut];
 
 module fl_screw(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  type,                 // NopSCADlib screw type
-  len,                  // when passed a fixed len will be used instead of fl_screw_len()
-  thick   = 0,          // thickness part passed to fl_screw_len() during length calculation
-  washer  = "no",       // screw washer : "no","default","penny","nylon"
-  nut     = "no",       // screw nut    : "no","default","nyloc"
-  xwasher = "no",       // extra washer : "no","spring","star"
-  nwasher = false,      // nut washer
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
+  //! NopSCADlib screw type
+  type,
+  //! when passed a fixed len will be used instead of fl_screw_len()
+  len,
+  //! thickness part passed to fl_screw_len() during length calculation
+  thick   = 0,
+  //! screw washer : "no","default","penny","nylon"
+  washer  = "no",
+  //! screw nut    : "no","default","nyloc"
+  nut     = "no",
+  //! extra washer : "no","spring","star"
+  xwasher = "no",
+  //! nut washer
+  nwasher = false,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
