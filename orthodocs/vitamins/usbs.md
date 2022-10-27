@@ -109,6 +109,8 @@ __Syntax:__
 fl_USB_new(utype,flange=true)
 ```
 
+USB constructor
+
 ---
 
 ### function fl_USB_type

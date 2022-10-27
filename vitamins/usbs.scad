@@ -31,7 +31,7 @@ function fl_USB_type(type,value)    = fl_property(type,"usb/type",value);
 function fl_USB_flange(type,value)  = fl_property(type,"usb/flange",value);
 
 //*****************************************************************************
-// USB constructors
+//! USB constructor
 function fl_USB_new(utype,flange=true) =
   utype=="Ax1"
   ? let(

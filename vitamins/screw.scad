@@ -61,12 +61,12 @@ function fl_screw_l(
 
 /*!
  * return a list with layered thickness (according to parameters):
- * - 0 overall screw length
- * - 1 passed thickness
- * - 2 washer thickness
- * - 3 extra washer (spring or star) thickness
- * - 4 nut washer thickness
- * - 5 nut thickness
+ * 0. overall screw length
+ * 1. passed thickness
+ * 2. washer thickness
+ * 3. extra washer (spring or star) thickness
+ * 4. nut washer thickness
+ * 5. nut thickness
  *
  * **Note:** if one layer is "off", the corresponding thickness will be 0
  */

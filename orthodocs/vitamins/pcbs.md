@@ -290,7 +290,7 @@ Component context:
  - $director
  - $rotation
  - $type
- - $subtract  : the tolerance to be used during component FL_FOOTPRINT difference() from parent shape
+ - $subtract  : the tolerance to be used during component FL_FOOTPRINT difference from parent shape
  - $drift     : additional positioning during component positioning
  - $color
  - $octant
