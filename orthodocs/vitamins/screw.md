@@ -66,14 +66,14 @@ fl_screw_lens(type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false)
 ```
 
 return a list with layered thickness (according to parameters):
- 0 overall screw length
- 1 passed thickness
- 2 washer thickness
- 3 extra washer (spring or star) thickness
- 4 nut washer thickness
- 5 nut thickness
+- 0 overall screw length
+- 1 passed thickness
+- 2 washer thickness
+- 3 extra washer (spring or star) thickness
+- 4 nut washer thickness
+- 5 nut thickness
 
-Note: if one layer is "off", the corresponding thickness will be 0
+**Note:** if one layer is "off", the corresponding thickness will be 0
 
 
 __Parameters:__
@@ -110,4 +110,37 @@ fl_screw_size(type,length)
 __Syntax:__
 
     fl_screw(verbs=FL_ADD,type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false,direction,octant)
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+
+__type__  
+NopSCADlib screw type
+
+__len__  
+when passed a fixed len will be used instead of fl_screw_len()
+
+__thick__  
+thickness part passed to fl_screw_len() during length calculation
+
+__washer__  
+screw washer : "no","default","penny","nylon"
+
+__nut__  
+screw nut    : "no","default","nyloc"
+
+__xwasher__  
+extra washer : "no","spring","star"
+
+__nwasher__  
+nut washer
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
 
