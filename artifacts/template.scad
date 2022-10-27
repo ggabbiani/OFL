@@ -21,12 +21,12 @@
 include <../foundation/unsafe_defs.scad>
 
 // namespace
-FL_ART_NS  = "art";
+__FL_ART_NS  = "art";
 
-FL_ART_DICT = [
+__FL_ART_DICT = [
 ];
 
-module artifact(
+module __artifact__(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   type,

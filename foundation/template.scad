@@ -21,7 +21,7 @@
 
 include <hole.scad>
 
-function constructor(description,bbox,holes)  = let(
+function __constructor__(description,bbox,holes)  = let(
 ) [
   fl_native(value=true),
   fl_director(value=+Z),fl_rotor(value=+X),
@@ -30,11 +30,7 @@ function constructor(description,bbox,holes)  = let(
   if (holes) fl_holes(value=holes),
 ];
 
-/**
- * CONTEXT FROM PARENT:
- * $hole_syms - when 'true' hole symbles are ALWAYS added
- */
-module stub(
+module __stub__(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
   verbs       = FL_ADD,
   type,

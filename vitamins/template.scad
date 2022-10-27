@@ -21,12 +21,12 @@
 include <../foundation/defs.scad>
 
 // namespace
-FL_TEMP_NS  = "mag";
+__FL_TEMP_NS  = "mag";
 
-FL_TEMP_DICT = [
+__FL_TEMP_DICT = [
 ];
 
-module stub(
+module __stub__(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   type,
   direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])

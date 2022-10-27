@@ -105,4 +105,4 @@ holes = [fl_Hole(HOLE_CENTER,HOLE_D,HOLE_N,HOLE_DEPTH)];
 type  = constructor("Test type",bbox=bbox,holes=holes);
 
 translate(X(3))
-stub(verbs,type,direction=direction,octant=octant);
+__stub__(verbs,type,direction=direction,octant=octant);

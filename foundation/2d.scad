@@ -621,7 +621,8 @@ function __step__(angle) = sin(angle/3)==1 ? 1 : cos(angle)>0 ? 1 : -1;
 
 /*!
  * Converts «θ» value to the corresponding ellipse «t» parameter
- *
+ */
+/*
  * __NOTE:__ we need to extend the theoretical function behiond ±π/2 codomain,
  * for that we use __ramp__() and __step__() function accordingly.
  */
