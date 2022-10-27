@@ -1,5 +1,11 @@
 # package foundation/base_string
 
+string utility implementation file.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
@@ -10,6 +16,8 @@ __Default:__
 
     ["AND",function(one,other)one!=other]
 
+see [fl_list_filter()](#function-fl_list_filter) «operator» parameter
+
 ---
 
 ### variable FL_INCLUDE_ALL
@@ -17,6 +25,8 @@ __Default:__
 __Default:__
 
     ["OR",function(one,other)one==other]
+
+see [fl_list_filter()](#function-fl_list_filter) «operator» parameter
 
 ## Functions
 
@@ -39,6 +49,8 @@ __Syntax:__
 ```text
 fl_list_flatten(list)
 ```
+
+recursively flatten infinitely nested list
 
 ---
 

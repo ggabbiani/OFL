@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org).
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -19,19 +19,16 @@
 
 include <3d.scad>
 
-// engine for generating profiles
-// default octant     : O
-// default direction  : [+Z,+X]
+//! engine for generating profiles
 module fl_profile(
   verbs     = FL_ADD,
-  // preset,     // preset profiles
   type,       // "E","L","T" and "U"
   radius,     // external radius (square if undef)
   size,
   material,   // actually a color
   thick,
-  direction,  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant      // when undef native positioning is used
+  direction,  // desired direction [director,rotation], native direction when undef ([+X+Z])
+  octant      // when undef native positioning (see variable FL_O) is used
 ) {
   assert(size!=undef);
   assert(thick!=undef);
@@ -128,20 +125,26 @@ module fl_profile(
   }
 }
 
-// engine for generating bent plates
+/*!
+ * engine for generating bent plates.
+ */
 // See also https://metalfabricationsvcs.com/products/bent-plate/
-// default octant     : O
-// default direction  : [+Z,+X]
 module fl_bentPlate(
   verbs     = FL_ADD,
-  // preset,             // preset profiles
-  type,               // "L" or "U"
-  radius,             // fold internal radius (square if undef)
-  size,               // dimensioni del profilato [w,h,d]. Uno scalare s indica [s,s,s]
-  material,           // actually a color
-  thick,              // sheet thickness
-  direction,  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant      // when undef native positioning is used
+  //! "L" or "U"
+  type,
+  //! fold internal radius (square if undef)
+  radius,
+  //! dimensioni del profilato [w,h,d]. Uno scalare s indica [s,s,s]
+  size,
+  //! actually a color
+  material,
+  //! sheet thickness
+  thick,
+  //! desired direction [director,rotation], native direction when undef ([+X+Z])
+  direction,
+  //! when undef native positioning (see variable FL_O) is used
+  octant
 ) {
   assert(size!=undef);
   assert(thick!=undef);

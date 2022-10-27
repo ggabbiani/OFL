@@ -1,4 +1,4 @@
-/*
+/*!
  * Type traits implementation file.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -21,27 +21,26 @@
 
 include <base_string.scad>
 
-/**
+/*!
  * return true when «list» is a list and each item satisfy f(value)
  */
 function fl_tt_isList(
-    // list to be verified
-    list,
-    // check function
-    f=function(value) true,
-    // optional list size
-    size
-  ) = let(
-    len   = assert(is_list(list),list) len(list),
-    rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
-  )
-  (
+  //! list to be verified
+  list,
+  //! check function
+  f=function(value) true,
+  //! optional list size
+  size
+) = let(
+  len   = assert(is_list(list),list) len(list),
+  rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
+) (
     (size!=undef ? size==len : true)
     && (len>0 ? f(list[0]) : true)
     && (rest!=[] ? fl_tt_isList(rest,f) : true)
   );
 
-/**
+/*!
  * true if «string» appears in «dictionary»
  */
 function fl_tt_isInDictionary(string,dictionary,nocase=true) =
@@ -55,7 +54,7 @@ function fl_tt_isInDictionary(string,dictionary,nocase=true) =
     : string==dictionary[0]
     ) || fl_tt_isInDictionary(string,rest,nocase);
 
-/**
+/*!
  * true if «kv» is a key/value pair satisfying f(value)
  */
 function fl_tt_isKV(kv,dictionary=[],f=function (value) value!=undef) =
@@ -69,13 +68,13 @@ function fl_tt_isKV(kv,dictionary=[],f=function (value) value!=undef) =
     && is_string(key) && f(value)
   );
 
-/**
+/*!
  * true if «kv» is a key/value pair list with each item satisfying f(value)
  */
 function fl_tt_isKVList(list,dictionary=[],f=function (value) value!=undef,size) =
   fl_tt_isList(list,function(value) fl_tt_isKV(value,dictionary=dictionary,f=f),size);
 
-/*
+/*!
  * Semi-axis Key/value list
  *
  * Each item of the list is actually a key/value pair representing a value
@@ -84,7 +83,9 @@ function fl_tt_isKVList(list,dictionary=[],f=function (value) value!=undef,size)
  *
  * example:
  *
+ * ```
  * thick=[["+x",3],["-Z",1.5]];
+ * ```
  *
  * indicates a thickness of 3mm along +X and of 1.5mm along +Z.
  */
@@ -96,24 +97,28 @@ function fl_tt_isAxisKVList(list) =
     f=function(value) is_num(value)
   );
 
-/*
+/*!
  * Full semi axis value list.
  *
  * Each row represents values associated to X,Y and Z semi-axes.
  *
+ * ```
  * [
  *  [«-x value»,«+x value»],
  *  [«-y value»,«+y value»],
  *  [«-z value»,«+z value»]
  * ]
+ * ```
  *
  * example:
  *
+ * ```
  * [
  *  [0,3],
  *  [0,0],
  *  [1.5,0]
  * ]
+ * ```
  *
  * indicates a value of 3 along +X, 1.5 along -Z and 0 otherwise.
  */
@@ -126,7 +131,7 @@ function fl_tt_isAxisVList(list) =
       )
     );
 
-/**
+/*!
  * plane in point-normal format: [<3d point>,<plane normal>]
  */
 function fl_tt_isPointNormal(plane) = let(
@@ -148,14 +153,16 @@ function fl_tt_isAxisString(s) =
 
 function fl_tt_isAxis(axis) = (axis==-X||axis==+X||axis==-Y||axis==+Y||axis==-Z||axis==+Z);
 
-/*
+/*!
  * Floating semi-axis list.
  *
  * One row with matricial representation of cartesian semi-axes in whatever order.
  *
  * example:
  *
+ * ```
  * [-X,+Z,-Y]
+ * ```
  */
 function fl_tt_isAxisList(list) =
   fl_tt_isList(list,f=function(axis) fl_tt_isAxis(axis));

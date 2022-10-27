@@ -1,4 +1,4 @@
-/*
+/*!
  * string utility implementation file.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -39,7 +39,7 @@ function fl_str_lower(s) = let(
     ) lc
   : str(fl_str_lower(s[0]),fl_str_lower([for(i=[1:len-1]) s[i]]));
 
-// recursively flatten infinitely nested list
+//! recursively flatten infinitely nested list
 function fl_list_flatten(list) =
   assert(is_list(list))
   [
@@ -47,7 +47,9 @@ function fl_list_flatten(list) =
       for (i=sub) i
   ];
 
+//! see fl_list_filter() «operator» parameter
 FL_EXCLUDE_ANY  = ["AND",function(one,other) one!=other];
+//! see fl_list_filter() «operator» parameter
 FL_INCLUDE_ALL  = ["OR", function(one,other) one==other];
 
 function fl_list_filter(list,operator,compare,__result__=[],__first__=true) =

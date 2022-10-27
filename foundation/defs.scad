@@ -152,13 +152,16 @@ function fl_Rz(theta) = [
 //! composite rotation around X then Y then Z axis
 function fl_Rxyz(angle) = fl_Rz(angle.z) * fl_Ry(angle.y) * fl_Rx(angle.x);
 
-/*
+/*!
  * rotation matrix about arbitrary axis.
+ *
  * TODO: check with more efficient alternative [here](https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724)
  */
 function fl_R(
-  u,      // arbitrary axis
-  theta   // rotation angle around u
+  //! arbitrary axis
+  u,
+  //! rotation angle around «u»
+  theta
 ) =
   let(M = fl_align(u,FL_X))
   matrix_invert(M)  // align X to «u»
@@ -186,7 +189,8 @@ function fl_isSet(flag,list) = search([flag],list)!=[[]];
 FL_ADD        = "FL_ADD add base shape (no components nor screws)";
 /*!
  * add predefined component shape(s).
- * __NOTE:__ this operation doesn't include screws, for these see variable FL_MOUNT
+ *
+ * **NOTE:** this operation doesn't include screws, for these see variable FL_MOUNT
  */
 FL_ASSEMBLY   = "FL_ASSEMBLY add predefined component shape(s)";
 //! draws local reference axes
@@ -204,11 +208,17 @@ FL_DRAW       = [FL_ADD,FL_ASSEMBLY];
 FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter)";
 //! adds a footprint to scene, usually a simplified ADD operation (see variable FL_ADD)
 FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD";
+//! adds vitamine holders to the scene. **Warning** this verb is **DEPRECATED**
 FL_HOLDERS    = "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**";
+//! layout of user passed accessories (like alternative screws)
 FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws)";
+//! mount shape through predefined screws
 FL_MOUNT      = "FL_MOUNT mount shape through predefined screws";
+//! adds a box representing the payload of the shape
 FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
+//! is a test verb for library development
 FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
+//! is a test verb for library development
 FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
 
 // Runtime behaviour defaults
@@ -224,11 +234,11 @@ $FL_LAYOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_PAYLOAD   = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/*
+/*!
  * Modifier module for verbs.
  */
 module fl_modifier(
-  // "OFF","ON","ONLY","DEBUG","TRANSPARENT"
+  //! "OFF","ON","ONLY","DEBUG","TRANSPARENT"
   behaviour,
   reset=true
 ) {
@@ -253,7 +263,7 @@ module fl_modifier(
   else assert(false,str("Unknown behaviour ('",behaviour,"')."));
 }
 
-// deprecated function call
+//! deprecated function call
 function fl_deprecated(bad,value,replacement) = let(
     complain  = str("***DEPRECATED***: ", bad, " is deprecated and ", replacement!=undef ? str("will be replaced by ", replacement, " in next major release.") : "WILL NOT BE REPLACED.")
   ) echo(complain) value;
@@ -303,27 +313,28 @@ function fl_has(type,property,check=function(value) true) =
   let(i=search([property],type))
   i != [[]] ? assert(len(type[i[0]])==2,"Malformed type") check(type[i[0]][1]) : false;
 
-/**
- * manage verbs parsing, placement, orientation and fl_axes()
+/*!
+ * manage verbs parsing, placement, orientation and fl_axes{}
  *
  * children context:
- *  $verb      - current parsed verb
- *  $modifier  - current verb modifier
+ *
+ * - $verb    : current parsed verb
+ * - $modifier: current verb modifier
  */
 module fl_manage(
-    // verb list
+    //! verb list
     verbs,
-    // placement matrix
+    //! placement matrix
     placement,
-    // orientation matrix
+    //! orientation matrix
     direction,
-    // size used for fl_axes()
+    //! size used for fl_axes{}
     size,
-    // see constructor fl_parm_Debug()
+    //! see constructor fl_parm_Debug()
     debug,
-    // list of connectors to debug
+    //! list of connectors to debug
     connectors,
-    // list of holes to debug
+    //! list of holes to debug
     holes
   ) {
     placement = placement ? placement : FL_I;
@@ -384,7 +395,7 @@ module fl_manage(
   }
 }
 
-/*
+/*!
  * Applies a Rotation Matrix for aligning fl_vector A (from) to fl_vector B (to).
  *
  * Taken from
@@ -438,14 +449,14 @@ module fl_align(from,to) {
   }
 }
 
-// Aligns children from u1 to u2 and move to position
+//! Aligns children from u1 to u2 and move to position
 module fl_overlap(u1,u2,position) {
   translate(position)
     fl_align(u1,u2)
       children();
 }
 
-// Draws a fl_vector [out|in]ward P
+//! Draws a fl_vector [out|in]ward P
 module fl_vector(P,outward=true,endpoint="arrow",ratio=20) {
   assert(is_list(P));
   length  = norm(P);
@@ -467,7 +478,7 @@ module fl_vector(P,outward=true,endpoint="arrow",ratio=20) {
   }
 }
 
-// Draws a fl_versor facing point P
+//! Draws a fl_versor facing point P
 module fl_versor(P) {
   fl_vector(fl_versor(P));
 }
@@ -482,9 +493,9 @@ module fl_axes(size=1,reverse=false) {
   if (sz.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
 
-/*
- * Set current color and alpha channel, using $fl_filament when «color» is
- * undef. When $fl_debug is true, color information is ignored and debug
+/*!
+ * Set current color and alpha channel, using variable $fl_filament when «color» is
+ * undef. When variable $fl_debug is true, color information is ignored and debug
  * modifier is applied to children().
  */
 module fl_color(color=fl_filament(),alpha=1) {
@@ -506,26 +517,26 @@ function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : u
 function fl_parse_radius(r,r1,d,d1,def)    = (r!=undef ? r : (r1!=undef ? r1 : (d!=undef ? d/2 : (d1!=undef ? d1/2:undef))));
 function fl_parse_diameter(r,r1,d,d1,def)  = (d!=undef ? d : (d1!=undef ? d1 : (r!=undef ? 2*r : (r1!=undef ? 2*r1:undef))));
 
-/* true when n is multiple of m */
+/*! true when n is multiple of m */
 function fl_isMultiple(n,m) = (n % m == 0);
 
-/* true when n is even */
+/*! true when n is even */
 function fl_isEven(n) = fl_isMultiple(n,2);
 
-/* true when n is odd */
+/*! true when n is odd */
 function fl_isOdd(n) = !fl_isEven(n);
 
-// transforms 3D to 2D coords
+//! transforms 3D to 2D coords
 function fl_2(v) =
   assert(len(v)>1)
   [v.x,v.y];
 
-// transforms homogeneous to 3D coords
+//! transforms homogeneous to 3D coords
 function fl_3(v)  =
   assert(len(v)>2)
   len(v)==3 ? v : [v.x,v.y,v.z] / v[3];
 
-// transforms 3D coords to homogeneous
+//! transforms 3D coords to homogeneous
 function fl_4(v)  =
   assert(len(v)>2)
   len(v)==3 ? [v.x,v.y,v.z,1] : v / v[3];
@@ -536,8 +547,10 @@ function fl_4(v)  =
  * **NOTE:** result in 3d format
  */
 function fl_transform(
-  M,// 4x4 transformation matrix
-  v // fl_vector (in homogeneous or 3d format)
+  //! 4x4 transformation matrix
+  M,
+  //! fl_vector (in homogeneous or 3d format)
+  v
 ) =
   assert(len(M)==4 && len(M[0])==4,str("Bad matrix M(",M,")"))
   assert(is_list(v) && len(v)>2,str("Bad vector v(",v,")"))

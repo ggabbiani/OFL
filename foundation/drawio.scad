@@ -1,5 +1,6 @@
-/*
+/*!
  * Draw.io helpers.
+ * This module is **DEPRECATED** and will be removed in a future.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -21,12 +22,15 @@
 
 include <2d.scad>
 
-// Y invert and scale to size from draw.io coords
-// Draw.io store geometries in the domain [0..1]
-// So the final size is just a scale operation.
-// Expressing an actual size in the span [0..1] is
-// just a matter of dividing the actual size for the
-// global X or Y length.
+/*!
+ * Y invert and scale to size from draw.io coords.
+ *
+ * Draw.io stores geometries in the domain [0..1], so the final size is just a
+ * scale operation.
+ *
+ * Expressing an actual size in the span [0..1] is just a matter of dividing
+ * the actual size for the global X or Y length.
+ */
 function dio_polyCoords(points,size) =
   assert(points!=undef && is_list(points))
   assert(size!=undef && is_list(size))
@@ -39,10 +43,14 @@ function dio_polyCoords(points,size) =
   [for(p=points)  M * p];
 
 module dio_polyCoords(
-  verbs=FL_ADD, // FL_ADD,FL_AXIS,FL_BBOX
-  points,       // 2d point list as provided by the Base Polygon Draw.io shape
-  size,         // 2d size
-  quadrant      // native positioning when undef
+  //! FL_ADD,FL_AXIS,FL_BBOX
+  verbs=FL_ADD,
+  //! 2d point list as provided by the Base Polygon Draw.io shape
+  points,
+  //! 2d size
+  size,
+  //! native positioning when undef
+  quadrant
 ) {
   points  = dio_polyCoords(points,size);
   bbox    = fl_bb_polygon(points);

@@ -1,4 +1,6 @@
-/*
+/*!
+ * utility toolkit for connecting objects
+ *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -68,30 +70,30 @@ function conn_Socket(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0]) =
     fl_conn_loct(value=octant),
   ];
 
-// massive connection clone eventually transformed
+//! massive connection clone eventually transformed
 function fl_conn_import(conns,M) = [for(c=conns) fl_conn_clone(c,M=M)];
 
-// returns a copy of the given connection with eventual rewriting of attributes
+//! returns a copy of the given connection with eventual rewriting of attributes
 function fl_conn_clone(
-  // MANDATORY original connection to be cloned
+  //! MANDATORY original connection to be cloned
   original,
-  // OPTIONAL new connection type ("socket" or "plug")
+  //! OPTIONAL new connection type ("socket" or "plug")
   type,
-  // OPTIONAL new connection id
+  //! OPTIONAL new connection id
   id,
-  // OPTIONAL new orientation X
+  //! OPTIONAL new orientation X
   ox,
-  // OPTIONAL new orientation Y
+  //! OPTIONAL new orientation Y
   oy,
-  // OPTIONAL new position
+  //! OPTIONAL new position
   pos,
-  // OPTIONAL new size
+  //! OPTIONAL new size
   size,
-  // OPTIONAL label octant
+  //! OPTIONAL label octant
   octant,
-  // OPTIONAL label [direction,rotation]
+  //! OPTIONAL label [direction,rotation]
   direction,
-  // OPTIONAL transformation matrix for position transformation
+  //! OPTIONAL transformation matrix for position transformation
   M=I
 ) =
   assert(original!=undef)
@@ -128,7 +130,7 @@ function fl_conn_clone(
   assert(x_3*y_3==0,"Resulting orientation fl_axes are not orthogonal")
   type=="plug" ? conn_Plug(id,x_3,y_3,p_3,size,octant,direction) : conn_Socket(id,x_3,y_3,p_3,size,octant,direction);
 
-/**
+/*!
  * Returns the transformation matrix moving child shape to its parent
  * coherently with their respective connection geometries.
  * Child can be thought as a mobile socket/plug jointing a fixed plug/socket
@@ -145,9 +147,9 @@ function fl_conn_clone(
  * [director,rotor] instead.
  */
 function fl_connect(
-  // child to be moved, either a connector or a list [child object,connector number]
+  //! child to be moved, either a connector or a list [child object,connector number]
   son,
-  // fixed parent, either a connector or a list [parent object,connector number]
+  //! fixed parent, either a connector or a list [parent object,connector number]
   parent
   ) = let(
     son_c = len(son)==2     ? fl_connectors(son[0])[son[1]]       : son,
@@ -162,17 +164,18 @@ function fl_connect(
     par_pos       = fl_conn_pos(par_c)
   ) T(+par_pos) * fl_planeAlign(son_ox,son_oy,par_ox,par_oy) * T(-son_pos);
 
-/**
+/*!
  * See function fl_connect() for docs.
  *
  * Children context:
- * $con_child   - OPTIONAL child object (undef when direct connector is passed)
- * $con_parent  - OPTIONAL parent object (undef when direct connector is passed)
+ *
+ * - $con_child : OPTIONAL child object (undef when direct connector is passed)
+ * - $con_parent: OPTIONAL parent object (undef when direct connector is passed)
  */
 module fl_connect(
-  // child to be moved, can be either a connector or a list [object,connector number]
+  //! child to be moved, can be either a connector or a list [object,connector number]
   son,
-  // fixed parent, can be either a connector or a list [object,connector number]
+  //! fixed parent, can be either a connector or a list [object,connector number]
   parent
   ) {
   son_c       = len(son)==2 ? fl_connectors(son[0])[son[1]] : son;
@@ -194,7 +197,7 @@ module fl_connect(
   ) multmatrix(M) children();
 }
 
-// Adds proper connection symbol (plug or socket) to the scene
+//! Adds proper connection symbol (plug or socket) to the scene
 module fl_conn_add(connector,size,label) {
   assert(connector!=undef);
   fl_conn_Context(connector)
@@ -202,22 +205,22 @@ module fl_conn_add(connector,size,label) {
       fl_symbol(size=size,symbol=$conn_type);
 }
 
-/**
+/*!
  * Prepares context for children() connectors
  *
- * $conn_i      - OPTIONAL connection number
- * $conn_ox     - X axis
- * $conn_oy     - Y axis
- * $conn_label  - OPTIONAL string label
- * $conn_ldir   - [direction,rotation]
- * $conn_loct   - label octant
- * $conn_pos    - position
- * $conn_size   - OPTIONAL connector size
- * $conn_type   - connector type
+ * - $conn_i    : OPTIONAL connection number
+ * - $conn_ox   : X axis
+ * - $conn_oy   : Y axis
+ * - $conn_label: OPTIONAL string label
+ * - $conn_ldir : [direction,rotation]
+ * - $conn_loct : label octant
+ * - $conn_pos  : position
+ * - $conn_size : OPTIONAL connector size
+ * - $conn_type : connector type
  */
 module fl_conn_Context(
   connector,
-  // OPTIONAL connection number
+  //! OPTIONAL connection number
   ordinal
 ) {
   $conn_i     = ordinal;
@@ -233,25 +236,26 @@ module fl_conn_Context(
   children();
 }
 
-/**
+/*!
  * Layouts children along a list of connectors.
- * See fl_conn_Context() for context variables passed to children().
+ *
+ * See fl_conn_Context{} for context variables passed to children().
  */
 module fl_lay_connectors(
-  // list of connectors
+  //! list of connectors
   conns
 ) for(i=[0:len(conns)-1])
     fl_conn_Context(conns[i],i)
       multmatrix(T($conn_pos)*fl_planeAlign(X,Y,$conn_ox,$conn_oy))
         children();
 
-/**
+/*!
  * Layouts connector symbols.
  */
 module fl_conn_debug(
-  // list of connectors
+  //! list of connectors
   conns,
-  // see constructor fl_parm_Debug()
+  //! see constructor fl_parm_Debug()
   debug
 ) {
     fl_lay_connectors(conns) union() {

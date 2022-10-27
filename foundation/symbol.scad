@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -27,30 +27,30 @@ module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
   fl_symbol(verbs,type,size,"socket");
 }
 
-/**
+/*!
  * provides the symbol required in its 'canonical' form:
- * "plug": 'a piece that fits into a hole in order to close it'
- *        Its canonical form implies an orientation of the piece coherent
- *        with its insertion movement along +Z axis.
- * "socket": 'a part of the body into which another part fits'
- *        Its canonical form implies an orientation of the piece coherent
- *        with its fitting movement along -Z axis.
+ * - "plug": 'a piece that fits into a hole in order to close it'
+ *          Its canonical form implies an orientation of the piece coherent
+ *          with its insertion movement along +Z axis.
+ * - "socket": 'a part of the body into which another part fits'
+ *          Its canonical form implies an orientation of the piece coherent
+ *          with its fitting movement along -Z axis.
  *
- * FL_LAYOUT is used for proper label orientation
+ * variable FL_LAYOUT is used for proper label orientation
  *
  * Children context:
  *
- * $sym_ldir  - [axis,angle]
- * $sym_size  - size in 3d format
+ * - $sym_ldir: [axis,angle]
+ * - $sym_size: size in 3d format
  */
 module fl_symbol(
-  // supported verbs: FL_ADD, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_LAYOUT
   verbs   = FL_ADD,
   // really needed?
   type    = undef,
-  // default size given as a scalar
+  //! default size given as a scalar
   size    = 0.5,
-  // currently "plug" or "socket"
+  //! currently "plug" or "socket"
   symbol
   ) {
   assert(verbs!=undef);
@@ -107,12 +107,13 @@ module fl_symbol(
   }
 }
 
-/**
+/*!
  * this symbol uses as input a complete node context.
+ *
  * The symbol is oriented according to the hole normal.
  */
 module fl_sym_hole(
-  // supported verbs: FL_ADD
+  //! supported verbs: FL_ADD
   verbs = FL_ADD
 ) {
   radius  = $hole_d/2;

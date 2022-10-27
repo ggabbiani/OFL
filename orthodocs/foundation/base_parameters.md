@@ -1,5 +1,11 @@
 # package foundation/base_parameters
 
+Common parameter helpers
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Functions
 
 ---
@@ -12,6 +18,8 @@ __Syntax:__
 fl_asserts()
 ```
 
+When true [fl_assert()](defs.md#function-fl_assert) is enabled
+
 ---
 
 ### function fl_debug
@@ -21,6 +29,8 @@ __Syntax:__
 ```text
 fl_debug()
 ```
+
+When true debug statements are turned on
 
 ---
 
@@ -32,6 +42,8 @@ __Syntax:__
 fl_filament()
 ```
 
+Default color for printable items (i.e. artifacts)
+
 ---
 
 ### function fl_parm_Debug
@@ -41,6 +53,17 @@ __Syntax:__
 ```text
 fl_parm_Debug(labels=false,symbols=false)
 ```
+
+contructor for debug context parameter
+
+__Parameters:__
+
+__labels__  
+when true, labels to symbols are assigned and displayed
+
+__symbols__  
+when true symbols are displayed
+
 
 ---
 
@@ -52,6 +75,8 @@ __Syntax:__
 fl_parm_labels(debug)
 ```
 
+When true debug labels are turned on
+
 ---
 
 ### function fl_parm_symbols
@@ -61,4 +86,6 @@ __Syntax:__
 ```text
 fl_parm_symbols(debug)
 ```
+
+When true debug symbols are turned on
 

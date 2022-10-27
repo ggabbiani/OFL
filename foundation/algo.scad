@@ -3,8 +3,8 @@
  *
  * __TODO:__
  *
- * 1) better example (SATA plug?)
- * 2) orientation?
+ * 1. better example (SATA plug?)
+ * 2. orientation?
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *

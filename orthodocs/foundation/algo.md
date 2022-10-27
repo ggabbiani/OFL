@@ -11,8 +11,8 @@ General algorithm package.
 
 __TODO:__
 
-1) better example (SATA plug?)
-2) orientation?
+1. better example (SATA plug?)
+2. orientation?
 
 
 

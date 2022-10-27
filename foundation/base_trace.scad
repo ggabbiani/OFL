@@ -1,4 +1,4 @@
-/*
+/*!
  * Base tracing helpers.
  *
  * Copyright © 2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -21,10 +21,10 @@
 
 include <TOUL.scad> // TOUL       : The OpenScad Usefull Library
 
-/**
+/*!
  * trace helper function.
  *
- * See module fl_trace().
+ * See module fl_trace{}.
  */
 function fl_trace(msg,result,always=false) = let(
   call_chain  = strcat([for (i=[$parent_modules-1:-1:0]) parent_module(i)],"->"),
@@ -34,17 +34,18 @@ function fl_trace(msg,result,always=false) = let(
   ? echo(mdepth,str(call_chain,": ",msg,"==",result)) result
   : result;
 
-/**
+/*!
  * trace helper module.
  *
  * prints «msg» prefixed by its call order either if «always» is true or if its
  * current call order is ≤ $FL_TRACES.
  *
  * Used $special variables:
- *  $FL_TRACE affects trace messages according to its value:
- *    -2    - all traces disabled
- *    -1    - all traces enabled
- *    [0,∞) - traces with call order ≤ $FL_TRACES are enabled
+ *
+ * - $FL_TRACE affects trace messages according to its value:
+ *   - -2   : all traces disabled
+ *   - -1   : all traces enabled
+ *   - [0,∞): traces with call order ≤ $FL_TRACES are enabled
  */
 module fl_trace(
   // message to be printed

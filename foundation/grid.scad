@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -20,13 +20,13 @@
 include <3d.scad>
 
 function fl_grid_quad(
-  // bounding box relative grid origin
+  //! bounding box relative grid origin
   origin=[0,0],
-  // 2d deltas
+  //! 2d deltas
   step,
-  // used for clipping the out of region points
+  //! used for clipping the out of region points
   bbox,
-  // generator (default generator just returns its center resulting in a quad grid ... hence the name)
+  //! generator (default generator just returns its center resulting in a quad grid ... hence the name)
   generator=function(x,y,bbox) [[x,y]]
 ) = let(
   low   = bbox[0],
@@ -39,11 +39,11 @@ function fl_grid_quad(
   ];
 
 function fl_grid_hex(
-  // bounding box relative grid origin
+  //! bounding box relative grid origin
   origin=[0,0],
-  // scalar radial step
+  //! scalar radial step
   r_step,
-  // used for clipping the out of region points
+  //! used for clipping the out of region points
   bbox
 ) = assert(is_num(r_step))
   let(
@@ -64,13 +64,13 @@ function fl_grid_hex(
   fl_grid_quad(origin,size,bbox,generator);
 
 module fl_grid_layout(
-  // grid origin relative to bounding box
+  //! grid origin relative to bounding box
   origin=[0,0],
-  // 2d deltas for quad grid
+  //! 2d deltas for quad grid
   step,
-  // scalar radial step for hex grid
+  //! scalar radial step for hex grid
   r_step,
-  // used for clipping the out of region points
+  //! used for clipping the out of region points
   bbox,
   clip=true
 ) {

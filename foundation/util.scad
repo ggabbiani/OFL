@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org).
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -21,9 +21,10 @@ include <3d.scad>
 
 include <NopSCADlib/lib.scad>
 
-// use children(0) for making a rail
+//! use children(0) for making a rail
 module fl_rail(
-  length  // when undef or 0 rail degenerates into children(0)
+  //! when undef or 0 rail degenerates into children(0)
+  length
 ) {
   len = length ? length : 0;
   rotate(-90,FL_X)
@@ -37,13 +38,20 @@ module fl_rail(
 }
 
 module fl_cutout(
-   len          // cutout length
-  ,z=Z          // axis to use as Z (detects the cutout plane on Z==0)
-  ,x=X          // axis to use as X
-  ,trim=[0,0,0] // translation applied BEFORE projection() useful for trimming when cut=true
-  ,cut=false    // when true only the cutout plane is used for section
-  ,debug=false  // echo of children() when true
-  ,delta=0      // specifies the distance of the new outline from the original outline
+  //! cutout length
+  len,
+  //! axis to use as Z (detects the cutout plane on Z==0)
+  z=Z,
+  //! axis to use as X
+  x=X,
+  //! translation applied BEFORE projection() useful for trimming when cut=true
+  trim=[0,0,0],
+  //! when true only the cutout plane is used for section
+  cut=false,
+  //! echo of children() when true
+  debug=false,
+  //! specifies the distance of the new outline from the original outline
+  delta=0
   ) {
   fl_planeAlign(Z,X,z,x)
     linear_extrude(len)
@@ -58,24 +66,35 @@ module fl_cutout(
 function fl_bend_sheet(type,value)    = fl_property(type,"bend/sheet",value);
 function fl_bend_faceSet(type,value)  = fl_property(type,"bend/face set",value);
 
-/**
- * folding objects contain bending information
- * «faces» is used for mapping each surface sizings and calculating the total size of the sheet.
+/*!
+ * folding objects contain bending information.
+ *
+ * «faces» is used for mapping each surface sizings and calculating the total
+ * size of the sheet.
+ *
  * The folding object is then created with the overall sheet bounding box.
  *
  */
 function fl_folding(
-  // key/value list of face sizings:
-  // key    = one of the six cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
-  // value  = 3d size [x-size,y-size,z-size]
-  // Missing faces means 0-sized.
-  // Examples
-  // face=[
-  //  [-X, [28, 78, 0.5]],
-  //  [+Z, [51, 78, 0.5]],
-  //  [+Y, [51, 28, 0.5]],
-  //  [-Y, [51,  9, 0.5]],
-  // ]
+  /*
+   * key/value list of face sizings:
+   *
+   * - key  : one of the six cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
+   * - value: 3d size [x-size,y-size,z-size]
+   *
+   * Missing faces means 0-sized.
+   *
+   * Examples
+   *
+   * ```
+   * face=[
+   *  [-X, [28, 78, 0.5]],
+   *  [+Z, [51, 78, 0.5]],
+   *  [+Y, [51, 28, 0.5]],
+   *  [-Y, [51,  9, 0.5]],
+   * ]
+   * ```
+   */
   faces,
   material  = "silver"
 ) = let(
@@ -105,11 +124,12 @@ function fl_folding(
     fl_director(value=FL_Z),fl_rotor(value=FL_X),
   ];
 
-/*
+/*!
  * 3d surface bending on rectangular cuboid faces.
  *
  * Children context:
  *
+ * ```
  *
  *                        N           M
  *                         +=========+                  ✛ ⇐ upper corner
@@ -126,30 +146,24 @@ function fl_folding(
  *                         |   -Y    |
  * lower corner ⇒ ✛       +=========+
  * (at origin)            O           P
+ * ```
  *
- * $sheet - an object containing the calculated bounding corners of the sheet
- * $A..$N - 3d values of the corresponding points in the above picture
- * $size  - list of six surface sizings in the order shown in the picture
- * $fid   - current face id
+ * - $sheet : an object containing the calculated bounding corners of the sheet
+ * - $A..$N : 3d values of the corresponding points in the above picture
+ * - $size  : list of six surface sizings in the order shown in the picture
+ * - $fid   : current face id
  *
  */
 module fl_bend(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
-  // bend type as constructed from function fl_folding()
+  //! bend type as constructed from function fl_folding()
   type,
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  // verbs       = FL_ADD,
-  // key/value list of face sizing:
-  // key    = one of the eight cartesian semi axes (+X=[1,0,0], -Z=[0,0,1])
-  // value  = 3d size [x-size,y-size,z-size]
-  // Missing faces means 0-sized.
-  // faces,
-  // when true children 3d surface is not bent
+  //! when true children 3d surface is not bent
   flat=false,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   assert(type!=undef);

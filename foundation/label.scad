@@ -1,6 +1,4 @@
-/*
- * Template file for OpenSCAD Foundation Library.
- *
+/*!
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -21,7 +19,7 @@
 
 include <3d.scad>
 
-/**
+/*!
  * mimics standard resize() module behaviour
  */
 // TODO: either remove or move elsewhere
@@ -35,7 +33,7 @@ function fl_resize(oldsize,newsize,auto=false) =
   ) leader  ? [for(i=[0:len-1]) auto[i] ? leader*oldsize[i] : newsize[i] ? newsize[i] : oldsize[i]]
             : [newsize.x ? newsize.x : oldsize.x,newsize.y ? newsize.y : oldsize.y,newsize.z ? newsize.z : oldsize.z];
 
-/**
+/*!
  * modify position according to size modifications
  */
 // TODO: likely to be removed
@@ -49,19 +47,19 @@ function fl_repos(oldpos,oldsize,newsize) =
   ) [for(i=[0:len-1]) facts[i]*oldpos[i]];
 
 module fl_label(
-  // supported verbs: FL_ADD, FL_AXES
+  //! supported verbs: FL_ADD, FL_AXES
   verbs   = FL_ADD,
   string,
   fg      = "white",
-  // font y-size
+  //! font y-size
   size,
-  // depth along z-axis
+  //! depth along z-axis
   thick,
-  // extra delta to add to octant placement
+  //! extra delta to add to octant placement
   extra=0,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
-  // desired direction [director,rotation] or native direction if undef
+  //! desired direction [director,rotation] or native direction if undef
   direction
 ) {
   assert(is_list(verbs)||is_string(verbs));

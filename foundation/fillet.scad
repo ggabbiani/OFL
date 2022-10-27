@@ -1,4 +1,4 @@
-/*
+/*!
  * Fillet primitives.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -22,12 +22,19 @@
 include <3d.scad>
 
 module fl_vFillet(
-  verbs   = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX
-  r,          // shortcut for «rx»/«ry»
+  //! FL_ADD, FL_AXES, FL_BBOX
+  verbs   = FL_ADD,
+  //! shortcut for «rx»/«ry»
+  r,
   h,
-  rx,ry,      // ellipse's radius
-  direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
-  octant      // when undef native positioning is used (+Z)
+  //! ellipse's horizontal radius
+  rx,
+  //! ellipse's vertical radius
+  ry,
+  //! desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
+  direction,
+  //! when undef native positioning is used (+Z)
+  octant
   ) {
   rx      = r ? r : rx;
   ry      = r ? r : ry;
@@ -36,12 +43,19 @@ module fl_vFillet(
 }
 
 module fl_hFillet(
-  verbs   = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX
-  r,          // shortcut for «rx»/«ry»
+  //! FL_ADD, FL_AXES, FL_BBOX
+  verbs   = FL_ADD,
+  //! shortcut for «rx»/«ry»
+  r,
   h,
-  rx,ry,      // ellipse's radius
-  direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
-  octant      // when undef native positioning is used (+Z)
+  //! ellipse's horizontal radius
+  rx,
+  //! ellipse's vertical radius
+  ry,
+  //! desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
+  direction,
+  //! when undef native positioning is used (+Z)
+  octant
   ) {
   default = [+Z,+X];  // default director and rotor
   rx      = r ? r : rx;
@@ -68,12 +82,19 @@ module fl_hFillet(
 }
 
 module fl_fillet(
-  verbs   = FL_ADD, // FL_ADD, FL_AXES, FL_BBOX
-  r,          // shortcut for «rx»/«ry»
+  //! FL_ADD, FL_AXES, FL_BBOX
+  verbs   = FL_ADD,
+  //! shortcut for «rx»/«ry»
+  r,
   h,
-  rx,ry,      // ellipse's radius
-  direction,  // desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
-  octant      // when undef native positioning is used (+Z)
+  //! ellipse's horizontal radius
+  rx,
+  //! ellipse's vertical radius
+  ry,
+  //! desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
+  direction,
+  //! when undef native positioning is used (+Z)
+  octant
   ) {
   default = [+Z,+X];  // default director and rotor
   rx      = r ? r : rx;
@@ -106,20 +127,27 @@ module fl_fillet(
 function __3d__(p)  = [p.x,p.y,0];
 
 function fl_bb_90DegFillet(
-  r,                  // fillet radius
-  n,                  // number of steps along Z axis
-  child_bbox,         // bounding box od the object to apply the fillet to
+  //! fillet radius
+  r,
+  //! number of steps along Z axis
+  n,
+  //! bounding box of the object to apply the fillet to
+  child_bbox,
 ) = [__3d__(child_bbox[0])-[r,r,0],__3d__(child_bbox[1])+[r,r,r]];
 
-// 90 Degree fillet taken from:
-// https://forum.openscad.org/Fillet-With-Internal-Angles-td17201.html
+/*! 90 Degree fillet taken from [OpenSCAD - Fillet With Internal Angles](https://forum.openscad.org/Fillet-With-Internal-Angles-td17201.html) */
 module fl_90DegFillet(
   verbs = FL_ADD,
-  r,                  // fillet radius
-  n,                  // number of steps along Z axis
-  child_bbox,         // 2D bounding box of the object to apply the fillet to
-  direction,          // desired direction [director,rotation], [+Z,0°] native direction when undef
-  octant,             // 3d placement, children positioning when undef
+  //! fillet radius
+  r,
+  //! number of steps along Z axis
+  n,
+  //! 2D bounding box of the object to apply the fillet to
+  child_bbox,
+  //! desired direction [director,rotation], [+Z,0°] native direction when undef
+  direction,
+  //! 3d placement, children positioning when undef
+  octant,
 ) {
   assert(child_bbox!=undef);
 

@@ -130,7 +130,8 @@ __Default:__
     "FL_ASSEMBLY add predefined component shape(s)"
 
 add predefined component shape(s).
-__NOTE:__ this operation doesn't include screws, for these see [variable FL_MOUNT](#variable-fl_mount)
+
+**NOTE:** this operation doesn't include screws, for these see [variable FL_MOUNT](#variable-fl_mount)
 
 
 ---
@@ -170,6 +171,8 @@ layout of predefined cutout shapes (±X,±Y,±Z)
 __Default:__
 
     "FL_DEPRECATED is a test verb. **DEPRECATED**"
+
+is a test verb for library development
 
 ---
 
@@ -211,6 +214,8 @@ __Default:__
 
     "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**"
 
+adds vitamine holders to the scene. **Warning** this verb is **DEPRECATED**
+
 ---
 
 ### variable FL_I
@@ -229,6 +234,8 @@ __Default:__
 
     "FL_LAYOUT layout of user passed accessories (like alternative screws)"
 
+layout of user passed accessories (like alternative screws)
+
 ---
 
 ### variable FL_MOUNT
@@ -236,6 +243,8 @@ __Default:__
 __Default:__
 
     "FL_MOUNT mount shape through predefined screws"
+
+mount shape through predefined screws
 
 ---
 
@@ -273,6 +282,8 @@ __Default:__
 
     "FL_OBSOLETE is a test verb. **OBSOLETE**"
 
+is a test verb for library development
+
 ---
 
 ### variable FL_PAYLOAD
@@ -280,6 +291,8 @@ __Default:__
 __Default:__
 
     "FL_PAYLOAD adds a box representing the payload of the shape"
+
+adds a box representing the payload of the shape
 
 ---
 
@@ -353,6 +366,8 @@ __Syntax:__
 fl_2(v)
 ```
 
+transforms 3D to 2D coords
+
 ---
 
 ### function fl_3
@@ -362,6 +377,8 @@ __Syntax:__
 ```text
 fl_3(v)
 ```
+
+transforms homogeneous to 3D coords
 
 ---
 
@@ -373,6 +390,8 @@ __Syntax:__
 fl_4(v)
 ```
 
+transforms 3D coords to homogeneous
+
 ---
 
 ### function fl_R
@@ -382,6 +401,20 @@ __Syntax:__
 ```text
 fl_R(u,theta)
 ```
+
+rotation matrix about arbitrary axis.
+
+TODO: check with more efficient alternative [here](https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724)
+
+
+__Parameters:__
+
+__u__  
+arbitrary axis
+
+__theta__  
+rotation angle around «u»
+
 
 ---
 
@@ -521,6 +554,12 @@ __Syntax:__
 fl_align(from,to)
 ```
 
+Applies a Rotation Matrix for aligning fl_vector A (from) to fl_vector B (to).
+
+Taken from
+[How to Calculate a Rotation Matrix to Align Vector A to Vector B in 3D](https://gist.github.com/kevinmoran/b45980723e53edeb8a5a43c49f134724)
+
+
 ---
 
 ### function fl_assert
@@ -550,6 +589,8 @@ __Syntax:__
 ```text
 fl_deprecated(bad,value,replacement)
 ```
+
+deprecated function call
 
 ---
 
@@ -631,6 +672,8 @@ __Syntax:__
 fl_isEven(n)
 ```
 
+true when n is even */
+
 ---
 
 ### function fl_isMultiple
@@ -641,6 +684,8 @@ __Syntax:__
 fl_isMultiple(n,m)
 ```
 
+true when n is multiple of m */
+
 ---
 
 ### function fl_isOdd
@@ -650,6 +695,8 @@ __Syntax:__
 ```text
 fl_isOdd(n)
 ```
+
+true when n is odd */
 
 ---
 
@@ -854,6 +901,15 @@ Returns M * v , actually transforming v by M.
 **NOTE:** result in 3d format
 
 
+__Parameters:__
+
+__M__  
+4x4 transformation matrix
+
+__v__  
+fl_vector (in homogeneous or 3d format)
+
+
 ---
 
 ### function fl_vendor
@@ -928,6 +984,11 @@ __Syntax:__
 
     fl_color(color=fl_filament(),alpha=1)
 
+Set current color and alpha channel, using variable $fl_filament when «color» is
+undef. When variable $fl_debug is true, color information is ignored and debug
+modifier is applied to children().
+
+
 ---
 
 ### module fl_manage
@@ -935,6 +996,38 @@ __Syntax:__
 __Syntax:__
 
     fl_manage(verbs,placement,direction,size,debug,connectors,holes)
+
+manage verbs parsing, placement, orientation and [fl_axes{}](#module-fl_axes)
+
+children context:
+
+- $verb    : current parsed verb
+- $modifier: current verb modifier
+
+
+__Parameters:__
+
+__verbs__  
+verb list
+
+__placement__  
+placement matrix
+
+__direction__  
+orientation matrix
+
+__size__  
+size used for [fl_axes{}](#module-fl_axes)
+
+__debug__  
+see constructor [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
+
+__connectors__  
+list of connectors to debug
+
+__holes__  
+list of holes to debug
+
 
 ---
 
@@ -944,6 +1037,15 @@ __Syntax:__
 
     fl_modifier(behaviour,reset=true)
 
+Modifier module for verbs.
+
+
+__Parameters:__
+
+__behaviour__  
+"OFF","ON","ONLY","DEBUG","TRANSPARENT"
+
+
 ---
 
 ### module fl_overlap
@@ -951,6 +1053,8 @@ __Syntax:__
 __Syntax:__
 
     fl_overlap(u1,u2,position)
+
+Aligns children from u1 to u2 and move to position
 
 ---
 
@@ -960,6 +1064,8 @@ __Syntax:__
 
     fl_vector(P,outward=true,endpoint="arrow",ratio=20)
 
+Draws a fl_vector [out|in]ward P
+
 ---
 
 ### module fl_versor
@@ -967,4 +1073,6 @@ __Syntax:__
 __Syntax:__
 
     fl_versor(P)
+
+Draws a fl_versor facing point P
 

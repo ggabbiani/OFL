@@ -1,4 +1,4 @@
-/*
+/*!
  * Template file for OpenSCAD Foundation Library.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)

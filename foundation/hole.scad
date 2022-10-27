@@ -1,4 +1,4 @@
-/*
+/*!
  * Hole engine implementation.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -57,12 +57,12 @@ function fl_tt_isDirectionRotation(value) = let(
   && (fl_tt_is3d(direction))
   && (is_num(rotation));
 
-/**
+/*!
  * Hole representation as mandatory properties check:
- * 3d     ↦ hole position
- * n      ↦ applied surface normal
- * d      ↦ hole diameter
- * depth  ↦ hole depth (0 means pass-thru hole)
+ * - 3d   : hole position
+ * - n    : applied surface normal
+ * - d    : hole diameter
+ * - depth: hole depth (0 means pass-thru hole)
  */
 function fl_tt_isHole(hole) = let(
     3d    = fl_hole_pos(hole),
@@ -80,21 +80,21 @@ function fl_tt_isHole(hole) = let(
 
 function fl_tt_isHoleList(list) = fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));
 
-// constructor
+//! constructor
 function fl_Hole(
-  // 3d hole position
+  //! 3d hole position
   position,
-  // diameter
+  //! diameter
   d,
-  // normal
+  //! normal
   normal  = +Z,
-  // when depth is null hole is pass-through
+  //! when depth is null hole is pass-through
   depth = 0,
-  // OPTIONAL label direction in [direction,rotation] format
+  //! OPTIONAL label direction in [direction,rotation] format
   ldir,
-  // OPTIONAL label octant
+  //! OPTIONAL label octant
   loct,
-  // OPTIONAL screw
+  //! OPTIONAL screw
   screw
 ) = let(
     hole  = assert(fl_tt_isPointNormal([position,normal]),[position,normal]) [
@@ -108,27 +108,27 @@ function fl_Hole(
     ]
   ) hole;
 
-/**
+/*!
  * prepare context for children() holes
  *
- * $hole_pos        - hole position
- * $hole_d          - hole diameter
- * $hole_depth      - hole depth (set to «thick» for pass-thru)
- * $hole_direction  - [$hole_n,0]
- * $hole_i          - OPTIONAL hole number
- * $hole_label      - OPTIONAL string label
- * $hole_ldir       - [direction,rotation]
- * $hole_loct       - label octant
- * $hole_n          - hole normal
- * $hole_screw      - OPTIONAL hole screw
+ * - $hole_pos      : hole position
+ * - $hole_d        : hole diameter
+ * - $hole_depth    : hole depth (set to «thick» for pass-thru)
+ * - $hole_direction: [$hole_n,0]
+ * - $hole_i        : OPTIONAL hole number
+ * - $hole_label    : OPTIONAL string label
+ * - $hole_ldir     : [direction,rotation]
+ * - $hole_loct     : label octant
+ * - $hole_n        : hole normal
+ * - $hole_screw    : OPTIONAL hole screw
  */
 module fl_hole_Context(
   hole,
-  // fallback thickness
+  //! fallback thickness
   thick,
-  // OPTIONAL hole number
+  //! OPTIONAL hole number
   ordinal,
-  // fallback screw
+  //! fallback screw
   screw
 ) {
   opts            = hole[4];
@@ -148,22 +148,22 @@ module fl_hole_Context(
   children();
 }
 
-/**
+/*!
  * Layouts children along a list of holes.
  *
- * See fl_hole_Context() for context variables passed to children().
+ * See fl_hole_Context{} for context variables passed to children().
  *
- * NOTE: supported normals are x,y or z semi-axis ONLY
+ * **NOTE:** supported normals are x,y or z semi-axis ONLY
  *
  */
 module fl_lay_holes(
-  // list of hole specs
+  //! list of hole specs
   holes,
-  // enabled normals in floating semi-axis list form
+  //! enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
-  // pass-through thickness
+  //! pass-through thickness
   thick=0,
-  // fallback screw
+  //! fallback screw
   screw
 ) {
   assert(fl_tt_isHoleList(holes),holes);
@@ -180,39 +180,39 @@ module fl_lay_holes(
           children();
 }
 
-/**
+/*!
  * Layouts holes according to their defined positions, depth and enabled normals.
  *
- * NOTE: supported normals are x,y or z semi-axis ONLY
+ * **NOTE:** supported normals are x,y or z semi-axis ONLY
  */
 module fl_holes(
-  // list of holes specs
+  //! list of holes specs
   holes,
-  // enabled normals in floating semi-axis list form
+  //! enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
-  // pass-through thickness
+  //! pass-through thickness
   thick=0,
-  // fallback screw
+  //! fallback screw
   screw
 ) fl_lay_holes(holes,enable,thick,screw)
     translate(NIL*$hole_n)
       fl_cylinder(h=$hole_depth+NIL2,d=$hole_d,direction=[-$hole_n,0]);
 
-/**
+/*!
   * Layouts of hole symbols
   *
-  * NOTE: supported normals are x,y or z semi-axis ONLY
+  * **NOTE:** supported normals are x,y or z semi-axis ONLY
   */
 module fl_hole_debug(
-  // list of holes specs
+  //! list of holes specs
   holes,
-  // enabled normals in floating semi-axis list form
+  //! enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
-  // pass-through thickness
+  //! pass-through thickness
   thick=0,
-  // fallback screw
+  //! fallback screw
   screw,
-  // see constructor fl_parm_Debug()
+  //! see constructor fl_parm_Debug()
   debug
 ) {
     fl_lay_holes(holes,enable,thick,screw) union() {

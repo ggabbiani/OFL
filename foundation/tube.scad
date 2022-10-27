@@ -1,6 +1,4 @@
-/*
- * Empty file description
- *
+/*!
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -22,14 +20,22 @@
 include <3d.scad>
 
 module fl_tube(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  base,                 // base ellipse in [a,b] form
-  r,                    // «base» alternative radius for circular tubes
-  d,                    // «base» alternative diameter for circular tubes
-  h,                    // pipe height
-  thick,                // tube thickness
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
+  //! base ellipse in [a,b] form
+  base,
+  //! «base» alternative radius for circular tubes
+  r,
+  //! «base» alternative diameter for circular tubes
+  d,
+  //! pipe height
+  h,
+  //! tube thickness
+  thick,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant,
 ) {
   assert(h!=undef);
   assert(thick!=undef);

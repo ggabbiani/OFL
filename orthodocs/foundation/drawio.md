@@ -7,6 +7,13 @@ graph LR
     A1[foundation/drawio] --o|include| A2[foundation/2d]
 ```
 
+Draw.io helpers.
+This module is **DEPRECATED** and will be removed in a future.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Functions
 
 ---
@@ -19,6 +26,15 @@ __Syntax:__
 dio_polyCoords(points,size)
 ```
 
+Y invert and scale to size from draw.io coords.
+
+Draw.io stores geometries in the domain [0..1], so the final size is just a
+scale operation.
+
+Expressing an actual size in the span [0..1] is just a matter of dividing
+the actual size for the global X or Y length.
+
+
 ## Modules
 
 ---
@@ -28,4 +44,19 @@ dio_polyCoords(points,size)
 __Syntax:__
 
     dio_polyCoords(verbs=FL_ADD,points,size,quadrant)
+
+__Parameters:__
+
+__verbs__  
+FL_ADD,FL_AXIS,FL_BBOX
+
+__points__  
+2d point list as provided by the Base Polygon Draw.io shape
+
+__size__  
+2d size
+
+__quadrant__  
+native positioning when undef
+
 

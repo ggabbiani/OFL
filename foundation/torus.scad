@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -20,13 +20,13 @@
 include <3d.scad>
 
 function fl_bb_torus(
-  // radius of the circular tube.
+  //! radius of the circular tube.
   r,
-  // diameter of the circular tube.
+  //! diameter of the circular tube.
   d,
-  // elliptic tube [a,b] form
+  //! elliptic tube [a,b] form
   e,
-  // distance from the center of the tube to the center of the torus
+  //! distance from the center of the tube to the center of the torus
   R
 ) = let(
   // e     = r ? assert(!e) [r,r] : assert(len(e)==2) e,
@@ -36,23 +36,23 @@ function fl_bb_torus(
   edge  = assert(R>=a,str("R=",R,",a=",a)) a+R
 ) [[-edge,-edge,-b],[+edge,+edge,+b]];
 
-/**
+/*!
  * «e» and «R» are mutually exclusive parameters
  */
 module fl_torus(
-  // supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
   verbs       = FL_ADD,
-  // radius of the circular tube.
+  //! radius of the circular tube.
   r,
-  // diameter of the circular tube.
+  //! diameter of the circular tube.
   d,
-  // elliptic tube [a,b] form
+  //! elliptic tube [a,b] form
   e,
-  // distance from the center of the tube to the center of the torus
+  //! distance from the center of the tube to the center of the torus
   R,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   bbox    = fl_bb_torus(r,d,e,R);
