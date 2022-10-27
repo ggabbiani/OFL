@@ -237,7 +237,7 @@ __Syntax:__
 
 Layouts of hole symbols
 
-**NOTE:** supported normals are x,y or z semi-axis ONLY
+:memo: **NOTE:** supported normals are x,y or z semi-axis ONLY
 
 
 __Parameters:__
@@ -268,7 +268,7 @@ __Syntax:__
 
 Layouts holes according to their defined positions, depth and enabled normals.
 
-**NOTE:** supported normals are x,y or z semi-axis ONLY
+:memo: **NOTE:** supported normals are x,y or z semi-axis ONLY
 
 
 __Parameters:__
@@ -298,7 +298,7 @@ Layouts children along a list of holes.
 
 See [fl_hole_Context{}](#module-fl_hole_context) for context variables passed to children().
 
-**NOTE:** supported normals are x,y or z semi-axis ONLY
+:memo: **NOTE:** supported normals are x,y or z semi-axis ONLY
 
 
 

@@ -74,7 +74,7 @@ return a list with layered thickness (according to parameters):
 4. nut washer thickness
 5. nut thickness
 
-**Note:** if one layer is "off", the corresponding thickness will be 0
+:memo: **Note:** if one layer is "off", the corresponding thickness will be 0
 
 
 __Parameters:__

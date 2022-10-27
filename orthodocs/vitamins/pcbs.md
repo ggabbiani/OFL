@@ -192,7 +192,7 @@ fl_comp_search(type,label,comps)
 
 returns the component with «label»
 
-**NOTE:** error when label is not unique
+:memo: **NOTE:** error when label is not unique
 
 
 ---
@@ -248,7 +248,7 @@ Only basic PCB attributes are imported from NopSCADlib types:
  - screw
  - grid
 
-**WARNING:** no component is currently imported. still a work in progress
+:warning: **WARNING:** no component is currently imported. still a work in progress
 use [fl_pcb_adapter{}](#module-fl_pcb_adapter) instead.
 
 

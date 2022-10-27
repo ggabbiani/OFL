@@ -131,7 +131,7 @@ __Default:__
 
 add predefined component shape(s).
 
-**NOTE:** this operation doesn't include screws, for these see [variable FL_MOUNT](#variable-fl_mount)
+:memo: **NOTE:** this operation doesn't include screws, for these see [variable FL_MOUNT](#variable-fl_mount)
 
 
 ---
@@ -898,7 +898,7 @@ fl_transform(M,v)
 
 Returns M * v , actually transforming v by M.
 
-**NOTE:** result in 3d format
+:memo: **NOTE:** result in 3d format
 
 
 __Parameters:__
