@@ -1,4 +1,4 @@
-/*
+/*!
  * Spacers with optional screw and knurl nuts.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -25,7 +25,7 @@ include <../foundation/hole.scad>
 
 include <../vitamins/knurl_nuts.scad>
 
-// namespace
+//! namespace
 FL_SPC_NS  = "spc";
 
 // FL_SPC_DICT = [
@@ -34,48 +34,48 @@ FL_SPC_NS  = "spc";
 // no constructor for spacer since no predefined variable
 function fl_bb_spacer(h,r) = fl_bb_cylinder(h,r);
 
-/**
+/*!
  * calculates the internal spacer radius.
  */
 function fl_spc_holeRadius(
-    // optional screw
+    //! optional screw
     screw,
-    // optional knurl nut instance
+    //! optional knurl nut instance
     knut
   ) =
   let(
     knut  = knut!=undef ? assert(is_list(knut)) knut : undef
   ) knut ? fl_knut_r(knut)-0.3 : screw ? screw_radius(screw) : undef;
 
-/**
+/*!
  * Children context:
  *
- * $spc_director  - layout direction
- * $spc_screw     - OPTIONAL screw
- * $spc_thick     - thickness along $spc_director
- * $spc_h         - spacer height
- * $spc_holeR     - OPTIONAL internal hole radius
+ * - $spc_director: layout direction
+ * - $spc_screw   : OPTIONAL screw
+ * - $spc_thick   : thickness along $spc_director
+ * - $spc_h       : spacer height
+ * - $spc_holeR   : OPTIONAL internal hole radius
  */
 module fl_spacer(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
-  // height along Z axis
+  //! height along Z axis
   h,
-  // external radius
+  //! external radius
   r,
-  // external diameter (mutually exclusive with «r»)
+  //! external diameter (mutually exclusive with «r»)
   d,
-  // thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  //! thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
-  // FL_LAYOUT directions in floating semi-axis list
+  //! FL_LAYOUT directions in floating semi-axis list
   lay_direction=[+Z,-Z],
-  // optional screw
+  //! optional screw
   screw,
-  // optional knurl nut
+  //! optional knurl nut
   knut=false,
-  // desired direction [director,rotation], native direction when undef ([+Z,0])
+  //! desired direction [director,rotation], native direction when undef ([+Z,0])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);

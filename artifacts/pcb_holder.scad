@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
@@ -32,28 +32,28 @@ function fl_bb_holderByHoles(
     pcb_sz  = pcb_bb[1]-pcb_bb[0]
   ) [[pcb_bb[0].x,pcb_bb[0].y,0],[pcb_bb[1].x,pcb_bb[1].y,pcb_sz.z]+Z(h)];
 
-/*
+/*!
  * PCB holder by holes engine
  *
  * children() context:
  *
- * $holder_screw
+ * - $holder_screw
  */
 module fl_pcb_holderByHoles(
   verbs,
   pcb,
-  // spacers height
+  //! spacers height
   h,
-  // FL_DRILL thickness
+  //! FL_DRILL thickness
   thick=0,
-  // knurl nut
+  //! knurl nut
   knut=false,
   frame,
-  // FL_LAYOUT directions in floating semi-axis list
+  //! FL_LAYOUT directions in floating semi-axis list
   lay_direction=[+Z,-Z],
-  // desired direction [director,rotation], native direction when undef
+  //! desired direction [director,rotation], native direction when undef
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
 ) {
   assert(verbs!=undef);
@@ -204,13 +204,13 @@ function __R__(screw) = washer_radius(screw_washer(screw));
 
 function fl_bb_holderBySize(
     pcb,
-    // spacers height
+    //! spacers height
     h,
-    // used for the pcb joints
+    //! used for the pcb joints
     tolerance = 0.5,
-    // mounting screw
+    //! mounting screw
     screw = M3_cap_screw,
-    // knurl nut
+    //! knurl nut
     knut=false
   ) =
   assert(pcb)
@@ -248,35 +248,34 @@ function __deltaXY__(
     R       = __R__(screw)
   ) (tolerance+sin(45)*r_knut+0*R);
 
-/*
+/*!
  * engine for pcb holder by size
  *
  * children() context:
  *
- * $holder_screw
+ * - $holder_screw
  */
 module fl_pcb_holderBySize(
   verbs,
   pcb,
-  // spacers height
+  //! spacers height
   h,
-  // used for the pcb joints
+  //! used for the pcb joints
   tolerance = 0.5,
-  // MANDATORY mounting screw
+  //! MANDATORY mounting screw
   screw = M3_cap_screw,
-
-  // knurl nut
+  //! knurl nut
   knut=false,
-  // FL_DRILL thickness
+  //! FL_DRILL thickness
   // FIXME: rename as dri_thick
   thick=0,
-  // frame thickness. 0 means 'no frame'
+  //! frame thickness. 0 means 'no frame'
   frame=0,
-  // FL_LAYOUT directions in floating semi-axis list
+  //! FL_LAYOUT directions in floating semi-axis list
   lay_direction=[+Z,-Z],
-  // desired direction [director,rotation], native direction when undef
+  //! desired direction [director,rotation], native direction when undef
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   assert(verbs);

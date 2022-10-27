@@ -1,4 +1,4 @@
-/*
+/*!
  * Generic caddy artifact.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org).
@@ -22,10 +22,10 @@
 include <../foundation/unsafe_defs.scad>
 include <../foundation/fillet.scad>
 
-// Caddy's namespace
+//! Caddy's namespace
 FL_NS_CAD = "cad";
 
-/*
+/*!
  * Builds a caddy around the passed object «type».
  * Even if not mandatory - when passed - children will be used during
  * FL_ADD (for drilling), FL_ASSEMBLY (for rendering) and FL_LAYOUT.
@@ -36,34 +36,41 @@ FL_NS_CAD = "cad";
  *
  * Context passed to children:
  *
- * $cad_thick     - see «thick» parameter
- * $cad_tolerance - see tolerance
- * $cad_verbs     - list of verbs to be executed by children()
+ * - $cad_thick     : see «thick» parameter
+ * - $cad_tolerance : see tolerance
+ * - $cad_verbs     : list of verbs to be executed by children()
  *
  * TODO: FL_DRILL implementation
  */
 module fl_caddy(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   type,
-  // walls thickness in the fixed form: [[-x,+x],[-y,+y],[-z+z]]
-  // Passed as scalar means same thickness for all the six walls:
-  // [[«thick»,«thick»],[«thick»,«thick»],[«thick»«thick»]].
-  // examples:
-  // thick=[[0,2.5],[0,0],[5,0]]
-  // thick=2.5
+  /*!
+   * walls thickness in the fixed form: `[[-x,+x],[-y,+y],[-z+z]]`
+   *
+   * Passed as scalar means same thickness for all the six walls:
+   * `[[«thick»,«thick»],[«thick»,«thick»],[«thick»«thick»]]`.
+   *
+   * examples:
+   *
+   * ```
+   * thick=[[0,2.5],[0,0],[5,0]]
+   * thick=2.5
+   * ```
+   */
   thick,
-  // faces defined by their othonormal axis in floating semi-axis list format
+  //! faces defined by their othonormal axis in floating semi-axis list format
   faces,
-  // SCALAR added to each internal payload dimension.
+  //! SCALAR added to each internal payload dimension.
   tolerance   = fl_JNgauge,
-  // fillet radius, when > 0 a fillet is inserted where needed
+  //! fillet radius, when > 0 a fillet is inserted where needed
   fillet      = 0,
-  // defines the value of $cad_verbs passed to children
+  //! defines the value of $cad_verbs passed to children
   lay_verbs   =[],
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);

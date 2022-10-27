@@ -26,32 +26,32 @@ include <../foundation/util.scad>
 include <../vitamins/knurl_nuts.scad>
 include <../vitamins/screw.scad>
 
-// engine for generating boxes
+//! engine for generating boxes
 module fl_box(
   verbs           = FL_ADD,
-  // preset profiles (UNUSED)
+  //! preset profiles (UNUSED)
   preset,
-  // external dimensions
+  //! external dimensions
   xsize,
-  // internal payload size
+  //! internal payload size
   isize,
-  // internal bounding box
+  //! internal bounding box
   pload,
-  // sheet thickness
+  //! sheet thickness
   thick,
-  // fold internal radius (square if undef)
+  //! fold internal radius (square if undef)
   radius,
-  // "all","upper","lower"
+  //! "all","upper","lower"
   parts,
   tolerance       = 0.3,
-  // upper side color
+  //! upper side color
   material_upper,
-  // lower side color
+  //! lower side color
   material_lower,
   fillet          = true,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   assert(thick!=undef);
