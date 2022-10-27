@@ -520,7 +520,7 @@ __Syntax:__
 fl_Y(y)
 ```
 
-Axis X * scalar «y». Generally used for y translation
+Axis Y * scalar «y». Generally used for Y translation
 
 ---
 
@@ -532,7 +532,7 @@ __Syntax:__
 fl_Z(z)
 ```
 
-Axis X * scalar «z». Generally used for Z translation
+Axis Z * scalar «z». Generally used for Z translation
 
 ---
 

@@ -170,9 +170,9 @@ function fl_R(
 
 //! Axis X * scalar «x». Generally used for X translation
 function fl_X(x) = [x,0,0];
-//! Axis X * scalar «y». Generally used for y translation
+//! Axis Y * scalar «y». Generally used for Y translation
 function fl_Y(y) = [0,y,0];
-//! Axis X * scalar «z». Generally used for Z translation
+//! Axis Z * scalar «z». Generally used for Z translation
 function fl_Z(z) = [0,0,z];
 
 /*!
