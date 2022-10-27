@@ -53,16 +53,16 @@ function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
 /*!
  * Component context:
  *
- * $engine    - engine to be triggered for component rendering
- * $position  - component position
- * $direction
- * $director
- * $rotation
- * $type
- * $subtract  - the tolerance to be used during component FL_FOOTPRINT difference() from parent shape
- * $drift     - additional positioning during component positioning
- * $color
- * $octant
+ *  - $engine    : engine to be triggered for component rendering
+ *  - $position  : component position
+ *  - $direction
+ *  - $director
+ *  - $rotation
+ *  - $type
+ *  - $subtract  : the tolerance to be used during component FL_FOOTPRINT difference() from parent shape
+ *  - $drift     : additional positioning during component positioning
+ *  - $color
+ *  - $octant
  */
 // TODO: prepend component namespace to context variable name
 module fl_comp_Context(
@@ -87,8 +87,9 @@ module fl_comp_Context(
 /*!
  * Component specifications context:
  *
- * $label
- * $component
+ *  - $label
+ *  - $component
+ *
  * plus component context (see module fl_comp_Context())
  */
 module fl_comp_Specs(
@@ -132,6 +133,7 @@ function fl_comp_BBox(spec_list) =
 
 /*!
  * returns the component with «label»
+ *
  * NOTE: error when label is not unique
  */
 function fl_comp_search(type,label,comps) = let(
@@ -157,23 +159,31 @@ function fl_comp_connectors(component)  = let(
 //! base constructor
 function fl_PCB(
     name,
-    // bare (i.e. no payload) pcb's bounding box
+    //! bare (i.e. no payload) pcb's bounding box
     bare,
-    // pcb thickness
+    //! pcb thickness
     thick = 1.6,
     color  = "green",
-    // corners radius
+    //! corners radius
     radius=0,
-    // Optional payload bounding box.
-    // When passed it concurs in pcb's bounding box calculations
+    /*!
+     * Optional payload bounding box.
+     * When passed it concurs in pcb's bounding box calculations
+     */
     payload,
-    // each row represents a hole with the following format:
-    // [[point],[normal], diameter, thickness]
+    /*!
+     * each row represents a hole with the following format:
+     *
+     * `[[point],[normal], diameter, thickness]`
+     */
     holes = [],
-    // each row represent one component with the following format:
-    // ["label", ["engine", [position], [[director],rotation] type],subtract]
+    /*!
+     * each row represent one component with the following format:
+     *
+     * `["label", ["engine", [position], [[director],rotation] type],subtract]`
+     */
     components,
-    // grid specs
+    //! grid specs
     grid,
     screw,
     dxf,
@@ -221,7 +231,7 @@ function fl_PCB(
  *  - screw
  *  - grid
  *
- * NO COMPONENT IS CURRENTLY IMPORTED. STILL A WORK IN PROGRESS USE fl_pcb_adapter instead
+ * WARNING: NO COMPONENT IS CURRENTLY IMPORTED. STILL A WORK IN PROGRESS USE fl_pcb_adapter{} instead
  */
 // TODO: fix and complete
 function fl_pcb_import(nop,payload) = let(
@@ -389,11 +399,11 @@ FL_PCB_DICT = [
  * PCB engine.
  *
  * CONTEXT FROM PARENT:
- *  $hole_syms - (OPTIONAL bool) enables hole symbles
+ *  - $hole_syms - (OPTIONAL bool) enables hole symbles
  *
  * CONTEXT TO CHILDREN:
- *  complete hole context
- *  $pcb_radius - pcb radius
+ *  - complete hole context
+ *  - $pcb_radius - pcb radius
  */
 module fl_pcb(
   //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
@@ -681,27 +691,27 @@ module fl_pcb(
  * While full attributes rendering is supported via NopSCADlib APIs, only basic
  * support is provided to OFL verbs, sometimes even with different behaviour:
  *
- * FL_ADD       - being impossible to render NopSCADlib pcbs without components,
- *                this verb always renders components too;
- * FL_ASSEMBLY  - only screws are added during assembly, since
- *                components are always rendered during FL_ADD;
- * FL_AXES      - no changes;
- * FL_BBOX      - while OFL native PCBs includes also components sizing in
- *                bounding box calculations, the adapter bounding box is
- *                'reduced' to pcb only. The only way to mimic OFL native
- *                behaviour is to explicity add the payload capacity through
- *                the «payload» parameter.
- * FL_CUTOUT    - always applied to all the components, it's not possible to
- *                reduce component triggering by label nor direction.
- *                No cutout tolerance is provided either;
- * FL_DRILL     - no changes
- * FL_LAYOUT    - no changes
- * FL_PAYLOAD   - unsupported by native OFL PCBs
+ * - FL_ADD       : being impossible to render NopSCADlib pcbs without components,
+ *                  this verb always renders components too;
+ * - FL_ASSEMBLY  : only screws are added during assembly, since
+ *                  components are always rendered during FL_ADD;
+ * - FL_AXES      : no changes;
+ * - FL_BBOX      : while OFL native PCBs includes also components sizing in
+ *                  bounding box calculations, the adapter bounding box is
+ *                  'reduced' to pcb only. The only way to mimic OFL native
+ *                  behaviour is to explicity add the payload capacity through
+ *                  the «payload» parameter.
+ * - FL_CUTOUT    : always applied to all the components, it's not possible to
+ *                  reduce component triggering by label nor direction.
+ *                  No cutout tolerance is provided either;
+ * - FL_DRILL     : no changes
+ * - FL_LAYOUT    : no changes
+ * - FL_PAYLOAD   : unsupported by native OFL PCBs
  *
  * Others:
  *
- * Placement    - working with the FL_BBOX limitations
- * Orientation  - no changes
+ * - Placement    : working with the FL_BBOX limitations
+ * - Orientation  : no changes
  */
 module fl_pcb_adapter(
   //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD

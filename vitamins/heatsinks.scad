@@ -125,9 +125,9 @@ function fl_pimoroni(
 
 /*!
  * FL_LAYOUT,FL_ASSEMBLY children context:
- *  $hs_radius  - corner radius
- *  $hs_normal  - layout normal (always -Z);
- *  $hs_screw   - mount screw;
+ *  - $hs_radius: corner radius
+ *  - $hs_normal: layout normal (always -Z);
+ *  - $hs_screw : mount screw;
  */
 module fl_pimoroni(
   // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT

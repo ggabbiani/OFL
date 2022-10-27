@@ -27,7 +27,7 @@ include <../foundation/unsafe_defs.scad>
 include <screw.scad>
 include <NopSCADlib/lib.scad>
 
-//! namespace for PCB engine
+//! namespace for PSU engine
 FL_PSU_NS  = "psu";
 
 // ***** PSU MeanWell RS-25-5 25W 5V 5A ***************************************

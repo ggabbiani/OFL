@@ -50,8 +50,10 @@ module sata_adapter(
   verbs,
   type,
   locators=false,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant                // when undef native positioning is used
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant
 ) {
   assert(verbs!=undef);
 
