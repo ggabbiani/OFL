@@ -192,7 +192,7 @@ fl_comp_search(type,label,comps)
 
 returns the component with «label»
 
-NOTE: error when label is not unique
+**NOTE:** error when label is not unique
 
 
 ---
@@ -248,7 +248,8 @@ Only basic PCB attributes are imported from NopSCADlib types:
  - screw
  - grid
 
-WARNING: NO COMPONENT IS CURRENTLY IMPORTED. STILL A WORK IN PROGRESS USE [fl_pcb_adapter{}](#module-fl_pcb_adapter) instead
+**WARNING:** no component is currently imported. still a work in progress
+use [fl_pcb_adapter{}](#module-fl_pcb_adapter) instead.
 
 
 ---
@@ -328,11 +329,11 @@ __Syntax:__
 PCB engine.
 
 CONTEXT FROM PARENT:
- - $hole_syms - (OPTIONAL bool) enables hole symbles
+- $hole_syms - (OPTIONAL bool) enables hole symbles
 
 CONTEXT TO CHILDREN:
- - complete hole context
- - $pcb_radius - pcb radius
+- complete hole context
+- $pcb_radius - pcb radius
 
 
 __Parameters:__
