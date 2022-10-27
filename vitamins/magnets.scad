@@ -1,9 +1,7 @@
 /*!
  * Magnets definitions.
  *
- * Created  : on Mon Aug 30 2021.
- * Copyright: © 2021 Giampiero Gabbiani.
- * Email    : giampiero@gabbiani.org
+ * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL).
  *

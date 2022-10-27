@@ -134,7 +134,7 @@ function fl_comp_BBox(spec_list) =
 /*!
  * returns the component with «label»
  *
- * NOTE: error when label is not unique
+ * **NOTE:** error when label is not unique
  */
 function fl_comp_search(type,label,comps) = let(
   components  = comps ? comps : assert(type) fl_pcb_components(type),
@@ -231,7 +231,8 @@ function fl_PCB(
  *  - screw
  *  - grid
  *
- * WARNING: NO COMPONENT IS CURRENTLY IMPORTED. STILL A WORK IN PROGRESS USE fl_pcb_adapter{} instead
+ * **WARNING:** no component is currently imported. still a work in progress
+ * use fl_pcb_adapter{} instead.
  */
 // TODO: fix and complete
 function fl_pcb_import(nop,payload) = let(
@@ -399,11 +400,11 @@ FL_PCB_DICT = [
  * PCB engine.
  *
  * CONTEXT FROM PARENT:
- *  - $hole_syms - (OPTIONAL bool) enables hole symbles
+ * - $hole_syms - (OPTIONAL bool) enables hole symbles
  *
  * CONTEXT TO CHILDREN:
- *  - complete hole context
- *  - $pcb_radius - pcb radius
+ * - complete hole context
+ * - $pcb_radius - pcb radius
  */
 module fl_pcb(
   //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
