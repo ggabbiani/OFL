@@ -7,6 +7,8 @@ graph LR
     A1[foundation/symbol] --o|include| A2[foundation/torus]
 ```
 
+*Published under __GNU General Public License v3__*
+
 ## Modules
 
 ---

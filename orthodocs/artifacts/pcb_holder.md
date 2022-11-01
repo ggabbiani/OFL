@@ -7,6 +7,8 @@ graph LR
     A1[artifacts/pcb_holder] --o|include| A2[artifacts/spacer]
 ```
 
+*Published under __GNU General Public License v3__*
+
 ## Functions
 
 ---

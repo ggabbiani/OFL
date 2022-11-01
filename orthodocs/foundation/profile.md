@@ -7,6 +7,8 @@ graph LR
     A1[foundation/profile] --o|include| A2[foundation/3d]
 ```
 
+*Published under __GNU General Public License v3__*
+
 ## Modules
 
 ---
