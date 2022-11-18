@@ -27,14 +27,14 @@ function fl_grid_quad(
   //! used for clipping the out of region points
   bbox,
   //! generator (default generator just returns its center resulting in a quad grid ... hence the name)
-  generator=function(x,y,bbox) [[x,y]]
+  generator=function(point,bbox) [point]
 ) = let(
   low   = bbox[0],
   high  = bbox[1],
   step  = is_num(step) ? [step,step] : step
 ) [
     for(y=[low.y+origin.y:step.y:high.y])
-      for(x=[low.x+origin.x:step.x:high.x],p=generator(x,y,bbox))
+      for(x=[low.x+origin.x:step.x:high.x],p=generator([x,y],bbox))
         p
   ];
 
@@ -50,8 +50,8 @@ function fl_grid_hex(
     edges = 6,
     size  = let(bb = fl_bb_ipoly(r=r_step,n=edges)) bb[1]-bb[0],
     // hex generator
-    generator = function(x,y,bbox) let(
-        center  = [x,y],
+    generator = function(point,bbox) let(
+        center  = point,
         // builds points needed for a circle given «center» and «r»
         points  = fl_circle(center=center,r=r_step,$fn=edges)
         // FIXME: eliminate double points algorithmically generated in hex mode
@@ -59,7 +59,7 @@ function fl_grid_hex(
         // clipped = [for(p=points) if (p.x>bbox[0].x && p.y>bbox[0].y && p.x<bbox[1].x && p.y<bbox[1].y) p]
       )
       // echo(points=points)
-      concat([center],points)
+      echo(center=center) concat([center],points)
   )
   fl_grid_quad(origin,size,bbox,generator);
 
