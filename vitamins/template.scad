@@ -20,17 +20,20 @@
  */
 include <../foundation/defs.scad>
 
-// namespace
+//! template namespace
 __FL_TEMP_NS  = "mag";
 
 __FL_TEMP_DICT = [
 ];
 
 module __stub__(
-  verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
   type,
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  octant,               // when undef native positioning is used
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
