@@ -63,7 +63,8 @@ verbs=[
 size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
 
 if (SYMBOL=="hole")
-  fl_hole_Context([O,HOLE_N,HOLE_D,HOLE_DEPTH]) fl_sym_hole(verbs);
+  fl_hole_Context(fl_Hole(O,HOLE_D,HOLE_N,HOLE_DEPTH))
+    fl_sym_hole(FL_ADD);
 else
   fl_symbol(verbs=verbs,size=size,symbol=SYMBOL)
     fl_label(FL_ADD,"Ciao!",size=$sym_size.y,thick=0.1,direction=$sym_ldir);
