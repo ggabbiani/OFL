@@ -123,6 +123,7 @@ function fl_Hole(
  * - $hole_screw    : OPTIONAL hole screw
  */
 module fl_hole_Context(
+  //! hole instance as returned from fl_Hole()
   hole,
   //! fallback thickness
   thick,
