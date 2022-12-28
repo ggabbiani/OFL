@@ -80,9 +80,9 @@ FILAMENT_LOWER  = "SteelBlue";  // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // box thickness
 T=2.5;
 // inner radius for rounded angles (square if undef)
-RADIUS    = 1.1;
-TOLERANCE = 0.3;
-FILLET    = false;
+RADIUS      = 1.1;
+TOLERANCE   = 0.2;
+FILLET      = true;
 UPPER_PART  = true;
 LOWER_PART  = true;
 
@@ -165,12 +165,25 @@ difference() {
       fl_cylinder(h=2*spacer_h,r=$spc_holeR,octant=O);
 
   fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly",$FL_LAYOUT="ON") {
-    // rpi cutout
+    // rpi cutout for +X and +Y components
     fl_pcb(FL_CUTOUT,rpi,thick=20,cut_direction=[+X,+Y],cut_tolerance=0.5);
+    // window for the uSD card socket
+    for(z=[0:3])
+      translate(-z*Z(1.3))
+        fl_pcb(FL_CUTOUT,rpi,thick=20,cut_label="uSD",cut_tolerance=0.5);
     fl_connect([FL_PHDR_GPIOHDR_F,0],[rpi,0])
       fl_connect([FL_PHDR_GPIOHDR_FL,0],[$con_child,1])
         fl_connect([FL_PCB_RPI_uHAT,0],[$con_child,1])
           // TV hat cutout
-          fl_pcb([FL_ADD,FL_CUTOUT],$con_child,thick=20,cut_direction=[-X],cut_tolerance=3,$FL_ADD="ON");
+          fl_pcb([FL_ADD,FL_CUTOUT],$con_child,thick=20,cut_direction=[-X],cut_tolerance=3.5,$FL_ADD="ON");
   }
+
+  translate(+X(0.5+TOLERANCE))
+    difference() {
+      fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly",$FL_LAYOUT="ON")
+        hull()
+          fl_pcb(FL_CUTOUT,rpi,thick=10,cut_direction=[+X],cut_tolerance=2);
+      fl_box(FL_PAYLOAD,pload=bb,thick=T,radius=radius,parts=parts,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=TOLERANCE,fillet=FILLET,$FL_PAYLOAD="ON");
+    }
 }
+

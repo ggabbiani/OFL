@@ -69,7 +69,8 @@ module fl_box(
   screw   = M3_cs_cap_screw;
   holder_sz = fl_bb_size(knut)+[3,3,-2*FL_NIL];
   // Mknut   = T([0,size.y/2-thick-tolerance,sz_up.z/2-(holder_sz.y+thick-tolerance)/2]);
-  Mknut2  = T([size.x/2,size.y-thick-tolerance,Treal+sz_up.z-(holder_sz.y+thick-tolerance)/2]);
+  Mfront_knut = T([size.x/2,thick+tolerance-0*(size.y-thick-tolerance),Treal+sz_up.z-(holder_sz.y+thick-tolerance)/2]);
+  Mknut2      = T([size.x/2,size.y-thick-tolerance,Treal+sz_up.z-(holder_sz.y+thick-tolerance)/2]);
   // Mholder = Mknut * Rx(90);
   D       = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
   M       = fl_octant(octant,bbox=bbox);
@@ -113,10 +114,15 @@ module fl_box(
           fl_cube(size=[size.x,size.y,thick]);
         }
         translate(+Y(NIL))
-        multmatrix(Mknut2)
-          fl_spacer([FL_LAYOUT],holder_sz.z,4,screw=screw,knut=true,thick=[[0,0],[0,0],[Treal,Treal]],octant=-Z,direction=[+Y,0],lay_direction=[+Z],$fl_filament=undef)
-            translate($spc_thick*$spc_director)
-              fl_screw(FL_FOOTPRINT,screw,10);
+          multmatrix(Mknut2)
+            fl_spacer([FL_LAYOUT],holder_sz.z,4,screw=screw,knut=true,thick=[[0,0],[0,0],[Treal,Treal]],octant=-Z,direction=[+Y,0],lay_direction=[+Z],$fl_filament=undef)
+              translate($spc_thick*$spc_director)
+                fl_screw(FL_FOOTPRINT,screw,10);
+        translate(-Y(NIL))
+          multmatrix(Mfront_knut)
+            fl_spacer([FL_LAYOUT],holder_sz.z,4,screw=screw,knut=true,thick=[[0,0],[0,0],[Treal,Treal]],octant=-Z,direction=[-Y,0],lay_direction=[+Z],$fl_filament=undef)
+              translate($spc_thick*$spc_director)
+                fl_screw(FL_FOOTPRINT,screw,10);
       }
   }
 
@@ -134,13 +140,21 @@ module fl_box(
           fl_spacer([FL_ADD],holder_sz.z,4,screw=screw,knut=true,thick=Treal,octant=-Z,direction=[+Y,0],$fl_filament=undef);
         fl_spacer([FL_ADD],holder_sz.z,4,screw=screw,knut=true,thick=Treal,octant=-Z,direction=[+Y,0],$fl_filament=undef);
       }
+      multmatrix(Mfront_knut) {
+        fl_cutout(holder_sz.z/2,cut=true)
+          fl_spacer([FL_ADD],holder_sz.z,4,screw=screw,knut=true,thick=Treal,octant=-Z,direction=[-Y,0],$fl_filament=undef);
+        fl_spacer([FL_ADD],holder_sz.z,4,screw=screw,knut=true,thick=Treal,octant=-Z,direction=[-Y,0],$fl_filament=undef);
+      }
   }
 
   module do_assembly() {
     translate(bbox[0]) {
-      if (parts=="all" || parts=="upper")
+      if (parts=="all" || parts=="upper") {
         multmatrix(Mknut2)
           fl_spacer([FL_ASSEMBLY],holder_sz.z,4,screw=screw,knut=true,thick=Treal,octant=-Z,direction=[+Y,0],$fl_filament=undef);
+        multmatrix(Mfront_knut)
+          fl_spacer([FL_ASSEMBLY],holder_sz.z,4,screw=screw,knut=true,thick=Treal,octant=-Z,direction=[-Y,0],$fl_filament=undef);
+      }
     }
   }
 
@@ -156,10 +170,14 @@ module fl_box(
 
   module do_mount() {
     translate(bbox[0]) {
-      if (parts=="all" || parts=="lower")
+      if (parts=="all" || parts=="lower") {
         multmatrix(Mknut2)
           fl_spacer([FL_MOUNT],holder_sz.z,4,screw=screw,knut=true,thick=Treal,lay_direction=+Z,octant=-Z,direction=[+Y,0],$fl_filament=undef)
             screw(screw,10);
+        multmatrix(Mfront_knut)
+          fl_spacer([FL_MOUNT],holder_sz.z,4,screw=screw,knut=true,thick=Treal,lay_direction=+Z,octant=-Z,direction=[-Y,0],$fl_filament=undef)
+            screw(screw,10);
+      }
     }
   }
 
