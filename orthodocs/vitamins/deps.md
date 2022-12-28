@@ -17,16 +17,18 @@ graph TD
     A8 --o|include| A9
     A8 --o|include| A12[vitamins/pin_headers]
     A8 --o|include| A6
-    A8 --o|include| A13[vitamins/trimpot]
-    A8 --o|include| A14[vitamins/usbs]
+    A8 --o|include| A13[vitamins/sd]
+    A8 --o|include| A14[vitamins/trimpot]
+    A8 --o|include| A15[vitamins/usbs]
     A12
-    A15[vitamins/psus] --o|include| A6
+    A16[vitamins/psus] --o|include| A6
     A5
-    A16[vitamins/sata-adapters] --o|include| A5
+    A17[vitamins/sata-adapters] --o|include| A5
     A6
-    A17[vitamins/spdts]
-    A18[vitamins/template]
     A13
+    A18[vitamins/spdts]
+    A19[vitamins/template]
     A14
+    A15
 ```
 

@@ -59,7 +59,7 @@ __Syntax:__
 fl_bb_corners(type,value)
 ```
 
-invoked by «type» parameter acts as getter
+invoked by «type» parameter acts as getter for the bounding box property
 
 invoked by «value» parameter acts as property constructor
 
@@ -74,7 +74,7 @@ __Syntax:__
 fl_bb_new(negative=[0,0,0],size=[0,0,0],positive)
 ```
 
-constructor
+constructor for a new type with bounding box corners set as property
 
 ---
 

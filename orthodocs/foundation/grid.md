@@ -40,7 +40,7 @@ used for clipping the out of region points
 __Syntax:__
 
 ```text
-fl_grid_quad(origin=[0,0],step,bbox,generator=function(x,y,bbox)[[x,y]])
+fl_grid_quad(origin=[0,0],step,bbox,generator=function(point,bbox)[point])
 ```
 
 __Parameters:__

@@ -12,9 +12,10 @@ graph LR
     A1 --o|include| A7[vitamins/jacks]
     A1 --o|include| A8[vitamins/pin_headers]
     A1 --o|include| A9[vitamins/screw]
-    A1 --o|include| A10[vitamins/trimpot]
-    A1 --o|include| A11[vitamins/usbs]
-    A1 --o|use| A12[dxf]
+    A1 --o|include| A10[vitamins/sd]
+    A1 --o|include| A11[vitamins/trimpot]
+    A1 --o|include| A12[vitamins/usbs]
+    A1 --o|use| A13[dxf]
 ```
 
 PCB definition file.
@@ -97,7 +98,7 @@ __Default:__
 
 __Default:__
 
-    let(w=56,l=85,h=16,pcb_t=1.5,hole_d=2.7,bare=[[-w/2,0,-pcb_t],[+w/2,l,0]],payload=[[bare[0].x,bare[0].y,0],[bare[1].x,bare[1].y,h]],holes=[fl_Hole([24.5,3.5,0],hole_d,depth=pcb_t,loct=-X),fl_Hole([24.5,61.5,0],hole_d,+Z,pcb_t,loct=+Y),fl_Hole([-24.5,3.5,0],hole_d,+Z,pcb_t,loct=+X),fl_Hole([-24.5,61.5,0],hole_d,+Z,pcb_t,loct=+Y),],comps=[["POWER IN",[FL_USB_NS,[25.5,11.2,0],[+X,0],FL_USB_TYPE_C,[["comp/drift",-1.3]]]],["HDMI0",[FL_HDMI_NS,[25,26,0],[+X,0],FL_HDMI_TYPE_D,[["comp/drift",-1.26]]]],["HDMI1",[FL_HDMI_NS,[25,39.5,0],[+X,0],FL_HDMI_TYPE_D,[["comp/drift",-1.26]]]],["A/V",[FL_JACK_NS,[22,54,0],[+X,0],FL_JACK_BARREL]],["USB2",[FL_USB_NS,[w/2-9,79.5,0],[+Y,0],FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],["USB3",[FL_USB_NS,[w/2-27,79.5,0],[+Y,0],FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],["ETHERNET",[FL_ETHER_NS,[w/2-45.75,77.5,0],[+Y,0],FL_ETHER_RJ45,[["comp/drift",-3]]]],["GPIO",[FL_PHDR_NS,[-w/2+3.5,32.5,0],[+Z,90],FL_PHDR_GPIOHDR]],],vendors=[["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],gpio_c=fl_comp_connectors(comps[7][1])[0],conns=[fl_conn_clone(gpio_c,type="plug",direction=[+Z,-90],octant=-X-Y),])fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=conns)
+    let(w=56,l=85,h=16,pcb_t=1.5,hole_d=2.7,bare=[[-w/2,0,-pcb_t],[+w/2,l,0]],payload=[[bare[0].x,bare[0].y,0],[bare[1].x,bare[1].y,h]],holes=[fl_Hole([24.5,3.5,0],hole_d,depth=pcb_t,loct=-X),fl_Hole([24.5,61.5,0],hole_d,+Z,pcb_t,loct=+Y),fl_Hole([-24.5,3.5,0],hole_d,+Z,pcb_t,loct=+X),fl_Hole([-24.5,61.5,0],hole_d,+Z,pcb_t,loct=+Y),],comps=[["POWER IN",[FL_USB_NS,[25.5,11.2,0],[+X,0],FL_USB_TYPE_C,[["comp/drift",-1.3]]]],["HDMI0",[FL_HDMI_NS,[25,26,0],[+X,0],FL_HDMI_TYPE_D,[["comp/drift",-1.26]]]],["HDMI1",[FL_HDMI_NS,[25,39.5,0],[+X,0],FL_HDMI_TYPE_D,[["comp/drift",-1.26]]]],["A/V",[FL_JACK_NS,[22,54,0],[+X,0],FL_JACK_BARREL]],["USB2",[FL_USB_NS,[w/2-9,79.5,0],[+Y,0],FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],["USB3",[FL_USB_NS,[w/2-27,79.5,0],[+Y,0],FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],["ETHERNET",[FL_ETHER_NS,[w/2-45.75,77.5,0],[+Y,0],FL_ETHER_RJ45,[["comp/drift",-3]]]],["GPIO",[FL_PHDR_NS,[-w/2+3.5,32.5,0],[+Z,90],FL_PHDR_GPIOHDR]],["uSD",[FL_SD_NS,[0,2,-pcb_t],[-Y,180],FL_SD_MOLEX_uSD_SOCKET,[["comp/octant",+Y+Z],["comp/drift",2]]]],],vendors=[["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],gpio_c=fl_comp_connectors(comps[7][1])[0],conns=[fl_conn_clone(gpio_c,type="plug",direction=[+Z,-90],octant=-X-Y),])fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=conns)
 
 ---
 
@@ -328,10 +329,12 @@ __Syntax:__
 
 PCB engine.
 
-CONTEXT FROM PARENT:
+__parent context__:
+
 - $hole_syms - (OPTIONAL bool) enables hole symbles
 
-CONTEXT TO CHILDREN:
+__children context__:
+
 - complete hole context
 - $pcb_radius - pcb radius
 
@@ -345,7 +348,20 @@ __cut_tolerance__
 FL_CUTOUT tolerance
 
 __cut_label__  
-FL_CUTOUT component filter by label
+FL_CUTOUT component filter by label.
+
+This parameter can assume one of the following values:
+
+- "POWER IN"
+- "HDMI0"
+- "HDMI1"
+- "A/V"
+- "USB2": USB 2 ports
+- "USB3": USB 3 ports
+- "ETHERNET"
+- "GPIO"
+- "uSD": micro SD card socket
+
 
 __cut_direction__  
 FL_CUTOUT component filter by direction (+X,+Y or +Z)

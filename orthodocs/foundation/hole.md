@@ -217,6 +217,9 @@ prepare context for children() holes
 
 __Parameters:__
 
+__hole__  
+hole instance as returned from [fl_Hole()](#function-fl_hole)
+
 __thick__  
 fallback thickness
 
