@@ -22,7 +22,7 @@
 include <defs.scad>
 
 /*!
- * invoked by «type» parameter acts as getter
+ * invoked by «type» parameter acts as getter for the bounding box property
  *
  * invoked by «value» parameter acts as property constructor
  */
@@ -34,7 +34,7 @@ function fl_bb_corners(type,value)  = let(key="bb/bounding corners")
 //! computes size from the bounding corners.
 function fl_bb_size(type)       = assert(type) let(c=fl_bb_corners(type)) c[1]-c[0];
 
-//! constructor
+//! constructor for a new type with bounding box corners set as property
 function fl_bb_new(
   negative  = [0,0,0],
   size      = [0,0,0],
