@@ -28,6 +28,7 @@ include <hdmi.scad>
 include <jacks.scad>
 include <pin_headers.scad>
 include <screw.scad>
+include <sd.scad>
 include <trimpot.scad>
 include <usbs.scad>
 
@@ -285,6 +286,7 @@ FL_PCB_RPI4 = let(
     ["USB3",      [FL_USB_NS,   [w/2-27,    79.5, 0], [+Y,0  ],             FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],
     ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0], [+Y,0  ],             FL_ETHER_RJ45  ,[["comp/drift",-3]]]],
     ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5,  32.5, 0], [+Z,90 ],             FL_PHDR_GPIOHDR]],
+    ["uSD",       [FL_SD_NS,    [0,       2, -pcb_t], [-Y,180],             FL_SD_MOLEX_uSD_SOCKET, [["comp/octant",+Y+Z],["comp/drift",2]] ]],
   ],
   vendors = [["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],
   gpio_c  = fl_comp_connectors(comps[7][1])[0],
@@ -399,10 +401,12 @@ FL_PCB_DICT = [
 /*!
  * PCB engine.
  *
- * CONTEXT FROM PARENT:
+ * __parent context__:
+ *
  * - $hole_syms - (OPTIONAL bool) enables hole symbles
  *
- * CONTEXT TO CHILDREN:
+ * __children context__:
+ *
  * - complete hole context
  * - $pcb_radius - pcb radius
  */
@@ -412,7 +416,21 @@ module fl_pcb(
   type,
   //! FL_CUTOUT tolerance
   cut_tolerance=0,
-  //! FL_CUTOUT component filter by label
+  /*!
+   * FL_CUTOUT component filter by label.
+   *
+   * This parameter can assume one of the following values:
+   *
+   * - "POWER IN"
+   * - "HDMI0"
+   * - "HDMI1"
+   * - "A/V"
+   * - "USB2": USB 2 ports
+   * - "USB3": USB 3 ports
+   * - "ETHERNET"
+   * - "GPIO"
+   * - "uSD": micro SD card socket
+   */
   cut_label,
   //! FL_CUTOUT component filter by direction (+X,+Y or +Z)
   cut_direction,
@@ -604,6 +622,8 @@ module fl_pcb(
         fl_pinHeader(FL_ADD,type=$type,octant=$octant,direction=$direction);
       else if ($engine==FL_TRIM_NS)
         fl_trimpot(FL_ADD,type=$type,direction=$direction,octant=$octant);
+      else if ($engine==FL_SD_NS)
+        fl_sd_usocket(FL_ADD,type=$type,octant=$octant,direction=$direction);
       else
         assert(false,str("Unknown engine ",$engine));
   }
@@ -640,6 +660,9 @@ module fl_pcb(
       else if ($engine==FL_TRIM_NS) let(
           thick = size.z-pcb_t-11.5+cut_thick
         ) fl_trimpot(FL_CUTOUT,type=$type,cut_thick=thick,cut_tolerance=cut_tolerance,cut_drift=$drift,direction=$direction,octant=$octant);
+      else if ($engine==FL_SD_NS)
+        // echo(cut_tolerance=cut_tolerance)
+        fl_sd_usocket(FL_CUTOUT,type=$type,cut_thick=cut_thick+2,cut_tolerance=cut_tolerance,octant=$octant,direction=$direction);
       else
         assert(false,str("Unknown engine ",$engine));
     }
