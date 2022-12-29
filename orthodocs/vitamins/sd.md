@@ -8,6 +8,12 @@ graph LR
     A1 --o|include| A3[foundation/util]
 ```
 
+Secure Digital flash memory card for OpenSCAD Foundation Library.
+
+
+
+*Published under __GNU General Public License v3__*
+
 ## Variables
 
 ---
