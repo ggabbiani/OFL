@@ -1,6 +1,6 @@
 # OpenSCAD Foundation Library
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ggabbiani/OFL/tests.yml?style=square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ggabbiani/OFL/tests.yml?label=tests&style=square)
 
 ![Cover](docs/cover.png)
 
