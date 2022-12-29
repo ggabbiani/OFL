@@ -1,4 +1,4 @@
-/*
+/*!
  * Secure Digital flash memory card for OpenSCAD Foundation Library.
  *
  * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
