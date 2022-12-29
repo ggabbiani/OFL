@@ -35,6 +35,7 @@ FL_SD_MOLEX_uSD_SOCKET = let(
 
 //! sd dictionary
 FL_SD_DICT = [
+  FL_SD_MOLEX_uSD_SOCKET
 ];
 
 /*!

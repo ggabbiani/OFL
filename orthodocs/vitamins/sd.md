@@ -22,7 +22,7 @@ Secure Digital flash memory card for OpenSCAD Foundation Library.
 
 __Default:__
 
-    []
+    [FL_SD_MOLEX_uSD_SOCKET]
 
 sd dictionary
 
