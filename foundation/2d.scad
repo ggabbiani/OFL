@@ -937,7 +937,7 @@ module fl_square(
    * Defaults to a 'perfect' rectangle with four squared corners.
    * Scalar value R for «vertices» means corners=[R,R,R,R]
    *
-   * See also [function fl_square()](#function-fl_square) for more complete examples.
+   * See also function fl_square() for more complete examples.
   */
   corners = [0,0,0,0],
   quadrant
