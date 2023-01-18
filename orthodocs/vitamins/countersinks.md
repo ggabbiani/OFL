@@ -10,9 +10,10 @@ graph LR
 Countersink definitions, data taken from:
 https://www.sailornautica.it/viti-metallo-inox-aisi-316-e-304/927-vite-testa-svasata-piana-esagono-incassato-m3-uni-5933-acciaio-inox-aisi-316.html
 
+Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 
+SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
-*Published under __GNU General Public License v3__*
 
 ## Variables
 

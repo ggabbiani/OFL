@@ -10,9 +10,10 @@ graph LR
 Draw.io helpers.
 This module is **DEPRECATED** and will be removed in a future.
 
+Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 
+SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
-*Published under __GNU General Public License v3__*
 
 ## Functions
 

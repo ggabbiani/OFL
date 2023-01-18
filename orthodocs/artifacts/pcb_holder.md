@@ -7,7 +7,10 @@ graph LR
     A1[artifacts/pcb_holder] --o|include| A2[artifacts/spacer]
 ```
 
-*Published under __GNU General Public License v3__*
+Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+
+SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
+
 
 ## Functions
 
