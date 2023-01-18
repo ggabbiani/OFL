@@ -1,22 +1,9 @@
 /*
  * Bit-holder example.
  *
- * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
+ * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
- * This file is part of the 'OpenSCAD Foundation Library' (OFL).
- *
- * OFL is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * OFL is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with OFL.  If not, see <http://www.gnu.org/licenses/>.
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 include <../foundation/util.scad>
@@ -77,14 +64,21 @@ MAGNET    = "FL_MAG_RECT_10x5x2"; // [FL_MAG_RECT_10x5x1,FL_MAG_RECT_10x5x2]
 
 /* [Hidden] */
 
+VERB_CENTROID = "calculates the centroid of a distributed mass";
+
+function centroid() = 0;
+
 function check(r) = r[3]!=0;
 
+function volume(r,h) = PI*r^2*h;
+
 function bitHolder(name,bit,cardinality,magnet) = let(
-  d       = bit[0]+2*TOLERANCE,
-  h       = max(bit[1]/3,HEIGHT),
-  width   = max(SZ_magnet.y+2*(TOLERANCE+T_magnet)+I_holder,d+2*(TOLERANCE+T_hole)+I_holder),
-  length  = T_magnet+2*TOLERANCE+T_hole+SZ_magnet.z+cardinality*(d+T_hole),
-  bbox    = [[-width/2,-length,0],[+width/2,0,h]]
+  d         = bit[0]+2*TOLERANCE,
+  h         = max(bit[1]/3,HEIGHT),
+  width     = max(SZ_magnet.y+2*(TOLERANCE+T_magnet)+I_holder,d+2*(TOLERANCE+T_hole)+I_holder),
+  length    = T_magnet+2*TOLERANCE+T_hole+SZ_magnet.z+cardinality*(d+T_hole),
+  bbox      = [[-width/2,-length,0],[+width/2,0,h]],
+  centroid  = 0
 ) [
     fl_name(value=str(name," bit-holder")),
     fl_bb_corners(value=bbox),
@@ -93,6 +87,7 @@ function bitHolder(name,bit,cardinality,magnet) = let(
     ["bit",         bit],
     ["cardinality", cardinality],
     ["magnet",      magnet],
+    ["centroid",    centroid],
   ];
 
 magnet    = MAGNET=="FL_MAG_RECT_10x5x1"
@@ -104,21 +99,21 @@ magnet    = MAGNET=="FL_MAG_RECT_10x5x1"
 SZ_magnet = fl_size(magnet);
 
 bits = [
-  if (check(BIT_1))  let(r=BIT_1)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_2))  let(r=BIT_2)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_3))  let(r=BIT_3)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_4))  let(r=BIT_4)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_5))  let(r=BIT_5)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_6))  let(r=BIT_6)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_7))  let(r=BIT_7)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_8))  let(r=BIT_8)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_9))  let(r=BIT_9)   [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_10)) let(r=BIT_10)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_11)) let(r=BIT_11)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_12)) let(r=BIT_12)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_13)) let(r=BIT_13)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_14)) let(r=BIT_14)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
-  if (check(BIT_15)) let(r=BIT_15)  [str(r[0],"mm"),[r[1],r[2]],r[3]],
+  if (check(BIT_1))  let(r=BIT_1)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_2))  let(r=BIT_2)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_3))  let(r=BIT_3)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_4))  let(r=BIT_4)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_5))  let(r=BIT_5)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_6))  let(r=BIT_6)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_7))  let(r=BIT_7)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_8))  let(r=BIT_8)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_9))  let(r=BIT_9)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_10)) let(r=BIT_10)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_11)) let(r=BIT_11)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_12)) let(r=BIT_12)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_13)) let(r=BIT_13)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_14)) let(r=BIT_14)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_15)) let(r=BIT_15)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
 ];
 strip();
 
