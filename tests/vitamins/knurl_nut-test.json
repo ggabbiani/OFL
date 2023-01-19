@@ -17,6 +17,23 @@
             "OCTANT": "[0, 0, 0]",
             "PLACE_NATIVE": "false",
             "SHOW": "All"
+        },
+        "package": {
+            "$FL_ADD": "ON",
+            "$FL_ASSEMBLY": "OFF",
+            "$FL_AXES": "OFF",
+            "$FL_BBOX": "OFF",
+            "$FL_DRILL": "OFF",
+            "$FL_RENDER": "true",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fn": "50",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
+            "OCTANT": "[0, 0, 0]",
+            "PLACE_NATIVE": "true",
+            "SHOW": "All"
         }
     },
     "fileFormatVersion": "1"
