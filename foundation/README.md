@@ -358,4 +358,4 @@ $pecial variables used in OFL follow the same naming convention used for constan
 
 ## OrthoDocs - API documentation
 
-An alpha release of the API documentation can be found [here](../orthodocs/foundation/toc.md).
+An alpha release of the API documentation can be found [here](../orthodocs/toc.md).
