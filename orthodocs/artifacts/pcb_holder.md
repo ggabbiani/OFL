@@ -119,6 +119,9 @@ knurl nut
 __thick__  
 FL_DRILL thickness
 
+FIXME: rename as dri_thick
+
+
 __frame__  
 frame thickness. 0 means 'no frame'
 

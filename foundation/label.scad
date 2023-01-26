@@ -8,8 +8,9 @@ include <3d.scad>
 
 /*!
  * mimics standard resize() module behaviour
+ *
+ * TODO: either remove or move elsewhere
  */
-// TODO: either remove or move elsewhere
 function fl_resize(oldsize,newsize,auto=false) =
   assert(oldsize)
   assert(newsize!=undef)
@@ -22,8 +23,10 @@ function fl_resize(oldsize,newsize,auto=false) =
 
 /*!
  * modify position according to size modifications
+ *
+ * TODO: likely to be removed
  */
-// TODO: likely to be removed
+
 function fl_repos(oldpos,oldsize,newsize) =
   assert(oldpos)
   assert(oldsize)

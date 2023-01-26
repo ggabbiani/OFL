@@ -552,8 +552,8 @@ let(
  *     $len    - equal to len(types)
  *     $size   - equal to bounding box size of $item
  *
+ * TODO: add namespace to children context variables.
  */
- // TODO: add namespace
 module fl_layout(
   //! supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
   verbs = FL_LAYOUT,

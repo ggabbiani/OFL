@@ -58,6 +58,15 @@ fl_bb_pimoroni(type,top=true,bottom=true)
 calculates Pimoroni's bounding box
 
 
+__Parameters:__
+
+__top__  
+top part
+
+__bottom__  
+bottom part
+
+
 ---
 
 ### function fl_pimoroni
@@ -103,8 +112,33 @@ __Syntax:__
     fl_pimoroni(verbs=FL_ADD,type,thick=0,lay_what="mount",top=true,bottom=true,direction,octant)
 
 FL_LAYOUT,FL_ASSEMBLY children context:
+
   - $hs_radius: corner radius
   - $hs_normal: layout normal (always -Z);
   - $hs_screw : mount screw;
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: `FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT`
+
+__thick__  
+FL_DRILL thickness in scalar form for -Z normal
+
+__lay_what__  
+either "mount" or "assembly"
+
+__top__  
+top part
+
+__bottom__  
+bottom part
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
 
 

@@ -48,7 +48,7 @@ __Syntax:__
 
     fl_90DegFillet(verbs=FL_ADD,r,n,child_bbox,direction,octant)
 
-90 Degree fillet taken from [OpenSCAD - Fillet With Internal Angles](https://forum.openscad.org/Fillet-With-Internal-Angles-td17201.html) */
+90 Degree fillet taken from [OpenSCAD - Fillet With Internal Angles](https://forum.openscad.org/Fillet-With-Internal-Angles-td17201.html)
 
 __Parameters:__
 

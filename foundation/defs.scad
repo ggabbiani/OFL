@@ -504,13 +504,13 @@ function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : u
 function fl_parse_radius(r,r1,d,d1,def)    = (r!=undef ? r : (r1!=undef ? r1 : (d!=undef ? d/2 : (d1!=undef ? d1/2:undef))));
 function fl_parse_diameter(r,r1,d,d1,def)  = (d!=undef ? d : (d1!=undef ? d1 : (r!=undef ? 2*r : (r1!=undef ? 2*r1:undef))));
 
-/*! true when n is multiple of m */
+//! true when n is multiple of m
 function fl_isMultiple(n,m) = (n % m == 0);
 
-/*! true when n is even */
+//! true when n is even
 function fl_isEven(n) = fl_isMultiple(n,2);
 
-/*! true when n is odd */
+//! true when n is odd
 function fl_isOdd(n) = !fl_isEven(n);
 
 //! transforms 3D to 2D coords

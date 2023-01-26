@@ -9,13 +9,18 @@ include <3d.scad>
 //! engine for generating profiles
 module fl_profile(
   verbs     = FL_ADD,
-  type,       // "E","L","T" and "U"
-  radius,     // external radius (square if undef)
+  //! "E","L","T" and "U"
+  type,
+  //! external radius (square if undef)
+  radius,
   size,
-  material,   // actually a color
+  //! actually a color
+  material,
   thick,
-  direction,  // desired direction [director,rotation], native direction when undef ([+X+Z])
-  octant      // when undef native positioning (see variable FL_O) is used
+  //! desired direction [director,rotation], native direction when undef ([+X+Z])
+  direction,
+  //! when undef native positioning (see variable FL_O) is used
+  octant
 ) {
   assert(size!=undef);
   assert(thick!=undef);
@@ -114,8 +119,9 @@ module fl_profile(
 
 /*!
  * engine for generating bent plates.
+ *
+ * See also https://metalfabricationsvcs.com/products/bent-plate/
  */
-// See also https://metalfabricationsvcs.com/products/bent-plate/
 module fl_bentPlate(
   verbs     = FL_ADD,
   //! "L" or "U"

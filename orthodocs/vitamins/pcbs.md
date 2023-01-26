@@ -253,6 +253,8 @@ Only basic PCB attributes are imported from NopSCADlib types:
 :warning: **WARNING:** no component is currently imported. still a work in progress
 use [fl_pcb_adapter{}](#module-fl_pcb_adapter) instead.
 
+TODO: fix and complete
+
 
 ---
 
@@ -296,6 +298,14 @@ Component context:
  - $drift     : additional positioning during component positioning
  - $color
  - $octant
+
+TODO: prepend component namespace to context variable name
+
+
+__Parameters:__
+
+__component__  
+component definition: ["engine", [position], [[director],rotation], type, properties]
 
 
 ---

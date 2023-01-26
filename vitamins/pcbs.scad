@@ -51,10 +51,12 @@ function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
  *  - $drift     : additional positioning during component positioning
  *  - $color
  *  - $octant
+ *
+ * TODO: prepend component namespace to context variable name
  */
-// TODO: prepend component namespace to context variable name
 module fl_comp_Context(
-  component // component definition: ["engine", [position], [[director],rotation], type, properties]
+  //! component definition: ["engine", [position], [[director],rotation], type, properties]
+  component
   ) {
   $engine     = component[0];
   $position   = component[1];
@@ -221,8 +223,9 @@ function fl_PCB(
  *
  * **WARNING:** no component is currently imported. still a work in progress
  * use fl_pcb_adapter{} instead.
+ *
+ * TODO: fix and complete
  */
-// TODO: fix and complete
 function fl_pcb_import(nop,payload) = let(
     w         = max(pcb_width(nop),pcb_length(nop)),
     l         = min(pcb_width(nop),pcb_length(nop)),

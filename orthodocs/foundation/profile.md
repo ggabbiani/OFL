@@ -24,6 +24,8 @@ __Syntax:__
 
 engine for generating bent plates.
 
+See also https://metalfabricationsvcs.com/products/bent-plate/
+
 
 __Parameters:__
 
@@ -58,4 +60,22 @@ __Syntax:__
     fl_profile(verbs=FL_ADD,type,radius,size,material,thick,direction,octant)
 
 engine for generating profiles
+
+__Parameters:__
+
+__type__  
+"E","L","T" and "U"
+
+__radius__  
+external radius (square if undef)
+
+__material__  
+actually a color
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Z])
+
+__octant__  
+when undef native positioning (see [variable FL_O](defs.md#variable-fl_o)) is used
+
 

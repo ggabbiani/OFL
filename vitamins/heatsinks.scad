@@ -51,9 +51,9 @@ FL_HS_DICT  = [FL_HS_PIMORONI];
  */
 function fl_bb_pimoroni(
   type,
-  // top part
+  //! top part
   top       = true,
-  // bottom part
+  //! bottom part
   bottom    = true,
 ) = let(
   bb    = fl_bb_corners(type),
@@ -112,25 +112,26 @@ function fl_pimoroni(
 
 /*!
  * FL_LAYOUT,FL_ASSEMBLY children context:
+ *
  *   - $hs_radius: corner radius
  *   - $hs_normal: layout normal (always -Z);
  *   - $hs_screw : mount screw;
  */
 module fl_pimoroni(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: `FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT`
   verbs       = FL_ADD,
   type,
-  // FL_DRILL thickness in scalar form for -Z normal
+  //! FL_DRILL thickness in scalar form for -Z normal
   thick=0,
-  // either "mount" or "assembly"
+  //! either "mount" or "assembly"
   lay_what  = "mount",
-  // top part
+  //! top part
   top       = true,
-  // bottom part
+  //! bottom part
   bottom    = true,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);

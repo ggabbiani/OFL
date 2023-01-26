@@ -253,8 +253,11 @@ module fl_pcb_holderBySize(
   screw = M3_cap_screw,
   //! knurl nut
   knut=false,
-  //! FL_DRILL thickness
-  // FIXME: rename as dri_thick
+  /*!
+   * FL_DRILL thickness
+   *
+   * FIXME: rename as dri_thick
+   */
   thick=0,
   //! frame thickness. 0 means 'no frame'
   frame=0,

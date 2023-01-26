@@ -75,7 +75,8 @@ module fl_hd(
   type,
   /*!
    * thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
-   * scalar «t» means [[t,t],[t,t],[t,t]]
+   *
+   * scalar «t» means `[[t,t],[t,t],[t,t]]`
    */
   thick,
   //! FL_LAYOUT directions in floating semi-axis list form

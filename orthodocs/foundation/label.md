@@ -26,6 +26,8 @@ fl_repos(oldpos,oldsize,newsize)
 
 modify position according to size modifications
 
+TODO: likely to be removed
+
 
 ---
 
@@ -38,6 +40,8 @@ fl_resize(oldsize,newsize,auto=false)
 ```
 
 mimics standard resize() module behaviour
+
+TODO: either remove or move elsewhere
 
 
 ## Modules

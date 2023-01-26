@@ -672,7 +672,7 @@ __Syntax:__
 fl_isEven(n)
 ```
 
-true when n is even */
+true when n is even
 
 ---
 
@@ -684,7 +684,7 @@ __Syntax:__
 fl_isMultiple(n,m)
 ```
 
-true when n is multiple of m */
+true when n is multiple of m
 
 ---
 
@@ -696,7 +696,7 @@ __Syntax:__
 fl_isOdd(n)
 ```
 
-true when n is odd */
+true when n is odd
 
 ---
 

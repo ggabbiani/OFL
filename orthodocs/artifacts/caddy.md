@@ -42,8 +42,9 @@ Even if not mandatory - when passed - children will be used during
 FL_ADD (for drilling), FL_ASSEMBLY (for rendering) and FL_LAYOUT.
 
 Children must implement the following verbs:
-FL_DRILL,FL_CUTOUT (used during FL_ADD)
-FL_ADD,FL_ASSEMBLY (used during FL_ASSEMBLY)
+
+- FL_DRILL,FL_CUTOUT (used during FL_ADD)
+- FL_ADD,FL_ASSEMBLY (used during FL_ASSEMBLY)
 
 Context passed to children:
 

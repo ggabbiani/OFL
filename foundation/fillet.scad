@@ -122,7 +122,7 @@ function fl_bb_90DegFillet(
   child_bbox,
 ) = [__3d__(child_bbox[0])-[r,r,0],__3d__(child_bbox[1])+[r,r,r]];
 
-/*! 90 Degree fillet taken from [OpenSCAD - Fillet With Internal Angles](https://forum.openscad.org/Fillet-With-Internal-Angles-td17201.html) */
+//! 90 Degree fillet taken from [OpenSCAD - Fillet With Internal Angles](https://forum.openscad.org/Fillet-With-Internal-Angles-td17201.html)
 module fl_90DegFillet(
   verbs = FL_ADD,
   //! fillet radius
