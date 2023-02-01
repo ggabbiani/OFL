@@ -3,3 +3,4 @@ stl
 .vscode
 *.bak
 nogit-*
+.DS_Store
