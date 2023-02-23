@@ -7,7 +7,5 @@ graph TD
     A4[artifacts/pcb_holder] --o|include| A2
     A2
     A5[artifacts/template]
-    click A1 "artifacts/box.md"
-    click A2 "artifacts/spacer.md"
 ```
 
