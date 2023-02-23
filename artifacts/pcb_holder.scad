@@ -81,7 +81,7 @@ module fl_pcb_holderByHoles(
   // echo(holes=holes);
   D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
   M     = fl_octant(octant,bbox=bbox);
-  Mpcb  = T(Z(h-pcb_bb[0].z));
+  Mpcb  = T(Z(h+pcb_t));
 
   module context() {
     $hld_thick  = thick;
@@ -214,7 +214,7 @@ function fl_bb_holderBySize(
     R       = __R__(screw),
     delta   = (__deltaXY__(h,tolerance,screw,knut!=undef)+R)*[1,1,0]
   )
-  echo(delta=delta)
+  // echo(delta=delta)
   [[pcb_bb[0].x,pcb_bb[0].y,0]-delta,[pcb_bb[1].x,pcb_bb[1].y,pcb_sz.z]+delta+Z(h-pcb_t)];
 
 function __deltaXY__(
@@ -288,7 +288,7 @@ module fl_pcb_holderBySize(
   r_knut  = knut ? fl_knut_r(knut) : r;
   R       = __R__(screw);
 
-  echo(scr_d=scr_d,h=h,knut=knut);
+  // echo(scr_d=scr_d,h=h,knut=knut);
 
   pcb_t   = fl_pcb_thick(pcb);
   pcb_bb  = fl_bb_corners(pcb);
@@ -296,7 +296,7 @@ module fl_pcb_holderBySize(
 
   D       = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
   M       = fl_octant(octant,bbox=bbox);
-  Mpcb    = T(Z(h-pcb_bb[0].z-pcb_t));
+  Mpcb    = T(Z(h));
 
   holes  = let(
       normal    = +Z,
@@ -310,10 +310,10 @@ module fl_pcb_holderBySize(
       quad_III  = [quad_II.x,low.y-delta,0],
       quad_IV   = [quad_I.x,quad_III.y,0]
     ) [
-    [quad_I,  normal,diameter,depth],
-    [quad_II, normal,diameter,depth],
-    [quad_III,normal,diameter,depth],
-    [quad_IV, normal,diameter,depth],
+    fl_Hole(quad_I,   diameter, normal, depth),
+    fl_Hole(quad_II,  diameter, normal, depth),
+    fl_Hole(quad_III, diameter, normal, depth),
+    fl_Hole(quad_IV,  diameter, normal, depth),
   ];
   // echo(holes=holes,bbox=bbox);
 
@@ -339,8 +339,8 @@ module fl_pcb_holderBySize(
           spacer(FL_ADD,position=$hole_pos,screw=$hld_screw);
       multmatrix(Mpcb)
         fl_bb_add([
-          pcb_bb[0]-tolerance*[1,1,0]-Z(NIL),
-          pcb_bb[1]+tolerance*[1,1,0]+Z(NIL)
+          [pcb_bb[0].x,pcb_bb[0].y,-pcb_t]-tolerance*[1,1,1]-Z(NIL),
+          [pcb_bb[1].x,pcb_bb[1].y,0]+tolerance*[1,1,0]+Z(NIL)
         ]);
     }
     if (frame) difference() {
