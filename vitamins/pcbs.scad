@@ -250,7 +250,22 @@ function fl_pcb_NopHoles(nop) = let(
     )
   ]
 ) holes;
-
+/*!
+ * Model for Raspberry PI 4.
+ * The following labels can be passed as **cut_label** parameter to fl_pcb{} when performing FL_CUTOUT:
+ *
+ * | Label      | Description                                   |
+ * |------------|-----------------------------------------------|
+ * | "POWER IN" | 5V DC via USB-C connector                     |
+ * | "HDMI0"    | micro-HDMI port 0                             |
+ * | "HDMI1"    | micro-HDMI port 1                             |
+ * | "A/V"      | 4-pole stereo audio and composite video port  |
+ * | "USB2"     | USB 2.0 port                                  |
+ * | "USB3"     | USB 3.0 port                                  |
+ * | "ETHERNET" | Gigabit Ethernet                              |
+ * | "GPIO"     | Raspberry Pi standard 40 pin GPIO header      |
+ * | "uSD"      | Micro-SD card slot                            |
+ */
 FL_PCB_RPI4 = let(
   w       = 56,
   l       = 85,
@@ -285,7 +300,16 @@ FL_PCB_RPI4 = let(
   ]
 ) fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=conns);
 
-//! pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+/*!
+ * PCB RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+ *
+ * The following labels can be passed as **cut_label** parameter to fl_pcb{} when performing FL_CUTOUT:
+ *
+ * | Label      | Description                             |
+ * |------------|-----------------------------------------|
+ * | "RF IN"  | Antenna connector                         |
+ * | "GPIO"   | Raspberry Pi standard 40 pin GPIO header  |
+ */
 FL_PCB_RPI_uHAT = let(
   pcb_t   = 1.6,
   size    = [65,30,pcb_t],
@@ -406,21 +430,7 @@ module fl_pcb(
   type,
   //! FL_CUTOUT tolerance
   cut_tolerance=0,
-  /*!
-   * FL_CUTOUT component filter by label.
-   *
-   * This parameter can assume one of the following values:
-   *
-   * - "POWER IN"
-   * - "HDMI0"
-   * - "HDMI1"
-   * - "A/V"
-   * - "USB2": USB 2 ports
-   * - "USB3": USB 3 ports
-   * - "ETHERNET"
-   * - "GPIO"
-   * - "uSD": micro SD card socket
-   */
+  //! FL_CUTOUT component filter by label. For the possible values consult the relevant «type» supported labels.
   cut_label,
   //! FL_CUTOUT component filter by direction (+X,+Y or +Z)
   cut_direction,

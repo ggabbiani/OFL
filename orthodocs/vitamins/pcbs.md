@@ -101,6 +101,22 @@ __Default:__
 
     let(w=56,l=85,h=16,pcb_t=1.5,hole_d=2.7,bare=[[-w/2,0,-pcb_t],[+w/2,l,0]],payload=[[bare[0].x,bare[0].y,0],[bare[1].x,bare[1].y,h]],holes=[fl_Hole([24.5,3.5,0],hole_d,depth=pcb_t,loct=-X),fl_Hole([24.5,61.5,0],hole_d,+Z,pcb_t,loct=+Y),fl_Hole([-24.5,3.5,0],hole_d,+Z,pcb_t,loct=+X),fl_Hole([-24.5,61.5,0],hole_d,+Z,pcb_t,loct=+Y),],comps=[["POWER IN",[FL_USB_NS,[25.5,11.2,0],[+X,0],FL_USB_TYPE_C,[["comp/drift",-1.3]]]],["HDMI0",[FL_HDMI_NS,[25,26,0],[+X,0],FL_HDMI_TYPE_D,[["comp/drift",-1.26]]]],["HDMI1",[FL_HDMI_NS,[25,39.5,0],[+X,0],FL_HDMI_TYPE_D,[["comp/drift",-1.26]]]],["A/V",[FL_JACK_NS,[22,54,0],[+X,0],FL_JACK_BARREL]],["USB2",[FL_USB_NS,[w/2-9,79.5,0],[+Y,0],FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],["USB3",[FL_USB_NS,[w/2-27,79.5,0],[+Y,0],FL_USB_TYPE_Ax2,[["comp/drift",-3]]]],["ETHERNET",[FL_ETHER_NS,[w/2-45.75,77.5,0],[+Y,0],FL_ETHER_RJ45,[["comp/drift",-3]]]],["GPIO",[FL_PHDR_NS,[-w/2+3.5,32.5,0],[+Z,90],FL_PHDR_GPIOHDR]],["uSD",[FL_SD_NS,[0,2,-pcb_t],[-Y,180],FL_SD_MOLEX_uSD_SOCKET,[["comp/octant",+Y+Z],["comp/drift",2]]]],],vendors=[["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],gpio_c=fl_comp_connectors(comps[7][1])[0],conns=[fl_conn_clone(gpio_c,type="plug",direction=[+Z,-90],octant=-X-Y),])fl_PCB("RPI4-MODBP-8GB",bare,pcb_t,"green",3,undef,holes,comps,undef,M3_cap_screw,vendors=vendors,connectors=conns)
 
+Model for Raspberry PI 4.
+The following labels can be passed as **cut_label** parameter to [fl_pcb{}](#module-fl_pcb) when performing FL_CUTOUT:
+
+| Label      | Description                                   |
+|------------|-----------------------------------------------|
+| "POWER IN" | 5V DC via USB-C connector                     |
+| "HDMI0"    | micro-HDMI port 0                             |
+| "HDMI1"    | micro-HDMI port 1                             |
+| "A/V"      | 4-pole stereo audio and composite video port  |
+| "USB2"     | USB 2.0 port                                  |
+| "USB3"     | USB 3.0 port                                  |
+| "ETHERNET" | Gigabit Ethernet                              |
+| "GPIO"     | Raspberry Pi standard 40 pin GPIO header      |
+| "uSD"      | Micro-SD card slot                            |
+
+
 ---
 
 ### variable FL_PCB_RPI_uHAT
@@ -109,7 +125,15 @@ __Default:__
 
     let(pcb_t=1.6,size=[65,30,pcb_t],bare=[[0,0,-pcb_t],[size.x,size.y,0]],hole_d=2.75,holes=[fl_Hole([3.5,size.y-3.5,0],hole_d,+Z,pcb_t,loct=-Y),fl_Hole([size.x-3.5,size.y-3.5,0],hole_d,+Z,pcb_t,loct=-Y),fl_Hole([size.x-3.5,3.5,0],hole_d,+Z,pcb_t,loct=+Y),],comps=[["RF IN",[FL_JACK_NS,[0,15,0],[-X,0],FL_JACK_MCXJPHSTEM1]],["GPIO",[FL_PHDR_NS,[32.5,size.y-3.5,0],[+Z,0],FL_PHDR_GPIOHDR_F_SMT_LOW]],],vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],gpio_conn_pos=fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),rf_conn_pos=fl_conn_pos(fl_comp_connectors(comps[0][1])[0]),connectors=[conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t],octant=+X+Y,direction=[-Z,180]),conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4],octant=+X+Y,direction=[-Z,0]),conn_Socket("antenna",-Z,+Y,rf_conn_pos,octant=+X+Y,direction=[-Z,-90]),])fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,connectors=connectors)
 
-pcb RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+PCB RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+
+The following labels can be passed as **cut_label** parameter to [fl_pcb{}](#module-fl_pcb) when performing FL_CUTOUT:
+
+| Label      | Description                             |
+|------------|-----------------------------------------|
+| "RF IN"  | Antenna connector                         |
+| "GPIO"   | Raspberry Pi standard 40 pin GPIO header  |
+
 
 ## Functions
 
@@ -359,20 +383,7 @@ __cut_tolerance__
 FL_CUTOUT tolerance
 
 __cut_label__  
-FL_CUTOUT component filter by label.
-
-This parameter can assume one of the following values:
-
-- "POWER IN"
-- "HDMI0"
-- "HDMI1"
-- "A/V"
-- "USB2": USB 2 ports
-- "USB3": USB 3 ports
-- "ETHERNET"
-- "GPIO"
-- "uSD": micro SD card socket
-
+FL_CUTOUT component filter by label. For the possible values consult the relevant «type» supported labels.
 
 __cut_direction__  
 FL_CUTOUT component filter by direction (+X,+Y or +Z)
