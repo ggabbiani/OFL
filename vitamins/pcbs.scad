@@ -149,7 +149,7 @@ function fl_comp_connectors(component)  = let(
 //! base constructor
 function fl_PCB(
     name,
-    //! bare (i.e. no payload) pcb's bounding box
+    //! bare (i.e. no payload) pcb's bounding box in the format `[[x,y,z],[X,Y,Z]]`
     bare,
     //! pcb thickness
     thick = 1.6,
