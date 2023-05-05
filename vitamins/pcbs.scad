@@ -148,8 +148,13 @@ function fl_comp_connectors(component)  = let(
 
 //! base constructor
 function fl_PCB(
+    //! optional name for the constructed type
     name,
-    //! bare (i.e. no payload) pcb's bounding box in the format `[[x,y,z],[X,Y,Z]]`
+    /*!
+     * bare (i.e. no payload) pcb's bounding box in the format `[[x,y,z],[X,Y,Z]]`
+     *
+     * See also fl_tt_isBoundingBox() for its definition.
+     */
     bare,
     //! pcb thickness
     thick = 1.6,
@@ -171,17 +176,29 @@ function fl_PCB(
      * each row represent one component with the following format:
      *
      * `["label", ["engine", [position], [[director],rotation] type],subtract]`
+     *
+     * See also fl_tt_isHole() for its definition.
      */
     components,
     //! grid specs
     grid,
     screw,
+    /*!
+     * Name of a DXF file used for describing the pcb geometry. When passed it
+     * will be used for rendering by verbs like FL_ADD.
+     *
+     * NOTE: the presence of a DXF file doesn't replace the bounding box
+     * parameter, since OpenSCAD is unable to return it from the DXF import{}
+     * module.
+     */
     dxf,
     vendors,
     connectors,
     director=+Z,
     rotor=+X
-  ) = let(
+  ) =
+  assert(fl_tt_isBoundingBox(bare),"«bare» must be a bounding box in high-low format")
+  let(
     comp_bbox = components ? fl_comp_BBox(components) : undef,
     pload = payload ? payload : comp_bbox,
     bbox  = pload

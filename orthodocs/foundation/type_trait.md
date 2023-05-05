@@ -119,6 +119,45 @@ indicates a value of 3 along +X, 1.5 along -Z and 0 otherwise.
 
 ---
 
+### function fl_tt_isBoundingBox
+
+__Syntax:__
+
+```text
+fl_tt_isBoundingBox(bbox)
+```
+
+return true when «bbox» is a bounding box in [low,high] format.
+
+A 3D bounding box (or 3D "bbox") is a volume of space that encloses a
+three-dimensional object. The 3D bounding box is defined as a rectangular
+parallelepiped, composed of six faces, each of which is a quadrilateral.
+The 3D bounding box is usually defined by three dimensions: width, height
+and depth. These three dimensions define the dimensions of the rectangular
+parallelepiped.
+
+The [high,low] format is a list containing two 3d points:
+
+```
+low-point==min(x),min(y),min(z) of the bounding box
+high-point==max(x),max(y),max(z) of the bounding box
+```
+
+__NOTE__: 0-sized bounding box are allowed
+
+TODO: When using a 3D bounding box, the coordinates of the 3D object are
+often converted to coordinates local to the bounding box, making
+manipulation of the object even easier.
+
+
+__Parameters:__
+
+__bbox__  
+bounding box to be verified
+
+
+---
+
 ### function fl_tt_isInDictionary
 
 __Syntax:__

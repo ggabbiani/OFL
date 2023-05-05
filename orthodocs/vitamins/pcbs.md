@@ -151,8 +151,14 @@ base constructor
 
 __Parameters:__
 
+__name__  
+optional name for the constructed type
+
 __bare__  
-bare (i.e. no payload) pcb's bounding box
+bare (i.e. no payload) pcb's bounding box in the format `[[x,y,z],[X,Y,Z]]`
+
+See also [fl_tt_isBoundingBox()](../foundation/type_trait.md#function-fl_tt_isboundingbox) for its definition.
+
 
 __thick__  
 pcb thickness
@@ -176,9 +182,20 @@ each row represent one component with the following format:
 
 `["label", ["engine", [position], [[director],rotation] type],subtract]`
 
+See also [fl_tt_isHole()](../foundation/hole.md#function-fl_tt_ishole) for its definition.
+
 
 __grid__  
 grid specs
+
+__dxf__  
+Name of a DXF file used for describing the pcb geometry. When passed it
+will be used for rendering by verbs like FL_ADD.
+
+NOTE: the presence of a DXF file doesn't replace the bounding box
+parameter, since OpenSCAD is unable to return it from the DXF import{}
+module.
+
 
 
 ---

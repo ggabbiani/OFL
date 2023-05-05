@@ -550,6 +550,7 @@
 - [fl_tt_isAxisList (function)](foundation/type_trait.md#function-fl_tt_isaxislist)
 - [fl_tt_isAxisString (function)](foundation/type_trait.md#function-fl_tt_isaxisstring)
 - [fl_tt_isAxisVList (function)](foundation/type_trait.md#function-fl_tt_isaxisvlist)
+- [fl_tt_isBoundingBox (function)](foundation/type_trait.md#function-fl_tt_isboundingbox)
 - [fl_tt_isDirectionRotation (function)](foundation/hole.md#function-fl_tt_isdirectionrotation)
 - [fl_tt_isHole (function)](foundation/hole.md#function-fl_tt_ishole)
 - [fl_tt_isHoleList (function)](foundation/hole.md#function-fl_tt_isholelist)
