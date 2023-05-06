@@ -29,7 +29,7 @@ __Syntax:__
 fl_Hole(position,d,normal=+Z,depth=0,ldir,loct,screw)
 ```
 
-constructor
+hole constructor in key-value list format
 
 __Parameters:__
 
@@ -37,10 +37,10 @@ __position__
 3d hole position
 
 __d__  
-diameter
+hole diameter
 
 __normal__  
-normal
+normal vector __exiting__ the surface being drilled
 
 __depth__  
 when depth is null hole is pass-through

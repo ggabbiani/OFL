@@ -27,6 +27,7 @@ function fl_bb_screw(type,length) =
 //*****************************************************************************
 // helpers
 
+//! return the [x,y,z] size of the screw
 function fl_screw_size(type,length) = let(
   bbox  = fl_bb_screw(type,length)
 ) bbox[1]-bbox[0];

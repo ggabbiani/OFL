@@ -103,6 +103,8 @@ __Syntax:__
 fl_screw_size(type,length)
 ```
 
+return the [x,y,z] size of the screw
+
 ## Modules
 
 ---

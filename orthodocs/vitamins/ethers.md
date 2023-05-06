@@ -22,7 +22,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_ETHER_RJ45,]
+    [FL_ETHER_RJ45,FL_ETHER_RJ45_SLIM]
 
 ---
 
@@ -41,6 +41,14 @@ ethernet namespace
 __Default:__
 
     let(bbox=let(l=21,w=16,h=13.5)[[-l/2,-w/2,0],[+l/2,+w/2,h]])[fl_name(value="RJ45"),fl_bb_corners(value=bbox),fl_director(value=+FL_X),fl_rotor(value=-FL_Z),]
+
+---
+
+### variable FL_ETHER_RJ45_SLIM
+
+__Default:__
+
+    let(l=12.6,w=14.4,h=11.5)[fl_name(value="RJ45 SLIM"),fl_bb_new(size=[l,w,h]),fl_director(value=+FL_X),fl_rotor(value=-FL_Z),]
 
 ## Modules
 

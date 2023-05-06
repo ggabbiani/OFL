@@ -172,17 +172,13 @@ When passed it concurs in pcb's bounding box calculations
 
 
 __holes__  
-each row represents a hole with the following format:
-
-`[[point],[normal], diameter, thickness]`
+each row represents a hole as returned from [fl_Hole()](../foundation/hole.md#function-fl_hole)
 
 
 __components__  
 each row represent one component with the following format:
 
-`["label", ["engine", [position], [[director],rotation] type],subtract]`
-
-See also [fl_tt_isHole()](../foundation/hole.md#function-fl_tt_ishole) for its definition.
+`["label", ["engine", [position], [[director],rotation], type],subtract]`
 
 
 __grid__  

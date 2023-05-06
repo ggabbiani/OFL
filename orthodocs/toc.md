@@ -191,6 +191,7 @@
 - [FL_ETHER_DICT (variable)](vitamins/ethers.md#variable-fl_ether_dict)
 - [FL_ETHER_NS (variable)](vitamins/ethers.md#variable-fl_ether_ns)
 - [FL_ETHER_RJ45 (variable)](vitamins/ethers.md#variable-fl_ether_rj45)
+- [FL_ETHER_RJ45_SLIM (variable)](vitamins/ethers.md#variable-fl_ether_rj45_slim)
 - [vitamins/ethers (package)](vitamins/ethers.md#package-vitaminsethers)
 - [FL_EXCLUDE_ANY (variable)](foundation/base_string.md#variable-fl_exclude_any)
 

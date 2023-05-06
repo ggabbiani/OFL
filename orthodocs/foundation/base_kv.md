@@ -36,8 +36,8 @@ fl_optProperty(type,key,value,default)
 
 'bipolar' optional property helper:
 
-- type/key{/default} ↦ value       (optional property getter)
-- key{/value}        ↦ [key,value] (property constructor)
+- type/key{/default} ↦ returns the property value (no error if property not found)
+- key{/value}        ↦ returns the property [key,value] (acts as a property constructor)
 
 It concentrates property key definition reducing possible mismatch when
 referring to property key in the more usual getter/setter function pair.
@@ -70,8 +70,8 @@ fl_property(type,key,value,default)
 
 'bipolar' property helper:
 
-- type/key{/default} ↦ value       (mandatory property getter)
-- key{/value}        ↦ [key,value] (property constructor)
+- type/key{/default} ↦ returns the property value (error if property not found)
+- key{/value}        ↦ returns the property [key,value] (acts as a property constructor)
 
 It concentrates property key definition reducing possible mismatch when
 referring to property key in the more usual getter/setter function pair.

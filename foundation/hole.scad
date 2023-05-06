@@ -67,13 +67,13 @@ function fl_tt_isHole(hole) = let(
 
 function fl_tt_isHoleList(list) = fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));
 
-//! constructor
+//! hole constructor in key-value list format
 function fl_Hole(
   //! 3d hole position
   position,
-  //! diameter
+  //! hole diameter
   d,
-  //! normal
+  //! normal vector __exiting__ the surface being drilled
   normal  = +Z,
   //! when depth is null hole is pass-through
   depth = 0,
