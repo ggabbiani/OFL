@@ -167,17 +167,13 @@ function fl_PCB(
      */
     payload,
     /*!
-     * each row represents a hole with the following format:
-     *
-     * `[[point],[normal], diameter, thickness]`
+     * each row represents a hole as returned from fl_Hole()
      */
     holes = [],
     /*!
      * each row represent one component with the following format:
      *
-     * `["label", ["engine", [position], [[director],rotation] type],subtract]`
-     *
-     * See also fl_tt_isHole() for its definition.
+     * `["label", ["engine", [position], [[director],rotation], type],subtract]`
      */
     components,
     //! grid specs
@@ -633,7 +629,7 @@ module fl_pcb(
       else if ($engine==FL_JACK_NS)
         fl_jack(type=$type,direction=$direction);
       else if ($engine==FL_ETHER_NS)
-        fl_ether(type=$type,direction=$direction);
+        fl_ether(type=$type,octant=$octant,direction=$direction);
       else if ($engine==FL_PHDR_NS)
         // FIXME: add namespace to context variables in order to avoid common parameters collision
         fl_pinHeader(FL_ADD,type=$type,octant=$octant,direction=$direction);
