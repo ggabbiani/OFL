@@ -8,7 +8,11 @@
 
 //**** Global getters *********************************************************
 
-//! When true fl_assert() is enabled
+/*!
+ * When true fl_assert() is enabled
+ *
+ * TODO: remove since deprecated.
+ */
 function fl_asserts() = is_undef($fl_asserts) ? false : assert(is_bool($fl_asserts)) $fl_asserts;
 
 //! When true debug statements are turned on
