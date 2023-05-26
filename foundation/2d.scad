@@ -609,7 +609,7 @@ function __step__(angle) = sin(angle/3)==1 ? 1 : cos(angle)>0 ? 1 : -1;
 /*!
  * Converts «θ» value to the corresponding ellipse «t» parameter
  *
- * __NOTE:__ we need to extend the theoretical function behiond ±π/2 codomain,
+ * __NOTE:__ we need to extend the theoretical function beyond ±π/2 codomain,
  * for that we use __ramp__() and __step__() function accordingly.
  */
 function fl_ellipseT(e,angle) =
@@ -914,6 +914,9 @@ function fl_square(
       )
   ) points;
 
+/*!
+ * Draw a 2d square centered at the origin.
+ */
 module fl_square(
   verbs   = FL_ADD,
   size    = [1,1],
@@ -921,7 +924,7 @@ module fl_square(
    * List of four radiuses, one for each quadrant's corners.
    * Each zero means that the corresponding corner is squared.
    * Defaults to a 'perfect' rectangle with four squared corners.
-   * Scalar value R for «vertices» means corners=[R,R,R,R]
+   * Scalar value R for «corners» means corners=[R,R,R,R]
    *
    * See also function fl_square() for more complete examples.
   */
