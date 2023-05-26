@@ -10,6 +10,8 @@ include <../../foundation/type_trait.scad>
 include <../../foundation/unsafe_defs.scad>
 // include <../../foundation/hole.scad>
 
+fl_status();
+
 assert(fl_tt_isInDictionary("inexistent",["key1","key2","key3"])==false);
 assert(fl_tt_isInDictionary("key2",["key1","key2","key3"]));
 
@@ -95,3 +97,55 @@ let(
   axes  = [[1,2,3],-Z],
   r     = fl_tt_isAxisList(axes)
 ) assert(!r,axes);
+
+// verb lists
+
+let(
+  verbs = "Single verb",
+  r     = fl_tt_isVerbList(verbs)
+) assert(r,verbs);
+
+let(
+  verbs = ["First", "Second", "Third"],
+  r     = fl_tt_isVerbList(verbs)
+) assert(r,verbs);
+
+let(
+  verbs = -1,
+  r     = fl_tt_isVerbList(verbs)
+) assert(!r,verbs);
+
+let(
+  verbs = ["First", -1, "Third"],
+  r     = fl_tt_isVerbList(verbs)
+) assert(!r,verbs);
+
+let(
+  bbox = [[0, 0], [100, 100]]
+) assert(fl_tt_isBoundingBox(bbox),bbox);
+
+let(
+  p = [1]
+) assert(!fl_tt_isPosition(p),p);
+let(
+  p = [1,2]
+) assert(fl_tt_isPosition(p),p);
+let(
+  p = [1,2,3]
+) assert(fl_tt_isPosition(p),p);
+let(
+  p = [1,2,3,4]
+) assert(!fl_tt_isPosition(p),p);
+let(
+  p = ["1",2]
+) assert(!fl_tt_isPosition(p),p);
+
+let(
+  comp  = [
+    "test",
+    [25.5,11.2,0],
+    [+[1,0,0],0 ],
+    [], // fake type
+    [["comp/drift",-1.3]]
+  ]
+) assert(fl_tt_isComponent(comp),comp);
