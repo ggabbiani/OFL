@@ -13,6 +13,7 @@ include <type_trait.scad>
 
 //*****************************************************************************
 // General properties
+
 function fl_holes(type,value)               = assert(is_undef(value)||fl_tt_isHoleList(value),value) fl_property(type,"holes",value);
 
 //*****************************************************************************
@@ -28,21 +29,6 @@ function fl_hole_screw(hole,value,default)  = fl_optProperty(hole,"hole/screw",v
 
 //*****************************************************************************
 // type traits
-
-function fl_tt_is3d(3d) = len(3d)==3;
-
-function fl_tt_isOctant(3d) =
-  fl_tt_is3d(3d)
-  && (3d.x==0 || abs(3d.x)==1)
-  && (3d.y==0 || abs(3d.y)==1)
-  && (3d.z==0 || abs(3d.z)==1);
-
-function fl_tt_isDirectionRotation(value) = let(
-    direction = value[0],
-    rotation  = value[1]
-  )  (len(value)==2)
-  && (fl_tt_is3d(direction))
-  && (is_num(rotation));
 
 /*!
  * Hole representation as mandatory properties check:
