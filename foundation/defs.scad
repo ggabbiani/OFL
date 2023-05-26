@@ -25,22 +25,32 @@ function fl_versionNumber() = let(
 ) version.x*10000+version.y*100+version.z;
 
 //*****************************************************************************
+// status
+
+module fl_status() {
+  v=fl_version();
+  echo(str("**OFL** Version : ",v.x,".",v.y,".",v.z));
+  echo(str("**OFL** Debug   : ",fl_debug()));
+}
+
+//*****************************************************************************
 // assertions
+// TODO: remove this section since DEPRECATED
 
 module fl_assert(condition, message) {
   // echo($fl_asserts=$fl_asserts,condition=condition,message=message);
-  if (fl_asserts())
-    /* echo("assertions enabled") */ assert(condition,str("****ASSERT****: ",message));
+  if (fl_debug())
+    echo("assertions enabled") assert(condition,str("****ASSERT****: ",message));
   children();
 }
 
 function fl_assert(condition,message,result) =
   // echo($fl_asserts=$fl_asserts,condition=condition,message=message,result=result)
-  fl_asserts()
-    ? is_list(condition)
+  fl_debug()
+    ? echo("assertions enabled") is_list(condition)
       ? assert(is_list(message)) condition ? assert(condition[0],message[0]) fl_assert(fl_pop(condition),message?fl_pop(message):[],result) : result
       : assert(condition,str("****ASSERT****: ",message)) result
-    : result;
+    : /* echo("assertions disabled") */ result;
 
 //*****************************************************************************
 // lists
@@ -268,7 +278,7 @@ function fl_deprecated(bad,value,replacement) = let(
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value);
 function fl_director(type,value)    = fl_property(type,"director",value);
-function fl_dxf(type,value)         = fl_property(type,"DXF model",value);
+function fl_dxf(type,value)         = fl_property(type,"DXF model file",value);
 function fl_engine(type,value)      = fl_property(type,"engine",value);
 function fl_material(type,value,default)
                                     = fl_property(type,"material (actually a color)",value,default);
@@ -479,6 +489,9 @@ module fl_axes(size=1,reverse=false) {
   color("green") fl_vector(sz.y*FL_Y,reverse==undef || !reverse);
   if (sz.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
+
+//! Generate a shade of grey to pass to color().
+function fl_grey(n) = [0.01, 0.01, 0.01] * n;
 
 /*!
  * Set current color and alpha channel, using variable $fl_filament when «color» is
