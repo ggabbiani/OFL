@@ -8,6 +8,49 @@
 
 include <base_string.scad>
 
+function fl_tt_is2d(p) = len(p)==2 && is_num(p.x) && is_num(p.y);
+
+function fl_tt_is3d(p) = len(p)==3 && is_num(p.x) && is_num(p.y) && is_num(p.z);
+
+function fl_tt_isPosition(p) = fl_tt_is2d(p) || fl_tt_is3d(p);
+
+function fl_tt_isOctant(3d) =
+  fl_tt_is3d(3d)
+  && (3d.x==0 || abs(3d.x)==1)
+  && (3d.y==0 || abs(3d.y)==1)
+  && (3d.z==0 || abs(3d.z)==1);
+
+/*!
+ * check whether «value» is a valid [axis,rotation angle] format:
+ */
+function fl_tt_isDirectionRotation(value) = let(
+    direction = value[0],
+    rotation  = value[1]
+  )  (len(value)==2)
+  && (fl_tt_is3d(direction))
+  && (is_num(rotation));
+
+/*!
+ * check if «comp» is a valid component format:
+ *
+ *    ["engine", [position], [[director],rotation], type, properties]
+ */
+function fl_tt_isComponent(comp) = let(
+) (   is_string(comp[0])                  // engine
+  &&  fl_tt_is3d(comp[1])                 // position
+  &&  fl_tt_isDirectionRotation(comp[2])  // [direction,rotation]
+  &&  is_list(comp[3])                    // type
+  &&  (is_undef(props) || is_list(props)) // optional properties
+);
+
+/*!
+ * Component specification list check
+ *
+ *    ["label", component]
+ */
+function fl_tt_isCompSpecList(specs) =
+  fl_tt_isKVList(specs,f=function (value) fl_tt_isComponent(value));
+
 /*!
  * return true when «bbox» is a bounding box in [low,high] format.
  *
@@ -18,7 +61,7 @@ include <base_string.scad>
  * and depth. These three dimensions define the dimensions of the rectangular
  * parallelepiped.
  *
- * The [high,low] format is a list containing two 3d points:
+ * The [low,high] format is a list containing two 3d points:
  *
  * ```
  * low-point==min(x),min(y),min(z) of the bounding box
@@ -34,13 +77,14 @@ include <base_string.scad>
 function fl_tt_isBoundingBox(
   //! bounding box to be verified
   bbox
-) = (
+) = let(l1=len(bbox[0]), l2=len(bbox[1])) (
   len(bbox)==2
-  && len(bbox[0])==3
-  && len(bbox[1])==3
+  && (l1==2 || l1==3)
+  && (l2==2 || l2==3)
+  && (l1==l2)
   && bbox[0].x<=bbox[1].x
   && bbox[0].y<=bbox[1].y
-  && bbox[0].z<=bbox[1].z
+  &&  (l1==2 ? true : bbox[0].z<=bbox[1].z)
 );
 
 /*!
@@ -54,10 +98,11 @@ function fl_tt_isList(
   //! optional list size
   size
 ) = let(
-  len   = assert(is_list(list),list) len(list),
+  len   = is_list(list) ? len(list) : -1,
   rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
 ) (
-    (size!=undef ? size==len : true)
+    (len>-1)
+    && (size!=undef ? size==len : true)
     && (len>0 ? f(list[0]) : true)
     && (rest!=[] ? fl_tt_isList(rest,f) : true)
   );
@@ -188,3 +233,9 @@ function fl_tt_isAxis(axis) = (axis==-X||axis==+X||axis==-Y||axis==+Y||axis==-Z|
  */
 function fl_tt_isAxisList(list) =
   fl_tt_isList(list,f=function(axis) fl_tt_isAxis(axis));
+
+/*!
+ * verb list is either a single verb string or a list of verb strings.
+ */
+function fl_tt_isVerbList(verbs) =
+  is_string(verbs) || fl_tt_isList(verbs,f=function(v) is_string(v));
