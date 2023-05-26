@@ -14,102 +14,96 @@ FL_USB_NS = "usb";
 // USB properties
 // when invoked by «type» parameter act as getters
 // when invoked by «value» parameter act as property constructors
-function fl_USB_type(type,value)    = fl_property(type,"usb/type",value);
 function fl_USB_flange(type,value)  = fl_property(type,"usb/flange",value);
 
 //*****************************************************************************
-//! USB constructor
-function fl_USB_new(utype,flange=true) =
-  utype=="Ax1"
-  ? let(
-      // following data definitions taken from NopSCADlib usb_Ax1() module
-      h           = 6.5,
-      v_flange_l  = 4.5,
-      bar         = 0,
-      // following data definitions taken from NopSCADlib usb_A() module
-      l         = 17,
-      w         = 13.25,
-      flange_t  = 0.4,
-      // calculated bounding box corners
-      bbox      = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
-    ) [
-      fl_USB_type(value=utype),
-      fl_bb_corners(value=bbox),
-      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-      fl_USB_flange(value=flange),
-    ]
-  : utype=="Ax2"
-  ? let(
-      // following data definitions taken from NopSCADlib usb_Ax2() module
-      h           = 15.6,
-      v_flange_l  = 12.15,
-      bar         = 3.4,
-      // following data definitions taken from NopSCADlib usb_A() module
-      l           = 17,
-      w           = 13.25,
-      flange_t    = 0.4,
-      // calculated bounding box corners
-      bbox        = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
-    ) [
-      fl_USB_type(value=utype),
-      fl_bb_corners(value=bbox),
-      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-      fl_USB_flange(value=true),
-    ]
-  : utype=="B"
-  ? let(
-      // following data definitions taken from NopSCADlib usb_A() module
-      l     = 16.4,
-      w     = 12.2,
-      h     = 11,
-      // calculated bounding box corners
-      bbox  = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
-    ) [
-      fl_USB_type(value=utype),
-      fl_bb_corners(value=bbox),
-      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-      fl_USB_flange(value=false),
-    ]
-  : utype=="C"
-  ? let(
-      // following data definitions taken from NopSCADlib usb_C() module
-      l     = 7.35,
-      w     = 8.94,
-      h     = 3.26,
-      // calculated bounding box corners
-      bbox  = [[-l/2,-w/2,0],[+l/2,+w/2,h]]
-    ) [
-      fl_USB_type(value=utype),
-      fl_bb_corners(value=bbox),
-      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-      fl_USB_flange(value=false),
-    ]
-  : utype=="uA"
-  ? let(
-      // following data definitions taken from NopSCADlib usb_uA() module
-      l = 6,
-      iw1 = 7,
-      h = 2.65,
-      t = 0.4,
-      // calculated bounding box corners
-      bbox        = [[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]
-    ) [
-      fl_USB_type(value=utype),
-      fl_bb_corners(value=bbox),
-      fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-      fl_USB_flange(value=flange),
-    ]
-  : assert(false) [];
+FL_USB_TYPE_Ax1_NF_SM = let(
+  h = 6.5, l = 10, w = 13.25
+) [
+  fl_engine(value="USB/A SM"),
+  fl_bb_corners(value=[[-l,-w/2,0],[0,+w/2,h]]),
+  fl_director(value=+X),fl_rotor(value=+Y),
+  fl_USB_flange(value=false),
+];
 
-FL_USB_TYPE_Ax1     = fl_USB_new("Ax1");
-FL_USB_TYPE_Ax1_NF  = fl_USB_new("Ax1",false);
-FL_USB_TYPE_Ax2     = fl_USB_new("Ax2");
-FL_USB_TYPE_B       = fl_USB_new("B");
-FL_USB_TYPE_C       = fl_USB_new("C");
-FL_USB_TYPE_uA      = fl_USB_new("uA");
-FL_USB_TYPE_uA_NF   = fl_USB_new("uA",false);
+FL_USB_TYPE_Ax1 = let(
+  // from NopSCADlib usb_Ax1() module
+  h=6.5, v_flange_l=4.5, bar=0,
+  // from NopSCADlib usb_A() module
+  l=17,w=13.25,flange_t= 0.4
+) [
+  fl_engine(value="USB/Ax1"),
+  fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
+  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  fl_USB_flange(value=true),
+];
+
+FL_USB_TYPE_Ax1_NF = let(
+  // from NopSCADlib usb_Ax1() module
+  h=6.5,
+  // from NopSCADlib usb_A() module
+  l=17,w=13.25,flange_t= 0.4
+) [
+  fl_engine(value="USB/Ax1"),
+  fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
+  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  fl_USB_flange(value=false),
+];
+
+FL_USB_TYPE_Ax2 = let(
+  // from NopSCADlib usb_Ax2() module
+  h=15.6,
+  // from NopSCADlib usb_A() module
+  l=17, w=13.25, flange_t=0.4
+) [
+  fl_engine(value="USB/Ax2"),
+  fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
+  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  fl_USB_flange(value=true),
+];
+
+FL_USB_TYPE_B   = let(
+  // from NopSCADlib usb_A() module
+  l=16.4, w=12.2, h=11
+) [
+  fl_engine(value="USB/B"),
+  fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
+  fl_director(value=+FL_X),fl_rotor(value=+Y),
+  fl_USB_flange(value=false),
+];
+
+FL_USB_TYPE_C   = let(
+  // from NopSCADlib usb_C() module
+  l=7.35, w=8.94, h=3.26
+) [
+  fl_engine(value="USB/C"),
+  fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
+  fl_director(value=+X),fl_rotor(value=+Y),
+  fl_USB_flange(value=false),
+];
+
+FL_USB_TYPE_uA = let(
+  // from NopSCADlib usb_uA() module
+  l = 6, iw1 = 7, h = 2.65, t = 0.4
+) [
+  fl_engine(value="USB/uA"),
+  fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),
+  fl_director(value=+X),fl_rotor(value=+Y),
+  fl_USB_flange(value=true),
+];
+
+FL_USB_TYPE_uA_NF = let(
+  // from NopSCADlib usb_uA() module
+  l = 6, iw1 = 7, h = 2.65, t = 0.4
+) [
+  fl_engine(value="USB/uA"),
+  fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),
+  fl_director(value=+X),fl_rotor(value=+Y),
+  fl_USB_flange(value=false),
+];
 
 FL_USB_DICT = [
+  FL_USB_TYPE_Ax1_NF_SM,
   FL_USB_TYPE_Ax1,
   FL_USB_TYPE_Ax1_NF,
   FL_USB_TYPE_Ax2,
@@ -145,17 +139,104 @@ module fl_USB(
   size  = fl_bb_size(type);
   D     = direction ? fl_direction(proto=type,direction=direction)  : I;
   M     = fl_octant(octant,bbox=bbox);
-  utype = fl_USB_type(type);
+  engine = fl_engine(type);
   fl_trace("D",D);
   fl_trace("cutout drift",cut_drift);
 
   module wrap() {
-    if      (utype=="Ax1")  usb_Ax1(tongue=tongue,flange=flange);
-    else if (utype=="Ax2")  usb_Ax2();
-    else if (utype=="B")    usb_B();
-    else if (utype=="C")    usb_C();
-    else if (utype=="uA")   usb_uA(flange=flange);
-    else assert(false,str("Unimplemented USB type ",utype));
+    if      (engine=="USB/A SM") usb_A_sm($verb);
+    else if (engine=="USB/Ax1")  usb_Ax1(tongue=tongue,flange=flange);
+    else if (engine=="USB/Ax2")  usb_Ax2(tongue=tongue);
+    else if (engine=="USB/B")    usb_B();
+    else if (engine=="USB/C")    usb_C();
+    else if (engine=="USB/uA")   usb_uA(flange=flange);
+    else assert(false,engine);
+  }
+
+  module usb_A_sm(verb) {
+    Tshield = 0.35;
+    Rext    = 0.32;
+    Rint    = Rext-0.1;
+
+    module tongue() {
+      l = 8.38;
+      w = 11.10;
+      h = 1.84;
+
+      translate([-l, 0 , h / 2])
+        hull() {
+          fl_linear_extrude(length=(l-2),direction=[X,90])
+            fl_square(size=[w, h]);
+
+          fl_linear_extrude(length=l,direction=[X,90])
+            fl_square(size=[w - 1, h - 1]);
+        }
+    }
+
+    module do_add() {
+      translate(+Z(size.z/2)) {
+        fl_color("silver")
+          fl_linear_extrude(length=size.x,direction=[-X,0])
+            difference() {
+              fl_square(size=[size.z,size.y],corners=Rext);
+              fl_square(size=[size.z-2*Tshield,size.y-2*Tshield],corners=Rint);
+            }
+        fl_color(tongue)
+          tongue();
+        fl_color(fl_grey(30))
+          translate(-X(size.x-Tshield))
+            fl_linear_extrude(length=Tshield,direction=[-X,0])
+              fl_square(size=[size.z-2*Tshield,size.y-2*Tshield],corners=Rint);
+      }
+    }
+
+    module do_cutout() {
+      translate(+X(cut_thick+cut_drift)+Z(size.z/2))
+        fl_linear_extrude(length=cut_thick,direction=[-X,0])
+          offset(r=tolerance)
+            fl_square(size=[size.z,size.y],corners=Rint);
+    }
+
+    // module do_assembly() {}
+    // module do_drill() {}
+    // module do_footprint() {}
+    // module do_layout() {}
+    // module do_mount() {}
+    // module do_pload() {}
+
+    if (verb==FL_ADD) {
+      do_add();
+
+    // } else if (verb==FL_ASSEMBLY) {
+    //   fl_modifier($modifier) do_assembly();
+
+    // } else if (verb==FL_BBOX) {
+    //   fl_bb_add(bbox);
+
+    } else if (verb==FL_CUTOUT) {
+      do_cutout();
+
+    // } else if (verb==FL_DRILL) {
+    //   do_drill();
+
+    // } else if (verb==FL_FOOTPRINT) {
+    //   do_footprint();
+
+    // } else if (verb==FL_LAYOUT) {
+    //   do_layout()
+    //     children();
+
+    // } else if (verb==FL_MOUNT) {
+    //   do_mount()
+    //     children();
+
+    // } else if (verb==FL_PAYLOAD) {
+    //   do_pload()
+    //     children();
+
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",verb));
+    }
   }
 
   fl_manage(verbs,M,D,size) {
@@ -169,10 +250,14 @@ module fl_USB(
     } else if ($verb==FL_CUTOUT) {
       assert(cut_drift!=undef);
       assert(cut_thick!=undef);
+
       fl_modifier($modifier)
-        translate(+X(size.x/2+cut_drift))
-          fl_cutout(len=cut_thick,z=X,x=Y,delta=tolerance)
-            wrap();
+        if (engine=="USB/A SM")
+          wrap();
+        else
+          translate(+X(size.x/2+cut_drift))
+            fl_cutout(len=cut_thick,z=X,x=Y,delta=tolerance)
+              wrap();
 
     } else if ($verb==FL_FOOTPRINT) {
       assert(tolerance!=undef,tolerance);

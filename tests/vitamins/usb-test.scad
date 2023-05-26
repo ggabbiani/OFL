@@ -47,7 +47,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [USB] */
 
-SHOW      = "ALL";  // [ALL,FL_USB_TYPE_Ax1,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C,FL_USB_TYPE_uA]
+SHOW      = "ALL";  // [ALL,FL_USB_TYPE_Ax1_NF_SM,FL_USB_TYPE_Ax1,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C,FL_USB_TYPE_uA]
 // tolerance used during FL_CUTOUT and FL_FOOTPRINT
 TOLERANCE = 0;      // [0:0.1:5]
 // thickness for FL_CUTOUT
@@ -73,11 +73,12 @@ verbs=[
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
 ];
 // target object(s)
-single  = SHOW=="FL_USB_TYPE_Ax1" ? FL_USB_TYPE_Ax1
-        : SHOW=="FL_USB_TYPE_Ax2" ? FL_USB_TYPE_Ax2
-        : SHOW=="FL_USB_TYPE_B"   ? FL_USB_TYPE_B
-        : SHOW=="FL_USB_TYPE_C"   ? FL_USB_TYPE_C
-        : SHOW=="FL_USB_TYPE_uA"  ? FL_USB_TYPE_uA
+single  = SHOW=="FL_USB_TYPE_Ax1_NF_SM"  ? FL_USB_TYPE_Ax1_NF_SM
+        : SHOW=="FL_USB_TYPE_Ax1"   ? FL_USB_TYPE_Ax1
+        : SHOW=="FL_USB_TYPE_Ax2"   ? FL_USB_TYPE_Ax2
+        : SHOW=="FL_USB_TYPE_B"     ? FL_USB_TYPE_B
+        : SHOW=="FL_USB_TYPE_C"     ? FL_USB_TYPE_C
+        : SHOW=="FL_USB_TYPE_uA"    ? FL_USB_TYPE_uA
         : undef;
 
 fl_trace("verbs",verbs);
