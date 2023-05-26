@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <../../dxf.scad>
 include <../../vitamins/ethers.scad>
 
 $fn         = 50;           // [3:100]
@@ -25,7 +26,7 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -44,6 +45,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [RJ45] */
 
+ETHER = "FL_ETHER_RJ45";  // [FL_ETHER_RJ45, FL_ETHER_RJ45_SM]
 // tolerance used during FL_CUTOUT
 CO_TOLERANCE   = 0;  // [0:0.1:5]
 // thickness for FL_CUTOUT
@@ -53,11 +55,13 @@ CO_DRIFT = 0; // [-5:0.05:5]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef         : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef         : OCTANT;
+direction = DIR_NATIVE        ? undef         : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE      ? undef         : OCTANT;
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
-drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT : undef;
+drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
+
+p_thick = thick!=undef && drift!=undef ? thick-drift : undef;
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
@@ -66,8 +70,10 @@ verbs=[
   if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
 ];
+ether = ETHER=="FL_ETHER_RJ45"  ? FL_ETHER_RJ45
+      : FL_ETHER_RJ45_SM;
 
 fl_trace("verbs",verbs);
 
-fl_ether(verbs,FL_ETHER_RJ45,
-  direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift);
+fl_ether(verbs,ether,
+  direction=direction,octant=octant,cut_thick=p_thick,cut_tolerance=tolerance,cut_drift=drift);
