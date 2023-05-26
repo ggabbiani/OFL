@@ -46,7 +46,7 @@ function fl_grid_hex(
         // clipped = [for(p=points) if (p.x>bbox[0].x && p.y>bbox[0].y && p.x<bbox[1].x && p.y<bbox[1].y) p]
       )
       // echo(points=points)
-      echo(center=center) concat([center],points)
+      /* echo(center=center) */ concat([center],points)
   )
   fl_grid_quad(origin,size,bbox,generator);
 
