@@ -102,12 +102,15 @@ T_NIL     = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
 fl_trace("faces",faces);
 
 module medium() {
-  if (medium==FL_PCB_RPI4)    fl_pcb($cad_verbs,medium,thick=$cad_thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE)
-    children();
-  else if (medium==FL_HD_EVO860) fl_hd($cad_verbs,medium,thick=$cad_thick+T_NIL,lay_direction=faces,dri_tolerance=$cad_tolerance)
-    children();
-  else                        fl_psu($cad_verbs,medium,thick=$cad_thick,lay_direction=faces)
-    children();
+  if (medium==FL_PCB_RPI4)
+    fl_pcb($cad_verbs,medium,thick=$cad_thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE)
+      children();
+  else if (medium==FL_HD_EVO860)
+    fl_hd($cad_verbs,medium,thick=$cad_thick+T_NIL,lay_direction=faces,dri_tolerance=$cad_tolerance)
+      children();
+  else
+    fl_psu($cad_verbs,medium,thick=$cad_thick,lay_direction=faces)
+      children();
 }
 
 fl_caddy(verbs,medium,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,lay_verbs=[FL_LAYOUT],direction=direction,octant=octant)
