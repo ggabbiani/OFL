@@ -6,8 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-use     <../dxf.scad>
-include <pcbs.scad>
+include <../foundation/3d.scad>
+include <../foundation/bbox.scad>
+include <../foundation/defs.scad>
 
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
@@ -15,11 +16,11 @@ include <NopSCADlib/vitamins/screws.scad>
 //! namespace
 FL_HS_NS  = "hs";
 
-FL_HS_PIMORONI = let(
-  size  = [56,87,25.5]
+FL_HS_PIMORONI_TOP = let(
+  Tbase = 1.5, Tfluting = 8.6, Tholders = 5.5,
+  size  = [56,70,Tbase+Tfluting+Tholders]
 ) [
-  fl_name(value="PIMORONI Heatsink Case"),
-  fl_description(value="PIMORONI Aluminium Heatsink Case for Raspberry Pi 4"),
+  fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - top"),
   fl_bb_corners(value=[
     [-size.x/2, 0,      0       ],  // negative corner
     [+size.x/2, size.y, size.z  ],  // positive corner
@@ -27,47 +28,72 @@ FL_HS_PIMORONI = let(
   fl_screw(value=M2p5_cap_screw),
   fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_dxf(value="vitamins/pimoroni.dxf"),
-  ["corner radius",      3],
-  ["bottom part", [
-    ["layer 0 base thickness",    2   ],
-    ["layer 0 fluting thickness", 2.3 ],
-    ["layer 0 holders thickness", 3   ],
-  ]],
-  ["top part", [
-    ["layer 1 base thickness",    1.5   ],
-    ["layer 1 fluting thickness", 8.6   ],
-    ["layer 1 holders thickness", 5.5   ],
-  ]],
   fl_vendor(value=[
       ["Amazon", "https://www.amazon.it/gp/product/B082Y21GX5/"],
     ]
   ),
+  fl_engine(value="Pimoroni"),
+
+  // private/undocumented properties
+  ["corner radius",     3         ],
+  ["base thickness",    Tbase     ],
+  ["fluting thickness", Tfluting  ],
+  ["holders thickness", Tholders  ],
+  ["part",              "top"     ],
 ];
 
-FL_HS_DICT  = [FL_HS_PIMORONI];
+FL_HS_PIMORONI_BOTTOM = let(
+  Tbase = 2, Tfluting = 2.3, Tholders = 3,
+  size  = [56,87,Tbase+Tfluting+Tholders]
+) [
+  fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - bottom"),
+  fl_bb_corners(value=[
+    [-size.x/2, 0,      -size.z ],  // negative corner
+    [+size.x/2, size.y, 0       ],  // positive corner
+  ]),
+  fl_screw(value=M2p5_cap_screw),
+  fl_director(value=-FL_Z),fl_rotor(value=-FL_X),
+  fl_dxf(value="vitamins/pimoroni.dxf"),
+  fl_vendor(value=[
+      ["Amazon", "https://www.amazon.it/gp/product/B082Y21GX5/"],
+    ]
+  ),
+  fl_engine(value="Pimoroni"),
+
+  // private/undocumented properties
+  ["corner radius",     3         ],
+  ["base thickness",    Tbase     ],
+  ["fluting thickness", Tfluting  ],
+  ["holders thickness", Tholders  ],
+  ["part",              "bottom"  ],
+];
+
+FL_HS_KHADAS = let(
+  Zs  =2, Zh =1, Zf=5.45,
+  Zt  =2.2
+) [
+  fl_name(value="KHADAS VIM SBC Heatsink"),
+  fl_bb_corners(value=[
+    [0.5,   -49.57,   0         ],  // negative corner
+    [81.49,  -0.49,   Zs+Zh+Zf  ],  // positive corner
+  ]),
+  fl_screw(value=M2_cap_screw),
+  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
+  fl_dxf(value="vitamins/hs-khadas.dxf"),
+  fl_engine(value="Khadas"),
+
+  // private/undocumented properties
+  fl_property(key="separator height", value=Zs),
+  fl_property(key="heatsink height",  value=Zh),
+  fl_property(key="fin height",       value=Zf),
+  fl_property(key="tooth height",     value=Zt),
+];
+
+FL_HS_DICT  = [FL_HS_PIMORONI_TOP, FL_HS_PIMORONI_BOTTOM, FL_HS_KHADAS];
 
 /*!
- * calculates Pimoroni's bounding box
+ * TODO: TO BE REMOVED
  */
-function fl_bb_pimoroni(
-  type,
-  //! top part
-  top       = true,
-  //! bottom part
-  bottom    = true,
-) = let(
-  bb    = fl_bb_corners(type),
-  pcb_bb  = fl_bb_corners(FL_PCB_RPI4),
-  pcb_t  = fl_pcb_thick(FL_PCB_RPI4),
-  bot_p = fl_get(type,"bottom part"),
-  bot_t = fl_get(bot_p,"layer 0 base thickness") + fl_get(bot_p,"layer 0 fluting thickness") + fl_get(bot_p,"layer 0 holders thickness"),
-  top_p = fl_get(type,"top part"),
-  top_t = fl_get(top_p,"layer 1 base thickness") + fl_get(top_p,"layer 1 fluting thickness") + fl_get(top_p,"layer 1 holders thickness")
-) [
-  [bb[0].x,bb[0].y,bottom ? bb[0].z : bot_t+pcb_bb[0].z+pcb_t],
-  [bb[1].x,bb[1].y-(bottom ? 0 : 2),bb[1].z-0*(top    ? 0 : top_t)]
-];
-
 function fl_pimoroni(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verb      = FL_ADD,
@@ -93,7 +119,7 @@ function fl_pimoroni(
   rpi4      = FL_PCB_RPI4,
   pcb_t     = fl_pcb_thick(rpi4),
   screw     = fl_screw(type),
-  dxf       = fl_get(type,"DXF model"),
+  dxf       = fl_dxf(type),
 
   bot_base_t    = fl_get(bottom_p,"layer 0 base thickness"),
   bot_fluting_t = fl_get(bottom_p,"layer 0 fluting thickness"),
@@ -111,188 +137,198 @@ function fl_pimoroni(
 : undef;
 
 /*!
- * FL_LAYOUT,FL_ASSEMBLY children context:
- *
- *   - $hs_radius: corner radius
- *   - $hs_normal: layout normal (always -Z);
- *   - $hs_screw : mount screw;
+ * common wrapper for different heat sink model engines.
  */
-module fl_pimoroni(
-  //! supported verbs: `FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT`
+module fl_heatsink(
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
   verbs       = FL_ADD,
   type,
-  //! FL_DRILL thickness in scalar form for -Z normal
-  thick=0,
-  //! either "mount" or "assembly"
-  lay_what  = "mount",
-  //! top part
-  top       = true,
-  //! bottom part
-  bottom    = true,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
   octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(is_undef(lay_what)||lay_what=="mount"||lay_what=="assembly");
 
-  bbox      = fl_bb_pimoroni(type,top=top,bottom=bottom);
-  size      = fl_bb_size(type);
-  corner_r  = fl_get(type,"corner radius");
-  bottom_p  = fl_get(type,"bottom part");
-  top_p     = fl_get(type,"top part");
-  rpi4      = FL_PCB_RPI4;
-  pcb_t     = fl_pcb_thick(rpi4);
-  screw     = fl_screw(type);
-  dxf       = fl_get(type,"DXF model");
+  bbox    = fl_bb_corners(type);
+  size    = fl_bb_size(type);
+  engine  = fl_engine(type);
+  D       = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  M       = fl_octant(octant,bbox=bbox);
 
-  bot_base_t    = fl_get(bottom_p,"layer 0 base thickness");
-  bot_fluting_t = fl_get(bottom_p,"layer 0 fluting thickness");
-  bot_holder_t  = fl_get(bottom_p,"layer 0 holders thickness");
-  top_base_t    = fl_get(top_p,"layer 1 base thickness");
-  top_fluting_t = fl_get(top_p,"layer 1 fluting thickness");
-  top_holder_t  = fl_get(top_p,"layer 1 holders thickness");
+  module pimoroni(verb,type,direction,octant) {
+    dxf       = fl_dxf(type);
+    // private properties
+    corner_r  = fl_get(type,"corner radius");
+    base_t    = fl_property(type,"base thickness");
+    fluting_t = fl_property(type,"fluting thickness");
+    holder_t  = fl_property(type,"holders thickness");
+    part      = fl_property(type,"part");
 
-  D         = direction ? fl_direction(proto=type,direction=direction)  : I;
-  M         = fl_octant(octant,bbox=bbox);
+    D         = direction ? fl_direction(proto=type,direction=direction)  : I;
+    M         = fl_octant(octant,bbox=bbox);
 
-  function bottom_sz() = [size.x,size.y,bot_base_t+bot_fluting_t+bot_holder_t];
+    module do_add(fprint) {
 
-  module do_add() {
-
-    module bottom() {
-      difference() {
-        union() {
-          // metal block
-          translate(bbox[0]+[corner_r,corner_r])
-            minkowski() {
-              fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r, bot_base_t]);
-              fl_cylinder(r1=0, r2=corner_r, h=bot_fluting_t);
-            }
-          // add holders
-          translate(+Z(bot_base_t+bot_fluting_t))
-            linear_extrude(bot_holder_t)
-              __dxf__(file=dxf,layer="0 holders");
-        }
-        // subtracts holes
-        translate(-Z(NIL))
-          linear_extrude(bot_base_t+bot_fluting_t+NIL2)
-            __dxf__(file=dxf,layer="0 holes");
-        // subtracts fluting
-        translate(-Z(NIL))
-          linear_extrude(bot_fluting_t)
-            __dxf__(file=dxf,layer="0 fluting");
-      }
-      // let(
-      //   sz  = bottom_sz(),
-      //   bb  = [[-sz.x/2,0,0],[+sz.x/2,sz.y,sz.z]]
-      // ) #fl_bb_add(bb);
-    }
-
-    module top() {
-      bottom_sz = bottom_sz();
-      translate(+Z(bottom_sz.z+pcb_t)) {
+      module bottom(fprint) {
+        translate(Z(bbox[0].z))
         difference() {
           union() {
-            // add holders
-            linear_extrude(top_holder_t)
-              __dxf__(file=dxf,layer="0 holders");
-            translate(+Z(top_holder_t)) {
+            // metal block
+            translate(bbox[0]+[corner_r,corner_r])
+              minkowski() {
+                fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r, (fprint?holder_t:0)+base_t]);
+                fl_cylinder(r1=0, r2=corner_r, h=fluting_t);
+              }
+            if (!fprint) // add holders
+              translate(+Z(base_t+fluting_t))
+                linear_extrude(holder_t)
+                  __dxf__(file=dxf,layer="0 holders");
+          }
+          if (!fprint) {
+            // subtracts holes
+            translate(-Z(NIL))
+              linear_extrude(base_t+fluting_t+NIL2)
+                __dxf__(file=dxf,layer="0 holes");
+            // subtracts fluting
+            translate(-Z(NIL))
+              linear_extrude(fluting_t)
+                __dxf__(file=dxf,layer="0 fluting");
+          }
+        }
+      }
+
+      module top(fprint) {
+        difference() {
+          union() {
+            if (!fprint) // add holders
+              linear_extrude(holder_t)
+                fl_importDxf(file=dxf,layer="0 holders");
+            translate(+Z(fprint?0:holder_t)) {
               // metal block
               intersection() {
                 translate(bbox[0]+[corner_r,corner_r])
                   minkowski() {
-                    fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r, top_base_t+top_fluting_t-2.3]);
+                    fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r,(fprint?holder_t:0)+base_t+fluting_t-2.3]);
                     fl_cylinder(r2=0, r1=corner_r, h=2.3);
                   }
-                linear_extrude(top_base_t+top_fluting_t)
-                  __dxf__(file=dxf,layer="1");
+                linear_extrude((fprint?holder_t:0)+base_t+fluting_t)
+                  fl_importDxf(file=dxf,layer="1");
               }
             }
           }
-          // subtracts fluting
-          translate(+Z(top_holder_t)) {
-            resize(newsize=[0,70+NIL,0])
-              translate(Z(top_base_t+NIL))
-                linear_extrude(top_fluting_t)
-                  __dxf__(file=dxf,layer="1 fluting");
+          if (!fprint) {
+            // subtracts fluting
+            translate(+Z(holder_t)) {
+              resize(newsize=[0,70+NIL,0])
+                translate(Z(base_t+NIL))
+                  linear_extrude(fluting_t)
+                    __dxf__(file=dxf,layer="1 fluting");
+            }
+            // subtracts GPIO and VIDEO bus
+            translate(+Z(holder_t-NIL)) {
+              linear_extrude(base_t+fluting_t+NIL2)
+                offset(1)
+                  fl_importDxf(dxf,"gpio");
+              linear_extrude(base_t+3*NIL)
+                offset(0.5)
+                  fl_importDxf(dxf,"video");
+              translate(+Z(base_t))
+                linear_extrude(fluting_t+NIL2)
+                  offset(0.5)
+                    fl_importDxf(dxf,"video2");
+            }
           }
-          // subtracts GPIO
-          fl_pcb([FL_ADD,FL_CUTOUT],rpi4,cut_label="GPIO",thick=5,cut_tolerance=2);
         }
       }
-      // let(
-      //   sz  = [size.x,size.y,top_base_t+top_fluting_t+top_holder_t],
-      //   bb  = [[-sz.x/2,0,bottom_sz.z+pcb_t],[+sz.x/2,sz.y,bottom_sz.z+pcb_t+sz.z]]
-      // ) #fl_bb_add(bb);
+
+      if (part=="top")
+        top(fprint);
+      else
+        bottom(fprint);
     }
 
-    if (bottom)
-      bottom();
-    if (top)
-      top();
+    if (verb==FL_ADD) {
+      fl_trace("$FL_ADD",$FL_ADD);
+      do_add(false);
+
+    } else if (verb==FL_FOOTPRINT) {
+      fl_trace("$FL_FOOTPRINT",$FL_FOOTPRINT);
+      do_add(true);
+
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+}
+
+  module khadas(verb,type,direction,octant,) {
+    dxf   = fl_dxf(type);
+    // private properties
+    Zs  = fl_property(type,"separator height");
+    Zh  = fl_property(type,"heatsink height");
+    Zf  = fl_property(type,"fin height");
+    Zt  = fl_property(type,"tooth height");
+
+    D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+    M     = fl_octant(octant,bbox=bbox);
+
+    module do_add(fprint) {
+      fl_color(fl_grey(30)) {
+        if (!fprint)
+          linear_extrude(Zs)
+            fl_importDxf(file=dxf,layer="separators");
+        translate(+Z(fprint?0:Zs)) {
+          linear_extrude((fprint?Zs:0)+Zh)
+            difference() {
+              fl_importDxf(file=dxf,layer="heatsink");
+              if (!fprint)
+                fl_importDxf(file=dxf,layer="holes");
+            }
+          translate(+Z(Zh)) {
+            if (!fprint) {
+              linear_extrude(Zf)
+                fl_importDxf(file=dxf,layer="fins");
+              linear_extrude(Zt)
+                fl_importDxf(file=dxf,layer="tooth");
+            } else {
+              translate([4.5,-7.17])
+                fl_cube(size=[35,35,Zf+Zt],octant=+X-Y+Z);
+            }
+          }
+        }
+      }
+    }
+
+    if (verb==FL_ADD) {
+      do_add(false);
+
+    } else if (verb==FL_FOOTPRINT) {
+      do_add(true);
+
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
   }
 
-  module do_assembly() {
-    t = bot_base_t+bot_holder_t;
-    translate(+Z(bottom_sz().z+pcb_t))
-      fl_pcb(FL_DRAW,rpi4,thick=t,lay_direction=[]);
-  }
-
-  module context() {
-    $hs_radius  = corner_r;
-    $hs_normal  = -Z;
-    $hs_screw   = screw;
-    children();
-  }
-
-  module do_layout() {
-    fl_trace("$FL_LAYOUT",$FL_LAYOUT);
-    translate(+Z(bottom_sz().z+pcb_t))
-      if (lay_what=="mount")
-        fl_pcb(FL_LAYOUT,rpi4,thick=bot_base_t+bot_holder_t)
-          translate(-Z(pcb_t+(bottom?bot_base_t+bot_holder_t:0)))
-            context()
-              children();
-      else
+  module wrap(verb) {
+    if (engine=="Khadas")
+      khadas(verb, type, direction, octant)
         children();
-  }
-
-  module do_drill() {
-    do_layout($FL_LAYOUT=$FL_DRILL)
-      fl_cylinder(h=thick+bot_fluting_t,r=screw_radius(screw),octant=$hs_normal);
-  }
-
-  module do_mount() {
-    do_layout() fl_color("DarkSlateGray")
-      fl_screw(type=M2p5_cap_screw,len=10,direction=[$hs_normal,0]);
+    else if (engine=="Pimoroni")
+      pimoroni(verb, type, direction, octant)
+        children();
   }
 
   fl_manage(verbs,M,D,size) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+      fl_modifier($modifier)
+        wrap($verb);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
 
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
-        children();
-
     } else if ($verb==FL_FOOTPRINT) {
-      fl_trace("$FL_FOOTPRINT",$FL_FOOTPRINT);
-      fl_modifier($modifier) fl_bb_add(bbox);
-
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
-
-    } else if ($verb==FL_DRILL) {
-      fl_trace("$FL_DRILL",$FL_DRILL);
-      fl_modifier($modifier) do_drill();
-
-    } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier) do_mount();
+      fl_modifier($modifier) wrap($verb);
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));

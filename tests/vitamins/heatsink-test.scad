@@ -6,6 +6,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+// TODO: the following include MUST be removed
+include <../../vitamins/pcbs.scad>
 include <../../vitamins/heatsinks.scad>
 
 $fn         = 50;           // [3:100]
@@ -22,20 +24,12 @@ $FL_TRACES  = -2;     // [-2:10]
 
 // adds shapes to scene.
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
-$FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined drill shapes (like holes with predefined screw diameter)
-$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of user passed accessories (like alternative screws)
-$FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// mount shape through predefined screws
-$FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -50,10 +44,9 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [Pimoroni] */
+/* [Heatsink] */
 
-TOP     = true;
-BOTTOM  = true;
+TYPE  = "FL_HS_PIMORONI_TOP"; // [FL_HS_PIMORONI_TOP,FL_HS_PIMORONI_BOTTOM,FL_HS_KHADAS]
 
 /* [Hidden] */
 
@@ -61,14 +54,13 @@ direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
-  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-  if ($FL_MOUNT!="OFF")     FL_MOUNT,
 ];
+type  = (TYPE=="FL_HS_PIMORONI_TOP") ? FL_HS_PIMORONI_TOP
+      : (TYPE=="FL_HS_PIMORONI_BOTTOM") ? FL_HS_PIMORONI_BOTTOM
+      : FL_HS_KHADAS;
 
-fl_pimoroni(verbs,type=FL_HS_PIMORONI,top=TOP,bottom=BOTTOM,direction=direction,octant=octant)
+fl_heatsink(verbs, type=type, direction=direction, octant=octant)
   fl_color() fl_cylinder(h=10,d=5,octant=$hs_normal);
