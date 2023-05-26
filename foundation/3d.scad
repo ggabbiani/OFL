@@ -6,6 +6,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+use <../dxf.scad>
+
 include <2d.scad>
 include <bbox.scad>
 include <type_trait.scad>
@@ -31,7 +33,10 @@ module fl_cube(
   //! FL_ADD,FL_AXES,FL_BBOX
   verbs     = FL_ADD,
   size      = [1,1,1],
-  //! when undef native positioning is used
+  /*!
+   * when undef, native positioning is used with the Low bounding box vertex
+   * into the origin O
+   */
   octant,
   //! desired direction [director,rotation] or native direction if undef
   direction
@@ -376,7 +381,7 @@ function fl_direction(
   //! default coordinate system by [director,rotor], overrides «proto» settings
   default
 ) =
-  assert(is_list(direction)&&len(direction)==2,str("direction=",direction))
+  assert(!fl_debug() || fl_tt_isDirectionRotation(direction),direction)
   assert(proto!=undef || default!=undef)
   // echo(default=default,direction=direction)
   let(
@@ -649,15 +654,18 @@ module fl_layout(
  *****************************************************************************/
 
 /*!
- * add a bounding box shape
+ * add a bounding box shape to the scene
  */
 module fl_bb_add(
-  //! bounding box corners
+  /*!
+   * Bounding box corners in [Low,High] format.
+   * see also fl_tt_isBoundingBox()
+   */
   corners,
   2d=false
 ) {
   fl_trace("$FL_ADD",$FL_ADD);
-  assert(is_list(corners),corners)
+  assert(fl_tt_isBoundingBox(corners),corners)
   translate(corners[0])
     if (!2d) fl_cube(size=corners[1]-corners[0],octant=+X+Y+Z);
     else fl_square(size=corners[1]-corners[0],quadrant=+X+Y);
@@ -855,3 +863,37 @@ function fl_3d_axisIsSet(
     curr  = len ? list[0] : undef,
     rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
   ) curr==axis ? true : len>1 ? fl_3d_axisIsSet(axis,rest) :  false;
+
+/*!
+ * Extrusion along arbitrary axis with eventual rotation
+ */
+module fl_linear_extrude(
+  //! source plane in [director,rotor] format to be extruded along the passed direction
+  source=[Z,X],
+  //! direction in axis-angle representation
+  direction,
+  length,
+  convexity = 10,
+) {
+  D = direction ? fl_direction(direction=direction,default=source) : I;
+  multmatrix(D)
+    linear_extrude(height=length,convexity=convexity)
+      children();
+}
+
+/*!
+ * DXF files import with direction and rotation. By default DXF files are
+ * imported in the XY plane with no rotation. The «direction» parameter
+ * specifies a normal to the actual import plane and a rotation about it.
+ */
+module fl_importDxf(
+  file,
+  layer,
+  //! direction in axis-angle representation
+  direction
+) {
+  D = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
+  multmatrix(D)
+    __dxf__(file,layer);
+}
+
