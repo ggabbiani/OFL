@@ -81,7 +81,7 @@ pcb = let(
     1PIN  = fl_PinHeader("1-pin",nop=2p54header,engine="male"),
     comps = [
       //["label", ["engine",   [position        ],  [[director],rotation],  type,           [engine specific parameters]]]
-      ["TRIMPOT", [FL_TRIM_NS, [-5,-sz.y/2+0.5,0],  [+Y,0],                 FL_TRIM_POT10,  [["comp/octant",+X-Y+Z]]  ]],
+      ["TRIMPOT", [FL_TRIM_NS, [-5,-sz.y/2+0.5,0],  [+Y,0],                 FL_TRIM_POT10,  [[FL_COMP_OCTANT,+X-Y+Z]]  ]],
       // create four component specifications, one for each hole position, labelled as "PIN-0", "PIN-1", "PIN-2", "PIN-3"
       for(i=[0:len(holes)-1]) let(label=str("PIN-",i))
         [label,   [FL_PHDR_NS, holes[i],            [+Z,0],                 1PIN]],

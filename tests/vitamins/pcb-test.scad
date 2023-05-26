@@ -57,7 +57,7 @@ SYMBOLS     = false;
 
 /* [PCB] */
 
-TYPE  = "FL_PCB_HILETGO_SX1308";  // [FL_PCB_VIM1,FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,ALL]
+TYPE  = "FL_PCB_VIM1";  // [FL_PCB_VIM1,FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,ALL]
 
 // FL_DRILL and FL_CUTOUT thickness
 T             = 2.5;
@@ -69,6 +69,8 @@ CO_LABEL      = "undef";        // [undef,POWER IN,HDMI0,HDMI1,A/V,USB2,USB3,ETH
 CO_DIRECTION  = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
+
+fl_status();
 
 co_direction  = CO_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]) if (CO_DIRECTION[i]) CO_DIRECTION[i]*axes[i]];
 co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
@@ -91,8 +93,6 @@ verbs=[
 
 fl_trace("***VERBS***",[for(verb=fl_list_flatten(verbs)) split(verb)[0]]);
 
-FL_PCB_VIM1 = fl_PCB("KHADAS-VIM1",[[0,-58,-1.6],[82,0,0]], dxf="vitamins/vim1.dxf");
-
 single  = TYPE=="FL_PCB_HILETGO_SX1308"  ? FL_PCB_HILETGO_SX1308
         : TYPE=="FL_PCB_MH4PU_P"         ? FL_PCB_MH4PU_P
         : TYPE=="FL_PCB_PERF70x50"       ? FL_PCB_PERF70x50
@@ -103,7 +103,6 @@ single  = TYPE=="FL_PCB_HILETGO_SX1308"  ? FL_PCB_HILETGO_SX1308
         : TYPE=="FL_PCB_RPI_uHAT"        ? FL_PCB_RPI_uHAT
         : TYPE=="FL_PCB_VIM1"            ? FL_PCB_VIM1
         : undef;
-
 
 module test() {
   module pcb(type) {
