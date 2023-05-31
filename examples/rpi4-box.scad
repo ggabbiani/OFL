@@ -8,11 +8,11 @@
 
 // include <OFL/artifacts/pcb_holder.scad>
 include <../artifacts/box.scad>
-include <../artifacts/spacer.scad>
-include <../vitamins/heatsinks.scad>
-include <../vitamins/hds.scad>
 include <../artifacts/caddy.scad>
-// include <OFL/vitamins/pcbs.scad>
+include <../artifacts/spacer.scad>
+include <../vitamins/hds.scad>
+include <../vitamins/heatsinks.scad>
+include <../vitamins/pcbs.scad>
 
 $fn           = 50;           // [3:100]
 // Debug statements are turned on
@@ -62,6 +62,8 @@ DIR_R       = 0;        // [0:360]
 
 /* [Box] */
 
+SBC = "rpi4"; // [rpi4, khadas]
+
 FILAMENT_UPPER  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 FILAMENT_LOWER  = "SteelBlue";  // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // box thickness
@@ -91,14 +93,13 @@ verbs=[
   if (PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
 
-rpi         = FL_PCB_RPI4;
-pimoroni    = FL_HS_PIMORONI;
+sbc         = SBC=="rpi4" ? FL_PCB_RPI4 : FL_PCB_VIM1;
+// pimoroni    = FL_HS_PIMORONI;
 
 pim_octant  = octant;
-pim_bottom  = fl_get(FL_HS_PIMORONI,"bottom part");
-pim_fthick  = fl_get(pim_bottom,"layer 0 fluting thickness");
-pim_bbox    = fl_bb_pimoroni(pimoroni,bottom=false);
-// pim_size    = pim_bbox[1]-pim_bbox[0];
+// pim_bottom  = fl_get(FL_HS_PIMORONI,"bottom part");
+// pim_fthick  = fl_get(pim_bottom,"layer 0 fluting thickness");
+// pim_bbox    = fl_bb_pimoroni(pimoroni,bottom=false);
 
 spacer_h    = 1.7+T+TOLERANCE;
 
@@ -108,15 +109,37 @@ parts = (LOWER_PART && UPPER_PART) ? "all"
       : UPPER_PART ? "upper"
       : "none";
 
+bb    = fl_bb_corners(sbc);
+echo(bb=bb);
+
+pim_direction = SBC=="rpi4" ? [+Z,0] : [+Z,90];
+
+fl_pcb(
+  [FL_ADD,FL_ASSEMBLY,FL_LAYOUT,FL_BBOX],
+  sbc,
+  octant=+X+Z,
+  direction=pim_direction,
+  $FL_ADD=ASSEMBLY,
+  $FL_ASSEMBLY=ASSEMBLY,
+  $FL_BBOX=BBOX,
+  $FL_LAYOUT=ADD,
+);
+// box rendering
+fl_box(
+  [FL_ADD,FL_ASSEMBLY,FL_MOUNT],
+  pload=bb,thick=T,radius=radius,parts=parts,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=TOLERANCE,fillet=FILLET,
+  $FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_MOUNT=MOUNT
+);
+
 // heatsink rendering plus layout of mounted spacers
-fl_pimoroni([FL_ADD,FL_LAYOUT,FL_BBOX],pimoroni,bottom=false,octant=pim_octant,$FL_ADD=ASSEMBLY,$FL_LAYOUT=ADD,$FL_BBOX=BBOX)
+*fl_pimoroni([FL_ADD,FL_LAYOUT,FL_BBOX],pimoroni,bottom=false,octant=pim_octant,$FL_ADD=ASSEMBLY,$FL_LAYOUT=ADD,$FL_BBOX=BBOX)
   fl_spacer([FL_ADD,FL_LAYOUT],h=spacer_h,r=$hs_radius,screw=$hs_screw,knut=true,thick=T,lay_direction=[$hs_normal],octant=$hs_normal,$FL_ADD=LOWER_PART?ADD:"OFF",$FL_LAYOUT=MOUNT)
     fl_screw([FL_ADD,FL_ASSEMBLY],$spc_screw,thick=$spc_h+$spc_thick,washer="no",direction=[$spc_director,0],$FL_ADD=MOUNT,$FL_ASSEMBLY=MOUNT);
 // heatsink layout of assembled parts
-fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly",$FL_LAYOUT=ASSEMBLY) {
-  fl_pcb(FL_DRAW,rpi);
-  // connect [female GPIO pin header, connector 0] to [rpi, connector 0]
-  fl_connect([FL_PHDR_GPIOHDR_F,0],[rpi,0]) {
+*fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly",$FL_LAYOUT=ASSEMBLY) {
+  fl_pcb(FL_DRAW,sbc);
+  // connect [female GPIO pin header, connector 0] to [sbc, connector 0]
+  fl_connect([FL_PHDR_GPIOHDR_F,0],[sbc,0]) {
     // connection child rendering
     fl_pinHeader(FL_ADD,$con_child,color=grey(30));
 
@@ -133,16 +156,16 @@ fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly
   }
 }
 
-m0      = fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly",$FL_LAYOUT=ASSEMBLY);
-m1      = m0*fl_connect([FL_PHDR_GPIOHDR_F,0],[rpi,0]);
-trans1  = fl_bb_transform(m1,fl_bb_corners(FL_PHDR_GPIOHDR_F));
-m2      = m1*fl_connect([FL_PHDR_GPIOHDR_FL,0],[FL_PHDR_GPIOHDR_F,1]);
-trans2 = fl_bb_transform(m2,fl_bb_corners(FL_PHDR_GPIOHDR_FL));
-m3      = m2*fl_connect([FL_PCB_RPI_uHAT,0],[FL_PHDR_GPIOHDR_FL,1]);
-trans3  = fl_bb_transform(m3,fl_bb_corners(FL_PCB_RPI_uHAT));
-bb      = fl_bb_calc([pim_bbox,trans1,trans2,trans3]);
+// m0      = fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly",$FL_LAYOUT=ASSEMBLY);
+// m1      = m0*fl_connect([FL_PHDR_GPIOHDR_F,0],[sbc,0]);
+// trans1  = fl_bb_transform(m1,fl_bb_corners(FL_PHDR_GPIOHDR_F));
+// m2      = m1*fl_connect([FL_PHDR_GPIOHDR_FL,0],[FL_PHDR_GPIOHDR_F,1]);
+// trans2 = fl_bb_transform(m2,fl_bb_corners(FL_PHDR_GPIOHDR_FL));
+// m3      = m2*fl_connect([FL_PCB_RPI_uHAT,0],[FL_PHDR_GPIOHDR_FL,1]);
+// trans3  = fl_bb_transform(m3,fl_bb_corners(FL_PCB_RPI_uHAT));
+// bb      = fl_bb_calc([pim_bbox,trans1,trans2,trans3]);
 
-difference() {
+*difference() {
   // box rendering
   fl_box([FL_ADD,FL_ASSEMBLY,FL_MOUNT],pload=bb,thick=T,radius=radius,parts=parts,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=TOLERANCE,fillet=FILLET,$FL_ADD=ADD,$FL_ASSEMBLY=ASSEMBLY,$FL_MOUNT=MOUNT);
 
@@ -152,13 +175,13 @@ difference() {
       fl_cylinder(h=2*spacer_h,r=$spc_holeR,octant=O);
 
   fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly",$FL_LAYOUT="ON") {
-    // rpi cutout for +X and +Y components
-    fl_pcb(FL_CUTOUT,rpi,thick=20,cut_direction=[+X,+Y],cut_tolerance=0.5);
+    // sbc cutout for +X and +Y components
+    fl_pcb(FL_CUTOUT,sbc,thick=20,cut_direction=[+X,+Y],cut_tolerance=0.5);
     // window for the uSD card socket
     for(z=[0:3])
       translate(-z*Z(1.3))
-        fl_pcb(FL_CUTOUT,rpi,thick=20,cut_label="uSD",cut_tolerance=0.5);
-    fl_connect([FL_PHDR_GPIOHDR_F,0],[rpi,0])
+        fl_pcb(FL_CUTOUT,sbc,thick=20,cut_label="uSD",cut_tolerance=0.5);
+    fl_connect([FL_PHDR_GPIOHDR_F,0],[sbc,0])
       fl_connect([FL_PHDR_GPIOHDR_FL,0],[$con_child,1])
         fl_connect([FL_PCB_RPI_uHAT,0],[$con_child,1])
           // TV hat cutout
@@ -169,7 +192,7 @@ difference() {
     difference() {
       fl_pimoroni(FL_LAYOUT,pimoroni,bottom=false,octant=pim_octant,lay_what="assembly",$FL_LAYOUT="ON")
         hull()
-          fl_pcb(FL_CUTOUT,rpi,thick=10,cut_direction=[+X],cut_tolerance=2);
+          fl_pcb(FL_CUTOUT,sbc,thick=10,cut_direction=[+X],cut_tolerance=2);
       fl_box(FL_PAYLOAD,pload=bb,thick=T,radius=radius,parts=parts,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=TOLERANCE,fillet=FILLET,$FL_PAYLOAD="ON");
     }
 }
