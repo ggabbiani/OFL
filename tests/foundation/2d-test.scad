@@ -37,8 +37,8 @@ A             = 10;
 // ellipse vert. semi axis
 B             = 6;
 // arc/sector specific
-START_ANGLE   = 0;    // [-360:360]
-END_ANGLE     = 60;   // [-360:360]
+START_ANGLE   = 0;    // [-720:720]
+END_ANGLE     = 60;   // [-720:720]
 // arc thickness
 ARC_T         = 1;  // [0:10]
 // Inscribed polygon edge number
