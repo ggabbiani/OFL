@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <TOUL.scad>               // TOUL       : The OpenScad Usefull Library
+include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 include <base_geo.scad>
@@ -218,7 +218,7 @@ FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
 //! is a test verb for library development
 FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
 
-// Runtime behaviour defaults
+// Runtime behavior defaults
 $FL_ADD       = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_ASSEMBLY  = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
@@ -236,28 +236,28 @@ $FL_PAYLOAD   = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
  */
 module fl_modifier(
   //! "OFF","ON","ONLY","DEBUG","TRANSPARENT"
-  behaviour,
+  behavior,
   reset=true
 ) {
-  fl_trace("behaviour",behaviour);
-  // Runtime behaviour reset to behaviour
-  $FL_ADD       = reset ? behaviour : $FL_ADD;
-  $FL_ASSEMBLY  = reset ? behaviour : $FL_ASSEMBLY;
-  $FL_AXES      = reset ? behaviour : $FL_AXES;
-  $FL_BBOX      = reset ? behaviour : $FL_BBOX;
-  $FL_CUTOUT    = reset ? behaviour : $FL_CUTOUT;
-  $FL_DRILL     = reset ? behaviour : $FL_DRILL;
-  $FL_FOOTPRINT = reset ? behaviour : $FL_FOOTPRINT;
-  $FL_HOLDERS   = reset ? behaviour : $FL_HOLDERS;
-  $FL_LAYOUT    = reset ? behaviour : $FL_LAYOUT;
-  $FL_MOUNT     = reset ? behaviour : $FL_MOUNT;
-  $FL_PAYLOAD   = reset ? behaviour : $FL_PAYLOAD;
-  if      (behaviour=="ON")                children();
-  else if (behaviour=="OFF")              *children();
-  else if (behaviour=="ONLY")             !children();
-  else if (behaviour=="DEBUG")            #children();
-  else if (behaviour=="TRANSPARENT")      %children();
-  else assert(false,str("Unknown behaviour ('",behaviour,"')."));
+  fl_trace("behavior",behavior);
+  // Runtime behavior reset to behavior
+  $FL_ADD       = reset ? behavior : $FL_ADD;
+  $FL_ASSEMBLY  = reset ? behavior : $FL_ASSEMBLY;
+  $FL_AXES      = reset ? behavior : $FL_AXES;
+  $FL_BBOX      = reset ? behavior : $FL_BBOX;
+  $FL_CUTOUT    = reset ? behavior : $FL_CUTOUT;
+  $FL_DRILL     = reset ? behavior : $FL_DRILL;
+  $FL_FOOTPRINT = reset ? behavior : $FL_FOOTPRINT;
+  $FL_HOLDERS   = reset ? behavior : $FL_HOLDERS;
+  $FL_LAYOUT    = reset ? behavior : $FL_LAYOUT;
+  $FL_MOUNT     = reset ? behavior : $FL_MOUNT;
+  $FL_PAYLOAD   = reset ? behavior : $FL_PAYLOAD;
+  if      (behavior=="ON")                children();
+  else if (behavior=="OFF")              *children();
+  else if (behavior=="ONLY")             !children();
+  else if (behavior=="DEBUG")            #children();
+  else if (behavior=="TRANSPARENT")      %children();
+  else assert(false,str("Unknown behavior ('",behavior,"')."));
 }
 
 //! deprecated function call
@@ -494,23 +494,37 @@ module fl_axes(size=1,reverse=false) {
 function fl_grey(n) = [0.01, 0.01, 0.01] * n;
 
 /*!
+ * returns the canonical axis color when «key» is an axis
+ *
+ *     X ⟹ red
+ *     Y ⟹ green
+ *     Z ⟹ blue
+ *
+ * or the corresponding color palette if «key» is a string
+ */
+function fl_palette(key) = let(
+  versor = is_string(key) ? undef : fl_versor(key)
+) versor ? (  (versor==FL_X||versor==-FL_X) ? "red"
+            : (versor==FL_Y||versor==-FL_Y) ? "green"
+            : (versor==FL_Z||versor==-FL_Z) ? "blue"
+            : assert(false, axis) undef)
+          : (
+              key=="bronze"        ? "#CD7F32"
+            : key=="copper red"    ? "#CB6D51"
+            : key=="copper penny"  ? "#AD6F69"
+            : key=="pale copper"   ? "#DA8A67"
+            : key);
+
+/*!
  * Set current color and alpha channel, using variable $fl_filament when «color» is
  * undef. When variable $fl_debug is true, color information is ignored and debug
  * modifier is applied to children().
  */
 module fl_color(color=fl_filament(),alpha=1) {
-
-  function palette(name) =
-      name=="bronze"        ? "#CD7F32"
-    : name=="copper red"    ? "#CB6D51"
-    : name=="copper penny"  ? "#AD6F69"
-    : name=="pale copper"   ? "#DA8A67"
-    : name;
-
   if (fl_debug())
     #children();
   else
-    color(palette(color),alpha) children();
+    color(fl_palette(color),alpha) children();
 }
 
 function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : undef));
