@@ -367,6 +367,8 @@ module fl_placeIf(
  *
  *     [direction axis (director),orthonormal vector (rotor)]
  *
+ * The third axis is obtained through the cross product director X rotor.
+ *
  * New direction is expected in [Axis–angle representation](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation)
  * in the format
  *
@@ -374,7 +376,7 @@ module fl_placeIf(
  *
  */
 function fl_direction(
-  //! prototype with fl_director and fl_rotor properties
+  //! prototype with fl_director() and fl_rotor() properties
   proto,
   //! desired direction in axis-angle representation [axis,rotation about]
   direction,
@@ -422,7 +424,7 @@ function fl_planeAlign(ax,ay,bx,by,a,b) =
   let (
     ax    = fl_versor(a?a.x:ax),ay=fl_versor(a?a.y:ay),bx=fl_versor(b?b.x:bx),by=fl_versor(b?b.y:by),
     az    = cross(ax,ay),
-    ortho = ax*ay==0 && bx*by==0,
+    ortho = (ax*ay==0) && (bx*by==0),
     A=[
       [ax.x, ay.x,  az.x,  0 ],
       [ax.y, ay.y,  az.y,  0 ],
@@ -436,7 +438,7 @@ function fl_planeAlign(ax,ay,bx,by,a,b) =
           [az.x, az.y,  az.z,  0 ],
           [0,    0,     0,     1 ],
         ]
-      : matrix_invert(A), // otherwise full calculations
+      : assert(!fl_debug() || det(A)!=0,A) matrix_invert(A), // otherwise full calculations
     bz=cross(bx,by),
     B=[
       [bx.x, by.x,  bz.x,  0 ],
@@ -672,7 +674,7 @@ module fl_bb_add(
 }
 
 /*****************************************************************************
- * 3d miscellanous functions
+ * 3d miscellaneous functions
  *****************************************************************************/
 
 /*!
