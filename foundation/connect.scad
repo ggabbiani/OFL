@@ -20,7 +20,7 @@ function fl_conn_type(type,value) = fl_property(type,"conn/type",value);
 function fl_conn_ldir(type,value) = fl_property(type,"conn/label [direction,rotation]",value);
 function fl_conn_loct(type,value) = fl_property(type,"conn/label octant",value);
 
-// contructors
+// constructors
 function conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0]) =
   assert(is_string(id))
   assert(is_list(ox))
