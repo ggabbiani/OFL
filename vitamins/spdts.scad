@@ -7,6 +7,7 @@
  */
 
 include <../foundation/3d.scad>
+include <../foundation/symbol.scad>
 
 include <NopSCADlib/vitamins/spades.scad>
 
@@ -37,8 +38,8 @@ FL_SODAL_SPDT = let(
 
 FL_SPDT_DICT = [ FL_SODAL_SPDT ];
 
-function fl_spdt_d(type)       = fl_get(type,"nominal diameter");
-function fl_spdt_l(type)       = fl_get(type,"length");
+function fl_spdt_d(type)      = fl_get(type,"nominal diameter");
+function fl_spdt_l(type)      = fl_get(type,"length");
 function fl_spdt_headH(type)  = fl_get(type,"head height");
 function fl_spdt_headD(type)  = fl_get(type,"head diameter");
 
@@ -80,7 +81,7 @@ module fl_spdt(
 
   module do_add() {
     fl_color("silver") head();
-    let(h=20) translate(-fl_Z(h)){
+    let(h=20) translate(-fl_Z(h)) {
       fl_color("silver") cylinder(d=d, h=h);
       let(d=15,h=10) translate(-fl_Z(h)) {
         fl_color("LightSlateGray",0.8) cylinder(d=d, h=h);
@@ -91,6 +92,11 @@ module fl_spdt(
         translate([0,+d/2-1,0]) rotate(180,FL_X) spade(spade3,8);
       }
     }
+    // if (fl_debug())
+    if (direction)
+      let(sz=size*1.2)
+        // translate(Z(size.z*1.2-sz.z))
+          fl_sym_direction(ncs=[fl_director(type),fl_rotor(type)],direction=direction,size=sz);
   }
 
   module do_drill() {

@@ -141,3 +141,121 @@ module fl_sym_hole(
     }
   }
 }
+
+/*!
+ * display the direction change from a native coordinate system and a new
+ * direction specification in [direction,rotation] format.
+ */
+module fl_sym_direction(
+  //! supported verbs: FL_ADD
+  verbs = FL_ADD,
+  //! Native Coordinate System in [director axis, rotor axis] form
+  ncs = [+FL_Z,+FL_X],
+  /*!
+   * direction in [Axis–angle representation](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation)
+   * in the format
+   *
+   *     [axis,rotation angle]
+   */
+  direction,
+  //! default size given as a scalar
+  size    = 0.5
+) {
+  assert(!fl_debug() || fl_tt_isDirectionRotation(direction));
+  assert(!fl_debug() || ncs[0]*ncs[1]==0,str(ncs[0]," and ", ncs[1], " must be orthogonal"));
+
+  // returns the angle between vector «a» and «b»
+  function angle(a,b) = let(
+    dot_prod = a*b
+  ) dot_prod==0 ? 90 : acos(dot_prod/norm(a)/norm(b));
+
+  function projectOnPlane(v,p) = let(
+    u1 = fl_versor(p[0]),
+    u2 = fl_versor(p[1])
+  ) v*(u1+u2);
+
+  angle   = direction[1];
+  sz      = size==undef ? [0.5,0.5,0.5] : is_list(size) ? size : [size,size,size];
+  ratio   = 20;
+  d       = sz.x/ratio;
+  head_r  = 1.5 * d;
+  e       = [sz.x/2-0*head_r,sz.y/2-0*head_r];
+
+  curr_director = let(versor=fl_versor(ncs[0])) abs(versor*sz)*versor;
+  curr_rotor    = let(versor=fl_versor(ncs[1])) abs(versor*sz)*versor;
+  curr_axis     = let(versor=fl_versor(cross(curr_director,curr_rotor))) abs(versor*sz)*versor;;
+
+  dir_color     = fl_palette(curr_director);
+  rot_color     = fl_palette(curr_rotor);
+  axis_color    = fl_palette(cross(curr_director,curr_rotor));
+
+  // invert matrix for original coordinate system representation after
+  // the direction change
+  m = matrix_invert(fl_align(ncs[0],direction[0]));
+
+  // old director in the new coordinate system
+  old_director  = fl_3(m * fl_4(curr_director));
+  old_rotor     = fl_3(m * fl_4(curr_rotor));
+  // old_axis      = cross(old_director,old_rotor);
+
+  assert(!fl_debug() || (old_director*old_rotor<=FL_NIL),old_director*old_rotor);
+
+  // Native Coordinate System DIRECTOR
+  fl_color(dir_color) rotate(-angle,curr_director) {
+    // current director
+    fl_cylinder(h=norm(curr_director), d=d, octant=fl_versor(curr_director), direction=[curr_director,0]);
+
+    // angle between [new director, old director]
+    dir_rotation  = angle(curr_director,old_director);
+    2d            = fl_circleXY(norm(curr_director),dir_rotation);
+
+    // projection matrix the XY plane to the rotation plane of the DIRECTOR
+    m = (fl_isParallel(old_director,curr_director,false))
+      ? echo("PARALLEL") (fl_versor(old_director)==fl_versor(curr_director)
+        ? echo("EQUAL") FL_I  // equality
+        : echo("OPPOSITE") fl_R(curr_director,angle)*fl_Ry(180)*fl_Rx(90)*fl_Rz(90)*fl_Rx(90))  // opposite
+      : echo("NOT PARALLEL") fl_planeAlign(X,[2d.x,2d.y,0],old_director,curr_director); // parallel
+
+    // rotation angle visualization
+    multmatrix(m) {
+      r = norm(curr_director);
+
+      if (dir_rotation!=0) let(a=dir_rotation/2)
+        translate(fl_circleXY(r-d/2,a))
+          rotate(90+a,Z)
+            translate(-Z(d/4))
+              linear_extrude(d/2)
+                fl_ipoly(r=head_r,n=3);
+
+      // rotation angle built on XY plane
+      translate(-Z(d/4))
+        linear_extrude(d/2)
+          fl_arc(r=r,angles=[0,dir_rotation],thick=d);
+    }
+
+  }
+
+  // let(r = norm(curr_director),dir_rotation  = angle(curr_director,old_director))
+  // translate(-Z(d/4))
+  //   linear_extrude(d/2)
+  //     fl_arc(r=r,angles=[0,dir_rotation],thick=d);
+
+  // Native Coordinate System ROTOR
+  fl_color(rot_color) {
+    fl_cylinder(h=norm(curr_rotor), d=d, octant=O, direction=[curr_rotor,0]);
+
+    if (angle!=0) let(a=angle/2)
+      translate(fl_ellipseXY(e-[d,d]/2,angle=-a>0?-a:360-a))
+        rotate(angle<0?-90-a:90-a,Z)
+          translate(-Z(d/4))
+            linear_extrude(d/2)
+              fl_ipoly(r=head_r,n=3,quadrant=O);
+
+    // rotation angle visualization on [old_director,Z plane]
+    fl_planeAlign(X,Y,ncs[1],cross(ncs[0],ncs[1]))
+      // rotation angle built on [X,Y] plane
+      translate(-Z(d/4))
+        linear_extrude(d/2)
+          fl_ellipticArc(e=e,angles=[0,-angle],thick=d);
+  }
+}
