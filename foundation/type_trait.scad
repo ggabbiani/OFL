@@ -223,7 +223,7 @@ function fl_tt_isAxis(axis) = (axis==-X||axis==+X||axis==-Y||axis==+Y||axis==-Z|
 /*!
  * Floating semi-axis list.
  *
- * One row with matricial representation of cartesian semi-axes in whatever order.
+ * One row with matrix representation of cartesian semi-axes in whatever order.
  *
  * example:
  *
