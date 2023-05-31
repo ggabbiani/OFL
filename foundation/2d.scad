@@ -683,7 +683,7 @@ module fl_ellipse(
 
 //**** circle *****************************************************************
 
-//! Rectangular value [x,y] of circle of ray «r» by «t» (parametric)
+//! Rectangular value [x,y] of circle of ray «r» by «t» (parametric/polar)
 function fl_circleXY(
   //! radius of the circle
   r,
@@ -794,7 +794,7 @@ module fl_arc(
 
 //**** inscribed polygon ******************************************************
 
-//! Regular polygon inscribed a circonference
+//! Regular polygon inscribed a circumference
 module fl_ipoly(
   verbs   = FL_ADD,
   //! circumscribed circle radius
