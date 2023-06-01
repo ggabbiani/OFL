@@ -5,6 +5,7 @@
 ```mermaid
 graph LR
     A1[foundation/template] --o|include| A2[foundation/hole]
+    A1 --o|include| A3[foundation/mngm]
 ```
 
 Template file for OpenSCAD Foundation Library.

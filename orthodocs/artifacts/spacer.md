@@ -5,9 +5,10 @@
 ```mermaid
 graph LR
     A1[artifacts/spacer] --o|include| A2[foundation/hole]
-    A1 --o|include| A3[foundation/tube]
-    A1 --o|include| A4[foundation/unsafe_defs]
-    A1 --o|include| A5[vitamins/knurl_nuts]
+    A1 --o|include| A3[foundation/mngm]
+    A1 --o|include| A4[foundation/tube]
+    A1 --o|include| A5[foundation/unsafe_defs]
+    A1 --o|include| A6[vitamins/knurl_nuts]
 ```
 
 Spacers with optional screw and knurl nuts.

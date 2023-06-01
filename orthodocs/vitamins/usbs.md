@@ -4,7 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/usbs] --o|include| A2[foundation/util]
+    A1[vitamins/usbs] --o|include| A2[foundation/mngm]
+    A1 --o|include| A3[foundation/util]
 ```
 
 NopACADlib USB definitions wrapper.
@@ -22,7 +23,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_USB_TYPE_Ax1,FL_USB_TYPE_Ax1_NF,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C,FL_USB_TYPE_uA,FL_USB_TYPE_uA_NF,]
+    [FL_USB_TYPE_Ax1_NF_SM,FL_USB_TYPE_Ax1,FL_USB_TYPE_Ax1_NF,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C,FL_USB_TYPE_uA,FL_USB_TYPE_uA_NF,]
 
 ---
 
@@ -38,7 +39,7 @@ __Default:__
 
 __Default:__
 
-    fl_USB_new("Ax1")
+    let(h=6.5,v_flange_l=4.5,bar=0,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax1"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_director(value=+FL_X),fl_rotor(value=+FL_Y),fl_USB_flange(value=true),]
 
 ---
 
@@ -46,7 +47,15 @@ __Default:__
 
 __Default:__
 
-    fl_USB_new("Ax1",false)
+    let(h=6.5,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax1"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_director(value=+FL_X),fl_rotor(value=+FL_Y),fl_USB_flange(value=false),]
+
+---
+
+### variable FL_USB_TYPE_Ax1_NF_SM
+
+__Default:__
+
+    let(h=6.5,l=10,w=13.25)[fl_engine(value="USB/A SM"),fl_bb_corners(value=[[-l,-w/2,0],[0,+w/2,h]]),fl_director(value=+X),fl_rotor(value=+Y),fl_USB_flange(value=false),]
 
 ---
 
@@ -54,7 +63,7 @@ __Default:__
 
 __Default:__
 
-    fl_USB_new("Ax2")
+    let(h=15.6,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax2"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_director(value=+FL_X),fl_rotor(value=+FL_Y),fl_USB_flange(value=true),]
 
 ---
 
@@ -62,7 +71,7 @@ __Default:__
 
 __Default:__
 
-    fl_USB_new("B")
+    let(l=16.4,w=12.2,h=11)[fl_engine(value="USB/B"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_director(value=+FL_X),fl_rotor(value=+Y),fl_USB_flange(value=false),]
 
 ---
 
@@ -70,7 +79,7 @@ __Default:__
 
 __Default:__
 
-    fl_USB_new("C")
+    let(l=7.35,w=8.94,h=3.26)[fl_engine(value="USB/C"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_director(value=+X),fl_rotor(value=+Y),fl_USB_flange(value=false),]
 
 ---
 
@@ -78,7 +87,7 @@ __Default:__
 
 __Default:__
 
-    fl_USB_new("uA")
+    let(l=6,iw1=7,h=2.65,t=0.4)[fl_engine(value="USB/uA"),fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),fl_director(value=+X),fl_rotor(value=+Y),fl_USB_flange(value=true),]
 
 ---
 
@@ -86,7 +95,7 @@ __Default:__
 
 __Default:__
 
-    fl_USB_new("uA",false)
+    let(l=6,iw1=7,h=2.65,t=0.4)[fl_engine(value="USB/uA"),fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),fl_director(value=+X),fl_rotor(value=+Y),fl_USB_flange(value=false),]
 
 ## Functions
 
@@ -98,28 +107,6 @@ __Syntax:__
 
 ```text
 fl_USB_flange(type,value)
-```
-
----
-
-### function fl_USB_new
-
-__Syntax:__
-
-```text
-fl_USB_new(utype,flange=true)
-```
-
-USB constructor
-
----
-
-### function fl_USB_type
-
-__Syntax:__
-
-```text
-fl_USB_type(type,value)
 ```
 
 ## Modules

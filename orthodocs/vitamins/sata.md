@@ -7,6 +7,7 @@ graph LR
     A1[vitamins/sata] --o|include| A2[foundation/algo]
     A1 --o|include| A3[foundation/connect]
     A1 --o|include| A4[foundation/drawio]
+    A1 --o|include| A5[foundation/mngm]
 ```
 
 'Naive' SATA plug & socket definition.

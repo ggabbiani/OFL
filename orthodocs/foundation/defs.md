@@ -644,6 +644,18 @@ fl_engine(type,value)
 
 ---
 
+### function fl_grey
+
+__Syntax:__
+
+```text
+fl_grey(n)
+```
+
+Generate a shade of grey to pass to color().
+
+---
+
 ### function fl_has
 
 __Syntax:__
@@ -751,6 +763,27 @@ __Syntax:__
 ```text
 fl_nopSCADlib(type,value,default)
 ```
+
+---
+
+### function fl_palette
+
+__Syntax:__
+
+```text
+fl_palette(color,axis)
+```
+
+returns the canonical axis color when invoked by «axis»
+
+    X ⟹ red
+    Y ⟹ green
+    Z ⟹ blue
+
+or the corresponding color palette if invoked by «color»
+
+__NOTE__: «axis» and «color» are mutually exclusive.
+
 
 ---
 
@@ -982,7 +1015,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_color(color=fl_filament(),alpha=1)
+    fl_color(color,alpha=1)
 
 Set current color and alpha channel, using variable $fl_filament when «color» is
 undef. When variable $fl_debug is true, color information is ignored and debug
@@ -991,58 +1024,18 @@ modifier is applied to children().
 
 ---
 
-### module fl_manage
-
-__Syntax:__
-
-    fl_manage(verbs,placement,direction,size,debug,connectors,holes)
-
-manage verbs parsing, placement, orientation and [fl_axes{}](#module-fl_axes)
-
-children context:
-
-- $verb    : current parsed verb
-- $modifier: current verb modifier
-
-
-__Parameters:__
-
-__verbs__  
-verb list
-
-__placement__  
-placement matrix
-
-__direction__  
-orientation matrix
-
-__size__  
-size used for [fl_axes{}](#module-fl_axes)
-
-__debug__  
-see constructor [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
-
-__connectors__  
-list of connectors to debug
-
-__holes__  
-list of holes to debug
-
-
----
-
 ### module fl_modifier
 
 __Syntax:__
 
-    fl_modifier(behaviour,reset=true)
+    fl_modifier(behavior,reset=true)
 
 Modifier module for verbs.
 
 
 __Parameters:__
 
-__behaviour__  
+__behavior__  
 "OFF","ON","ONLY","DEBUG","TRANSPARENT"
 
 
@@ -1055,6 +1048,14 @@ __Syntax:__
     fl_overlap(u1,u2,position)
 
 Aligns children from u1 to u2 and move to position
+
+---
+
+### module fl_status
+
+__Syntax:__
+
+    fl_status()
 
 ---
 

@@ -5,8 +5,9 @@
 ```mermaid
 graph LR
     A1[vitamins/magnets] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[vitamins/countersinks]
-    A1 --o|include| A4[vitamins/screw]
+    A1 --o|include| A3[foundation/mngm]
+    A1 --o|include| A4[vitamins/countersinks]
+    A1 --o|include| A5[vitamins/screw]
 ```
 
 Magnets definitions.

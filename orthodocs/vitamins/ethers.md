@@ -5,6 +5,7 @@
 ```mermaid
 graph LR
     A1[vitamins/ethers] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[foundation/mngm]
 ```
 
 Ethernet.
@@ -22,7 +23,17 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_ETHER_RJ45,FL_ETHER_RJ45_SLIM]
+    [FL_ETHER_RJ45,FL_ETHER_RJ45_SM]
+
+---
+
+### variable FL_ETHER_FRAME_T
+
+__Default:__
+
+    1.5
+
+part of a surface mount ethernet socket length is reserved for the external frame
 
 ---
 
@@ -36,19 +47,51 @@ ethernet namespace
 
 ---
 
+### variable FL_ETHER_PLUG_L
+
+__Default:__
+
+    8.5
+
+value of the internally inserted part of an RJ45 plug
+
+---
+
 ### variable FL_ETHER_RJ45
 
 __Default:__
 
-    let(bbox=let(l=21,w=16,h=13.5)[[-l/2,-w/2,0],[+l/2,+w/2,h]])[fl_name(value="RJ45"),fl_bb_corners(value=bbox),fl_director(value=+FL_X),fl_rotor(value=-FL_Z),]
+    let(l=21,w=16,h=13.5)[fl_name(value="RJ45"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_director(value=+FL_X),fl_rotor(value=-FL_Z),fl_engine(value=str(FL_ETHER_NS,"/NopSCADlib")),]
 
 ---
 
-### variable FL_ETHER_RJ45_SLIM
+### variable FL_ETHER_RJ45_SM
 
 __Default:__
 
-    let(l=12.6,w=14.4,h=11.5)[fl_name(value="RJ45 SLIM"),fl_bb_new(size=[l,w,h]),fl_director(value=+FL_X),fl_rotor(value=-FL_Z),]
+    let(l=12.6,w=17.4,h=11.5)[fl_name(value="RJ45 SLIM"),fl_bb_corners(value=[[-l+FL_ETHER_FRAME_T,-w/2,-FL_ETHER_Z_OFFSET],+[FL_ETHER_FRAME_T,w/2,h-FL_ETHER_Z_OFFSET]]),fl_director(value=+FL_X),fl_rotor(value=-FL_Z),fl_dxf(value="vitamins/ether-slim.dxf"),fl_engine(value=str(FL_ETHER_NS,"/native")),]
+
+---
+
+### variable FL_ETHER_Z_OFFSET
+
+__Default:__
+
+    5
+
+a surface mount ethernet socket is partially embedded on PCB
+
+## Functions
+
+---
+
+### function fl_ether_Zoffset
+
+__Syntax:__
+
+```text
+fl_ether_Zoffset(type,value)
+```
 
 ## Modules
 

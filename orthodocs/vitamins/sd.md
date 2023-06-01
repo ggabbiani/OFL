@@ -5,7 +5,8 @@
 ```mermaid
 graph LR
     A1[vitamins/sd] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[foundation/util]
+    A1 --o|include| A3[foundation/mngm]
+    A1 --o|include| A4[foundation/util]
 ```
 
 Secure Digital flash memory card for OpenSCAD Foundation Library.

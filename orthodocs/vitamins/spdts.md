@@ -5,6 +5,8 @@
 ```mermaid
 graph LR
     A1[vitamins/spdts] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[foundation/mngm]
+    A1 --o|include| A4[foundation/symbol]
 ```
 
 Single pole, double throw switch.
@@ -82,7 +84,7 @@ fl_spdt_l(type)
 
 __Syntax:__
 
-    fl_spdt(verbs=FL_ADD,type,direction,octant)
+    fl_spdt(verbs=FL_ADD,type,direction,octant,debug)
 
 __Parameters:__
 
@@ -93,9 +95,12 @@ __type__
 prototype
 
 __direction__  
-desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+desired direction [director,rotation], native direction when undef ([+Z,0])
 
 __octant__  
 when undef native positioning is used
+
+__debug__  
+see constructor [fl_parm_Debug()](../foundation/base_parameters.md#function-fl_parm_debug)
 
 

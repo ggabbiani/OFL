@@ -7,7 +7,8 @@ graph LR
     A1[vitamins/pin_headers] --o|include| A2[foundation/connect]
     A1 --o|include| A3[foundation/defs]
     A1 --o|include| A4[foundation/label]
-    A1 --o|include| A5[foundation/util]
+    A1 --o|include| A5[foundation/mngm]
+    A1 --o|include| A6[foundation/util]
 ```
 
 NopSCADlib pin header wrapper definitions.

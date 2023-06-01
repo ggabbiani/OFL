@@ -6,10 +6,11 @@
 graph LR
     A1[artifacts/box] --o|include| A2[artifacts/spacer]
     A1 --o|include| A3[foundation/fillet]
-    A1 --o|include| A4[foundation/profile]
-    A1 --o|include| A5[foundation/util]
-    A1 --o|include| A6[vitamins/knurl_nuts]
-    A1 --o|include| A7[vitamins/screw]
+    A1 --o|include| A4[foundation/mngm]
+    A1 --o|include| A5[foundation/profile]
+    A1 --o|include| A6[foundation/util]
+    A1 --o|include| A7[vitamins/knurl_nuts]
+    A1 --o|include| A8[vitamins/screw]
 ```
 
 Box artifact.

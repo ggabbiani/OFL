@@ -5,8 +5,9 @@
 ```mermaid
 graph LR
     A1[vitamins/hds] --o|include| A2[foundation/hole]
-    A1 --o|include| A3[vitamins/sata]
-    A1 --o|include| A4[vitamins/screw]
+    A1 --o|include| A3[foundation/mngm]
+    A1 --o|include| A4[vitamins/sata]
+    A1 --o|include| A5[vitamins/screw]
 ```
 
 Hard disk definition file.

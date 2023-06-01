@@ -5,7 +5,8 @@
 ```mermaid
 graph LR
     A1[artifacts/caddy] --o|include| A2[foundation/fillet]
-    A1 --o|include| A3[foundation/unsafe_defs]
+    A1 --o|include| A3[foundation/mngm]
+    A1 --o|include| A4[foundation/unsafe_defs]
 ```
 
 Generic caddy artifact.

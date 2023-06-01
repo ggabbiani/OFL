@@ -6,8 +6,9 @@
 graph LR
     A1[vitamins/trimpot] --o|include| A2[foundation/3d]
     A1 --o|include| A3[foundation/bbox]
-    A1 --o|include| A4[foundation/unsafe_defs]
-    A1 --o|include| A5[foundation/util]
+    A1 --o|include| A4[foundation/mngm]
+    A1 --o|include| A5[foundation/unsafe_defs]
+    A1 --o|include| A6[foundation/util]
 ```
 
 trimpot engine file

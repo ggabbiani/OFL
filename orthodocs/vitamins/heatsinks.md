@@ -4,8 +4,10 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/heatsinks] --o|include| A2[vitamins/pcbs]
-    A1 --o|use| A3[dxf]
+    A1[vitamins/heatsinks] --o|include| A2[foundation/3d]
+    A1 --o|include| A3[foundation/bbox]
+    A1 --o|include| A4[foundation/defs]
+    A1 --o|include| A5[foundation/mngm]
 ```
 
 Heatsinks definition file.
@@ -23,7 +25,15 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_HS_PIMORONI]
+    [FL_HS_PIMORONI_TOP,FL_HS_PIMORONI_BOTTOM,FL_HS_KHADAS]
+
+---
+
+### variable FL_HS_KHADAS
+
+__Default:__
+
+    let(Zs=2,Zh=1,Zf=5.45,Zt=2.2)[fl_name(value="KHADAS VIM SBC Heatsink"),fl_bb_corners(value=[[0.5,-49.57,0],[81.49,-0.49,Zs+Zh+Zf],]),fl_screw(value=M2_cap_screw),fl_director(value=+FL_Z),fl_rotor(value=+FL_X),fl_dxf(value="vitamins/hs-khadas.dxf"),fl_engine(value="Khadas"),fl_property(key="separator height",value=Zs),fl_property(key="heatsink height",value=Zh),fl_property(key="fin height",value=Zf),fl_property(key="tooth height",value=Zt),]
 
 ---
 
@@ -37,35 +47,21 @@ namespace
 
 ---
 
-### variable FL_HS_PIMORONI
+### variable FL_HS_PIMORONI_BOTTOM
 
 __Default:__
 
-    let(size=[56,87,25.5])[fl_name(value="PIMORONI Heatsink Case"),fl_description(value="PIMORONI Aluminium Heatsink Case for Raspberry Pi 4"),fl_bb_corners(value=[[-size.x/2,0,0],[+size.x/2,size.y,size.z],]),fl_screw(value=M2p5_cap_screw),fl_director(value=+FL_Z),fl_rotor(value=+FL_X),fl_dxf(value="vitamins/pimoroni.dxf"),["corner radius",3],["bottom part",[["layer 0 base thickness",2],["layer 0 fluting thickness",2.3],["layer 0 holders thickness",3],]],["top part",[["layer 1 base thickness",1.5],["layer 1 fluting thickness",8.6],["layer 1 holders thickness",5.5],]],fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),]
-
-## Functions
+    let(Tbase=2,Tfluting=2.3,Tholders=3,size=[56,87,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - bottom"),fl_bb_corners(value=[[-size.x/2,0,-size.z],[+size.x/2,size.y,0],]),fl_screw(value=M2p5_cap_screw),fl_director(value=-FL_Z),fl_rotor(value=-FL_X),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),["corner radius",3],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","bottom"],]
 
 ---
 
-### function fl_bb_pimoroni
+### variable FL_HS_PIMORONI_TOP
 
-__Syntax:__
+__Default:__
 
-```text
-fl_bb_pimoroni(type,top=true,bottom=true)
-```
+    let(Tbase=1.5,Tfluting=8.6,Tholders=5.5,size=[56,70,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - top"),fl_bb_corners(value=[[-size.x/2,0,0],[+size.x/2,size.y,size.z],]),fl_screw(value=M2p5_cap_screw),fl_director(value=+FL_Z),fl_rotor(value=+FL_X),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),["corner radius",3],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","top"],]
 
-calculates Pimoroni's bounding box
-
-
-__Parameters:__
-
-__top__  
-top part
-
-__bottom__  
-bottom part
-
+## Functions
 
 ---
 
@@ -76,6 +72,9 @@ __Syntax:__
 ```text
 fl_pimoroni(verb=FL_ADD,type,thick=0,lay_what="mount",top=true,bottom=true,direction,octant)
 ```
+
+TODO: TO BE REMOVED
+
 
 __Parameters:__
 
@@ -105,35 +104,19 @@ when undef native positioning is used
 
 ---
 
-### module fl_pimoroni
+### module fl_heatsink
 
 __Syntax:__
 
-    fl_pimoroni(verbs=FL_ADD,type,thick=0,lay_what="mount",top=true,bottom=true,direction,octant)
+    fl_heatsink(verbs=FL_ADD,type,direction,octant)
 
-FL_LAYOUT,FL_ASSEMBLY children context:
-
-  - $hs_radius: corner radius
-  - $hs_normal: layout normal (always -Z);
-  - $hs_screw : mount screw;
+common wrapper for different heat sink model engines.
 
 
 __Parameters:__
 
 __verbs__  
-supported verbs: `FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT`
-
-__thick__  
-FL_DRILL thickness in scalar form for -Z normal
-
-__lay_what__  
-either "mount" or "assembly"
-
-__top__  
-top part
-
-__bottom__  
-bottom part
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

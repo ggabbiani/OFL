@@ -5,7 +5,8 @@
 ```mermaid
 graph LR
     A1[vitamins/knurl_nuts] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[vitamins/screw]
+    A1 --o|include| A3[foundation/mngm]
+    A1 --o|include| A4[vitamins/screw]
 ```
 
 Knurl nuts (aka 'inserts') definition module.

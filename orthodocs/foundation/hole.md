@@ -4,10 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[foundation/hole] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[foundation/label]
-    A1 --o|include| A4[foundation/symbol]
-    A1 --o|include| A5[foundation/type_trait]
+    A1[foundation/hole] --o|include| A2[foundation/label]
+    A1 --o|include| A3[foundation/symbol]
 ```
 
 Hole engine implementation.
@@ -137,26 +135,6 @@ fl_holes(type,value)
 
 ---
 
-### function fl_tt_is3d
-
-__Syntax:__
-
-```text
-fl_tt_is3d(3d)
-```
-
----
-
-### function fl_tt_isDirectionRotation
-
-__Syntax:__
-
-```text
-fl_tt_isDirectionRotation(value)
-```
-
----
-
 ### function fl_tt_isHole
 
 __Syntax:__
@@ -180,16 +158,6 @@ __Syntax:__
 
 ```text
 fl_tt_isHoleList(list)
-```
-
----
-
-### function fl_tt_isOctant
-
-__Syntax:__
-
-```text
-fl_tt_isOctant(3d)
 ```
 
 ## Modules

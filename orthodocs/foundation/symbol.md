@@ -16,6 +16,37 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
+### module fl_sym_direction
+
+__Syntax:__
+
+    fl_sym_direction(verbs=FL_ADD,ncs=[+FL_Z,+FL_X],direction,size=0.5)
+
+display the direction change from a native coordinate system and a new
+direction specification in [direction,rotation] format.
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD
+
+__ncs__  
+Native Coordinate System in [director axis, rotor axis] form
+
+__direction__  
+direction in [Axis–angle representation](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation)
+in the format
+
+    [axis,rotation angle]
+
+
+__size__  
+default size given as a scalar
+
+
+---
+
 ### module fl_sym_hole
 
 __Syntax:__

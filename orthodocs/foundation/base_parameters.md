@@ -21,6 +21,9 @@ fl_asserts()
 
 When true [fl_assert()](defs.md#function-fl_assert) is enabled
 
+TODO: remove since deprecated.
+
+
 ---
 
 ### function fl_debug
@@ -55,7 +58,7 @@ __Syntax:__
 fl_parm_Debug(labels=false,symbols=false)
 ```
 
-contructor for debug context parameter
+constructor for debug context parameter
 
 __Parameters:__
 

@@ -4,7 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/hdmi] --o|include| A2[foundation/util]
+    A1[vitamins/hdmi] --o|include| A2[foundation/mngm]
+    A1 --o|include| A3[foundation/util]
 ```
 
 NopACADlib HDMI engine wrapper.

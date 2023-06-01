@@ -7,8 +7,9 @@ graph LR
     A1[vitamins/jacks] --o|include| A2[foundation/3d]
     A1 --o|include| A3[foundation/connect]
     A1 --o|include| A4[foundation/label]
-    A1 --o|include| A5[foundation/tube]
-    A1 --o|include| A6[foundation/util]
+    A1 --o|include| A5[foundation/mngm]
+    A1 --o|include| A6[foundation/tube]
+    A1 --o|include| A7[foundation/util]
 ```
 
 NopSCADlib Jack definitions wrapper.

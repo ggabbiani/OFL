@@ -18,6 +18,26 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
+### function fl_tt_is2d
+
+__Syntax:__
+
+```text
+fl_tt_is2d(p)
+```
+
+---
+
+### function fl_tt_is3d
+
+__Syntax:__
+
+```text
+fl_tt_is3d(p)
+```
+
+---
+
 ### function fl_tt_isAxis
 
 __Syntax:__
@@ -63,7 +83,7 @@ fl_tt_isAxisList(list)
 
 Floating semi-axis list.
 
-One row with matricial representation of cartesian semi-axes in whatever order.
+One row with matrix representation of cartesian semi-axes in whatever order.
 
 example:
 
@@ -136,7 +156,7 @@ The 3D bounding box is usually defined by three dimensions: width, height
 and depth. These three dimensions define the dimensions of the rectangular
 parallelepiped.
 
-The [high,low] format is a list containing two 3d points:
+The [low,high] format is a list containing two 3d points:
 
 ```
 low-point==min(x),min(y),min(z) of the bounding box
@@ -154,6 +174,59 @@ __Parameters:__
 
 __bbox__  
 bounding box to be verified
+
+
+---
+
+### function fl_tt_isColor
+
+__Syntax:__
+
+```text
+fl_tt_isColor(color)
+```
+
+---
+
+### function fl_tt_isCompSpecList
+
+__Syntax:__
+
+```text
+fl_tt_isCompSpecList(specs)
+```
+
+Component specification list check
+
+   ["label", component]
+
+
+---
+
+### function fl_tt_isComponent
+
+__Syntax:__
+
+```text
+fl_tt_isComponent(comp)
+```
+
+check if «comp» is a valid component format:
+
+   ["engine", [position], [[director],rotation], type, properties]
+
+
+---
+
+### function fl_tt_isDirectionRotation
+
+__Syntax:__
+
+```text
+fl_tt_isDirectionRotation(value)
+```
+
+check whether «value» is a valid [axis,rotation angle] format:
 
 
 ---
@@ -222,6 +295,16 @@ optional list size
 
 ---
 
+### function fl_tt_isOctant
+
+__Syntax:__
+
+```text
+fl_tt_isOctant(3d)
+```
+
+---
+
 ### function fl_tt_isPointNormal
 
 __Syntax:__
@@ -242,4 +325,27 @@ __Syntax:__
 ```text
 fl_tt_isPointNormalList(list)
 ```
+
+---
+
+### function fl_tt_isPosition
+
+__Syntax:__
+
+```text
+fl_tt_isPosition(p)
+```
+
+---
+
+### function fl_tt_isVerbList
+
+__Syntax:__
+
+```text
+fl_tt_isVerbList(verbs)
+```
+
+verb list is either a single verb string or a list of verb strings.
+
 

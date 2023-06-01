@@ -4,7 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/sata-adapters] --o|include| A2[vitamins/sata]
+    A1[vitamins/sata-adapters] --o|include| A2[foundation/mngm]
+    A1 --o|include| A3[vitamins/sata]
 ```
 
 'Naive' SATA adapter definition file.
