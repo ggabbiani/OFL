@@ -10,6 +10,7 @@ use <../dxf.scad>
 
 include <2d.scad>
 include <bbox.scad>
+include <mngm.scad>
 include <type_trait.scad>
 
 /*!

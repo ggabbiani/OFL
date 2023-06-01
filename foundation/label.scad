@@ -5,6 +5,7 @@
  */
 
 include <3d.scad>
+include <mngm.scad>
 
 /*!
  * mimics standard resize() module behaviour

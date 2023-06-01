@@ -7,6 +7,7 @@
  */
 include <../foundation/bbox.scad>
 include <../foundation/3d.scad>
+include <../foundation/mngm.scad>
 include <../foundation/unsafe_defs.scad>
 
 //! template namespace

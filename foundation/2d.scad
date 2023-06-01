@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <mngm.scad>
 include <unsafe_defs.scad>
 
 function __clip__(inf,x,sup) = x<=inf?inf:x>=sup?sup:x;

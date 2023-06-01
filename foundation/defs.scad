@@ -311,88 +311,6 @@ function fl_has(type,property,check=function(value) true) =
   i != [[]] ? assert(len(type[i[0]])==2,"Malformed type") check(type[i[0]][1]) : false;
 
 /*!
- * manage verbs parsing, placement, orientation and fl_axes{}
- *
- * children context:
- *
- * - $verb    : current parsed verb
- * - $modifier: current verb modifier
- */
-module fl_manage(
-    //! verb list
-    verbs,
-    //! placement matrix
-    placement,
-    //! orientation matrix
-    direction,
-    //! size used for fl_axes{}
-    size,
-    //! see constructor fl_parm_Debug()
-    debug,
-    //! list of connectors to debug
-    connectors,
-    //! list of holes to debug
-    holes
-  ) {
-    placement = placement ? placement : FL_I;
-    direction = direction ? direction : FL_I;
-
-  module context(vlist) {
-    assert(is_list(vlist)||is_string(vlist),vlist);
-    flat  = fl_list_flatten(is_list(vlist)?vlist:[vlist]);
-    let(
-      $_axes_   = fl_list_has(flat,FL_AXES),
-      $_verbs_  = fl_list_filter(flat,FL_EXCLUDE_ANY,FL_AXES)
-    ) children();
-  }
-
-  // parse verbs and trigger children with predefined context (see module fl_manage())
-  module fl_parse(verbs) {
-
-    // given a verb returns the corresponding modifier value
-    function verb2modifier(verb)  =
-        verb==FL_ADD        ? $FL_ADD
-      : verb==FL_ASSEMBLY   ? $FL_ASSEMBLY
-      : verb==FL_AXES       ? $FL_AXES
-      : verb==FL_BBOX       ? $FL_BBOX
-      : verb==FL_CUTOUT     ? $FL_CUTOUT
-      : verb==FL_DRILL      ? $FL_DRILL
-      : verb==FL_FOOTPRINT  ? $FL_FOOTPRINT
-      : verb==FL_HOLDERS    ? $FL_HOLDERS
-      : verb==FL_LAYOUT     ? $FL_LAYOUT
-      : verb==FL_MOUNT      ? $FL_MOUNT
-      : verb==FL_PAYLOAD    ? $FL_PAYLOAD
-      : assert(false,str("Unsupported verb ",verb)) undef;
-
-    assert(is_list(verbs)||is_string(verbs),verbs);
-    for($verb=verbs) {
-      tokens  = split($verb);
-      fl_trace(tokens[0]);
-      if (fl_isSet("**DEPRECATED**",tokens)) {
-        fl_trace(str("***WARN*** ", tokens[0], " is marked as DEPRECATED and will be removed in future version!"),always=true);
-      } else if (fl_isSet("**OBSOLETE**",tokens)) {
-        assert(false,str(tokens[0], " is marked as OBSOLETE!"));
-      } let(
-        $modifier = verb2modifier($verb)
-      ) if ($modifier!="OFF") children();
-    }
-  }
-
-  multmatrix(direction) context(verbs) union() {
-    multmatrix(placement) union() {
-      if (debug) {
-        if (connectors)
-          fl_conn_debug(connectors,debug=debug);
-        if (holes)
-          fl_hole_debug(holes,debug=debug);
-      }
-      fl_parse($_verbs_) children();
-    }
-    if ($_axes_ && size) fl_modifier($FL_AXES) fl_axes(size=1.2*size);
-  }
-}
-
-/*!
  * Applies a Rotation Matrix for aligning fl_vector A (from) to fl_vector B (to).
  *
  * Taken from
@@ -494,37 +412,44 @@ module fl_axes(size=1,reverse=false) {
 function fl_grey(n) = [0.01, 0.01, 0.01] * n;
 
 /*!
- * returns the canonical axis color when «key» is an axis
+ * returns the canonical axis color when invoked by «axis»
  *
  *     X ⟹ red
  *     Y ⟹ green
  *     Z ⟹ blue
  *
- * or the corresponding color palette if «key» is a string
+ * or the corresponding color palette if invoked by «color»
+ *
+ * __NOTE__: «axis» and «color» are mutually exclusive.
  */
-function fl_palette(key) = let(
-  versor = is_string(key) ? undef : fl_versor(key)
+function fl_palette(color,axis) = assert(
+  (color!=undef && axis==undef)||color==undef && axis!=undef,str("color=",color,",axis=",axis)
+) let(
+  versor = axis
+  ? assert(!fl_debug() || fl_tt_isAxis(axis),axis) fl_versor(axis)
+  : assert(!fl_debug() || fl_tt_isColor(color),color) undef
 ) versor ? (  (versor==FL_X||versor==-FL_X) ? "red"
             : (versor==FL_Y||versor==-FL_Y) ? "green"
             : (versor==FL_Z||versor==-FL_Z) ? "blue"
             : assert(false, axis) undef)
           : (
-              key=="bronze"        ? "#CD7F32"
-            : key=="copper red"    ? "#CB6D51"
-            : key=="copper penny"  ? "#AD6F69"
-            : key=="pale copper"   ? "#DA8A67"
-            : key);
+              color=="bronze"        ? "#CD7F32"
+            : color=="copper red"    ? "#CB6D51"
+            : color=="copper penny"  ? "#AD6F69"
+            : color=="pale copper"   ? "#DA8A67"
+            : color);
 
 /*!
  * Set current color and alpha channel, using variable $fl_filament when «color» is
  * undef. When variable $fl_debug is true, color information is ignored and debug
  * modifier is applied to children().
  */
-module fl_color(color=fl_filament(),alpha=1) {
+module fl_color(color,alpha=1) {
+  color = color ? color : fl_filament();
   if (fl_debug())
     #children();
   else
-    color(fl_palette(color),alpha) children();
+    color(fl_palette(color=color),alpha) children();
 }
 
 function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : undef));

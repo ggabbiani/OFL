@@ -5,6 +5,7 @@
  */
 
 include <spacer.scad>
+include <../foundation/mngm.scad>
 
 /******************************************************************************
  * Hole driven PCB holders

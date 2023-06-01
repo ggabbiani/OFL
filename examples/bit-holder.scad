@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <../foundation/mngm.scad>
 include <../foundation/util.scad>
 include <../vitamins/magnets.scad>
 

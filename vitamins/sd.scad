@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 include <../foundation/3d.scad>
+include <../foundation/mngm.scad>
 include <../foundation/util.scad>
 
 include <NopSCADlib/vitamins/pcb.scad>

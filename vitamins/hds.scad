@@ -7,6 +7,7 @@
  */
 
 include <../foundation/hole.scad>
+include <../foundation/mngm.scad>
 include <sata.scad>
 include <screw.scad>
 

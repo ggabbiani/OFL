@@ -5,8 +5,9 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../foundation/unsafe_defs.scad>
 include <../foundation/3d.scad>
+include <../foundation/mngm.scad>
+include <../foundation/unsafe_defs.scad>
 
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>

@@ -6,9 +6,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/unsafe_defs.scad>
-include <../foundation/tube.scad>
 include <../foundation/hole.scad>
+include <../foundation/mngm.scad>
+include <../foundation/tube.scad>
+include <../foundation/unsafe_defs.scad>
 
 include <../vitamins/knurl_nuts.scad>
 

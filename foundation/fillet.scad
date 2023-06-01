@@ -7,6 +7,7 @@
  */
 
 include <3d.scad>
+include <mngm.scad>
 
 module fl_vFillet(
   //! FL_ADD, FL_AXES, FL_BBOX

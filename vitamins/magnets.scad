@@ -7,6 +7,7 @@
  */
 
 include <../foundation/3d.scad>
+include <../foundation/mngm.scad>
 
 include <countersinks.scad>
 include <screw.scad>

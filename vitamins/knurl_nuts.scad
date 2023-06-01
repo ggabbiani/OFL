@@ -7,6 +7,7 @@
  */
 
 include <../foundation/3d.scad>
+include <../foundation/mngm.scad>
 include <screw.scad>
 
 include <NopSCADlib/lib.scad>;

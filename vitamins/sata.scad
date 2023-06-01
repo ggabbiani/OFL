@@ -10,6 +10,7 @@
 include <../foundation/algo.scad>
 include <../foundation/connect.scad>
 include <../foundation/drawio.scad>
+include <../foundation/mngm.scad>
 
 FL_SATA_NS  = "sata";
 

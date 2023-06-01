@@ -8,6 +8,7 @@
 
 include <../foundation/3d.scad>
 include <../foundation/bbox.scad>
+include <../foundation/mngm.scad>
 include <../foundation/unsafe_defs.scad>
 include <../foundation/util.scad>
 

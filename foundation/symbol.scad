@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <mngm.scad>
 include <torus.scad>
 
 module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
@@ -185,9 +186,9 @@ module fl_sym_direction(
   curr_rotor    = let(versor=fl_versor(ncs[1])) abs(versor*sz)*versor;
   curr_axis     = let(versor=fl_versor(cross(curr_director,curr_rotor))) abs(versor*sz)*versor;;
 
-  dir_color     = fl_palette(curr_director);
-  rot_color     = fl_palette(curr_rotor);
-  axis_color    = fl_palette(cross(curr_director,curr_rotor));
+  dir_color     = fl_palette(axis=curr_director);
+  rot_color     = fl_palette(axis=curr_rotor);
+  axis_color    = fl_palette(axis=cross(curr_director,curr_rotor));
 
   // invert matrix for original coordinate system representation after
   // the direction change

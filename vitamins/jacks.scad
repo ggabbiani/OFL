@@ -9,6 +9,7 @@
 include <../foundation/3d.scad>
 include <../foundation/connect.scad>
 include <../foundation/label.scad>
+include <../foundation/mngm.scad>
 include <../foundation/tube.scad>
 include <../foundation/util.scad>
 

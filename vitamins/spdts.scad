@@ -7,6 +7,7 @@
  */
 
 include <../foundation/3d.scad>
+include <../foundation/mngm.scad>
 include <../foundation/symbol.scad>
 
 include <NopSCADlib/vitamins/spades.scad>
@@ -48,10 +49,12 @@ module fl_spdt(
   verbs       = FL_ADD,
   //! prototype
   type,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+Z,0])
   direction,
   //! when undef native positioning is used
-  octant
+  octant,
+  //! see constructor fl_parm_Debug()
+  debug
 ) {
   assert(verbs!=undef);
 
@@ -92,11 +95,6 @@ module fl_spdt(
         translate([0,+d/2-1,0]) rotate(180,FL_X) spade(spade3,8);
       }
     }
-    // if (fl_debug())
-    if (direction)
-      let(sz=size*1.2)
-        // translate(Z(size.z*1.2-sz.z))
-          fl_sym_direction(ncs=[fl_director(type),fl_rotor(type)],direction=direction,size=sz);
   }
 
   module do_drill() {
@@ -104,7 +102,7 @@ module fl_spdt(
       cylinder(d=d, h=h);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D,size,debug,direction=direction,ncs=[fl_director(type),fl_rotor(type)]) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
     } else if ($verb==FL_BBOX) {

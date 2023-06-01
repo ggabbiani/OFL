@@ -7,6 +7,7 @@
  */
 
 include <hole.scad>
+include <mngm.scad>
 
 function __constructor__(description,bbox,holes)  = let(
 ) [

@@ -7,6 +7,7 @@
  */
 
 include <../foundation/unsafe_defs.scad>
+include <../foundation/mngm.scad>
 include <../foundation/fillet.scad>
 
 //! Caddy's namespace

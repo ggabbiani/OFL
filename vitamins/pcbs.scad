@@ -11,6 +11,7 @@ include <../foundation/components.scad>
 include <../foundation/grid.scad>
 include <../foundation/hole.scad>
 include <../foundation/label.scad>
+include <../foundation/mngm.scad>
 
 include <ethers.scad>
 include <hdmi.scad>

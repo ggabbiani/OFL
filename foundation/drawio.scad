@@ -8,6 +8,7 @@
  */
 
 include <2d.scad>
+include <mngm.scad>
 
 /*!
  * Y invert and scale to size from draw.io coords.

@@ -8,6 +8,7 @@
 
 include <../foundation/grid.scad>
 include <../foundation/hole.scad>
+include <../foundation/mngm.scad>
 include <../foundation/util.scad>
 include <../foundation/unsafe_defs.scad>
 

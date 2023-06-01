@@ -7,6 +7,7 @@
  */
 
 include <../foundation/fillet.scad>
+include <../foundation/mngm.scad>
 include <../vitamins/magnets.scad>
 
 $fn         = 50;           // [3:100]

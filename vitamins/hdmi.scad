@@ -7,6 +7,7 @@
  */
 
 include <../foundation/util.scad>
+include <../foundation/mngm.scad>
 
 use     <NopSCADlib/vitamins/pcb.scad>
 

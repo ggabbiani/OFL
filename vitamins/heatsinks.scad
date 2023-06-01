@@ -9,6 +9,7 @@
 include <../foundation/3d.scad>
 include <../foundation/bbox.scad>
 include <../foundation/defs.scad>
+include <../foundation/mngm.scad>
 
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>

@@ -7,6 +7,7 @@
  */
 
 include <sata.scad>
+include <../foundation/mngm.scad>
 
 FL_SADP_NS  = "sadp";
 

@@ -8,6 +8,7 @@
 
 include <../artifacts/spacer.scad>
 include <../foundation/fillet.scad>
+include <../foundation/mngm.scad>
 include <../foundation/profile.scad>
 include <../foundation/util.scad>
 include <../vitamins/knurl_nuts.scad>
