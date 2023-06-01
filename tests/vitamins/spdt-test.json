@@ -1,54 +1,48 @@
 {
+    "fileFormatVersion": "1",
     "parameterSets": {
         "pic-7": {
             "$FL_ADD": "ON",
             "$FL_AXES": "ON",
             "$FL_BBOX": "OFF",
-            "$FL_DEBUG": "false",
             "$FL_DRILL": "OFF",
             "$FL_RENDER": "false",
-            "$FL_SAFE": "false",
-            "$FL_TRACE": "false",
             "$fn": "50",
             "DIR_NATIVE": "true",
             "DIR_R": "0",
             "DIR_Z": "[0, 0, 1]",
             "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true"
+            "PLACE_NATIVE": "true",
+            "SHOW_SYMBOLS": "true"
         },
         "pic-8": {
             "$FL_ADD": "ON",
             "$FL_AXES": "ON",
             "$FL_BBOX": "OFF",
-            "$FL_DEBUG": "false",
             "$FL_DRILL": "OFF",
             "$FL_RENDER": "false",
-            "$FL_SAFE": "false",
-            "$FL_TRACE": "false",
             "$fn": "50",
             "DIR_NATIVE": "false",
             "DIR_R": "0",
-            "DIR_Z": "[1, 1, 1]",
+            "DIR_Z": "[-1, -1, 1]",
             "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true"
+            "PLACE_NATIVE": "true",
+            "SHOW_SYMBOLS": "true"
         },
         "pic-9": {
             "$FL_ADD": "ON",
             "$FL_AXES": "ON",
             "$FL_BBOX": "OFF",
-            "$FL_DEBUG": "false",
             "$FL_DRILL": "OFF",
             "$FL_RENDER": "false",
-            "$FL_SAFE": "false",
-            "$FL_TRACE": "false",
             "$fn": "50",
             "DIR_NATIVE": "false",
             "DIR_R": "137",
-            "DIR_Z": "[1, 1, 1]",
+            "DIR_Z": "[-1, -1, 1]",
             "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true"
+            "PLACE_NATIVE": "true",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "true"
         }
-    },
-    "parameterSets": "",
-    "fileFormatVersion": "1"
+    }
 }
