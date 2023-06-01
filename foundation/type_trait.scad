@@ -218,7 +218,9 @@ function fl_tt_isAxisString(s) =
     nocase=true
   );
 
-function fl_tt_isAxis(axis) = (axis==-X||axis==+X||axis==-Y||axis==+Y||axis==-Z||axis==+Z);
+function fl_tt_isAxis(axis) = let(
+  versor = fl_versor(axis)
+) (versor==-X||versor==+X||versor==-Y||versor==+Y||versor==-Z||versor==+Z);
 
 /*!
  * Floating semi-axis list.
@@ -239,3 +241,8 @@ function fl_tt_isAxisList(list) =
  */
 function fl_tt_isVerbList(verbs) =
   is_string(verbs) || fl_tt_isList(verbs,f=function(v) is_string(v));
+
+function fl_tt_isColor(color) = len(color)==3
+  && color[0]>=0 && color[0]<=1
+  && color[1]>=0 && color[1]<=1
+  && color[2]>=0 && color[2]<=1;
