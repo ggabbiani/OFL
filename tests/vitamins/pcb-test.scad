@@ -50,12 +50,10 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [DEBUG] */
-
-LABELS      = false;
-SYMBOLS     = false;
-
 /* [PCB] */
+
+SHOW_LABELS      = false;
+SHOW_SYMBOLS     = false;
 
 TYPE  = "FL_PCB_VIM1";  // [FL_PCB_VIM1,FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,ALL]
 
@@ -77,7 +75,7 @@ co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
 direction     = DIR_NATIVE        ? undef : [DIR_Z,DIR_R];
 octant        = PLACE_NATIVE      ? undef : OCTANT;
 filament      = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-debug         = fl_parm_Debug(labels=LABELS,symbols=SYMBOLS);
+debug         = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,

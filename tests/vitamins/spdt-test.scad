@@ -41,17 +41,22 @@ DIR_R       = 0;        // [0:360]
 PLACE_NATIVE  = true;
 OCTANT        = [0,0,0];  // [-1:+1]
 
+/* SPDT */
+
+SHOW_LABELS      = false;
+SHOW_SYMBOLS     = false;
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
+debug     = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
+
 verbs=[
   if ($FL_ADD!="OFF")   FL_ADD,
   if ($FL_AXES!="OFF")  FL_AXES,
   if ($FL_BBOX!="OFF")  FL_BBOX,
   if ($FL_DRILL!="OFF") FL_DRILL,
 ];
-fl_trace("PLACE_NATIVE",PLACE_NATIVE);
-fl_trace("octant",octant);
 
-fl_spdt(verbs,FL_SODAL_SPDT,octant=octant,direction=direction);
+fl_spdt(verbs,FL_SODAL_SPDT,octant=octant,direction=direction,debug=debug);

@@ -21,7 +21,9 @@ function fl_debug() = is_undef($fl_debug)
 : assert(is_bool($fl_debug),$fl_debug) /* echo(str("**DEBUG** ",$fl_debug)) */ $fl_debug;
 
 //! Default color for printable items (i.e. artifacts)
-function fl_filament() = is_undef($fl_filament) ? "DodgerBlue" : assert(is_string($fl_filament)) $fl_filament;
+function fl_filament() = is_undef($fl_filament)
+? "DodgerBlue"
+: assert(is_string($fl_filament)) $fl_filament;
 
 //**** Common parameters ******************************************************
 
