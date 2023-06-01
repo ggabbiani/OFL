@@ -5,7 +5,6 @@
  */
 
 include <3d.scad>
-include <mngm.scad>
 
 //! engine for generating profiles
 module fl_profile(

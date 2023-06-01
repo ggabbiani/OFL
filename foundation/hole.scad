@@ -6,10 +6,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <3d.scad>
 include <label.scad>
 include <symbol.scad>
-include <type_trait.scad>
 
 //*****************************************************************************
 // General properties

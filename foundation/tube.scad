@@ -5,7 +5,6 @@
  */
 
 include <3d.scad>
-include <mngm.scad>
 
 module fl_tube(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT

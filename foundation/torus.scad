@@ -5,7 +5,6 @@
  */
 
 include <3d.scad>
-include <mngm.scad>
 
 function fl_bb_torus(
   //! radius of the circular tube.

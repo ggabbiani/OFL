@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <mngm.scad>
 include <torus.scad>
 
 module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
