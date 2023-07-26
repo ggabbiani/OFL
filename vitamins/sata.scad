@@ -7,10 +7,11 @@
  */
 
 
-include <../foundation/algo.scad>
 include <../foundation/connect.scad>
 include <../foundation/drawio.scad>
-include <../foundation/mngm.scad>
+
+use <../foundation/algo-engine.scad>
+use <../foundation/mngm.scad>
 
 FL_SATA_NS  = "sata";
 
@@ -51,7 +52,6 @@ FL_SATA_DATAPLUG  = let(
 ) [
   fl_sata_conns(value=[conn_Plug(cid,+FL_X,+FL_Y,[0,0,0.5])]),
   fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
-  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_sata_type(value="data plug"),
   ["points",      dio_polyCoords(dio_pts,size)],
   ["contacts",      7],
@@ -87,7 +87,6 @@ FL_SATA_POWERPLUG = let(
 ) [
   fl_sata_conns(value=[conn_Plug(cid,+FL_X,+FL_Y,[size.x,0,0.5])]),
   fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
-  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_sata_type(value="power plug"),
   ["points",        dio_polyCoords(dio_pts,size)],
   ["contacts",      15],
@@ -125,7 +124,6 @@ FL_SATA_POWERDATAPLUG  = let(
 ) [
   fl_sata_conns(value=[pc,dc]),
   fl_bb_corners(value=[-size/2,+size/2]),
-  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_sata_type(value="power data plug"),
   ["power plug",  power],
   ["data plug",   data],
@@ -163,7 +161,6 @@ FL_SATA_POWERDATASOCKET = let(
   fl_conn_id(value=cid),
   fl_sata_conns(value=[pc,dc]),
   fl_bb_corners(value=[-blk_sz/2,+blk_sz/2]),
-  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_sata_type(value="power data socket"),
   ["points",      dio_polyCoords(dio_pts,[side_blk_sz.x,side_blk_sz.z,side_blk_sz.y])],
   ["block size",      blk_sz],
@@ -212,7 +209,7 @@ module fl_sata_dataPlug(
   cont_sz     = fl_get(type,"contact sizes");
   pattern     = fl_get(type,"contact pattern");
   bbox        = fl_bb_corners(type);
-  D           = direction ? fl_direction(proto=type,direction=direction)  : I;
+  D           = direction ? fl_direction(direction) : FL_I;
   M           = fl_octant(octant,type=type);
 
   fl_trace("type",type);
@@ -230,9 +227,12 @@ module fl_sata_dataPlug(
       fl_conn_add(connection,size=2);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_FOOTPRINT) {
@@ -288,9 +288,12 @@ module fl_sata_powerPlug(
       fl_conn_add(connection,size=2);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_FOOTPRINT) {
@@ -362,9 +365,13 @@ module fl_sata_powerDataPlug(
       multmatrix(Ms) shell();
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
@@ -461,6 +468,9 @@ module sata_PowerDataSocket(
   fl_manage(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_footprint();
     } else if ($verb==FL_FOOTPRINT) {

@@ -6,13 +6,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/3d.scad>
-include <../foundation/bbox.scad>
-include <../foundation/defs.scad>
-include <../foundation/mngm.scad>
-
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
+
+include <../foundation/defs.scad>
+
+use <../foundation/3d-engine.scad>
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
 
 //! namespace
 FL_HS_NS  = "hs";
@@ -27,13 +28,13 @@ FL_HS_PIMORONI_TOP = let(
     [+size.x/2, size.y, size.z  ],  // positive corner
   ]),
   fl_screw(value=M2p5_cap_screw),
-  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_dxf(value="vitamins/pimoroni.dxf"),
   fl_vendor(value=[
       ["Amazon", "https://www.amazon.it/gp/product/B082Y21GX5/"],
     ]
   ),
   fl_engine(value="Pimoroni"),
+  fl_cutout(value=[+FL_Z]),
 
   // private/undocumented properties
   ["corner radius",     3         ],
@@ -53,13 +54,13 @@ FL_HS_PIMORONI_BOTTOM = let(
     [+size.x/2, size.y, 0       ],  // positive corner
   ]),
   fl_screw(value=M2p5_cap_screw),
-  fl_director(value=-FL_Z),fl_rotor(value=-FL_X),
   fl_dxf(value="vitamins/pimoroni.dxf"),
   fl_vendor(value=[
       ["Amazon", "https://www.amazon.it/gp/product/B082Y21GX5/"],
     ]
   ),
   fl_engine(value="Pimoroni"),
+  fl_cutout(value=[FL_Z]),
 
   // private/undocumented properties
   ["corner radius",     3         ],
@@ -79,9 +80,9 @@ FL_HS_KHADAS = let(
     [81.49,  -0.49,   Zs+Zh+Zf  ],  // positive corner
   ]),
   fl_screw(value=M2_cap_screw),
-  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   fl_dxf(value="vitamins/hs-khadas.dxf"),
   fl_engine(value="Khadas"),
+  fl_cutout(value=[+FL_Z]),
 
   // private/undocumented properties
   fl_property(key="separator height", value=Zs),
@@ -129,7 +130,7 @@ function fl_pimoroni(
   top_fluting_t = fl_get(top_p,"layer 1 fluting thickness"),
   top_holder_t  = fl_get(top_p,"layer 1 holders thickness"),
 
-  D         = direction ? fl_direction(proto=type,direction=direction)  : I,
+  D         = direction ? fl_direction(direction) : FL_I,
   M         = fl_octant(octant,bbox=bbox),
 
   bottom_sz = function() [size.x,size.y,bot_base_t+bot_fluting_t+bot_holder_t]
@@ -147,14 +148,16 @@ module fl_heatsink(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
-  octant
+  octant,
+  // see constructor fl_parm_Debug()
+  debug
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
   bbox    = fl_bb_corners(type);
   size    = fl_bb_size(type);
   engine  = fl_engine(type);
-  D       = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D       = direction ? fl_direction(direction)  : FL_I;
   M       = fl_octant(octant,bbox=bbox);
 
   module pimoroni(verb,type,direction,octant) {
@@ -166,7 +169,7 @@ module fl_heatsink(
     holder_t  = fl_property(type,"holders thickness");
     part      = fl_property(type,"part");
 
-    D         = direction ? fl_direction(proto=type,direction=direction)  : I;
+    D         = direction ? fl_direction(direction) : FL_I;
     M         = fl_octant(octant,bbox=bbox);
 
     module do_add(fprint) {
@@ -270,7 +273,7 @@ module fl_heatsink(
     Zf  = fl_property(type,"fin height");
     Zt  = fl_property(type,"tooth height");
 
-    D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+    D     = direction ? fl_direction(direction)  : FL_I;
     M     = fl_octant(octant,bbox=bbox);
 
     module do_add(fprint) {
@@ -320,10 +323,14 @@ module fl_heatsink(
         children();
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         wrap($verb);
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

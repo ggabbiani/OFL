@@ -7,15 +7,15 @@
  */
 include <../../foundation/defs.scad>
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fn           = 50;   // [3:100]
+// When true, disables epsilon corrections
+$FL_RENDER    = false;
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES    = -2;   // [-2:10]
+$fl_debug     = false;
+SHOW_LABELS   = false;
+SHOW_SYMBOLS  = false;
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 
 /* [Supported verbs] */
 
@@ -39,6 +39,8 @@ $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_MOUNT      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// add symbols and labels usually for debugging
+$FL_SYMBOLS   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -57,8 +59,11 @@ DIR_R       = 0;        // [0:360]
 
 /* [Hidden] */
 
+fl_status();
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
@@ -70,4 +75,5 @@ verbs=[
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
   if ($FL_MOUNT!="OFF")     FL_MOUNT,
   if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
+  if ($FL_SYMBOLS!="OFF")   FL_SYMBOLS,
 ];

@@ -5,12 +5,15 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../foundation/3d.scad>
-include <../foundation/mngm.scad>
-include <../foundation/unsafe_defs.scad>
-
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
+
+include <../foundation/unsafe_defs.scad>
+
+use <../foundation/3d-engine.scad>
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
+
 
 //*****************************************************************************
 //! bounding box
@@ -139,7 +142,7 @@ module fl_screw(
   size    = fl_screw_size(type,length);
   hole_r  = screw_clearance_radius(type);
   hole_l  = length-(thick_washer+thick_xwasher);
-  D       = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
+  D       = direction ? fl_direction(direction) : I;
   M       = fl_octant(octant,bbox=bbox);
 
   module do_assembly() {
@@ -165,17 +168,20 @@ module fl_screw(
       rotate_extrude()
         intersection() {
           projection()
-            fl_direct(direction=[-Y,0],default=[+Z,+X]) screw(type,length);
+            fl_direct(direction=[-Y,0]) screw(type,length);
           translate([0,-screw_head_height(type)])
             square(size=[screw_head_radius(type),length+screw_head_height(type)]);
         }
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         translate(Z(thick_washer+thick_xwasher))
           screw(type, length, hob_point = 0, nylon = false);
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_ASSEMBLY) {

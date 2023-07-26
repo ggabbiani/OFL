@@ -7,7 +7,7 @@
  */
 
 include <../foundation/hole.scad>
-include <../foundation/mngm.scad>
+use <../foundation/mngm.scad>
 include <../foundation/tube.scad>
 include <../foundation/unsafe_defs.scad>
 
@@ -53,7 +53,7 @@ module fl_spacer(
   r,
   //! external diameter (mutually exclusive with «r»)
   d,
-  //! thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  //! FL_MOUNT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
   //! FL_LAYOUT directions in floating semi-axis list
   lay_direction=[+Z,-Z],
@@ -74,10 +74,11 @@ module fl_spacer(
   size    = bbox[1]-bbox[0];
   knut    = knut && screw ? fl_knut_search(screw,h) : undef;
   hole_r  = fl_spc_holeRadius(screw,knut);
+  assert(r>hole_r,str("r=",r,",hole_r=",hole_r));
   // thickness along ±Z only
   thick   = is_num(thick) ? [thick,thick] : assert(fl_tt_isAxisVList(thick)) thick.z;
 
-  D       = direction ? fl_direction(default=[+Z,+X],direction=direction) : I;
+  D       = direction ? fl_direction(direction) : FL_I;
   M       = fl_octant(octant,bbox=bbox);
 
   module do_add() {
@@ -139,12 +140,16 @@ module fl_spacer(
     children();
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

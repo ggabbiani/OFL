@@ -6,25 +6,34 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <unsafe_defs.scad>
+// use <core-symbols.scad>
+use <bbox-engine.scad>
+use <type_trait.scad>
 use <../dxf.scad>
+use <2d-engine.scad>
+use <mngm.scad>
 
-include <2d.scad>
-include <bbox.scad>
-include <mngm.scad>
-include <type_trait.scad>
+module fl_doAxes(
+  size,
+  direction,
+  debug
+) {
+  sz = 1.2*size;
+  fl_axes(sz);
+  if (debug && direction && fl_parm_symbols(debug))
+    fl_sym_direction(direction=direction,size=sz);
+}
 
 /*!
- * cube defaults for positioning (fl_bb_cornersKV)
- * and direction (fl_directorKV, fl_rotorKV).
+ * cube defaults for positioning (fl_bb_cornersKV).
  */
 function fl_cube_defaults(
   size=[1,1,1]
 )  = let(
   size  = is_list(size) ? size : [size,size,size]
 ) [
-  fl_bb_corners(value=[O,size]),  // octant ⇒ +X+Y+Z
-  fl_director(value=+Z),
-  fl_rotor(value=+X),
+  fl_bb_corners(value=[FL_O,size]),  // octant ⇒ +X+Y+Z
 ];
 
 /*!
@@ -34,6 +43,8 @@ module fl_cube(
   //! FL_ADD,FL_AXES,FL_BBOX
   verbs     = FL_ADD,
   size      = [1,1,1],
+  //! debug parameter as returned from fl_parm_Debug()
+  debug,
   /*!
    * when undef, native positioning is used with the Low bounding box vertex
    * into the origin O
@@ -45,12 +56,14 @@ module fl_cube(
   size  = is_list(size) ? size : [size,size,size];
   defs  = fl_cube_defaults(size);
 
-  D     = direction ? fl_direction(defs,direction=direction)  : I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,type=defs);
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cube(size,false);
+    } else if ($verb==FL_AXES) {
+      fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) cube(size);  // center=default=false ⇒ +X+Y+Z
     } else {
@@ -60,8 +73,7 @@ module fl_cube(
 }
 
 /*!
- * sphere defaults for positioning (fl_bb_cornersKV)
- * and direction (fl_directorKV, fl_rotorKV).
+ * sphere defaults for positioning (fl_bb_cornersKV).
  */
 function fl_sphere_defaults(
   r = [1,1,1],
@@ -69,9 +81,7 @@ function fl_sphere_defaults(
 ) = let(
   r  = is_undef(d) ? (is_list(r) ? r : [r,r,r]) : (is_list(d) ? d : [d,d,d])/2
 ) [
-  fl_bb_corners(value=[-r,+r]),  // simmetric bounding box ⇒ octant==O
-  fl_director(value=+Z),
-  fl_rotor(value=+X),
+  fl_bb_corners(value=[-r,+r]),  // symmetric bounding box ⇒ octant==O
 ];
 
 /*!
@@ -82,6 +92,8 @@ module fl_sphere(
   verbs   = FL_ADD,
   r       = [1,1,1],
   d,
+  //! debug parameter as returned from fl_parm_Debug()
+  debug,
   //! when undef default positioning is used
   octant,
   //! desired direction [director,rotation], default direction if undef
@@ -91,12 +103,14 @@ module fl_sphere(
 
   bbox  = fl_bb_corners(defs);
   size  = fl_bb_size(defs); // bbox[1] - bbox[0];
-  D     = direction ? fl_direction(defs,direction=direction)  : I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,type=defs);
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) resize(size) sphere();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) cube(size,true);
     } else {
@@ -106,8 +120,7 @@ module fl_sphere(
 }
 
 /*!
- * cylinder defaults for positioning (fl_bb_cornersKV)
- * and direction (fl_directorKV, fl_rotorKV).
+ * cylinder defaults for positioning (fl_bb_cornersKV).
  */
 function fl_cylinder_defaults(
   //! height of the cylinder or cone
@@ -126,8 +139,6 @@ function fl_cylinder_defaults(
   d2
 ) = [
   fl_bb_corners(value=fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
-  fl_director(value=+Z),
-  fl_rotor(value=+X),
 ];
 
 function fl_bb_cylinder(
@@ -179,6 +190,8 @@ module fl_cylinder(
   d1,
   //! diameter, top of cone. r2 = d2 / 2.
   d2,
+  //! debug parameter as returned from fl_parm_Debug()
+  debug,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -190,15 +203,17 @@ module fl_cylinder(
   size  = fl_bb_size(defs);
   step  = 360/$fn;
   R     = max(r_bot,r_top);
-  D     = direction ? fl_direction(defs,direction=direction)  : I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,type=defs);
   Mbbox = fl_T(-[size.x/2,size.y/2,0]);
   fl_trace("octant",octant);
   fl_trace("size",size);
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
+    } else if ($verb==FL_AXES) {
+      fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) multmatrix(Mbbox) cube(size=size); // center=default=false ⇒ +X+Y+Z
     } else {
@@ -208,8 +223,7 @@ module fl_cylinder(
 }
 
 /*!
- * prism defaults for positioning (fl_bb_cornersKV)
- * and direction (fl_directorKV, fl_rotorKV).
+ * prism defaults for positioning (fl_bb_cornersKV).
  */
 function fl_prism_defaults(
   //! edge number
@@ -224,8 +238,6 @@ function fl_prism_defaults(
   h
 ) = [
   fl_bb_corners(value=fl_bb_prism(n,l,l1,l2,h)),  // placement: +Z
-  fl_director(value=+Z),
-  fl_rotor(value=+X),
 ];
 
 function fl_bb_prism(
@@ -263,21 +275,23 @@ let(
  *    native direction   : [+Z,+X]
  */
 module fl_prism(
-  // FL_ADD,FL_AXES,FL_BBOX
+  //! FL_ADD,FL_AXES,FL_BBOX
   verbs  = FL_ADD,
-  // edge number
+  //! edge number
   n,
-  // edge length
+  //! edge length
   l,
-  // edge length, bottom
+  //! edge length, bottom
   l1,
-  // edge length, top
+  //! edge length, top
   l2,
-  // height
+  //! height
   h,
-  // when undef native positioning is used
+  //! debug parameter as returned from fl_parm_Debug()
+  debug,
+  //! when undef native positioning is used
   octant,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) {
   defs  = fl_prism_defaults(n,l,l1,l2,h);
@@ -288,16 +302,18 @@ module fl_prism(
   Rtop  = l_top / (2 * sin(step/2));
   R     = max(Rbase,Rtop);
   size  = fl_bb_size(defs);
-  D     = direction ? fl_direction(defs,direction=direction): I;
+  D     = direction ? fl_direction(direction): FL_I;
   M     = fl_octant(octant,type=defs);
   Mbbox = fl_T([-size.x+R,-size.y/2,0]);
   fl_trace("octant",octant);
   fl_trace("direction",direction);
   fl_trace("size",size);
 
-  fl_manage(verbs,M,D,size)  {
+  fl_manage(verbs,M,D)  {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
+    } else if ($verb==FL_AXES) {
+      fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) multmatrix(Mbbox) cube(size=size);     // center=default=false ⇒ +X+Y+Z
     } else {
@@ -316,7 +332,7 @@ function fl_octant(
   //! bounding box corners, overrides «type» settings
   bbox,
   //! returned matrix if «octant» is undef
-  default=I
+  default=FL_I
 ) = octant ? let(
     corner  = bbox ? bbox : fl_bb_corners(type),
     half    = (corner[1] - corner[0]) / 2,
@@ -361,14 +377,12 @@ module fl_placeIf(
 }
 
 /*!
- * Direction matrix transforming native coordinates along new direction.
+ * Return the direction matrix transforming native coordinates along new
+ * direction.
  *
- * Native coordinate system is represented by two vectors either retrieved
- * from «proto» or passed explicitly through «default» in the format
- *
- *     [direction axis (director),orthonormal vector (rotor)]
- *
- * The third axis is obtained through the cross product director X rotor.
+ * Native coordinate system is represented by two vectors: +Z and +X. +Y axis
+ * is the cross product between +Z and +X. So with two vector (+Z,+X) we can
+ * represent the native coordinate system +X,+Y,+Z.
  *
  * New direction is expected in [Axis–angle representation](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation)
  * in the format
@@ -377,38 +391,26 @@ module fl_placeIf(
  *
  */
 function fl_direction(
-  //! prototype with fl_director() and fl_rotor() properties
-  proto,
   //! desired direction in axis-angle representation [axis,rotation about]
-  direction,
-  //! default coordinate system by [director,rotor], overrides «proto» settings
-  default
+  direction
 ) =
   assert(!fl_debug() || fl_tt_isDirectionRotation(direction),direction)
-  assert(proto!=undef || default!=undef)
-  // echo(default=default,direction=direction)
   let(
-    def_dir = default==undef ? fl_director(proto) : default[0],
-    def_rot = default==undef ? fl_rotor(proto)    : default[1],
     alpha   = direction[1],
-    new_dir = fl_versor(direction[0]),
-    new_rot = fl_transform(fl_align(def_dir,new_dir),def_rot)
-  ) R(new_dir,alpha)                                // rotate «alpha» degrees around «new_dir»
-  * fl_planeAlign(def_dir,def_rot,new_dir,new_rot); // align direction
+    Z_new = fl_versor(direction[0]),
+    X_new = fl_transform(fl_align(FL_Z,Z_new),FL_X)
+  ) R(Z_new,alpha)                        // rotate «alpha» degrees around new Z
+  * fl_planeAlign(FL_Z,FL_X,Z_new,X_new); // align direction
 
 /*!
  * Applies a direction matrix to its children.
  * See also fl_direction() function comments.
  */
 module fl_direct(
-  //! prototype for native coordinate system
-  proto,
   //! desired direction in axis-angle representation [axis,rotation about]
-  direction,
-  //! default coordinate system by [director,rotor], overrides «proto» settings
-  default
+  direction
 ) {
-  multmatrix(fl_direction(proto,direction,default)) children();
+  multmatrix(fl_direction(direction)) children();
 }
 
 /*!
@@ -529,8 +531,8 @@ let(
 
   rest      = len(bbcs)>1 ? [for(i=[1:len(bbcs)-1]) bbcs[i]] : [],
   rest_result  = sum
-  ? len(rest) ? fl_bb_accum(axis,gap,rest) + [O,gap*axis]: [O,O]
-  : len(rest) ? fl_bb_accum(axis,gap,rest) - [O,gap*axis]: [O,O],
+  ? len(rest) ? fl_bb_accum(axis,gap,rest) + [FL_O,gap*axis]: [FL_O,FL_O]
+  : len(rest) ? fl_bb_accum(axis,gap,rest) - [FL_O,gap*axis]: [FL_O,FL_O],
   rest_plane  = [fl_3d_planarProjection(rest_result[0],plane),fl_3d_planarProjection(rest_result[1],plane)],
   rest_axis = [fl_3d_vectorialProjection(rest_result[0],axis),fl_3d_vectorialProjection(rest_result[1],axis)],
 
@@ -595,7 +597,7 @@ module fl_layout(
         : assert(len(align)==3) align;
   bbox  = lay_bb_corners(axis,gap,types);
   size  = bbox[1]-bbox[0]; // resulting size
-  D     = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
   fl_trace("$children",$children);
@@ -609,6 +611,7 @@ module fl_layout(
   sz    = [for(c=bcs) c[1]-c[0]];
   fl_trace("bcs",bcs);
   fl_trace("sz",sz);
+  fl_trace("object layout #: ",$len);
 
   module context() {
     for($i=[0:$len-1]) {
@@ -619,9 +622,9 @@ module fl_layout(
       $bbox   = $i!=undef ? fl_bb_corners($item) : undef;
       $size   = $i!=undef ? $bbox[1]-$bbox[0] : undef;
       offset  = sum
-      ? $i>0 ? bcs[0][1] -bcs[$i][0] : O
-      : $i>0 ? bcs[0][0] -bcs[$i][1] : O;
-      sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : O;
+      ? $i>0 ? bcs[0][1] -bcs[$i][0] : FL_O
+      : $i>0 ? bcs[0][0] -bcs[$i][1] : FL_O;
+      sz = $i>1 ? fl_accum([for(j=[1:$i-1]) sz[j]]) : FL_O;
       fl_trace("sz",sz);
       fl_trace("delta",$i*gap*axis);
       fl_trace("offset",offset);
@@ -637,8 +640,15 @@ module fl_layout(
     }
   }
 
-  fl_manage(verbs,M,D,size) {
-    if ($verb==FL_BBOX) {
+  fl_manage(verbs,M,D) {
+    fl_trace(str("dispatching ",$verb));
+
+    if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        // fl_doAxes(size);
+      fl_trace("FL_AXES DONE");
+
+    } else if ($verb==FL_BBOX) {
       fl_modifier($modifier,false) fl_bb_add(bbox);
 
     } else if ($verb==FL_LAYOUT) fl_modifier($modifier,false) {
@@ -871,14 +881,12 @@ function fl_3d_axisIsSet(
  * Extrusion along arbitrary axis with eventual rotation
  */
 module fl_linear_extrude(
-  //! source plane in [director,rotor] format to be extruded along the passed direction
-  source=[Z,X],
   //! direction in axis-angle representation
   direction,
   length,
   convexity = 10,
 ) {
-  D = direction ? fl_direction(direction=direction,default=source) : I;
+  D = direction ? fl_direction(direction) : FL_I;
   multmatrix(D)
     linear_extrude(height=length,convexity=convexity)
       children();
@@ -895,8 +903,325 @@ module fl_importDxf(
   //! direction in axis-angle representation
   direction
 ) {
-  D = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
+  D = direction ? fl_direction(direction) : FL_I;
   multmatrix(D)
     __dxf__(file,layer);
 }
 
+//*****************************************************************************
+// 3d symbols
+
+module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
+  fl_symbol(verbs,type,size,"plug");
+}
+
+module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
+  fl_symbol(verbs,type,size,"socket");
+}
+
+/*!
+ * provides the symbol required in its 'canonical' form:
+ * - "plug": 'a piece that fits into a hole in order to close it'
+ *          Its canonical form implies an orientation of the piece coherent
+ *          with its insertion movement along +Z axis.
+ * - "socket": 'a part of the body into which another part fits'
+ *          Its canonical form implies an orientation of the piece coherent
+ *          with its fitting movement along -Z axis.
+ *
+ * variable FL_LAYOUT is used for proper label orientation
+ *
+ * Children context:
+ *
+ * - $sym_ldir: [axis,angle]
+ * - $sym_size: size in 3d format
+ */
+module fl_symbol(
+  //! supported verbs: FL_ADD, FL_LAYOUT
+  verbs   = FL_ADD,
+  // really needed?
+  type    = undef,
+  //! default size given as a scalar
+  size    = 0.5,
+  //! currently "plug" or "socket"
+  symbol
+  ) {
+  assert(verbs!=undef);
+
+  sz      = size==undef ? [0.5,0.5,0.5] : is_list(size) ? size : [size,size,size];
+  d1      = sz.x * 2/3;
+  d2      = 0;
+  overlap = sz.z / 5;
+  h       = (sz.z + 2 * overlap) / 3;
+  delta   = h - overlap;
+  fl_trace("verbs",verbs);
+  fl_trace("size",size);
+  fl_trace("sz",sz);
+
+  module context() {
+    $sym_ldir = symbol=="plug" ? [+Z,0] : [-Z,180];
+    $sym_size = sz;
+
+    children();
+  }
+
+  module do_add() {
+    fl_trace("d1",d1);
+    fl_trace("d2",d2);
+
+    color("blue")
+      resize(sz)
+        translate(Z(symbol=="socket"?-h:0))
+          for(i=symbol=="plug"?[0:+2]:[-2:0])
+            translate(Z(i*delta))
+              cylinder(d1=d1,d2=d2,h=h);
+
+    %translate(symbol=="plug"?-Z(0.1/2):+Z(0.1/2)) cube(size=[sz.x,sz.y,0.1],center=true); // cube(octant=symbol=="plug"?-Z:+Z,size=[sz.x,sz.y,0.1]);
+    let(sz=2*sz) {
+      color("red") translate(-X(sz.x/2)) fl_vector(X(sz.x),ratio=30);
+      color("green") translate(-Y(sz.y/2)) fl_vector(Y(sz.y),ratio=30);
+    }
+  }
+
+  module do_layout() {
+    context() children();
+  }
+
+  fl_manage(verbs) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
+
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout() children();
+
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
+
+/*!
+ * this symbol uses as input a complete node context.
+ *
+ * The symbol is oriented according to the hole normal.
+ */
+module fl_sym_hole(
+  //! supported verbs: FL_ADD
+  verbs = FL_ADD
+) {
+
+  module _torus_(
+    //! radius of the circular tube.
+    r,
+    //! distance from the center of the tube to the center of the torus
+    R
+  ) {
+
+    function bb(
+      //! radius of the circular tube.
+      r,
+      //! distance from the center of the tube to the center of the torus
+      R
+    ) = let(
+      e     = assert(r) [r,r],
+      a     = e[0],
+      b     = e[1],
+      edge  = assert(R>=a,str("R=",R,",a=",a)) a+R
+    ) [[-edge,-edge,-b],[+edge,+edge,+b]];
+
+    bbox    = bb(r,R);
+    e       = assert(r) [r,r];
+    a       = e[0];
+    b       = e[1];
+    size    = bbox[1]-bbox[0];
+
+    fn      = $fn;
+    rotate_extrude($fn=$fn)
+      translate(X(R-a))
+        translate(X(r))
+          circle(r=r,$fn=fn);
+  }
+
+  radius  = $hole_d/2;
+  D       = fl_align(from=+Z,to=$hole_n);
+  rotor   = fl_transform(D,+X);
+  bbox    = [
+    [-radius,-radius,-$hole_depth],
+    [+radius,+radius,0]
+  ];
+  size    = bbox[1]-bbox[0];
+  fl_trace("verbs",verbs);
+
+  module do_add() {
+    let(l=$hole_d*3/2,r=radius/20) {
+      fl_color("red")
+        translate(-X(l/2))
+          rotate(+90,FL_Y) cylinder(r=r,h=l); // direction=[+X,0];
+      fl_color("green")
+        translate(-Y(l/2))
+          rotate(-90,FL_X) cylinder(r=r,h=l); // direction=[+Y,0];
+      fl_color("black")
+        for(z=[0,-$hole_depth])
+          translate(Z(z))
+            _torus_(r=r,R=$hole_d/2);
+    }
+    if ($hole_depth)
+      %translate(-Z($hole_depth)) cylinder(d=$hole_d,h=$hole_depth); // octant=-Z;
+    fl_color("blue")
+      fl_vector($hole_depth*Z);
+  }
+
+  fl_manage(verbs,D=D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
+
+/*!
+ * display the direction change from a native coordinate system and a new
+ * direction specification in [direction,rotation] format.
+ *
+ * **NOTE:** the native coordinate system (ncs) is now meant to be the standard
+ * +X+Y+Z (with direction set by +Z)
+ */
+module fl_sym_direction(
+  //! supported verbs: FL_ADD
+  verbs = FL_ADD,
+  /*!
+   * direction in [Axis–angle representation](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation)
+   * in the format
+   *
+   *     [axis,rotation angle]
+   */
+  direction,
+  //! default size given as a scalar
+  size    = 0.5
+) {
+  assert(!fl_debug() || fl_tt_isDirectionRotation(direction));
+
+  // returns the angle between vector «a» and «b»
+  function angle(a,b) = let(
+    dot_prod = a*b
+  ) dot_prod==0 ? 90 : acos(dot_prod/norm(a)/norm(b));
+
+  function projectOnPlane(v,p) = let(
+    u1 = fl_versor(p[0]),
+    u2 = fl_versor(p[1])
+  ) v*(u1+u2);
+
+  fl_trace("start");
+  angle   = direction[1];
+  sz      = size==undef ? [0.5,0.5,0.5] : is_list(size) ? size : [size,size,size];
+  ratio   = 20;
+  d       = sz/ratio;
+  head_r  = 1.5 * d;
+  e       = [sz.x/2,sz.y/2];
+  // echo(sz=sz,d=d);
+
+  curr_director = sz.z*FL_Z;
+  curr_rotor    = sz.x*FL_X;
+  curr_axis     = sz.y*FL_Y;
+
+  dir_color     = fl_palette(+FL_Z);
+  rot_color     = fl_palette(+FL_X);
+  axis_color    = fl_palette(+FL_Y);
+
+  // invert matrix for original coordinate system representation after
+  // the direction change
+  m = matrix_invert(fl_align(+FL_Z,direction[0]));
+
+  // old director in the new coordinate system
+  old_director  = fl_3(m * fl_4(curr_director));
+  old_rotor     = fl_3(m * fl_4(curr_rotor));
+  // old_axis      = cross(old_director,old_rotor);
+
+  // assert(!fl_debug() || (old_director*old_rotor<=FL_NIL),old_director*old_rotor);
+
+  // Native Coordinate System DIRECTOR
+  color(dir_color) rotate(-angle,curr_director) {
+    // current director
+    fl_cylinder(h=norm(curr_director), d=d.z, octant=fl_versor(curr_director), direction=[curr_director,0]);
+
+    // angle between [new director, old director]
+    dir_rotation  = angle(curr_director,old_director);
+    2d            = fl_circleXY(norm(curr_director),dir_rotation);
+
+    // projection matrix the XY plane to the rotation plane of the DIRECTOR
+    m = (fl_isParallel(old_director,curr_director,false))
+      ? (fl_versor(old_director)==fl_versor(curr_director) // parallel
+        ? FL_I  // equality
+        : fl_R(curr_director,angle)*fl_Ry(180)*fl_Rx(90)*fl_Rz(90)*fl_Rx(90))  // opposite
+      : fl_planeAlign(FL_X,[2d.x,2d.y,0],old_director,curr_director); // parallel
+
+    // rotation angle visualization
+    multmatrix(m) {
+      r = norm(curr_director);
+
+      if (dir_rotation!=0) let(a=dir_rotation/2)
+        translate(fl_circleXY(r-d.z/2,a))
+          rotate(90+a,FL_Z)
+            translate(-Z(d.z/4))
+              linear_extrude(d.z/2)
+                fl_ipoly(r=head_r.z,n=3);
+
+      // rotation angle built on XY plane
+      translate(-Z(d.z/4))
+        linear_extrude(d.z/2)
+          fl_arc(r=r,angles=[0,dir_rotation],thick=d.z);
+    }
+
+  }
+
+  // Native Coordinate System ROTOR
+  color(rot_color) {
+    beta  = angle/2;
+    // m_bisector   = tan(beta);
+    // fl_ellipticArc() defines thickness as a scalar, so we set it to ellipses XY axes average
+    elli_thick  = (d.x+d.y)/2;
+    // echo(m_bisector=m_bisector);
+    // elli  = e-[d.x,d.y]/2;
+    elli  = e-[1,1]*elli_thick/2;
+    // elli  = [1.2,2.1];
+    // for the same reasons we do something similar for the arrow dimension radius
+    head_radius = (head_r.x+head_r.y)/2;
+    x_d   = d.x;  // harmonizing X axis diameter with its length
+    extr_h  = d.x/2;  // harmonizing Z extrusion with X dimensions
+    a     = elli[0];
+    b     = elli[1];
+    // C     = _intersection_(elli,-m_bisector,angle); // echo(C=C);
+    C     = fl_ellipseXY(elli,angle=-beta);
+    echo(C=C);
+    m_tangent   = -b*b/(a*a)*C.x/C.y; // slope of the tangent to e in C
+    echo(m_tangent=m_tangent);
+
+    // gamma = abs(angle%180)<=FL_NIL ? 0 : atan(m_tangent);  // atan2(C.y,C.x)
+    gamma = atan(m_tangent);  // atan2(C.y,C.x)
+    echo(str("atan(m_tangent)=",atan(m_tangent)));
+
+    // X axis
+    fl_cylinder(h=norm(curr_rotor), d=x_d, octant=FL_O, direction=[curr_rotor,0]);
+
+    // rotation arrow
+    if (angle!=0)
+      translate(fl_ellipseXY(elli,angle=-beta))
+        echo(gamma=gamma) rotate(gamma,FL_Z)
+          translate(-Z(extr_h/2))
+            linear_extrude(extr_h) {
+              // circle(0.01);
+              fl_ipoly(r=head_radius,n=3,quadrant=-FL_X);
+              // fl_square(size = [1,0.01]);
+            }
+    // rotation angle built on [X,Y] plane
+    translate(-Z(extr_h/2))
+      linear_extrude(extr_h)
+        fl_ellipticArc(e=e,angles=[0,-angle],thick=elli_thick);
+  }
+  fl_trace("end");
+}

@@ -1,5 +1,5 @@
 /*!
- * Box artifact.
+ * Box artifact engine.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -7,15 +7,23 @@
  */
 
 include <../artifacts/spacer.scad>
-include <../foundation/fillet.scad>
-include <../foundation/mngm.scad>
-include <../foundation/profile.scad>
-include <../foundation/util.scad>
 include <../vitamins/knurl_nuts.scad>
 include <../vitamins/screw.scad>
 
-//! engine for generating boxes
+use <../foundation/fillet.scad>
+use <../foundation/mngm.scad>
+use <../foundation/profile.scad>
+use <../foundation/util.scad>
+
+/*!
+ * engine for generating boxes.
+ *
+ * __children context__:
+ *
+ * - $box_materials - list of used materials [«material_lower», «material_upper»]
+ */
 module fl_box(
+  //! supported verbs: FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
   verbs           = FL_ADD,
   //! preset profiles (UNUSED)
   preset,
@@ -37,6 +45,7 @@ module fl_box(
   //! lower side color
   material_lower,
   fillet          = true,
+  lay_octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -60,8 +69,13 @@ module fl_box(
   Mfront_knut = T([size.x/2,thick+tolerance-0*(size.y-thick-tolerance),Treal+sz_up.z-(holder_sz.y+thick-tolerance)/2]);
   Mknut2      = T([size.x/2,size.y-thick-tolerance,Treal+sz_up.z-(holder_sz.y+thick-tolerance)/2]);
   // Mholder = Mknut * Rx(90);
-  D       = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
+  D       = direction ? fl_direction(direction)  : I;
   M       = fl_octant(octant,bbox=bbox);
+
+  module context() {
+    $box_materials  = [material_lower,material_upper];
+    children();
+  }
 
   module do_fillet(r) {
     delta = thick - r;
@@ -173,9 +187,13 @@ module fl_box(
     fl_bb_add([bbox[0]+deltas/2,bbox[1]-deltas/2]);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();
@@ -185,6 +203,18 @@ module fl_box(
 
     } else if ($verb==FL_MOUNT) {
       fl_modifier($modifier) do_mount();
+
+    } else if ($verb==FL_LAYOUT) {
+      pload = [bbox[0]+deltas/2,bbox[1]-deltas/2];
+      psize = pload[1]-pload[0];
+      po    = (pload[1]+pload[0])/2;
+      fl_modifier($modifier) context()
+        if (lay_octant) {
+          translate([lay_octant.x*psize.x/2,lay_octant.y*psize.y/2,lay_octant.z*psize.z/2])
+            children();
+        } else {
+          children();
+        }
 
     } else if ($verb==FL_PAYLOAD) {
       fl_modifier($modifier) do_pload();

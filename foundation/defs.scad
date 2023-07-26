@@ -1,4 +1,4 @@
-/*
+/*!
  * Base definitions for OpenSCAD.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -9,11 +9,12 @@
 include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
-include <base_geo.scad>
-include <base_kv.scad>
-include <base_parameters.scad>
 include <base_string.scad>
-include <base_trace.scad>
+
+use <base_geo.scad>
+use <base_kv.scad>
+use <base_parameters.scad>
+use <base_trace.scad>
 
 //*****************************************************************************
 // versioning
@@ -213,6 +214,8 @@ FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative s
 FL_MOUNT      = "FL_MOUNT mount shape through predefined screws";
 //! adds a box representing the payload of the shape
 FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
+//! add symbols and labels usually for debugging
+FL_SYMBOLS    = "FL_SYMBOLS adds symbols and labels usually for debugging";
 //! is a test verb for library development
 FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
 //! is a test verb for library development
@@ -230,6 +233,7 @@ $FL_HOLDERS   = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_LAYOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_PAYLOAD   = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_SYMBOLS   = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /*!
  * Modifier module for verbs.
@@ -240,7 +244,7 @@ module fl_modifier(
   reset=true
 ) {
   fl_trace("behavior",behavior);
-  // Runtime behavior reset to behavior
+  // Runtime behavior reset vs pass-through
   $FL_ADD       = reset ? behavior : $FL_ADD;
   $FL_ASSEMBLY  = reset ? behavior : $FL_ASSEMBLY;
   $FL_AXES      = reset ? behavior : $FL_AXES;
@@ -252,6 +256,7 @@ module fl_modifier(
   $FL_LAYOUT    = reset ? behavior : $FL_LAYOUT;
   $FL_MOUNT     = reset ? behavior : $FL_MOUNT;
   $FL_PAYLOAD   = reset ? behavior : $FL_PAYLOAD;
+  $FL_SYMBOLS   = reset ? behavior : $FL_SYMBOLS;
   if      (behavior=="ON")                children();
   else if (behavior=="OFF")              *children();
   else if (behavior=="ONLY")             !children();
@@ -277,7 +282,7 @@ function fl_deprecated(bad,value,replacement) = let(
 
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value);
-function fl_director(type,value)    = fl_property(type,"director",value);
+// function fl_director(type,value)    = fl_property(type,"director",value);
 function fl_dxf(type,value)         = fl_property(type,"DXF model file",value);
 function fl_engine(type,value)      = fl_property(type,"engine",value);
 function fl_material(type,value,default)
@@ -289,11 +294,16 @@ function fl_nopSCADlib(type,value,default)
 function fl_pcb(type,value)         = fl_property(type,"embedded OFL pcb",value);
 // pay-load bounding box, it contributes to the overall bounding box calculation
 function fl_payload(type,value)     = fl_property(type,"payload bounding box",value);
-function fl_rotor(type,value)       = fl_property(type,"rotor",value);
+// function fl_rotor(type,value)       = fl_property(type,"rotor",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
 function fl_tolerance(type,value)   = fl_property(type,"tolerance",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
-
+/*
+ * cut-out directions in floating semi-axis list form as described in fl_tt_isAxisList().
+ *
+ * This property represents the list of cut-out directions supported by the passed type.
+ */
+function fl_cutout(type,value)      = fl_property(type,"cut-out direction list",value);
 //*****************************************************************************
 // Derived getters
 function fl_size(type)    = fl_bb_size(type);

@@ -5,8 +5,11 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+include <unsafe_defs.scad>
 
-include <3d.scad>
+use <2d-engine.scad>
+use <3d-engine.scad>
+use <mngm.scad>
 
 module fl_vFillet(
   //! FL_ADD, FL_AXES, FL_BBOX
@@ -58,9 +61,12 @@ module fl_hFillet(
         fl_fillet(FL_ADD,r,h,rx,ry);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD)
       fl_modifier($modifier) do_add();
+    else if ($verb==FL_AXES)
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_bb_add(bbox);
     else
@@ -89,7 +95,7 @@ module fl_fillet(
   size    = [rx,ry,h];
   bbox    = [O,size];
   M       = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
-  D       = direction!=undef ? fl_direction(direction=direction,default=default) : I;
+  D       = direction!=undef ? fl_direction(direction) : FL_I;
   fl_trace("D",D);
   fl_trace("default",default);
 
@@ -101,9 +107,12 @@ module fl_fillet(
     }
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD)
       fl_modifier($modifier) do_add();
+    else if ($verb==FL_AXES)
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_cube(size=size);
     else
@@ -158,9 +167,12 @@ module fl_90DegFillet(
       }
     }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD)
       fl_modifier($modifier) do_add() children();
+    else if ($verb==FL_AXES)
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) translate(bbox[0]) fl_cube(size=size);
     else

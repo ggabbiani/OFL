@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <3d.scad>
+include <unsafe_defs.scad>
+
+use <3d-engine.scad>
+use <mngm.scad>
 
 /*!
- * mimics standard resize() module behaviour
+ * mimics standard resize() module behavior
  *
  * TODO: either remove or move elsewhere
  */
@@ -57,7 +60,7 @@ module fl_label(
 
   bbox  = [O,Z(thick)];
   M     = octant ? T(0.6*extra*[sign(octant.x),sign(octant.y),sign(octant.z)]) * fl_octant(octant=[0,0,octant.z],bbox=bbox) : I;
-  D     = direction ? fl_direction(direction=direction,default=[+Z,+X])  : I;
+  D     = direction ? fl_direction(direction)  : I;
 
   halign  = is_undef(octant) || octant.x==1 ? "left"    : !octant.x ? "center" : "right";
   valign  = is_undef(octant) || octant.y==1 ? "bottom"  : !octant.y ? "center" : "top";
@@ -70,7 +73,7 @@ module fl_label(
             text(string, valign=valign, halign=halign);
   }
 
-  fl_manage(verbs,M,D,size=size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
     } else {

@@ -6,10 +6,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../vitamins/hdmi.scad>
-
 include <NopSCADlib/global_defs.scad>
 use     <NopSCADlib/utils/layout.scad>
+
+include <../../foundation/defs.scad>
+include <../../vitamins/hdmi.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

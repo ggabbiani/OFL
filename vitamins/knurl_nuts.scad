@@ -6,11 +6,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/3d.scad>
-include <../foundation/mngm.scad>
+include <NopSCADlib/lib.scad>;
+
 include <screw.scad>
 
-include <NopSCADlib/lib.scad>;
+use <../foundation/3d-engine.scad>
+use <../foundation/mngm.scad>
 
 //*****************************************************************************
 // Knurl nuts properties
@@ -62,8 +63,6 @@ assert(is_num(tooth),str("tooth=",tooth))
     [-diameter/2, -diameter/2,  0],       // negative corner
     [+diameter/2, +diameter/2,  length],  // positive corner
   ]),
-  fl_director(value=FL_Z),
-  fl_rotor(value=FL_X),
 ];
 
 /*!
@@ -232,7 +231,7 @@ module fl_knut(
   //! when undef native positioning is used
   octant,
 ) {
-  assert(verbs!=undef);
+  assert(type!=undef);
 
   r       = fl_knut_r(type);
   l       = fl_knut_thick(type);
@@ -244,7 +243,7 @@ module fl_knut(
   teeth   = fl_knut_teeth(type);
   bbox    = fl_bb_corners(type);
   size    = fl_bb_size(type);
-  D       = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D       = direction ? fl_direction(direction)  : FL_I;
   M       = fl_octant(octant,bbox=bbox);
 
   fl_trace("bbox",bbox);
@@ -312,9 +311,12 @@ module fl_knut(
     fl_cylinder(r=r-0.2 /* tooth_h */, h=l,octant=+Z);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_bbox();
     } else if ($verb==FL_ASSEMBLY) {

@@ -6,15 +6,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/3d.scad>
-include <../foundation/bbox.scad>
-include <../foundation/mngm.scad>
-include <../foundation/unsafe_defs.scad>
-include <../foundation/util.scad>
-
 include <NopSCADlib/lib.scad>
 
-//! namespace
+include <../foundation/unsafe_defs.scad>
+
+use <../foundation/3d-engine.scad>
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
+use <../foundation/util.scad>
+
+// namespace
 FL_TRIM_NS    = "trim";
 
 FL_TRIM_POT10  = let(
@@ -22,7 +23,6 @@ FL_TRIM_POT10  = let(
 ) [
   fl_name(value="ten turn trimpot"),
   fl_bb_corners(value=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]),
-  fl_director(value=+Z),fl_rotor(value=+X),
 ];
 
 module fl_trimpot(
@@ -42,16 +42,20 @@ module fl_trimpot(
 ) {
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     trimpot10();
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) trimpot10();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

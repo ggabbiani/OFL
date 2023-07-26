@@ -6,9 +6,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/mngm.scad>
 include <../../foundation/unsafe_defs.scad>
 include <../../artifacts/caddy.scad>
+
+use <../../foundation/3d-engine.scad>
+use <../../foundation/mngm.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -90,7 +92,7 @@ module blob(
 
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {}
@@ -99,9 +101,13 @@ module blob(
   module do_layout() {}
   module do_drill() {}
 
-  fl_manage(verbs,M,D,size)  {
+  fl_manage(verbs,M,D)  {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) fl_cube(size=size);
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_cube(size=size);

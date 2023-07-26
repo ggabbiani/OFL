@@ -4,7 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <3d.scad>
+include <unsafe_defs.scad>
+
+use <2d-engine.scad>
+use <3d-engine.scad>
+use <mngm.scad>
 
 module fl_tube(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -25,13 +29,13 @@ module fl_tube(
   octant,
 ) {
   assert(h!=undef);
-  assert(thick!=undef);
+  assert(thick>0,thick);
 
   obase = r ? [r,r] : d ? [d/2,d/2] : base;
   assert(obase);
   bbox  = let(bbox=fl_bb_ellipse(obase)) [[bbox[0].x,bbox[0].y,0],[bbox[1].x,bbox[1].y,h]];
   size  = bbox[1]-bbox[0];
-  D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
+  D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
 
   fl_trace("bbox",bbox);
@@ -46,9 +50,12 @@ module fl_tube(
       fl_ellipse(e=obase);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_FOOTPRINT) {

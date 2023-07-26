@@ -7,11 +7,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/defs.scad>
-include <../foundation/mngm.scad>
-
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
+
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
 
 //! countersinks namespace
 FL_CS_NS  = "cs";
@@ -50,7 +50,6 @@ function fl_Countersink(
     fl_cs_d(value=d),
     fl_cs_angle(value=angle),
     fl_bb_corners(value=[[-r,-r,-h],[r,r,0]]),
-    fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   ];
 
 FL_CS_M3  = fl_Countersink("FL_CS_M3","M3 countersink",6+3/5,angle=90);
@@ -76,8 +75,10 @@ FL_CS_DICT = [
 ];
 
 module fl_countersink(
-  verbs,
+  verbs=FL_ADD,
   type,
+  //! tolerance added to countersink's dimensions
+  tolerance=0,
   //! desired direction [director,rotation], native direction when undef
   direction,
   //! when undef native positioning is used (+Z)
@@ -87,16 +88,19 @@ module fl_countersink(
 
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  d     = fl_cs_d(type);
+  d     = fl_cs_d(type)+tolerance;
   h     = fl_cs_h(type);
-  D     = direction!=undef ? fl_direction(proto=type,direction=direction) : I;
+  D     = direction!=undef ? fl_direction(direction) : I;
   M     = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
   fl_trace("Verbs: ",verbs);
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD)
       fl_modifier($modifier)
-        fl_cylinder(d1=0,d2=d,h=h,octant=-Z);
+        fl_cylinder(d1=tolerance,d2=d,h=h,octant=-Z);
+    else if ($verb==FL_AXES)
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) translate(Z(NIL)) fl_bb_add(bbox);
     else

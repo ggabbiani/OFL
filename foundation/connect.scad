@@ -6,8 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <symbol.scad>
 include <util.scad>
+
+use <3d-engine.scad>
 
 //*****************************************************************************
 // Connection properties
@@ -21,7 +22,7 @@ function fl_conn_ldir(type,value) = fl_property(type,"conn/label [direction,rota
 function fl_conn_loct(type,value) = fl_property(type,"conn/label octant",value);
 
 // constructors
-function conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0]) =
+function conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+FL_Z,0]) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
@@ -39,7 +40,7 @@ function conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0]) =
     fl_conn_loct(value=octant),
   ];
 
-function conn_Socket(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0]) =
+function conn_Socket(id,ox,oy,pos,size=2.54,octant,direction=[+FL_Z,0]) =
   assert(is_string(id))
   assert(is_list(ox))
   assert(is_list(oy))
@@ -188,7 +189,7 @@ module fl_connect(
 module fl_conn_add(connector,size,label) {
   assert(connector!=undef);
   fl_conn_Context(connector)
-    multmatrix(T($conn_pos)*fl_planeAlign(X,Y,$conn_ox,$conn_oy))
+    multmatrix(T($conn_pos)*fl_planeAlign(FL_X,FL_Y,$conn_ox,$conn_oy))
       fl_symbol(size=size,symbol=$conn_type);
 }
 
@@ -233,7 +234,7 @@ module fl_lay_connectors(
   conns
 ) for(i=[0:len(conns)-1])
     fl_conn_Context(conns[i],i)
-      multmatrix(T($conn_pos)*fl_planeAlign(X,Y,$conn_ox,$conn_oy))
+      multmatrix(T($conn_pos)*fl_planeAlign(FL_X,FL_Y,$conn_ox,$conn_oy))
         children();
 
 /*!
@@ -245,12 +246,12 @@ module fl_conn_debug(
   //! see constructor fl_parm_Debug()
   debug
 ) {
-    fl_lay_connectors(conns) union() {
-      if (fl_parm_symbols(debug))
-        fl_symbol(FL_ADD,size=$conn_size,symbol=$conn_type,$FL_ADD="ON",$fl_debug=false);
-      if (fl_parm_labels(debug))
-        // echo($conn_label=$conn_label,$conn_loct=$conn_loct,$conn_ldir=$conn_ldir)
-        // multmatrix(T(0.6*$conn_size*[sign($conn_loct.x),sign($conn_loct.y),sign($conn_loct.z)]))
-          fl_label(FL_ADD,$conn_label,size=0.6*$conn_size,thick=0.1,octant=$conn_loct,direction=$conn_ldir,extra=$conn_size,$FL_ADD="ON",$FL_AXES="ON",$fl_debug=false);
-    }
+  fl_lay_connectors(conns) union() {
+    if (fl_parm_symbols(debug))
+      fl_symbol(FL_ADD,size=$conn_size,symbol=$conn_type,$FL_ADD="ON",$fl_debug=false);
+    if (fl_parm_labels(debug))
+      // echo($conn_label=$conn_label,$conn_loct=$conn_loct,$conn_ldir=$conn_ldir)
+      // multmatrix(T(0.6*$conn_size*[sign($conn_loct.x),sign($conn_loct.y),sign($conn_loct.z)]))
+        fl_label(FL_ADD,$conn_label,size=0.6*$conn_size,thick=0.1,octant=$conn_loct,direction=$conn_ldir,extra=$conn_size,$FL_ADD="ON",$FL_AXES="ON",$fl_debug=false);
   }
+}

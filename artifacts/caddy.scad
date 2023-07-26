@@ -7,8 +7,10 @@
  */
 
 include <../foundation/unsafe_defs.scad>
-include <../foundation/mngm.scad>
-include <../foundation/fillet.scad>
+
+use <../foundation/bbox-engine.scad>
+use <../foundation/fillet.scad>
+use <../foundation/mngm.scad>
 
 //! Caddy's namespace
 FL_NS_CAD = "cad";
@@ -49,7 +51,7 @@ module fl_caddy(
    * ```
    */
   thick,
-  //! faces defined by their othonormal axis in floating semi-axis list format
+  //! faces defined by their orthonormal axis in floating semi-axis list format
   faces,
   //! SCALAR added to each internal payload dimension.
   tolerance   = fl_JNgauge,
@@ -89,7 +91,7 @@ module fl_caddy(
                     [fl_isSet(+X,faces)?thick.x[1]:0, fl_isSet(+Y,faces)?thick.y[1]:0, fl_isSet(+Z,faces)?thick.z[1]:0]
                   ]) [pload[0]-delta[0],pload[1]+delta[1]];
   size      = bbox[1]-bbox[0];
-  D         = direction ? fl_direction(default=[+Z,+X],direction=direction) : I;
+  D         = direction ? fl_direction(direction) : FL_I;
   M         = fl_octant(octant,bbox=bbox);
 
   fl_trace("thick",thick);
@@ -144,7 +146,7 @@ module fl_caddy(
     }
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         fl_color()
@@ -152,6 +154,10 @@ module fl_caddy(
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) context(FL_DRAW) children();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);

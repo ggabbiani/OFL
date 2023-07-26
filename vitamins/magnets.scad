@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/3d.scad>
-include <../foundation/mngm.scad>
+include <../foundation/3d-engine.scad>
+use <../foundation/mngm.scad>
 
 include <countersinks.scad>
 include <screw.scad>
@@ -39,7 +39,6 @@ function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
     fl_name(value=name),
     fl_description(value=description),
     fl_mag_engine(value=engine),
-    fl_director(value=+FL_Z), fl_rotor(value=+FL_X),
     if (engine=="cyl") fl_mag_d(value=d),
     fl_mag_cs(value=cs),
     if (cs!=undef) fl_mag_csH(value=csh),
@@ -149,7 +148,7 @@ module fl_magnet(
   bbox          = fl_bb_corners(type);
   size          = bbox[1]-bbox[0];
   name          = fl_name(type);
-  D             = direction!=undef ? fl_direction(proto=type,direction=direction) : I;
+  D             = direction!=undef ? fl_direction(direction) : I;
   M             = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
   Mscrew        = T(+Z(h));
   screw_thick   = h + thick;
@@ -217,9 +216,12 @@ module fl_magnet(
       multmatrix(Mscrew) children();
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(-Z(NIL)) fl_cube(size=size+Z(2*NIL),octant=+Z);
     } else if ($verb==FL_LAYOUT) {

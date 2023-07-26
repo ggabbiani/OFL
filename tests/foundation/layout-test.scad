@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/3d.scad>
 include <../../vitamins/hds.scad>
 include <../../vitamins/pcbs.scad>
 include <../../vitamins/psus.scad>
+
+use <../../foundation/3d-engine.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -80,5 +81,6 @@ module object(object) {
     assert(false,str("Engine ",engine," UNKNOWN."));
 }
 
+fl_trace("verbs",verbs);
 fl_layout(verbs,axis,GAP,types,align=ALIGN,octant=octant,direction=direction)
   object($item);

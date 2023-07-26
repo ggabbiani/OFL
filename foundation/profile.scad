@@ -3,8 +3,11 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+include <unsafe_defs.scad>
 
-include <3d.scad>
+use <2d-engine.scad>
+use <3d-engine.scad>
+use <mngm.scad>
 
 //! engine for generating profiles
 module fl_profile(
@@ -28,7 +31,7 @@ module fl_profile(
   assert(is_string(type) && len(type)==1 && search(type,"ELTU")!=[]);
 
   bbox  = [-size/2,+size/2];
-  D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
+  D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
 
   r     = radius ? radius : 0;
@@ -103,9 +106,12 @@ module fl_profile(
     }
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) fl_color(material) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) cube(size=size, center=true);
     } else if ($verb==FL_FOOTPRINT) {
@@ -143,7 +149,7 @@ module fl_bentPlate(
   assert(thick!=undef);
 
   bbox  = [-size/2,+size/2];
-  D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
+  D     = direction ? fl_direction(direction) : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
   r   = radius == undef ? 0 : radius;
@@ -196,9 +202,12 @@ module fl_bentPlate(
       else assert(false,str("Unsupported bent plate type '",type,"'. Please choose one of the following: L,U"));
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_cube(size=size, octant=FL_O);
     } else if ($verb==FL_FOOTPRINT) {

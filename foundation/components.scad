@@ -8,6 +8,8 @@
 
 include <defs.scad>
 
+use <bbox-engine.scad>
+
 //! namespace for component package
 FL_COMP_NS  = "comp";
 
@@ -34,19 +36,34 @@ FL_COMP_COLOR = str(FL_COMP_NS,"/color");
  */
 FL_COMP_OCTANT = str(FL_COMP_NS,"/octant");
 
+/*
+ * Component constructor
+ */
+function fl_Component(
+  engine,
+  position,
+  direction,
+  type,
+  parameters
+) =
+assert(!fl_debug(),fl_debug())
+[engine,position,undef,direction,type,parameters];
+
 /*!
  * Component context:
  *
  *  - $comp_engine    : engine to be triggered for component rendering
  *  - $comp_position  : component position
- *  - $comp_direction
- *  - $comp_director
- *  - $comp_rotation
+ *  - $comp_direction : new coordinate system in [[direction], rotation] format
+ *  - $comp_director  : new coordinate system direction vector
+ *  - $comp_rotation  : new coordinate system rotation value around new direction
  *  - $comp_type
  *  - $comp_subtract  : the tolerance to be used during component FL_FOOTPRINT difference from parent shape
  *  - $comp_drift     : additional delta during component FL_CUTOUT
  *  - $comp_color
  *  - $comp_octant
+ *  - $comp_cutdir    : cutout direction for the component in the __hosting__ coordinate system
+ *                      TODO: remove this variable since **OBSOLETE**
  *
  */
 module fl_comp_Context(
@@ -55,14 +72,16 @@ module fl_comp_Context(
   ) {
   assert(!fl_debug() || fl_tt_isComponent(component),component);
 
-  $comp_engine    = component[0];
-  $comp_position  = component[1];
-  $comp_direction = component[2];
-  $comp_director  = $comp_direction[0];
-  $comp_rotation  = $comp_direction[1];
-  $comp_type      = component[3];
+  $comp_engine    = assert(is_string(component[0])) component[0];
+  $comp_position  = assert(fl_tt_is3d(component[1]),component[1]) component[1];
+  // $comp_cutdir    = assert(fl_tt_isAxis(component[2])) component[2]; // **OBSOLETE**
+  $comp_direction = assert(is_list(component[3])) component[3];
+  $comp_director  = assert(fl_tt_isAxis($comp_direction[0])) $comp_direction[0];
+  $comp_rotation  = assert(is_num($comp_direction[1])) $comp_direction[1];
+  $comp_type      = component[4];
+
   // properties
-  properties      = component[4];
+  properties      = component[5];
   $comp_subtract  = fl_optional(properties,FL_COMP_SUB);
   $comp_drift     = fl_optional(properties,FL_COMP_DRIFT,0);
   $comp_color     = fl_optional(properties,FL_COMP_COLOR);
@@ -97,14 +116,14 @@ function fl_comp_BBox(spec_list) =
       let(
         component   = specs[1],
         position    = component[1],
-        direction   = component[2],
-        type        = component[3],
-        properties  = component[4],
+        direction   = component[3],
+        type        = component[4],
+        properties  = component[5],
         octant      = fl_optional(properties,FL_COMP_OCTANT),
         // component bounding box
         bbox        = fl_bb_corners(type),
         // component direction matrix
-        D           = fl_direction(type,direction),
+        D           = fl_direction(direction),
         // translation by component position
         T           = T(position),
         // eventual component placement
@@ -127,15 +146,16 @@ function fl_comp_search(type,label,comps) = let(
   result      = [for(specs=components) if (label==specs[0]) specs[1]]
 ) assert(!fl_debug() || len(result)==1,result) result[0];
 
-/*!
- * returns «component» connectors transformed according to component position/orientation
+/*
+ * returns all the «component» connectors transformed according to component
+ * position/orientation
  */
 function fl_comp_connectors(component)  = let(
   position    = component[1],
-  direction   = component[2],
-  type        = component[3],
+  direction   = component[3],
+  type        = component[4],
   T           = T(position),
-  D           = fl_direction(proto=type,direction=direction),
+  D           = fl_direction(direction),
   M           = T*D,
   connectors  = fl_connectors(type)
 ) fl_conn_import(connectors,M);

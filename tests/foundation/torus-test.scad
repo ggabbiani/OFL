@@ -3,8 +3,9 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+include <../../foundation/defs.scad>
 
-include <../../foundation/torus.scad>
+use <../../foundation/torus.scad>
 
 $fn         = 50;           // [3:100]
 $fs         = 50;           // [3:100]

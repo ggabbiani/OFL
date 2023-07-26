@@ -5,7 +5,9 @@
  */
 
 include <spacer.scad>
-include <../foundation/mngm.scad>
+
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
 
 /******************************************************************************
  * Hole driven PCB holders
@@ -80,7 +82,7 @@ module fl_pcb_holderByHoles(
       ) fl_Hole(p,d,n,0,ldir,loct,screw)
   ];
   // echo(holes=holes);
-  D     = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
+  D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
   Mpcb  = T(Z(h+pcb_t));
 
@@ -156,12 +158,16 @@ module fl_pcb_holderByHoles(
         spacer(FL_ASSEMBLY,position=$hole_pos,screw=$hld_screw);
   }
 
-  fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
@@ -295,7 +301,7 @@ module fl_pcb_holderBySize(
   pcb_bb  = fl_bb_corners(pcb);
   pcb_sz  = pcb_bb[1]-pcb_bb[0];
 
-  D       = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
+  D       = direction ? fl_direction(direction) : FL_I;
   M       = fl_octant(octant,bbox=bbox);
   Mpcb    = T(Z(h));
 
@@ -385,12 +391,16 @@ module fl_pcb_holderBySize(
         spacer(FL_ASSEMBLY,position=$hole_pos,screw=$hld_screw);
   }
 
-  fl_manage(verbs,M,D,(bbox[1]-bbox[0])) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) fl_color() do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

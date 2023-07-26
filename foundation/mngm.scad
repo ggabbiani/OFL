@@ -9,7 +9,7 @@
 include <defs.scad>
 
 /*!
- * manage verbs parsing, placement, orientation and fl_axes{}
+ * manage verbs parsing, placement and orientation
  *
  * children context:
  *
@@ -22,42 +22,20 @@ module fl_manage(
   //! placement matrix
   M,
   //! orientation matrix
-  D,
-  //! size used for fl_axes{}
-  size,
-  //! see constructor fl_parm_Debug()
-  debug,
-  //! list of connectors to debug
-  connectors,
-  //! list of holes to debug
-  holes,
-  /*!
-   * direction [director,rotation], when undef the debug flag will be ignored
-   * for the direction symbol
-   */
-  direction,
-  /*!
-   * Native Coordinate System when different from the default [+Z,+X]
-   *
-   * TODO: remove the [director,rotor] definition and use always the default
-   */
-  ncs = [+FL_Z,+FL_X]
+  D
 ) {
   assert(!fl_debug() || D);
 
-  M = M ? M : FL_I;
-  D = D ? D : FL_I;
-
-  module context(vlist) {
-    assert(is_list(vlist)||is_string(vlist),vlist);
-    flat  = fl_list_flatten(is_list(vlist)?vlist:[vlist]);
+  module context(verb_list) {
+    assert(is_list(verb_list)||is_string(verb_list),verb_list);
+    flat  = fl_list_flatten(is_list(verb_list)?verb_list:[verb_list]);
     let(
       $_axes_   = fl_list_has(flat,FL_AXES),
       $_verbs_  = fl_list_filter(flat,FL_EXCLUDE_ANY,FL_AXES)
     ) children();
   }
 
-  // parse verbs and trigger children with predefined context (see module fl_manage())
+  // parse verbs and trigger children with predefined context
   module parse(verbs) {
 
     // given a verb returns the corresponding modifier value
@@ -73,40 +51,34 @@ module fl_manage(
       : verb==FL_LAYOUT     ? $FL_LAYOUT
       : verb==FL_MOUNT      ? $FL_MOUNT
       : verb==FL_PAYLOAD    ? $FL_PAYLOAD
+      : verb==FL_SYMBOLS    ? $FL_SYMBOLS
       : assert(false,str("Unsupported verb ",verb)) undef;
 
     assert(is_list(verbs)||is_string(verbs),verbs);
+    fl_trace("verbs",verbs);
     for($verb=verbs) {
       tokens  = split($verb);
-      fl_trace(tokens[0]);
+      fl_trace("tokens[0]",tokens[0]);
       if (fl_isSet("**DEPRECATED**",tokens)) {
         fl_trace(str("***WARN*** ", tokens[0], " is marked as DEPRECATED and will be removed in future version!"),always=true);
       } else if (fl_isSet("**OBSOLETE**",tokens)) {
         assert(false,str(tokens[0], " is marked as OBSOLETE!"));
-      } let(
-        $modifier = verb2modifier($verb)
-      ) if ($modifier!="OFF") children();
+      }
+      let($modifier = verb2modifier($verb))
+        children();
     }
   }
 
+  M = M ? M : FL_I;
+  D = D ? D : FL_I;
+
+  fl_trace("verbs",verbs);
   multmatrix(D) context(verbs) union() {
-    multmatrix(M) union() {
-      if (debug) {
-        if (connectors)
-          fl_conn_debug(connectors,debug=debug);
-        if (holes)
-          fl_hole_debug(holes,debug=debug);
-      }
+    multmatrix(M) union()
       parse($_verbs_) children();
-    }
-    if ($_axes_ && size)
-      fl_modifier($FL_AXES) {
-        sz = 1.2*size;
-        fl_axes(size=sz);
-        echo(direction=direction);
-        echo(debug=debug);
-        if (direction && fl_parm_symbols(debug))
-          fl_sym_direction(ncs=ncs,direction=direction,size=sz);
-      }
+
+    // trigger FL_AXES WITHOUT octant related transformation (i.e. matrix M)
+    if ($_axes_)
+      parse([FL_AXES]) children();
   }
 }

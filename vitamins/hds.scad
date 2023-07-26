@@ -7,7 +7,7 @@
  */
 
 include <../foundation/hole.scad>
-include <../foundation/mngm.scad>
+use <../foundation/mngm.scad>
 include <sata.scad>
 include <screw.scad>
 
@@ -39,7 +39,6 @@ FL_HD_EVO860 = let(
     [-size.x/2, 0,      0       ],  // negative corner
     [+size.x/2, +size.y,+size.z ],  // positive corner
   ]),
-  fl_director(value=+FL_Z),fl_rotor(value=+FL_X),
   ["offset",            [0,-size.y/2,-size.z/2]],
   ["corner radius",     3],
   fl_screw(value=screw),
@@ -140,11 +139,15 @@ module fl_hd(
       cube(size,true);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {  // intentionally a no-op
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_MOUNT) {
       fl_modifier($modifier) do_layout()

@@ -1,4 +1,4 @@
-/*
+/*!
  * Box artifact test.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -7,6 +7,8 @@
  */
 
 include <../../artifacts/box.scad>
+
+use <../../foundation/2d-engine.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -24,6 +26,8 @@ $FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of user passed accessories (like alternative screws)
+$FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // mount shape through predefined screws
 $FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
@@ -67,6 +71,11 @@ MATERIAL_UPPER  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 MATERIAL_LOWER  = "SteelBlue";  // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 FILLET          = true;
 
+/* [Layout] */
+
+LAY_NATIVE  = true;
+LAY_OCTANT  = [0,0,0];  // [-1:+1]
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
@@ -76,9 +85,12 @@ verbs=[
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
   if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
+  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
   if ($FL_MOUNT!="OFF")     FL_MOUNT,
   if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
 ];
+
+lay_octant  = LAY_NATIVE  ? undef : LAY_OCTANT;
 
 fl_box(verbs,
   xsize=SIZE_BY=="XSIZE"?XSIZE:undef,
@@ -91,5 +103,7 @@ fl_box(verbs,
   material_lower=MATERIAL_LOWER,
   tolerance=TOLERANCE,
   fillet=FILLET,
+  lay_octant=lay_octant,
   octant=octant,direction=direction
-);
+)
+  fl_sphere([FL_AXES],r=10);

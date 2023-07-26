@@ -3,8 +3,11 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+include <unsafe_defs.scad>
 
-include <3d.scad>
+use <2d-engine.scad>
+use <3d-engine.scad>
+use <mngm.scad>
 
 function fl_bb_torus(
   //! radius of the circular tube.
@@ -47,7 +50,7 @@ module fl_torus(
   a       = e[0];
   b       = e[1];
   size    = bbox[1]-bbox[0];
-  D       = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
+  D       = direction ? fl_direction(direction) : I;
   M       = fl_octant(octant,bbox=bbox);
 
   fn      = $fn;
@@ -55,9 +58,12 @@ module fl_torus(
   fl_trace("D",D);
   fl_trace("M",M);
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) rotate_extrude($fn=$fn) translate(X(R-a)) fl_ellipse(e=e,quadrant=+X,$fn=fn);
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else {

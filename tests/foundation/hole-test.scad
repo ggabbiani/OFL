@@ -8,11 +8,10 @@
 
 include <../../foundation/hole.scad>
 include <../../foundation/util.scad>
-
 include <../../vitamins/screw.scad>
 
-include <NopSCADlib/core.scad>
-include <NopSCADlib/vitamins/screws.scad>
+// include <NopSCADlib/core.scad>
+// include <NopSCADlib/vitamins/screws.scad>
 
 $fn           = 50;           // [3:100]
 // When true debug statements are turned on

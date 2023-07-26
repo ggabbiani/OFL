@@ -6,18 +6,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/3d.scad>
+include <../../foundation/unsafe_defs.scad>
 include <../../vitamins/countersinks.scad>
 
+use <../../foundation/3d-engine.scad>
+
 $fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables epsilon corrections
 $FL_RENDER  = false;
-// Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;     // [-2:10]
+$fl_debug   = false;
+SHOW_LABELS      = false;
+SHOW_SYMBOLS     = false;
 
 /* [Supported verbs] */
 
@@ -43,6 +44,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [Countersink] */
 
+TOLERANCE = 0;  // [-1:0.1:1]
 // -1 for all, the ordinal dictionary member otherwise
 SHOW    = -1;   // [-1:1:8]
 GAP     = 5;
@@ -51,6 +53,8 @@ GAP     = 5;
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
+debug     = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
+
 verbs=[
   if ($FL_ADD!="OFF")   FL_ADD,
   if ($FL_AXES!="OFF")  FL_AXES,
@@ -58,7 +62,8 @@ verbs=[
 ];
 
 if (SHOW>-1)
-  fl_countersink(verbs,FL_CS_DICT[SHOW],octant=octant,direction=direction);
+  echo("countersink ",fl_name(FL_CS_DICT[SHOW]))
+    fl_countersink(verbs,FL_CS_DICT[SHOW],tolerance=TOLERANCE,octant=octant,direction=direction);
 else
   fl_layout(axis=X,gap=GAP,types=FL_CS_DICT)
-    fl_countersink(verbs,FL_CS_DICT[$i],octant=octant,direction=direction);
+    fl_countersink(verbs,FL_CS_DICT[$i],tolerance=TOLERANCE,octant=octant,direction=direction);

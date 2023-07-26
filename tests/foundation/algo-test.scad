@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/algo.scad>
+use <../../foundation/algo-engine.scad>
+use <../../foundation/base_trace.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

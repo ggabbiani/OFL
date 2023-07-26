@@ -6,9 +6,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/mngm.scad>
-include <../foundation/util.scad>
 include <../vitamins/magnets.scad>
+
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
+use <../foundation/util.scad>
 
 $fn           = 50;           // [3:100]
 // May trigger debug statement in client modules / functions
@@ -197,8 +199,10 @@ module holder(verbs,item) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) fl_color()
         multmatrix(Mbox) box();
+
     } else if ($verb==FL_BBOX) {
       fl_modifier($FL_BBOX) fl_bb_add(bbox);
+
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($FL_ASSEMBLY) fl_color("silver") {
         // bit
@@ -209,8 +213,14 @@ module holder(verbs,item) {
         multmatrix(Mmagnet)
           fl_magnet(FL_ADD,magnet,octant=+X,direction=[-Y,90]);
       }
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
+
     } else if ($verb==FL_DRILL) {
       fl_modifier($FL_DRILL) do_drill();
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }

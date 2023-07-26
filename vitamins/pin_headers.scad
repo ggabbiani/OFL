@@ -5,11 +5,12 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../foundation/defs.scad>
+include <../foundation/unsafe_defs.scad>
+
 include <../foundation/connect.scad>
 include <../foundation/label.scad>
-include <../foundation/mngm.scad>
-include <../foundation/util.scad>
+use <../foundation/mngm.scad>
+use <../foundation/util.scad>
 
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/pin_headers.scad>
@@ -94,7 +95,6 @@ let(
     fl_engine(value=engine),
     fl_phdr_geometry(value=geometry),
     fl_bb_corners(value=bbox),
-    fl_director(value=+Z),fl_rotor(value=+X),
     fl_connectors(value=[
       engine=="male"||through ? conn_Plug(cid,+X,+Y, pin_1_hi,size=pitch,octant=engine=="male"?-X:+X) :  conn_Socket(cid,+X,-Y,pin_2_hi,size=pitch,octant=+X),
       through ? conn_Socket(cid,+X,+Y,pin_1_lo,size=pitch,octant=+X,direction=[-Z,180]) : conn_Plug(cid,+X,-Y,pin_2_lo,size=pitch,octant=-X),
@@ -104,6 +104,7 @@ let(
     ["phdr/smt", smt],
     ["phdr/pass-through", through],
     if (vendors!=[]) fl_vendor(value=vendors),
+    fl_cutout(value=[+FL_Z]),
   ];
 
 /*!
@@ -123,7 +124,9 @@ module fl_pinHeader(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef
-  direction
+  direction,
+  // see constructor fl_parm_Debug()
+  debug
 ) {
   assert(type);
   assert(is_list(verbs)||is_string(verbs),verbs);
@@ -139,7 +142,7 @@ module fl_pinHeader(
   engine    = fl_engine(type);
   smt       = fl_property(type,"phdr/smt");
 
-  D     = direction ? fl_direction(direction=direction,default=[Z,X]) : I;
+  D     = direction ? fl_direction(direction) : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
   fl_trace("conns",conns);
@@ -165,9 +168,13 @@ module fl_pinHeader(
         fl_cube(size=pin_sz,octant=-Z);
   }
 
-  fl_manage(verbs,M,D,size,debug,connectors=conns) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

@@ -6,7 +6,8 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../foundation/3d.scad>
+include <../foundation/defs.scad>
+use <../foundation/3d-engine.scad>
 
 $fn         = 50;           // [3:50]
 // Debug statements are turned on

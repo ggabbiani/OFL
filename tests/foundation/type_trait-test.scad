@@ -144,6 +144,7 @@ let(
   comp  = [
     "test",
     [25.5,11.2,0],
+    undef,
     [+[1,0,0],0 ],
     [], // fake type
     [["comp/drift",-1.3]]

@@ -6,13 +6,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <hole.scad>
-include <mngm.scad>
+include <3d-engine.scad>
 
 function __constructor__(description,bbox,holes)  = let(
 ) [
   fl_native(value=true),
-  fl_director(value=+Z),fl_rotor(value=+X),
   assert(bbox) fl_bb_corners(value=bbox),
   if (description) fl_description(value=description),
   if (holes) fl_holes(value=holes),
@@ -29,35 +27,25 @@ module __stub__(
 ) {
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  holes = fl_optional(type,fl_holes()[0]);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
-    difference() {
-      fl_bb_add(bbox);
-      fl_holes(holes=holes);
-    }
   }
 
   module do_assembly() {
-
   }
 
   module do_bbox() {
-
   }
 
   module do_cutout() {
-
   }
 
   module do_drill() {
-
   }
 
   module do_fprint() {
-
   }
 
   module do_layout() {
@@ -65,23 +53,21 @@ module __stub__(
   }
 
   module do_mount() {
-
   }
 
   module do_pload() {
-
   }
 
-  if (!is_undef($hole_syms) && $hole_syms==true)
-    multmatrix(D*M)
-      fl_hole_debug(holes=holes);
-
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);

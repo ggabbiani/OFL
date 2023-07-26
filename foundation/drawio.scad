@@ -7,7 +7,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <2d.scad>
+include <defs.scad>
+
+use <2d-engine.scad>
+use <base_trace.scad>
+use <mngm.scad>
 
 /*!
  * Y invert and scale to size from draw.io coords.
@@ -48,9 +52,12 @@ module dio_polyCoords(
   fl_trace("bbox",bbox);
   fl_trace("quadrant",quadrant);
 
-  fl_manage(verbs,M,size=size) {
+  fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(points);
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=bbsize, center=false);
     } else {

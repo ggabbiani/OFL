@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <3d.scad>
-
 include <NopSCADlib/lib.scad>
+include <unsafe_defs.scad>
+
+use <3d-engine.scad>
+use <bbox-engine.scad>
+use <mngm.scad>
 
 //! use children(0) for making a rail
 module fl_rail(
@@ -108,7 +111,6 @@ function fl_folding(
     fl_bend_sheet(value=[fl_bb_corners(value=flat_bb)]),
     fl_bend_faceSet(value=fcs),
     fl_material(value=material),
-    fl_director(value=FL_Z),fl_rotor(value=FL_X),
   ];
 
 /*!
@@ -167,7 +169,7 @@ module fl_bend(
   size        = bbox[1]-bbox[0];
   material    = fl_material(type);
 
-  D = direction ? fl_direction(proto=type,direction=direction)  : I;
+  D = direction ? fl_direction(direction) : FL_I;
   M = fl_octant(octant,bbox=bbox);
 
   module do_add() {
@@ -264,9 +266,13 @@ module fl_bend(
     fl_trace("***END***");
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD)
       fl_modifier($modifier) do_add() children();
+
+    else if ($verb==FL_AXES)
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
 
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_bb_add(bbox);

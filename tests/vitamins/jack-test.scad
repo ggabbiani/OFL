@@ -1,15 +1,14 @@
 /*
- * NopACADlib Jack wrapper test.
+ * NopSCADlib Jack wrapper test.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
-include <../../vitamins/jacks.scad>
-
 include <NopSCADlib/global_defs.scad>
 use     <NopSCADlib/utils/layout.scad>
+
+include <../../vitamins/jacks.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

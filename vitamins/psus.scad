@@ -8,8 +8,8 @@
 
 include <../foundation/grid.scad>
 include <../foundation/hole.scad>
-include <../foundation/mngm.scad>
-include <../foundation/util.scad>
+use <../foundation/mngm.scad>
+use <../foundation/util.scad>
 include <../foundation/unsafe_defs.scad>
 
 include <screw.scad>
@@ -68,7 +68,7 @@ FL_PSU_MeanWell_RS_25_5 = let(
         ["Amazon",  "https://www.amazon.it/gp/product/B00MWQDAMU/"],
       ]
     ),
-    fl_director(value=-FL_Y),fl_rotor(value=-FL_X),
+    // fl_director(value=-FL_Y),fl_rotor(value=-FL_X),
   ];
 
 FL_PSU_MeanWell_RS_15_5 = let(
@@ -119,7 +119,7 @@ FL_PSU_MeanWell_RS_15_5 = let(
         ["Amazon",  "https://www.amazon.it/gp/product/B00MWQD43U/"],
       ]
     ),
-    fl_director(value=-FL_Y),fl_rotor(value=-FL_X),
+    // fl_director(value=-FL_Y),fl_rotor(value=-FL_X),
   ];
 
 FL_PSU_DICT = [
@@ -284,11 +284,15 @@ module fl_psu(
       children();
   }
 
-  fl_manage(verbs,M,D,cbox_sz) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {    // intentionally a no-op
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(bbox_sz,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_bbox();

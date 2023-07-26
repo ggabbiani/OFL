@@ -5,10 +5,13 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../foundation/bbox.scad>
-include <../foundation/3d.scad>
-include <../foundation/mngm.scad>
 include <../foundation/unsafe_defs.scad>
+
+use <../foundation/2d-engine.scad>
+use <../foundation/3d-engine.scad>
+use <../foundation/bbox-engine.scad>
+// use <../foundation/core-symbols.scad>
+use <../foundation/mngm.scad>
 
 //! template namespace
 FL_SWT_NS  = "swt";
@@ -18,7 +21,8 @@ FL_SWT_USWITCH_7p2x3p4x3x2p5  = let(
   w=7, h = 3.4, l=2.5+Tbutton
 ) [
   fl_bb_corners(value=[[-l+Tbutton,-w/2,0],[Tbutton,+w/2,h]]),
-  fl_director(value=+X),fl_rotor(value=+Y),
+  // fl_director(value=+X),fl_rotor(value=+Y),
+  fl_cutout(value=[FL_X]),
 ];
 
 FL_SWT_DICT = [
@@ -36,6 +40,8 @@ module fl_switch(
   direction,
   //! when undef native positioning is used
   octant,
+  // see constructor fl_parm_Debug()
+  debug
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
@@ -43,7 +49,7 @@ module fl_switch(
   Tbutton = 1;
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
@@ -72,9 +78,13 @@ module fl_switch(
           fl_square(size=[1.6,3.22]);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

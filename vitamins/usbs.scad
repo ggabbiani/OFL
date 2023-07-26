@@ -1,13 +1,19 @@
 /*!
- * NopACADlib USB definitions wrapper.
+ * NopSCADlib USB definitions wrapper.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/mngm.scad>
-include <../foundation/util.scad>
+include <NopSCADlib/utils/core/core.scad>
+include <../foundation/defs.scad>
+
+use <../foundation/2d-engine.scad>
+use <../foundation/3d-engine.scad>
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
+use <../foundation/util.scad>
 
 FL_USB_NS = "usb";
 
@@ -19,11 +25,13 @@ function fl_USB_flange(type,value)  = fl_property(type,"usb/flange",value);
 
 //*****************************************************************************
 FL_USB_TYPE_Ax1_NF_SM = let(
-  h = 6.5, l = 10, w = 13.25
+  // h = 6.5, l = 10, w = 13.25
+  h = 5.8, l = 10, w = 13.25
 ) [
   fl_engine(value="USB/A SM"),
   fl_bb_corners(value=[[-l,-w/2,0],[0,+w/2,h]]),
-  fl_director(value=+X),fl_rotor(value=+Y),
+  // fl_director(value=+X),fl_rotor(value=+Y),
+  fl_cutout(value=[+FL_X]),
   fl_USB_flange(value=false),
 ];
 
@@ -35,7 +43,8 @@ FL_USB_TYPE_Ax1 = let(
 ) [
   fl_engine(value="USB/Ax1"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
-  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  fl_cutout(value=[+FL_X]),
   fl_USB_flange(value=true),
 ];
 
@@ -47,7 +56,8 @@ FL_USB_TYPE_Ax1_NF = let(
 ) [
   fl_engine(value="USB/Ax1"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
-  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  fl_cutout(value=[+FL_X]),
   fl_USB_flange(value=false),
 ];
 
@@ -59,7 +69,8 @@ FL_USB_TYPE_Ax2 = let(
 ) [
   fl_engine(value="USB/Ax2"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
-  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  fl_cutout(value=[+FL_X]),
   fl_USB_flange(value=true),
 ];
 
@@ -69,7 +80,8 @@ FL_USB_TYPE_B   = let(
 ) [
   fl_engine(value="USB/B"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
-  fl_director(value=+FL_X),fl_rotor(value=+Y),
+  // fl_director(value=+FL_X),fl_rotor(value=+Y),
+  fl_cutout(value=[+FL_X]),
   fl_USB_flange(value=false),
 ];
 
@@ -79,7 +91,8 @@ FL_USB_TYPE_C   = let(
 ) [
   fl_engine(value="USB/C"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
-  fl_director(value=+X),fl_rotor(value=+Y),
+  // fl_director(value=+X),fl_rotor(value=+Y),
+  fl_cutout(value=[+FL_X]),
   fl_USB_flange(value=false),
 ];
 
@@ -89,7 +102,8 @@ FL_USB_TYPE_uA = let(
 ) [
   fl_engine(value="USB/uA"),
   fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),
-  fl_director(value=+X),fl_rotor(value=+Y),
+  // fl_director(value=+X),fl_rotor(value=+Y),
+  fl_cutout(value=[+FL_X]),
   fl_USB_flange(value=true),
 ];
 
@@ -99,7 +113,8 @@ FL_USB_TYPE_uA_NF = let(
 ) [
   fl_engine(value="USB/uA"),
   fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),
-  fl_director(value=+X),fl_rotor(value=+Y),
+  // fl_director(value=+X),fl_rotor(value=+Y),
+  fl_cutout(value=[+FL_X]),
   fl_USB_flange(value=false),
 ];
 
@@ -130,6 +145,8 @@ module fl_USB(
   direction,
   //! when undef native positioning is used
   octant,
+  // see constructor fl_parm_Debug()
+  debug
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
@@ -138,7 +155,7 @@ module fl_USB(
   flange  = fl_USB_flange(type);
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : I;
+  D     = direction ? fl_direction(direction) : FL_I;
   M     = fl_octant(octant,bbox=bbox);
   engine = fl_engine(type);
   fl_trace("D",D);
@@ -166,10 +183,10 @@ module fl_USB(
 
       translate([-l, 0 , h / 2])
         hull() {
-          fl_linear_extrude(length=(l-2),direction=[X,90])
+          fl_linear_extrude(length=(l-2),direction=[FL_X,90])
             fl_square(size=[w, h]);
 
-          fl_linear_extrude(length=l,direction=[X,90])
+          fl_linear_extrude(length=l,direction=[FL_X,90])
             fl_square(size=[w - 1, h - 1]);
         }
     }
@@ -177,7 +194,7 @@ module fl_USB(
     module do_add() {
       translate(+Z(size.z/2)) {
         fl_color("silver")
-          fl_linear_extrude(length=size.x,direction=[-X,0])
+          fl_linear_extrude(length=size.x,direction=[-FL_X,0])
             difference() {
               fl_square(size=[size.z,size.y],corners=Rext);
               fl_square(size=[size.z-2*Tshield,size.y-2*Tshield],corners=Rint);
@@ -185,15 +202,15 @@ module fl_USB(
         fl_color(tongue)
           tongue();
         fl_color(fl_grey(30))
-          translate(-X(size.x-Tshield))
-            fl_linear_extrude(length=Tshield,direction=[-X,0])
+          translate(-fl_X(size.x-Tshield))
+            fl_linear_extrude(length=Tshield,direction=[-FL_X,0])
               fl_square(size=[size.z-2*Tshield,size.y-2*Tshield],corners=Rint);
       }
     }
 
     module do_cutout() {
-      translate(+X(cut_thick+cut_drift)+Z(size.z/2))
-        fl_linear_extrude(length=cut_thick,direction=[-X,0])
+      translate(+fl_X(cut_thick+cut_drift)+Z(size.z/2))
+        fl_linear_extrude(length=cut_thick,direction=[-FL_X,0])
           offset(r=tolerance)
             fl_square(size=[size.z,size.y],corners=Rint);
     }
@@ -240,10 +257,14 @@ module fl_USB(
     }
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         wrap();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
@@ -256,8 +277,8 @@ module fl_USB(
         if (engine=="USB/A SM")
           wrap();
         else
-          translate(+X(size.x/2+cut_drift))
-            fl_cutout(len=cut_thick,z=X,x=Y,delta=tolerance)
+          translate(+fl_X(size.x/2+cut_drift))
+            fl_cutout(len=cut_thick,z=FL_X,x=FL_Y,delta=tolerance)
               wrap();
 
     } else if ($verb==FL_FOOTPRINT) {

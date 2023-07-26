@@ -6,9 +6,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/3d.scad>
-include <../foundation/mngm.scad>
-include <../foundation/symbol.scad>
+include <../foundation/defs.scad>
+
+use <../foundation/3d-engine.scad>
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
 
 include <NopSCADlib/vitamins/spades.scad>
 
@@ -28,8 +30,6 @@ FL_SODAL_SPDT = let(
   ["length",                len],
   ["head diameter",         head_d],
   ["head height",           head_h],
-  fl_director(value=+FL_Z),
-  fl_rotor(value=+FL_X),
   fl_vendor(value=
     [
       ["Amazon", "https://www.amazon.it/gp/product/B077HJT92M/"],
@@ -63,7 +63,7 @@ module fl_spdt(
   bbox    = fl_bb_corners(type);
   size    = fl_bb_size(type);
   d       = fl_spdt_d(type);
-  D       = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D       = direction ? fl_direction(direction)  : FL_I;
   M       = fl_octant(octant,bbox=bbox);
 
   fl_trace("D",D);
@@ -102,13 +102,20 @@ module fl_spdt(
       cylinder(d=d, h=h);
   }
 
-  fl_manage(verbs,M,D,size,debug,direction=direction,ncs=[fl_director(type),fl_rotor(type)]) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
+
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) cube(size=size,center=false);
+
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }

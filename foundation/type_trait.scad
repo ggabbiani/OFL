@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <defs.scad>
 include <base_string.scad>
 
 function fl_tt_is2d(p) = len(p)==2 && is_num(p.x) && is_num(p.y);
@@ -33,13 +34,15 @@ function fl_tt_isDirectionRotation(value) = let(
 /*!
  * check if «comp» is a valid component format:
  *
- *    ["engine", [position], [[director],rotation], type, properties]
+ *    ["engine", [position], [cut direction], [[director],rotation], type, properties]
  */
 function fl_tt_isComponent(comp) = let(
+  props = comp[5]
 ) (   is_string(comp[0])                  // engine
   &&  fl_tt_is3d(comp[1])                 // position
-  &&  fl_tt_isDirectionRotation(comp[2])  // [direction,rotation]
-  &&  is_list(comp[3])                    // type
+  // &&  fl_tt_isAxis(comp[2])               // cut direction
+  &&  fl_tt_isDirectionRotation(comp[3])  // [direction,rotation]
+  &&  is_list(comp[4])                    // type
   &&  (is_undef(props) || is_list(props)) // optional properties
 );
 
@@ -220,7 +223,7 @@ function fl_tt_isAxisString(s) =
 
 function fl_tt_isAxis(axis) = let(
   versor = fl_versor(axis)
-) (versor==-X||versor==+X||versor==-Y||versor==+Y||versor==-Z||versor==+Z);
+) (versor==-FL_X||versor==+FL_X||versor==-FL_Y||versor==+FL_Y||versor==-FL_Z||versor==+FL_Z);
 
 /*!
  * Floating semi-axis list.

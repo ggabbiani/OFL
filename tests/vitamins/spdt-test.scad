@@ -6,16 +6,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// include <../../foundation/incs.scad>
 include <../../vitamins/spdts.scad>
 
 $fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+// When true, disables epsilon corrections
+$FL_RENDER    = false;
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES    = -2;     // [-2:10]
+$fl_debug     = false;
+SHOW_LABELS   = false;
+SHOW_SYMBOLS  = false;
 
 /* [Supported verbs] */
 
@@ -34,20 +34,16 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:1:360]
 
 /* [Placement] */
 
 PLACE_NATIVE  = true;
 OCTANT        = [0,0,0];  // [-1:+1]
 
-/* SPDT */
-
-SHOW_LABELS      = false;
-SHOW_SYMBOLS     = false;
-
 /* [Hidden] */
 
+fl_status();
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 debug     = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);

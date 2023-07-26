@@ -7,13 +7,17 @@
  */
 use     <../dxf.scad>
 
+include <NopSCADlib/lib.scad>
+include <NopSCADlib/vitamins/screws.scad>
+
+// include <../foundation/actions.scad>
 include <../foundation/components.scad>
 include <../foundation/grid.scad>
 include <../foundation/hole.scad>
 include <../foundation/label.scad>
-include <../foundation/mngm.scad>
 
 include <ethers.scad>
+include <generic.scad>
 include <hdmi.scad>
 include <heatsinks.scad>
 include <jacks.scad>
@@ -24,8 +28,7 @@ include <switch.scad>
 include <trimpot.scad>
 include <usbs.scad>
 
-include <NopSCADlib/lib.scad>
-include <NopSCADlib/vitamins/screws.scad>
+use <../foundation/mngm.scad>
 
 //! namespace for PCB engine
 FL_PCB_NS  = "pcb";
@@ -100,7 +103,7 @@ function fl_PCB(
     fl_native(value=true),
     fl_name(value=name),
     fl_bb_corners(value=bbox),
-    fl_director(value=director),fl_rotor(value=rotor),
+    // fl_director(value=director),fl_rotor(value=rotor),
     fl_engine(value=FL_PCB_NS),
     fl_pcb_thick(value=thick),
     fl_pcb_radius(value=radius),
@@ -157,7 +160,9 @@ function fl_pcb_NopHoles(nop) = let(
 ) holes;
 /*!
  * Model for Raspberry PI 4.
- * The following labels can be passed as **cut_label** parameter to fl_pcb{} when performing FL_CUTOUT:
+ *
+ * The following labels can be passed as **cut_label** parameter to fl_pcb{} when
+ * performing FL_CUTOUT:
  *
  * | Label      | Description                                   |
  * |------------|-----------------------------------------------|
@@ -189,18 +194,17 @@ FL_PCB_RPI4 = let(
   ],
   comps = [
     //TODO: engine can be retrieved from type
-    //["label",   ["engine",    [position],           [[director],rotation] type,           [component parameters] ]]
-    ["POWER IN",  [FL_USB_NS,   [25.5, 11.2, 0      ], [+X,0              ], FL_USB_TYPE_C  ,[[FL_COMP_DRIFT,-1.3]] ]],
-    ["HDMI0",     [FL_HDMI_NS,  [25, 26, 0          ], [+X,0              ], FL_HDMI_TYPE_D ,[[FL_COMP_DRIFT,-1.26]] ]],
-    ["HDMI1",     [FL_HDMI_NS,  [25, 39.5, 0        ], [+X,0              ], FL_HDMI_TYPE_D ,[[FL_COMP_DRIFT,-1.26]] ]],
-    ["A/V",       [FL_JACK_NS,  [22, 54, 0          ], [+X,0              ], FL_JACK_BARREL  ]],
-    ["USB2",      [FL_USB_NS,   [w/2-9, 79.5, 0     ], [+Y,0              ], FL_USB_TYPE_Ax2,[[FL_COMP_DRIFT,-3], [FL_COMP_COLOR,fl_grey(30)]] ]],
-    ["USB3",      [FL_USB_NS,   [w/2-27, 79.5, 0    ], [+Y,0              ], FL_USB_TYPE_Ax2,[[FL_COMP_DRIFT,-3], [FL_COMP_COLOR,"DodgerBlue"]] ]],
-    ["ETHERNET",  [FL_ETHER_NS, [w/2-45.75, 77.5, 0 ], [+Y,0              ], FL_ETHER_RJ45  ,[[FL_COMP_DRIFT,-3]] ]],
-    ["GPIO",      [FL_PHDR_NS,  [-w/2+3.5, 32.5, 0  ], [+Z,90             ], FL_PHDR_GPIOHDR]],
-    ["uSD",       [FL_SD_NS,    [0, 2, -pcb_t       ], [-Y,180            ], FL_SD_MOLEX_uSD_SOCKET, [[FL_COMP_OCTANT,+Y+Z],[FL_COMP_DRIFT,2]] ]],
-    ["PIM TOP",   [FL_HS_NS,    [0, 0, 0            ], [+Z,0              ], FL_HS_PIMORONI_TOP ]],
-    ["PIM BOT",   [FL_HS_NS,    [0, 0, -pcb_t       ], [-Z,0              ], FL_HS_PIMORONI_BOTTOM ]],
+    ["POWER IN", fl_Component(FL_USB_NS,  [25.5,11.2,0        ], [+Z,0],  FL_USB_TYPE_C  ,[[FL_COMP_DRIFT,-1.3]]) ],
+    ["HDMI0",    fl_Component(FL_HDMI_NS, [25, 26, 0          ], [+Z,0 ], FL_HDMI_TYPE_D ,[[FL_COMP_DRIFT,-1.26]] )],
+    ["HDMI1",    fl_Component(FL_HDMI_NS, [25, 39.5, 0        ], [+Z,0 ], FL_HDMI_TYPE_D ,[[FL_COMP_DRIFT,-1.26]] )],
+    ["A/V",      fl_Component(FL_JACK_NS, [22, 54, 0          ], [+Z,0 ], FL_JACK_BARREL  )],
+    ["USB2",     fl_Component(FL_USB_NS,  [w/2-9, 79.5, 0     ], [+Z,90], FL_USB_TYPE_Ax2,[[FL_COMP_DRIFT,-3], [FL_COMP_COLOR,fl_grey(30)]] )],
+    ["USB3",     fl_Component(FL_USB_NS,  [w/2-27, 79.5, 0    ], [+Z,90], FL_USB_TYPE_Ax2,[[FL_COMP_DRIFT,-3], [FL_COMP_COLOR,"DodgerBlue"]] )],
+    ["ETHERNET", fl_Component(FL_ETHER_NS,[w/2-45.75, 77.5, 0 ], [+Z,90], FL_ETHER_RJ45  ,[[FL_COMP_DRIFT,-3]] )],
+    ["GPIO",     fl_Component(FL_PHDR_NS, [-w/2+3.5, 32.5, 0  ], [+Z,90], FL_PHDR_GPIOHDR)],
+    ["uSD",      fl_Component(FL_SD_NS,   [0, 2, -pcb_t       ], [-Z,0 ], FL_SD_MOLEX_uSD_SOCKET, [[FL_COMP_OCTANT,+Y+Z],[FL_COMP_DRIFT,2]] )],
+    ["PIM TOP",  fl_Component(FL_HS_NS,   [0, 0, 0            ], [+Z,0 ], FL_HS_PIMORONI_TOP )],
+    ["PIM BOT",  fl_Component(FL_HS_NS,   [0, 0, -pcb_t       ], [+Z,0 ], FL_HS_PIMORONI_BOTTOM )],
   ],
   vendors = [["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],
   gpio_c  = fl_comp_connectors(comps[7][1])[0],
@@ -230,9 +234,8 @@ FL_PCB_RPI_uHAT = let(
     fl_Hole([ size.x-3.5,  3.5,        0 ], hole_d, +Z, pcb_t,loct=+Y),
   ],
   comps   = [
-  //["label",  ["engine",     [position],              [[director],rotation] type,                [engine specific parameters]]]
-    ["RF IN",  [FL_JACK_NS,   [0,      15, 0],         [-X,0  ],             FL_JACK_MCXJPHSTEM1      ]],
-    ["GPIO",   [FL_PHDR_NS,   [32.5,   size.y-3.5, 0], [+Z,0 ],              FL_PHDR_GPIOHDR_F_SMT_LOW]],
+    ["RF IN", fl_Component(FL_JACK_NS, [0,15,0], [+Z,-90  ], FL_JACK_MCXJPHSTEM1)],
+    ["GPIO",  fl_Component(FL_PHDR_NS, [32.5, size.y-3.5, 0], [+Z,0 ], FL_PHDR_GPIOHDR_F_SMT_LOW)],
   ],
   vendors = [["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],
   gpio_conn_pos = fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),
@@ -264,13 +267,12 @@ FL_PCB_MH4PU_P = let(
     sz_uA = fl_size(FL_USB_TYPE_uA),
     tol   = 0.5,
     comps = [
-    //["label",     ["engine",  [position],                               [[director],rotation]  type,            [engine specific parameters]]]
-      ["USB3 IN",   [FL_USB_NS, [-w/2+13.5,+l/2-6,-(pcb_t+1)],                    [+Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",0.5],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"OrangeRed"]]]],
-      ["POWER IN",  [FL_USB_NS, [+w/2-10,+l/2-sz_uA.x/2+0.5,0],                   [+Y,0],       FL_USB_TYPE_uA_NF,  [[FL_COMP_DRIFT,-0.5]]]],
-      ["USB3-1",    [FL_USB_NS, [+w/2-(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],        [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]]]],
-      ["USB3-2",    [FL_USB_NS, [+w/2-(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]]]],
-      ["USB3-3",    [FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],  [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]]]],
-      ["USB3-4",    [FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],        [-Y,0],       FL_USB_TYPE_Ax1_NF, [["comp/sub",tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]]]],
+      ["USB3 IN",   fl_Component(FL_USB_NS, [-w/2+13.5,+l/2-6,-(pcb_t+1)], [+Z,90], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,0.5],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"OrangeRed"]])],
+      ["POWER IN",  fl_Component(FL_USB_NS, [+w/2-10,+l/2-sz_uA.x/2+0.5,0], [+Z,90], FL_USB_TYPE_uA_NF, [[FL_COMP_DRIFT,-0.5]])],
+      ["USB3-1",    fl_Component(FL_USB_NS, [+w/2-(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)], [+Z,-90], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
+      ["USB3-2",    fl_Component(FL_USB_NS, [+w/2-(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)], [+Z,-90],       FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
+      ["USB3-3",    fl_Component(FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)], [+Z,-90],       FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
+      ["USB3-4",    fl_Component(FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],       [+Z,-90],       FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
     ],
     vendors=[["Amazon","https://www.amazon.it/gp/product/B07VQLXCTB"]]
   ) fl_PCB(name,bare,pcb_t,"DarkCyan",1,undef,holes,comps,undef,M3_cap_screw,vendors=vendors);
@@ -282,11 +284,10 @@ FL_PCB_HILETGO_SX1308 = let(
     holes = [for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5]) [x,y,0]],
     1PIN  = fl_PinHeader("1-pin",nop=2p54header,engine="male"),
     comps = [
-      //["label", ["engine",   [position        ],  [[director],rotation],  type,           [engine specific parameters]]]
-      ["TRIMPOT", [FL_TRIM_NS, [-5,-sz.y/2+0.5,0],  [+Y,0],                 FL_TRIM_POT10,  [[FL_COMP_OCTANT,+X-Y+Z]]  ]],
+      ["TRIMPOT", fl_Component(FL_TRIM_NS, [-5,-sz.y/2+0.5,0], [+Y,0],                 FL_TRIM_POT10,  [[FL_COMP_OCTANT,+X-Y+Z]])],
       // create four component specifications, one for each hole position, labelled as "PIN-0", "PIN-1", "PIN-2", "PIN-3"
       for(i=[0:len(holes)-1]) let(label=str("PIN-",i))
-        [label,   [FL_PHDR_NS, holes[i],            [+Z,0],                 1PIN]],
+        [label,fl_Component(FL_PHDR_NS, holes[i],[+Z,0],1PIN)],
     ]
   ) fl_PCB(
     name  = "HiLetgo SX1308 DC-DC Step up power module",
@@ -304,7 +305,7 @@ FL_PCB_HILETGO_SX1308 = let(
     vendors=[["Amazon","https://www.amazon.it/gp/product/B07ZYW68C4"]]
   );
 
-/*!
+/*
  * Model for Khadas SBC VIM1.
  *
  * The following labels can be passed as **cut_label** parameter to fl_pcb{} when
@@ -321,6 +322,8 @@ FL_PCB_HILETGO_SX1308 = let(
  * | "FUNCTION"       | Function button                           |
  * | "RESET"          | Reset button                              |
  * | "GPIO"           | 40-Pin GPIO                               |
+ * | "LEDS"           | Blue & white leds                         |
+ * | "2-CH INFRA"     | 2-channel infrared receiver               |
  * | "HEAT SINK"      | heatsink for all VIM SBCs and Edge-V SBCs |
  */
 FL_PCB_VIM1 = let(
@@ -328,24 +331,27 @@ FL_PCB_VIM1 = let(
   d     = screw_radius(screw)*2,
   pcb_t = 1,
   comps = [
-    ["USB 2.0 900mA", [FL_USB_NS,   [0.63, -47.6, 0],         [-Y,0 ],  FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]] ]],
-    ["USB-C",         [FL_USB_NS,   [19, -48-2.15, 0],        [-Y,0 ],  FL_USB_TYPE_C,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]] ]],
-    ["HDMI0",         [FL_HDMI_NS,  [31,  -45.3-0.2,  0],     [-Y,0 ],  FL_HDMI_TYPE_A ,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]] ]],
-    ["ETHERNET",      [FL_ETHER_NS, [48.6+7.2,-44.9-11.1,0],  [-Y,0 ],  FL_ETHER_RJ45_SM,[[FL_COMP_DRIFT,-FL_ETHER_FRAME_T]] ]] ,
-    ["USB 2.0 500mA", [FL_USB_NS,   [68.23, -47.6, 0],        [-Y,0 ],  FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]] ]],
-    ["POWER",         [FL_SWT_NS,   [3.02, -9.96, 0],         [-X,0 ],  FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] ]],
-    ["FUNCTION",      [FL_SWT_NS,   [3.02, -19.99, 0],        [-X,0 ],  FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] ]],
-    ["RESET",         [FL_SWT_NS,   [3.02, -30.02, 0],        [-X,0 ],  FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] ]],
-    ["GPIO",          [FL_PHDR_NS,  [31.5,  -3.2, 0],         [+Z,0 ],  FL_PHDR_GPIOHDR]],
-    ["HEAT SINK",     [FL_HS_NS,    [0.5,   -0.5, 0],         [+Z,0 ],  FL_HS_KHADAS, [[FL_COMP_OCTANT,+X-Y+Z]] ]],
+    ["USB 2.0 900mA", fl_Component(FL_USB_NS,     [0.63, -47.6, 1.2],[+Z,-90 ],FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]]) ],
+    ["USB-C",         fl_Component(FL_USB_NS,     [19, -48-2.15, 0], [+Z,-90 ],FL_USB_TYPE_C,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["HDMI0",         fl_Component(FL_HDMI_NS,    [31,  -45.3-0.2,  1.1],     [+Z,-90 ],  FL_HDMI_TYPE_A ,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["uSD",           fl_Component(FL_SD_NS,      [(31+fl_bb_size(FL_HDMI_TYPE_A).y/2-fl_bb_size(FL_SD_MOLEX_uSD_SOCKET).x/2), -44.5, -pcb_t],  [-Z,0   ], FL_SD_MOLEX_uSD_SOCKET, [[FL_COMP_OCTANT,-X-Y+Z],[FL_COMP_DRIFT,0*2]] )],
+    ["ETHERNET",      fl_Component(FL_ETHER_NS,   [48.6+7.2,-44.9-11.1,0],  [+Z,-90 ],  FL_ETHER_RJ45_SM,[[FL_COMP_DRIFT,-2*FL_ETHER_FRAME_T]] )] ,
+    ["USB 2.0 500mA", fl_Component(FL_USB_NS,     [68.23, -47.6, 1.2],        [+Z,-90 ],  FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["POWER",         fl_Component(FL_SWT_NS,     [3.02, -9.96, 0],       [+Z,180 ],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["FUNCTION",      fl_Component(FL_SWT_NS,     [3.02, -19.99, 0],        [+Z,180 ],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["RESET",         fl_Component(FL_SWT_NS,     [3.02, -30.02, 0],        [+Z,180 ],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["GPIO",          fl_Component(FL_PHDR_NS,    [31.5,  -3.2, 0],         [+Z,0 ],  FL_PHDR_GPIOHDR)],
+    ["LEDS",          fl_Component(FL_GENERIC_NS, [73.3,  -3.65,  0],     [+Z,0 ],  fl_generic_Vitamin(bbox=[O,[2,3.5,1]],cut_directions=[+Y]))],
+    ["2-CH INFRA",    fl_Component(FL_GENERIC_NS, [65.5, -3.04,     0],     [+Z,0 ],  fl_generic_Vitamin(bbox=[O,[6.8,3,3.5]],cut_directions=[+Y]))],
+    ["HEAT SINK",     fl_Component(FL_HS_NS,      [0.5,   -0.5, 0],         [+Z,0 ],  FL_HS_KHADAS, [[FL_COMP_OCTANT,+X-Y+Z]] )],
   ],
-  gpio_c  = fl_comp_connectors(comps[8][1])[0],
+  gpio_c  = fl_comp_connectors(comps[9][1])[0],
   conns   = [
     fl_conn_clone(gpio_c,type="plug",direction=[+Z,-90],octant=-X-Y),
   ]
 ) fl_PCB(
   "KHADAS-SBC-VIM1",
-  [[0,-58,-1],[82,0,0]],
+  [[0,-56,-1],[82,0,0]],
   thick=pcb_t,
   holes=[
     fl_Hole([2.5  ,-2.5 ,0] ,d,+Z,pcb_t),
@@ -380,14 +386,11 @@ FL_PCB_DICT = [
 /*!
  * PCB engine.
  *
- * __parent context__:
+ * __children context:__
  *
- * - $hole_syms - (OPTIONAL bool) enables hole symbols
- *
- * __children context__:
- *
- * - complete hole context
- * - $pcb_radius - pcb radius
+ * - complete hole context (see also fl_hole_Context{})
+ * - $pcb_radius  - pcb radius
+ * - $pcb_thick   - pcb thickness
  */
 module fl_pcb(
   //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
@@ -397,7 +400,20 @@ module fl_pcb(
   cut_tolerance=0,
   //! FL_CUTOUT component filter by label. For the possible values consult the relevant «type» supported labels.
   cut_label,
-  //! FL_CUTOUT component filter by direction (+X,+Y or +Z)
+  /*!
+   * component filter list in floating semi-axis list (see also fl_tt_isAxisList()).
+   *
+   * this parameter sets a filter used during FL_CUTOUT, when set all and only
+   * components implementing cut out along at least one of the passed directions
+   * will be actually triggered.
+   *
+   * example:
+   *
+   *    cut_direction=[+X,-Z]
+   *
+   * in this case all the components implementing cut-out along +X or -Z will
+   * be triggered during the FL_CUTOUT.
+   */
   cut_direction,
   //! FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
   thick=0,
@@ -435,7 +451,7 @@ module fl_pcb(
   conns     = fl_optional(type,fl_connectors()[0]);
 
   M         = fl_octant(octant,bbox=bbox);
-  D         = direction ? fl_direction(type,direction=direction)  : I;
+  D         = direction ? fl_direction(direction)  : I;
 
   function fl_pcb_NopHoles(nop) = let(
     pcb_t     = pcb_thickness(nop),
@@ -452,9 +468,9 @@ module fl_pcb(
   ) holes;
 
   module grid_plating() {
-  /**
-  * Return the grid size in [cols,rows] format
-  */
+  /*!
+   * Return the grid size in [cols,rows] format
+   */
   function fl_grid_geometry(grid,size) = let(
       cols  = is_undef(grid[2]) ? round((size.x - 2 * grid.x) / inch(0.1))  : grid[2] - 1,
       rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
@@ -492,7 +508,7 @@ module fl_pcb(
   }
 
   // TODO: better clarify the kind of native positioning, right now it places pcb on first quadrant
-  // then translate according the bounding box. This doesn't match the behaviour followed
+  // then translate according the bounding box. This doesn't match the behavior followed
   // for holes, that are instead already placed in the final full 3d space
   module do_add() {
     fl_color(material) difference() {
@@ -534,6 +550,7 @@ module fl_pcb(
 
   module context() {
     $pcb_radius = radius;
+    $pcb_thick  = pcb_t;
     children();
   }
 
@@ -548,22 +565,30 @@ module fl_pcb(
 
     if (label) {
       assert(!fl_debug() || class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
-      $label      = label;
-      $component  = fl_optional(comps,$label);
-      if ($component!=undef)
-        fl_comp_Context($component)
+      // $label      = label;
+      component  = fl_optional(comps,label);
+      if (component!=undef)
+        fl_comp_Context(component)
           translate($comp_position)
             children();
       else
         echo(str("***WARN***: component '",label,"' not found"));
     } else if (directions) {
       assert(!fl_debug() ||class=="components",str("Cannot layout BY DIRECTION on class '",class,"'"));
-      for(c=comps) fl_comp_Specs(c) {  // «c» = ["label",component]
-        // triggers a component if its director matches the direction list
-        if (search([$comp_director],directions)!=[[]]) {
-          translate($comp_position) children();
-        }
-      }
+      // note:
+      // union() is mandatory until version 2021.01
+      // from version 2023.05.19 it could be removed
+      // «c» = ["label",component]
+      for(c=comps) fl_comp_Specs(c) let(
+        // transform component directions into pcb coordinate system
+        dirs  = fl_cutout($comp_type),
+        D     = fl_direction($comp_direction),
+        new   = [for(d=dirs) fl_transform(D,d)]
+      ) // triggers a component when any cut_direction(s) is present in the
+        // component direction list
+        if (search(new,cut_direction)!=[[]])
+          translate($comp_position)
+            children();
     } else {  // by class
       if (class=="components")
         for(c=comps) {
@@ -581,26 +606,33 @@ module fl_pcb(
   }
 
   module do_assembly() {
+    function verbs() = echo($comp_label=$comp_label) [
+      FL_ADD,
+      if (fl_parm_components(debug,$comp_label)) FL_AXES
+    ];
+    function render() = fl_parm_components(debug,$comp_label) ? "DEBUG" : $FL_ADD;
+
     do_layout("components")
-      if ($comp_engine==FL_USB_NS)
-        fl_USB(type=$comp_type,octant=$comp_octant,direction=$comp_direction,tongue=$comp_color);
-      else if ($comp_engine==FL_HDMI_NS)
-        fl_hdmi(type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_JACK_NS)
-        fl_jack(type=$comp_type,direction=$comp_direction,octant=$comp_octant);
-      else if ($comp_engine==FL_ETHER_NS)
-        fl_ether(type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_PHDR_NS)
-        // FIXME: add namespace to context variables in order to avoid common parameters collision
-        fl_pinHeader(FL_ADD,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_TRIM_NS)
-        fl_trimpot(FL_ADD,type=$comp_type,direction=$comp_direction,octant=$comp_octant);
-      else if ($comp_engine==FL_SD_NS)
-        fl_sd_usocket(FL_ADD,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_SWT_NS)
-        fl_switch(FL_ADD,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_HS_NS)
-        fl_heatsink(FL_ADD,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
+      if ($comp_engine==FL_USB_NS)          // USB
+        fl_USB(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,tongue=$comp_color,debug=debug,$FL_ADD=render());
+      else if ($comp_engine==FL_HDMI_NS)    // HDMI
+        fl_hdmi(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+      else if ($comp_engine==FL_JACK_NS)    // JACK
+        fl_jack(verbs(),type=$comp_type,direction=$comp_direction,octant=$comp_octant,debug=debug,$FL_ADD=render());
+      else if ($comp_engine==FL_ETHER_NS)   // ETHERNET
+        fl_ether(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+      else if ($comp_engine==FL_PHDR_NS)    // PIN HEADER
+        fl_pinHeader(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+      else if ($comp_engine==FL_TRIM_NS)    // TRIM POT
+        fl_trimpot(verbs(),type=$comp_type,direction=$comp_direction,octant=$comp_octant,$FL_ADD=render());
+      else if ($comp_engine==FL_SD_NS)      // SECURE DIGITAL
+        fl_sd_usocket(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+      else if ($comp_engine==FL_SWT_NS) {   // SWITCH
+        fl_switch(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+      } else if ($comp_engine==FL_HS_NS)    // HEAT SINK
+        fl_heatsink(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+      else if ($comp_engine==FL_GENERIC_NS) // GENERIC VITAMIN
+        fl_generic_vitamin(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
       else
         assert(false,str("Unknown engine ",$comp_engine));
   }
@@ -619,7 +651,8 @@ module fl_pcb(
   }
 
   module do_cutout() {
-    module trigger(component) {
+    // triggers the component in context
+    module trigger() {
       cut_thick = $comp_director==+X ? cut_thick.x[1] : $comp_director==-X ? cut_thick.x[0]
                 : $comp_director==+Y ? cut_thick.y[1] : $comp_director==-Y ? cut_thick.y[0]
                 : $comp_director==+Z ? cut_thick.z[1] : cut_thick.z[0];
@@ -642,8 +675,11 @@ module fl_pcb(
       else if ($comp_engine==FL_SWT_NS)
         fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
       else if ($comp_engine==FL_HS_NS)
+        // TODO: implement a rationale for heat-sinks cut-out operations
         // fl_heatsink(FL_CUTOUT,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
         ;
+      else if ($comp_engine==FL_GENERIC_NS)
+        fl_generic_vitamin(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
       else
         assert(false,str("Unknown engine ",$comp_engine));
     }
@@ -651,11 +687,10 @@ module fl_pcb(
     fl_trace("cut_label: ",cut_label);
     if (cut_label)
       do_layout("components",cut_label)
-        fl_comp_Context($comp_component)
-          trigger($comp_component);
+        trigger();
     else
       do_layout("components",undef,cut_direction)
-        trigger($comp_component);
+        trigger();
   }
 
   module do_payload() {
@@ -663,12 +698,26 @@ module fl_pcb(
       fl_bb_add(pload);
   }
 
-  fl_manage(verbs,M,D,size,debug,connectors=conns,holes=holes) {
+  module do_symbols(debug,connectors,holes) {
+    if (debug) {
+      if (connectors)
+        fl_conn_debug(connectors,debug=debug);
+      if (holes)
+        fl_hole_debug(holes,debug=debug);
+    }
+  }
+
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
+      do_symbols(debug,conns,holes);
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
@@ -698,7 +747,7 @@ module fl_pcb(
  * PCB adapter for NopSCADlib.
  *
  * While full attributes rendering is supported via NopSCADlib APIs, only basic
- * support is provided to OFL verbs, sometimes even with different behaviour:
+ * support is provided to OFL verbs, sometimes even with different behavior:
  *
  * - FL_ADD       : being impossible to render NopSCADlib pcbs without components,
  *                  this verb always renders components too;
@@ -708,7 +757,7 @@ module fl_pcb(
  * - FL_BBOX      : while OFL native PCBs includes also components sizing in
  *                  bounding box calculations, the adapter bounding box is
  *                  'reduced' to pcb only. The only way to mimic OFL native
- *                  behaviour is to explicity add the payload capacity through
+ *                  behavior is to explicitly add the payload capacity through
  *                  the «payload» parameter.
  * - FL_CUTOUT    : always applied to all the components, it's not possible to
  *                  reduce component triggering by label nor direction.
@@ -794,9 +843,13 @@ module fl_pcb_adapter(
       fl_bb_add(payload);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
@@ -821,4 +874,3 @@ module fl_pcb_adapter(
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
   }
 }
-

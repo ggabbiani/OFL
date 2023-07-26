@@ -1,15 +1,18 @@
 /*!
- * NopACADlib HDMI engine wrapper.
+ * NopSCADlib HDMI engine wrapper.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/util.scad>
-include <../foundation/mngm.scad>
-
 use     <NopSCADlib/vitamins/pcb.scad>
+
+use <../foundation/3d-engine.scad>
+use <../foundation/bbox-engine.scad>
+use <../foundation/util.scad>
+use <../foundation/mngm.scad>
+
 
 FL_HDMI_NS = "hdmi";
 
@@ -25,7 +28,8 @@ function fl_hdmi_new(nop_type) = let(
 ) [
   fl_nopSCADlib(value=nop_type),
   fl_bb_corners(value=bbox),
-  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  fl_cutout(value=[+FL_X]),
 ];
 
 // following HDMI socket definitions are taken from NopSCADlib/vitamins/pcb.scad
@@ -63,19 +67,24 @@ module fl_hdmi(
   direction,
   //! when undef native positioning is used
   octant,
+  // see constructor fl_parm_Debug()
+  debug
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
 
   bbox      = fl_bb_corners(type);
   size      = fl_bb_size(type);
-  D         = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D         = direction ? fl_direction(direction)  : FL_I;
   M         = fl_octant(octant,bbox=bbox);
   nop       = fl_nopSCADlib(type);
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) hdmi(nop,false);
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_CUTOUT) {

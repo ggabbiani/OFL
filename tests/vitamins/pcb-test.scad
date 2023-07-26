@@ -8,13 +8,15 @@
 
 include <../../vitamins/pcbs.scad>
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$fn             = 50;           // [3:100]
+// When true, disables epsilon corrections
+$FL_RENDER      = false;
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES      = -2;     // [-2:10]
+$fl_debug       = false;
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+COMPONENT_DEBUG  = "";
 
 /* [Supported verbs] */
 
@@ -36,6 +38,8 @@ $FL_LAYOUT    = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // components payload bounding box
 $FL_PAYLOAD   = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// add symbols and labels usually for debugging
+$FL_SYMBOLS   = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -52,9 +56,6 @@ DIR_R       = 0;        // [0:360]
 
 /* [PCB] */
 
-SHOW_LABELS      = false;
-SHOW_SYMBOLS     = false;
-
 TYPE  = "FL_PCB_VIM1";  // [FL_PCB_VIM1,FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,ALL]
 
 // FL_DRILL and FL_CUTOUT thickness
@@ -62,7 +63,7 @@ T             = 2.5;
 // FL_CUTOUT tolerance
 TOLERANCE     = 0.5;
 // when !="undef", FL_CUTOUT verb is triggered only on the labelled component
-CO_LABEL      = "undef";        // [undef,POWER IN,HDMI0,HDMI1,A/V,USB2,USB3,ETHERNET,GPIO]
+CO_LABEL      = "undef";
 // when !=[0,0,0], FL_CUTOUT is triggered only on components oriented accordingly to any of the not-null axis values
 CO_DIRECTION  = [0,0,0];  // [-1:+1]
 
@@ -75,7 +76,8 @@ co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
 direction     = DIR_NATIVE        ? undef : [DIR_Z,DIR_R];
 octant        = PLACE_NATIVE      ? undef : OCTANT;
 filament      = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-debug         = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
+debug         = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS,components=[COMPONENT_DEBUG]);
+echo(debug=debug);
 
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
@@ -87,6 +89,7 @@ verbs=[
   if ($FL_DRILL!="OFF")     FL_DRILL,
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
   if ($FL_MOUNT!="OFF")     FL_MOUNT,
+  if ($FL_SYMBOLS!="OFF")   FL_SYMBOLS,
 ];
 
 fl_trace("***VERBS***",[for(verb=fl_list_flatten(verbs)) split(verb)[0]]);

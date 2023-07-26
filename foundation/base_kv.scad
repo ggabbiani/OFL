@@ -17,7 +17,7 @@
  * | defined | defined | *       | false     | default   | GETTER   |
  * | defined | defined | *       | true      | value     | GETTER   |
  *
- * **ERROR* in all the other cases
+ * **ERROR** in all the other cases
  */
 function fl_optional(type,key,default) =
   type==undef ? default : let(r=search([key],type)) r!=[[]] ? type[r[0]][1] : default;
@@ -25,13 +25,14 @@ function fl_optional(type,key,default) =
 /*!
  * Mandatory property getter with default value when not found
  *
- * Never return undef
+ * Never return undef.
+ *
  * | type    | key     | default | key found | result    | semantic |
  * | ------- | ------- | ------- | --------- | --------- | -------- |
  * | defined | defined | *       | true      | value     | GETTER   |
  * | defined | defined | defined | false     | default   | GETTER   |
  *
- * **ERROR* in all the other cases
+ * **ERROR** in all the other cases
  */
 function fl_get(type,key,default) =
   assert(key!=undef)
@@ -58,7 +59,7 @@ function fl_get(type,key,default) =
  * | defined | defined | *       | true      | value       |  GETTER  |
  * | defined | defined | defined | false     | default     |  GETTER  |
  *
- * **ERROR* in all the other cases
+ * **ERROR** in all the other cases
  */
 function fl_property(type,key,value,default)  =
   assert(key!=undef)
@@ -80,7 +81,7 @@ function fl_property(type,key,value,default)  =
  * | defined | defined | *       | false     | default     | GETTER   |
  * | defined | defined | *       | true      | value       | GETTER   |
  *
- * **ERROR* in all the other cases
+ * **ERROR** in all the other cases
  */
 function fl_optProperty(type,key,value,default) =
   type!=undef ? fl_optional(type,key,default) : fl_property(key=key,value=value);

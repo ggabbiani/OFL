@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/hole.scad>
-include <../../foundation/label.scad>
-include <../../foundation/symbol.scad>
+include <../../foundation/unsafe_defs.scad>
+
+use <../../foundation/3d-engine.scad>
+use <../../foundation/hole.scad>
+use <../../foundation/label.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -41,25 +43,15 @@ SYMBOL          = "direction";  // [direction,hole,plug,socket]
 
 /* [Direction Symbol] */
 
-// Native Coordinate System director
-DIRECTOR  = "+Z";  // [+X,-X,+Y,-Y,+Z,-Z]
-// Native Coordinate System rotor
-ROTOR     = "+X";  // [+X,-X,+Y,-Y,+Z,-Z]
-
 DIRECTION       = [0,0,1];
 ROTATION        = 0;      // [-360:360]
 
 /* [Hidden] */
-
+fl_status();
 verbs=[
-  if ($FL_ADD!="OFF")   FL_ADD,
-  if ($FL_AXES!="OFF")  FL_AXES,
+  if ($FL_ADD!="OFF")     FL_ADD,
+  if ($FL_AXES!="OFF")    FL_AXES,
   if ($FL_LAYOUT!="OFF")  FL_LAYOUT,
-];
-
-ncs=[
-  fl_3d_AxisList([DIRECTOR])[0],
-  fl_3d_AxisList([ROTOR])[0],
 ];
 
 size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
@@ -68,7 +60,7 @@ if (SYMBOL=="hole")
   fl_hole_Context(fl_Hole(O,HOLE_D,HOLE_N,HOLE_DEPTH))
     fl_sym_hole(FL_ADD);
 else if (SYMBOL=="direction")
-  fl_sym_direction(FL_ADD,ncs=ncs,direction=[DIRECTION,ROTATION],size=size);
+  fl_sym_direction(FL_ADD,direction=[DIRECTION,ROTATION],size=size);
 else
   fl_symbol(verbs=verbs,size=size,symbol=SYMBOL)
     fl_label(FL_ADD,"Ciao!",size=$sym_size.y,thick=0.1,direction=$sym_ldir);

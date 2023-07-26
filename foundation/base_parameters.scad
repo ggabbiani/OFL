@@ -11,7 +11,7 @@
 /*!
  * When true fl_assert() is enabled
  *
- * TODO: remove since deprecated.
+ * **TODO**: remove since deprecated.
  */
 function fl_asserts() = is_undef($fl_asserts) ? false : assert(is_bool($fl_asserts)) $fl_asserts;
 
@@ -32,11 +32,24 @@ function fl_parm_Debug(
   //! when true, labels to symbols are assigned and displayed
   labels  = false,
   //! when true symbols are displayed
-  symbols = false
-) = [labels,symbols];
+  symbols = false,
+  /*
+   * a string or a list of strings equals to the component label of which
+   * direction information will be shown
+   */
+  components = []
+) = [labels,symbols,components];
 
 //! When true debug labels are turned on
 function fl_parm_labels(debug) = is_undef(debug) ? false : assert(is_bool(debug[0])) debug[0];
 
 //! When true debug symbols are turned on
 function fl_parm_symbols(debug) = is_undef(debug) ? false : assert(is_bool(debug[1])) debug[1];
+
+// When true show direction information of the component with «label»
+function fl_parm_components(debug,label) = let(
+  dbg = debug[2]
+)   is_undef(debug) ? false
+  : is_list(dbg) ? search([label],dbg)!=[[]]
+  : is_string(dbg) ? dbg==label
+  : assert(false,str("debug information must be a string or a list of strings: ", dbg)) undef;

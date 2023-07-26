@@ -6,12 +6,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/3d.scad>
 include <../foundation/connect.scad>
 include <../foundation/label.scad>
-include <../foundation/mngm.scad>
 include <../foundation/tube.scad>
-include <../foundation/util.scad>
+
+use <../foundation/3d-engine.scad>
+use <../foundation/mngm.scad>
+use <../foundation/util.scad>
 
 FL_JACK_NS = "jack";
 
@@ -25,7 +26,8 @@ FL_JACK_BARREL = let(
   bbox      = [[-l/2,-w/2,0],[+l/2+ch,+w/2,h]]
 ) [
   fl_bb_corners(value=bbox),
-  fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
+  fl_cutout(value = [+FL_X]),
   fl_engine(value="fl_jack_barrelEngine"),
 ];
 
@@ -44,10 +46,11 @@ FL_JACK_MCXJPHSTEM1 = let(
 ) [
   fl_name(value=name),
   fl_bb_corners(value=bbox),
-  fl_director(value=-Y),fl_rotor(value=+X),
+  // fl_director(value=-FL_Y),fl_rotor(value=+X),
+  fl_cutout(value = [-FL_Y]),
   fl_engine(value="fl_jack_mcxjphstem1Engine"),
   fl_connectors(value=[
-    conn_Socket("antenna",+X,-Z,[0,0,axis.z],size=3.45,octant=-X-Y,direction=[-Z,180])
+    conn_Socket("antenna",+FL_X,-FL_Z,[0,0,axis.z],size=3.45,octant=-FL_X-FL_Y,direction=[-FL_Z,180])
   ]),
   ["axis of symmetry",  axis],
   ["external diameter", d_ext],
@@ -117,20 +120,23 @@ module fl_jack_barrelEngine(
 
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : I;
+  D     = direction ? fl_direction(direction) : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         jack();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_CUTOUT) {
       assert(cut_thick!=undef);
       fl_modifier($modifier)
-        translate(+X(bbox[1].x-2.5+cut_drift))
-          fl_cutout(len=cut_thick,z=X,x=-Z,delta=cut_tolerance,trim=X(-size.x/2),cut=true)
+        translate(+fl_X(bbox[1].x-2.5+cut_drift))
+          fl_cutout(len=cut_thick,z=X,x=-FL_Z,delta=cut_tolerance,trim=fl_X(-size.x/2),cut=true)
             jack();
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
@@ -138,7 +144,7 @@ module fl_jack_barrelEngine(
   }
 }
 
-// FIXME: issue when directioning, likely to be related to the 'D' matrix when director is not +Z
+// FIXME: issue when directing, likely to be related to the 'D' matrix when director is not +Z
 /*!
  * Engine for RF MCX edge mount jack pcb connector
  * specs taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
@@ -169,9 +175,9 @@ module fl_jack_mcxjphstem1Engine(
   head    = fl_get(type,"head");
   tail    = fl_get(type,"tail");
   jack    = fl_get(type,"jack length");
-  Mshape  = T(+Y(size.y)) * Rx(90);
+  Mshape  = T(+fl_Y(size.y)) * Rx(90);
   conns   = fl_connectors(type);
-  D       = direction ? fl_direction(proto=type,direction=direction)  : I;
+  D       = direction ? fl_direction(direction) : FL_I;
   M       = fl_octant(octant,bbox=bbox);
 
   module do_add() {
@@ -179,29 +185,29 @@ module fl_jack_mcxjphstem1Engine(
       fl_color("gold") {
         difference() {
           fprint();
-          translate([0,axis.z,-NIL])
-            fl_cylinder(d=3.45,h=size.y+NIL);
-          translate([0,0,-NIL])
-            fl_cube(size=[size.x,size.z,size.y-head+NIL2],octant=-Y+Z);
-          translate([0,axis.z,-NIL])
-            fl_cube(size=[size.x,size.z,size.y-head+NIL2],octant=+Y+Z);
+          translate([0,axis.z,-FL_NIL])
+            fl_cylinder(d=3.45,h=size.y+FL_NIL);
+          translate([0,0,-FL_NIL])
+            fl_cube(size=[size.x,size.z,size.y-head+FL_NIL2],octant=-FL_Y+FL_Z);
+          translate([0,axis.z,-FL_NIL])
+            fl_cube(size=[size.x,size.z,size.y-head+FL_NIL2],octant=+FL_Y+FL_Z);
         }
         // female jack
         let(l=jack)
         translate([0,axis.z,0])
-          fl_tube(d=0.95+NIL2,thick=0.1,h=l);
+          fl_tube(d=0.95+FL_NIL2,thick=0.1,h=l);
         // closing bottom
-        translate([0,axis.z,size.y-head+NIL])
-          fl_tube(d=3.45+NIL2,thick=(3.45-1.88)/2,h=1);
+        translate([0,axis.z,size.y-head+FL_NIL])
+          fl_tube(d=3.45+FL_NIL2,thick=(3.45-1.88)/2,h=1);
       }
-      fl_color("white") translate([0,axis.z,size.y-head+NIL])
-        fl_tube(d=1.88+NIL2,thick=(1.88-0.95)/2,h=1);
+      fl_color("white") translate([0,axis.z,size.y-head+FL_NIL])
+        fl_tube(d=1.88+FL_NIL2,thick=(1.88-0.95)/2,h=1);
     }
   }
 
   module do_cutout() {
     assert(cut_thick);
-    translate(-Y(cut_drift))
+    translate(-fl_Y(cut_drift))
       multmatrix(Mshape)
         translate([0,axis.z,size.y])
           fl_cylinder(d=3.45+cut_tolerance*2,h=cut_thick);
@@ -209,15 +215,15 @@ module fl_jack_mcxjphstem1Engine(
 
   module fprint() {
     difference() {
-      translate(+Y(axis.z))
-        fl_cylinder(d=d_ext,h=size.y-NIL);
+      translate(+fl_Y(axis.z))
+        fl_cylinder(d=d_ext,h=size.y-FL_NIL);
       // lower cut
-      fl_cube(size=[size.x,size.z,size.y+0*NIL],octant=-Y+Z);
+      fl_cube(size=[size.x,size.z,size.y+0*FL_NIL],octant=-FL_Y+FL_Z);
       // upper cut
       translate([0,size.z/2+axis.z,0])
-        fl_cube(size=[size.x,size.z,size.y+NIL2],octant=+Y+Z);
+        fl_cube(size=[size.x,size.z,size.y+FL_NIL2],octant=+FL_Y+FL_Z);
     }
-    fl_cube(size=[4.8,size.z/2-axis.z,size.y-NIL],octant=-Y+Z);
+    fl_cube(size=[4.8,size.z/2-axis.z,size.y-FL_NIL],octant=-FL_Y+FL_Z);
   }
 
   module do_footprint() {
@@ -225,9 +231,13 @@ module fl_jack_mcxjphstem1Engine(
       fprint();
   }
 
-  fl_manage(verbs,M,D,size,debug,connectors=conns) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

@@ -19,7 +19,7 @@ function fl_bb_corners(type,value)  = let(key="bb/bounding corners")
   : fl_property(key=key,value=value);
 
 //! computes size from the bounding corners.
-function fl_bb_size(type)       = assert(type) let(c=fl_bb_corners(type)) c[1]-c[0];
+function fl_bb_size(type)       = assert(type,type) let(c=fl_bb_corners(type)) c[1]-c[0];
 
 //! constructor for a new type with bounding box corners set as property
 function fl_bb_new(
@@ -34,13 +34,13 @@ function fl_bb_center(type) = let(c=fl_bb_corners(type),sz=fl_bb_size(type)) c[0
 /*!
  * Converts a bounding box in canonic form into four vertices:
  *
- * a,b,c,d on plane y==bbcorner[0].y
+ * a,b,c,d on plane y==corners[0].y
  *
- * A,B,C,D on plane y==bbcorner[1].y
+ * A,B,C,D on plane y==corners[1].y
  */
-function fl_bb_vertices(bbcorners) = let(
-  a   = bbcorners[0]
-  ,C  = bbcorners[1]
+function fl_bb_vertices(corners) = let(
+  a   = corners[0]
+  ,C  = corners[1]
   ,b  = [C.x,a.y,a.z]
   ,c  = [C.x,a.y,C.z]
   ,d  = [a.x,a.y,C.z]
@@ -50,8 +50,8 @@ function fl_bb_vertices(bbcorners) = let(
 ) [a,b,c,d,A,B,C,D];
 
 //! Applies a transformation matrix «M» to a bounding box
-function fl_bb_transform(M,bbcorners) = let(
-  vertices  = [for(v=fl_bb_vertices(bbcorners)) fl_transform(M,v)]
+function fl_bb_transform(M,corners) = let(
+  vertices  = [for(v=fl_bb_vertices(corners)) fl_transform(M,v)]
   ,Xs       = [for(v=vertices) v.x]
   ,Ys       = [for(v=vertices) v.y]
   ,Zs       = [for(v=vertices) v.z]

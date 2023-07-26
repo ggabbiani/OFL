@@ -8,14 +8,13 @@
 include <../../vitamins/switch.scad>
 
 $fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When true, disables epsilon corrections
+$FL_RENDER    = false;
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES    = -2;     // [-2:10]
+$fl_debug     = false;
+SHOW_LABELS   = false;
+SHOW_SYMBOLS  = false;
 
 /* [Supported verbs] */
 
@@ -39,7 +38,7 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
 
 /* [Switch] */
 SHOW      = "ALL";  // [ALL,FL_SWT_USWITCH_7p2x3p4x3x2p5]
@@ -58,6 +57,8 @@ octant    = PLACE_NATIVE  ? undef : OCTANT;
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = $FL_CUTOUT!="OFF" || $FL_FOOTPRINT!="OFF" ? TOLERANCE : undef;
 drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT : undef;
+debug     = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
+
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_AXES!="OFF")      FL_AXES,
@@ -68,6 +69,6 @@ verbs=[
 switch  = FL_SWT_USWITCH_7p2x3p4x3x2p5;
 
 fl_switch(verbs,switch,
-  direction=direction,octant=octant,
+  direction=direction,octant=octant,debug=debug,
   cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift
 );

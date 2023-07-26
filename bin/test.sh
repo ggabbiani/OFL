@@ -2,30 +2,31 @@
 ###############################################################################
 # Executes all the OpenSCAD scripts present in the <OFL>/tests directory.
 #
-# An OpenSCAD script is recognized as 'test' when all the conditions are met:
+# An OpenSCAD script is recognized as 'test' when following conditions are met:
+#
 # * script is inside <OFL>/tests directory
 # * script file name is in the form <name>"-test.scad"
 #
 # <OFL> repo root is auto-retrieved from this script real path.
 #
-# Test results are session persistent since written inside 
+# Test results are session persistent since written inside
 # /var/tmp/<random directory name>/
-# 
+#
 set -e # exit immediately in case of error
 OFL="$(realpath $(dirname $0)/..)"
 . $OFL/bin/functions.sh
-trap 'on_exit $? $test' EXIT
+trap 'on_exit $? $test $OFILE' EXIT
 # trap 'catch $? $test' ERR
 
 help() {
 cat <<EoH
 
-$(basename $0) [-?|-h|--help] [-i|--interactive] [-s|--silent] 
+$(basename $0) [-?|-h|--help] [-i|--interactive] [-s|--silent]
 
   -?|-h|--help      this help
-  -i|--interactive  when unset confirmations are inibhited (default unset)
+  -i|--interactive  when unset confirmations are inhibited (default unset)
   -s|--silent       silent output when set, verbose otherwise (default verbose)
-  
+
 EoH
 exit 0
 }
@@ -33,6 +34,9 @@ exit 0
 on_exit() {
   if [ "$1" != "0" ]; then
     color_message ${COLOR_RED} "$2 failed."
+    if [ "$3" != "" ]; then
+      cat "$3"
+    fi
   fi
 }
 
@@ -85,10 +89,12 @@ info "Output directory set to: '$OUT'."
 for test in $(find $OFL/tests/ -name '*-test.scad'); do
   info "running `basename $test .scad`"
   OFILE="$OUT/$(basename $test .scad).echo"
+  # "$CMD" "--hardwarnings" -o $OFILE $test
   "$CMD" -o $OFILE $test
-  ERROR=$(grep -e "WARNING:" -e "ERROR:" $OFILE | grep -v "WARNING: Viewall and autocenter disabled in favor of $vp*" |wc -l)
-  if [ "$ERROR" -ne "0" ]; then 
-    cat $OFILE
+  ERROR=$(grep -e "WARNING:" -e "ERROR:" $OFILE | grep -v 'WARNING: Viewall and autocenter disabled in favor of $vp*' |wc -l)
+  if [ "$ERROR" -ne "0" ]; then
+    # echo $ERROR
+    # cat $OFILE
     exit 1
   fi
 done

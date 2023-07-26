@@ -5,20 +5,23 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../foundation/3d.scad>
-include <../foundation/mngm.scad>
-include <../foundation/util.scad>
-
 include <NopSCADlib/vitamins/pcb.scad>
+
+use <../foundation/bbox-engine.scad>
+use <../foundation/3d-engine.scad>
+use <../foundation/mngm.scad>
+use <../foundation/util.scad>
 
 //! sd namespace
 FL_SD_NS  = "sd";
 
 FL_SD_MOLEX_uSD_SOCKET = let(
-  size  = [12, 11.5, 1.28]
+  // size  = [12, 11.5, 1.28]
+  size  = [13, 11.5, 1.28]
 ) [
   fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),
-  fl_director(value=-Y),fl_rotor(value=+X),
+  // fl_director(value=-Y),fl_rotor(value=+X),
+  fl_cutout(value=[-FL_Y]),
 ];
 
 //! sd dictionary
@@ -42,12 +45,14 @@ module fl_sd_usocket(
   direction,
   //! when undef native positioning is used
   octant,
+  // see constructor fl_parm_Debug()
+  debug
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  D     = direction ? fl_direction(proto=type,direction=direction)  : FL_I;
+  D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
@@ -63,9 +68,13 @@ module fl_sd_usocket(
           uSD(size);
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

@@ -10,8 +10,9 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+include <unsafe_defs.scad>
 
-include <3d.scad>
+use <3d-engine.scad>
 
 /*!
  * draws the three orthogonal planes dividing space into octants

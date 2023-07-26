@@ -7,7 +7,7 @@
  */
 
 include <sata.scad>
-include <../foundation/mngm.scad>
+use <../foundation/mngm.scad>
 
 FL_SADP_NS  = "sadp";
 
@@ -22,7 +22,7 @@ let(
 [
   fl_name(value="ELUTENG USB 3.0 TO SATA ADAPTER"),
   fl_bb_corners(value=[[-size.x/2,-handle_size.y,-size.z/2],[size.x/2,socket_size.z,+size.z/2]]),
-  fl_director(value=+FL_Y),fl_rotor(value=+FL_X),
+  // fl_director(value=+FL_Y),fl_rotor(value=+FL_X),
   fl_vendor(value=[["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/"]]),
   ["handle size", handle_size],
   ["Mpd",         Mpd],
@@ -81,9 +81,12 @@ module sata_adapter(
     translate(fl_Y(sock_size.z))
       fl_cube(size=size,octant=-FL_Y);
   }
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_bbox();
     } else {

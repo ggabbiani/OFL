@@ -5,9 +5,12 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+include <unsafe_defs.scad>
 
-include <label.scad>
-include <symbol.scad>
+use <3d-engine.scad>
+use <base_kv.scad>
+use <label.scad>
+use <type_trait.scad>
 
 //*****************************************************************************
 // General properties
@@ -165,10 +168,12 @@ module fl_holes(
   //! pass-through thickness
   thick=0,
   //! fallback screw
-  screw
+  screw,
+  //! tolerance radius
+  tolerance=0
 ) fl_lay_holes(holes,enable,thick,screw)
     translate(NIL*$hole_n)
-      fl_cylinder(h=$hole_depth+NIL2,d=$hole_d,direction=[-$hole_n,0]);
+      fl_cylinder(h=$hole_depth+NIL2,d=$hole_d+tolerance,direction=[-$hole_n,0]);
 
 /*!
   * Layouts of hole symbols

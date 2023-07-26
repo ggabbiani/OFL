@@ -6,9 +6,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/fillet.scad>
-include <../foundation/mngm.scad>
 include <../vitamins/magnets.scad>
+
+use <../foundation/bbox-engine.scad>
+use <../foundation/fillet.scad>
+use <../foundation/mngm.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -24,6 +26,8 @@ FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
 $FL_ASSEMBLY  = "ON";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds local reference axes
+$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -108,7 +112,7 @@ module element(
   child_bbox  = fl_bb_circle(d=cyl_d);
   bbox        = bb_element(magnet,fill_r,fill_n,edge_thick,base_thick,tolerance,horiz_gap);
   size        = bbox[1]-bbox[0];
-  D           = direction ? fl_direction(direction=direction,default=[+Z,+X]) : I;
+  D           = direction ? fl_direction(direction) : I;
   M           = fl_octant(octant,bbox=bbox);
 
   module do_add() {
@@ -148,15 +152,24 @@ module element(
   fl_manage(verbs,M) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
+
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
+
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout()
         children();
+
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier) do_assembly();
+
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
@@ -166,6 +179,7 @@ module element(
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
+  if ($FL_AXES!="OFF")      FL_AXES,
   if ($FL_BBOX!="OFF")      FL_BBOX,
 ];
 

@@ -5,6 +5,8 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+include <../../foundation/unsafe_defs.scad>
+
 include <../../vitamins/sd.scad>
 
 $fn         = 50;           // [3:100]

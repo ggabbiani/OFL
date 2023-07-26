@@ -88,8 +88,6 @@ verbs=[
 ];
 bbox  = [BB_NEGATIVE,BB_POSITIVE];
 
-holes = [fl_Hole(HOLE_CENTER,HOLE_D,HOLE_N,HOLE_DEPTH)];
-type  = __constructor__("Test type",bbox=bbox,holes=holes);
+type  = __constructor__("Test type",bbox=bbox);
 
-translate(X(3))
 __stub__(verbs,type,direction=direction,octant=octant);

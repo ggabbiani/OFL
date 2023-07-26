@@ -6,10 +6,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/3d.scad>
-include <../foundation/mngm.scad>
-
 use     <NopSCADlib/vitamins/pcb.scad>
+
+include <../foundation/unsafe_defs.scad>
+
+use <../foundation/3d-engine.scad>
+use <../foundation/bbox-engine.scad>
+use <../foundation/mngm.scad>
 
 //! ethernet namespace
 FL_ETHER_NS = "ether";
@@ -17,7 +20,7 @@ FL_ETHER_NS = "ether";
 //*****************************************************************************
 // Ethernet properties
 // when invoked by «type» parameter act as getters
-// when invodec by «value» parameter act as property constructors
+// when invoked by «value» parameter act as property constructors
 function fl_ether_Zoffset(type,value) = fl_optProperty(type,"ether/Z offset for SM ethernet",value,0);
 
 //! value of the internally inserted part of an RJ45 plug
@@ -33,7 +36,8 @@ FL_ETHER_RJ45 = let(
 ) [
   fl_name(value="RJ45"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
-  fl_director(value=+FL_X),fl_rotor(value=-FL_Z),
+  // fl_director(value=+FL_X),fl_rotor(value=-FL_Z),
+  fl_cutout(value=[+FL_X]),
 
   fl_engine(value=str(FL_ETHER_NS,"/NopSCADlib")),
 ];
@@ -44,7 +48,8 @@ FL_ETHER_RJ45_SM = let(
 ) [
   fl_name(value="RJ45 SLIM"),
   fl_bb_corners(value=[[-l+FL_ETHER_FRAME_T,-w/2,-FL_ETHER_Z_OFFSET],+[FL_ETHER_FRAME_T,w/2,h-FL_ETHER_Z_OFFSET]]),
-  fl_director(value=+FL_X),fl_rotor(value=-FL_Z),
+  // fl_director(value=+FL_X),fl_rotor(value=-FL_Z),
+  fl_cutout(value=[+FL_X]),
 
   fl_dxf(value="vitamins/ether-slim.dxf"),
   fl_engine(value=str(FL_ETHER_NS,"/native")),
@@ -65,10 +70,14 @@ module fl_ether(
   cut_tolerance=0,
   //! translation applied to cutout (default 0)
   cut_drift=0,
+  //! see constructor fl_parm_Debug()
+  debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
   octant,
+  // see constructor fl_parm_Debug()
+  debug
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
@@ -79,7 +88,7 @@ module fl_ether(
   bbox        = fl_bb_corners(type);
   engine      = fl_engine(type);
   dxf         = engine==str(FL_ETHER_NS,"/native") ? fl_dxf(type) : undef;
-  D           = direction ? fl_direction(proto=type,direction=direction)  : I;
+  D           = direction ? fl_direction(direction) : FL_I;
   M           = fl_octant(octant,type=type);
 
   fl_trace("cutout drift",cut_drift);
@@ -134,11 +143,14 @@ module fl_ether(
       }
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         if (engine==str(FL_ETHER_NS,"/NopSCADlib")) rj45();
         else do_add();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($modifier) fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
