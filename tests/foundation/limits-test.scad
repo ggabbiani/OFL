@@ -20,7 +20,7 @@ $FL_TRACES  = -2;     // [-2:10]
 
 /* [Hidden] */
 
-for(limits=FL_LIMITS) {
+for(limits=__FL_LIMITS__) {
   $fl_print_tech=limits[0];
   settings=limits[1];
   for(prop=settings) {
