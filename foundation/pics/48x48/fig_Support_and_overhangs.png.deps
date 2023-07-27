@@ -1,0 +1,21 @@
+fig_Support_and_overhangs.png: \
+	/home/giampa/.local/share/OpenSCAD/libraries/scad-utils/linalg.scad \
+	/home/giampa/projects/OFL/foundation/2d-engine.scad \
+	/home/giampa/projects/OFL/dxf.scad \
+	/home/giampa/projects/OFL/foundation/bbox-engine.scad \
+	/home/giampa/.local/share/OpenSCAD/libraries/scad-utils/lists.scad \
+	/home/giampa/projects/OFL/foundation/mngm.scad \
+	fig_Support_and_overhangs.scad \
+	/home/giampa/projects/OFL/library.scad \
+	/home/giampa/projects/OFL/foundation/limits.scad \
+	/home/giampa/projects/OFL/foundation/3d-engine.scad \
+	/home/giampa/.local/share/OpenSCAD/libraries/scad-utils/spline.scad \
+	/home/giampa/projects/OFL/foundation/base_geo.scad \
+	/home/giampa/projects/OFL/foundation/unsafe_defs.scad \
+	/home/giampa/projects/OFL/foundation/defs.scad \
+	/home/giampa/.local/share/OpenSCAD/libraries/TOUL.scad \
+	/home/giampa/projects/OFL/foundation/base_string.scad \
+	/home/giampa/projects/OFL/foundation/base_parameters.scad \
+	/home/giampa/projects/OFL/foundation/base_kv.scad \
+	/home/giampa/projects/OFL/foundation/type_trait.scad \
+	/home/giampa/projects/OFL/foundation/base_trace.scad

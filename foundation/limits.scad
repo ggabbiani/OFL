@@ -1,5 +1,6 @@
 /*!
- * Recommended settings for 3d printing properties (limits taken from [Knowledge base | Hubs](https://www.hubs.com/knowledge-base/))
+ * Recommended settings for 3d printing properties
+ * (limits taken from [Knowledge base | Hubs](https://www.hubs.com/knowledge-base/))
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
  *
@@ -29,39 +30,6 @@ FL_TECHNOLOGIES = [
 ];
 
 // 3d printing property names
-
-module __fig_Supported_walls__() {
-  T=1.5;
-  l=10;
-  $fl_technology=FL_TECH_FDM;
-  fl_cube(size=[l,l,T], octant=+X+Z);
-  fl_cube(size=[T,l,l], octant=+X+Z);
-  #translate([T,0,T])
-    fl_cube(size=[l-T,fl_techLimit(FL_LIMIT_SWALLS),l-T],octant=+X+Z);
-}
-
-module __fig_Unsupported_walls__() {
-  T=1.5;
-  l=10;
-  $fl_technology=FL_TECH_FDM;
-  fl_cube(size=[l,l,T], octant=+X+Z);
-  #translate([0,0,T])
-    fl_cube(size=[l,fl_techLimit(FL_LIMIT_SWALLS),l-T],octant=+X+Z);
-}
-
-module __fig_Support_and_overhangs__() {
-  T=1.5;
-  l=10;
-  size=[10,10];
-  $fl_technology=FL_TECH_FDM;
-  fl_linear_extrude(direction = [-Y,0], length = T, convexity = 10)
-  difference() {
-    fl_square(size=size,quadrant=+X+Y);
-    fl_ellipticSector(e = 1.5*size, angles = [0,90-fl_techLimit(FL_LIMIT_OVERHANGS)], quadrant = +X+Y);
-  }
-}
-
-// __fig_Support_and_overhangs__();
 
 /*!
  * ![Supported walls](../../foundation/pics/48x48/fig_Supported_walls.png)
@@ -103,7 +71,7 @@ FL_LIMIT_TOLERANCE  = "Tolerance";
 //! this is the printing technology used
 $fl_print_tech  = FL_TECH_FDM;
 
-FL_LIMITS  = [
+__FL_LIMITS__  = [
   [FL_TECH_FDM, [
     [FL_LIMIT_SWALLS,     0.8],
     [FL_LIMIT_UWALLS,     0.8],
@@ -137,5 +105,53 @@ FL_LIMITS  = [
  * current $fl_technology.
  */
 function fl_techLimit(name) = let(
-  technology  = fl_property(FL_LIMITS,$fl_print_tech)
+  technology  = fl_property(__FL_LIMITS__,$fl_print_tech)
 ) fl_optProperty(technology,name);
+
+module __fig_Supported_walls__() {
+  T=1.5;
+  l=10;
+  $fl_technology=FL_TECH_FDM;
+  fl_cube(size=[l,l,T], octant=+X+Z);
+  fl_cube(size=[T,l,l], octant=+X+Z);
+  #translate([T,0,T])
+    fl_cube(size=[l-T,fl_techLimit(FL_LIMIT_SWALLS),l-T],octant=+X+Z);
+}
+
+module __fig_Unsupported_walls__() {
+  T=1.5;
+  l=10;
+  $fl_technology=FL_TECH_FDM;
+  fl_cube(size=[l,l,T], octant=+X+Z);
+  #translate([0,0,T])
+    fl_cube(size=[l,fl_techLimit(FL_LIMIT_SWALLS),l-T],octant=+X+Z);
+}
+
+module __fig_Support_and_overhangs__() {
+  T=1.5;
+  l=10;
+  size=[10,10];
+  alpha=90-fl_techLimit(FL_LIMIT_OVERHANGS);
+  $fl_technology=FL_TECH_FDM;
+  fl_color("DodgerBlue")
+    translate(-fl_Y(T))
+    fl_linear_extrude([-Y,0],T*10) {
+      difference() {
+        fl_square(size=size,quadrant=+X+Y);
+        fl_ellipticSector(e=1.5*size, angles = [0,alpha], quadrant = +X+Y);
+      }
+    }
+    fl_color("red")
+    fl_linear_extrude([-Y,0],T)
+    let(
+      beta=alpha/2,
+      e=sqrt(2)*(size+[T,T])
+    ) {
+    translate(fl_ellipseXY(e-[T,T]/2,angle=90-beta))
+    rotate(-beta,FL_Z)
+    polygon([[0,-T],[T,0],[0,+T]]);
+      fl_ellipticArc(e=e,angles=[90,90-alpha],thick=T,$fn=100);
+    }
+}
+
+// __fig_Support_and_overhangs__();
