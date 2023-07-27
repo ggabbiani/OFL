@@ -4,12 +4,12 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/jacks] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[foundation/connect]
-    A1 --o|include| A4[foundation/label]
-    A1 --o|include| A5[foundation/mngm]
-    A1 --o|include| A6[foundation/tube]
-    A1 --o|include| A7[foundation/util]
+    A1[vitamins/jacks] --o|include| A2[foundation/connect]
+    A1 --o|include| A3[foundation/label]
+    A1 --o|include| A4[foundation/tube]
+    A1 --o|use| A5[foundation/3d-engine]
+    A1 --o|use| A6[foundation/mngm]
+    A1 --o|use| A7[foundation/util]
 ```
 
 NopSCADlib Jack definitions wrapper.
@@ -27,7 +27,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    let(l=12,w=7,h=6,ch=2.5,bbox=[[-l/2,-w/2,0],[+l/2+ch,+w/2,h]])[fl_bb_corners(value=bbox),fl_director(value=+FL_X),fl_rotor(value=+FL_Y),fl_engine(value="fl_jack_barrelEngine"),]
+    let(l=12,w=7,h=6,ch=2.5,bbox=[[-l/2,-w/2,0],[+l/2+ch,+w/2,h]])[fl_bb_corners(value=bbox),fl_cutout(value=[+FL_X]),fl_engine(value="fl_jack_barrelEngine"),]
 
 ---
 
@@ -43,7 +43,7 @@ __Default:__
 
 __Default:__
 
-    let(name="50Ω MCX EDGE MOUNT JACK PCB CONNECTOR",w=6.7,l=9.3,h=5,sz=[w,l,h],axis=[0,0,0.4],bbox=[[-w/2,0,-h/2+axis.z],[+w/2,l,+h/2+axis.z]],d_ext=6.7,head=6.25,tail=sz.y-head,jack=sz.y-2)[fl_name(value=name),fl_bb_corners(value=bbox),fl_director(value=-Y),fl_rotor(value=+X),fl_engine(value="fl_jack_mcxjphstem1Engine"),fl_connectors(value=[conn_Socket("antenna",+X,-Z,[0,0,axis.z],size=3.45,octant=-X-Y,direction=[-Z,180])]),["axis of symmetry",axis],["external diameter",d_ext],["head",head],["tail",tail],["jack length",jack]]
+    let(name="50Ω MCX EDGE MOUNT JACK PCB CONNECTOR",w=6.7,l=9.3,h=5,sz=[w,l,h],axis=[0,0,0.4],bbox=[[-w/2,0,-h/2+axis.z],[+w/2,l,+h/2+axis.z]],d_ext=6.7,head=6.25,tail=sz.y-head,jack=sz.y-2)[fl_name(value=name),fl_bb_corners(value=bbox),fl_cutout(value=[-FL_Y]),fl_engine(value="fl_jack_mcxjphstem1Engine"),fl_connectors(value=[conn_Socket("antenna",+FL_X,-FL_Z,[0,0,axis.z],size=3.45,octant=-FL_X-FL_Y,direction=[-FL_Z,180])]),["axis of symmetry",axis],["external diameter",d_ext],["head",head],["tail",tail],["jack length",jack]]
 
 ---
 

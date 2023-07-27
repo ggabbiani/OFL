@@ -5,10 +5,10 @@
 ```mermaid
 graph LR
     A1[vitamins/pin_headers] --o|include| A2[foundation/connect]
-    A1 --o|include| A3[foundation/defs]
-    A1 --o|include| A4[foundation/label]
-    A1 --o|include| A5[foundation/mngm]
-    A1 --o|include| A6[foundation/util]
+    A1 --o|include| A3[foundation/label]
+    A1 --o|include| A4[foundation/unsafe_defs]
+    A1 --o|use| A5[foundation/mngm]
+    A1 --o|use| A6[foundation/util]
 ```
 
 NopSCADlib pin header wrapper definitions.
@@ -184,7 +184,7 @@ __engine__
 
 __Syntax:__
 
-    fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,debug,octant,direction)
+    fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,debug,octant,direction,debug)
 
 Pin headers engine.
 

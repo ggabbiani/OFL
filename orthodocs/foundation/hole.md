@@ -4,8 +4,11 @@
 
 ```mermaid
 graph LR
-    A1[foundation/hole] --o|include| A2[foundation/label]
-    A1 --o|include| A3[foundation/symbol]
+    A1[foundation/hole] --o|include| A2[foundation/unsafe_defs]
+    A1 --o|use| A3[foundation/3d-engine]
+    A1 --o|use| A4[foundation/base_kv]
+    A1 --o|use| A5[foundation/label]
+    A1 --o|use| A6[foundation/type_trait]
 ```
 
 Hole engine implementation.
@@ -236,7 +239,7 @@ see constructor [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
 
 __Syntax:__
 
-    fl_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw)
+    fl_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,tolerance=0)
 
 Layouts holes according to their defined positions, depth and enabled normals.
 
@@ -256,6 +259,9 @@ pass-through thickness
 
 __screw__  
 fallback screw
+
+__tolerance__  
+tolerance radius
 
 
 ---

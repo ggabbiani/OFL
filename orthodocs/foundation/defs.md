@@ -4,12 +4,19 @@
 
 ```mermaid
 graph LR
-    A1[foundation/defs] --o|include| A2[foundation/base_geo]
-    A1 --o|include| A3[foundation/base_kv]
-    A1 --o|include| A4[foundation/base_parameters]
-    A1 --o|include| A5[foundation/base_string]
-    A1 --o|include| A6[foundation/base_trace]
+    A1[foundation/defs] --o|include| A2[foundation/base_string]
+    A1 --o|use| A3[foundation/base_geo]
+    A1 --o|use| A4[foundation/base_kv]
+    A1 --o|use| A5[foundation/base_parameters]
+    A1 --o|use| A6[foundation/base_trace]
 ```
+
+Base definitions for OpenSCAD.
+
+Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+
+SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
+
 
 ## Variables
 
@@ -110,6 +117,14 @@ __Default:__
     !$preview
 
 When true, disables PREVIEW corrections (see [variable FL_NIL](#variable-fl_nil))
+
+---
+
+### variable $FL_SYMBOLS
+
+__Default:__
+
+    "ON"
 
 ---
 
@@ -293,6 +308,16 @@ __Default:__
     "FL_PAYLOAD adds a box representing the payload of the shape"
 
 adds a box representing the payload of the shape
+
+---
+
+### variable FL_SYMBOLS
+
+__Default:__
+
+    "FL_SYMBOLS adds symbols and labels usually for debugging"
+
+add symbols and labels usually for debugging
 
 ---
 
@@ -582,6 +607,16 @@ fl_connectors(type,value)
 
 ---
 
+### function fl_cutout
+
+__Syntax:__
+
+```text
+fl_cutout(type,value)
+```
+
+---
+
 ### function fl_deprecated
 
 __Syntax:__
@@ -610,16 +645,6 @@ __Syntax:__
 
 ```text
 fl_dict_search(dictionary,name)
-```
-
----
-
-### function fl_director
-
-__Syntax:__
-
-```text
-fl_director(type,value)
 ```
 
 ---
@@ -858,16 +883,6 @@ fl_push(list,item)
 ```
 
 push «item» on tail of list «l»
-
----
-
-### function fl_rotor
-
-__Syntax:__
-
-```text
-fl_rotor(type,value)
-```
 
 ---
 

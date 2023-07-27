@@ -4,8 +4,10 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/ethers] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[foundation/mngm]
+    A1[vitamins/ethers] --o|include| A2[foundation/unsafe_defs]
+    A1 --o|use| A3[foundation/3d-engine]
+    A1 --o|use| A4[foundation/bbox-engine]
+    A1 --o|use| A5[foundation/mngm]
 ```
 
 Ethernet.
@@ -61,7 +63,7 @@ value of the internally inserted part of an RJ45 plug
 
 __Default:__
 
-    let(l=21,w=16,h=13.5)[fl_name(value="RJ45"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_director(value=+FL_X),fl_rotor(value=-FL_Z),fl_engine(value=str(FL_ETHER_NS,"/NopSCADlib")),]
+    let(l=21,w=16,h=13.5)[fl_name(value="RJ45"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X]),fl_engine(value=str(FL_ETHER_NS,"/NopSCADlib")),]
 
 ---
 
@@ -69,7 +71,7 @@ __Default:__
 
 __Default:__
 
-    let(l=12.6,w=17.4,h=11.5)[fl_name(value="RJ45 SLIM"),fl_bb_corners(value=[[-l+FL_ETHER_FRAME_T,-w/2,-FL_ETHER_Z_OFFSET],+[FL_ETHER_FRAME_T,w/2,h-FL_ETHER_Z_OFFSET]]),fl_director(value=+FL_X),fl_rotor(value=-FL_Z),fl_dxf(value="vitamins/ether-slim.dxf"),fl_engine(value=str(FL_ETHER_NS,"/native")),]
+    let(l=12.6,w=17.4,h=11.5)[fl_name(value="RJ45 SLIM"),fl_bb_corners(value=[[-l+FL_ETHER_FRAME_T,-w/2,-FL_ETHER_Z_OFFSET],+[FL_ETHER_FRAME_T,w/2,h-FL_ETHER_Z_OFFSET]]),fl_cutout(value=[+FL_X]),fl_dxf(value="vitamins/ether-slim.dxf"),fl_engine(value=str(FL_ETHER_NS,"/native")),]
 
 ---
 
@@ -101,7 +103,7 @@ fl_ether_Zoffset(type,value)
 
 __Syntax:__
 
-    fl_ether(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
+    fl_ether(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,debug,direction,octant,debug)
 
 __Parameters:__
 
@@ -116,6 +118,9 @@ tolerance used during FL_CUTOUT
 
 __cut_drift__  
 translation applied to cutout (default 0)
+
+__debug__  
+see constructor [fl_parm_Debug()](../foundation/base_parameters.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

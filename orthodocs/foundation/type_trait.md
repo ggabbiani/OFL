@@ -5,6 +5,7 @@
 ```mermaid
 graph LR
     A1[foundation/type_trait] --o|include| A2[foundation/base_string]
+    A1 --o|include| A3[foundation/defs]
 ```
 
 Type traits implementation file.
@@ -213,7 +214,7 @@ fl_tt_isComponent(comp)
 
 check if «comp» is a valid component format:
 
-   ["engine", [position], [[director],rotation], type, properties]
+   ["engine", [position], [cut direction], [[director],rotation], type, properties]
 
 
 ---

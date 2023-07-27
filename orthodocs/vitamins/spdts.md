@@ -4,9 +4,10 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/spdts] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[foundation/mngm]
-    A1 --o|include| A4[foundation/symbol]
+    A1[vitamins/spdts] --o|include| A2[foundation/defs]
+    A1 --o|use| A3[foundation/3d-engine]
+    A1 --o|use| A4[foundation/bbox-engine]
+    A1 --o|use| A5[foundation/mngm]
 ```
 
 Single pole, double throw switch.
@@ -24,7 +25,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    let(len=40,d=19,head_d=22,head_h=+2)[fl_name(value="B077HJT92M"),fl_description(value="SODIAL(R) SPDT Button Switch 220V"),fl_bb_corners(value=[[-head_d/2,-head_d/2,-len+head_h],[+head_d/2,+head_d/2,head_h],]),["nominal diameter",d],["length",len],["head diameter",head_d],["head height",head_h],fl_director(value=+FL_Z),fl_rotor(value=+FL_X),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B077HJT92M/"],]),]
+    let(len=40,d=19,head_d=22,head_h=+2)[fl_name(value="B077HJT92M"),fl_description(value="SODIAL(R) SPDT Button Switch 220V"),fl_bb_corners(value=[[-head_d/2,-head_d/2,-len+head_h],[+head_d/2,+head_d/2,head_h],]),["nominal diameter",d],["length",len],["head diameter",head_d],["head height",head_h],fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B077HJT92M/"],]),]
 
 ---
 

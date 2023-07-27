@@ -4,7 +4,9 @@
 
 ```mermaid
 graph LR
-    A1[foundation/label] --o|include| A2[foundation/3d]
+    A1[foundation/label] --o|include| A2[foundation/unsafe_defs]
+    A1 --o|use| A3[foundation/3d-engine]
+    A1 --o|use| A4[foundation/mngm]
 ```
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -39,7 +41,7 @@ __Syntax:__
 fl_resize(oldsize,newsize,auto=false)
 ```
 
-mimics standard resize() module behaviour
+mimics standard resize() module behavior
 
 TODO: either remove or move elsewhere
 

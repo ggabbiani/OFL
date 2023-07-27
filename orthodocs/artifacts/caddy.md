@@ -4,9 +4,10 @@
 
 ```mermaid
 graph LR
-    A1[artifacts/caddy] --o|include| A2[foundation/fillet]
-    A1 --o|include| A3[foundation/mngm]
-    A1 --o|include| A4[foundation/unsafe_defs]
+    A1[artifacts/caddy] --o|include| A2[foundation/unsafe_defs]
+    A1 --o|use| A3[foundation/bbox-engine]
+    A1 --o|use| A4[foundation/fillet]
+    A1 --o|use| A5[foundation/mngm]
 ```
 
 Generic caddy artifact.
@@ -76,7 +77,7 @@ thick=2.5
 
 
 __faces__  
-faces defined by their othonormal axis in floating semi-axis list format
+faces defined by their orthonormal axis in floating semi-axis list format
 
 __tolerance__  
 SCALAR added to each internal payload dimension.

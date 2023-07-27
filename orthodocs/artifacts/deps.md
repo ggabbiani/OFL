@@ -6,6 +6,7 @@ graph TD
     A3[artifacts/caddy]
     A4[artifacts/pcb_holder] --o|include| A2
     A2
-    A5[artifacts/template]
+    A5[artifacts/t-nut]
+    A6[artifacts/template]
 ```
 

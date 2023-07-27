@@ -21,13 +21,14 @@ fl_get(type,key,default)
 
 Mandatory property getter with default value when not found
 
-Never return undef
+Never return undef.
+
 | type    | key     | default | key found | result    | semantic |
 | ------- | ------- | ------- | --------- | --------- | -------- |
 | defined | defined | *       | true      | value     | GETTER   |
 | defined | defined | defined | false     | default   | GETTER   |
 
-**ERROR* in all the other cases
+**ERROR** in all the other cases
 
 
 ---
@@ -53,7 +54,7 @@ This getter returns 'undef' when the key is not found and no default is passed.
 | defined | defined | *       | false     | default     | GETTER   |
 | defined | defined | *       | true      | value       | GETTER   |
 
-**ERROR* in all the other cases
+**ERROR** in all the other cases
 
 
 ---
@@ -76,7 +77,7 @@ Return «default» when «type» is undef or empty, or when «key» is not found
 | defined | defined | *       | false     | default   | GETTER   |
 | defined | defined | *       | true      | value     | GETTER   |
 
-**ERROR* in all the other cases
+**ERROR** in all the other cases
 
 
 ---
@@ -105,6 +106,6 @@ This getter never return undef.
 | defined | defined | *       | true      | value       |  GETTER  |
 | defined | defined | defined | false     | default     |  GETTER  |
 
-**ERROR* in all the other cases
+**ERROR** in all the other cases
 
 

@@ -5,7 +5,8 @@
 ```mermaid
 graph LR
     A1[artifacts/pcb_holder] --o|include| A2[artifacts/spacer]
-    A1 --o|include| A3[foundation/mngm]
+    A1 --o|use| A3[foundation/bbox-engine]
+    A1 --o|use| A4[foundation/mngm]
 ```
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)

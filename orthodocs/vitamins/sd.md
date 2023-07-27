@@ -4,9 +4,10 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/sd] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[foundation/mngm]
-    A1 --o|include| A4[foundation/util]
+    A1[vitamins/sd] --o|use| A2[foundation/3d-engine]
+    A1 --o|use| A3[foundation/bbox-engine]
+    A1 --o|use| A4[foundation/mngm]
+    A1 --o|use| A5[foundation/util]
 ```
 
 Secure Digital flash memory card for OpenSCAD Foundation Library.
@@ -34,7 +35,7 @@ sd dictionary
 
 __Default:__
 
-    let(size=[12,11.5,1.28])[fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),fl_director(value=-Y),fl_rotor(value=+X),]
+    let(size=[13,11.5,1.28])[fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),fl_cutout(value=[-FL_Y]),]
 
 ---
 
@@ -54,7 +55,7 @@ sd namespace
 
 __Syntax:__
 
-    fl_sd_usocket(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,direction,octant)
+    fl_sd_usocket(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,direction,octant,debug)
 
 micro SD socket
 

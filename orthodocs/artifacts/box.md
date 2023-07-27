@@ -5,15 +5,15 @@
 ```mermaid
 graph LR
     A1[artifacts/box] --o|include| A2[artifacts/spacer]
-    A1 --o|include| A3[foundation/fillet]
-    A1 --o|include| A4[foundation/mngm]
-    A1 --o|include| A5[foundation/profile]
-    A1 --o|include| A6[foundation/util]
-    A1 --o|include| A7[vitamins/knurl_nuts]
-    A1 --o|include| A8[vitamins/screw]
+    A1 --o|include| A3[vitamins/knurl_nuts]
+    A1 --o|include| A4[vitamins/screw]
+    A1 --o|use| A5[foundation/fillet]
+    A1 --o|use| A6[foundation/mngm]
+    A1 --o|use| A7[foundation/profile]
+    A1 --o|use| A8[foundation/util]
 ```
 
-Box artifact.
+Box artifact engine.
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 
@@ -28,11 +28,19 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Syntax:__
 
-    fl_box(verbs=FL_ADD,preset,xsize,isize,pload,thick,radius,parts,tolerance=0.3,material_upper,material_lower,fillet=true,direction,octant)
+    fl_box(verbs=FL_ADD,preset,xsize,isize,pload,thick,radius,parts,tolerance=0.3,material_upper,material_lower,fillet=true,lay_octant,direction,octant)
 
-engine for generating boxes
+engine for generating boxes.
+
+__children context__:
+
+- $box_materials - list of used materials [«material_lower», «material_upper»]
+
 
 __Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
 
 __preset__  
 preset profiles (UNUSED)

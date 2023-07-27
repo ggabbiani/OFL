@@ -4,10 +4,10 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/heatsinks] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[foundation/bbox]
-    A1 --o|include| A4[foundation/defs]
-    A1 --o|include| A5[foundation/mngm]
+    A1[vitamins/heatsinks] --o|include| A2[foundation/defs]
+    A1 --o|use| A3[foundation/3d-engine]
+    A1 --o|use| A4[foundation/bbox-engine]
+    A1 --o|use| A5[foundation/mngm]
 ```
 
 Heatsinks definition file.
@@ -33,7 +33,7 @@ __Default:__
 
 __Default:__
 
-    let(Zs=2,Zh=1,Zf=5.45,Zt=2.2)[fl_name(value="KHADAS VIM SBC Heatsink"),fl_bb_corners(value=[[0.5,-49.57,0],[81.49,-0.49,Zs+Zh+Zf],]),fl_screw(value=M2_cap_screw),fl_director(value=+FL_Z),fl_rotor(value=+FL_X),fl_dxf(value="vitamins/hs-khadas.dxf"),fl_engine(value="Khadas"),fl_property(key="separator height",value=Zs),fl_property(key="heatsink height",value=Zh),fl_property(key="fin height",value=Zf),fl_property(key="tooth height",value=Zt),]
+    let(Zs=2,Zh=1,Zf=5.45,Zt=2.2)[fl_name(value="KHADAS VIM SBC Heatsink"),fl_bb_corners(value=[[0.5,-49.57,0],[81.49,-0.49,Zs+Zh+Zf],]),fl_screw(value=M2_cap_screw),fl_dxf(value="vitamins/hs-khadas.dxf"),fl_engine(value="Khadas"),fl_cutout(value=[+FL_Z]),fl_property(key="separator height",value=Zs),fl_property(key="heatsink height",value=Zh),fl_property(key="fin height",value=Zf),fl_property(key="tooth height",value=Zt),]
 
 ---
 
@@ -51,7 +51,7 @@ namespace
 
 __Default:__
 
-    let(Tbase=2,Tfluting=2.3,Tholders=3,size=[56,87,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - bottom"),fl_bb_corners(value=[[-size.x/2,0,-size.z],[+size.x/2,size.y,0],]),fl_screw(value=M2p5_cap_screw),fl_director(value=-FL_Z),fl_rotor(value=-FL_X),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),["corner radius",3],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","bottom"],]
+    let(Tbase=2,Tfluting=2.3,Tholders=3,size=[56,87,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - bottom"),fl_bb_corners(value=[[-size.x/2,0,-size.z],[+size.x/2,size.y,0],]),fl_screw(value=M2p5_cap_screw),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),fl_cutout(value=[FL_Z]),["corner radius",3],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","bottom"],]
 
 ---
 
@@ -59,7 +59,7 @@ __Default:__
 
 __Default:__
 
-    let(Tbase=1.5,Tfluting=8.6,Tholders=5.5,size=[56,70,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - top"),fl_bb_corners(value=[[-size.x/2,0,0],[+size.x/2,size.y,size.z],]),fl_screw(value=M2p5_cap_screw),fl_director(value=+FL_Z),fl_rotor(value=+FL_X),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),["corner radius",3],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","top"],]
+    let(Tbase=1.5,Tfluting=8.6,Tholders=5.5,size=[56,70,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - top"),fl_bb_corners(value=[[-size.x/2,0,0],[+size.x/2,size.y,size.z],]),fl_screw(value=M2p5_cap_screw),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),fl_cutout(value=[+FL_Z]),["corner radius",3],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","top"],]
 
 ## Functions
 
@@ -108,7 +108,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_heatsink(verbs=FL_ADD,type,direction,octant)
+    fl_heatsink(verbs=FL_ADD,type,direction,octant,debug)
 
 common wrapper for different heat sink model engines.
 

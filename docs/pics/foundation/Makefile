@@ -5,7 +5,7 @@
 # 	openscad -m make -o $@ -d $@.deps $<
 
 all:
-	$(MAKE) -C 48x48 all
+	$(MAKE) -C 256x256 all
 
 clean:
-	$(MAKE) -C 48x48 clean
+	$(MAKE) -C 256x256 clean

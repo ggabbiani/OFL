@@ -4,34 +4,36 @@
 graph TD
     A1[vitamins/countersinks]
     A2[vitamins/ethers]
-    A3[vitamins/hdmi]
-    A4[vitamins/hds] --o|include| A5[vitamins/sata]
-    A4 --o|include| A6[vitamins/screw]
-    A7[vitamins/heatsinks]
-    A8[vitamins/jacks]
-    A9[vitamins/knurl_nuts] --o|include| A6
-    A10[vitamins/magnets] --o|include| A1
-    A10 --o|include| A6
-    A11[vitamins/pcbs] --o|include| A2
-    A11 --o|include| A3
+    A3[vitamins/generic]
+    A4[vitamins/hdmi]
+    A5[vitamins/hds] --o|include| A6[vitamins/sata]
+    A5 --o|include| A7[vitamins/screw]
+    A8[vitamins/heatsinks]
+    A9[vitamins/jacks]
+    A10[vitamins/knurl_nuts] --o|include| A7
+    A11[vitamins/magnets] --o|include| A1
     A11 --o|include| A7
-    A11 --o|include| A8
-    A11 --o|include| A12[vitamins/pin_headers]
-    A11 --o|include| A6
-    A11 --o|include| A13[vitamins/sd]
-    A11 --o|include| A14[vitamins/switch]
-    A11 --o|include| A15[vitamins/trimpot]
-    A11 --o|include| A16[vitamins/usbs]
-    A12
-    A17[vitamins/psus] --o|include| A6
-    A5
-    A18[vitamins/sata-adapters] --o|include| A5
-    A6
+    A12[vitamins/pcbs] --o|include| A2
+    A12 --o|include| A3
+    A12 --o|include| A4
+    A12 --o|include| A8
+    A12 --o|include| A9
+    A12 --o|include| A13[vitamins/pin_headers]
+    A12 --o|include| A7
+    A12 --o|include| A14[vitamins/sd]
+    A12 --o|include| A15[vitamins/switch]
+    A12 --o|include| A16[vitamins/trimpot]
+    A12 --o|include| A17[vitamins/usbs]
     A13
-    A19[vitamins/spdts]
+    A18[vitamins/psus] --o|include| A7
+    A6
+    A19[vitamins/sata-adapters] --o|include| A6
+    A7
     A14
-    A20[vitamins/template]
+    A20[vitamins/spdts]
     A15
+    A21[vitamins/template]
     A16
+    A17
 ```
 

@@ -4,11 +4,13 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/hdmi] --o|include| A2[foundation/mngm]
-    A1 --o|include| A3[foundation/util]
+    A1[vitamins/hdmi] --o|use| A2[foundation/3d-engine]
+    A1 --o|use| A3[foundation/bbox-engine]
+    A1 --o|use| A4[foundation/mngm]
+    A1 --o|use| A5[foundation/util]
 ```
 
-NopACADlib HDMI engine wrapper.
+NopSCADlib HDMI engine wrapper.
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 
@@ -87,7 +89,7 @@ fl_hdmi_new(nop_type)
 
 __Syntax:__
 
-    fl_hdmi(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
+    fl_hdmi(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant,debug)
 
 __Parameters:__
 

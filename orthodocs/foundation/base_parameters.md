@@ -21,7 +21,7 @@ fl_asserts()
 
 When true [fl_assert()](defs.md#function-fl_assert) is enabled
 
-TODO: remove since deprecated.
+**TODO**: remove since deprecated.
 
 
 ---
@@ -55,7 +55,7 @@ Default color for printable items (i.e. artifacts)
 __Syntax:__
 
 ```text
-fl_parm_Debug(labels=false,symbols=false)
+fl_parm_Debug(labels=false,symbols=false,components=[])
 ```
 
 constructor for debug context parameter
@@ -68,6 +68,16 @@ when true, labels to symbols are assigned and displayed
 __symbols__  
 when true symbols are displayed
 
+
+---
+
+### function fl_parm_components
+
+__Syntax:__
+
+```text
+fl_parm_components(debug,label)
+```
 
 ---
 

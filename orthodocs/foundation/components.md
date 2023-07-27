@@ -5,6 +5,7 @@
 ```mermaid
 graph LR
     A1[foundation/components] --o|include| A2[foundation/defs]
+    A1 --o|use| A3[foundation/bbox-engine]
 ```
 
 Component package for OpenSCAD Foundation Library.
@@ -77,6 +78,16 @@ parent shape
 
 ---
 
+### function fl_Component
+
+__Syntax:__
+
+```text
+fl_Component(engine,position,direction,type,parameters)
+```
+
+---
+
 ### function fl_comp_BBox
 
 __Syntax:__
@@ -96,9 +107,6 @@ __Syntax:__
 ```text
 fl_comp_connectors(component)
 ```
-
-returns «component» connectors transformed according to component position/orientation
-
 
 ---
 
@@ -129,14 +137,16 @@ Component context:
 
  - $comp_engine    : engine to be triggered for component rendering
  - $comp_position  : component position
- - $comp_direction
- - $comp_director
- - $comp_rotation
+ - $comp_direction : new coordinate system in [[direction], rotation] format
+ - $comp_director  : new coordinate system direction vector
+ - $comp_rotation  : new coordinate system rotation value around new direction
  - $comp_type
  - $comp_subtract  : the tolerance to be used during component FL_FOOTPRINT difference from parent shape
  - $comp_drift     : additional delta during component FL_CUTOUT
  - $comp_color
  - $comp_octant
+ - $comp_cutdir    : cutout direction for the component in the __hosting__ coordinate system
+                     TODO: remove this variable since **OBSOLETE**
 
 
 

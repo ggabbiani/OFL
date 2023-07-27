@@ -4,8 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[foundation/connect] --o|include| A2[foundation/symbol]
-    A1 --o|include| A3[foundation/util]
+    A1[foundation/connect] --o|include| A2[foundation/util]
+    A1 --o|use| A3[foundation/3d-engine]
 ```
 
 utility toolkit for connecting objects
@@ -24,7 +24,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 __Syntax:__
 
 ```text
-conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0])
+conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+FL_Z,0])
 ```
 
 ---
@@ -34,7 +34,7 @@ conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0])
 __Syntax:__
 
 ```text
-conn_Socket(id,ox,oy,pos,size=2.54,octant,direction=[+Z,0])
+conn_Socket(id,ox,oy,pos,size=2.54,octant,direction=[+FL_Z,0])
 ```
 
 ---

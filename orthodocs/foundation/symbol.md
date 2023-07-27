@@ -4,8 +4,10 @@
 
 ```mermaid
 graph LR
-    A1[foundation/symbol] --o|include| A2[foundation/torus]
+    A1[foundation/symbol] --o|include| A2[foundation/defs]
 ```
+
+Basic symbol definitions
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 

@@ -32,21 +32,21 @@ FL_TECHNOLOGIES = [
 // 3d printing property names
 
 /*!
- * ![Supported walls](../../foundation/pics/48x48/fig_Supported_walls.png)
+ * ![Supported walls](../../docs/pics/foundation/256x256/fig_Supported_walls.png)
  *
  * The minimum width of walls connected to the rest of the print on at least
  * two sides (mm).
  */
 FL_LIMIT_SWALLS     = "Supported walls";
 /*!
- * ![Unsupported walls](../../foundation/pics/48x48/fig_Unsupported_walls.png)
+ * ![Unsupported walls](../../docs/pics/foundation/256x256/fig_Unsupported_walls.png)
  *
  * Unsupported walls are connected to the rest of the print on less than two
  * sides (mm).
  */
 FL_LIMIT_UWALLS     = "Unsupported walls";
 /*!
- * ![Support & overhangs](../../foundation/pics/48x48/fig_Support_and_overhangs.png)
+ * ![Support & overhangs](../../docs/pics/foundation/256x256/fig_Support_and_overhangs.png)
  *
  * Maximum angle a wall can be printed at without requiring support (degree).
  */

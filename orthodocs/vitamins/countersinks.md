@@ -4,8 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/countersinks] --o|include| A2[foundation/defs]
-    A1 --o|include| A3[foundation/mngm]
+    A1[vitamins/countersinks] --o|use| A2[foundation/bbox-engine]
+    A1 --o|use| A3[foundation/mngm]
 ```
 
 Countersink definitions, data taken from:
@@ -158,9 +158,12 @@ fl_cs_h(type)
 
 __Syntax:__
 
-    fl_countersink(verbs,type,direction,octant)
+    fl_countersink(verbs=FL_ADD,type,tolerance=0,direction,octant)
 
 __Parameters:__
+
+__tolerance__  
+tolerance added to countersink's dimensions
 
 __direction__  
 desired direction [director,rotation], native direction when undef

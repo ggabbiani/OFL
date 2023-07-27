@@ -4,10 +4,11 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/switch] --o|include| A2[foundation/3d]
-    A1 --o|include| A3[foundation/bbox]
-    A1 --o|include| A4[foundation/mngm]
-    A1 --o|include| A5[foundation/unsafe_defs]
+    A1[vitamins/switch] --o|include| A2[foundation/unsafe_defs]
+    A1 --o|use| A3[foundation/2d-engine]
+    A1 --o|use| A4[foundation/3d-engine]
+    A1 --o|use| A5[foundation/bbox-engine]
+    A1 --o|use| A6[foundation/mngm]
 ```
 
 ## Variables
@@ -36,7 +37,7 @@ template namespace
 
 __Default:__
 
-    let(Tbutton=1,Tshild=0.1,w=7,h=3.4,l=2.5+Tbutton)[fl_bb_corners(value=[[-l+Tbutton,-w/2,0],[Tbutton,+w/2,h]]),fl_director(value=+X),fl_rotor(value=+Y),]
+    let(Tbutton=1,Tshild=0.1,w=7,h=3.4,l=2.5+Tbutton)[fl_bb_corners(value=[[-l+Tbutton,-w/2,0],[Tbutton,+w/2,h]]),fl_cutout(value=[FL_X]),]
 
 ## Modules
 
@@ -46,7 +47,7 @@ __Default:__
 
 __Syntax:__
 
-    fl_switch(verbs=FL_ADD,type,cut_thick,cut_tolerance,cut_drift,direction,octant)
+    fl_switch(verbs=FL_ADD,type,cut_thick,cut_tolerance,cut_drift,direction,octant,debug)
 
 __Parameters:__
 
