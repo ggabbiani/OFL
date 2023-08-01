@@ -5,7 +5,7 @@
 # 	openscad -m make -o $@ -d $@.deps $<
 
 all:
-	$(MAKE) -C foundation all
+	$(MAKE) -C foundation $@
 
 clean:
-	$(MAKE) -C foundation clean
+	$(MAKE) -C foundation $@
