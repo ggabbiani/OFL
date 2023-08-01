@@ -1,4 +1,5 @@
 {
+    "fileFormatVersion": "1",
     "parameterSets": {
         "final": {
             "$FL_RENDER": "false",
@@ -6,30 +7,33 @@
             "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
-            "ADD": "ON",
-            "ASSEMBLY": "ON",
-            "AXES": "OFF",
-            "BBOX": "OFF",
-            "CUTOUT": "OFF",
-            "DIR_NATIVE": "true",
-            "DIR_R": "0",
-            "DIR_Z": "[0, 0, 1]",
-            "DRILL": "OFF",
             "FILAMENT_LOWER": "SteelBlue",
             "FILAMENT_UPPER": "DodgerBlue",
             "FILLET": "true",
-            "FOOTPRINT": "OFF",
-            "LAYOUT": "OFF",
             "LOWER_PART": "true",
-            "MOUNT": "ON",
-            "OCTANT": "[0, 0, 0]",
-            "PAYLOAD": "OFF",
-            "PLACE_NATIVE": "true",
             "RADIUS": "1.1",
             "T": "2.5",
-            "TOLERANCE": "0.2",
             "UPPER_PART": "true"
+        },
+        "cover": {
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "100",
+            "BOX_TOLERANCE": "0.20000000000000001",
+            "CUT_TOLERANCE": "0.59999999999999998",
+            "EXTRA_H": "7",
+            "FILAMENT_LOWER": "SteelBlue",
+            "FILAMENT_UPPER": "DodgerBlue",
+            "FILLET": "true",
+            "LOWER_PART": "true",
+            "RADIUS": "1.1000000000000001",
+            "SBC": "khadas",
+            "SPACER_T": "2",
+            "T": "1.5",
+            "UPPER_PART": "false",
+            "VIEW_MODE": "FULL"
         }
-    },
-    "fileFormatVersion": "1"
+    }
 }
