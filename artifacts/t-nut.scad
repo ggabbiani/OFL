@@ -2,12 +2,12 @@
  * T-slot nut engine for OpenSCAD Foundation Library.
  *
  * T-slot nuts are used with
- * (T-slot structural framing)[https://en.wikipedia.org/wiki/T-slot_structural_framing]
+ * [T-slot structural framing](https://en.wikipedia.org/wiki/T-slot_structural_framing)
  * to build a variety of industrial structures and machines.
  *
- * T-slot nut are not to be confused with (T-nuts)[https://en.wikipedia.org/wiki/T-nut].
+ * T-slot nut are not to be confused with [T-nuts](https://en.wikipedia.org/wiki/T-nut).
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
