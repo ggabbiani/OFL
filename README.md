@@ -2,7 +2,7 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ggabbiani/OFL/tests.yml?label=tests&style=square)
 
-![Cover](docs/pics/800x600/cover.png)
+![Cover](pics/800x600/cover.png)
 
 **O**penSCAD **F**oundation **L**ibrary (OFL) is a foundation library for OpenSCAD integrating concepts not included natively in the OpenSCAD language and providing an extendible standardized API base.
 
@@ -33,4 +33,4 @@ OFL comes with three major components:
 
 Every library component is accessed through a set of verb-based APIs (Common API Template), even third part libraries eventually used internally.
 
-![OFL architecture](docs/pics/architecture.png)
+![OFL architecture](pics/architecture.png)

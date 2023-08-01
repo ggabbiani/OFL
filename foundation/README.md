@@ -86,7 +86,7 @@ When a verb is passed as a single value the verb will be trivially executed.
     |
     +---< primitive
 
-![Single verb primitive invocation](docs/torus.png)
+![Single verb primitive invocation](../pics/800x600/torus.png)
 
     include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
