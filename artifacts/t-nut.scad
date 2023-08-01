@@ -1,5 +1,11 @@
-/*
- * T-nut engine for OpenSCAD Foundation Library.
+/*!
+ * T-slot nut engine for OpenSCAD Foundation Library.
+ *
+ * T-slot nuts are used with
+ * (T-slot structural framing)[https://en.wikipedia.org/wiki/T-slot_structural_framing]
+ * to build a variety of industrial structures and machines.
+ *
+ * T-slot nut are not to be confused with (T-nuts)[https://en.wikipedia.org/wiki/T-nut].
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -15,21 +21,54 @@ use <../foundation/hole.scad>
 use <../foundation/mngm.scad>
 
 // namespace
-__FL_ART_NS  = "tslide";
+__FL_ART_NS  = "tsnut";
 
+// TODO: build preset types
 __FL_ART_DICT = [
 ];
 
 /*!
- * constructor
+ * Constructor returning a T-slot nut.
  *
+ *                        screw M
+ *                      ⭰─────────⇥
+ *            ________________________________
+ *          ╱           ░░░░░░░░░░░░           ╲       ⤒         ⤒
+ *        ╱             ░░░░░░░░░░░░             ╲    cone
+ *      ╱               ░░░░░░░░░░░░               ╲   ⤓         h
+ *     │                ░░░░░░░░░░░░                │  ⤒         e
+ *     │                ░░░░░░░░░░░░                │ base       i
+ *     │_________       ░░░░░░░░░░░░       _________│  ⤓         g
+ *               │      ░░░░░░░░░░░░      │            ⤒         t
+ *               │      ░░░░░░░░░░░░      │           wall       h
+ *               │      ░░░░░░░░░░░░      │            ⤓         ⤓
+ *               └────────────────────────┘
+ *                        opening
+ *               ⭰───────────────────────⇥
  *
+ *                         width
+ *     ⭰──────────────────────────────────────────⇥
  *
- *    ⤒
- *    󠁼|
- *    ⤓
  */
-function fl_TNut(opening, size, thickness, screw, knut=false) = let(
+function fl_TNut(
+  //! the opening of the T-slot
+  opening,
+  /*!
+   * 2d size in the form [with,length], the height being calculated from «thickness».
+   * The resulting bounding box is: `[width, ∑ thickness, length]`
+   */
+  size,
+  /*!
+   * section heights passed as `[wall,base,cone]` thicknesses
+   */
+  thickness,
+  //! an optional screw determining a hole
+  screw,
+  //! eventual knurl nut
+  knut=false,
+  //! list of user defined holes usually positioned on the 'opening' side
+  holes
+) = let(
   // r = screw_radius(screw),
   wall  = thickness[0],
   base  = thickness[1],
@@ -56,12 +95,12 @@ function fl_TNut(opening, size, thickness, screw, knut=false) = let(
   fl_bb_corners(value=bbox),
   ["section points", points],
   if (screw) fl_screw(value=screw),
-  if (screw) ["hole",fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,screw=screw)],
+  if (screw) holes ? ["holes",holes] : ["holes",[fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,screw=screw)]],
   if (knut) ["knut",fl_knut_search(screw,size.y)],
 ];
 
 module fl_tnut(
-  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: `FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT`
   verbs       = FL_ADD,
   type,
   /*!
@@ -70,7 +109,7 @@ module fl_tnut(
    * tolerance=x means [x,x,x]
    */
   tolerance=0,
-  coutersink=false,
+  countersink=false,
   //! see constructor fl_parm_Debug()
   debug,
   //! desired direction [director,rotation], native direction when undef ([+Z,0])
@@ -97,7 +136,7 @@ module fl_tnut(
   nut_t = tolerance[0];
   hole_t  = tolerance[1];
   cs_t  = tolerance[2];
-  holes  = [fl_optional(type,"hole")];
+  holes  = fl_optional(type,"holes");
   knut  = fl_optional(type,"knut");
   ext_r = knut ? fl_knut_r(knut)+hole_t : undef;
 
@@ -142,11 +181,14 @@ module fl_tnut(
           fl_knut(type=knut,direction=[-$hole_n,0],octant=+Z,$FL_ADD=$FL_ASSEMBLY);
   }
   module do_layout() {
-    fl_lay_holes(holes)
-      children();
+    if (holes)
+      fl_lay_holes(holes)
+        children();
   }
 
-  module do_drill() {}
+  // TODO: implement do_drill() module
+  module do_drill() {
+  }
 
   module do_symbols(
     debug,
@@ -177,15 +219,16 @@ module fl_tnut(
       echo($modifier=$modifier);
       fl_modifier($modifier) fl_bb_add(bbox);
 
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
-        children();
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier);
 
+    // TODO: implement FL_FOOTPRINT verb
     } else if ($verb==FL_FOOTPRINT) {
       fl_modifier($modifier);
 
-    } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier);
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout()
+        children();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
