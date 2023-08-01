@@ -30,8 +30,12 @@ function fl_versionNumber() = let(
 
 module fl_status() {
   v=fl_version();
-  echo(str("**OFL** Version : ",v.x,".",v.y,".",v.z));
-  echo(str("**OFL** Debug   : ",fl_debug()));
+  echo(str("**OFL** Version         : ",v.x,".",v.y,".",v.z));
+  echo(str("**OFL** Debug           : ",fl_debug()));
+  echo(str("**OFL** VP rotation     : ",$vpr));
+  echo(str("**OFL** VP translation  : ",$vpt));
+  echo(str("**OFL** VP camera       : ",$vpd));
+  echo(str("**OFL** VP FoV          : ",$vpf));
 }
 
 //*****************************************************************************
