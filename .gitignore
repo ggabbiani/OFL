@@ -4,3 +4,4 @@ stl
 *.bak
 nogit-*
 .DS_Store
+orthodocs/api-docs
