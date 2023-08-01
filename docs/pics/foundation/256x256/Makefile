@@ -2,8 +2,7 @@
 include $(wildcard *.deps)
 
 # get desired image sizes from current directory name
-DIR 		:= $(subst x, ,$(notdir $(CURDIR)))
-SIZE		:= $(word 1,$(DIR)),$(word 2,$(DIR))
+SIZE		:= $(notdir $(CURDIR))
 SOURCES 	:= $(wildcard *.scad)
 TARGETS		:= $(SOURCES:.scad=.png)
 UNSCALED	:= /tmp/unscaled.png
@@ -15,7 +14,7 @@ all: $(TARGETS)
 
 %.png: %.scad
 	OPENSCADPATH="/home/giampa/projects:${OPENSCADPATH}" openscad -m make -o $(UNSCALED) --imgsize 9600,9600 -d $@.deps --view axes $<
-	convert $(UNSCALED) -resize 256x256 $@
+	convert $(UNSCALED) -resize $(SIZE) $@
 	rm $(UNSCALED)
 
 # %.scad:
