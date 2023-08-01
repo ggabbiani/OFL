@@ -27,4 +27,4 @@ OFL comes with three major components:
 
 * [foundation](foundation/README.md) - the core part re-implementing some of the OpenSCAD native 2d/3d modules while adding new ones;
 * [vitamins](vitamins/README.md) - client vitamin modules leveraging the foundation.
-* [artifacts](artifacts/README.md) - printables built on top of [foundation components](foundation/README.md) and [vitamins parts](vitamins/README.md);
+* [artifacts](artifacts/README.md) - printable artifacts built on top of [foundation components](foundation/README.md) and [vitamins parts](vitamins/README.md);
