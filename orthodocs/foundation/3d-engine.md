@@ -247,7 +247,7 @@ fl_bb_accum(axis,gap=0,bbcs)
 Accumulates a list of bounding boxes along a direction.
 
 Recursive algorithm, at each call a bounding box is extracted from «bbcs»
-and decomposed into axial and planar components. The last bunding box in
+and decomposed into axial and planar components. The last bounding box in
 the list ended up the recursion and is returned as result.
 If there are still bounding boxes left, a new call is made and its
 result, decomposed into the axial and planar components, used to produce a
