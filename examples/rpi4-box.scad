@@ -86,7 +86,7 @@ difference() {
     [FL_ADD,FL_LAYOUT],
     pload=box_payload,thick=T,radius=radius,parts=parts,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=BOX_TOLERANCE,fillet=FILLET,
     // lay_octant=O,
-    octant=+Z,
+    octant=+Z
     // $FL_ADD="DEBUG"
   ) translate(X(T)) fl_pcb(
     [FL_LAYOUT],
