@@ -5,3 +5,6 @@ stl
 nogit-*
 .DS_Store
 orthodocs/api-docs
+docs/pics/foundation/256x256/fig_Support_and_overhangs.png.deps
+docs/pics/foundation/256x256/fig_Supported_walls.png.deps
+docs/pics/foundation/256x256/fig_Unsupported_walls.png.deps
