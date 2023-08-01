@@ -50,18 +50,18 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [tnut] */
+/* [T-slot nut] */
 
-opening   = 6.4;
-in_width  = 10.0; // [0:0.1:20]
-length    = 20;
-screw_name     = "M3_cs_cap_screw"; // [M3_cs_cap_screw,M4_cs_cap_screw,M5_cs_cap_screw,M6_cs_cap_screw]
-wall_thick  = 2.0;  // [0:0.1:1]
-base_thick  = 1.0;  // [0:0.1:3]
-cone_thick  = 2.0;  // [0:0.1:6]
-nut_tolerance   = 0;    // [-1:0.1:1]
-hole_tolerance   = 0;    // [-1:0.1:2]
-countersink_tolerance   = 0;    // [-1:0.1:1]
+opening               = 6.4;
+in_width              = 10.0; // [0:0.1:20]
+length                = 20; // [0:30]
+screw_name            = "M3_cs_cap_screw"; // [M3_cs_cap_screw,M4_cs_cap_screw,M5_cs_cap_screw,M6_cs_cap_screw]
+wall_thick            = 2.0;  // [0:0.1:1]
+base_thick            = 1.0;  // [0:0.1:3]
+cone_thick            = 2.0;  // [0:0.1:6]
+nut_tolerance         = 0;    // [-1:0.1:1]
+hole_tolerance        = 0;    // [-1:0.1:2]
+countersink_tolerance = 0;    // [-1:0.1:1]
 
 countersink = false;
 knut = false;
