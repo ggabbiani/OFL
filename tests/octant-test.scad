@@ -1,6 +1,5 @@
 /*
- * Template file for OpenSCAD Founfation Library.
- * Created on Fri Jul 16 2021.
+ * Template file for OpenSCAD Foundation Library.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *

@@ -71,7 +71,7 @@ verbs=[
 ];
 
 module do_test(magnet) {
-  fl_trace("obj name:",fl_name(magnet));
+  echo(str("obj name:",fl_name(magnet)));
   fl_trace("DIR_NATIVE",DIR_NATIVE);
   fl_trace("DIR_Z",DIR_Z);
   fl_trace("DIR_R",DIR_R);
