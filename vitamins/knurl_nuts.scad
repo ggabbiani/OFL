@@ -27,7 +27,7 @@ function fl_knut_rings(type,value)  = fl_property(type,"knut/rings array [[heigh
 // key values
 
 /*!
- * Contructor for brass knurl nuts.
+ * Constructor for brass knurl nuts.
  */
 function fl_Knut(
   //! internal thread
