@@ -6,26 +6,23 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# explicit wildcard expansion suppresses errors when no files are found
-# include $(wildcard *.deps)
+# 'Immediate Set'
+export TEMPLATE		:= $(CURDIR)/template.scad
+export DEF_RULES	:= $(CURDIR)/rules.mk
 
-# %.png: %.scad
-# 	openscad -m make -o $@ -d $@.deps $<
+# 'Lazy Set'
+SOURCES				= bb-test.scad octant-test.scad quadrant-test.scad
+ECHOES				= $(SOURCES:.scad=.echo)
+export OSCAD		= openscad --hardwarnings
 
-export OSCAD	:= openscad --hardwarnings
-SOURCES			:= bb-test.scad octant-test.scad quadrant-test.scad
-ECHOES			:= $(SOURCES:.scad=.echo)
-export TEMPLATE	:= $(CURDIR)/test.template
+include $(DEF_RULES)
+
+tests: $(ECHOES) foundation
 
 # source creation
-$(SOURCES): $(@:.scad=.base) $(@:.scad=.ini) $(TEMPLATE)
+$(SOURCES): $(@:.scad=.base) $(@:.scad=.conf) $(TEMPLATE)
 	@echo "creating $@"
-	@((source ./$(@:.scad=.ini) && envsubst <$(TEMPLATE)) && cat $(@:.scad=.base)) >$@
-
-# test execution
-%.echo : %.scad
-	@echo "testing $*.scad"
-	@$(OSCAD) -o $*.echo $*.scad
+	@((set -a && source ./$(@:.scad=.conf) && envsubst <$(TEMPLATE)) && cat $(@:.scad=.base)) >$@
 
 .PHONY: foundation
 
@@ -34,9 +31,9 @@ $(SOURCES): $(@:.scad=.base) $(@:.scad=.ini) $(TEMPLATE)
 foundation:
 	$(MAKE) -C foundation tests
 
-tests: $(ECHOES) foundation
-
 clean:
-	for echo in $(ECHOES) ; do rm $$echo ; done
-	for src in $(SOURCES) ; do rm $$src ; done
-	$(MAKE) -C foundation $@
+	@echo "Deleting $(ECHOES)"
+	@for f in $(ECHOES) ; do rm -f $$f ; done
+	@echo "Deleting $(SOURCES)"
+	@for f in $(SOURCES) ; do rm -f $$f ; done
+	@$(MAKE) -C foundation $@

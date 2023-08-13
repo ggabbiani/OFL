@@ -6,23 +6,29 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# export OSCAD	:= openscad --hardwarnings
-SOURCES			:= 2d_grid-test.scad
-ECHOES			:= $(SOURCES:.scad=.echo)
-# TEMPLATE		:= $(realpath ../test.template)
+SOURCES			= 2d_grid-test.scad
+ECHOES			= $(SOURCES:.scad=.echo)
+
+include $(DEF_RULES)
 
 # source creation
-$(SOURCES): $(@:.scad=.base) $(@:.scad=.ini) $(TEMPLATE)
+$(SOURCES): $(@:.scad=.base) $(@:.scad=.conf) $(TEMPLATE)
 	@echo "creating $@"
-	@((source ./$(@:.scad=.ini) && envsubst <$(TEMPLATE)) && cat $(@:.scad=.base)) >$@
+	@((set -a && source ./$(@:.scad=.conf) && envsubst <$(TEMPLATE)) && cat $(@:.scad=.base)) >$@
 
-# test execution
-%.echo : %.scad
-	@echo "testing $*.scad"
-	@$(OSCAD) -o $*.echo $*.scad
+# # test execution
+# %.echo : %.scad
+# 	@echo "testing $*.scad"
+# 	@$(OSCAD) -o $*.echo $*.scad
+
+.PHONY: tests
 
 tests: $(ECHOES)
+	@echo "Echoes: $(ECHOES)"
+	@echo "Default rules: $(DEF_RULES)"
 
 clean:
-	for echo in $(ECHOES) ; do rm $$echo ; done
-	for src in $(SOURCES) ; do rm $$src ; done
+	@echo "Deleting $(ECHOES)"
+	@for f in $(ECHOES) ; do rm -f $$f ; done
+	@echo "Deleting $(SOURCES)"
+	@for f in $(SOURCES) ; do rm -f $$f ; done
