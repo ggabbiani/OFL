@@ -8,32 +8,28 @@
 
 # 'Immediate Set'
 export TEMPLATE		:= $(CURDIR)/template.scad
-export DEF_RULES	:= $(CURDIR)/rules.mk
+export DEF_RULES	:= $(CURDIR)/defaults.mk
+export DEF_CONFS	:= $(CURDIR)/defaults.conf
 
 # 'Lazy Set'
 SOURCES				= bb-test.scad octant-test.scad quadrant-test.scad
-ECHOES				= $(SOURCES:.scad=.echo)
+RESULTS				= $(SOURCES:.scad=.echo)
 export OSCAD		= openscad --hardwarnings
 
 include $(DEF_RULES)
 
-tests: $(ECHOES) foundation
+.PRECIOUS: $(SOURCES)
 
-# source creation
-$(SOURCES): $(@:.scad=.base) $(@:.scad=.conf) $(TEMPLATE)
-	@echo "creating $@"
-	@((set -a && source ./$(@:.scad=.conf) && envsubst <$(TEMPLATE)) && cat $(@:.scad=.base)) >$@
+tests: $(RESULTS) foundation
 
 .PHONY: foundation
-
-# all: tests foundation
 
 foundation:
 	$(MAKE) -C foundation tests
 
 clean:
-	@echo "Deleting $(ECHOES)"
-	@for f in $(ECHOES) ; do rm -f $$f ; done
-	@echo "Deleting $(SOURCES)"
+	@for f in $(RESULTS) ; do rm -f $$f ; done
+	@echo "$(RESULTS): DELETED"
 	@for f in $(SOURCES) ; do rm -f $$f ; done
+	@echo "$(SOURCES): DELETED"
 	@$(MAKE) -C foundation $@

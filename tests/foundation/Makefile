@@ -7,28 +7,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 SOURCES			= 2d_grid-test.scad
-ECHOES			= $(SOURCES:.scad=.echo)
+RESULTS			= $(SOURCES:.scad=.echo)
 
 include $(DEF_RULES)
 
-# source creation
-$(SOURCES): $(@:.scad=.base) $(@:.scad=.conf) $(TEMPLATE)
-	@echo "creating $@"
-	@((set -a && source ./$(@:.scad=.conf) && envsubst <$(TEMPLATE)) && cat $(@:.scad=.base)) >$@
+.PRECIOUS: $(SOURCES)
 
-# # test execution
-# %.echo : %.scad
-# 	@echo "testing $*.scad"
-# 	@$(OSCAD) -o $*.echo $*.scad
-
-.PHONY: tests
-
-tests: $(ECHOES)
-	@echo "Echoes: $(ECHOES)"
-	@echo "Default rules: $(DEF_RULES)"
+tests: $(RESULTS)
 
 clean:
-	@echo "Deleting $(ECHOES)"
-	@for f in $(ECHOES) ; do rm -f $$f ; done
-	@echo "Deleting $(SOURCES)"
+	@for f in $(RESULTS) ; do rm -f $$f ; done
+	@echo "$(RESULTS): DELETED"
 	@for f in $(SOURCES) ; do rm -f $$f ; done
+	@echo "$(SOURCES): DELETED"
