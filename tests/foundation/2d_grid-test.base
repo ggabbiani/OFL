@@ -1,0 +1,22 @@
+sheet_metal = [[0,0],GRID_SIZE];
+// the grid bounding box is equal to the sheet metal one reduced by border size
+grid_bbox   = sheet_metal+[BORDER,-BORDER];
+
+if (GRID_BBOX)
+  translate(Z(NIL)) #fl_bb_add(grid_bbox,2d=true);
+
+fl_color("silver")
+  linear_extrude(0.5)
+    difference() {
+      // sheet metal
+      fl_bb_add(sheet_metal,2d=true);
+      // grid holes
+      fl_grid_layout(
+        origin  = TRIM_ORIGIN,
+        step    = GRID_TYPE=="quad" ? QUAD_STEP : undef,
+        r_step  = GRID_TYPE=="hex" ? HEX_STEP : undef,
+        bbox    = grid_bbox,
+        clip    = GRID_CLIP
+      ) // hole shape
+        rotate(ROTATION,+Z) fl_circle(d=HOLE_D,$fn=HOLE_VERTICES);
+    }
