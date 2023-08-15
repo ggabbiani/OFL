@@ -4,7 +4,7 @@
 	@echo " TESTED"
 
 # source creation
-%.scad : %.base %.conf $(TEMPLATE) $(DEF_CONFS)
+%.scad : %.base %.conf $(TEMPLATES) $(DEF_CONFS)
 	@echo -n "$@:"
-	@((set -a && source $(DEF_CONFS) && source $(realpath $*.conf) && envsubst <$(TEMPLATE)) && cat $(@:.scad=.base)) >$@
+	@((set -a && source $(DEF_CONFS) && source $(realpath $*.conf) && envsubst <$(TEMPLATE_DIR)/$${TEST_TEMPLATE}) && cat $(@:.scad=.base)) >$@
 	@echo -n " CREATED"

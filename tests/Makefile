@@ -7,7 +7,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # 'Immediate Set'
-export TEMPLATE		:= $(CURDIR)/template.scad
+export TEMPLATE_DIR	:= $(CURDIR)
+export TEMPLATES	:= $(addprefix $(TEMPLATE_DIR)/,template-default.scad template-nogui.scad)
 export DEF_RULES	:= $(CURDIR)/defaults.mk
 export DEF_CONFS	:= $(CURDIR)/defaults.conf
 
