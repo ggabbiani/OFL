@@ -1,15 +1,3 @@
-/*
- * Various 3d functions tests
- *
- * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
-
-include <../../foundation/unsafe_defs.scad>
-use <../../foundation/3d-engine.scad>
-
 /******************************************************************************
  * Full semi-axis value list constructor from key/value list
  */
