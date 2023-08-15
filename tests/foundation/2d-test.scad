@@ -1,20 +1,27 @@
 /*
  * 2D foundation primitives tests.
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/defs.scad>
 
+include <../../foundation/defs.scad>
 use <../../foundation/2d-engine.scad>
 
-$fn         = 50;     // [3:100]
+
+
+$fn         = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug   = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;     // [-2:10]
+
 
 /* [Supported verbs] */
 
@@ -25,14 +32,16 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+
 /* [Placement] */
 
 PLACE_NATIVE  = true;
 QUADRANT      = [+1,+1];  // [-1:+1]
 
+
 /* [2D primitives] */
 
-PRIMITIVE     = "circle arc";  // ["circle", "circle arc", "circle sector", "circle annulus", "ellipse", "elliptic arc", "elliptic sector", "elliptic annulus", "frame", "inscribed polygon", "square"]
+PRIMITIVE     = "circle arc";  // [circle, circle arc, circle sector, circle annulus, ellipse, elliptic arc, elliptic sector, elliptic annulus, frame, inscribed polygon, square]
 RADIUS        = 10;
 // ellipse horiz. semi axis
 A             = 10;
@@ -48,6 +57,7 @@ IPOLY_N       = 3;  // [3:50]
 // Show a circumscribed circle to inscribed polygon
 IPOLY_CIRCLE  = true;
 SQUARE_SIZE   = [40,30];
+
 
 /* [Hidden] */
 

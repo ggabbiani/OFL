@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-SOURCES			= 2d_grid-test.scad
+SOURCES			= 2d_grid-test.scad 2d-test.scad
 RESULTS			= $(SOURCES:.scad=.echo)
 
 include $(DEF_RULES)
