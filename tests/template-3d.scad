@@ -18,3 +18,6 @@ ${TAB_Direction}
 ${TAB_TEST}
 
 /* [Hidden] */
+${TEST_PROLOGUE}
+// end of automatically generated code
+

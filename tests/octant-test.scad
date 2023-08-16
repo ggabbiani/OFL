@@ -24,6 +24,8 @@ $FL_RENDER  = false;
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
 
 
 
@@ -48,5 +50,12 @@ SIZE          = [1,2,3];
 
 
 /* [Hidden] */
+
+direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant    = PLACE_NATIVE  ? undef : OCTANT;
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+// end of automatically generated code
+
 fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[FL_O,SIZE])
   cube(size=SIZE);

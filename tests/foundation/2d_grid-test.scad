@@ -26,6 +26,8 @@ $FL_RENDER  = false;
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
 
 
 
@@ -52,6 +54,9 @@ ROTATION    = 0;    // [0:360]
 
 
 /* [Hidden] */
+
+// end of automatically generated code
+
 sheet_metal = [[0,0],GRID_SIZE];
 // the grid bounding box is equal to the sheet metal one reduced by border size
 grid_bbox   = sheet_metal+[BORDER,-BORDER];
