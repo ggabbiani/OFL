@@ -1,23 +1,32 @@
 /*
  * 3D foundation primitives tests.
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/defs.scad>
 
+include <../../foundation/defs.scad>
 use <../../foundation/3d-engine.scad>
 
-$fn           = 50;   // [3:100]
-// When true, disables epsilon corrections
-$FL_RENDER    = false;
+
+
+$fn         = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug   = false;
+// When true, disables PREVIEW corrections like FL_NIL
+$FL_RENDER  = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES    = -2;   // [-2:10]
-$fl_debug     = false;
-SHOW_LABELS   = false;
-SHOW_SYMBOLS  = false;
+$FL_TRACES  = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -28,10 +37,12 @@ AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+
 /* [Placement] */
 
 PLACE_NATIVE  = true;
-OCTANT        = [+1,+1,+1];  // [-1:+1]
+OCTANT        = [0,0,0];    // [-1:+1]
+
 
 /* [Direction] */
 
@@ -41,9 +52,10 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
+
 /* [3ds] */
 
-SHAPE   = "cube";     // ["cube", "cylinder", "prism", "sphere"]
+SHAPE   = "cube";     // [cube, cylinder, prism, sphere]
 // Size for cube and sphere, bottom/top diameter and height for cylinder, bottom/top edge length and height for prism
 SIZE    = [1,2,3];
 
@@ -52,11 +64,16 @@ SIZE    = [1,2,3];
 // Number of edges
 N     = 3; // [3:10]
 
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+fl_status();
+
+// end of automatically generated code
 
 verbs=[
   if (ADD!="OFF")   FL_ADD,
@@ -64,7 +81,6 @@ verbs=[
   if (BBOX!="OFF")  FL_BBOX,
 ];
 
-fl_status();
 fl_trace("PLACE_NATIVE",PLACE_NATIVE);
 fl_trace("octant",octant);
 
