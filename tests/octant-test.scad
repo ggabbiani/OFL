@@ -55,6 +55,8 @@ direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
+fl_status();
+
 // end of automatically generated code
 
 fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[FL_O,SIZE])
