@@ -262,7 +262,7 @@ __Syntax:__
 fl_Knut(screw,length,diameter,tooth,rings)
 ```
 
-Contructor for brass knurl nuts.
+Constructor for brass knurl nuts.
 
 
 __Parameters:__
