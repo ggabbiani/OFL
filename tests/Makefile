@@ -8,7 +8,7 @@
 
 # 'Immediate Set'
 export TEMPLATE_DIR	:= $(CURDIR)
-export TEMPLATES	:= $(addprefix $(TEMPLATE_DIR)/,template-default.scad template-nogui.scad)
+export TEMPLATES	:= $(addprefix $(TEMPLATE_DIR)/,template-2d.scad template-3d.scad template-nogui.scad)
 export DEF_RULES	:= $(CURDIR)/defaults.mk
 export DEF_CONFS	:= $(CURDIR)/defaults.conf
 

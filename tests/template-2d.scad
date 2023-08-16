@@ -1,7 +1,7 @@
 /*
  * ${TEST_DESCRIPTION}
  *
- * NOTE: this file is generated automatically from 'template-nogui.scad', any
+ * NOTE: this file is generated automatically from 'template-2d.scad', any
  * change will be lost.
  *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
@@ -10,3 +10,10 @@
  */
 
 ${TEST_INCLUDES}
+
+${TAB_PARAMETERS}
+${TAB_Verbs}
+${TAB_Placement}
+${TAB_TEST}
+
+/* [Hidden] */

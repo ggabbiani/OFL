@@ -1,6 +1,9 @@
 /*
  * 2d grid test
  *
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -26,10 +29,6 @@ $FL_TRACES  = -2;     // [-2:10]
 
 
 
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-QUADRANT      = [+1,+1];  // [-1:+1]
 
 
 /* [TEST] */
@@ -53,7 +52,6 @@ ROTATION    = 0;    // [0:360]
 
 
 /* [Hidden] */
-
 sheet_metal = [[0,0],GRID_SIZE];
 // the grid bounding box is equal to the sheet metal one reduced by border size
 grid_bbox   = sheet_metal+[BORDER,-BORDER];

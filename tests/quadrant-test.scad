@@ -1,6 +1,9 @@
 /*
  * 2d quadrant test
  *
+ * NOTE: this file is generated automatically from 'template-2d.scad', any
+ * change will be lost.
+ *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -26,14 +29,14 @@ $FL_TRACES  = -2;     // [-2:10]
 /* [Placement] */
 
 PLACE_NATIVE  = true;
-QUADRANT      = [0,0];      // [-1:+1]
+QUADRANT      = [+1,+1];  // [-1:+1]
+
 
 /* [TEST] */
 
 SIZE          = [200,100];
 
 /* [Hidden] */
-
 module do_square(primus=false) {
   fl_color("cyan") square(size=SIZE);
   fl_color("black") {

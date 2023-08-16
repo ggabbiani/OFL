@@ -1,6 +1,9 @@
 /*
  * 3d octant test
  *
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -30,12 +33,20 @@ PLACE_NATIVE  = true;
 OCTANT        = [0,0,0];    // [-1:+1]
 
 
+/* [Direction] */
+
+DIR_NATIVE  = true;
+// ARBITRARY direction vector
+DIR_Z       = [0,0,1];  // [-1:0.1:+1]
+// rotation around
+DIR_R       = 0;        // [-360:360]
+
+
 /* [TEST] */
 
 SIZE          = [1,2,3];
 
 
 /* [Hidden] */
-
 fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[FL_O,SIZE])
   cube(size=SIZE);

@@ -1,7 +1,7 @@
 # test execution
 %.echo : %.scad
 	@source $(realpath $*.conf) && $(OSCAD) $${CAMERA} -o $*.echo $*.scad
-	@echo " TESTED"
+	@echo " OK"
 
 # source creation
 %.scad : %.base %.conf $(TEMPLATES) $(DEF_CONFS)
