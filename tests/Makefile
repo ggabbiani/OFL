@@ -7,15 +7,17 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # 'Immediate Set'
-export TEMPLATE_DIR	:= $(CURDIR)
-export TEMPLATES	:= $(addprefix $(TEMPLATE_DIR)/,template-2d.scad template-3d.scad template-nogui.scad)
-export DEF_RULES	:= $(CURDIR)/defaults.mk
-export DEF_CONFS	:= $(CURDIR)/defaults.conf
+TEMPLATE_DIR	:= $(CURDIR)
+TEMPLATES		:= $(addprefix $(TEMPLATE_DIR)/,template-2d.scad template-3d.scad template-nogui.scad)
+DEF_RULES		:= $(CURDIR)/defaults.mk
+DEF_CONFS		:= $(CURDIR)/defaults.conf
 
 # 'Lazy Set'
-SOURCES				= bb-test.scad octant-test.scad quadrant-test.scad
-RESULTS				= $(SOURCES:.scad=.echo)
-export OSCAD		= openscad --hardwarnings
+SOURCES			= bb-test.scad octant-test.scad quadrant-test.scad
+RESULTS			= $(SOURCES:.scad=.echo)
+OSCAD			= openscad --hardwarnings
+
+export TEMPLATE_DIR TEMPLATES DEF_RULES DEF_CONFS OSCAD
 
 include $(DEF_RULES)
 
@@ -26,7 +28,7 @@ tests: $(RESULTS) foundation
 .PHONY: foundation
 
 foundation:
-	$(MAKE) -C foundation tests
+	@$(MAKE) -C foundation tests
 
 clean:
 	@for f in $(RESULTS) ; do rm -f $$f ; done
