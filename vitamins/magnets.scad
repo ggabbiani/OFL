@@ -127,6 +127,8 @@ module fl_magnet(
   fp_gross    = 0,
   //! thickness for screws
   thick       = 0,
+  //! nominal screw overloading
+  screw,
   //! desired direction [director,rotation], native direction when undef
   direction,
   //! when undef native positioning is used (+Z)
@@ -139,7 +141,7 @@ module fl_magnet(
   cs            = fl_mag_cs(type);
   color         = fl_material(type);
   h             = fl_thick(type);
-  screw         = fl_screw(type);
+  screw         = screw ? screw : fl_screw(type);
   screw_len     = screw!=undef  ? screw_longer_than(h)   : undef;
   screw_d       = screw!=undef  ? 2*screw_radius(screw)  : undef;
   h_cs          = cs!=undef     ? fl_mag_csH(type)       : undef;

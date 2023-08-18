@@ -147,7 +147,7 @@ fl_mag_engine(type,value)
 
 __Syntax:__
 
-    fl_magnet(verbs=FL_ADD,type,fp_gross=0,thick=0,direction,octant)
+    fl_magnet(verbs=FL_ADD,type,fp_gross=0,thick=0,screw,direction,octant)
 
 __Parameters:__
 
@@ -162,6 +162,9 @@ quantity to add to the footprint dimensions
 
 __thick__  
 thickness for screws
+
+__screw__  
+nominal screw overloading
 
 __direction__  
 desired direction [director,rotation], native direction when undef
