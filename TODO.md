@@ -36,6 +36,11 @@
 [ ] global: implement an automatic documentation picture generator mechanism
 [x] vitamins/generic.scad: new generic vitamins with no-op FL_ADD semantic but fully programmable FL_CUTOUT implementation. This module has been used for implementing proper component cutout on complex PCBs.
 [x] test/vitamins/generic.scad: first implementation
+[ ] include third libraries into the distribution
+[ ] general package rename adhering the architectural documentation
+[ ] general Makefile implementing documents/pictures/example generation
+[ ] move library sources into a single top level directory (src?)
+[ ] remove obsolete drawio library
 
 ## Changed file names
 
