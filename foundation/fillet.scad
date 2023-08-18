@@ -66,7 +66,7 @@ module fl_hFillet(
       fl_modifier($modifier) do_add();
     else if ($verb==FL_AXES)
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_bb_add(bbox);
     else
@@ -112,7 +112,7 @@ module fl_fillet(
       fl_modifier($modifier) do_add();
     else if ($verb==FL_AXES)
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_cube(size=size);
     else
@@ -172,7 +172,7 @@ module fl_90DegFillet(
       fl_modifier($modifier) do_add() children();
     else if ($verb==FL_AXES)
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) translate(bbox[0]) fl_cube(size=size);
     else
