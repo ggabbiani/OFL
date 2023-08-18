@@ -98,7 +98,7 @@ __Default:__
 
     "Support & overhangs"
 
-![Support & overhangs](../../docs/pics/foundation/256x256/fig_Support_and_overhangs.png)
+![Support & overhangs](../../pics/foundation/256x256/fig_Support_and_overhangs.png)
 
 Maximum angle a wall can be printed at without requiring support (degree).
 
@@ -121,7 +121,7 @@ __Default:__
 
     "Supported walls"
 
-![Supported walls](../../docs/pics/foundation/256x256/fig_Supported_walls.png)
+![Supported walls](../../pics/foundation/256x256/fig_Supported_walls.png)
 
 The minimum width of walls connected to the rest of the print on at least
 two sides (mm).
@@ -145,7 +145,7 @@ __Default:__
 
     "Unsupported walls"
 
-![Unsupported walls](../../docs/pics/foundation/256x256/fig_Unsupported_walls.png)
+![Unsupported walls](../../pics/foundation/256x256/fig_Unsupported_walls.png)
 
 Unsupported walls are connected to the rest of the print on less than two
 sides (mm).
