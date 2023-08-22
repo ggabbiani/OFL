@@ -5,9 +5,13 @@
 # 	openscad -m make -o $@ -d $@.deps $<
 
 # SIZE		:= $(notdir $(CURDIR))
-# UNSCALED	:= /tmp/unscaled.png
+UNSCALED	:= /tmp/unscaled.png
+SCAD		:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make -o $(UNSCALED) --view axes
+
+export SCAD UNSCALED
 
 all:
+	@echo "Real path=$(OFL_PATH)"
 	$(MAKE) -C foundation $@
 	$(MAKE) -C 800x600 $@
 
