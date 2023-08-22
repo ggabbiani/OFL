@@ -6,11 +6,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../vitamins/magnets.scad>
+include <../lib/OFL/vitamins/magnets.scad>
 
-use <../foundation/bbox-engine.scad>
-use <../foundation/mngm.scad>
-use <../foundation/util.scad>
+use <../lib/OFL/foundation/bbox-engine.scad>
+use <../lib/OFL/foundation/mngm.scad>
+use <../lib/OFL/foundation/util.scad>
 
 $fn           = 50;           // [3:100]
 // May trigger debug statement in client modules / functions

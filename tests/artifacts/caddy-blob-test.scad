@@ -6,11 +6,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../artifacts/caddy.scad>
+include <../../lib/OFL/foundation/unsafe_defs.scad>
+include <../../lib/OFL/artifacts/caddy.scad>
 
-use <../../foundation/3d-engine.scad>
-use <../../foundation/mngm.scad>
+use <../../lib/OFL/foundation/3d-engine.scad>
+use <../../lib/OFL/foundation/mngm.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

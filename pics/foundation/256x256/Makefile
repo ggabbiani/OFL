@@ -12,13 +12,13 @@ TARGETS		:= $(SOURCES:.scad=.png)
 all: $(TARGETS)
 
 %.png: %.scad
-	$(SCAD) --imgsize 9600,9600 -d $@.deps $<
-	convert $(UNSCALED) -resize $(SIZE) $@
-	rm $(UNSCALED)
+	@$(SCAD) --imgsize 9600,9600 -d $@.deps $<
+	@convert $(UNSCALED) -resize $(SIZE) $@
+	@rm $(UNSCALED)
 
 # %.scad:
 # 	@echo "include <OFL/library.scad>" >$@
 # 	@echo "__$(basename $@)__();" >>$@
 
 clean:
-	rm *.png *.deps
+	@rm -f *.png *.deps

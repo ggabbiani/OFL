@@ -6,10 +6,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/unsafe_defs.scad>
-include <../../vitamins/countersinks.scad>
+include <../../lib/OFL/foundation/unsafe_defs.scad>
+include <../../lib/OFL/vitamins/countersinks.scad>
 
-use <../../foundation/3d-engine.scad>
+use <../../lib/OFL/foundation/3d-engine.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables epsilon corrections

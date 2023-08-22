@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../../foundation/defs.scad>
+include <../../lib/OFL/foundation/defs.scad>
 
 $fn           = 50;   // [3:100]
 // When true, disables epsilon corrections

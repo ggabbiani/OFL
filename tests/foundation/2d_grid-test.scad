@@ -10,22 +10,21 @@
  */
 
 
-include <../../foundation/unsafe_defs.scad>
-use <../../foundation/2d-engine.scad>
-use <../../foundation/3d-engine.scad>
-use <../../foundation/grid.scad>
+include <../../lib/OFL/foundation/unsafe_defs.scad>
+use <../../lib/OFL/foundation/2d-engine.scad>
+use <../../lib/OFL/foundation/3d-engine.scad>
+use <../../lib/OFL/foundation/grid.scad>
 
 
-
-$fn         = 50;           // [3:100]
+$fn            = 50;           // [3:100]
 // When true, debug statements are turned on
-$fl_debug   = false;
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
 

@@ -9,8 +9,8 @@
 include <NopSCADlib/global_defs.scad>
 use     <NopSCADlib/utils/layout.scad>
 
-include <../../foundation/defs.scad>
-include <../../vitamins/hdmi.scad>
+include <../../lib/OFL/foundation/defs.scad>
+include <../../lib/OFL/vitamins/hdmi.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

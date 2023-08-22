@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/defs.scad>
+include <../../lib/OFL/foundation/defs.scad>
 
-include <../../vitamins/screw.scad>
+include <../../lib/OFL/vitamins/screw.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/type_trait.scad>
-include <../../foundation/unsafe_defs.scad>
-// include <../../foundation/hole.scad>
+include <../../lib/OFL/foundation/type_trait.scad>
+include <../../lib/OFL/foundation/unsafe_defs.scad>
+// include <../../lib/OFL/foundation/hole.scad>
 
 fl_status();
 

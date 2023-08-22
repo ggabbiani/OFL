@@ -5,12 +5,12 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../../foundation/defs.scad>
+include <../../lib/OFL/foundation/defs.scad>
 
-include <../../dxf.scad>
-include <../../vitamins/ethers.scad>
+include <../../lib/OFL/dxf.scad>
+include <../../lib/OFL/vitamins/ethers.scad>
 
-use <../../foundation/base_parameters.scad>
+use <../../lib/OFL/foundation/base_parameters.scad>
 
 $fn           = 50;   // [3:100]
 // When true, disables epsilon corrections

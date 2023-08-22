@@ -6,6 +6,7 @@
 #
 set -e # exit immediately in case of error
 OFL="$(realpath $(dirname $0)/..)"
+LIB="${OFL}/lib/OFL"
 . $OFL/bin/functions.sh
 trap 'on_exit $? $test' EXIT
 
@@ -36,11 +37,11 @@ on_exit() {
 }
 
 locals() {
-  grep -e '^use[[:space:]]*<' -e '^include[[:space:]]*<' $OFL/$MODE/*.scad | sed -e 's@^.*/OFL/[[:alnum:]]*/@@g' -e 's/[[:space:]]*</:/g' -e 's/>.*$//g' | grep -v -e ':\.\./' -v -e scad-utils -v -e TOUL -v -e NopSCADlib | sed -e 's/\.scad//g'
+  grep -e '^use[[:space:]]*<' -e '^include[[:space:]]*<' $LIB/$MODE/*.scad | sed -e 's@^.*/OFL/[[:alnum:]]*/@@g' -e 's/[[:space:]]*</:/g' -e 's/>.*$//g' | grep -v -e ':\.\./' -v -e scad-utils -v -e TOUL -v -e NopSCADlib | sed -e 's/\.scad//g'
 }
 
 modules() {
-  cd $OFL/$MODE && ls -Q -l *.scad | sed -e 's/.* //g' -e 's/\.scad//g' && cd - >/dev/null
+  cd $LIB/$MODE && ls -Q -l *.scad | sed -e 's/.* //g' -e 's/\.scad//g' && cd - >/dev/null
 }
 
 digraph() {
@@ -144,6 +145,6 @@ info "uses: $uses"
 if [ "$DRY" == "ON" ]; then
   digraph
 else
-  digraph | dot -Tsvg -o "$OFL/$MODE/docs/dependencies.svg"
+  digraph | dot -Tsvg -o "$LIB/$MODE/docs/dependencies.svg"
 fi
 exit 0

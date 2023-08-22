@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../vitamins/sata.scad>
-include <../../foundation/unsafe_defs.scad>
+include <../../lib/OFL/vitamins/sata.scad>
+include <../../lib/OFL/foundation/unsafe_defs.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

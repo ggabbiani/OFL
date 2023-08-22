@@ -11,10 +11,9 @@ SCAD		:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make -o $(UNSCAL
 export SCAD UNSCALED
 
 all:
-	@echo "Real path=$(OFL_PATH)"
-	$(MAKE) -C foundation $@
-	$(MAKE) -C 800x600 $@
+	@$(MAKE) -C foundation $@
+	@$(MAKE) -C 800x600 $@
 
 clean:
-	$(MAKE) -C foundation $@
-	$(MAKE) -C 800x600 $@
+	@$(MAKE) -C foundation $@
+	@$(MAKE) -C 800x600 $@

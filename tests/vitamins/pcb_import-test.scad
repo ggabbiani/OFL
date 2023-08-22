@@ -5,9 +5,9 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../../foundation/unsafe_defs.scad>
-// include <../../foundation/incs.scad>
-include <../../vitamins/pcbs.scad>
+include <../../lib/OFL/foundation/unsafe_defs.scad>
+// include <../../lib/OFL/foundation/incs.scad>
+include <../../lib/OFL/vitamins/pcbs.scad>
 
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/pcbs.scad>

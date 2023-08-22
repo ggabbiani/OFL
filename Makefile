@@ -6,20 +6,23 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-SRC_ROOT 	:= $(CURDIR)
-SRC_DIRS	:= artifacts foundation vitamins
-LIB_SOURCES	:= $(wildcard $(SRC_ROOT)/*.scad) $(wildcard $(SRC_ROOT)/artifacts/*.scad) $(wildcard $(SRC_ROOT)/foundation/*.scad) $(wildcard $(SRC_ROOT)/vitamins/*.scad)
-EXAMPLES	:= $(realpath examples)
-TESTS		:= $(realpath tests)
+SRC_ROOT 	:= $(CURDIR)/lib
+LIB_ROOT	:= $(SRC_ROOT)/OFL
+LIB_DIRS	:= artifacts foundation vitamins
+LIB_SOURCES	:= $(wildcard $(LIB_ROOT)/*.scad) $(wildcard $(LIB_ROOT)/artifacts/*.scad) $(wildcard $(LIB_ROOT)/foundation/*.scad) $(wildcard $(LIB_ROOT)/vitamins/*.scad)
+LIB_SOURCES	:= $(wildcard $(addsuffix *.scad,$(LIB_DIRS)))
+EXAMPLES	:= $(CURDIR)/examples
+TESTS		:= $(CURDIR)/tests
+TEMP_ROOT	:= /tmp
 
-export EXAMPLES LIB_SOURCES SRC_DIRS SRC_ROOT TESTS
+export EXAMPLES LIB_SOURCES LIB_DIRS SRC_ROOT LIB_ROOT TEMP_ROOT TESTS
 
 .PHONY: pics tests
 
-all: docs tests tests
+all: docs tests
 
 tests:
-	@$(MAKE) -C tests
+	@$(MAKE) -C $(TESTS)
 
 docs: api-docs pics
 
@@ -32,4 +35,4 @@ pics:
 
 clean:
 	@$(MAKE) -C pics $@
-	@$(MAKE) -C tests $@
+	@$(MAKE) -C $(TESTS) $@

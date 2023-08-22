@@ -8,13 +8,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/2d-engine.scad>
-include <../foundation/fillet.scad>
-include <../foundation/limits.scad>
-include <../foundation/tube.scad>
-include <../vitamins/magnets.scad>
-include <../vitamins/screw.scad>
-include <../vitamins/knurl_nuts.scad>
+include <../lib/OFL/foundation/2d-engine.scad>
+include <../lib/OFL/foundation/fillet.scad>
+include <../lib/OFL/foundation/limits.scad>
+include <../lib/OFL/foundation/tube.scad>
+include <../lib/OFL/vitamins/magnets.scad>
+include <../lib/OFL/vitamins/screw.scad>
+include <../lib/OFL/vitamins/knurl_nuts.scad>
 
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER  = false;

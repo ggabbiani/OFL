@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/tube.scad>
+include <../../lib/OFL/foundation/tube.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

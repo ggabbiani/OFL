@@ -1,2 +1,0 @@
-fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[FL_O,SIZE])
-  cube(size=SIZE);

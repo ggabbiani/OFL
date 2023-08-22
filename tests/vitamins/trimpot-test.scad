@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../../vitamins/trimpot.scad>
+include <../../lib/OFL/vitamins/trimpot.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

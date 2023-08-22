@@ -8,9 +8,9 @@
 // include <NopSCADlib/core.scad>
 // include <NopSCADlib/vitamins/screws.scad>
 
-include <../../artifacts/t-nut.scad>
-include <../../foundation/defs.scad>
-include <../../vitamins/knurl_nuts.scad>
+include <../../lib/OFL/artifacts/t-nut.scad>
+include <../../lib/OFL/foundation/defs.scad>
+include <../../lib/OFL/vitamins/knurl_nuts.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

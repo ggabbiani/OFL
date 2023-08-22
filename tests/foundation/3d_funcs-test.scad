@@ -10,8 +10,10 @@
  */
 
 
-include <../../foundation/unsafe_defs.scad>
-use <../../foundation/3d-engine.scad>
+include <../../lib/OFL/foundation/unsafe_defs.scad>
+use <../../lib/OFL/foundation/3d-engine.scad>
+
+// end of automatically generated code
 
 /******************************************************************************
  * Full semi-axis value list constructor from key/value list

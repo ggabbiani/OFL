@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../artifacts/pcb_holder.scad>
-include <../../vitamins/pcbs.scad>
+include <../../lib/OFL/artifacts/pcb_holder.scad>
+include <../../lib/OFL/vitamins/pcbs.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

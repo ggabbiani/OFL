@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/defs.scad>
+include <../../lib/OFL/foundation/defs.scad>
 
 let(
   list    = ["one","two","three"],

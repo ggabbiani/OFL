@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../vitamins/hds.scad>
-include <../../vitamins/pcbs.scad>
-include <../../vitamins/psus.scad>
+include <../../lib/OFL/vitamins/hds.scad>
+include <../../lib/OFL/vitamins/pcbs.scad>
+include <../../lib/OFL/vitamins/psus.scad>
 
-use <../../foundation/3d-engine.scad>
+use <../../lib/OFL/foundation/3d-engine.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

@@ -11,14 +11,14 @@
 include <NopSCADlib/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
-include <../foundation/defs.scad>
-include <../foundation/limits.scad>
-include <../artifacts/t-nut.scad>
-include <../vitamins/knurl_nuts.scad>
+include <../lib/OFL/foundation/defs.scad>
+include <../lib/OFL/foundation/limits.scad>
+include <../src/OFL/artifacts/t-nut.scad>
+include <../lib/OFL/vitamins/knurl_nuts.scad>
 
-use <../foundation/2d-engine.scad>
-use <../foundation/3d-engine.scad>
-use <../foundation/hole.scad>
+use <../lib/OFL/foundation/2d-engine.scad>
+use <../lib/OFL/foundation/3d-engine.scad>
+use <../lib/OFL/foundation/hole.scad>
 
 include <NopSCADlib/utils/core/core.scad>
 use <NopSCADlib/utils/thread.scad>

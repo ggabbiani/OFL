@@ -10,3 +10,5 @@
  */
 
 ${TEST_INCLUDES}
+// end of automatically generated code
+${TEST_CODE}

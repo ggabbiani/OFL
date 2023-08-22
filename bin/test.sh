@@ -1,10 +1,10 @@
 #!/bin/bash
 ###############################################################################
-# Executes all the OpenSCAD scripts present in the <OFL>/tests directory.
+# Executes all the OpenSCAD scripts present in the <OFL>/src/tests directory.
 #
 # An OpenSCAD script is recognized as 'test' when following conditions are met:
 #
-# * script is inside <OFL>/tests directory
+# * script is inside <OFL>/src/tests directory
 # * script file name is in the form <name>"-test.scad"
 #
 # <OFL> repo root is auto-retrieved from this script real path.
@@ -14,6 +14,7 @@
 #
 set -e # exit immediately in case of error
 OFL="$(realpath $(dirname $0)/..)"
+TESTS="$OFL/tests"
 . $OFL/bin/functions.sh
 trap 'on_exit $? $test $OFILE' EXIT
 # trap 'catch $? $test' ERR
@@ -86,7 +87,7 @@ done
 eval set -- "$POSITIONALS"
 
 info "Output directory set to: '$OUT'."
-for test in $(find $OFL/tests/ -name '*-test.scad'); do
+for test in $(find $TESTS/ -name '*-test.scad'); do
   info "running `basename $test .scad`"
   OFILE="$OUT/$(basename $test .scad).echo"
   # "$CMD" "--hardwarnings" -o $OFILE $test

@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../artifacts/box.scad>
+include <../../lib/OFL/artifacts/box.scad>
 
-use <../../foundation/2d-engine.scad>
+use <../../lib/OFL/foundation/2d-engine.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

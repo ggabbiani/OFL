@@ -9,20 +9,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <../lib/OFL/foundation/defs.scad>
+use <../lib/OFL/foundation/2d-engine.scad>
 
-include <../foundation/defs.scad>
-use <../foundation/2d-engine.scad>
-
-
-$fn         = 50;           // [3:100]
+$fn            = 50;           // [3:100]
 // When true, debug statements are turned on
-$fl_debug   = false;
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
 
@@ -38,7 +36,16 @@ QUADRANT      = [+1,+1];  // [-1:+1]
 
 SIZE          = [200,100];
 
+
 /* [Hidden] */
+
+quadrant    = PLACE_NATIVE  ? undef : QUADRANT;
+debug       = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+fl_status();
+
+// end of automatically generated code
+
 module do_square(primus=false) {
   fl_color("cyan") square(size=SIZE);
   fl_color("black") {

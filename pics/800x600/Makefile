@@ -9,12 +9,14 @@ SIZE		:= $(notdir $(CURDIR))
 all:	cover.png torus.png
 
 clean:
-	rm *.png *.deps
+	@rm -f *.png *.deps
 
-cover.png: $(EXAMPLES)/rpi4-box.scad $(EXAMPLES)/rpi4-box.json
-	$(SCAD) --imgsize 3200,2400 -d $@.deps --p $(EXAMPLES)/rpi4-box.json --P cover --camera="7.62939e-7,0,11.925,68.3,0,140.5,281.12" $(EXAMPLES)/rpi4-box.scad
-	convert $(UNSCALED) -resize $(SIZE) $@
+cover.png: $(EXAMPLES)/sbc-box.scad $(EXAMPLES)/sbc-box.json
+	@echo $@
+	@$(SCAD) --imgsize 3200,2400 -d $@.deps --p $(EXAMPLES)/sbc-box.json --P cover --camera="7.62939e-7,0,11.925,68.3,0,140.5,281.12" $(EXAMPLES)/sbc-box.scad
+	@convert $(UNSCALED) -resize $(SIZE) $@
 
 torus.png: $(TESTS)/foundation/torus-test.scad $(TESTS)/foundation/torus-test.json
-	$(SCAD) --imgsize 3200,2400 -d $@.deps --p $(TESTS)/foundation/torus-test.json --P torus $(TESTS)/foundation/torus-test.scad
-	convert $(UNSCALED) -resize $(SIZE) $@
+	@echo $@
+	@$(SCAD) --imgsize 3200,2400 -d $@.deps --p $(TESTS)/foundation/torus-test.json --P torus $(TESTS)/foundation/torus-test.scad
+	@convert $(UNSCALED) -resize $(SIZE) $@

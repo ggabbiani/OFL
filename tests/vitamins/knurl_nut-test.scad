@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../vitamins/knurl_nuts.scad>
+include <../../lib/OFL/vitamins/knurl_nuts.scad>
 
 // TODO: implement a CI-TEST parameter set for all test
 

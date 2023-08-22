@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/template.scad>
+include <../../lib/OFL/foundation/template.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../vitamins/hds.scad>
-// include <../../vitamins/sata-adapters.scad>
-// include <../../vitamins/screw.scad>
+include <../../lib/OFL/vitamins/hds.scad>
+// include <../../lib/OFL/vitamins/sata-adapters.scad>
+// include <../../lib/OFL/vitamins/screw.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

@@ -8,12 +8,13 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
 ${TEST_INCLUDES}
-
 ${TAB_PARAMETERS}
 ${TAB_Verbs}
 ${TAB_Placement}
 ${TAB_TEST}
 
 /* [Hidden] */
+${TEST_PROLOGUE}
+// end of automatically generated code
+${TEST_CODE}

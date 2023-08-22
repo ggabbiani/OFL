@@ -10,6 +10,8 @@
  */
 
 
+// end of automatically generated code
+
 empty = [
 
 ];
@@ -32,8 +34,8 @@ l2 = [
 
 function fl_bb_sum(bboxes,__r__) = let(
     len = len(bboxes)
-  ) 
-  echo("*********",len=len) 
+  )
+  echo("*********",len=len)
   echo(bboxes=bboxes)
   echo(__r__=__r__)
   len>0
@@ -42,7 +44,7 @@ function fl_bb_sum(bboxes,__r__) = let(
     min  = let(c=curr[0],r=__r__[0]) __r__!=undef ? [min(c.x,r.x),min(c.y,r.y),min(c.z,r.z)] : c,
     max  = let(c=curr[1],r=__r__[1]) __r__!=undef ? [max(c.x,r.x),max(c.y,r.y),max(c.z,r.z)] : c,
     rest = len==1 ? [] : [for(i=[1:len(bboxes)-1]) bboxes[i]]
-  ) 
+  )
     echo(min=min)
     echo(max=max)
     fl_bb_sum(rest,[min,max])

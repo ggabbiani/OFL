@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../vitamins/pcbs.scad>
+include <../../lib/OFL/vitamins/pcbs.scad>
 
 $fn             = 50;           // [3:100]
 // When true, disables epsilon corrections

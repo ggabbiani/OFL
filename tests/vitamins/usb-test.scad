@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-// include <../../foundation/incs.scad>
-include <../../vitamins/usbs.scad>
+// include <../../lib/OFL/foundation/incs.scad>
+include <../../lib/OFL/vitamins/usbs.scad>
 
 include <NopSCADlib/global_defs.scad>
 use     <NopSCADlib/utils/layout.scad>

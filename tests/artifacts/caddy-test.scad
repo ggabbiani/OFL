@@ -7,10 +7,10 @@
  */
 
 
-include <../../vitamins/hds.scad>
-include <../../vitamins/pcbs.scad>
-include <../../vitamins/psus.scad>
-include <../../artifacts/caddy.scad>
+include <../../lib/OFL/vitamins/hds.scad>
+include <../../lib/OFL/vitamins/pcbs.scad>
+include <../../lib/OFL/vitamins/psus.scad>
+include <../../lib/OFL/artifacts/caddy.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

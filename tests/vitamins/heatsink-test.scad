@@ -7,8 +7,8 @@
  */
 
 // TODO: the following include MUST be removed
-include <../../vitamins/pcbs.scad>
-include <../../vitamins/heatsinks.scad>
+include <../../lib/OFL/vitamins/pcbs.scad>
+include <../../lib/OFL/vitamins/heatsinks.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

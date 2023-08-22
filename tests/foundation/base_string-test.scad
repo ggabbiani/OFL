@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/base_string.scad>
+include <../../lib/OFL/foundation/base_string.scad>
 
 s = "I was A Mixed string!";
 

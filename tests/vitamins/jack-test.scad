@@ -8,7 +8,7 @@
 include <NopSCADlib/global_defs.scad>
 use     <NopSCADlib/utils/layout.scad>
 
-include <../../vitamins/jacks.scad>
+include <../../lib/OFL/vitamins/jacks.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

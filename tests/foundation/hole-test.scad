@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/hole.scad>
-include <../../foundation/util.scad>
-include <../../vitamins/screw.scad>
+include <../../lib/OFL/foundation/hole.scad>
+include <../../lib/OFL/foundation/util.scad>
+include <../../lib/OFL/vitamins/screw.scad>
 
 // include <NopSCADlib/core.scad>
 // include <NopSCADlib/vitamins/screws.scad>

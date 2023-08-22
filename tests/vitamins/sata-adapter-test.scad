@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../vitamins/sata-adapters.scad>
+include <../../lib/OFL/vitamins/sata-adapters.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

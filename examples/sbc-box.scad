@@ -6,15 +6,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// include <OFL/artifacts/pcb_holder.scad>
-include <../artifacts/caddy.scad>
-include <../artifacts/spacer.scad>
-include <../vitamins/hds.scad>
-include <../vitamins/heatsinks.scad>
-include <../vitamins/pcbs.scad>
+include <../lib/OFL/artifacts/caddy.scad>
+include <../lib/OFL/artifacts/spacer.scad>
+include <../lib/OFL/vitamins/hds.scad>
+include <../lib/OFL/vitamins/heatsinks.scad>
+include <../lib/OFL/vitamins/pcbs.scad>
 
-use <../foundation/bbox-engine.scad>
-use <../artifacts/box.scad>
+use <../lib/OFL/foundation/bbox-engine.scad>
+use <../lib/OFL/artifacts/box.scad>
 
 $fn           = 50;           // [3:100]
 // Debug statements are turned on

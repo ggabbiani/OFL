@@ -19,10 +19,10 @@
  * along with RPI4.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// include <../../foundation/unsafe_defs.scad>
-include <../../vitamins/psus.scad>
+// include <../../lib/OFL/foundation/unsafe_defs.scad>
+include <../../lib/OFL/vitamins/psus.scad>
 
-// include <../../vitamins/incs.scad>
+// include <../../lib/OFL/vitamins/incs.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

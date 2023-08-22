@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../../artifacts/spacer.scad>
+include <../../lib/OFL/artifacts/spacer.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/grid.scad>
-include <../../foundation/util.scad>
+include <../../lib/OFL/foundation/grid.scad>
+include <../../lib/OFL/foundation/util.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on

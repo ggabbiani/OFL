@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../foundation/defs.scad>
+include <../../lib/OFL/foundation/defs.scad>
 
-use <../../foundation/drawio.scad>
+use <../../lib/OFL/foundation/drawio.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
