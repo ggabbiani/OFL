@@ -7,8 +7,9 @@
 # SIZE		:= $(notdir $(CURDIR))
 UNSCALED	:= /tmp/unscaled.png
 SCAD		:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make -o $(UNSCALED) --view axes
+SCAD1		:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make --view axes
 
-export SCAD UNSCALED
+export SCAD SCAD1 UNSCALED
 
 all:
 	@$(MAKE) -C foundation $@

@@ -6,7 +6,7 @@ include $(wildcard *.deps)
 
 SIZE		:= $(notdir $(CURDIR))
 
-all:	cover.png torus.png
+all:	cover.png
 
 clean:
 	@rm -f *.png *.deps
@@ -14,9 +14,4 @@ clean:
 cover.png: $(EXAMPLES)/sbc-box.scad $(EXAMPLES)/sbc-box.json
 	@echo $@
 	@$(SCAD) --imgsize 3200,2400 -d $@.deps --p $(EXAMPLES)/sbc-box.json --P cover --camera="7.62939e-7,0,11.925,68.3,0,140.5,281.12" $(EXAMPLES)/sbc-box.scad
-	@convert $(UNSCALED) -resize $(SIZE) $@
-
-torus.png: $(TESTS)/foundation/torus-test.scad $(TESTS)/foundation/torus-test.json
-	@echo $@
-	@$(SCAD) --imgsize 3200,2400 -d $@.deps --p $(TESTS)/foundation/torus-test.json --P torus $(TESTS)/foundation/torus-test.scad
 	@convert $(UNSCALED) -resize $(SIZE) $@
