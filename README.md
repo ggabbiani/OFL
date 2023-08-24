@@ -33,4 +33,4 @@ OFL comes with three major components:
 
 Every library component is accessed through a set of verb-based APIs (Common API Template), even third part libraries eventually used internally.
 
-![OFL architecture](pics/architecture.png)
+![OFL architecture](docs/architecture.png)

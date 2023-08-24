@@ -1,10 +1,14 @@
 # explicit wildcard expansion suppresses errors when no files are found
-include $(wildcard *.deps)
+# include $(wildcard *.deps)
 
 # %.png: %.scad
 # 	openscad -m make -o $@ -d $@.deps $<
 
 SIZE		:= $(notdir $(CURDIR))
+FOUNDATION	:= $(LIB_ROOT)/foundation
+pics		:= pic-0.png pic-1.png pic-2.png pic-3.png pic-4.png pic-5.png pic-6.png pic-7.png pic-8.png pic-9.png torus.png
+
+# include $(pics:.png=.deps)
 
 all:	pic-0.png pic-1.png pic-2.png pic-3.png pic-4.png pic-5.png pic-6.png pic-7.png pic-8.png pic-9.png torus.png
 
