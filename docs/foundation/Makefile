@@ -4,10 +4,14 @@
 # %.png: %.scad
 # 	openscad -m make -o $@ -d $@.deps $<
 
-all:
+all: 800x600 dependencies.svg
+
+dependencies.svg: $(FOUNDATION_SOURCES)
+	$(DEPS) --foundation
+
+800x600:
 	@$(MAKE) -C 800x600 $@
-	@$(MAKE) -C 256x256 $@
 
 clean:
 	@$(MAKE) -C 800x600 $@
-	@$(MAKE) -C 256x256 $@
+	rm -f dependencies.svg

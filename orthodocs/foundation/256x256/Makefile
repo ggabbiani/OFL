@@ -6,19 +6,12 @@ SIZE		:= $(notdir $(CURDIR))
 SOURCES 	:= $(wildcard *.scad)
 TARGETS		:= $(SOURCES:.scad=.png)
 
-# .PHONY: all
-
-# all: fig_Supported_walls.png fig_Unsupported_walls.png fig_Support_and_overhangs.png
 all: $(TARGETS)
 
 %.png: %.scad
-	@$(SCAD) --imgsize 9600,9600 -d $@.deps $<
-	@convert $(UNSCALED) -resize $(SIZE) $@
-	@rm $(UNSCALED)
-
-# %.scad:
-# 	@echo "include <OFL/library.scad>" >$@
-# 	@echo "__$(basename $@)__();" >>$@
+	$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ $<
+	convert unscaled-$@ -resize $(SIZE) $@
+	rm unscaled-$@
 
 clean:
 	@rm -f *.png *.deps

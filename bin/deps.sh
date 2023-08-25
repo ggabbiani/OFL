@@ -7,6 +7,7 @@
 set -e # exit immediately in case of error
 OFL="$(realpath $(dirname $0)/..)"
 LIB="${OFL}/lib/OFL"
+DOCS="${OFL}/docs"
 . $OFL/bin/functions.sh
 trap 'on_exit $? $test' EXIT
 
@@ -145,6 +146,6 @@ info "uses: $uses"
 if [ "$DRY" == "ON" ]; then
   digraph
 else
-  digraph | dot -Tsvg -o "$LIB/$MODE/docs/dependencies.svg"
+  digraph | dot -Tsvg -o "$DOCS/$MODE/dependencies.svg"
 fi
 exit 0

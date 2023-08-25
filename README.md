@@ -2,7 +2,7 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ggabbiani/OFL/tests.yml?label=tests&style=square)
 
-![Cover](pics/800x600/cover.png)
+![Cover](docs/800x600/cover.png)
 
 **O**penSCAD **F**oundation **L**ibrary (OFL) is a foundation library for OpenSCAD integrating concepts not included natively in the OpenSCAD language and providing an extendible standardized API base.
 
@@ -25,7 +25,7 @@ The following libraries are used and must be installed for using all the OFL fea
 
 OFL comes with three major components:
 
-* [foundation](lib/OFL/foundation/README.md) - the core part re-implementing some of the OpenSCAD native 2d/3d modules while adding new ones;
+* [foundation](docs/foundation/README.md) - the core part re-implementing some of the OpenSCAD native 2d/3d modules while adding new ones;
 * [vitamins](lib/OFL/vitamins/README.md) - client vitamin modules leveraging the foundation.
 * [artifacts](lib/OFL/artifacts/README.md) - printable artifacts built on top of [foundation components](foundation/README.md) and [vitamins parts](vitamins/README.md);
 

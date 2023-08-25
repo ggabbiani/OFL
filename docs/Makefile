@@ -1,9 +1,15 @@
-# a do nothing ... for now!
+.PHONY: 800x600 foundation
 
-all: architecture.png
+all: 800x600 architecture.png foundation
 
-clean:
-	@rm -f architecture.png
+800x600:
+	@$(MAKE) -C $@
 
 architecture.png: architecture.drawio
 	@drawio --export --format png --output $(CURDIR)/$@ $<
+
+foundation:
+	@$(MAKE) -C $@
+
+clean:
+	@rm -f architecture.png
