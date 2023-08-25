@@ -8,22 +8,20 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-PRJ_ROOT	:= $(realpath $(CURDIR))
-SRC_ROOT 	:= $(CURDIR)/lib
-LIB_ROOT	:= $(SRC_ROOT)/OFL
-LIB_DIRS	:= artifacts foundation vitamins
-ARTIFACTS_SOURCES	:= $(wildcard $(LIB_ROOT)/artifacts/*.scad)
-VITAMINS_SOURCES	:= $(wildcard $(LIB_ROOT)/vitamins/*.scad)
-FOUNDATION_SOURCES	:= $(wildcard $(LIB_ROOT)/foundation/*.scad)
-LIB_SOURCES			:= $(wildcard $(LIB_ROOT)/*.scad) $(ARTIFACTS_SOURCES) $(FOUNDATION_SOURCES) $(VITAMINS_SOURCES)
-EXAMPLES	:= $(CURDIR)/examples
-TESTS		:= $(CURDIR)/tests
-DOCS		:= $(CURDIR)/docs
-TEMP_ROOT	:= /tmp
-SCAD		:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make --view axes
-DEPS		:= $(PRJ_ROOT)/bin/deps.sh --silent
-
-export DEPS EXAMPLES LIB_SOURCES LIB_DIRS LIB_ROOT PRJ_ROOT SCAD SRC_ROOT TEMP_ROOT TESTS
+export PRJ_ROOT	:= $(realpath $(CURDIR))
+export SRC_ROOT 	:= $(CURDIR)/lib
+export LIB_ROOT	:= $(SRC_ROOT)/OFL
+export LIB_DIRS	:= artifacts foundation vitamins
+export ARTIFACTS_SOURCES	:= $(wildcard $(LIB_ROOT)/artifacts/*.scad)
+export VITAMINS_SOURCES	:= $(wildcard $(LIB_ROOT)/vitamins/*.scad)
+export FOUNDATION_SOURCES	:= $(wildcard $(LIB_ROOT)/foundation/*.scad)
+export LIB_SOURCES			:= $(wildcard $(LIB_ROOT)/*.scad) $(ARTIFACTS_SOURCES) $(FOUNDATION_SOURCES) $(VITAMINS_SOURCES)
+export EXAMPLES	:= $(CURDIR)/examples
+export TESTS		:= $(CURDIR)/tests
+export DOCS		:= $(CURDIR)/docs
+export TEMP_ROOT	:= /tmp
+export SCAD		:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make --view axes
+export DEPS		:= $(PRJ_ROOT)/bin/deps.sh --silent
 
 .PHONY: docs tests
 
