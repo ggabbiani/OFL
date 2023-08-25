@@ -17,7 +17,7 @@
 - [x] foundation/components.scad: added fl_Component() constructor. Modified component data record removing the cut direction ($comp_cutdir) and updated fl_comp_Context() consequently.
 - [x] foundation/3d.scad: renamed as 3d-engine.scad. Simplified fl_direction() signature after the two type properties (director/rotor) are now defaulted to the local coordinate systems that is always defined as [+Z,+X].
 - [x] foundation/defs.scad: added FL_SYMBOLS. Added a new general property fl_cutout() defining the available cut-out directions for a generic type.
-- [ ] foundation/defs.scad: renamed as foundation/core.scad
+- [x] foundation/defs.scad: renamed as foundation/core.scad
 - [x] global change: moved the FL_AXES implementation directly on the module engine APIs.
 - [x] foundation/limits.scad: added for recommended settings/limits for 3d printing properties (values taken from [Knowledge base | Hubs](https://www.hubs.com/knowledge-base/))
 - [x] foundation/mngm.scad: implementation of FL_SYMBOLS in fl_manage(). Simplified fl_manage() signature after the removal of the [director,rotor] couple, substitute by the native coordinate system defaulted as [+Z,+X]
@@ -43,6 +43,7 @@
 - [x] general Makefile implementing documents/pictures/example generation
 - [x] moved library sources into a single top level directory, same for tests and examples
 - [ ] remove obsolete drawio library
+- [ ] fix dxf files
 
 ## Changed file names
 

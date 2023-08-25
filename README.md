@@ -16,8 +16,9 @@ The following libraries are used and must be installed for using all the OFL fea
 
 ## Usage
 
-1. download and expand the library in the [OpenSCAD Library Folder](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations)
-2. include the needed library file(s) in your OpenSCAD code like in the following example:
+1. download and expand the library
+2. modify the OPENSCADPATH Environment Variable to point lib/ directory of this repo as described in [OpenSCAD Library Folder](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations)
+3. include the needed library file(s) in your OpenSCAD code like in the following example:
 
     include \<OFL/foundation/2d.scad\>
 

@@ -1,4 +1,6 @@
-# Makefile for automatic test and documentation generation
+# This Makefile generates test and documentation files. This file is meant for
+# maintainers, final users should not use it since the library is provided with
+# tests and documentation already created.
 #
 # This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 #
