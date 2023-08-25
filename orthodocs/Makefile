@@ -6,8 +6,10 @@ DOC_ROOT	:= $(CURDIR)
 all: api-docs pics
 
 api-docs: $(LIB_SOURCES)
-	@$(ODOX) --src-root $(LIB_ROOT) --doc-root $(DOC_ROOT) --admonitions --toc --ignore-prefix fl_ '$$fl_' --pkg-deps graph --graphs . $(LIB_DIRS) -- $(LIB_DIRS) dxf.scad library.scad
+	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@$(ODOX) --src-root $(LIB_ROOT) --doc-root $(DOC_ROOT) --verbosity off --admonitions --toc --ignore-prefix fl_ '$$fl_' --pkg-deps graph --graphs . $(LIB_DIRS) -- $(LIB_DIRS) dxf.scad library.scad
 	@touch $@
+	@echo -e "\e[32mOK\e[0m"
 
 pics:
 	@$(MAKE) -C foundation

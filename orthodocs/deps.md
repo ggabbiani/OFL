@@ -21,7 +21,7 @@ graph TD
     A10 --o|use| A4
     A10 --o|use| A15[foundation/profile]
     A10 --o|use| A16[foundation/util]
-    A17[artifacts/caddy] --o|include| A2
+    A17[artifacts/caddy] --o|include| A9
     A17 --o|use| A3
     A17 --o|use| A14
     A17 --o|use| A4

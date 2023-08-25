@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/unsafe_defs.scad>
+include <../foundation/core.scad>
 
 use <../foundation/bbox-engine.scad>
 use <../foundation/fillet.scad>
@@ -70,9 +70,9 @@ module fl_caddy(
 
   // delta to add to children thicknesses
   t_deltas  = let(d=(tolerance+fillet)) [
-    [fl_isSet(-X,faces)?d:0,fl_isSet(+X,faces)?d:0],
-    [fl_isSet(-Y,faces)?d:0,fl_isSet(+Y,faces)?d:0],
-    [fl_isSet(-Z,faces)?tolerance:0,fl_isSet(+Z,faces)?tolerance:0]
+    [fl_isSet(-FL_X,faces)?d:0,fl_isSet(+FL_X,faces)?d:0],
+    [fl_isSet(-FL_Y,faces)?d:0,fl_isSet(+FL_Y,faces)?d:0],
+    [fl_isSet(-FL_Z,faces)?tolerance:0,fl_isSet(+FL_Z,faces)?tolerance:0]
   ];
   // thickness without tolerance and fillet
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
@@ -81,14 +81,14 @@ module fl_caddy(
                 d     = tolerance+fillet,
                 pload = fl_bb_corners(type),
                 delta = [
-                    [fl_isSet(-X,faces)?d:0, fl_isSet(-Y,faces)?d:0, fl_isSet(-Z,faces)?tolerance:0],
-                    [fl_isSet(+X,faces)?d:0, fl_isSet(+Y,faces)?d:0, fl_isSet(+Z,faces)?tolerance:0]
+                    [fl_isSet(-FL_X,faces)?d:0, fl_isSet(-FL_Y,faces)?d:0, fl_isSet(-FL_Z,faces)?tolerance:0],
+                    [fl_isSet(+FL_X,faces)?d:0, fl_isSet(+FL_Y,faces)?d:0, fl_isSet(+FL_Z,faces)?tolerance:0]
                   ]) [pload[0]-delta[0],pload[1]+delta[1]];
   // bounding box = payload + spessori
   bbox      = let(
                 delta = [
-                    [fl_isSet(-X,faces)?thick.x[0]:0, fl_isSet(-Y,faces)?thick.y[0]:0, fl_isSet(-Z,faces)?thick.z[0]:0],
-                    [fl_isSet(+X,faces)?thick.x[1]:0, fl_isSet(+Y,faces)?thick.y[1]:0, fl_isSet(+Z,faces)?thick.z[1]:0]
+                    [fl_isSet(-FL_X,faces)?thick.x[0]:0, fl_isSet(-FL_Y,faces)?thick.y[0]:0, fl_isSet(-FL_Z,faces)?thick.z[0]:0],
+                    [fl_isSet(+FL_X,faces)?thick.x[1]:0, fl_isSet(+FL_Y,faces)?thick.y[1]:0, fl_isSet(+FL_Z,faces)?thick.z[1]:0]
                   ]) [pload[0]-delta[0],pload[1]+delta[1]];
   size      = bbox[1]-bbox[0];
   D         = direction ? fl_direction(direction) : FL_I;
@@ -124,22 +124,22 @@ module fl_caddy(
             fl_cube(size=[size.x,size.y,thick.z[0]],octant=+FL_X+FL_Y+FL_Z);
           }
         if (fillet) {
-          if (fl_isSet(+X,faces) && fl_isSet(-Z,faces))
-            translate([size.x-thick.x[1],0,thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+Y,180]);
-          if (fl_isSet(+X,faces) && fl_isSet(+Z,faces))
-            translate([size.x-thick.x[1],0,size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+Y,90]);
-          if (fl_isSet(+Z,faces) && fl_isSet(-X,faces))
-            translate([thick.x[0],0,size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+Y,0]);
-          if (fl_isSet(-X,faces) && fl_isSet(-Z,faces))
-            translate([thick.x[0],0,thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+Y,-90]);
-          if (fl_isSet(-Y,faces) && fl_isSet(-Z,faces))
-            translate([0,thick.y[0],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,+90]);
-          if (fl_isSet(+Z,faces) && fl_isSet(-Y,faces))
-            translate([0,thick.y[0],size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,0]);
-          if (fl_isSet(+Z,faces) && fl_isSet(+Y,faces))
-            translate([0,size.y-thick.y[1],size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,-90]);
-          if (fl_isSet(-Z,faces) && fl_isSet(+Y,faces))
-            translate([0,size.y-thick.y[1],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+X,+180]);
+          if (fl_isSet(+FL_X,faces) && fl_isSet(-FL_Z,faces))
+            translate([size.x-thick.x[1],0,thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+FL_Y,180]);
+          if (fl_isSet(+FL_X,faces) && fl_isSet(+FL_Z,faces))
+            translate([size.x-thick.x[1],0,size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+FL_Y,90]);
+          if (fl_isSet(+FL_Z,faces) && fl_isSet(-FL_X,faces))
+            translate([thick.x[0],0,size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+FL_Y,0]);
+          if (fl_isSet(-FL_X,faces) && fl_isSet(-FL_Z,faces))
+            translate([thick.x[0],0,thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.y,direction=[+FL_Y,-90]);
+          if (fl_isSet(-FL_Y,faces) && fl_isSet(-FL_Z,faces))
+            translate([0,thick.y[0],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+FL_X,+90]);
+          if (fl_isSet(+FL_Z,faces) && fl_isSet(-FL_Y,faces))
+            translate([0,thick.y[0],size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+FL_X,0]);
+          if (fl_isSet(+FL_Z,faces) && fl_isSet(+FL_Y,faces))
+            translate([0,size.y-thick.y[1],size.z-thick.z[1]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+FL_X,-90]);
+          if (fl_isSet(-FL_Z,faces) && fl_isSet(+FL_Y,faces))
+            translate([0,size.y-thick.y[1],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+FL_X,+180]);
         }
       }
       context([FL_DRILL,FL_CUTOUT])  children();
