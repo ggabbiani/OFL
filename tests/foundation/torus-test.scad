@@ -5,7 +5,7 @@
  */
 include <../../lib/OFL/foundation/core.scad>
 
-use <../../lib/OFL/foundation/torus.scad>
+use <../../lib/OFL/foundation/3d-engine.scad>
 
 $fn         = 50;           // [3:100]
 $fs         = 50;           // [3:100]

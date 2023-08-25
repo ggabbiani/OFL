@@ -4,8 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/limits] --o|include| A2[foundation/3d-engine]
-    A1 --o|include| A3[foundation/core]
+    A1[foundation/limits] --o|include| A2[foundation/core]
 ```
 
 Recommended settings for 3d printing properties

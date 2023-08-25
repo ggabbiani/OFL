@@ -79,7 +79,7 @@
 - [fl_bb_sector (function)](foundation/2d-engine.md#function-fl_bb_sector)
 - [fl_bb_size (function)](foundation/bbox-engine.md#function-fl_bb_size)
 - [fl_bb_spacer (function)](artifacts/spacer.md#function-fl_bb_spacer)
-- [fl_bb_torus (function)](foundation/torus.md#function-fl_bb_torus)
+- [fl_bb_torus (function)](foundation/3d-engine.md#function-fl_bb_torus)
 - [fl_bb_transform (function)](foundation/bbox-engine.md#function-fl_bb_transform)
 - [fl_bb_vertices (function)](foundation/bbox-engine.md#function-fl_bb_vertices)
 - [$FL_BBOX (variable)](foundation/core.md#variable-$fl_bbox)
@@ -588,8 +588,7 @@
 - [fl_TNut (function)](artifacts/t-nut.md#function-fl_tnut)
 - [fl_tnut (module)](artifacts/t-nut.md#module-fl_tnut)
 - [fl_tolerance (function)](foundation/core.md#function-fl_tolerance)
-- [fl_torus (module)](foundation/torus.md#module-fl_torus)
-- [foundation/torus (package)](foundation/torus.md#package-foundationtorus)
+- [fl_torus (module)](foundation/3d-engine.md#module-fl_torus)
 - [fl_trace (function)](foundation/core.md#function-fl_trace)
 - [fl_trace (module)](foundation/core.md#module-fl_trace)
 - [fl_transform (function)](foundation/core.md#function-fl_transform)
@@ -620,8 +619,7 @@
 - [fl_tt_isPointNormalList (function)](foundation/type_trait.md#function-fl_tt_ispointnormallist)
 - [fl_tt_isPosition (function)](foundation/type_trait.md#function-fl_tt_isposition)
 - [fl_tt_isVerbList (function)](foundation/type_trait.md#function-fl_tt_isverblist)
-- [fl_tube (module)](foundation/tube.md#module-fl_tube)
-- [foundation/tube (package)](foundation/tube.md#package-foundationtube)
+- [fl_tube (module)](foundation/3d-engine.md#module-fl_tube)
 - [foundation/type_trait (package)](foundation/type_trait.md#package-foundationtype_trait)
 
 ## U

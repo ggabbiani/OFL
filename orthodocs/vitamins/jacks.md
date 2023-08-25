@@ -4,12 +4,12 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/jacks] --o|include| A2[foundation/connect]
-    A1 --o|include| A3[foundation/label]
-    A1 --o|include| A4[foundation/tube]
-    A1 --o|use| A5[foundation/3d-engine]
-    A1 --o|use| A6[foundation/mngm]
-    A1 --o|use| A7[foundation/util]
+    A1[vitamins/jacks] --o|include| A2[foundation/3d-engine]
+    A1 --o|include| A3[foundation/connect]
+    A1 --o|include| A4[foundation/label]
+    A1 --o|use| A2
+    A1 --o|use| A5[foundation/mngm]
+    A1 --o|use| A6[foundation/util]
 ```
 
 NopSCADlib Jack definitions wrapper.

@@ -8,10 +8,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <../lib/OFL/foundation/3d-engine.scad>
 include <../lib/OFL/foundation/2d-engine.scad>
 include <../lib/OFL/foundation/fillet.scad>
 include <../lib/OFL/foundation/limits.scad>
-include <../lib/OFL/foundation/tube.scad>
 include <../lib/OFL/vitamins/magnets.scad>
 include <../lib/OFL/vitamins/screw.scad>
 include <../lib/OFL/vitamins/knurl_nuts.scad>

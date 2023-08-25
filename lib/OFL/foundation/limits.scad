@@ -9,7 +9,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <3d-engine.scad>
 include <core.scad>
 
 // available 3d printing technologies

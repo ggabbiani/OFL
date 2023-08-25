@@ -342,6 +342,31 @@ height of the prism
 
 ---
 
+### function fl_bb_torus
+
+__Syntax:__
+
+```text
+fl_bb_torus(r,d,e,R)
+```
+
+__Parameters:__
+
+__r__  
+radius of the circular tube.
+
+__d__  
+diameter of the circular tube.
+
+__e__  
+elliptic tube [a,b] form
+
+__R__  
+distance from the center of the tube to the center of the torus
+
+
+---
+
 ### function fl_cube_defaults
 
 __Syntax:__
@@ -995,5 +1020,75 @@ default size given as a scalar
 
 __symbol__  
 currently "plug" or "socket"
+
+
+---
+
+### module fl_torus
+
+__Syntax:__
+
+    fl_torus(verbs=FL_ADD,r,d,e,R,direction,octant)
+
+«e» and «R» are mutually exclusive parameters
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_AXES, FL_BBOX
+
+__r__  
+radius of the circular tube.
+
+__d__  
+diameter of the circular tube.
+
+__e__  
+elliptic tube [a,b] form
+
+__R__  
+distance from the center of the tube to the center of the torus
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
+
+
+---
+
+### module fl_tube
+
+__Syntax:__
+
+    fl_tube(verbs=FL_ADD,base,r,d,h,thick,direction,octant)
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+
+__base__  
+base ellipse in [a,b] form
+
+__r__  
+«base» alternative radius for circular tubes
+
+__d__  
+«base» alternative diameter for circular tubes
+
+__h__  
+pipe height
+
+__thick__  
+tube thickness
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
 
 

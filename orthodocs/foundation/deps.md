@@ -35,22 +35,13 @@ graph TD
     A16 --o|include| A2
     A16 --o|use| A5
     A16 --o|use| A4
-    A17[foundation/limits] --o|include| A5
-    A17 --o|include| A8
+    A17[foundation/limits] --o|include| A8
     A4 --o|include| A8
     A18[foundation/profile] --o|include| A2
     A18 --o|use| A1
     A18 --o|use| A5
     A18 --o|use| A4
     A19[foundation/template] --o|include| A5
-    A20[foundation/torus] --o|include| A2
-    A20 --o|use| A1
-    A20 --o|use| A5
-    A20 --o|use| A4
-    A21[foundation/tube] --o|include| A2
-    A21 --o|use| A1
-    A21 --o|use| A5
-    A21 --o|use| A4
     A6 --o|include| A8
     A2 --o|include| A8
     A11 --o|include| A2

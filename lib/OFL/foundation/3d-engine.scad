@@ -7,7 +7,7 @@
  */
 
 include <unsafe_defs.scad>
-// use <core-symbols.scad>
+
 use <bbox-engine.scad>
 use <type_trait.scad>
 use <../dxf.scad>
@@ -1224,4 +1224,127 @@ module fl_sym_direction(
         fl_ellipticArc(e=e,angles=[0,-angle],thick=elli_thick);
   }
   fl_trace("end");
+}
+
+//**** torus ******************************************************************
+
+function fl_bb_torus(
+  //! radius of the circular tube.
+  r,
+  //! diameter of the circular tube.
+  d,
+  //! elliptic tube [a,b] form
+  e,
+  //! distance from the center of the tube to the center of the torus
+  R
+) = let(
+  // e     = r ? assert(!e) [r,r] : assert(len(e)==2) e,
+  e       = r ? assert(!e && !d) [r,r] : d ? assert(!e && !r) [d/2,d/2] : assert(!r && !d && len(e)==2) e,
+  a     = e[0],
+  b     = e[1],
+  edge  = assert(R>=a,str("R=",R,",a=",a)) a+R
+) [[-edge,-edge,-b],[+edge,+edge,+b]];
+
+/*!
+ * «e» and «R» are mutually exclusive parameters
+ */
+module fl_torus(
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  verbs       = FL_ADD,
+  //! radius of the circular tube.
+  r,
+  //! diameter of the circular tube.
+  d,
+  //! elliptic tube [a,b] form
+  e,
+  //! distance from the center of the tube to the center of the torus
+  R,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant
+) {
+  bbox    = fl_bb_torus(r,d,e,R);
+  e       = r ? [r,r] : d ? [d/2,d/2] : e;
+  a       = e[0];
+  b       = e[1];
+  size    = bbox[1]-bbox[0];
+  D       = direction ? fl_direction(direction) : I;
+  M       = fl_octant(octant,bbox=bbox);
+
+  fn      = $fn;
+
+  fl_trace("D",D);
+  fl_trace("M",M);
+
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) rotate_extrude($fn=$fn) translate(X(R-a)) fl_ellipse(e=e,quadrant=+X,$fn=fn);
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
+
+//**** tube *******************************************************************
+
+module fl_tube(
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
+  //! base ellipse in [a,b] form
+  base,
+  //! «base» alternative radius for circular tubes
+  r,
+  //! «base» alternative diameter for circular tubes
+  d,
+  //! pipe height
+  h,
+  //! tube thickness
+  thick,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant,
+) {
+  assert(h!=undef);
+  assert(thick>0,thick);
+
+  obase = r ? [r,r] : d ? [d/2,d/2] : base;
+  assert(obase);
+  bbox  = let(bbox=fl_bb_ellipse(obase)) [[bbox[0].x,bbox[0].y,0],[bbox[1].x,bbox[1].y,h]];
+  size  = bbox[1]-bbox[0];
+  D     = direction ? fl_direction(direction) : I;
+  M     = fl_octant(octant,bbox=bbox);
+
+  fl_trace("bbox",bbox);
+  fl_trace("size",size);
+
+  module do_add() {
+    linear_extrude(height=h)
+      fl_ellipticArc(e=obase,angles=[0,360],thick=thick);
+  }
+  module do_fprint() {
+    linear_extrude(height=h)
+      fl_ellipse(e=obase);
+  }
+
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+    } else if ($verb==FL_AXES) {
+      fl_modifier($FL_AXES)
+        ; // fl_doAxes(size,direction,debug);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_fprint();
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
 }

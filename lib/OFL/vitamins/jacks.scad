@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <../foundation/3d-engine.scad>
 include <../foundation/connect.scad>
 include <../foundation/label.scad>
-include <../foundation/tube.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/mngm.scad>

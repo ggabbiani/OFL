@@ -6,12 +6,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <../foundation/3d-engine.scad>
 include <../foundation/hole.scad>
-use <../foundation/mngm.scad>
-include <../foundation/tube.scad>
 include <../foundation/unsafe_defs.scad>
-
 include <../vitamins/knurl_nuts.scad>
+
+use <../foundation/mngm.scad>
 
 //! namespace
 FL_SPC_NS  = "spc";
