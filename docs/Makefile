@@ -6,7 +6,9 @@ all: 800x600 architecture.png artifacts foundation vitamins
 	@$(MAKE) -C $@
 
 architecture.png: architecture.drawio
-	@drawio --export --format png --output $(CURDIR)/$@ $<
+	@drawio --export --format png --border 10 --output $(CURDIR)/$@ $<
+	@echo -n "$(CURDIR)/$@: "
+	@echo -e "\e[32mOK\e[0m"
 
 artifacts:
 	@$(MAKE) -C $@
