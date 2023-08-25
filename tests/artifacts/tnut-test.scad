@@ -9,7 +9,7 @@
 // include <NopSCADlib/vitamins/screws.scad>
 
 include <../../lib/OFL/artifacts/t-nut.scad>
-include <../../lib/OFL/foundation/defs.scad>
+include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/vitamins/knurl_nuts.scad>
 
 $fn         = 50;           // [3:100]

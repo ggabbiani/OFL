@@ -2,6 +2,7 @@
 
 set -e # exit immediately in case of error
 OFL="$(realpath $(dirname $0)/..)"
+LIB="$OFL/lib/OFL"
 . $OFL/bin/functions.sh
 trap 'on_exit $? "$ERROR_MSG"' EXIT
 
@@ -46,7 +47,7 @@ git_chk() {
 }
 
 REMOTE="NO"
-DEFS="$OFL/foundation/defs.scad"
+DEFS="$LIB/foundation/core.scad"
 ##############################################################################
 # parsing
 MAX=1
@@ -163,10 +164,7 @@ this script is going to:
 
   * modify and commit:
     - $DEFS (${V[0]}.${V[1]}.${V[2]});
-    - $OFL/foundation/docs/dependencies.svg
-    - $OFL/artifacts/docs/dependencies.svg
-    - $OFL/vitamins/docs/dependencies.svg
-    - pictures in $OFL/foundation/docs/
+    - Documentation
   * annotate local repo as v${V[0]}.${V[1]}.${V[2]};
   * push updates and v${V[0]}.${V[1]}.${V[2]} annotation to remote repo
 
@@ -176,16 +174,10 @@ if [ "$DRYRUN" -eq "1" ]; then
 fi
 warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 
-# update defs.scad
+# update core.scad
 sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${V[0]},${V[1]},${V[2]}\];/g" "$DEFS"
-# update docs for foundation ($OFL/foundation/docs/dependencies.svg)
-$OFL/bin/deps.sh -s
-# artifacts ($OFL/artifacts/docs/dependencies.svg)
-$OFL/bin/deps.sh -a -s
-# and vitamins ($OFL/vitamins/docs/dependencies.svg)
-$OFL/bin/deps.sh -v -s
-# update pictures
-$OFL/bin/make-pics.sh -f
+# update Documentation & Tests
+cd $OFL && make docs api-docs && cd -
 
 git commit -m "Version $VERSION bumped" -a
 git tag -m "Version $VERSION bumped" $TAG $BRANCH

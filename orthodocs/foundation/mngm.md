@@ -4,7 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/mngm] --o|include| A2[foundation/defs]
+    A1[foundation/mngm] --o|include| A2[foundation/core]
 ```
 
 Verb management for OpenSCAD Foundation Library.

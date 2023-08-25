@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../lib/OFL/foundation/defs.scad>
+include <../../lib/OFL/foundation/core.scad>
 
 use <../../lib/OFL/foundation/profile.scad>
 

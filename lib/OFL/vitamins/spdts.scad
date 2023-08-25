@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/defs.scad>
+include <../foundation/core.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>

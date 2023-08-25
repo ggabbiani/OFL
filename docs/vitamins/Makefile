@@ -7,11 +7,9 @@
 .PHONY: all
 
 all: dependencies.svg
-	@$(MAKE) -C 800x600 $@
 
-dependencies.svg: $(FOUNDATION_SOURCES)
-	@$(DEPS) --foundation
+dependencies.svg: $(VITAMINS_SOURCES)
+	@$(DEPS) --vitamins
 
 clean:
-	@$(MAKE) -C 800x600 $@
 	@rm -f dependencies.svg

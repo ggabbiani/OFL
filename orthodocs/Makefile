@@ -15,3 +15,4 @@ pics:
 clean:
 	@rm -f *.md
 	@rm -f api-docs
+	@$(MAKE) -C foundation $@

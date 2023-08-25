@@ -51,7 +51,7 @@ __direction__
 desired direction [director,rotation], native direction when undef ([+X+Z])
 
 __octant__  
-when undef native positioning (see [variable FL_O](defs.md#variable-fl_o)) is used
+when undef native positioning (see [variable FL_O](core.md#variable-fl_o)) is used
 
 
 ---
@@ -79,6 +79,6 @@ __direction__
 desired direction [director,rotation], native direction when undef ([+X+Z])
 
 __octant__  
-when undef native positioning (see [variable FL_O](defs.md#variable-fl_o)) is used
+when undef native positioning (see [variable FL_O](core.md#variable-fl_o)) is used
 
 

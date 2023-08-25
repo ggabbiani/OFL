@@ -1,10 +1,10 @@
-# package foundation/defs
+# package foundation/core
 
 ## Dependencies
 
 ```mermaid
 graph LR
-    A1[foundation/defs] --o|include| A2[foundation/base_string]
+    A1[foundation/core] --o|include| A2[foundation/base_string]
     A1 --o|use| A3[foundation/base_geo]
     A1 --o|use| A4[foundation/base_kv]
     A1 --o|use| A5[foundation/base_parameters]

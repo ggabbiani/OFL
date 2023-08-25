@@ -17,7 +17,7 @@ graph TD
     A10[foundation/base_parameters]
     A11[foundation/base_string]
     A12[foundation/base_trace]
-    A3 --o|include| A13[foundation/defs]
+    A3 --o|include| A13[foundation/core]
     A14[foundation/components] --o|include| A13
     A14 --o|use| A3
     A15[foundation/connect] --o|include| A16[foundation/util]

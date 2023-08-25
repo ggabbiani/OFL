@@ -10,7 +10,7 @@
  */
 
 include <3d-engine.scad>
-include <defs.scad>
+include <core.scad>
 
 // available 3d printing technologies
 FL_TECH_SLS   = "Selective Laser sintering";

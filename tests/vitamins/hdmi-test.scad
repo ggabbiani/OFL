@@ -9,7 +9,7 @@
 include <NopSCADlib/global_defs.scad>
 use     <NopSCADlib/utils/layout.scad>
 
-include <../../lib/OFL/foundation/defs.scad>
+include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/vitamins/hdmi.scad>
 
 $fn         = 50;           // [3:100]

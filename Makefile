@@ -13,7 +13,7 @@ LIB_DIRS	:= artifacts foundation vitamins
 ARTIFACTS_SOURCES	:= $(wildcard $(LIB_ROOT)/artifacts/*.scad)
 VITAMINS_SOURCES	:= $(wildcard $(LIB_ROOT)/vitamins/*.scad)
 FOUNDATION_SOURCES	:= $(wildcard $(LIB_ROOT)/foundation/*.scad)
-LIB_SOURCES	:= $(wildcard $(LIB_ROOT)/*.scad) $(ARTIFACTS_SOURCES) $(FOUNDATION_SOURCES) $(VITAMINS_SOURCES)
+LIB_SOURCES			:= $(wildcard $(LIB_ROOT)/*.scad) $(ARTIFACTS_SOURCES) $(FOUNDATION_SOURCES) $(VITAMINS_SOURCES)
 EXAMPLES	:= $(CURDIR)/examples
 TESTS		:= $(CURDIR)/tests
 DOCS		:= $(CURDIR)/docs
@@ -37,7 +37,11 @@ docs:
 tests:
 	@$(MAKE) -C $(TESTS)
 
-clean:
-	@$(MAKE) -C $(TESTS) $@
-	@$(MAKE) -C $(DOCS) $@
-	@$(MAKE) -C orthodocs $@
+clean: docs-clean tests-clean
+
+docs-clean:
+	@$(MAKE) -C $(DOCS) clean
+	@$(MAKE) -C orthodocs clean
+
+tests-clean:
+	@$(MAKE) -C $(TESTS) clean

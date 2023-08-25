@@ -46,9 +46,10 @@
 
 ## Changed file names
 
-| old                    | new                          |
-| --------               | --------                     |
-| foundation/2d.scad     | foundation/2d-engine.scad    |
-| foundation/3d.scad     | foundation/3d-engine.scad    |
-| foundation/bbox.scad   | foundation/bbox-engine.scad  |
-| foundation/symbol.scad | -                            |
+| old                       | new                           |
+| --------                  | --------                      |
+| foundation/2d.scad        | foundation/2d-engine.scad     |
+| foundation/3d.scad        | foundation/3d-engine.scad     |
+| foundation/bbox.scad      | foundation/bbox-engine.scad   |
+| foundation/symbol.scad    | -                             |
+| foundation/defs.scad      | foundation/core.scad          |

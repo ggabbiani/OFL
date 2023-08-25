@@ -19,7 +19,7 @@ __Syntax:__
 fl_asserts()
 ```
 
-When true [fl_assert()](defs.md#function-fl_assert) is enabled
+When true [fl_assert()](core.md#function-fl_assert) is enabled
 
 **TODO**: remove since deprecated.
 

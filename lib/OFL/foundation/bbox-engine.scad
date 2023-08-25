@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <defs.scad>
+include <core.scad>
 
 /*!
  * invoked by «type» parameter acts as getter for the bounding box property

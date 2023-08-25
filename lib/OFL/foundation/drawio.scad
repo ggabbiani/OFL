@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <defs.scad>
+include <core.scad>
 
 use <2d-engine.scad>
 use <base_trace.scad>

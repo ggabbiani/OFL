@@ -151,15 +151,15 @@
 <polygon fill="white" stroke="black" stroke-width="2" points="177.14,-30 77.14,-30 77.14,0 177.14,0 177.14,-30"/>
 <text text-anchor="middle" x="127.14" y="-11.3" font-family="Times,serif" font-size="14.00">base_trace</text>
 </g>
-<!-- defs -->
+<!-- core -->
 <g id="node12" class="node">
-<title>defs</title>
+<title>core</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1093.14,-111 993.14,-111 993.14,-81 1093.14,-81 1093.14,-111"/>
-<text text-anchor="middle" x="1043.14" y="-92.3" font-family="Times,serif" font-size="14.00">defs</text>
+<text text-anchor="middle" x="1043.14" y="-92.3" font-family="Times,serif" font-size="14.00">core</text>
 </g>
-<!-- bbox&#45;engine&#45;&gt;defs -->
+<!-- bbox&#45;engine&#45;&gt;core -->
 <g id="edge4" class="edge">
-<title>bbox&#45;engine&#45;&gt;defs</title>
+<title>bbox&#45;engine&#45;&gt;core</title>
 <path fill="none" stroke="black" d="M919.75,-161.62C918.89,-151.37 919.6,-137.88 927.14,-129 940.97,-112.71 962.26,-104.33 982.84,-100.14"/>
 <polygon fill="black" stroke="black" points="983.6,-103.56 992.86,-98.4 982.41,-96.66 983.6,-103.56"/>
 <text text-anchor="middle" x="961.64" y="-132.8" font-family="Times,serif" font-size="14.00">«include»</text>
@@ -177,9 +177,9 @@
 <polygon fill="red" stroke="red" stroke-width="2" points="932.79,-200.63 926.49,-192.1 926.1,-202.69 932.79,-200.63"/>
 <text text-anchor="middle" x="962.14" y="-221.3" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
-<!-- components&#45;&gt;defs -->
+<!-- components&#45;&gt;core -->
 <g id="edge5" class="edge">
-<title>components&#45;&gt;defs</title>
+<title>components&#45;&gt;core</title>
 <path fill="none" stroke="black" d="M970.37,-257.84C976.34,-252.73 982.55,-246.59 987.14,-240 990.74,-234.84 1019.42,-159.68 1034.28,-120.46"/>
 <polygon fill="black" stroke="black" points="1037.56,-121.69 1037.82,-111.1 1031.01,-119.21 1037.56,-121.69"/>
 <text text-anchor="middle" x="1052.64" y="-173.3" font-family="Times,serif" font-size="14.00">«include»</text>
@@ -210,37 +210,37 @@
 <polygon fill="black" stroke="black" points="326.76,-446.64 316.29,-448.23 325.46,-453.52 326.76,-446.64"/>
 <text text-anchor="middle" x="559.64" y="-471.8" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
-<!-- defs&#45;&gt;base_geo -->
+<!-- core&#45;&gt;base_geo -->
 <g id="edge32" class="edge">
-<title>defs&#45;&gt;base_geo</title>
+<title>core&#45;&gt;base_geo</title>
 <path fill="none" stroke="red" stroke-width="2" d="M1030.81,-80.88C1020.31,-68.86 1005.06,-51.4 993.02,-37.62"/>
 <polygon fill="red" stroke="red" stroke-width="2" points="995.59,-35.23 986.37,-30 990.31,-39.84 995.59,-35.23"/>
 <text text-anchor="middle" x="1036.14" y="-51.8" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
-<!-- defs&#45;&gt;base_kv -->
+<!-- core&#45;&gt;base_kv -->
 <g id="edge33" class="edge">
-<title>defs&#45;&gt;base_kv</title>
+<title>core&#45;&gt;base_kv</title>
 <path fill="none" stroke="red" stroke-width="2" d="M1093.23,-84.1C1159.23,-69.74 1275.18,-44.5 1345.89,-29.11"/>
 <polygon fill="red" stroke="red" stroke-width="2" points="1346.95,-32.46 1355.98,-26.92 1345.47,-25.62 1346.95,-32.46"/>
 <text text-anchor="middle" x="1279.14" y="-51.8" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
-<!-- defs&#45;&gt;base_parameters -->
+<!-- core&#45;&gt;base_parameters -->
 <g id="edge34" class="edge">
-<title>defs&#45;&gt;base_parameters</title>
+<title>core&#45;&gt;base_parameters</title>
 <path fill="none" stroke="red" stroke-width="2" d="M1055.3,-80.88C1065.65,-68.86 1080.67,-51.4 1092.53,-37.62"/>
 <polygon fill="red" stroke="red" stroke-width="2" points="1095.22,-39.86 1099.09,-30 1089.91,-35.3 1095.22,-39.86"/>
 <text text-anchor="middle" x="1105.14" y="-51.8" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
-<!-- defs&#45;&gt;base_string -->
+<!-- core&#45;&gt;base_string -->
 <g id="edge7" class="edge">
-<title>defs&#45;&gt;base_string</title>
+<title>core&#45;&gt;base_string</title>
 <path fill="none" stroke="black" d="M1093.38,-90.09C1235.1,-76.23 1637.68,-36.87 1790.92,-21.89"/>
 <polygon fill="black" stroke="black" points="1791.47,-25.35 1801.08,-20.89 1790.79,-18.38 1791.47,-25.35"/>
 <text text-anchor="middle" x="1553.64" y="-51.8" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
-<!-- defs&#45;&gt;base_trace -->
+<!-- core&#45;&gt;base_trace -->
 <g id="edge35" class="edge">
-<title>defs&#45;&gt;base_trace</title>
+<title>core&#45;&gt;base_trace</title>
 <path fill="none" stroke="red" stroke-width="2" d="M992.92,-90.67C836.24,-77.16 356.83,-35.81 187.31,-21.19"/>
 <polygon fill="red" stroke="red" stroke-width="2" points="187.58,-17.7 177.31,-20.33 186.97,-24.67 187.58,-17.7"/>
 <text text-anchor="middle" x="689.14" y="-51.8" font-family="Times,serif" font-size="14.00">«use»</text>
@@ -265,9 +265,9 @@
 <polygon fill="red" stroke="red" stroke-width="2" points="134.78,-39.36 129.61,-30.11 127.89,-40.57 134.78,-39.36"/>
 <text text-anchor="middle" x="179.14" y="-173.3" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
-<!-- drawio&#45;&gt;defs -->
+<!-- drawio&#45;&gt;core -->
 <g id="edge8" class="edge">
-<title>drawio&#45;&gt;defs</title>
+<title>drawio&#45;&gt;core</title>
 <path fill="none" stroke="black" d="M185.46,-338.62C184.93,-309.48 188.23,-243.41 226.14,-210 338.6,-110.89 813.57,-98.31 982.88,-97.02"/>
 <polygon fill="black" stroke="black" points="983.13,-100.52 993.11,-96.95 983.09,-93.52 983.13,-100.52"/>
 <text text-anchor="middle" x="260.64" y="-221.3" font-family="Times,serif" font-size="14.00">«include»</text>
@@ -421,16 +421,16 @@
 <polygon fill="black" stroke="black" points="1149.82,-360.7 1139.42,-362.75 1148.83,-367.63 1149.82,-360.7"/>
 <text text-anchor="middle" x="1518.64" y="-390.8" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
-<!-- limits&#45;&gt;defs -->
+<!-- limits&#45;&gt;core -->
 <g id="edge13" class="edge">
-<title>limits&#45;&gt;defs</title>
+<title>limits&#45;&gt;core</title>
 <path fill="none" stroke="black" d="M1737.32,-419.83C1745.79,-415.24 1754.04,-409.37 1760.14,-402 1774.05,-385.22 1774.14,-376.8 1774.14,-355 1774.14,-355 1774.14,-355 1774.14,-176 1774.14,-108.73 1278.48,-98.68 1103.46,-97.23"/>
 <polygon fill="black" stroke="black" points="1103.41,-93.73 1093.39,-97.15 1103.36,-100.73 1103.41,-93.73"/>
 <text text-anchor="middle" x="1808.64" y="-269.3" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
-<!-- mngm&#45;&gt;defs -->
+<!-- mngm&#45;&gt;core -->
 <g id="edge14" class="edge">
-<title>mngm&#45;&gt;defs</title>
+<title>mngm&#45;&gt;core</title>
 <path fill="none" stroke="black" d="M684.14,-164.22C727.41,-154.22 791.73,-139.82 848.14,-129 893.14,-120.37 944.27,-112.04 982.88,-106.04"/>
 <polygon fill="black" stroke="black" points="983.57,-109.47 992.91,-104.49 982.5,-102.55 983.57,-109.47"/>
 <text text-anchor="middle" x="882.64" y="-132.8" font-family="Times,serif" font-size="14.00">«include»</text>
@@ -557,16 +557,16 @@
 <polygon fill="black" stroke="black" points="1887.31,-34.2 1877.48,-30.25 1882.69,-39.47 1887.31,-34.2"/>
 <text text-anchor="middle" x="1913.64" y="-132.8" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
-<!-- type_trait&#45;&gt;defs -->
+<!-- type_trait&#45;&gt;core -->
 <g id="edge19" class="edge">
-<title>type_trait&#45;&gt;defs</title>
+<title>type_trait&#45;&gt;core</title>
 <path fill="none" stroke="black" d="M1658.87,-210.84C1657.61,-210.55 1656.37,-210.27 1655.14,-210 1454.14,-165.45 1213.29,-124.61 1103.28,-106.64"/>
 <polygon fill="black" stroke="black" points="1103.8,-103.18 1093.36,-105.03 1102.67,-110.09 1103.8,-103.18"/>
 <text text-anchor="middle" x="1594.64" y="-173.3" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
-<!-- unsafe_defs&#45;&gt;defs -->
+<!-- unsafe_defs&#45;&gt;core -->
 <g id="edge21" class="edge">
-<title>unsafe_defs&#45;&gt;defs</title>
+<title>unsafe_defs&#45;&gt;core</title>
 <path fill="none" stroke="black" d="M1129.37,-161.88C1112.8,-149.41 1088.45,-131.09 1069.84,-117.09"/>
 <polygon fill="black" stroke="black" points="1071.85,-114.22 1061.75,-111 1067.64,-119.81 1071.85,-114.22"/>
 <text text-anchor="middle" x="1139.64" y="-132.8" font-family="Times,serif" font-size="14.00">«include»</text>

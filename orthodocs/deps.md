@@ -18,7 +18,7 @@ graph TD
     A11[foundation/base_parameters]
     A12[foundation/base_string]
     A13[foundation/base_trace]
-    A3 --o|include| A14[foundation/defs]
+    A3 --o|include| A14[foundation/core]
     A15[artifacts/box] --o|include| A16[artifacts/spacer]
     A15 --o|include| A17[vitamins/knurl_nuts]
     A15 --o|include| A18[vitamins/screw]
@@ -34,13 +34,13 @@ graph TD
     A23 --o|use| A3
     A24[foundation/connect] --o|include| A21
     A24 --o|use| A5
-    A25[vitamins/countersinks] --o|use| A3
-    A25 --o|use| A4
     A14 --o|include| A12
     A14 --o|use| A9
     A14 --o|use| A10
     A14 --o|use| A11
     A14 --o|use| A13
+    A25[vitamins/countersinks] --o|use| A3
+    A25 --o|use| A4
     A26[foundation/drawio] --o|include| A14
     A26 --o|use| A1
     A26 --o|use| A13

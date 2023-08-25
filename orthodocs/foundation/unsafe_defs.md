@@ -4,7 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/unsafe_defs] --o|include| A2[foundation/defs]
+    A1[foundation/unsafe_defs] --o|include| A2[foundation/core]
 ```
 
 UNPORTABLE DEFINITIONS, DON'T USE TOGETHER OTHER LIBRARIES INCLUDES.
@@ -24,7 +24,7 @@ __Default:__
 
     FL_I
 
-see [variable FL_I](defs.md#variable-fl_i)
+see [variable FL_I](core.md#variable-fl_i)
 
 ---
 
@@ -54,7 +54,7 @@ __Default:__
 
     FL_O
 
-see [variable FL_O](defs.md#variable-fl_o)
+see [variable FL_O](core.md#variable-fl_o)
 
 ---
 
@@ -64,7 +64,7 @@ __Default:__
 
     FL_X
 
-see [variable FL_X](defs.md#variable-fl_x)
+see [variable FL_X](core.md#variable-fl_x)
 
 ---
 
@@ -74,7 +74,7 @@ __Default:__
 
     FL_Y
 
-see [variable FL_Y](defs.md#variable-fl_y)
+see [variable FL_Y](core.md#variable-fl_y)
 
 ---
 
@@ -84,7 +84,7 @@ __Default:__
 
     FL_Z
 
-see [variable FL_Z](defs.md#variable-fl_z)
+see [variable FL_Z](core.md#variable-fl_z)
 
 ## Functions
 
@@ -98,7 +98,7 @@ __Syntax:__
 R(u,theta)
 ```
 
-see [fl_R()](defs.md#function-fl_r)
+see [fl_R()](core.md#function-fl_r)
 
 ---
 
@@ -110,7 +110,7 @@ __Syntax:__
 Rx(alpha)
 ```
 
-see [fl_Rx()](defs.md#function-fl_rx)
+see [fl_Rx()](core.md#function-fl_rx)
 
 ---
 
@@ -122,7 +122,7 @@ __Syntax:__
 Rxyz(alpha)
 ```
 
-see [fl_Rxyz()](defs.md#function-fl_rxyz)
+see [fl_Rxyz()](core.md#function-fl_rxyz)
 
 ---
 
@@ -134,7 +134,7 @@ __Syntax:__
 Ry(alpha)
 ```
 
-see [fl_Ry()](defs.md#function-fl_ry)
+see [fl_Ry()](core.md#function-fl_ry)
 
 ---
 
@@ -146,7 +146,7 @@ __Syntax:__
 Rz(alpha)
 ```
 
-see [fl_Rz()](defs.md#function-fl_rz)
+see [fl_Rz()](core.md#function-fl_rz)
 
 ---
 
@@ -158,7 +158,7 @@ __Syntax:__
 S(s)
 ```
 
-see [fl_S()](defs.md#function-fl_s)
+see [fl_S()](core.md#function-fl_s)
 
 ---
 
@@ -170,7 +170,7 @@ __Syntax:__
 T(t)
 ```
 
-see [fl_T()](defs.md#function-fl_t)
+see [fl_T()](core.md#function-fl_t)
 
 ---
 
@@ -182,7 +182,7 @@ __Syntax:__
 X(x)
 ```
 
-see [fl_X()](defs.md#function-fl_x)
+see [fl_X()](core.md#function-fl_x)
 
 ---
 
@@ -194,7 +194,7 @@ __Syntax:__
 Y(y)
 ```
 
-see [fl_Y()](defs.md#function-fl_y)
+see [fl_Y()](core.md#function-fl_y)
 
 ---
 
@@ -206,5 +206,5 @@ __Syntax:__
 Z(z)
 ```
 
-see [fl_Z()](defs.md#function-fl_z)
+see [fl_Z()](core.md#function-fl_z)
 

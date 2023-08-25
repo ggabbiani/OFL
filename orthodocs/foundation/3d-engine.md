@@ -977,7 +977,7 @@ provides the symbol required in its 'canonical' form:
          Its canonical form implies an orientation of the piece coherent
          with its fitting movement along -Z axis.
 
-[variable FL_LAYOUT](defs.md#variable-fl_layout) is used for proper label orientation
+[variable FL_LAYOUT](core.md#variable-fl_layout) is used for proper label orientation
 
 Children context:
 

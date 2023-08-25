@@ -4,7 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/bbox-engine] --o|include| A2[foundation/defs]
+    A1[foundation/bbox-engine] --o|include| A2[foundation/core]
 ```
 
 BoundingBox toolkit

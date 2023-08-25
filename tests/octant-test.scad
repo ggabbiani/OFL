@@ -10,7 +10,7 @@
  */
 
 
-include <../lib/OFL/foundation/defs.scad>
+include <../lib/OFL/foundation/core.scad>
 use <../lib/OFL/foundation/3d-engine.scad>
 
 

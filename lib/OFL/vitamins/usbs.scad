@@ -7,7 +7,7 @@
  */
 
 include <NopSCADlib/utils/core/core.scad>
-include <../foundation/defs.scad>
+include <../foundation/core.scad>
 
 use <../foundation/2d-engine.scad>
 use <../foundation/3d-engine.scad>

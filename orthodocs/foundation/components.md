@@ -4,7 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/components] --o|include| A2[foundation/defs]
+    A1[foundation/components] --o|include| A2[foundation/core]
     A1 --o|use| A3[foundation/bbox-engine]
 ```
 

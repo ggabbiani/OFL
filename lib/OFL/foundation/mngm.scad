@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <defs.scad>
+include <core.scad>
 
 /*!
  * manage verbs parsing, placement and orientation
