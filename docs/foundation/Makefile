@@ -10,7 +10,7 @@ all: dependencies.svg
 	@$(MAKE) -C 800x600 $@
 
 dependencies.svg: $(FOUNDATION_SOURCES)
-	@echo -n "$(CURDIR)/$@: "
+	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
 	@$(DEPS) --foundation
 	@echo -e "\e[32mOK\e[0m"
 
