@@ -4,8 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/type_trait] --o|include| A2[foundation/base_string]
-    A1 --o|include| A3[foundation/core]
+    A1[foundation/type_trait] --o|include| A2[foundation/core]
 ```
 
 Type traits implementation file.

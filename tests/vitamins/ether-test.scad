@@ -10,8 +10,6 @@ include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/dxf.scad>
 include <../../lib/OFL/vitamins/ethers.scad>
 
-use <../../lib/OFL/foundation/base_parameters.scad>
-
 $fn           = 50;   // [3:100]
 // When true, disables epsilon corrections
 $FL_RENDER    = false;

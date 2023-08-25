@@ -594,7 +594,7 @@ __verbs__
 FL_ADD,FL_AXES,FL_BBOX
 
 __debug__  
-debug parameter as returned from [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 __octant__  
 when undef, native positioning is used with the Low bounding box vertex
@@ -643,7 +643,7 @@ __d2__
 diameter, top of cone. r2 = d2 / 2.
 
 __debug__  
-debug parameter as returned from [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 __octant__  
 when undef native positioning is used
@@ -860,7 +860,7 @@ __h__
 height
 
 __debug__  
-debug parameter as returned from [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 __octant__  
 when undef native positioning is used
@@ -886,7 +886,7 @@ __verbs__
 FL_ADD,FL_AXES,FL_BBOX
 
 __debug__  
-debug parameter as returned from [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 __octant__  
 when undef default positioning is used

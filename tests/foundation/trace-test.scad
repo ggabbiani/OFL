@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../../lib/OFL/foundation/base_trace.scad>
+include <../../lib/OFL/foundation/core.scad>
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;  // [-2:10]

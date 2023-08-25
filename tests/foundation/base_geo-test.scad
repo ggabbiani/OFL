@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../lib/OFL/foundation/base_geo.scad>
+include <../../lib/OFL/foundation/core.scad>
 
 let(
   vector  = [1.2,13,-4.5],

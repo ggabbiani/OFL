@@ -12,62 +12,50 @@ graph TD
     A5 --o|use| A6[foundation/type_trait]
     A7[foundation/algo-engine] --o|include| A2
     A7 --o|use| A5
-    A8[foundation/base_geo]
-    A9[foundation/base_kv]
-    A10[foundation/base_parameters]
-    A11[foundation/base_string]
-    A12[foundation/base_trace]
-    A3 --o|include| A13[foundation/core]
-    A14[foundation/components] --o|include| A13
-    A14 --o|use| A3
-    A15[foundation/connect] --o|include| A16[foundation/util]
+    A3 --o|include| A8[foundation/core]
+    A9[foundation/components] --o|include| A8
+    A9 --o|use| A3
+    A10[foundation/connect] --o|include| A11[foundation/util]
+    A10 --o|use| A5
+    A8
+    A12[foundation/drawio] --o|include| A8
+    A12 --o|use| A1
+    A12 --o|use| A4
+    A13[foundation/fillet] --o|include| A2
+    A13 --o|use| A1
+    A13 --o|use| A5
+    A13 --o|use| A4
+    A14[foundation/grid] --o|include| A8
+    A14 --o|use| A1
+    A14 --o|use| A5
+    A15[foundation/hole] --o|include| A2
     A15 --o|use| A5
-    A13 --o|include| A11
-    A13 --o|use| A8
-    A13 --o|use| A9
-    A13 --o|use| A10
-    A13 --o|use| A12
-    A17[foundation/drawio] --o|include| A13
-    A17 --o|use| A1
-    A17 --o|use| A12
-    A17 --o|use| A4
-    A18[foundation/fillet] --o|include| A2
+    A15 --o|use| A16[foundation/label]
+    A15 --o|use| A6
+    A16 --o|include| A2
+    A16 --o|use| A5
+    A16 --o|use| A4
+    A17[foundation/limits] --o|include| A5
+    A17 --o|include| A8
+    A4 --o|include| A8
+    A18[foundation/profile] --o|include| A2
     A18 --o|use| A1
     A18 --o|use| A5
     A18 --o|use| A4
-    A19[foundation/grid] --o|use| A1
-    A19 --o|use| A5
-    A19 --o|use| A12
-    A20[foundation/hole] --o|include| A2
+    A19[foundation/template] --o|include| A5
+    A20[foundation/torus] --o|include| A2
+    A20 --o|use| A1
     A20 --o|use| A5
-    A20 --o|use| A9
-    A20 --o|use| A21[foundation/label]
-    A20 --o|use| A6
-    A21 --o|include| A2
+    A20 --o|use| A4
+    A21[foundation/tube] --o|include| A2
+    A21 --o|use| A1
     A21 --o|use| A5
     A21 --o|use| A4
-    A22[foundation/limits] --o|include| A5
-    A22 --o|include| A13
-    A4 --o|include| A13
-    A23[foundation/profile] --o|include| A2
-    A23 --o|use| A1
-    A23 --o|use| A5
-    A23 --o|use| A4
-    A24[foundation/template] --o|include| A5
-    A25[foundation/torus] --o|include| A2
-    A25 --o|use| A1
-    A25 --o|use| A5
-    A25 --o|use| A4
-    A26[foundation/tube] --o|include| A2
-    A26 --o|use| A1
-    A26 --o|use| A5
-    A26 --o|use| A4
-    A6 --o|include| A11
-    A6 --o|include| A13
-    A2 --o|include| A13
-    A16 --o|include| A2
-    A16 --o|use| A5
-    A16 --o|use| A3
-    A16 --o|use| A4
+    A6 --o|include| A8
+    A2 --o|include| A8
+    A11 --o|include| A2
+    A11 --o|use| A5
+    A11 --o|use| A3
+    A11 --o|use| A4
 ```
 

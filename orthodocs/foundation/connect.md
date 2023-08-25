@@ -265,7 +265,7 @@ __conns__
 list of connectors
 
 __debug__  
-see constructor [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
+see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---

@@ -1,20 +1,16 @@
 /*!
  * Base definitions for OpenSCAD.
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
-
-include <base_string.scad>
-
-use <base_geo.scad>
-use <base_kv.scad>
-use <base_parameters.scad>
-use <base_trace.scad>
 
 //*****************************************************************************
 // versioning
@@ -517,3 +513,244 @@ function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
 
 //**** dictionary *************************************************************
 function fl_dict_search(dictionary,name) = [for(item=dictionary) let(n=fl_name(item)) if (name==n) item];
+
+/*!
+ * Optional getter, no error when property is not found.
+ *
+ * Return «default» when «type» is undef or empty, or when «key» is not found
+ *
+ * | type    | key     | default | key found | result    | semantic |
+ * | ------- | ------- | ------- | --------- | --------- | -------- |
+ * | undef   | *       | *       | *         | default   | GETTER   |
+ * | defined | defined | *       | false     | default   | GETTER   |
+ * | defined | defined | *       | true      | value     | GETTER   |
+ *
+ * **ERROR** in all the other cases
+ */
+function fl_optional(type,key,default) =
+  type==undef ? default : let(r=search([key],type)) r!=[[]] ? type[r[0]][1] : default;
+
+/*!
+ * Mandatory property getter with default value when not found
+ *
+ * Never return undef.
+ *
+ * | type    | key     | default | key found | result    | semantic |
+ * | ------- | ------- | ------- | --------- | --------- | -------- |
+ * | defined | defined | *       | true      | value     | GETTER   |
+ * | defined | defined | defined | false     | default   | GETTER   |
+ *
+ * **ERROR** in all the other cases
+ */
+function fl_get(type,key,default) =
+  assert(key!=undef)
+  assert(type!=undef)
+  let(index_list=search([key],type))
+  index_list != [[]]
+  ? type[index_list[0]][1]
+  : assert(default!=undef,str("Key not found ***",key,"*** in ",type)) default;
+
+//**** key/values *************************************************************
+
+/*!
+ * 'bipolar' property helper:
+ *
+ * - type/key{/default} ↦ returns the property value (error if property not found)
+ * - key{/value}        ↦ returns the property [key,value] (acts as a property constructor)
+ *
+ * It concentrates property key definition reducing possible mismatch when
+ * referring to property key in the more usual getter/setter function pair.
+ *
+ * This getter never return undef.
+ *
+ * | type    | key     | default | key found | result      | semantic |
+ * | ------- | ------- | ------- | --------- | ----------- | -------- |
+ * | undef   | defined | undef   | *         | [key,value] |  SETTER  |
+ * | defined | defined | *       | true      | value       |  GETTER  |
+ * | defined | defined | defined | false     | default     |  GETTER  |
+ *
+ * **ERROR** in all the other cases
+ */
+function fl_property(type,key,value,default)  =
+  assert(key!=undef)
+  type!=undef
+  ? fl_get(type,key,default)              // property getter
+  : assert(default==undef)  [key,value];  // property constructor
+
+/*!
+ * 'bipolar' optional property helper:
+ *
+ * - type/key{/default} ↦ returns the property value (no error if property not found)
+ * - key{/value}        ↦ returns the property [key,value] (acts as a property constructor)
+ *
+ * This getter returns 'undef' when the key is not found and no default is passed.
+ *
+ * | type    | key     | default | key found | result      | semantic |
+ * | ------- | ------- | ------- | --------- | ----------- | -------- |
+ * | undef   | defined | undef   | *         | [key,value] | SETTER   |
+ * | defined | defined | *       | false     | default     | GETTER   |
+ * | defined | defined | *       | true      | value       | GETTER   |
+ *
+ * **ERROR** in all the other cases
+ */
+function fl_optProperty(type,key,value,default) =
+  type!=undef ? fl_optional(type,key,default) : fl_property(key=key,value=value);
+
+//**** base geometry **********************************************************
+
+function fl_versor(v) = assert(is_list(v),v) v / norm(v);
+
+function fl_isParallel(a,b,exact=true) = let(prod = fl_versor(a)*fl_versor(b)) (exact ? prod : abs(prod))==1;
+
+function fl_isOrthogonal(a,b) = a*b==0;
+
+//**** Base tracing helpers ***************************************************
+
+/*!
+ * trace helper function.
+ *
+ * See module fl_trace{}.
+ */
+function fl_trace(msg,result,always=false) = let(
+  call_chain  = strcat([for (i=[$parent_modules-1:-1:0]) parent_module(i)],"->"),
+  mdepth      = $parent_modules
+) assert(msg)
+  (always||(!is_undef($FL_TRACES) && ($FL_TRACES==-1||$FL_TRACES>=mdepth)))
+  ? echo(mdepth,str(call_chain,": ",msg,"==",result)) result
+  : result;
+
+/*!
+ * trace helper module.
+ *
+ * prints «msg» prefixed by its call order either if «always» is true or if its
+ * current call order is ≤ $FL_TRACES.
+ *
+ * Used $special variables:
+ *
+ * - $FL_TRACE affects trace messages according to its value:
+ *   - -2   : all traces disabled
+ *   - -1   : all traces enabled
+ *   - [0,∞): traces with call order ≤ $FL_TRACES are enabled
+ */
+module fl_trace(
+  // message to be printed
+  msg,
+  // optional value generally usable for printing a variable content
+  value,
+  // when true the trace is always printed
+  always=false
+) {
+  mdepth      = $parent_modules-1;
+  if (always||(!is_undef($FL_TRACES) && ($FL_TRACES==-1||$FL_TRACES>=mdepth)))
+    let(
+      call_chain  = strcat([for (i=[$parent_modules-1:-1:1]) parent_module(i)],"->")
+    ) echo(mdepth,str(call_chain,": ",is_undef(value)?msg:str(msg,"==",value))) children();
+  else
+    children();
+}
+
+//**** string utilities *******************************************************
+
+function fl_str_upper(s) = let(len=len(s))
+  len==0 ? ""
+  : len==1 ? let(
+      c   = s[0],
+      cp  = ord(c),
+      uc = cp>=97 && cp<=122 ? str(chr(ord(c)-32)) : c
+    ) uc
+  : str(fl_str_upper(s[0]),fl_str_upper([for(i=[1:len-1]) s[i]]));
+
+function fl_str_lower(s) = let(
+    len=len(s)
+  )
+  len==0 ? ""
+  : len==1 ? let(
+      c   = s[0],
+      cp  = ord(c),
+      lc = cp>=65 && cp<=90 ? str(chr(ord(c)+32)) : c
+    ) lc
+  : str(fl_str_lower(s[0]),fl_str_lower([for(i=[1:len-1]) s[i]]));
+
+//! recursively flatten infinitely nested list
+function fl_list_flatten(list) =
+  assert(is_list(list))
+  [
+    for (i=list) let(sub = is_list(i) ? fl_list_flatten(i) : [i])
+      for (i=sub) i
+  ];
+
+//! see fl_list_filter() «operator» parameter
+FL_EXCLUDE_ANY  = ["AND",function(one,other) one!=other];
+//! see fl_list_filter() «operator» parameter
+FL_INCLUDE_ALL  = ["OR", function(one,other) one==other];
+
+function fl_list_filter(list,operator,compare,__result__=[],__first__=true) =
+// echo(list=list,compare=compare,operator=operator,__result__=__result__,__first__=__first__)
+assert(is_list(list)||is_string(list),list)
+assert(is_list(compare)||is_string(compare),compare)
+let(
+  s_list  = is_list(list) ? list : [list],
+  c_list  = is_string(compare) ? [compare] : compare,
+  len     = len(c_list),
+  logic   = operator[0],
+  f       = operator[1],
+  string  = c_list[0],
+  match   = [for(item=(logic=="OR" || __first__) ? s_list:__result__) if (f(item,string)) item],
+  result  = (logic=="OR") ? concat(__result__,match) : match
+)
+// echo(match=match, result=result)
+len==1 ? result : fl_list_filter(s_list,operator,[for(i=[1:len-1]) c_list[i]],result,false);
+
+function fl_list_has(list,item) = len(fl_list_filter(list,FL_INCLUDE_ALL,item))>0;
+
+/*****************************************************************************
+ * Common parameter helpers
+ *****************************************************************************/
+
+//**** Global getters *********************************************************
+
+/*!
+ * When true fl_assert() is enabled
+ *
+ * **TODO**: remove since deprecated.
+ */
+function fl_asserts() = is_undef($fl_asserts) ? false : assert(is_bool($fl_asserts)) $fl_asserts;
+
+//! When true debug statements are turned on
+function fl_debug() = is_undef($fl_debug)
+? /* echo("**DEBUG** false")  */ false
+: assert(is_bool($fl_debug),$fl_debug) /* echo(str("**DEBUG** ",$fl_debug)) */ $fl_debug;
+
+//! Default color for printable items (i.e. artifacts)
+function fl_filament() = is_undef($fl_filament)
+? "DodgerBlue"
+: assert(is_string($fl_filament)) $fl_filament;
+
+//**** Common parameters ******************************************************
+
+//! constructor for debug context parameter
+function fl_parm_Debug(
+  //! when true, labels to symbols are assigned and displayed
+  labels  = false,
+  //! when true symbols are displayed
+  symbols = false,
+  /*
+   * a string or a list of strings equals to the component label of which
+   * direction information will be shown
+   */
+  components = []
+) = [labels,symbols,components];
+
+//! When true debug labels are turned on
+function fl_parm_labels(debug) = is_undef(debug) ? false : assert(is_bool(debug[0])) debug[0];
+
+//! When true debug symbols are turned on
+function fl_parm_symbols(debug) = is_undef(debug) ? false : assert(is_bool(debug[1])) debug[1];
+
+// When true show direction information of the component with «label»
+function fl_parm_components(debug,label) = let(
+  dbg = debug[2]
+)   is_undef(debug) ? false
+  : is_list(dbg) ? search([label],dbg)!=[[]]
+  : is_string(dbg) ? dbg==label
+  : assert(false,str("debug information must be a string or a list of strings: ", dbg)) undef;

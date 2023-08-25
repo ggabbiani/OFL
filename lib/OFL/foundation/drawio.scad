@@ -10,7 +10,6 @@
 include <core.scad>
 
 use <2d-engine.scad>
-use <base_trace.scad>
 use <mngm.scad>
 
 /*!

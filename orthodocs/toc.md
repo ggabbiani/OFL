@@ -49,18 +49,13 @@
 - [FL_ASSEMBLY (variable)](foundation/core.md#variable-fl_assembly)
 - [fl_assert (function)](foundation/core.md#function-fl_assert)
 - [fl_assert (module)](foundation/core.md#module-fl_assert)
-- [fl_asserts (function)](foundation/base_parameters.md#function-fl_asserts)
+- [fl_asserts (function)](foundation/core.md#function-fl_asserts)
 - [fl_axes (module)](foundation/core.md#module-fl_axes)
 - [$FL_AXES (variable)](foundation/core.md#variable-$fl_axes)
 - [FL_AXES (variable)](foundation/core.md#variable-fl_axes)
 
 ## B
 
-- [foundation/base_geo (package)](foundation/base_geo.md#package-foundationbase_geo)
-- [foundation/base_kv (package)](foundation/base_kv.md#package-foundationbase_kv)
-- [foundation/base_parameters (package)](foundation/base_parameters.md#package-foundationbase_parameters)
-- [foundation/base_string (package)](foundation/base_string.md#package-foundationbase_string)
-- [foundation/base_trace (package)](foundation/base_trace.md#package-foundationbase_trace)
 - [fl_bb_90DegFillet (function)](foundation/fillet.md#function-fl_bb_90degfillet)
 - [fl_bb_accum (function)](foundation/3d-engine.md#function-fl_bb_accum)
 - [fl_bb_add (module)](foundation/3d-engine.md#module-fl_bb_add)
@@ -165,7 +160,7 @@
 
 ## D
 
-- [fl_debug (function)](foundation/base_parameters.md#function-fl_debug)
+- [fl_debug (function)](foundation/core.md#function-fl_debug)
 - [fl_deprecated (function)](foundation/core.md#function-fl_deprecated)
 - [FL_DEPRECATED (variable)](foundation/core.md#variable-fl_deprecated)
 - [fl_description (function)](foundation/core.md#function-fl_description)
@@ -205,12 +200,12 @@
 - [FL_ETHER_Z_OFFSET (variable)](vitamins/ethers.md#variable-fl_ether_z_offset)
 - [fl_ether_Zoffset (function)](vitamins/ethers.md#function-fl_ether_zoffset)
 - [vitamins/ethers (package)](vitamins/ethers.md#package-vitaminsethers)
-- [FL_EXCLUDE_ANY (variable)](foundation/base_string.md#variable-fl_exclude_any)
+- [FL_EXCLUDE_ANY (variable)](foundation/core.md#variable-fl_exclude_any)
 
 ## F
 
 - [fl_FDMtolerance (variable)](foundation/core.md#variable-fl_fdmtolerance)
-- [fl_filament (function)](foundation/base_parameters.md#function-fl_filament)
+- [fl_filament (function)](foundation/core.md#function-fl_filament)
 - [fl_fillet (module)](foundation/fillet.md#module-fl_fillet)
 - [foundation/fillet (package)](foundation/fillet.md#package-foundationfillet)
 - [fl_folding (function)](foundation/util.md#function-fl_folding)
@@ -223,7 +218,7 @@
 - [FL_GENERIC_NS (variable)](vitamins/generic.md#variable-fl_generic_ns)
 - [fl_generic_Vitamin (function)](vitamins/generic.md#function-fl_generic_vitamin)
 - [fl_generic_vitamin (module)](vitamins/generic.md#module-fl_generic_vitamin)
-- [fl_get (function)](foundation/base_kv.md#function-fl_get)
+- [fl_get (function)](foundation/core.md#function-fl_get)
 - [fl_grey (function)](foundation/core.md#function-fl_grey)
 - [foundation/grid (package)](foundation/grid.md#package-foundationgrid)
 - [fl_grid_hex (function)](foundation/grid.md#function-fl_grid_hex)
@@ -277,14 +272,14 @@
 - [I (variable)](foundation/unsafe_defs.md#variable-i)
 - [FL_I (variable)](foundation/core.md#variable-fl_i)
 - [fl_importDxf (module)](foundation/3d-engine.md#module-fl_importdxf)
-- [FL_INCLUDE_ALL (variable)](foundation/base_string.md#variable-fl_include_all)
+- [FL_INCLUDE_ALL (variable)](foundation/core.md#variable-fl_include_all)
 - [fl_intersection (function)](foundation/2d-engine.md#function-fl_intersection)
 - [fl_ipoly (module)](foundation/2d-engine.md#module-fl_ipoly)
 - [fl_isEven (function)](foundation/core.md#function-fl_iseven)
 - [fl_isMultiple (function)](foundation/core.md#function-fl_ismultiple)
 - [fl_isOdd (function)](foundation/core.md#function-fl_isodd)
-- [fl_isOrthogonal (function)](foundation/base_geo.md#function-fl_isorthogonal)
-- [fl_isParallel (function)](foundation/base_geo.md#function-fl_isparallel)
+- [fl_isOrthogonal (function)](foundation/core.md#function-fl_isorthogonal)
+- [fl_isParallel (function)](foundation/core.md#function-fl_isparallel)
 - [fl_isSet (function)](foundation/core.md#function-fl_isset)
 
 ## J
@@ -354,9 +349,9 @@
 - [FL_LIMIT_UWALLS (variable)](foundation/limits.md#variable-fl_limit_uwalls)
 - [foundation/limits (package)](foundation/limits.md#package-foundationlimits)
 - [fl_linear_extrude (module)](foundation/3d-engine.md#module-fl_linear_extrude)
-- [fl_list_filter (function)](foundation/base_string.md#function-fl_list_filter)
-- [fl_list_flatten (function)](foundation/base_string.md#function-fl_list_flatten)
-- [fl_list_has (function)](foundation/base_string.md#function-fl_list_has)
+- [fl_list_filter (function)](foundation/core.md#function-fl_list_filter)
+- [fl_list_flatten (function)](foundation/core.md#function-fl_list_flatten)
+- [fl_list_has (function)](foundation/core.md#function-fl_list_has)
 
 ## M
 
@@ -402,17 +397,17 @@
 - [FL_O (variable)](foundation/core.md#variable-fl_o)
 - [FL_OBSOLETE (variable)](foundation/core.md#variable-fl_obsolete)
 - [fl_octant (function)](foundation/3d-engine.md#function-fl_octant)
-- [fl_optional (function)](foundation/base_kv.md#function-fl_optional)
-- [fl_optProperty (function)](foundation/base_kv.md#function-fl_optproperty)
+- [fl_optional (function)](foundation/core.md#function-fl_optional)
+- [fl_optProperty (function)](foundation/core.md#function-fl_optproperty)
 - [fl_overlap (module)](foundation/core.md#module-fl_overlap)
 
 ## P
 
 - [fl_palette (function)](foundation/core.md#function-fl_palette)
-- [fl_parm_components (function)](foundation/base_parameters.md#function-fl_parm_components)
-- [fl_parm_Debug (function)](foundation/base_parameters.md#function-fl_parm_debug)
-- [fl_parm_labels (function)](foundation/base_parameters.md#function-fl_parm_labels)
-- [fl_parm_symbols (function)](foundation/base_parameters.md#function-fl_parm_symbols)
+- [fl_parm_components (function)](foundation/core.md#function-fl_parm_components)
+- [fl_parm_Debug (function)](foundation/core.md#function-fl_parm_debug)
+- [fl_parm_labels (function)](foundation/core.md#function-fl_parm_labels)
+- [fl_parm_symbols (function)](foundation/core.md#function-fl_parm_symbols)
 - [fl_parse_diameter (function)](foundation/core.md#function-fl_parse_diameter)
 - [fl_parse_l (function)](foundation/core.md#function-fl_parse_l)
 - [fl_parse_radius (function)](foundation/core.md#function-fl_parse_radius)
@@ -468,7 +463,7 @@
 - [fl_prism_defaults (function)](foundation/3d-engine.md#function-fl_prism_defaults)
 - [fl_profile (module)](foundation/profile.md#module-fl_profile)
 - [foundation/profile (package)](foundation/profile.md#package-foundationprofile)
-- [fl_property (function)](foundation/base_kv.md#function-fl_property)
+- [fl_property (function)](foundation/core.md#function-fl_property)
 - [fl_psu (module)](vitamins/psus.md#module-fl_psu)
 - [FL_PSU_DICT (variable)](vitamins/psus.md#variable-fl_psu_dict)
 - [FL_PSU_MeanWell_RS_15_5 (variable)](vitamins/psus.md#variable-fl_psu_meanwell_rs_15_5)
@@ -557,8 +552,8 @@
 - [fl_square (function)](foundation/2d-engine.md#function-fl_square)
 - [fl_square (module)](foundation/2d-engine.md#module-fl_square)
 - [fl_status (module)](foundation/core.md#module-fl_status)
-- [fl_str_lower (function)](foundation/base_string.md#function-fl_str_lower)
-- [fl_str_upper (function)](foundation/base_string.md#function-fl_str_upper)
+- [fl_str_lower (function)](foundation/core.md#function-fl_str_lower)
+- [fl_str_upper (function)](foundation/core.md#function-fl_str_upper)
 - [fl_sub (function)](foundation/core.md#function-fl_sub)
 - [fl_switch (module)](vitamins/switch.md#module-fl_switch)
 - [vitamins/switch (package)](vitamins/switch.md#package-vitaminsswitch)
@@ -595,8 +590,8 @@
 - [fl_tolerance (function)](foundation/core.md#function-fl_tolerance)
 - [fl_torus (module)](foundation/torus.md#module-fl_torus)
 - [foundation/torus (package)](foundation/torus.md#package-foundationtorus)
-- [fl_trace (function)](foundation/base_trace.md#function-fl_trace)
-- [fl_trace (module)](foundation/base_trace.md#module-fl_trace)
+- [fl_trace (function)](foundation/core.md#function-fl_trace)
+- [fl_trace (module)](foundation/core.md#module-fl_trace)
 - [fl_transform (function)](foundation/core.md#function-fl_transform)
 - [FL_TRIM_NS (variable)](vitamins/trimpot.md#variable-fl_trim_ns)
 - [FL_TRIM_POT10 (variable)](vitamins/trimpot.md#variable-fl_trim_pot10)
@@ -660,7 +655,7 @@
 - [fl_vendor (function)](foundation/core.md#function-fl_vendor)
 - [fl_version (function)](foundation/core.md#function-fl_version)
 - [fl_versionNumber (function)](foundation/core.md#function-fl_versionnumber)
-- [fl_versor (function)](foundation/base_geo.md#function-fl_versor)
+- [fl_versor (function)](foundation/core.md#function-fl_versor)
 - [fl_versor (module)](foundation/core.md#module-fl_versor)
 - [fl_vFillet (module)](foundation/fillet.md#module-fl_vfillet)
 

@@ -107,7 +107,7 @@ tolerance=x means [x,x,x]
 
 
 __debug__  
-see constructor [fl_parm_Debug()](../foundation/base_parameters.md#function-fl_parm_debug)
+see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+Z,0])

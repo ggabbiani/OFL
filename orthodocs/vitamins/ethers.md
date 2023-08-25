@@ -120,7 +120,7 @@ __cut_drift__
 translation applied to cutout (default 0)
 
 __debug__  
-see constructor [fl_parm_Debug()](../foundation/base_parameters.md#function-fl_parm_debug)
+see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

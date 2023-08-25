@@ -7,7 +7,6 @@
  */
 
 include <core.scad>
-include <base_string.scad>
 
 function fl_tt_is2d(p) = len(p)==2 && is_num(p.x) && is_num(p.y);
 

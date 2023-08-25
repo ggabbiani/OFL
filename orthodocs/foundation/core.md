@@ -1,19 +1,10 @@
 # package foundation/core
 
-## Dependencies
-
-```mermaid
-graph LR
-    A1[foundation/core] --o|include| A2[foundation/base_string]
-    A1 --o|use| A3[foundation/base_geo]
-    A1 --o|use| A4[foundation/base_kv]
-    A1 --o|use| A5[foundation/base_parameters]
-    A1 --o|use| A6[foundation/base_trace]
-```
-
 Base definitions for OpenSCAD.
 
-Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+
+Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
 
 SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
@@ -213,6 +204,16 @@ layout of predefined drill shapes (like holes with predefined screw diameter)
 
 ---
 
+### variable FL_EXCLUDE_ANY
+
+__Default:__
+
+    ["AND",function(one,other)one!=other]
+
+see [fl_list_filter()](#function-fl_list_filter) «operator» parameter
+
+---
+
 ### variable FL_FOOTPRINT
 
 __Default:__
@@ -240,6 +241,16 @@ __Default:__
     [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1],]
 
 identity matrix in homogeneous coordinates
+
+---
+
+### variable FL_INCLUDE_ALL
+
+__Default:__
+
+    ["OR",function(one,other)one==other]
+
+see [fl_list_filter()](#function-fl_list_filter) «operator» parameter
 
 ---
 
@@ -597,6 +608,21 @@ fl_assert(condition,message,result)
 
 ---
 
+### function fl_asserts
+
+__Syntax:__
+
+```text
+fl_asserts()
+```
+
+When true [fl_assert()](#function-fl_assert) is enabled
+
+**TODO**: remove since deprecated.
+
+
+---
+
 ### function fl_connectors
 
 __Syntax:__
@@ -614,6 +640,18 @@ __Syntax:__
 ```text
 fl_cutout(type,value)
 ```
+
+---
+
+### function fl_debug
+
+__Syntax:__
+
+```text
+fl_debug()
+```
+
+When true debug statements are turned on
 
 ---
 
@@ -666,6 +704,40 @@ __Syntax:__
 ```text
 fl_engine(type,value)
 ```
+
+---
+
+### function fl_filament
+
+__Syntax:__
+
+```text
+fl_filament()
+```
+
+Default color for printable items (i.e. artifacts)
+
+---
+
+### function fl_get
+
+__Syntax:__
+
+```text
+fl_get(type,key,default)
+```
+
+Mandatory property getter with default value when not found
+
+Never return undef.
+
+| type    | key     | default | key found | result    | semantic |
+| ------- | ------- | ------- | --------- | --------- | -------- |
+| defined | defined | *       | true      | value     | GETTER   |
+| defined | defined | defined | false     | default   | GETTER   |
+
+**ERROR** in all the other cases
+
 
 ---
 
@@ -737,6 +809,26 @@ true when n is odd
 
 ---
 
+### function fl_isOrthogonal
+
+__Syntax:__
+
+```text
+fl_isOrthogonal(a,b)
+```
+
+---
+
+### function fl_isParallel
+
+__Syntax:__
+
+```text
+fl_isParallel(a,b,exact=true)
+```
+
+---
+
 ### function fl_isSet
 
 __Syntax:__
@@ -748,6 +840,38 @@ fl_isSet(flag,list)
 return true if «flag» is present in «list».
 TODO: make a case insensitive option
 
+
+---
+
+### function fl_list_filter
+
+__Syntax:__
+
+```text
+fl_list_filter(list,operator,compare,__result__=[],__first__=true)
+```
+
+---
+
+### function fl_list_flatten
+
+__Syntax:__
+
+```text
+fl_list_flatten(list)
+```
+
+recursively flatten infinitely nested list
+
+---
+
+### function fl_list_has
+
+__Syntax:__
+
+```text
+fl_list_has(list,item)
+```
 
 ---
 
@@ -791,6 +915,55 @@ fl_nopSCADlib(type,value,default)
 
 ---
 
+### function fl_optProperty
+
+__Syntax:__
+
+```text
+fl_optProperty(type,key,value,default)
+```
+
+'bipolar' optional property helper:
+
+- type/key{/default} ↦ returns the property value (no error if property not found)
+- key{/value}        ↦ returns the property [key,value] (acts as a property constructor)
+
+This getter returns 'undef' when the key is not found and no default is passed.
+
+| type    | key     | default | key found | result      | semantic |
+| ------- | ------- | ------- | --------- | ----------- | -------- |
+| undef   | defined | undef   | *         | [key,value] | SETTER   |
+| defined | defined | *       | false     | default     | GETTER   |
+| defined | defined | *       | true      | value       | GETTER   |
+
+**ERROR** in all the other cases
+
+
+---
+
+### function fl_optional
+
+__Syntax:__
+
+```text
+fl_optional(type,key,default)
+```
+
+Optional getter, no error when property is not found.
+
+Return «default» when «type» is undef or empty, or when «key» is not found
+
+| type    | key     | default | key found | result    | semantic |
+| ------- | ------- | ------- | --------- | --------- | -------- |
+| undef   | *       | *       | *         | default   | GETTER   |
+| defined | defined | *       | false     | default   | GETTER   |
+| defined | defined | *       | true      | value     | GETTER   |
+
+**ERROR** in all the other cases
+
+
+---
+
 ### function fl_palette
 
 __Syntax:__
@@ -809,6 +982,61 @@ or the corresponding color palette if invoked by «color»
 
 __NOTE__: «axis» and «color» are mutually exclusive.
 
+
+---
+
+### function fl_parm_Debug
+
+__Syntax:__
+
+```text
+fl_parm_Debug(labels=false,symbols=false,components=[])
+```
+
+constructor for debug context parameter
+
+__Parameters:__
+
+__labels__  
+when true, labels to symbols are assigned and displayed
+
+__symbols__  
+when true symbols are displayed
+
+
+---
+
+### function fl_parm_components
+
+__Syntax:__
+
+```text
+fl_parm_components(debug,label)
+```
+
+---
+
+### function fl_parm_labels
+
+__Syntax:__
+
+```text
+fl_parm_labels(debug)
+```
+
+When true debug labels are turned on
+
+---
+
+### function fl_parm_symbols
+
+__Syntax:__
+
+```text
+fl_parm_symbols(debug)
+```
+
+When true debug symbols are turned on
 
 ---
 
@@ -874,6 +1102,35 @@ removes till the i-indexed element from the top of list «l»
 
 ---
 
+### function fl_property
+
+__Syntax:__
+
+```text
+fl_property(type,key,value,default)
+```
+
+'bipolar' property helper:
+
+- type/key{/default} ↦ returns the property value (error if property not found)
+- key{/value}        ↦ returns the property [key,value] (acts as a property constructor)
+
+It concentrates property key definition reducing possible mismatch when
+referring to property key in the more usual getter/setter function pair.
+
+This getter never return undef.
+
+| type    | key     | default | key found | result      | semantic |
+| ------- | ------- | ------- | --------- | ----------- | -------- |
+| undef   | defined | undef   | *         | [key,value] |  SETTER  |
+| defined | defined | *       | true      | value       |  GETTER  |
+| defined | defined | defined | false     | default     |  GETTER  |
+
+**ERROR** in all the other cases
+
+
+---
+
 ### function fl_push
 
 __Syntax:__
@@ -906,6 +1163,26 @@ fl_size(type)
 
 ---
 
+### function fl_str_lower
+
+__Syntax:__
+
+```text
+fl_str_lower(s)
+```
+
+---
+
+### function fl_str_upper
+
+__Syntax:__
+
+```text
+fl_str_upper(s)
+```
+
+---
+
 ### function fl_sub
 
 __Syntax:__
@@ -933,6 +1210,21 @@ __Syntax:__
 ```text
 fl_tolerance(type,value)
 ```
+
+---
+
+### function fl_trace
+
+__Syntax:__
+
+```text
+fl_trace(msg,result,always=false)
+```
+
+trace helper function.
+
+See module [fl_trace{}](#module-fl_trace).
+
 
 ---
 
@@ -986,6 +1278,16 @@ __Syntax:__
 
 ```text
 fl_versionNumber()
+```
+
+---
+
+### function fl_versor
+
+__Syntax:__
+
+```text
+fl_versor(v)
 ```
 
 ---
@@ -1071,6 +1373,27 @@ Aligns children from u1 to u2 and move to position
 __Syntax:__
 
     fl_status()
+
+---
+
+### module fl_trace
+
+__Syntax:__
+
+    fl_trace(msg,value,always=false)
+
+trace helper module.
+
+prints «msg» prefixed by its call order either if «always» is true or if its
+current call order is ≤ $FL_TRACES.
+
+Used $special variables:
+
+- $FL_TRACE affects trace messages according to its value:
+  - -2   : all traces disabled
+  - -1   : all traces enabled
+  - [0,∞): traces with call order ≤ $FL_TRACES are enabled
+
 
 ---
 

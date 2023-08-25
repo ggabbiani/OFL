@@ -6,9 +6,8 @@
 graph LR
     A1[foundation/hole] --o|include| A2[foundation/unsafe_defs]
     A1 --o|use| A3[foundation/3d-engine]
-    A1 --o|use| A4[foundation/base_kv]
-    A1 --o|use| A5[foundation/label]
-    A1 --o|use| A6[foundation/type_trait]
+    A1 --o|use| A4[foundation/label]
+    A1 --o|use| A5[foundation/type_trait]
 ```
 
 Hole engine implementation.
@@ -230,7 +229,7 @@ __screw__
 fallback screw
 
 __debug__  
-see constructor [fl_parm_Debug()](base_parameters.md#function-fl_parm_debug)
+see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---

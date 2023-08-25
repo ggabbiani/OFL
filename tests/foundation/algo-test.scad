@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+include <../../lib/OFL/foundation/core.scad>
 use <../../lib/OFL/foundation/algo-engine.scad>
-use <../../lib/OFL/foundation/base_trace.scad>
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
