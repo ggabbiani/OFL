@@ -8,7 +8,7 @@ graph LR
     A1 --o|include| A3[vitamins/knurl_nuts]
     A1 --o|include| A4[vitamins/screw]
     A1 --o|use| A5[foundation/fillet]
-    A1 --o|use| A6[foundation/mngm]
+    A1 --o|use| A6[foundation/mngm-engine]
     A1 --o|use| A7[foundation/profile]
     A1 --o|use| A8[foundation/util]
 ```

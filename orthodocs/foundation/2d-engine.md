@@ -4,9 +4,9 @@
 
 ```mermaid
 graph LR
-    A1[foundation/2d-engine] --o|include| A2[foundation/mngm]
-    A1 --o|include| A3[foundation/unsafe_defs]
-    A1 --o|use| A4[foundation/bbox-engine]
+    A1[foundation/2d-engine] --o|include| A2[foundation/unsafe_defs]
+    A1 --o|use| A3[foundation/bbox-engine]
+    A1 --o|use| A4[foundation/mngm-engine]
 ```
 
 2D primitives.

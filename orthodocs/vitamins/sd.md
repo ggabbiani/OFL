@@ -6,7 +6,7 @@
 graph LR
     A1[vitamins/sd] --o|use| A2[foundation/3d-engine]
     A1 --o|use| A3[foundation/bbox-engine]
-    A1 --o|use| A4[foundation/mngm]
+    A1 --o|use| A4[foundation/mngm-engine]
     A1 --o|use| A5[foundation/util]
 ```
 

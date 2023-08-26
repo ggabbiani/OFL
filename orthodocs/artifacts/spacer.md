@@ -8,7 +8,7 @@ graph LR
     A1 --o|include| A3[foundation/hole]
     A1 --o|include| A4[foundation/unsafe_defs]
     A1 --o|include| A5[vitamins/knurl_nuts]
-    A1 --o|use| A6[foundation/mngm]
+    A1 --o|use| A6[foundation/mngm-engine]
 ```
 
 Spacers with optional screw and knurl nuts.

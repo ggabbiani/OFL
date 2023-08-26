@@ -7,7 +7,7 @@
 include <spacer.scad>
 
 use <../foundation/bbox-engine.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 /******************************************************************************
  * Hole driven PCB holders

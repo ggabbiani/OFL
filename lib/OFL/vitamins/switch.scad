@@ -11,7 +11,7 @@ use <../foundation/2d-engine.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 // use <../foundation/core-symbols.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 //! template namespace
 FL_SWT_NS  = "swt";

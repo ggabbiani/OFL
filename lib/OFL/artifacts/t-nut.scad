@@ -18,7 +18,7 @@ include <../vitamins/countersinks.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/hole.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 // namespace
 __FL_ART_NS  = "tsnut";

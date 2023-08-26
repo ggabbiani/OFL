@@ -11,7 +11,7 @@ include <../foundation/connect.scad>
 include <../foundation/drawio.scad>
 
 use <../foundation/algo-engine.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 FL_SATA_NS  = "sata";
 

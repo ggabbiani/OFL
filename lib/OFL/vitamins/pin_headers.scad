@@ -9,7 +9,7 @@ include <../foundation/unsafe_defs.scad>
 
 include <../foundation/connect.scad>
 include <../foundation/label.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 use <../foundation/util.scad>
 
 include <NopSCADlib/lib.scad>

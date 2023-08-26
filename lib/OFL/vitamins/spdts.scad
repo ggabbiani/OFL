@@ -10,7 +10,7 @@ include <../foundation/core.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 include <NopSCADlib/vitamins/spades.scad>
 

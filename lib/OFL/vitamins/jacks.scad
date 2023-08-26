@@ -11,7 +11,7 @@ include <../foundation/connect.scad>
 include <../foundation/label.scad>
 
 use <../foundation/3d-engine.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 use <../foundation/util.scad>
 
 FL_JACK_NS = "jack";

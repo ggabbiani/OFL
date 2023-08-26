@@ -20,7 +20,7 @@ graph LR
     A1 --o|include| A15[vitamins/trimpot]
     A1 --o|include| A16[vitamins/usbs]
     A1 --o|use| A17[dxf]
-    A1 --o|use| A18[foundation/mngm]
+    A1 --o|use| A18[foundation/mngm-engine]
 ```
 
 PCB definition file.

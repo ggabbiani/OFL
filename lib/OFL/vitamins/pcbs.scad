@@ -28,7 +28,7 @@ include <switch.scad>
 include <trimpot.scad>
 include <usbs.scad>
 
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 //! namespace for PCB engine
 FL_PCB_NS  = "pcb";

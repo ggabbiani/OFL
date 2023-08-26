@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 // include <../foundation/actions.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 //! template namespace
 __FL_TEMP_NS  = "mag";

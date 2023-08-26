@@ -12,7 +12,7 @@ include <../foundation/unsafe_defs.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 //! ethernet namespace
 FL_ETHER_NS = "ether";

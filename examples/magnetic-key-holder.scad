@@ -10,7 +10,7 @@ include <../lib/OFL/vitamins/magnets.scad>
 
 use <../lib/OFL/foundation/bbox-engine.scad>
 use <../lib/OFL/foundation/fillet.scad>
-use <../lib/OFL/foundation/mngm.scad>
+use <../lib/OFL/foundation/mngm-engine.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL

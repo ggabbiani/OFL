@@ -5,7 +5,7 @@
 ```mermaid
 graph LR
     A1[vitamins/countersinks] --o|use| A2[foundation/bbox-engine]
-    A1 --o|use| A3[foundation/mngm]
+    A1 --o|use| A3[foundation/mngm-engine]
 ```
 
 Countersink definitions, data taken from:

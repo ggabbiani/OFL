@@ -51,11 +51,12 @@
 | --------                          | --------                      |
 | foundation/2d.scad                | foundation/2d-engine.scad     |
 | foundation/3d.scad                | foundation/3d-engine.scad     |
-| foundation/bbox.scad              | foundation/bbox-engine.scad   |
-| foundation/symbol.scad            | -                             |
-| foundation/defs.scad              | foundation/core.scad          |
 | foundation/base_geo.scad          | foundation/core.scad          |
 | foundation/base_kv.scad           | foundation/core.scad          |
 | foundation/base_parameters.scad   | foundation/core.scad          |
 | foundation/base_string.scad       | foundation/core.scad          |
 | foundation/base_trace.scad        | foundation/core.scad          |
+| foundation/bbox.scad              | foundation/bbox-engine.scad   |
+| foundation/defs.scad              | foundation/core.scad          |
+| foundation/mngm.scad              | foundation/mngm-engine.scad   |
+| foundation/symbol.scad            | -                             |

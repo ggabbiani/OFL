@@ -11,7 +11,7 @@ use     <NopSCADlib/vitamins/pcb.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/util.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 
 FL_HDMI_NS = "hdmi";

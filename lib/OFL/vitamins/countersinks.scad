@@ -11,7 +11,7 @@ include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
 use <../foundation/bbox-engine.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 //! countersinks namespace
 FL_CS_NS  = "cs";

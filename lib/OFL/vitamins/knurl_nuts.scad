@@ -11,7 +11,7 @@ include <NopSCADlib/lib.scad>;
 include <screw.scad>
 
 use <../foundation/3d-engine.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 //*****************************************************************************
 // Knurl nuts properties

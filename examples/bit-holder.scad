@@ -9,7 +9,7 @@
 include <../lib/OFL/vitamins/magnets.scad>
 
 use <../lib/OFL/foundation/bbox-engine.scad>
-use <../lib/OFL/foundation/mngm.scad>
+use <../lib/OFL/foundation/mngm-engine.scad>
 use <../lib/OFL/foundation/util.scad>
 
 $fn           = 50;           // [3:100]

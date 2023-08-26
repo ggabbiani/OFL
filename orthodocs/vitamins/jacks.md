@@ -8,7 +8,7 @@ graph LR
     A1 --o|include| A3[foundation/connect]
     A1 --o|include| A4[foundation/label]
     A1 --o|use| A2
-    A1 --o|use| A5[foundation/mngm]
+    A1 --o|use| A5[foundation/mngm-engine]
     A1 --o|use| A6[foundation/util]
 ```
 

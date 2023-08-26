@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 include <unsafe_defs.scad>
-include <mngm.scad>
 
+use <mngm-engine.scad>
 use <bbox-engine.scad>
 
 module fl_2d_doAxes(size) {

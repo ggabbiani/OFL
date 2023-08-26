@@ -9,7 +9,7 @@ include <NopSCADlib/vitamins/pcb.scad>
 
 use <../foundation/bbox-engine.scad>
 use <../foundation/3d-engine.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 use <../foundation/util.scad>
 
 //! sd namespace

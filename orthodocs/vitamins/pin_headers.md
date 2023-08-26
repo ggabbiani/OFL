@@ -7,7 +7,7 @@ graph LR
     A1[vitamins/pin_headers] --o|include| A2[foundation/connect]
     A1 --o|include| A3[foundation/label]
     A1 --o|include| A4[foundation/unsafe_defs]
-    A1 --o|use| A5[foundation/mngm]
+    A1 --o|use| A5[foundation/mngm-engine]
     A1 --o|use| A6[foundation/util]
 ```
 

@@ -10,7 +10,7 @@ include <../foundation/core.scad>
 
 use <../foundation/bbox-engine.scad>
 use <../foundation/fillet.scad>
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 //! Caddy's namespace
 FL_NS_CAD = "cad";

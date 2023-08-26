@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 include <../foundation/unsafe_defs.scad>
 
 // namespace

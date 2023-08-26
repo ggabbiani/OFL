@@ -7,7 +7,7 @@ graph LR
     A1[vitamins/hds] --o|include| A2[foundation/hole]
     A1 --o|include| A3[vitamins/sata]
     A1 --o|include| A4[vitamins/screw]
-    A1 --o|use| A5[foundation/mngm]
+    A1 --o|use| A5[foundation/mngm-engine]
 ```
 
 Hard disk definition file.

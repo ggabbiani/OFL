@@ -11,7 +11,7 @@ include <../foundation/hole.scad>
 include <../foundation/unsafe_defs.scad>
 include <../vitamins/knurl_nuts.scad>
 
-use <../foundation/mngm.scad>
+use <../foundation/mngm-engine.scad>
 
 //! namespace
 FL_SPC_NS  = "spc";
