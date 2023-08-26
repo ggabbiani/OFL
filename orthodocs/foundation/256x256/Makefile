@@ -9,9 +9,11 @@ TARGETS		:= $(SOURCES:.scad=.png)
 all: $(TARGETS)
 
 %.png: %.scad
-	$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ $<
-	convert unscaled-$@ -resize $(SIZE) $@
-	rm unscaled-$@
+	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ $<
+	@convert unscaled-$@ -resize $(SIZE) $@
+	@rm unscaled-$@
+	@echo -e "\e[32mOK\e[0m"
 
 clean:
 	@rm -f *.png *.deps
