@@ -5,7 +5,6 @@
 ```mermaid
 graph LR
     A1[foundation/connect] --o|include| A2[foundation/util]
-    A1 --o|use| A3[foundation/3d-engine]
 ```
 
 utility toolkit for connecting objects

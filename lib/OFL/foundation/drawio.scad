@@ -6,11 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
-include <core.scad>
-
-use <2d-engine.scad>
-use <mngm.scad>
+include <2d-engine.scad>
 
 /*!
  * Y invert and scale to size from draw.io coords.

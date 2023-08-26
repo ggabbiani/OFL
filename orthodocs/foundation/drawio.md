@@ -4,9 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/drawio] --o|include| A2[foundation/core]
-    A1 --o|use| A3[foundation/2d-engine]
-    A1 --o|use| A4[foundation/mngm]
+    A1[foundation/drawio] --o|include| A2[foundation/2d-engine]
 ```
 
 Draw.io helpers.

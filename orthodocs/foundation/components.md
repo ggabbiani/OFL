@@ -4,8 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/components] --o|include| A2[foundation/core]
-    A1 --o|use| A3[foundation/bbox-engine]
+    A1[foundation/components] --o|include| A2[foundation/bbox-engine]
 ```
 
 Component package for OpenSCAD Foundation Library.

@@ -6,9 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <core.scad>
-
-use <bbox-engine.scad>
+include <bbox-engine.scad>
 
 //! namespace for component package
 FL_COMP_NS  = "comp";

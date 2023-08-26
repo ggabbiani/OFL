@@ -4,8 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/algo-engine] --o|include| A2[foundation/unsafe_defs]
-    A1 --o|use| A3[foundation/3d-engine]
+    A1[foundation/algo-engine] --o|include| A2[foundation/3d-engine]
 ```
 
 General algorithm package.

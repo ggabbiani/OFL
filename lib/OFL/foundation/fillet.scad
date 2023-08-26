@@ -5,11 +5,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <unsafe_defs.scad>
-
-use <2d-engine.scad>
-use <3d-engine.scad>
-use <mngm.scad>
+include <3d-engine.scad>
 
 module fl_vFillet(
   //! FL_ADD, FL_AXES, FL_BBOX

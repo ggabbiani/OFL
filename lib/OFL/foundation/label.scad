@@ -3,11 +3,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
-include <unsafe_defs.scad>
-
-use <3d-engine.scad>
-use <mngm.scad>
+include <3d-engine.scad>
 
 /*!
  * mimics standard resize() module behavior
@@ -29,7 +25,6 @@ function fl_resize(oldsize,newsize,auto=false) =
  *
  * TODO: likely to be removed
  */
-
 function fl_repos(oldpos,oldsize,newsize) =
   assert(oldpos)
   assert(oldsize)

@@ -8,8 +8,6 @@
 
 include <util.scad>
 
-use <3d-engine.scad>
-
 //*****************************************************************************
 // Connection properties
 function fl_conn_id(type,value)   = fl_property(type,"conn/id",value);

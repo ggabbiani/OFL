@@ -5,11 +5,7 @@
  */
 
 include <NopSCADlib/lib.scad>
-include <unsafe_defs.scad>
-
-use <3d-engine.scad>
-use <bbox-engine.scad>
-use <mngm.scad>
+include <3d-engine.scad>
 
 //! use children(0) for making a rail
 module fl_rail(

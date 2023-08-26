@@ -3,10 +3,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <core.scad>
-
-use <2d-engine.scad>
-use <3d-engine.scad>
+include <3d-engine.scad>
 
 function fl_grid_quad(
   //! bounding box relative grid origin
