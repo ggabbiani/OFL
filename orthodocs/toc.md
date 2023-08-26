@@ -8,6 +8,8 @@
 - [fl_2d_frame (module)](foundation/2d-engine.md#module-fl_2d_frame)
 - [fl_2d_place (module)](foundation/2d-engine.md#module-fl_2d_place)
 - [fl_2d_placeIf (module)](foundation/2d-engine.md#module-fl_2d_placeif)
+- [2xNIL (variable)](foundation/unsafe_defs.md#variable-2xnil)
+- [FL_2xNIL (variable)](foundation/core.md#variable-fl_2xnil)
 
 ## 3
 
@@ -386,8 +388,6 @@
 - [fl_native (function)](foundation/core.md#function-fl_native)
 - [NIL (variable)](foundation/unsafe_defs.md#variable-nil)
 - [FL_NIL (variable)](foundation/core.md#variable-fl_nil)
-- [NIL2 (variable)](foundation/unsafe_defs.md#variable-nil2)
-- [FL_NIL2 (variable)](foundation/core.md#variable-fl_nil2)
 - [fl_nopSCADlib (function)](foundation/core.md#function-fl_nopscadlib)
 - [FL_NS_CAD (variable)](artifacts/caddy.md#variable-fl_ns_cad)
 

@@ -18,6 +18,16 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
+### variable 2xNIL
+
+__Default:__
+
+    FL_2xNIL
+
+see [variable FL_2xNIL](core.md#variable-fl_2xnil)
+
+---
+
 ### variable I
 
 __Default:__
@@ -35,16 +45,6 @@ __Default:__
     FL_NIL
 
 see [variable NIL](#variable-nil)
-
----
-
-### variable NIL2
-
-__Default:__
-
-    FL_NIL2
-
-see [variable NIL2](#variable-nil2)
 
 ---
 

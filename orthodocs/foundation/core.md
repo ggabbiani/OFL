@@ -119,6 +119,14 @@ __Default:__
 
 ---
 
+### variable FL_2xNIL
+
+__Default:__
+
+    2*FL_NIL
+
+---
+
 ### variable FL_ADD
 
 __Default:__
@@ -281,14 +289,6 @@ __Default:__
     ($preview&&!$FL_RENDER?0.01:0)
 
 simple workaround for the z-fighting problem during preview
-
----
-
-### variable FL_NIL2
-
-__Default:__
-
-    2*FL_NIL
 
 ---
 
