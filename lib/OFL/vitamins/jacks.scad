@@ -185,23 +185,23 @@ module fl_jack_mcxjphstem1Engine(
       fl_color("gold") {
         difference() {
           fprint();
-          translate([0,axis.z,-FL_NIL])
-            fl_cylinder(d=3.45,h=size.y+FL_NIL);
-          translate([0,0,-FL_NIL])
-            fl_cube(size=[size.x,size.z,size.y-head+FL_NIL2],octant=-FL_Y+FL_Z);
-          translate([0,axis.z,-FL_NIL])
-            fl_cube(size=[size.x,size.z,size.y-head+FL_NIL2],octant=+FL_Y+FL_Z);
+          translate([0,axis.z,-NIL])
+            fl_cylinder(d=3.45,h=size.y+NIL);
+          translate([0,0,-NIL])
+            fl_cube(size=[size.x,size.z,size.y-head+2xNIL],octant=-FL_Y+FL_Z);
+          translate([0,axis.z,-NIL])
+            fl_cube(size=[size.x,size.z,size.y-head+2xNIL],octant=+FL_Y+FL_Z);
         }
         // female jack
         let(l=jack)
         translate([0,axis.z,0])
-          fl_tube(d=0.95+FL_NIL2,thick=0.1,h=l);
+          fl_tube(d=0.95+2xNIL,thick=0.1,h=l);
         // closing bottom
-        translate([0,axis.z,size.y-head+FL_NIL])
-          fl_tube(d=3.45+FL_NIL2,thick=(3.45-1.88)/2,h=1);
+        translate([0,axis.z,size.y-head+NIL])
+          fl_tube(d=3.45+2xNIL,thick=(3.45-1.88)/2,h=1);
       }
-      fl_color("white") translate([0,axis.z,size.y-head+FL_NIL])
-        fl_tube(d=1.88+FL_NIL2,thick=(1.88-0.95)/2,h=1);
+      fl_color("white") translate([0,axis.z,size.y-head+NIL])
+        fl_tube(d=1.88+2xNIL,thick=(1.88-0.95)/2,h=1);
     }
   }
 
@@ -216,14 +216,14 @@ module fl_jack_mcxjphstem1Engine(
   module fprint() {
     difference() {
       translate(+fl_Y(axis.z))
-        fl_cylinder(d=d_ext,h=size.y-FL_NIL);
+        fl_cylinder(d=d_ext,h=size.y-NIL);
       // lower cut
-      fl_cube(size=[size.x,size.z,size.y+0*FL_NIL],octant=-FL_Y+FL_Z);
+      fl_cube(size=[size.x,size.z,size.y+0*NIL],octant=-FL_Y+FL_Z);
       // upper cut
       translate([0,size.z/2+axis.z,0])
-        fl_cube(size=[size.x,size.z,size.y+FL_NIL2],octant=+FL_Y+FL_Z);
+        fl_cube(size=[size.x,size.z,size.y+2xNIL],octant=+FL_Y+FL_Z);
     }
-    fl_cube(size=[4.8,size.z/2-axis.z,size.y-FL_NIL],octant=-FL_Y+FL_Z);
+    fl_cube(size=[4.8,size.z/2-axis.z,size.y-NIL],octant=-FL_Y+FL_Z);
   }
 
   module do_footprint() {

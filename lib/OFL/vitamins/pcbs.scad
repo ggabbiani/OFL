@@ -489,7 +489,7 @@ module fl_pcb(
             clip    = false
           ) difference() {
             circle(d=2);
-            circle(d=2-NIL2-2*0.5);
+            circle(d=2-2xNIL-2*0.5);
           };
 
           // oval lands at the ends
@@ -540,7 +540,7 @@ module fl_pcb(
       do_layout("components")
         if ($comp_director==+Z||$comp_director==-Z)
           if ($comp_engine==FL_PHDR_NS)
-            translate(+Z(FL_NIL)) fl_pinHeader([FL_DRILL],$comp_type,cut_thick=pcb_t+NIL2,octant=$comp_octant,direction=$comp_direction);
+            translate(+Z(NIL)) fl_pinHeader([FL_DRILL],$comp_type,cut_thick=pcb_t+2xNIL,octant=$comp_octant,direction=$comp_direction);
 
     }
     if (grid)

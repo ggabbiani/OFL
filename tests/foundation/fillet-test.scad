@@ -5,7 +5,6 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
 include <../../lib/OFL/foundation/fillet.scad>
 
 $fn         = 50;           // [3:100]

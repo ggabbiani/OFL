@@ -73,8 +73,8 @@ function fl_push(list,item) = [each list,item];
 $FL_RENDER  = !$preview;
 
 //! simple workaround for the z-fighting problem during preview
-FL_NIL  = ($preview && !$FL_RENDER ? 0.01 : 0);
-FL_NIL2 = 2*FL_NIL;
+FL_NIL    = ($preview && !$FL_RENDER ? 0.01 : 0);
+FL_2xNIL  = 2*FL_NIL;
 
 //! PER SURFACE distance in case of movable parts to be doubled when applied to a diameter
 fl_MVgauge  = 0.6;

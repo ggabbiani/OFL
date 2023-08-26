@@ -170,7 +170,7 @@ module fl_tnut(
             do_layout()
               translate(-0*Y(h+NIL))
                 translate(-Y(size.y+NIL))
-                fl_cylinder(h=h+NIL2,r=ext_r,direction=[-$hole_n,0],octant=-Z);
+                fl_cylinder(h=h+2xNIL,r=ext_r,direction=[-$hole_n,0],octant=-Z);
       }
   }
 

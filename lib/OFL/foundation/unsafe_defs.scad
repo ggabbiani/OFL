@@ -20,9 +20,9 @@ O = FL_O;
 I = FL_I;
 
 //! see variable NIL
-NIL   = FL_NIL;
-//! see variable NIL2
-NIL2  = FL_NIL2;
+NIL     = FL_NIL;
+//! see variable FL_2xNIL
+2xNIL   = FL_2xNIL;
 
 //! see fl_T()
 function T(t)       = fl_T(t);

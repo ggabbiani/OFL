@@ -192,7 +192,7 @@ module fl_heatsink(
           if (!fprint) {
             // subtracts holes
             translate(-Z(NIL))
-              linear_extrude(base_t+fluting_t+NIL2)
+              linear_extrude(base_t+fluting_t+2xNIL)
                 __dxf__(file=dxf,layer="0 holes");
             // subtracts fluting
             translate(-Z(NIL))
@@ -231,14 +231,14 @@ module fl_heatsink(
             }
             // subtracts GPIO and VIDEO bus
             translate(+Z(holder_t-NIL)) {
-              linear_extrude(base_t+fluting_t+NIL2)
+              linear_extrude(base_t+fluting_t+2xNIL)
                 offset(1)
                   fl_importDxf(dxf,"gpio");
               linear_extrude(base_t+3*NIL)
                 offset(0.5)
                   fl_importDxf(dxf,"video");
               translate(+Z(base_t))
-                linear_extrude(fluting_t+NIL2)
+                linear_extrude(fluting_t+2xNIL)
                   offset(0.5)
                     fl_importDxf(dxf,"video2");
             }

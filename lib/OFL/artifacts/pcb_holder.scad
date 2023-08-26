@@ -124,7 +124,7 @@ module fl_pcb_holderByHoles(
         fl_lay_holes(holes)
           context()
             translate(+Z(NIL))
-              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[frame+NIL2,0]);
+              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[frame+2xNIL,0]);
     }
   }
 
@@ -358,7 +358,7 @@ module fl_pcb_holderBySize(
         fl_lay_holes(holes)
           context()
             translate(+Z(NIL))
-              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[frame+NIL2,0]);
+              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[frame+2xNIL,0]);
     }
   }
 
