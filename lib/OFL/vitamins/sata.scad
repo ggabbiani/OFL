@@ -331,7 +331,7 @@ module fl_sata_powerDataPlug(
   Md          = __fl_sata_Mdata__(type);
   Mp          = __fl_sata_Mpower__(type);
   Ms          = __fl_sata_Mshell__(type);
-  D           = direction ? fl_direction(type,direction=direction)  : I;
+  D           = direction ? fl_direction(direction)  : I;
   M           = fl_octant(octant,type=type);
 
   dio_int = [[0.06,0],[0.94,0],[0.94,0.38],[1,0.38],[1,0.86],[0.94,0.86],[0.94,1],[0.06,1],[0.06,0.86],[0,0.86],[0,0.38],[0.06,0.38],[0.06,0]];
