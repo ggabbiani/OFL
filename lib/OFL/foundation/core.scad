@@ -103,14 +103,24 @@ FL_I=[
 ];
 
 //! translation matrix in homogeneous coordinates
-function fl_T(t) = is_list(t)
-  ? [
-      [1,0,0, t.x ],
-      [0,1,0, t.y ],
-      [0,0,1, t.z ],
-      [0,0,0, 1   ]
-    ]
-  : fl_T([t,t,t]);
+function fl_T(
+  /*!
+   * depending on the passed value the actual translation matrix will be:
+   *
+   * - scalar ⇒ [t,t,t]
+   * - 2d space vector⇒ [t.x,t.y,0]
+   * - 3d space vector⇒ [t.x,t.y,t.z]
+   */
+  t
+) = let(
+  l = len(t),
+  t = is_undef(l) ? [t,t,t] : l==2 ? [t.x,t.y,0] : t
+) assert(len(t)>=3) [
+    [1,0,0, t.x ],
+    [0,1,0, t.y ],
+    [0,0,1, t.z ],
+    [0,0,0, 1   ]
+  ];
 
 //! scale matrix in homogeneous coordinates
 function fl_S(s) = is_list(s)
