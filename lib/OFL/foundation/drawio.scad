@@ -25,8 +25,7 @@ function dio_polyCoords(points,size) =
       [size.x, 0      ],
       [0,     -size.y ],
     ]
-  )
-  [for(p=points)  M * p];
+  ) [for(p=points)  M * p];
 
 module dio_polyCoords(
   //! FL_ADD,FL_AXIS,FL_BBOX
