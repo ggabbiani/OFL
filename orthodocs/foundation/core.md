@@ -524,6 +524,17 @@ fl_T(t)
 
 translation matrix in homogeneous coordinates
 
+__Parameters:__
+
+__t__  
+depending on the passed value the actual translation matrix will be:
+
+- scalar ⇒ [t,t,t]
+- 2d space vector⇒ [t.x,t.y,0]
+- 3d space vector⇒ [t.x,t.y,t.z]
+
+
+
 ---
 
 ### function fl_X
