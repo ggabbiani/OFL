@@ -46,11 +46,11 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 DIR_R       = 0;        // [0:360]
 
 /* [Sata] */
-PART            = "data plug";  // ["data plug", "power plug", "power data plug", "power data socket"]
 // TODO: see comment on sata.scad
-SW_SHELL        = true;
-CONTACTS        = true;
-CONNECTORS      = false;
+SW_SHELL    = true;
+CONTACTS    = true;
+CONNECTORS  = false;
+PART        = "data plug"; // [data plug,power plug,power data plug,power data socket]
 
 /* [Hidden] */
 
@@ -64,13 +64,9 @@ verbs=[
   if ($FL_BBOX!="OFF")      FL_BBOX,
   if ($FL_FOOTPRINT!="OFF")    FL_FOOTPRINT,
 ];
+type  = PART=="data plug"       ? FL_SATA_DATAPLUG
+      : PART=="power plug"      ? FL_SATA_POWERPLUG
+      : PART=="power data plug" ? FL_SATA_POWERDATAPLUG
+      : FL_SATA_POWERDATASOCKET;
 
-if (PART=="data plug") {
-  fl_sata(verbs,FL_SATA_DATAPLUG,connectors=CONNECTORS,octant=octant,direction=direction);
-} else if (PART=="power plug") {
-  fl_sata_powerPlug(verbs,FL_SATA_POWERPLUG,connectors=CONNECTORS,octant=octant,direction=direction);
-} else if (PART=="power data plug") {
-    fl_sata_powerDataPlug(verbs,FL_SATA_POWERDATAPLUG,shell=SW_SHELL,connectors=CONNECTORS,octant=octant,direction=direction);
-} else {
-  sata_PowerDataSocket(verbs,FL_SATA_POWERDATASOCKET,connectors=CONNECTORS,octant=octant,direction=direction);
-}
+fl_sata(verbs,type,connectors=CONNECTORS,shell=SW_SHELL,octant=octant,direction=direction);
