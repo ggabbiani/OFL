@@ -105,6 +105,7 @@ graph TD
     A42 --o|use| A16
     A28 --o|include| A19
     A28 --o|include| A21
+    A28 --o|use| A7
     A28 --o|use| A8
     A28 --o|use| A4
     A43[vitamins/sata-adapters] --o|include| A28
