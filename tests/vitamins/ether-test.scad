@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 include <../../lib/OFL/foundation/core.scad>
-
-include <../../lib/OFL/dxf.scad>
 include <../../lib/OFL/vitamins/ethers.scad>
+
+use <../../lib/OFL/dxf.scad>
 
 $fn           = 50;   // [3:100]
 // When true, disables epsilon corrections

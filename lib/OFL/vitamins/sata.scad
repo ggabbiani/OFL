@@ -10,6 +10,7 @@
 include <../foundation/connect.scad>
 include <../foundation/drawio.scad>
 
+use <../dxf.scad>
 use <../foundation/algo-engine.scad>
 use <../foundation/mngm-engine.scad>
 
@@ -23,8 +24,8 @@ FL_SATA_NS  = "sata";
  * public helpers
  */
 
-function fl_sata_plug(type,value)  = fl_property(type,"sata/plug",value);
-function fl_sata_sock(type,value)  = fl_property(type,"sata/socket",value);
+function fl_sata_plug(type,value)   = fl_property(type,"sata/plug",value);
+function fl_sata_sock(type,value)   = fl_property(type,"sata/socket",value);
 
 /****************************************************************************
  * PRIVATE helpers
@@ -98,16 +99,16 @@ FL_SATA_POWERDATASOCKET = let(
 ];
 
 FL_SATA_DATAPLUG  = let(
-  dxf     = "sata-data-plug.dxf",
-  w       = dxf_dim(file=dxf, name="width", layer="sizes", scale=1),
-  h       = dxf_dim(file=dxf, name="height",layer="sizes", scale=1),
-  d       = dxf_dim(file=dxf, name="plug",  layer="extrusions", scale=1),
+  dxf     = "vitamins/sata-data-plug.dxf",
+  w       = __dxf_dim__(file=dxf, name="width", layer="sizes"),
+  h       = __dxf_dim__(file=dxf, name="height",layer="sizes"),
+  d       = __dxf_dim__(file=dxf, name="plug",  layer="extrusions"),
   size    = [w,h,d],
   cid     = fl_sata_dataCID(),
-  d_short = dxf_dim(file=dxf, name="short", layer="extrusions", scale=1),
-  d_long  = dxf_dim(file=dxf, name="long",  layer="extrusions", scale=1),
-  c_w     = dxf_dim(file=dxf, name="c_width",  layer="sizes", scale=1),
-  c_h     = dxf_dim(file=dxf, name="c_height",  layer="sizes", scale=1)
+  d_short = __dxf_dim__(file=dxf, name="short", layer="extrusions"),
+  d_long  = __dxf_dim__(file=dxf, name="long",  layer="extrusions"),
+  c_w     = __dxf_dim__(file=dxf, name="c_width",  layer="sizes"),
+  c_h     = __dxf_dim__(file=dxf, name="c_height",  layer="sizes")
 ) [
   fl_dxf(value = dxf),
   fl_connectors(value=[conn_Plug(cid,+X,+Y,[0,0,0.5])]),
@@ -120,16 +121,16 @@ FL_SATA_DATAPLUG  = let(
 ];
 
 FL_SATA_POWERPLUG = let(
-  dxf     = "sata-power-plug.dxf",
-  w       = dxf_dim(file=dxf, name="width", layer="sizes", scale=1),
-  h       = dxf_dim(file=dxf, name="height",layer="sizes", scale=1),
-  d       = dxf_dim(file=dxf, name="plug",  layer="extrusions", scale=1),
+  dxf     = "vitamins/sata-power-plug.dxf",
+  w       = __dxf_dim__(file=dxf, name="width", layer="sizes"),
+  h       = __dxf_dim__(file=dxf, name="height",layer="sizes"),
+  d       = __dxf_dim__(file=dxf, name="plug",  layer="extrusions"),
   size    = [w,h,d],
   cid     = fl_sata_powerCID(),
-  d_short = dxf_dim(file=dxf, name="short", layer="extrusions", scale=1),
-  d_long  = dxf_dim(file=dxf, name="long",  layer="extrusions", scale=1),
-  c_w     = dxf_dim(file=dxf, name="c_width",  layer="sizes", scale=1),
-  c_h     = dxf_dim(file=dxf, name="c_height",  layer="sizes", scale=1)
+  d_short = __dxf_dim__(file=dxf, name="short", layer="extrusions"),
+  d_long  = __dxf_dim__(file=dxf, name="long",  layer="extrusions"),
+  c_w     = __dxf_dim__(file=dxf, name="c_width",  layer="sizes"),
+  c_h     = __dxf_dim__(file=dxf, name="c_height",  layer="sizes")
 ) [
   fl_dxf(value = dxf),
   fl_connectors(value=[conn_Plug(cid,+X,+Y,[size.x,0,0.5])]),
@@ -144,17 +145,27 @@ FL_SATA_POWERPLUG = let(
 FL_SATA_POWERDATAPLUG = let(
   power   = FL_SATA_POWERPLUG,
   data    = FL_SATA_DATAPLUG,
-  dxf     = "sata-powerdata-plug.dxf",
-  w       = dxf_dim(file=dxf, name="width", layer="sizes"),
-  h       = dxf_dim(file=dxf, name="height",layer="sizes"),
-  d       = dxf_dim(file=dxf, name="plug",  layer="extrusions"),
-  thick   = dxf_dim(file=dxf, name="shell thick",layer="extrusions"),
+  dxf     = "vitamins/sata-powerdata-plug.dxf",
+  w       = __dxf_dim__(file=dxf, name="width", layer="sizes"),
+  h       = __dxf_dim__(file=dxf, name="height",layer="sizes"),
+  d       = __dxf_dim__(file=dxf, name="plug",  layer="extrusions"),
+  thick   = __dxf_dim__(file=dxf, name="shell thick",layer="extrusions"),
   size    = [w,h,d+thick],
   sz_d    = fl_size(data),
   sz_p    = fl_size(power),
   cid     = fl_sata_powerDataCID(),
-  Mpower  = let(p2d=dxf_cross(file=dxf, layer="power translation")) T([p2d.x,p2d.y,thick]),
-  Mdata   = let(p2d=dxf_cross(file=dxf, layer="data translation")) T([p2d.x,p2d.y,thick]),
+
+  // see dxf package documentation for the reason of the following conditionals
+  Mpower  = let(
+    p2d = version_num()>20210507
+        ? __dxf_cross__(file=dxf, layer="power translation")
+        : [-16.6953, 1.15039]
+  ) T([p2d.x,p2d.y,thick]),
+  Mdata   = let(
+    p2d = version_num()>20210507
+        ? __dxf_cross__(file=dxf, layer="data translation")
+        : [6.28516, 1.15039]
+  ) T([p2d.x,p2d.y,thick]),
   dc      = fl_conn_clone(fl_connectors(data)[0],M=Mdata),
   pc      = fl_conn_clone(fl_connectors(power)[0],M=Mpower)
 ) [
@@ -215,7 +226,7 @@ module fl_sata(
 
     module do_footprint() {
       linear_extrude(size.z)
-        import(dxf,"0");
+        __dxf__(dxf,layer="0");
     }
 
     module do_add() {
@@ -223,9 +234,9 @@ module fl_sata(
         do_footprint();
       fl_color("gold") {
         linear_extrude(fl_get(cont_sz,"short").z)
-          import(dxf,"short");
+          __dxf__(dxf,layer="short");
         linear_extrude(fl_get(cont_sz,"long").z)
-          import(dxf,"long");
+          __dxf__(dxf,layer="long");
       }
       if (connectors)
         fl_conn_add(connection,size=2);
@@ -275,10 +286,9 @@ module fl_sata(
     fl_trace("type",type);
 
     module do_footprint() {
-      translate(-fl_Z(size.z/2))
-      fl_cutout(size.z,delta=fl_JNgauge)
+      translate(-Z(size.z/2))
         linear_extrude(size.z)
-          dio_polyCoords(points=dio_ext,size=[size.x,size.y],quadrant=FL_O);
+          __dxf__(dxf,layer="0");
     }
 
     module do_add() {
@@ -291,10 +301,10 @@ module fl_sata(
           for(c=conns) fl_conn_add(c,size=2);
         fl_color("DarkSlateGray") {
           linear_extrude(shell_thick)
-            import(dxf,"0");
+            __dxf__(dxf,layer="0");
           translate(Z(shell_thick))
             linear_extrude(power_sz.z)
-              import(dxf,"1");
+              __dxf__(dxf,layer="1");
         }
       }
     }

@@ -29,7 +29,7 @@ FL_HD_EVO860 = let(
     d = 7
   ) fl_T(fl_X((l-w+2*d)/2)-fl_Z(FL_NIL)) * fl_Rx(90) * fl_octant(+Y-Z,type=plug),
 
-  conns   = fl_sata_conns(plug),
+  conns   = fl_connectors(plug),
   pc      = fl_conn_clone(conns[0],M=Mpd),
   dc      = fl_conn_clone(conns[1],M=Mpd)
 ) [
@@ -42,7 +42,7 @@ FL_HD_EVO860 = let(
   ["offset",            [0,-size.y/2,-size.z/2]],
   ["corner radius",     3],
   fl_screw(value=screw),
-  fl_sata_instance(value=plug),
+  fl_sata_plug(value=plug),
   fl_connectors(value=[pc,dc]),
 
   // each row represents a hole with the following format:
@@ -102,7 +102,7 @@ module fl_hd(
   corner_r    = fl_get(type,"corner radius");
   size        = fl_size(type);
   conns       = fl_connectors(type);
-  plug        = fl_sata_instance(type);
+  plug        = fl_sata_plug(type);
   Mpd         = fl_get(type,"Mpd");
   holes       = fl_holes(type);
   D           = direction ? fl_direction(type,direction=direction): I;
@@ -126,9 +126,9 @@ module fl_hd(
         linear_extrude(height=size.z) fl_square(size=size,corners=corner_r,quadrant=+Y);
         fl_holes(holes,[-X,+X,-Z]);
       }
-      multmatrix(Mpd) fl_sata_powerDataPlug(FL_FOOTPRINT,plug);
+      multmatrix(Mpd) fl_sata(FL_FOOTPRINT,plug);
     }
-    multmatrix(Mpd) fl_sata_powerDataPlug(type=plug);
+    multmatrix(Mpd) fl_sata(type=plug);
 
     if (add_connectors)
       for(c=conns) fl_conn_add(c,2);

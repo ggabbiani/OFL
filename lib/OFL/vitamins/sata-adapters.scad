@@ -26,7 +26,7 @@ let(
   fl_vendor(value=[["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/"]]),
   ["handle size", handle_size],
   ["Mpd",         Mpd],
-  ["connectors",  fl_conn_import(fl_sata_conns(socket),Mpd)],
+  ["connectors",  fl_conn_import(fl_connectors(socket),Mpd)],
   ["SATA socket", socket],
 ];
 
@@ -72,7 +72,7 @@ module sata_adapter(
 
   module do_add() {
     sata_handle();
-    multmatrix(Mpd) sata_PowerDataSocket(type=sock);
+    multmatrix(Mpd) fl_sata(type=sock);
     if (locators)
       for(c=connectors) fl_conn_add(c,2);
   }
