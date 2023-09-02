@@ -1311,6 +1311,18 @@ __Syntax:__
 fl_width(type)
 ```
 
+---
+
+### function sort
+
+__Syntax:__
+
+```text
+sort(vec)
+```
+
+quick sort algorithm
+
 ## Modules
 
 ---

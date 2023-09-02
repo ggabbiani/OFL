@@ -7,7 +7,7 @@ graph LR
     A1[foundation/unsafe_defs] --o|include| A2[foundation/core]
 ```
 
-UNPORTABLE DEFINITIONS, DON'T USE TOGETHER OTHER LIBRARIES INCLUDES.
+NON-PORTABLE DEFINITIONS, DON'T USE TOGETHER OTHER LIBRARIES INCLUDES.
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 

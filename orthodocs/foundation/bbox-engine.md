@@ -23,7 +23,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 __Syntax:__
 
 ```text
-fl_bb_calc(bbs,pts)
+fl_bb_calc(bbs)
 ```
 
 Calculates a cubic bounding block from a bounding blocks list or 3d point set
@@ -33,9 +33,6 @@ __Parameters:__
 
 __bbs__  
 list of bounding blocks to be included in the new one
-
-__pts__  
-list of 3d points to be included in the new bounding block
 
 
 ---
@@ -76,6 +73,20 @@ fl_bb_new(negative=[0,0,0],size=[0,0,0],positive)
 ```
 
 constructor for a new type with bounding box corners set as property
+
+---
+
+### function fl_bb_polyhedron
+
+__Syntax:__
+
+```text
+fl_bb_polyhedron(points)
+```
+
+Calculates a cubic bounding block from a 3d point set.
+See also function [fl_bb_polygon()](2d-engine.md#function-fl_bb_polygon).
+
 
 ---
 

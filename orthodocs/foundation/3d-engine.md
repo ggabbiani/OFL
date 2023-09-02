@@ -340,6 +340,16 @@ height of the prism
 
 ---
 
+### function fl_bb_pyramid
+
+__Syntax:__
+
+```text
+fl_bb_pyramid(points)
+```
+
+---
+
 ### function fl_bb_torus
 
 __Syntax:__
@@ -361,6 +371,26 @@ elliptic tube [a,b] form
 
 __R__  
 distance from the center of the tube to the center of the torus
+
+
+---
+
+### function fl_centroid
+
+__Syntax:__
+
+```text
+fl_centroid(pts)
+```
+
+Calculates the [geometric center](https://en.wikipedia.org/wiki/Centroid) of
+the passed points.
+
+
+__Parameters:__
+
+__pts__  
+Point list defining a polygon/polyhedron with each element p | p∈ℝ^n^
 
 
 ---
@@ -513,6 +543,21 @@ edge length, top
 
 __h__  
 height of the prism
+
+
+---
+
+### function fl_pyramid
+
+__Syntax:__
+
+```text
+fl_pyramid(base,apex)
+```
+
+return pyramid
+
+- native positioning: +Z
 
 
 ---
@@ -859,7 +904,6 @@ __Syntax:__
 prism
 
    native positioning : +Z
-   native direction   : [+Z,+X]
 
 
 __Parameters:__
@@ -881,6 +925,34 @@ edge length, top
 
 __h__  
 height
+
+__debug__  
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
+
+__octant__  
+when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+
+---
+
+### module fl_pyramid
+
+__Syntax:__
+
+    fl_pyramid(verbs=FL_ADD,base,apex,debug,octant,direction)
+
+pyramid
+
+- native positioning: +Z
+
+
+__Parameters:__
+
+__verbs__  
+FL_ADD,FL_AXES,FL_BBOX
 
 __debug__  
 debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)

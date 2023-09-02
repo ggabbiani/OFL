@@ -20,6 +20,18 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
+### function fl_2d_angleBetween
+
+__Syntax:__
+
+```text
+fl_2d_angleBetween(a,b)
+```
+
+returns the angle between vector «a» and «b»
+
+---
+
 ### function fl_bb_arc
 
 __Syntax:__
@@ -170,6 +182,7 @@ fl_bb_polygon(points)
 ```
 
 Returns the bounding box of a 2d polygon.
+See also function [fl_bb_polyhedron()](bbox-engine.md#function-fl_bb_polyhedron).
 
 
 __Parameters:__
@@ -177,6 +190,9 @@ __Parameters:__
 __points__  
 list of x,y points of the polygon to be used with
 [polygon](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#polygon)
+
+**NOTE**: even if it is safe to 3d points, in any case the result will be
+a 2d bounding box.
 
 
 

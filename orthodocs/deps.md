@@ -139,10 +139,12 @@ graph TD
     A45 --o|use| A3
     A45 --o|use| A27
     A45 --o|use| A4
-    A46[artifacts/template] --o|include| A2
+    A46[artifacts/t-profiles] --o|include| A5
     A46 --o|use| A4
-    A47[foundation/template] --o|include| A5
-    A48[vitamins/template] --o|use| A4
+    A47[artifacts/template] --o|include| A2
+    A47 --o|use| A4
+    A48[foundation/template] --o|include| A5
+    A49[vitamins/template] --o|use| A4
     A40 --o|include| A2
     A40 --o|use| A5
     A40 --o|use| A3

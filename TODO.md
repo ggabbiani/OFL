@@ -39,7 +39,7 @@
 - [x] vitamins/generic.scad: new generic vitamins with no-op FL_ADD semantic but fully programmable FL_CUTOUT implementation. This module has been used for implementing proper component cutout on complex PCBs.
 - [x] test/vitamins/generic.scad: first implementation
 - [ ] include third libraries into the distribution
-- [ ] general package rename adhering the architectural documentation
+- [x] some package rename adhering the architectural documentation
 - [x] general Makefile implementing documents/pictures/example generation
 - [x] moved library sources into a single top level directory, same for tests and examples
 - [ ] remove obsolete drawio library
