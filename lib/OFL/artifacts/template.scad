@@ -16,12 +16,14 @@ __FL_ART_DICT = [
 ];
 
 module __artifact__(
-  // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   type,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! see constructor fl_parm_Debug()
+  debug,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
@@ -48,7 +50,7 @@ module __artifact__(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

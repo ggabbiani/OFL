@@ -216,7 +216,7 @@ module holder(verbs,item) {
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_DRILL) {
       fl_modifier($FL_DRILL) do_drill();

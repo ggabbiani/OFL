@@ -15,15 +15,22 @@ module fl_2d_doAxes(size) {
   fl_axes(sz);
 }
 
+//! returns the angle between vector «a» and «b»
+function fl_2d_angleBetween(a,b) = atan2(b.y,b.x)-atan2(a.y,a.x);;
+
 //**** 2d bounding box calculations *******************************************
 
 /*!
  * Returns the bounding box of a 2d polygon.
+ * See also function fl_bb_polyhedron().
  */
 function fl_bb_polygon(
   /*!
    * list of x,y points of the polygon to be used with
    * [polygon](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#polygon)
+   *
+   * **NOTE**: even if it is safe to 3d points, in any case the result will be
+   * a 2d bounding box.
    */
   points
 ) = let(
@@ -717,18 +724,9 @@ function fl_circleXY(
   t
 ) = r*[cos(t),sin(t)];
 
-// function fl_circle(r=1) = fl_sector(r=r,angles=[0,360]);
-
 function fl_circle(r=1,center=[0,0]) = let(
-    points  = fl_sector(r=r,angles=[0,360]),
-    T = [
-      [1,0, center.x],
-      [0,1, center.y],
-      [0,0, 1       ]
-    ]
-  ) center!=[0,0]
-  ? [for(p=points) let(t=T*[p.x,p.y,1]) [t.x,t.y]]
-  : points;
+  points  = fl_sector(r=r,angles=[0,360])
+) center!=[0,0] ? [for(p=points) [p.x+center.x,p.y+center.y]] : points;
 
 module fl_circle(
   verbs = FL_ADD,

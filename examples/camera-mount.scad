@@ -13,7 +13,7 @@ include <NopSCADlib/vitamins/screws.scad>
 
 include <../lib/OFL/foundation/core.scad>
 include <../lib/OFL/foundation/limits.scad>
-include <../src/OFL/artifacts/t-nut.scad>
+include <../lib/OFL/artifacts/t-nut.scad>
 include <../lib/OFL/vitamins/knurl_nuts.scad>
 
 use <../lib/OFL/foundation/2d-engine.scad>

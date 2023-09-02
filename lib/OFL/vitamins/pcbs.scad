@@ -791,7 +791,7 @@ module fl_pcb_adapter(
   pcb_t     = pcb_thickness(type);
   comps     = pcb_components(type);
   size      = pcb_size(type);
-  bbox      = let(bare=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]) payload ? fl_bb_calc(bbs=[bare,payload]) : bare;
+  bbox      = let(bare=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]) payload ? fl_bb_calc([bare,payload]) : bare;
   holes     = fl_pcb_NopHoles(type);
   screw     = pcb_screw(type);
   screw_r   = screw ? screw_radius(screw) : 0;
