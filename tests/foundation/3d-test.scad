@@ -54,7 +54,7 @@ DIR_R       = 0;        // [-360:360]
 
 /* [3ds] */
 
-SHAPE   = "cube";     // [cube, cylinder, prism, sphere]
+SHAPE   = "cube";     // [cube, cylinder, prism, sphere, pyramid]
 // Size for cube and sphere, bottom/top diameter and height for cylinder, bottom/top edge length and height for prism
 SIZE    = [1,2,3];
 
@@ -87,3 +87,4 @@ if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,debug=debug,octant=octant
 else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
 else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
 else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=SIZE.x,l2=SIZE.y,h=SIZE.z,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+else if (SHAPE == "pyramid" )  fl_pyramid(verbs,[[-1,-1],[+1,-1],[+1,+1],[-1,+1]], [0,0,2],debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
