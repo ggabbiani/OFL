@@ -270,7 +270,6 @@ let(
  * prism
  *
  *    native positioning : +Z
- *    native direction   : [+Z,+X]
  */
 module fl_prism(
   //! FL_ADD,FL_AXES,FL_BBOX
@@ -314,6 +313,56 @@ module fl_prism(
       fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) multmatrix(Mbbox) cube(size=size);     // center=default=false ⇒ +X+Y+Z
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
+
+function fl_bb_pyramid(points) = fl_bb_polyhedron(points);
+
+/*!
+ * return pyramid
+ *
+ * - native positioning: +Z
+ */
+function fl_pyramid(
+  base,
+  apex
+) = concat([apex],[for(p=base) [p.x,p.y,0]]);
+
+/*!
+ * pyramid
+ *
+ * - native positioning: +Z
+ */
+module fl_pyramid(
+  //! FL_ADD,FL_AXES,FL_BBOX
+  verbs  = FL_ADD,
+  base,
+  apex,
+  //! debug parameter as returned from fl_parm_Debug()
+  debug,
+  //! when undef native positioning is used
+  octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
+) {
+  points  = fl_pyramid(base, apex);
+  bbox    = fl_bb_pyramid(points);
+  faces   = [[0,2,1],[0,3,2],[0,4,3],[0,1,4],[1,2,3,4]];
+  size    = bbox[1]-bbox[0];
+  D       = direction ? fl_direction(direction): I;
+  M       = fl_octant(octant,bbox=bbox);
+
+  fl_manage(verbs,M,D)  {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier)
+        polyhedron(points, faces);
+    } else if ($verb==FL_AXES) {
+      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
@@ -685,6 +734,15 @@ module fl_bb_add(
 /*****************************************************************************
  * 3d miscellaneous functions
  *****************************************************************************/
+
+/*!
+ * Calculates the [geometric center](https://en.wikipedia.org/wiki/Centroid) of
+ * the passed points.
+ */
+function fl_centroid(
+  //! Point list defining a polygon/polyhedron with each element p | p∈ℝ^n^
+  pts
+) = assert(len(pts)>0) fl_accum(pts) / len(pts);
 
 /*!
  * Projection of «vector» onto a cartesian «axis»
