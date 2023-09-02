@@ -1,4 +1,4 @@
-/*
+/*!
  * Wrapper for NopSCADlib extrusions defining T-slot structural framing as
  * described [T-slot structural framing](https://en.wikipedia.org/wiki/T-slot_structural_framing)
  *
@@ -14,7 +14,7 @@ include <../foundation/3d-engine.scad>
 
 use <../foundation/mngm-engine.scad>
 
-// namespace
+//! namespace
 __FL_TSP_NS  = "t-slotted profile";
 
 //! constructor
