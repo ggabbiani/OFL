@@ -35,6 +35,18 @@ module fl_status() {
 }
 
 //*****************************************************************************
+// lists
+
+//! quick sort algorithm
+function sort(vec) =
+  len(vec)==0 ? [] : let(
+    pivot = vec[floor(len(vec)/2)],
+    below = [for (y = vec) if (y  < pivot) y],
+    equal = [for (y = vec) if (y == pivot) y],
+    above = [for (y = vec) if (y  > pivot) y]
+  ) concat(sort(below), equal, sort(above));
+
+//*****************************************************************************
 // assertions
 // TODO: remove this section since DEPRECATED
 
