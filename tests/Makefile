@@ -23,16 +23,20 @@ include $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
 
-tests: $(RESULTS) foundation
+tests: $(RESULTS) artifacts foundation
 
-.PHONY: foundation
+.PHONY: artifacts foundation
+
+artifacts:
+	@$(MAKE) -C $@ tests
 
 foundation:
-	@$(MAKE) -C foundation tests
+	@$(MAKE) -C $@ tests
 
 clean:
 	@for f in $(RESULTS) ; do rm -f $$f ; done
 	@echo "$(RESULTS): DELETED"
 	@for f in $(SOURCES) ; do rm -f $$f ; done
 	@echo "$(SOURCES): DELETED"
+	@$(MAKE) -C artifacts $@
 	@$(MAKE) -C foundation $@
