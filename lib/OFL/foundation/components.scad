@@ -129,7 +129,7 @@ function fl_comp_BBox(spec_list) =
         // transformed bounding box points
         points      = [for(corner=bbox) fl_transform(T*D*M,corner)],
         // build transformed bounding box from points
-        Tbbox       = fl_bb_calc(pts=points)
+        Tbbox       = fl_bb_polyhedron(points=points)
       ) Tbbox
     ]
   ) fl_bb_calc(bboxes);
