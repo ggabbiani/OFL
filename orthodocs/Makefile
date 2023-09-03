@@ -12,9 +12,11 @@ api-docs: $(LIB_SOURCES)
 	@echo -e "\e[32mOK\e[0m"
 
 pics:
+	@$(MAKE) -C artifacts
 	@$(MAKE) -C foundation
 
 clean:
 	@rm -f *.md
 	@rm -f api-docs
+	@$(MAKE) -C artifacts $@
 	@$(MAKE) -C foundation $@

@@ -34,18 +34,84 @@ let(
   fl_nopSCADlib(value=nop),
 ];
 
-FL_E1515  = fl_TProfile("E1515", E1515);
-FL_E2020  = fl_TProfile("E2020", E2020);
-FL_E2020t = fl_TProfile("E2020t",E2020t);
-FL_E2040  = fl_TProfile("E2040",E2040);
-FL_E2060  = fl_TProfile("E2060",E2060);
-FL_E2080  = fl_TProfile("E2080",E2080);
-FL_E3030  = fl_TProfile("E3030",E3030);
-FL_E3060  = fl_TProfile("E3060",E3060);
-FL_E4040  = fl_TProfile("E4040",E4040);
-FL_E4040t = fl_TProfile("E4040t",E4040t);
-FL_E4080  = fl_TProfile("E4080",E4080);
+/*!
+ * ![fractional T-slot framing 15 series](256x256/fig-FL_E1515.png "fractional T-slot framing 15 series")
+ *
+ * 15/15 T-slotted profile with cross-section 15x15mm ⌀3.3mm
+ */
+FL_E1515  = fl_TProfile("E1515",  E1515);
 
+/*!
+ * ![metric T-slot framing 20 series](256x256/fig-FL_E2020.png "metric T-slot framing 20 series")
+ *
+ * 20/20 T-slotted profile with cross-section 20x20mm ⌀4.2mm
+ */
+FL_E2020  = fl_TProfile("E2020",  E2020);
+
+/*!
+ * ![metric T-slot framing 20 series recessed](256x256/fig-FL_E2020t.png "metric T-slot framing 20 series recessed")
+ *
+ * 20/20 T-slotted recessed profile with cross-section 20x20mm ⌀5mm
+ */
+FL_E2020t = fl_TProfile("E2020t", E2020t);
+
+/*!
+ * ![metric T-slot framing 20 series](256x256/fig-FL_E2040.png "metric T-slot framing 20 series")
+ *
+ * 20/40 T-slotted profile with cross-section 20x40mm ⌀4.2mm
+ */
+FL_E2040  = fl_TProfile("E2040",  E2040);
+
+/*!
+ * ![metric T-slot framing 20 series](256x256/fig-FL_E2060.png "metric T-slot framing 20 series")
+ *
+ * 20/60 T-slotted profile with cross-section 20x60mm ⌀4.2mm
+ */
+FL_E2060  = fl_TProfile("E2060",  E2060);
+
+/*!
+ * ![metric T-slot framing 20 series](256x256/fig-FL_E2080.png "metric T-slot framing 20 series")
+ *
+ * 20/80 T-slotted profile with cross-section 20x80mm ⌀4.2mm
+ */
+FL_E2080  = fl_TProfile("E2080",  E2080);
+
+/*!
+ * ![metric T-slot framing 30 series](256x256/fig-FL_E3030.png "metric T-slot framing 30 series")
+ *
+ * 30/30 T-slotted profile with cross-section 30x30mm ⌀6.8mm
+ */
+FL_E3030  = fl_TProfile("E3030",  E3030);
+
+/*!
+ * ![metric T-slot framing 30 series](256x256/fig-FL_E3060.png "metric T-slot framing 30 series")
+ *
+ * 30/60 T-slotted profile with cross-section 30x60mm ⌀6.8mm
+ */
+FL_E3060  = fl_TProfile("E3060",  E3060);
+
+/*!
+ * ![metric T-slot framing 40 series](256x256/fig-FL_E4040.png "metric T-slot framing 40 series")
+ *
+ * 40/40 T-slotted profile with cross-section 40x40mm ⌀10.5mm
+ */
+FL_E4040  = fl_TProfile("E4040",  E4040);
+
+/*!
+ * ![metric T-slot framing 40 series recessed](256x256/fig-FL_E4040t.png "metric T-slot framing 40 series recessed")
+ *
+ * 40/40 T-slotted recessed profile with cross-section 40x40mm ⌀10mm
+ */
+FL_E4040t = fl_TProfile("E4040t", E4040t);
+
+/*!
+ * ![metric T-slot framing 40 series](256x256/fig-FL_E4080.png "metric T-slot framing 40 series")
+ *
+ * 40/80 T-slotted profile with cross-section 40x80mm ⌀10.5mm
+ */
+FL_E4080  = fl_TProfile("E4080",  E4080);
+
+//! T-slotted profile dictionary
 FL_XTR_DICT = [
   FL_E1515,
   FL_E2020,
@@ -57,14 +123,15 @@ FL_XTR_DICT = [
   FL_E3060,
   FL_E4040,
   FL_E4040t,
-  FL_E4080
+  FL_E4080,
 ];
 
 module fl_tprofile(
-  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
   verbs       = FL_ADD,
   type,
   length,
+  cornerHole=false,
   //! see constructor fl_parm_Debug()
   debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -83,25 +150,24 @@ module fl_tprofile(
     [-w/2,-h/2,-length/2],
     [+w/2,+h/2,+length/2]
   ];
-  echo(bbox=bbox);
+
   size  = bbox[1]-bbox[0];
   D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
-    extrusion(nop, length, center = true, cornerHole = false);
+    extrusion(nop, length, true, cornerHole);
   }
 
-  module do_assembly() {}
-  module do_layout() {}
-  module do_drill() {}
+  module do_fprint() {
+    translate(-Z(size.z/2))
+      linear_extrude(size.z)
+        fl_square(size=[size.x,size.y],corners=extrusion_fillet(nop));
+  }
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
-
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
@@ -110,15 +176,8 @@ module fl_tprofile(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
 
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
-        children();
-
     } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier);
-
-    } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier);
+      fl_modifier($modifier) do_fprint();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
