@@ -29,7 +29,7 @@ all: api-docs docs tests
 
 api-docs: $(LIB_SOURCES)
 	@$(MAKE) -C orthodocs all
-	@$(MAKE) -C new-orthodocs
+#	@$(MAKE) -C new-orthodocs
 
 docs:
 	@$(MAKE) -C $(DOCS)
