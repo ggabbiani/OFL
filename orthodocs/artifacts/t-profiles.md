@@ -206,7 +206,7 @@ __Syntax:__
 __Parameters:__
 
 __verbs__  
-supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
 
 __debug__  
 see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
