@@ -15,123 +15,134 @@ include <../foundation/3d-engine.scad>
 use <../foundation/mngm-engine.scad>
 
 //! namespace
-__FL_TSP_NS  = "t-slotted profile";
+FL_TSP_NS  = "t-slotted profile";
 
-//! constructor
-function fl_TProfile(
-  name,
-  //! verbatim NopSCADlib definition
-  nop,
-  description
-) =
-assert(name)
-assert(nop)
-let(
+//! return the center hole ⌀
+function fl_tsp_centerD(type,value) = fl_property(type,"tsp/center hole ⌀",value);
+//! return false when profile doesn't have corner holes, their ⌀ otherwise
+function fl_tsp_cornerD(type,value) = fl_property(type,"tsp/corner hole ⌀",value);
 
-) [
-  fl_name(value=name),
-  fl_description(value=description),
+//! Cross-section constructor
+function fl_tsp_CrossSection(
+  //! verbatim NopSCADlib cross-section definition
+  nop
+) = assert(nop) [
   fl_nopSCADlib(value=nop),
 ];
 
 /*!
- * ![fractional T-slot framing 15 series](256x256/fig-FL_E1515.png "fractional T-slot framing 15 series")
+ * ![fractional T-slot cross-section](256x256/fig-FL_TSP_E1515.png)
  *
- * 15/15 T-slotted profile with cross-section 15x15mm ⌀3.3mm
+ * 15 series T-slotted cross-section size 15mm ⌀3.3mm
  */
-FL_E1515  = fl_TProfile("E1515",  E1515);
+FL_TSP_E1515  = fl_tsp_CrossSection(E1515);
 
 /*!
- * ![metric T-slot framing 20 series](256x256/fig-FL_E2020.png "metric T-slot framing 20 series")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2020.png)
  *
- * 20/20 T-slotted profile with cross-section 20x20mm ⌀4.2mm
+ * 20 series T-slotted cross-section size 20mm ⌀4.2mm
  */
-FL_E2020  = fl_TProfile("E2020",  E2020);
+FL_TSP_E2020  = fl_tsp_CrossSection(E2020);
 
 /*!
- * ![metric T-slot framing 20 series recessed](256x256/fig-FL_E2020t.png "metric T-slot framing 20 series recessed")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2020t.png)
  *
- * 20/20 T-slotted recessed profile with cross-section 20x20mm ⌀5mm
+ * 20 series T-slotted cross-section size 20mm ⌀5mm
  */
-FL_E2020t = fl_TProfile("E2020t", E2020t);
+FL_TSP_E2020t = fl_tsp_CrossSection(E2020t);
 
 /*!
- * ![metric T-slot framing 20 series](256x256/fig-FL_E2040.png "metric T-slot framing 20 series")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2040.png)
  *
- * 20/40 T-slotted profile with cross-section 20x40mm ⌀4.2mm
+ * 20 series T-slotted cross-section size 40mm ⌀4.2mm
  */
-FL_E2040  = fl_TProfile("E2040",  E2040);
+FL_TSP_E2040  = fl_tsp_CrossSection(E2040);
 
 /*!
- * ![metric T-slot framing 20 series](256x256/fig-FL_E2060.png "metric T-slot framing 20 series")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2060.png)
  *
- * 20/60 T-slotted profile with cross-section 20x60mm ⌀4.2mm
+ * 20 series T-slotted cross-section size 60mm ⌀4.2mm
  */
-FL_E2060  = fl_TProfile("E2060",  E2060);
+FL_TSP_E2060  = fl_tsp_CrossSection(E2060);
 
 /*!
- * ![metric T-slot framing 20 series](256x256/fig-FL_E2080.png "metric T-slot framing 20 series")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2080.png)
  *
- * 20/80 T-slotted profile with cross-section 20x80mm ⌀4.2mm
+ * 20 series T-slotted cross-section size 80mm ⌀4.2mm
  */
-FL_E2080  = fl_TProfile("E2080",  E2080);
+FL_TSP_E2080  = fl_tsp_CrossSection(E2080);
 
 /*!
- * ![metric T-slot framing 30 series](256x256/fig-FL_E3030.png "metric T-slot framing 30 series")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E3030.png)
  *
- * 30/30 T-slotted profile with cross-section 30x30mm ⌀6.8mm
+ * 30 series T-slotted cross-section size 30mm ⌀6.8mm
  */
-FL_E3030  = fl_TProfile("E3030",  E3030);
+FL_TSP_E3030  = fl_tsp_CrossSection(E3030);
 
 /*!
- * ![metric T-slot framing 30 series](256x256/fig-FL_E3060.png "metric T-slot framing 30 series")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E3060.png)
  *
- * 30/60 T-slotted profile with cross-section 30x60mm ⌀6.8mm
+ * 30 series T-slotted cross-section size 60mm ⌀6.8mm
  */
-FL_E3060  = fl_TProfile("E3060",  E3060);
+FL_TSP_E3060  = fl_tsp_CrossSection(E3060);
 
 /*!
- * ![metric T-slot framing 40 series](256x256/fig-FL_E4040.png "metric T-slot framing 40 series")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E4040.png)
  *
- * 40/40 T-slotted profile with cross-section 40x40mm ⌀10.5mm
+ * 40 series T-slotted cross-section size 40mm ⌀10.5mm
  */
-FL_E4040  = fl_TProfile("E4040",  E4040);
+FL_TSP_E4040  = fl_tsp_CrossSection(E4040);
 
 /*!
- * ![metric T-slot framing 40 series recessed](256x256/fig-FL_E4040t.png "metric T-slot framing 40 series recessed")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E4040t.png)
  *
- * 40/40 T-slotted recessed profile with cross-section 40x40mm ⌀10mm
+ * 40 series T-slotted cross-section size 40mm ⌀10mm
  */
-FL_E4040t = fl_TProfile("E4040t", E4040t);
+FL_TSP_E4040t = fl_tsp_CrossSection(E4040t);
 
 /*!
- * ![metric T-slot framing 40 series](256x256/fig-FL_E4080.png "metric T-slot framing 40 series")
+ * ![metric T-slot cross-section](256x256/fig-FL_TSP_E4080.png)
  *
- * 40/80 T-slotted profile with cross-section 40x80mm ⌀10.5mm
+ * 40 series T-slotted cross-section size 80mm ⌀10.5mm
  */
-FL_E4080  = fl_TProfile("E4080",  E4080);
+FL_TSP_E4080  = fl_tsp_CrossSection(E4080);
 
-//! T-slotted profile dictionary
+//! T-slotted cross-section dictionary
 FL_XTR_DICT = [
-  FL_E1515,
-  FL_E2020,
-  FL_E2020t,
-  FL_E2040,
-  FL_E2060,
-  FL_E2080,
-  FL_E3030,
-  FL_E3060,
-  FL_E4040,
-  FL_E4040t,
-  FL_E4080,
+  FL_TSP_E1515,
+  FL_TSP_E2020,
+  FL_TSP_E2020t,
+  FL_TSP_E2040,
+  FL_TSP_E2060,
+  FL_TSP_E2080,
+  FL_TSP_E3030,
+  FL_TSP_E3060,
+  FL_TSP_E4040,
+  FL_TSP_E4040t,
+  FL_TSP_E4080,
 ];
 
-module fl_tprofile(
+function fl_tsp_xsection(type,value)  = fl_property(type,"tsp/cross-section",value);
+function fl_tsp_length(type,value)    = fl_property(type,"tsp/length",value);
+
+//! T-slotted profile constructor
+function fl_tsp_TProfile(
+  xsec,
+  length
+) = assert(xsec,xsec) assert(length,length) let(
+  nop = fl_nopSCADlib(xsec),
+  w   = extrusion_width(nop),
+  h   = extrusion_height(nop)
+) [
+  fl_tsp_xsection(value=xsec),
+  fl_tsp_length(value=length),
+  fl_bb_corners(value=[[-w/2,-h/2,-length/2],[+w/2,+h/2,+length/2]])
+];
+
+module fl_tProfile(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
   verbs       = FL_ADD,
   type,
-  length,
-  cornerHole=false,
   //! see constructor fl_parm_Debug()
   debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -140,23 +151,14 @@ module fl_tprofile(
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(length,length);
 
-  nop   = fl_nopSCADlib(type);
-  bbox  = let(
-    w = extrusion_width(nop),
-    h = extrusion_height(nop)
-  ) echo(w=w,h=h) [
-    [-w/2,-h/2,-length/2],
-    [+w/2,+h/2,+length/2]
-  ];
-
+  nop   = fl_nopSCADlib(fl_tsp_xsection(type));
+  bbox  = fl_bb_corners(type);
   size  = bbox[1]-bbox[0];
   D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
-    extrusion(nop, length, true, cornerHole);
   }
 
   module do_fprint() {
@@ -167,11 +169,11 @@ module fl_tprofile(
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+      fl_modifier($modifier)
+        extrusion(nop, size.z,center=true, cornerHole=false);
 
     } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+      fl_modifier($FL_AXES) fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

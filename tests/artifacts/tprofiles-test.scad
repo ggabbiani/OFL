@@ -55,7 +55,7 @@ DIR_R       = 0;        // [-360:360]
 
 /* [T Profile] */
 
-PROFILE     = "FL_E1515"; // [FL_E1515,FL_E2020,FL_E2020t,FL_E2040,FL_E2060,FL_E2080,FL_E3030,FL_E3060,FL_E4040,FL_E4040t,FL_E4080]
+PROFILE     = "E1515"; // [E1515,E2020,E2020t,E2040,E2060,E2080,E3030,E3060,E4040,E4040t,E4080]
 LENGTH      = 50;
 CORNER_HOLE = false;
 
@@ -77,16 +77,18 @@ verbs=[
   if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
 ];
 
-profile = PROFILE=="FL_E1515"   ? FL_E1515
-        : PROFILE=="FL_E2020"   ? FL_E2020
-        : PROFILE=="FL_E2020t"  ? FL_E2020t
-        : PROFILE=="FL_E2040"   ? FL_E2040
-        : PROFILE=="FL_E2060"   ? FL_E2060
-        : PROFILE=="FL_E2080"   ? FL_E2080
-        : PROFILE=="FL_E3030"   ? FL_E3030
-        : PROFILE=="FL_E3060"   ? FL_E3060
-        : PROFILE=="FL_E4040"   ? FL_E4040
-        : PROFILE=="FL_E4040t"  ? FL_E4040t
-        : FL_E4080;
+xsec  = PROFILE=="E1515"   ? FL_TSP_E1515
+      : PROFILE=="E2020"   ? FL_TSP_E2020
+      : PROFILE=="E2020t"  ? FL_TSP_E2020t
+      : PROFILE=="E2040"   ? FL_TSP_E2040
+      : PROFILE=="E2060"   ? FL_TSP_E2060
+      : PROFILE=="E2080"   ? FL_TSP_E2080
+      : PROFILE=="E3030"   ? FL_TSP_E3030
+      : PROFILE=="E3060"   ? FL_TSP_E3060
+      : PROFILE=="E4040"   ? FL_TSP_E4040
+      : PROFILE=="E4040t"  ? FL_TSP_E4040t
+      : FL_TSP_E4080;
 
-fl_tprofile(verbs,profile,LENGTH,CORNER_HOLE,debug,direction,octant);
+profile = fl_tsp_TProfile(xsec,LENGTH);
+
+fl_tProfile(verbs,profile,debug,direction,octant);
