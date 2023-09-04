@@ -54,7 +54,7 @@ function fl_TNut(
   //! the opening of the T-slot
   opening,
   /*!
-   * 2d size in the form [with,length], the height being calculated from «thickness».
+   * 2d size in the form [width,length], the height being calculated from «thickness».
    * The resulting bounding box is: `[width, ∑ thickness, length]`
    */
   size,
