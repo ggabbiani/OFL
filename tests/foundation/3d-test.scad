@@ -39,8 +39,9 @@ BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];    // [-1:+1]
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
 
 
 /* [Direction] */
@@ -67,7 +68,7 @@ N     = 3; // [3:10]
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();

@@ -40,8 +40,9 @@ $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];    // [-1:+1]
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
 
 
 /* [Direction] */
@@ -63,7 +64,7 @@ CORNER_HOLE = false;
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();
@@ -91,4 +92,4 @@ xsec  = PROFILE=="E1515"   ? FL_TSP_E1515
 
 profile = fl_tsp_TProfile(xsec,LENGTH);
 
-fl_tProfile(verbs,profile,debug,direction,octant);
+fl_tProfile(verbs,profile,debug=debug,direction=direction,octant=octant);

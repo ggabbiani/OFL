@@ -372,20 +372,54 @@ module fl_pyramid(
 //**** 3d placement ***********************************************************
 
 function fl_octant(
-  //! 3d octant
+  /*!
+   * 3d octant vector, each component can assume one out of four values
+   * modifying the corresponding x,y or z position in the following manner:
+   *
+   * - undef: translation invariant (no translation)
+   * - -1: object on negative semi-axis
+   * - 0: object midpoint on origin
+   * - +1: object on positive semi-axis
+   *
+   * Example 1:
+   *
+   *     octant=[undef,undef,undef]
+   *
+   * no translation in any dimension
+   *
+   * Example 2:
+   *
+   *     octant=[0,0,0]
+   *
+   * object center [midpoint x, midpoint y, midpoint z] on origin
+   *
+   * Example 3:
+   *
+   *     octant=[+1,undef,-1]
+   *
+   *  object on X positive semi-space, no Y translated, on negative Z semi-space
+   */
   octant,
-  //! type with "bounding corners" property
+  //! type with embedded "bounding corners" property (see fl_bb_corners())
   type,
-  //! bounding box corners, overrides «type» settings
+  //! explicit bounding box corners: overrides «type» settings
   bbox,
   //! returned matrix if «octant» is undef
   default=FL_I
 ) = octant ? let(
     corner  = bbox ? bbox : fl_bb_corners(type),
     half    = (corner[1] - corner[0]) / 2,
-    delta   = [sign(octant.x) * half.x,sign(octant.y) * half.y,sign(octant.z) * half.z]
-  ) T(-corner[0]-half+delta)
-  : assert(default) default;
+    delta   = [
+      is_undef(octant.x) ? undef : sign(octant.x) * half.x,
+      is_undef(octant.y) ? undef : sign(octant.y) * half.y,
+      is_undef(octant.z) ? undef : sign(octant.z) * half.z
+    ],
+    t       = [
+      is_undef(octant.x) ? 0 : -corner[0].x-half.x+delta.x,
+      is_undef(octant.y) ? 0 : -corner[0].y-half.y+delta.y,
+      is_undef(octant.z) ? 0 : -corner[0].z-half.z+delta.z
+    ]
+  ) T(t) : assert(default) default;
 
 module fl_place(
   type,
