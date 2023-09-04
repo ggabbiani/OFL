@@ -13,6 +13,13 @@ include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 //*****************************************************************************
+// language extension
+
+function fl_switch(value,cases,otherwise) = let(
+  match = [for(case=cases) if (value==case[0]) case[1]]
+) match ? match[0] : otherwise;
+
+//*****************************************************************************
 // versioning
 
 function fl_version() = [3,5,1];
@@ -26,12 +33,8 @@ function fl_versionNumber() = let(
 
 module fl_status() {
   v=fl_version();
-  echo(str("**OFL** Version         : ",v.x,".",v.y,".",v.z));
-  echo(str("**OFL** Debug           : ",fl_debug()));
-  // echo(str("**OFL** VP rotation     : ",$vpr));
-  // echo(str("**OFL** VP translation  : ",$vpt));
-  // echo(str("**OFL** VP camera       : ",$vpd));
-  // echo(str("**OFL** VP FoV          : ",$vpf));
+  echo(str("**OFL** Version : ",v.x,".",v.y,".",v.z));
+  echo(str("**OFL** Debug   : ",fl_debug()));
 }
 
 //*****************************************************************************
@@ -749,6 +752,21 @@ function fl_filament() = is_undef($fl_filament)
 : assert(is_string($fl_filament)) $fl_filament;
 
 //**** Common parameters ******************************************************
+
+/*!
+ * Constructor for the octant parameter from values as passed by customizer
+ * (see fl_octant() for the semantic behind).
+ *
+ * Each dimension can assume one out of four values:
+ *
+ * - "undef": mapped to undef
+ * - -1,0,+1: untouched
+ */
+function fl_parm_Octant(x,y,z) = let(
+  o_x = x=="undef" ? undef : x,
+  o_y = y=="undef" ? undef : y,
+  o_z = z=="undef" ? undef : z
+) [o_x,o_y,o_z];
 
 //! constructor for debug context parameter
 function fl_parm_Debug(
