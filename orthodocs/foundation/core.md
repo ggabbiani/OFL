@@ -1447,6 +1447,18 @@ Used $special variables:
   - [0,∞): traces with call order ≤ $FL_TRACES are enabled
 
 
+__Parameters:__
+
+__msg__  
+message to be printed
+
+__value__  
+optional value generally usable for printing a variable content
+
+__always__  
+when true the trace is always printed
+
+
 ---
 
 ### module fl_vector
