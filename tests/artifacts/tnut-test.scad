@@ -1,28 +1,32 @@
 /*
- * Artifacts test template.
+ * T-nut test.
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-// include <NopSCADlib/core.scad>
-// include <NopSCADlib/vitamins/screws.scad>
+
 
 include <../../lib/OFL/artifacts/t-nut.scad>
 include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/vitamins/knurl_nuts.scad>
 
-$fn         = 50;           // [3:100]
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
-// Debug statements are turned on
-$fl_debug   = false;
+$FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -37,10 +41,13 @@ $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+
 /* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Direction] */
 
@@ -48,7 +55,8 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
+
 
 /* [T-slot nut] */
 
@@ -63,15 +71,20 @@ nut_tolerance         = 0;    // [-1:0.1:1]
 hole_tolerance        = 0;    // [-1:0.1:2]
 countersink_tolerance = 0;    // [-1:0.1:1]
 
-countersink = false;
-knut = false;
+countersink           = false;
+knut                  = false;
+
 
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
-debug     = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
-echo(debug=debug);
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+fl_status();
+
+// end of automatically generated code
+
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
@@ -92,12 +105,6 @@ nop   = screw_name=="M3_cs_cap_screw" ? M3_sliding_t_nut
       : undef;
 
 thick = wall_thick+base_thick+cone_thick;
-nut = fl_TNut(opening,[in_width,length],[wall_thick,base_thick,cone_thick],screw,knut);
-// knut = fl_knut_search(screw,thick);
-
-// echo(knut=knut);
+nut   = fl_TNut(opening,[in_width,length],[wall_thick,base_thick,cone_thick],screw,knut);
 
 fl_tnut(verbs,nut,[nut_tolerance,hole_tolerance,countersink_tolerance],countersink,debug,direction,octant);
-  // fl_knut([FL_ADD,FL_AXES],type=knut,direction=$hole_direction,octant=-Z);
-
-// sliding_t_nut(nop);

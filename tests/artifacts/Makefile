@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-SOURCES			= tprofiles-test.scad
+SOURCES			= tprofiles-test.scad tnut-test.scad
 RESULTS			= $(SOURCES:.scad=.echo)
 
 include $(DEF_RULES)
