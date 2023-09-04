@@ -658,18 +658,18 @@ function fl_trace(msg,result,always=false) = let(
  *   - [0,∞): traces with call order ≤ $FL_TRACES are enabled
  */
 module fl_trace(
-  // message to be printed
+  //! message to be printed
   msg,
-  // optional value generally usable for printing a variable content
+  //! optional value generally usable for printing a variable content
   value,
-  // when true the trace is always printed
+  //! when true the trace is always printed
   always=false
 ) {
   mdepth      = $parent_modules-1;
   if (always||(!is_undef($FL_TRACES) && ($FL_TRACES==-1||$FL_TRACES>=mdepth)))
     let(
       call_chain  = strcat([for (i=[$parent_modules-1:-1:1]) parent_module(i)],"->")
-    ) echo(mdepth,str(call_chain,": ",is_undef(value)?msg:str(msg,"==",value))) children();
+    ) echo(mdepth,str(call_chain?call_chain:"***",": ",is_undef(value)?msg:str(msg,"==",value))) children();
   else
     children();
 }

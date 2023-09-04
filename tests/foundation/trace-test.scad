@@ -27,7 +27,7 @@ module three() {
     result  = -1
   ) fl_trace("Function test() result",result);
 
-  dummy=test();echo(dummy=dummy);
+  dummy=test();
   fl_trace("dummy",dummy);
   fl_trace("Mandatory message from module three!",always=true);
 }

@@ -81,7 +81,6 @@ verbs=[
   if (BBOX!="OFF")  FL_BBOX,
 ];
 
-fl_trace("PLACE_NATIVE",PLACE_NATIVE);
 fl_trace("octant",octant);
 
 if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
