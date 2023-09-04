@@ -1017,6 +1017,25 @@ when true symbols are displayed
 
 ---
 
+### function fl_parm_Octant
+
+__Syntax:__
+
+```text
+fl_parm_Octant(x,y,z)
+```
+
+Constructor for the octant parameter from values as passed by customizer
+(see [fl_octant()](3d-engine.md#function-fl_octant) for the semantic behind).
+
+Each dimension can assume one out of four values:
+
+- "undef": mapped to undef
+- -1,0,+1: untouched
+
+
+---
+
 ### function fl_parm_components
 
 __Syntax:__
@@ -1200,6 +1219,16 @@ __Syntax:__
 
 ```text
 fl_sub(list,from,to)
+```
+
+---
+
+### function fl_switch
+
+__Syntax:__
+
+```text
+fl_switch(value,cases,otherwise)
 ```
 
 ---

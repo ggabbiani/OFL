@@ -67,7 +67,7 @@ __opening__
 the opening of the T-slot
 
 __size__  
-2d size in the form [with,length], the height being calculated from «thickness».
+2d size in the form [width,length], the height being calculated from «thickness».
 The resulting bounding box is: `[width, ∑ thickness, length]`
 
 

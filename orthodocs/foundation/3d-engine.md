@@ -486,13 +486,38 @@ fl_octant(octant,type,bbox,default=FL_I)
 __Parameters:__
 
 __octant__  
-3d octant
+3d octant vector, each component can assume one out of four values
+modifying the corresponding x,y or z position in the following manner:
+
+- undef: translation invariant (no translation)
+- -1: object on negative semi-axis
+- 0: object midpoint on origin
+- +1: object on positive semi-axis
+
+Example 1:
+
+    octant=[undef,undef,undef]
+
+no translation in any dimension
+
+Example 2:
+
+    octant=[0,0,0]
+
+object center [midpoint x, midpoint y, midpoint z] on origin
+
+Example 3:
+
+    octant=[+1,undef,-1]
+
+ object on X positive semi-space, no Y translated, on negative Z semi-space
+
 
 __type__  
-type with "bounding corners" property
+type with embedded "bounding corners" property (see [fl_bb_corners()](bbox-engine.md#function-fl_bb_corners))
 
 __bbox__  
-bounding box corners, overrides «type» settings
+explicit bounding box corners: overrides «type» settings
 
 __default__  
 returned matrix if «octant» is undef

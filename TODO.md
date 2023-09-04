@@ -44,7 +44,9 @@
 - [x] moved library sources into a single top level directory, same for tests and examples
 - [ ] remove obsolete drawio library
 - [x] rewrite sata library with dxf
-- [x] fix .dxf file warnings during OpenSCAD loading
+- [x] fixed .dxf file warnings during OpenSCAD loading
+- [x] improved object positioning by fl_octant() extension now managing also 'undef' dimensional translations
+- [x] function fl_octant() extended in order to manage also the invariants
 
 ## Changed file names
 

@@ -222,10 +222,22 @@ T-slotted profile constructor
 __Syntax:__
 
 ```text
-fl_tsp_centerD(type,value)
+fl_tsp_centerD(type)
 ```
 
-return the center hole ⌀
+return false when profile doesn't have center hole, its ⌀ otherwise
+
+---
+
+### function fl_tsp_chW
+
+__Syntax:__
+
+```text
+fl_tsp_chW(type)
+```
+
+channel width
 
 ---
 
@@ -234,10 +246,34 @@ return the center hole ⌀
 __Syntax:__
 
 ```text
-fl_tsp_cornerD(type,value)
+fl_tsp_cornerD(type)
 ```
 
-return false when profile doesn't have corner holes, their ⌀ otherwise
+return false when profile doesn't have corner holes, the ⌀ otherwise
+
+---
+
+### function fl_tsp_h
+
+__Syntax:__
+
+```text
+fl_tsp_h(type)
+```
+
+height
+
+---
+
+### function fl_tsp_intChW
+
+__Syntax:__
+
+```text
+fl_tsp_intChW(type)
+```
+
+internal channel width
 
 ---
 
@@ -251,13 +287,39 @@ fl_tsp_length(type,value)
 
 ---
 
-### function fl_tsp_xsection
+### function fl_tsp_nominalSize
 
 __Syntax:__
 
 ```text
-fl_tsp_xsection(type,value)
+fl_tsp_nominalSize(type)
 ```
+
+nominal cross-section size
+
+---
+
+### function fl_tsp_tabT
+
+__Syntax:__
+
+```text
+fl_tsp_tabT(type)
+```
+
+tab thickness
+
+---
+
+### function fl_tsp_w
+
+__Syntax:__
+
+```text
+fl_tsp_w(type)
+```
+
+width
 
 ## Modules
 
@@ -267,12 +329,18 @@ fl_tsp_xsection(type,value)
 
 __Syntax:__
 
-    fl_tProfile(verbs=FL_ADD,type,debug,direction,octant)
+    fl_tProfile(verbs=FL_ADD,type,lay_surface,debug,direction,octant)
 
 __Parameters:__
 
 __verbs__  
-supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
+
+__lay_surface__  
+floating semi-axis list (es. [+X,-Y]) for FL_LAYOUT
+
+NOTE: ±Z is excluded
+
 
 __debug__  
 see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
