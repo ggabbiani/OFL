@@ -26,6 +26,24 @@ Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
 SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
 
+## Variables
+
+---
+
+### variable FL_TNUT_DICT
+
+__Default:__
+
+    []
+
+---
+
+### variable FL_TNUT_NS
+
+__Default:__
+
+    "tnut"
+
 ## Functions
 
 ---
@@ -84,6 +102,16 @@ eventual knurl nut
 __holes__  
 list of user defined holes usually positioned on the 'opening' side
 
+
+---
+
+### function fl_tnut_thickness
+
+__Syntax:__
+
+```text
+fl_tnut_thickness(type,value)
+```
 
 ## Modules
 

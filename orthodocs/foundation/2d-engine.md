@@ -476,10 +476,14 @@ list containing the start and ending angles for the sector.
 __Syntax:__
 
 ```text
-fl_square(size=[1,1],corners=[0,0,0,0])
+fl_square(size=1,corners=[0,0,0,0])
 ```
 
 __Parameters:__
+
+__size__  
+square size as 2d list or scalar
+
 
 __corners__  
 List of four values (one for each quadrant). Each of them can be passed in
@@ -799,12 +803,16 @@ list containing the start and ending angles for the sector.
 
 __Syntax:__
 
-    fl_square(verbs=FL_ADD,size=[1,1],corners=[0,0,0,0],quadrant)
+    fl_square(verbs=FL_ADD,size=1,corners=[0,0,0,0],quadrant)
 
 Draw a 2d square centered at the origin.
 
 
 __Parameters:__
+
+__size__  
+square size as 2d list or scalar
+
 
 __corners__  
 List of four radiuses, one for each quadrant's corners.

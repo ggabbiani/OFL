@@ -253,6 +253,16 @@ return false when profile doesn't have corner holes, the ⌀ otherwise
 
 ---
 
+### function fl_tsp_filletR
+
+__Syntax:__
+
+```text
+fl_tsp_filletR(type)
+```
+
+---
+
 ### function fl_tsp_h
 
 __Syntax:__
@@ -330,6 +340,9 @@ width
 __Syntax:__
 
     fl_tProfile(verbs=FL_ADD,type,lay_surface,debug,direction,octant)
+
+TODO: document context variables
+
 
 __Parameters:__
 

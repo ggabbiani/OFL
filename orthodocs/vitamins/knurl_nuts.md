@@ -50,8 +50,8 @@ __Default:__
 
 - **internal thread**  : M2
 - **length**           : 10mm
-- **external diameter**: 3.5mm
-- **hole diameter**    : ≅ 3.2mm
+- **⌀ (min,max)**      : 2.8mm,3.5mm
+- **⌀ hole**           : ≅ 2.9mm
 
 
 ---
@@ -64,8 +64,8 @@ __Default:__
 
 - **internal thread**  : M2
 - **length**           : 4mm
-- **external diameter**: 3.5mm
-- **hole diameter**    : ≅ 3.2mm
+- **⌀ (min,max)**      : 2.8mm,3.5mm
+- **⌀ hole**           : ≅ 2.9mm
 
 
 ---
@@ -78,8 +78,8 @@ __Default:__
 
 - **internal thread**  : M2
 - **length**           : 6mm
-- **external diameter**: 3.5mm
-- **hole diameter**    : ≅ 3.2mm
+- **⌀ (min,max)**      : 2.8mm,3.5mm
+- **⌀ hole**           : ≅ 2.9mm
 
 
 ---
@@ -92,8 +92,8 @@ __Default:__
 
 - **internal thread**  : M2
 - **length**           : 8mm
-- **external diameter**: 3.5mm
-- **hole diameter**    : ≅ 3.2mm
+- **⌀ (min,max)**      : 2.8mm,3.5mm
+- **⌀ hole**           : ≅ 2.9mm
 
 
 ---

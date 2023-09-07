@@ -864,7 +864,7 @@ Extrusion along arbitrary axis with eventual rotation
 __Parameters:__
 
 __direction__  
-direction in axis-angle representation
+direction in [axis,angle] representation
 
 
 ---
