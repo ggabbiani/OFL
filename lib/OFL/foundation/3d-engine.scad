@@ -971,7 +971,7 @@ function fl_3d_axisIsSet(
  * Extrusion along arbitrary axis with eventual rotation
  */
 module fl_linear_extrude(
-  //! direction in axis-angle representation
+  //! direction in [axis,angle] representation
   direction,
   length,
   convexity = 10,

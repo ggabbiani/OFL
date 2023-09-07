@@ -68,29 +68,29 @@ assert(is_num(tooth),str("tooth=",tooth))
 /*!
  * - **internal thread**  : M2
  * - **length**           : 4mm
- * - **external diameter**: 3.5mm
- * - **hole diameter**    : ≅ 3.2mm
+ * - **⌀ (min,max)**      : 2.8mm,3.5mm
+ * - **⌀ hole**           : ≅ 2.9mm
  */
 FL_KNUT_M2x4x3p5   = fl_Knut(M2_cap_screw,4,3.5,0.6, [1.15,  1.15      ]);
 /*!
  * - **internal thread**  : M2
  * - **length**           : 6mm
- * - **external diameter**: 3.5mm
- * - **hole diameter**    : ≅ 3.2mm
+ * - **⌀ (min,max)**      : 2.8mm,3.5mm
+ * - **⌀ hole**           : ≅ 2.9mm
  */
 FL_KNUT_M2x6x3p5   = fl_Knut(M2_cap_screw,6,3.5,0.6, [1.5,   1.5       ]);
 /*!
  * - **internal thread**  : M2
  * - **length**           : 8mm
- * - **external diameter**: 3.5mm
- * - **hole diameter**    : ≅ 3.2mm
+ * - **⌀ (min,max)**      : 2.8mm,3.5mm
+ * - **⌀ hole**           : ≅ 2.9mm
  */
 FL_KNUT_M2x8x3p5   = fl_Knut(M2_cap_screw,8,3.5,0.5, [1.3,   1.4,  1.3 ]);
 /*!
  * - **internal thread**  : M2
  * - **length**           : 10mm
- * - **external diameter**: 3.5mm
- * - **hole diameter**    : ≅ 3.2mm
+ * - **⌀ (min,max)**      : 2.8mm,3.5mm
+ * - **⌀ hole**           : ≅ 2.9mm
  */
 FL_KNUT_M2x10x3p5  = fl_Knut(M2_cap_screw,10,3.5,0.5,[1.9,   2.0,  1.9 ]);
 

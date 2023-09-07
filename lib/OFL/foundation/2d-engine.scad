@@ -862,7 +862,10 @@ module fl_ipoly(
 //**** square *****************************************************************
 
 function fl_square(
-  size      = [1,1],
+  /*!
+   * square size as 2d list or scalar
+   */
+  size      = 1,
   /*!
    * List of four values (one for each quadrant). Each of them can be passed in
    * one of the following formats:
@@ -887,6 +890,7 @@ function fl_square(
 ) =
   assert(is_num(corners) || len(corners)==2 || len(corners)==4)
   let(
+    size = is_num(size) ? [size,size] : size,
     bbox      = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]],
     corners  = is_num(corners) ? let(e=[corners,corners]) [e,e,e,e]                                 // same circular arc x 4
               : len(corners)==2 ? let(e=corners)            [e,e,e,e]                                 // same elliptical arc x 4
@@ -952,7 +956,10 @@ function fl_square(
  */
 module fl_square(
   verbs   = FL_ADD,
-  size    = [1,1],
+  /*!
+   * square size as 2d list or scalar
+   */
+  size      = 1,
   /*!
    * List of four radiuses, one for each quadrant's corners.
    * Each zero means that the corresponding corner is squared.
@@ -966,6 +973,7 @@ module fl_square(
 ) {
   assert(is_list(verbs)||is_string(verbs));
 
+  size    = is_num(size) ? [size,size] : size;
   points  = fl_square(size,corners);
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
   M       = fl_quadrant(quadrant,bbox=bbox);
