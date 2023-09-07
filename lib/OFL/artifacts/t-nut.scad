@@ -21,11 +21,16 @@ use <../foundation/hole.scad>
 use <../foundation/mngm-engine.scad>
 
 // namespace
-__FL_ART_NS  = "tsnut";
+FL_TNUT_NS  = "tnut";
 
 // TODO: build preset types
-__FL_ART_DICT = [
+FL_TNUT_DICT = [
 ];
+
+//*****************************************************************************
+// getters
+
+function fl_tnut_thickness(type,value) = fl_property(type,"tnut/[wall, base, cone] thickness",value);
 
 /*!
  * Constructor returning a T-slot nut.
@@ -91,7 +96,7 @@ function fl_TNut(
   ]
 ) [
   ["opening", opening],
-  ["[wall, base, cone] thickness", thickness],
+  fl_tnut_thickness(value=thickness),
   fl_bb_corners(value=bbox),
   ["section points", points],
   if (screw) fl_screw(value=screw),
@@ -125,7 +130,7 @@ module fl_tnut(
   D     = direction ? fl_direction(direction) : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
-  thickness = fl_property(type, "[wall, base, cone] thickness");
+  thickness = fl_tnut_thickness(type);
   wall  = thickness[0];
   base  = thickness[1];
   cone  = thickness[2];
@@ -140,8 +145,8 @@ module fl_tnut(
   knut  = fl_optional(type,"knut");
   ext_r = knut ? fl_knut_r(knut)+hole_t : undef;
 
-  echo(d=d,tolerance=tolerance,bbox=bbox,size=size,points=points);
-  echo(knut=knut,ext_r=ext_r);
+  // echo(d=d,tolerance=tolerance,bbox=bbox,size=size,points=points);
+  // echo(knut=knut,ext_r=ext_r);
 
   // module context() {
   //   fl_hole_Context(hole)

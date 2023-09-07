@@ -47,6 +47,9 @@ function fl_tsp_w(type) = extrusion_width(fl_nopSCADlib(type));
 //! height
 function fl_tsp_h(type) = extrusion_height(fl_nopSCADlib(type));
 
+function fl_tsp_filletR(type)    = extrusion_fillet(fl_nopSCADlib(type));
+
+
 //! Cross-section constructor
 function fl_tsp_CrossSection(
   //! verbatim NopSCADlib cross-section definition
@@ -147,7 +150,6 @@ FL_XTR_DICT = [
   FL_TSP_E4080,
 ];
 
-// function fl_tsp_xsection(type,value)  = fl_property(type,"tsp/cross-section",value);
 function fl_tsp_length(type,value)    = fl_property(type,"tsp/length",value);
 
 //! T-slotted profile constructor
@@ -165,6 +167,9 @@ function fl_tsp_TProfile(
   fl_bb_corners(value=[[-w/2,-h/2,-length/2],[+w/2,+h/2,+length/2]])
 ];
 
+/*!
+ * TODO: document context variables
+ */
 module fl_tProfile(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
@@ -202,9 +207,10 @@ module fl_tProfile(
     assert(lay_surface);
     // children context
     let(
-      $tsp_size = size
+      $tsp_size = size,
+      $tsp_tabT = fl_tsp_tabT(type)
     ) for($tsp_surface=lay_surface)
-        translate((abs($tsp_surface*size/2)-fl_tsp_tabT(type))*$tsp_surface)
+        translate(abs(size/2*$tsp_surface)*$tsp_surface)
           children();
   }
 
