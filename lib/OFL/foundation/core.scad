@@ -483,8 +483,13 @@ module fl_color(color,alpha=1) {
   color = color ? color : fl_filament();
   if (fl_debug())
     #children();
-  else
-    color(fl_palette(color=color),alpha) children();
+  else let(
+    c = fl_palette(color=color)
+  ) if (c!="ignore") {
+      color(c,alpha)
+        children();
+    } else
+      children();
 }
 
 function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : undef));
