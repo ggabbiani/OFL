@@ -168,7 +168,7 @@ module side(verb="show",normal) {
   }
 }
 
-rotate(0*90,Y) {
+rotate(90,Y) {
   difference() {
     union() {
       if (PARTS=="central"||PARTS=="all")
