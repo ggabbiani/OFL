@@ -13,7 +13,7 @@ MAX_SPOOLER_W = 80;
 // T-slotted profile length
 TSP_length   = 463;
 TOLERANCE = true;
-PARTS="side";     // [side,central,all]
+PARTS="side";     // [all,side,central,stopper]
 MODE="assembly";  // [assembly,print me!]
 SIDE_T  = 5;
 FILAMENT_CENTRAL  = "DodgerBlue"; // [ignore,DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -26,6 +26,8 @@ SHOW_SYMBOLS    = false;
 /* [Hidden] */
 
 debug = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
+
+PLEXI_SZ  = [463,605,2.5];
 
 // custom cross-section in NopSCADlib format
 //                                            1   2     3      4   5     6     7    8    9   10   11
@@ -45,6 +47,8 @@ screw       = M2_cap_screw;
 scr_d       = 2*screw_radius(screw);
 scr_head_d  = 2*screw_head_radius(screw);
 scr_head_h  = screw_head_height(screw);
+screw_side  = M4_cap_screw;
+scr_side_d  = 2*screw_radius(screw_side);
 
 // heuristic value: it works with M2 brass inserts
 knut_hole_d = 2.8;
@@ -132,9 +136,22 @@ module central(verb="show") {
 }
 
 // holding arm
-module holding_arm(depth) {
+module n_holding_arm(depth) {
   translate(-Z(depth/2))
-    // translate(X(tolerance)+Y(3+tolerance))
+      linear_extrude(depth) {
+        hull() {
+          let(thick = BLK_wall,corner=fl_tsp_filletR(TSP_section)*4)
+            translate(-X(tolerance))
+              fl_square(size=[thick+tolerance,BLK_size.y],quadrant=[-1,0]);
+          translate(-X(140))
+            fl_circle(r=6);
+        }
+      }
+}
+
+module holding_arm(depth) {
+  rotate(180,Z)
+    translate(-Z(depth/2))
       linear_extrude(depth)
         import("spool-holder-arm.dxf",layer="0");
 }
@@ -142,20 +159,18 @@ module holding_arm(depth) {
 // side part: body cross-section + holding arm
 module side(verb="show",normal) {
   depth = SIDE_T;
-  holes=[
-    fl_Hole([-BLK_wall/2,0,0]+SIDE_T/2*normal,d=scr_d,normal=normal,depth=depth,screw=screw),
-    fl_Hole([BLK_size.x/2-BLK_wall,(BLK_size.y-BLK_wall)/2,0]+SIDE_T/2*normal,d=scr_d,normal=normal,depth=depth,screw=screw),
-    fl_Hole([BLK_size.x/2-BLK_wall,-(BLK_size.y-BLK_wall)/2,0]+SIDE_T/2*normal,d=scr_d,normal=normal,depth=depth,screw=screw)
+  holes=let(d=scr_d) [
+    fl_Hole([-140,0,0]+SIDE_T/2*normal,d=scr_side_d,normal=normal,depth=depth,screw=screw_side),
+    fl_Hole([-BLK_wall/2,0,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,screw=screw),
+    fl_Hole([BLK_size.x/2-BLK_wall,(BLK_size.y-BLK_wall)/2,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,screw=screw),
+    fl_Hole([BLK_size.x/2-BLK_wall,-(BLK_size.y-BLK_wall)/2,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,screw=screw)
   ];
   if (verb=="show") {
   // fl_axes(size = 10, reverse = false);
-    // hull() {
-      body(SIDE_T);
-      rotate(180,Z)
-        holding_arm(SIDE_T);
-    // }
+    body(SIDE_T);
+    holding_arm(SIDE_T);
   } else if (verb=="drill") {
-    fl_holes(holes,tolerance=tolerance);
+    fl_holes(holes,tolerance=2*tolerance);
     fl_lay_holes(holes) {
       // inserts hole
       translate(-(SIDE_T-NIL)*$hole_n)
@@ -166,6 +181,10 @@ module side(verb="show",normal) {
   } else {
     assert(false,verb);
   }
+}
+
+module filamentStopper() {
+  fl_tube(r=6,h=2,thick=3.9,direction=[+X,0],octant=-Z);
 }
 
 rotate(90,Y) {
@@ -204,6 +223,18 @@ rotate(90,Y) {
     translate(Z(-(BLK_size.z+SIDE_T)/2)) side("debug",normal=-Z);
     translate(Z(+(BLK_size.z+SIDE_T)/2)) side("debug",normal=+Z);
   }
+  if (PARTS=="stopper" || PARTS=="all")
+    fl_color() translate(X(TSP_nominal)+Y(17+BLK_size.y))
+      for(z=[0,PLEXI_SZ.z+2]) translate(X(z)) filamentStopper();
+
   // T-slotted nuts and profile
   profile(depth=BLK_size.z);
+
+  if (MODE=="assembly")
+    translate(+X(TSP_nominal)-Y(300)) let(
+      direction = [-X,0],
+      octant    = -Z+Y
+    ) fl_color("Goldenrod",0.15)
+        fl_cube([FL_ADD],size=PLEXI_SZ,direction=direction,octant=octant);
 }
+
