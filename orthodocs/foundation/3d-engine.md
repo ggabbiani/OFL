@@ -483,6 +483,10 @@ __Syntax:__
 fl_octant(octant,type,bbox,default=FL_I)
 ```
 
+Calculates the translation matrix needed for moving a shape in the provided
+3d octant.
+
+
 __Parameters:__
 
 __octant__  

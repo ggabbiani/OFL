@@ -417,6 +417,25 @@ solution valid if inside segment 2
 
 ---
 
+### function fl_parm_Quadrant
+
+__Syntax:__
+
+```text
+fl_parm_Quadrant(x,y)
+```
+
+Constructor for the quadrant parameter from values as passed by customizer
+(see [fl_quadrant()](#function-fl_quadrant) for the semantic behind).
+
+Each dimension can assume one out of four values:
+
+- "undef": mapped to undef
+- -1,0,+1: untouched
+
+
+---
+
 ### function fl_quadrant
 
 __Syntax:__
@@ -432,7 +451,32 @@ Calculates the translation matrix needed for moving a shape in the provided
 __Parameters:__
 
 __quadrant__  
-2d quadrant
+2d quadrant vector, each component can assume one out of four values
+modifying the corresponding x or y position in the following manner:
+
+- undef: translation invariant (no translation)
+- -1: object on negative semi-axis
+- 0: object midpoint on origin
+- +1: object on positive semi-axis
+
+Example 1:
+
+    quadrant=[undef,undef]
+
+no translation in any dimension
+
+Example 2:
+
+    quadrant=[0,0]
+
+object center [midpoint x, midpoint y] on origin
+
+Example 3:
+
+    quadrant=[+1,undef]
+
+ object on X positive semi-space, no Y translated
+
 
 __type__  
 type with "bounding corners" property
@@ -569,7 +613,7 @@ __Syntax:__
 __Parameters:__
 
 __condition__  
-when true placement is ignored
+when false, placement is ignored
 
 __quadrant__  
 2d quadrant
