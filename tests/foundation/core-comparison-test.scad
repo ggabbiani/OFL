@@ -20,7 +20,7 @@ $FL_TRACES  = -2;     // [-2:10]
 
 /* [Primitive comparison] */
 
-PRIMITIVE = "circle"; // [circle,square,cube,sphere]
+PRIMITIVE = "fl_circle vs circle"; // [fl_circle vs circle,fl_square vs square,fl_cube vs cube,fl_sphere vs sphere]
 
 /* [Hidden] */
 
@@ -34,33 +34,33 @@ $vpt  = [0, 0, 0];
 $vpd  = 7;
 $vpf  = 22.5;
 
-T_legacy  = [-1.5,0,0];
-T_ofl     = [+1.5,0,0];
+T_legacy  = [+1.5,0,0];
+T_ofl     = [-1.5,0,0];
 
 translate(T_legacy) {
-  if (PRIMITIVE=="circle") {
+  if (PRIMITIVE=="fl_circle vs circle") {
     fl_2d_doAxes([1,1]);
     circle(d=1);
-  } else if (PRIMITIVE=="square") {
+  } else if (PRIMITIVE=="fl_square vs square") {
     fl_2d_doAxes([1,1]);
     square([1,1]);
-  } else if (PRIMITIVE=="cube") {
+  } else if (PRIMITIVE=="fl_cube vs cube") {
     fl_doAxes([1,1,1]);
     cube([1,1,1]);
-  } else if (PRIMITIVE=="sphere") {
+  } else if (PRIMITIVE=="fl_sphere vs sphere") {
     fl_doAxes([1,1,1]);
     sphere(d=1);
   }
 }
 
 translate(T_ofl) {
-  if (PRIMITIVE=="circle") {
+  if (PRIMITIVE=="fl_circle vs circle") {
     fl_circle([FL_ADD,FL_AXES],d=1);
-  } else if (PRIMITIVE=="square") {
+  } else if (PRIMITIVE=="fl_square vs square") {
     fl_square([FL_ADD,FL_AXES],[1,1]);
-  } else if (PRIMITIVE=="cube") {
+  } else if (PRIMITIVE=="fl_cube vs cube") {
     fl_cube([FL_ADD,FL_AXES],[1,1,1]);
-  } else if (PRIMITIVE=="sphere") {
+  } else if (PRIMITIVE=="fl_sphere vs sphere") {
     fl_sphere([FL_ADD,FL_AXES],d=[1,1,1]);
   }
 }
