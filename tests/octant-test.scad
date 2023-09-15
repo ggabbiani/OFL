@@ -59,5 +59,5 @@ fl_status();
 
 // end of automatically generated code
 
-fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[FL_O,SIZE])
+fl_placeIf(octant!=[undef,undef,undef],octant=octant,bbox=[FL_O,SIZE])
   cube(size=SIZE);
