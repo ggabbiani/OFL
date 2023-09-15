@@ -371,6 +371,10 @@ module fl_pyramid(
 
 //**** 3d placement ***********************************************************
 
+/*!
+ * Calculates the translation matrix needed for moving a shape in the provided
+ * 3d octant.
+ */
 function fl_octant(
   /*!
    * 3d octant vector, each component can assume one out of four values

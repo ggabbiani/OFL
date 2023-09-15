@@ -1061,11 +1061,51 @@ module fl_2d_frame(
 //**** 2d placement ***********************************************************
 
 /*!
+ * Constructor for the quadrant parameter from values as passed by customizer
+ * (see fl_quadrant() for the semantic behind).
+ *
+ * Each dimension can assume one out of four values:
+ *
+ * - "undef": mapped to undef
+ * - -1,0,+1: untouched
+ */
+function fl_parm_Quadrant(x,y) = let(
+  o_x = x=="undef" ? undef : x,
+  o_y = y=="undef" ? undef : y
+) [o_x,o_y];
+
+/*!
  * Calculates the translation matrix needed for moving a shape in the provided
  * 2d quadrant.
  */
 function fl_quadrant(
-  //! 2d quadrant
+  /*!
+   * 2d quadrant vector, each component can assume one out of four values
+   * modifying the corresponding x or y position in the following manner:
+   *
+   * - undef: translation invariant (no translation)
+   * - -1: object on negative semi-axis
+   * - 0: object midpoint on origin
+   * - +1: object on positive semi-axis
+   *
+   * Example 1:
+   *
+   *     quadrant=[undef,undef]
+   *
+   * no translation in any dimension
+   *
+   * Example 2:
+   *
+   *     quadrant=[0,0]
+   *
+   * object center [midpoint x, midpoint y] on origin
+   *
+   * Example 3:
+   *
+   *     quadrant=[+1,undef]
+   *
+   *  object on X positive semi-space, no Y translated
+   */
   quadrant,
   //! type with "bounding corners" property
   type,
@@ -1076,8 +1116,17 @@ function fl_quadrant(
 ) = quadrant ? let(
     corner  = bbox ? bbox : fl_bb_corners(type),
     half    = (corner[1] - corner[0]) / 2,
-    delta   = [sign(quadrant.x) * half.x,sign(quadrant.y) * half.y,0]
-  ) T(-corner[0]-half+delta)
+    delta   = [
+      is_undef(quadrant.x) ? undef : sign(quadrant.x) * half.x,
+      is_undef(quadrant.y) ? undef : sign(quadrant.y) * half.y,
+      0
+    ],
+    t       = [
+      is_undef(quadrant.x) ? 0 : -corner[0].x-half.x+delta.x,
+      is_undef(quadrant.y) ? 0 : -corner[0].y-half.y+delta.y,
+      0
+    ]
+  ) T(t)
   : assert(default) default;
 
 module fl_2d_place(
@@ -1096,8 +1145,8 @@ module fl_2d_place(
 }
 
 module fl_2d_placeIf(
-  //! when true placement is ignored
-  condition ,
+  //! when false, placement is ignored
+  condition,
   type,
   //! 2d quadrant
   quadrant,
