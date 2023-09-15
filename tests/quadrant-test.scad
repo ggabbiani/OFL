@@ -26,10 +26,10 @@ SHOW_SYMBOLS    = false;
 
 
 
-/* [Placement] */
+/* [2D Placement] */
 
-PLACE_NATIVE  = true;
-QUADRANT      = [+1,+1];  // [-1:+1]
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
 
 
 /* [TEST] */
@@ -39,7 +39,7 @@ SIZE          = [200,100];
 
 /* [Hidden] */
 
-quadrant    = PLACE_NATIVE  ? undef : QUADRANT;
+quadrant    = fl_parm_Quadrant(X_PLACE,Y_PLACE);
 debug       = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();
@@ -54,7 +54,6 @@ module do_square(primus=false) {
   }
 }
 
-if (PLACE_NATIVE)
-  do_square();
-#fl_2d_place(quadrant=QUADRANT,bbox=[FL_O,SIZE])
+do_square();
+#fl_2d_place(quadrant=quadrant,bbox=[FL_O,SIZE])
   do_square(true);

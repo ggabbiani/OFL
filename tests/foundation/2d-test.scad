@@ -36,10 +36,10 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
-/* [Placement] */
+/* [2D Placement] */
 
-PLACE_NATIVE  = true;
-QUADRANT      = [+1,+1];  // [-1:+1]
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
 
 
 /* [2D primitives] */
@@ -64,7 +64,7 @@ SQUARE_SIZE   = [40,30];
 
 /* [Hidden] */
 
-quadrant    = PLACE_NATIVE  ? undef : QUADRANT;
+quadrant    = fl_parm_Quadrant(X_PLACE,Y_PLACE);
 debug       = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();
@@ -91,7 +91,7 @@ verbs=[
 module ipoly() {
   fl_ipoly(verbs,RADIUS,n=IPOLY_N,quadrant=quadrant);
   if (IPOLY_CIRCLE)
-    fl_2d_placeIf(!PLACE_NATIVE,quadrant=QUADRANT,bbox=fl_bb_ipoly(r=RADIUS,n=IPOLY_N)) #fl_circle(FL_ADD,r=RADIUS);
+    fl_2d_placeIf(quadrant!=[undef,undef],quadrant=quadrant,bbox=fl_bb_ipoly(r=RADIUS,n=IPOLY_N)) #fl_circle(FL_ADD,r=RADIUS);
 }
 
 if      (PRIMITIVE == "circle"            ) fl_circle(verbs,r=RADIUS,quadrant=quadrant);

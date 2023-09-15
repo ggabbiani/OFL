@@ -1,23 +1,31 @@
 /*
- * Vitamins test template.
+ * Sheet bending test
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <../../lib/OFL/foundation/grid.scad>
 include <../../lib/OFL/foundation/util.scad>
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -27,6 +35,9 @@ ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+
+
+
 
 /* [grid] */
 MODE        = "sheet";  // [sheet,bent,both]
@@ -45,15 +56,18 @@ EDGES_2 = 50; // [3:1:50]
 // drill rotation about +Z on grid 2
 ROT_2    = 0; // [0:360]
 
+
 /* [Hidden] */
+
+fl_status();
+
+// end of automatically generated code
 
 verbs=[
   if (ADD!="OFF")       FL_ADD,
   if (AXES!="OFF")      FL_AXES,
   if (BBOX!="OFF")      FL_BBOX,
 ];
-
-// $FL_ADD=ADD;$FL_ASSEMBLY=ASSEMBLY;$FL_AXES=AXES;$FL_BBOX=BBOX;$FL_CUTOUT=CUTOUT;$FL_DRILL=DRILL;$FL_FOOTPRINT=FPRINT;$FL_LAYOUT=LAYOUT;$FL_PAYLOAD=PLOAD;
 
 size = [51,62.5,28];
 

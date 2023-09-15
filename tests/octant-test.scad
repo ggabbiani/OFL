@@ -28,7 +28,7 @@ SHOW_SYMBOLS    = false;
 
 
 
-/* [Placement] */
+/* [3D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
 Y_PLACE = "undef";  // [undef,-1,0,+1]
@@ -58,5 +58,6 @@ debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 fl_status();
 
 // end of automatically generated code
-fl_place(octant=octant,bbox=[FL_O,SIZE])
+
+fl_placeIf(!PLACE_NATIVE,octant=OCTANT,bbox=[FL_O,SIZE])
   cube(size=SIZE);

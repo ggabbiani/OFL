@@ -37,7 +37,7 @@ AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
-/* [Placement] */
+/* [3D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
 Y_PLACE = "undef";  // [undef,-1,0,+1]
@@ -82,6 +82,7 @@ verbs=[
 ];
 
 fl_trace("octant",octant);
+echo($FL_BBOX=$FL_BBOX);
 
 if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
 else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
