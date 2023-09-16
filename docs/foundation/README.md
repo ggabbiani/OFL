@@ -257,7 +257,7 @@ Of course these setting can be mixed with all the possible combination allowed, 
 
 ### Orientation
 
-3D orientation is managed by engines through the **direction** parameter actually constituted by a list containing a vector (director) and a rotation angle. When the direction parameter is undef the default value is used (usually +Z).
+3D orientation is managed by engines through the **direction** parameter actually constituted by a list containing a vector (director) and a rotation angle. When the direction parameter is undef the default value is used (always +Z).
 
 ![Default direction](800x600/pic-7.png)
 
@@ -265,7 +265,7 @@ The following code change the orientation from the default +Z to the [1,1,1] vec
 
     include <OFL/vitamins/spdts.scad>
 
-    // arbitrary direction vector
+    // arbitrary direction vector setup
     direction=[1,1,1];
     fl_spdt([FL_ADD,FL_AXES],FL_SODAL_SPDT,direction=[direction,0]);
 
