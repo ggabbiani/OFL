@@ -617,11 +617,11 @@ let(
 /*!
  * Layout of types along a direction.
  *
- * There are basically two methods of invokation call:
+ * There are basically two methods of invocation call:
  *
  * - with as many children as the length of types: in this case each children will
  *   be called explicitly in turn with children($i)
- * - with one child only called repetitely through children(0) with $i equal to the
+ * - with one child only called repetitively through children(0) with $i equal to the
  *   current execution number.
  *
  * Called children can use the following special variables:

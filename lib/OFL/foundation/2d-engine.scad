@@ -155,11 +155,15 @@ function fl_sector(
    *       0° ≤ distance ≤ +360°
    *       0° ≤   inf    < +360°
    *       0° ≤   sup    < +720°
+   *
+   * FIXME: this function depends on $fn variable. It should leverage instead
+   * on the $fa,$fs special variables as the rest of the OpenSCAD native
+   * functions/modules.
    */
   angles
 ) = let(
   radius  = d!=undef ? d/2 : r
-) assert($fn>2)
+) assert($fn>2,$fn)
   assert(is_num(radius),str("radius=",radius))
   assert(is_list(angles),str("angles=",angles))
   fl_ellipticSector(e=[radius,radius],angles=angles);
