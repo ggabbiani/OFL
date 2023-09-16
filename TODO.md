@@ -47,6 +47,7 @@
 - [x] fixed .dxf file warnings during OpenSCAD loading
 - [x] improved object positioning by fl_octant() extension now managing also 'undef' dimensional translations
 - [x] function fl_octant() extended in order to manage also the invariants
+- [x] all OFL base shapes but fl_cube() are centered to the origin: now fl_cube() is centered by default as well
 
 ## Changed file names
 
