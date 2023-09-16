@@ -395,19 +395,6 @@ Point list defining a polygon/polyhedron with each element p | p∈ℝ^n^
 
 ---
 
-### function fl_cube_defaults
-
-__Syntax:__
-
-```text
-fl_cube_defaults(size=[1,1,1])
-```
-
-cube defaults for positioning (fl_bb_cornersKV).
-
-
----
-
 ### function fl_cylinder_defaults
 
 __Syntax:__
@@ -682,7 +669,7 @@ __Syntax:__
 
     fl_cube(verbs=FL_ADD,size=[1,1,1],debug,octant,direction)
 
-cube replacement
+cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
 
 
 __Parameters:__
@@ -694,9 +681,7 @@ __debug__
 debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 __octant__  
-when undef, native positioning is used with the Low bounding box vertex
-into the origin O
-
+when undef, native positioning is used with cube midpoint centered at origin O
 
 __direction__  
 desired direction [director,rotation] or native direction if undef

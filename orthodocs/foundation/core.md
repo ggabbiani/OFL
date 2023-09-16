@@ -302,6 +302,86 @@ Origin
 
 ---
 
+### variable FL_O0
+
+__Default:__
+
+    [+1,+1,+1]
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping first octant
+
+---
+
+### variable FL_O1
+
+__Default:__
+
+    [-1,+1,+1]
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 1
+
+---
+
+### variable FL_O2
+
+__Default:__
+
+    [-1,-1,+1]
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 2
+
+---
+
+### variable FL_O3
+
+__Default:__
+
+    [+1,-1,+1]
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 3
+
+---
+
+### variable FL_O4
+
+__Default:__
+
+    [+1,-1,-1]
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 4
+
+---
+
+### variable FL_O5
+
+__Default:__
+
+    [-1,-1,-1]
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 5
+
+---
+
+### variable FL_O6
+
+__Default:__
+
+    [-1,+1,-1]
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 6
+
+---
+
+### variable FL_O7
+
+__Default:__
+
+    [+1,+1,-1]
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 7
+
+---
+
 ### variable FL_OBSOLETE
 
 __Default:__
@@ -319,6 +399,46 @@ __Default:__
     "FL_PAYLOAD adds a box representing the payload of the shape"
 
 adds a box representing the payload of the shape
+
+---
+
+### variable FL_QI
+
+__Default:__
+
+    [+1,+1,undef]
+
+Roman enumeration of first quadrant
+
+---
+
+### variable FL_QII
+
+__Default:__
+
+    [-1,+1,undef]
+
+Roman enumeration of quadrant 2
+
+---
+
+### variable FL_QIII
+
+__Default:__
+
+    [-1,-1,undef]
+
+Roman enumeration of quadrant 3
+
+---
+
+### variable FL_QIV
+
+__Default:__
+
+    [+1,-1,undef]
+
+Roman enumeration of quadrant 4
 
 ---
 

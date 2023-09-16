@@ -156,7 +156,6 @@
 - [FL_CS_M8 (variable)](vitamins/countersinks.md#variable-fl_cs_m8)
 - [FL_CS_NS (variable)](vitamins/countersinks.md#variable-fl_cs_ns)
 - [fl_cube (module)](foundation/3d-engine.md#module-fl_cube)
-- [fl_cube_defaults (function)](foundation/3d-engine.md#function-fl_cube_defaults)
 - [fl_cutout (function)](foundation/core.md#function-fl_cutout)
 - [fl_cutout (module)](foundation/util.md#module-fl_cutout)
 - [$FL_CUTOUT (variable)](foundation/core.md#variable-$fl_cutout)
@@ -399,6 +398,22 @@
 
 - [O (variable)](foundation/unsafe_defs.md#variable-o)
 - [FL_O (variable)](foundation/core.md#variable-fl_o)
+- [O0 (variable)](foundation/unsafe_defs.md#variable-o0)
+- [FL_O0 (variable)](foundation/core.md#variable-fl_o0)
+- [O1 (variable)](foundation/unsafe_defs.md#variable-o1)
+- [FL_O1 (variable)](foundation/core.md#variable-fl_o1)
+- [O2 (variable)](foundation/unsafe_defs.md#variable-o2)
+- [FL_O2 (variable)](foundation/core.md#variable-fl_o2)
+- [O3 (variable)](foundation/unsafe_defs.md#variable-o3)
+- [FL_O3 (variable)](foundation/core.md#variable-fl_o3)
+- [O4 (variable)](foundation/unsafe_defs.md#variable-o4)
+- [FL_O4 (variable)](foundation/core.md#variable-fl_o4)
+- [O5 (variable)](foundation/unsafe_defs.md#variable-o5)
+- [FL_O5 (variable)](foundation/core.md#variable-fl_o5)
+- [O6 (variable)](foundation/unsafe_defs.md#variable-o6)
+- [FL_O6 (variable)](foundation/core.md#variable-fl_o6)
+- [O7 (variable)](foundation/unsafe_defs.md#variable-o7)
+- [FL_O7 (variable)](foundation/core.md#variable-fl_o7)
 - [FL_OBSOLETE (variable)](foundation/core.md#variable-fl_obsolete)
 - [fl_octant (function)](foundation/3d-engine.md#function-fl_octant)
 - [fl_optional (function)](foundation/core.md#function-fl_optional)
@@ -482,6 +497,14 @@
 
 ## Q
 
+- [QI (variable)](foundation/unsafe_defs.md#variable-qi)
+- [FL_QI (variable)](foundation/core.md#variable-fl_qi)
+- [QII (variable)](foundation/unsafe_defs.md#variable-qii)
+- [FL_QII (variable)](foundation/core.md#variable-fl_qii)
+- [QIII (variable)](foundation/unsafe_defs.md#variable-qiii)
+- [FL_QIII (variable)](foundation/core.md#variable-fl_qiii)
+- [QIV (variable)](foundation/unsafe_defs.md#variable-qiv)
+- [FL_QIV (variable)](foundation/core.md#variable-fl_qiv)
 - [fl_quadrant (function)](foundation/2d-engine.md#function-fl_quadrant)
 
 ## R

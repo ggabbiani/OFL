@@ -58,6 +58,126 @@ see [variable FL_O](core.md#variable-fl_o)
 
 ---
 
+### variable O0
+
+__Default:__
+
+    FL_O0
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping first octant
+
+---
+
+### variable O1
+
+__Default:__
+
+    FL_O1
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 1
+
+---
+
+### variable O2
+
+__Default:__
+
+    FL_O2
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 2
+
+---
+
+### variable O3
+
+__Default:__
+
+    FL_O3
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 3
+
+---
+
+### variable O4
+
+__Default:__
+
+    FL_O4
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 4
+
+---
+
+### variable O5
+
+__Default:__
+
+    FL_O5
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 5
+
+---
+
+### variable O6
+
+__Default:__
+
+    FL_O6
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 6
+
+---
+
+### variable O7
+
+__Default:__
+
+    FL_O7
+
+[Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 7
+
+---
+
+### variable QI
+
+__Default:__
+
+    FL_QI
+
+Roman enumeration of first quadrant
+
+---
+
+### variable QII
+
+__Default:__
+
+    FL_QII
+
+Roman enumeration of quadrant 2
+
+---
+
+### variable QIII
+
+__Default:__
+
+    FL_QIV
+
+Roman enumeration of quadrant 3
+
+---
+
+### variable QIV
+
+__Default:__
+
+    FL_QIV
+
+Roman enumeration of quadrant 4
+
+---
+
 ### variable X
 
 __Default:__
