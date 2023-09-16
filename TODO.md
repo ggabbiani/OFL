@@ -48,7 +48,6 @@
 - [x] improved object positioning by fl_octant() extension now managing also 'undef' dimensional translations
 - [x] function fl_octant() extended in order to manage also the invariants
 - [x] all OFL base shapes but fl_cube() are centered to the origin: now fl_cube() is centered by default as well
-- [ ] fl_sector() function depends on $fn variable while it should leverage on the $fa,$fs special variables as the rest of the OpenSCAD native functions/modules.
 
 
 ## Changed file names
