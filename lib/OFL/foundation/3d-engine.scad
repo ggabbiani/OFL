@@ -1322,7 +1322,7 @@ function fl_bb_torus(
   e       = r ? assert(!e && !d) [r,r] : d ? assert(!e && !r) [d/2,d/2] : assert(!r && !d && len(e)==2) e,
   a     = e[0],
   b     = e[1],
-  edge  = assert(R>=a,str("R=",R,",a=",a)) a+R
+  edge  = assert(R!=undef,"Mandatory parameter 'R' missing") assert(R>=a,str("R=",R,",a=",a)) a+R
 ) [[-edge,-edge,-b],[+edge,+edge,+b]];
 
 /*!
