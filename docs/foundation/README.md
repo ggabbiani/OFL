@@ -53,17 +53,16 @@ A number of predefined verbs are available:
 
 * **FL_AXES** - draw local reference axes;
 * **FL_CUTOUT** - layout of predefined cutout shapes (±X,±Y,±Z);
-* **FL_DRILL** - layout of predefined children shapes;
+* **FL_DRILL** - layout of predefined drill shapes;
 * **FL_LAYOUT** - layout of custom children shapes;
+* **FL_SYMBOLS** - adds symbols and labels usually for debugging
 
 Relations between draw and bounding box verbs:
 
 | Draw verbs  | BB verbs   |
 | ----------- | ---------- |
-| FL_ADD      | -          |
 | FL_ASSEMBLY | FL_PAYLOAD |
 | FL_DRAW     | FL_BBOX    |
-| FL_MOUNT    | -          |
 
 All *engine* and *primitive* API signatures are standardized in order to respond to the same verbs with the same behaviour/semantic.
 
@@ -73,14 +72,13 @@ Every *engine* or *primitive* is implemented to respond to single or multiple *V
 
 When a verb is passed as a single value the verb will be trivially executed.
 
-    include <OFL/foundation/incs.scad>
-    include <OFL/foundation/3d.scad>
+    include <OFL/foundation/3d-engine.scad>
 
     // single verb primitive invocation
-    fl_torus(FL_ADD,a=2,b=3);
-    ^         ^     ^   ^
-    |         |     |   |
-    |         |     +---+----< other primitive dependent parameters
+    fl_torus(FL_ADD,a=2,b=3,R=5,$fn=50);
+    ^         ^     ^   ^   ^
+    |         |     |   |   |
+    |         |     +---+---+--< other primitive dependent parameters
     |         |
     |         +---< verb
     |
@@ -88,11 +86,10 @@ When a verb is passed as a single value the verb will be trivially executed.
 
 ![Single verb primitive invocation](800x600/torus.png)
 
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
     // single verb engine invocation
-    fl_magnet(FL_ADD,FL_MAG_M4_CS_32x6,...);
+    fl_magnet(FL_ADD,FL_MAG_M4_CS_D32x6,...);
     ^         ^      ^
     |         |      |
     |         |      +---< object
@@ -107,11 +104,10 @@ When a verb is passed as a single value the verb will be trivially executed.
 
  When a list of *verbs* is passed, it wil be executed sequentially, as in the following example
 
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
     // multiple verb engine invocation
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6);
+    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6);
     ^         ^                                    ^
     |         |                                    |
     |         |                                    +---> object
@@ -144,10 +140,10 @@ The list of modifier variables with their corresponding defaults are listed belo
 | $FL_CUTOUT    | FL_CUTOUT     | "ON"          |
 | $FL_DRILL     | FL_DRILL      | "ON"          |
 | $FL_FOOTPRINT | FL_FOOTPRINT  | "ON"          |
-| $FL_HOLDERS   | FL_HOLDERS    | "ON"          |
 | $FL_LAYOUT    | FL_LAYOUT     | "ON"          |
 | $FL_MOUNT     | FL_MOUNT      | "ON"          |
-| $FL_PAYLOAD   | FL_PAYLOAD    | "TRANSPARENT" |
+| $FL_PAYLOAD   | FL_PAYLOAD    | "DEBUG"       |
+| $FL_SYMBOLS   | FL_SYMBOLS    | "ON"          |
 
 The possible values for these special variables are the following:
 
@@ -162,16 +158,15 @@ The possible values for these special variables are the following:
 
 In the previous example we can modify the rendering of the FL_AXES verb
 
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
     // multiple verb engine invocation
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,$FL_AXES="DEBUG");
-    ^         ^                                    ^                 ^         ^
-    |         |                                    |                 |         |
-    |         |                                    |                 |         +---> DEBUG rendering
-    |         |                                    |                 |
-    |         |                                    |                 +---> runtime modifier for FL_AXES verb
+    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,$FL_AXES="DEBUG");
+    ^         ^                                    ^                  ^         ^
+    |         |                                    |                  |         |
+    |         |                                    |                  |         +---> DEBUG rendering
+    |         |                                    |                  |
+    |         |                                    |                  +---> runtime modifier for FL_AXES verb
     |         |                                    |
     |         |                                    +---> object
     |         |
@@ -194,11 +189,12 @@ Every OFL *engine* manages the following characteristics:
 
 3D space can be divided in eight octants delimited by the system reference semi-axes. Each engine has a default or native position in the space, eventually not corresponding exactly with octants. In order to assign the object position relative to octants, the **octant** parameter is implemented by all the engines. The value that the octant parameter can assume is a 3d vector whose x,y and z component can be:
 
-| value | semantic           |
-| ----- | ------------------ |
-| -1    | negative semi-axis |
-| 0     | centered           |
-| +1    | positive semi-axis |
+| value | semantic                  |
+| ----- | ------------------        |
+| undef | **native** position used  |
+| -1    | negative semi-axis        |
+| 0     | centered                  |
+| +1    | positive semi-axis        |
 
 so if we want to place an object in the octant defined by the semi-axes +X,+Y,+Z the **octant** must be [1,1,1]. OFL defines three constants:
 
@@ -211,17 +207,12 @@ so that the value [1,1,1] can be expressed as **+X+Y+Z**.
 
 We can pass this value to our example for placing the object in the desired octant
 
-    include <OFL/foundation/unsafe_defs.scad>
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
-    // allows unsafe definitions
-    $FL_SAFE  = false;
-
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=+X+Y+Z);
-    ^         ^                                    ^                 ^
-    |         |                                    |                 |
-    |         |                                    |                 +---> octant expressed as [1,1,1] ⇒ first octant
+    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=+X+Y+Z);
+    ^         ^                                    ^                  ^
+    |         |                                    |                  |
+    |         |                                    |                  +---> octant expressed as [1,1,1] ⇒ first octant
     |         |                                    |
     |         |                                    +---> object
     |         |
@@ -233,17 +224,12 @@ We can pass this value to our example for placing the object in the desired octa
 
 If we want the object centered along the X axis, the octant will be [0,1,1] ⇒ +Y+Z
 
-    include <OFL/foundation/unsafe_defs.scad>
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
-    // allows unsafe definitions
-    $FL_SAFE  = false;
-
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=+Y+Z);
-    ^         ^                                    ^                 ^
-    |         |                                    |                 |
-    |         |                                    |                 +---> octant expressed as [0,1,1] ⇒ x==0 means 'centered'
+    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=+Y+Z);
+    ^         ^                                    ^                  ^
+    |         |                                    |                  |
+    |         |                                    |                  +---> octant expressed as [0,1,1] ⇒ x==0 means 'centered'
     |         |                                    |
     |         |                                    +---> object
     |         |
@@ -255,27 +241,17 @@ If we want the object centered along the X axis, the octant will be [0,1,1] ⇒ 
 
 If we want the object centered on the origin the octant will be [0,0,0] ⇒ O (**capital 'o'**)
 
-    include <OFL/foundation/unsafe_defs.scad>
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
-    // allows unsafe definitions
-    $FL_SAFE  = false;
-
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=O);
+    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=O);
 
 ![Modified verb invocation](800x600/pic-5.png)
 
 Of course these setting can be mixed with all the possible combination allowed, for example [0,0,-1] ⇒ -Z
 
-    include <OFL/foundation/unsafe_defs.scad>
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/magnets.scad>
 
-    // allows unsafe definitions
-    $FL_SAFE  = false;
-
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_32x6,octant=-Z);
+    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=-Z);
 
 ![Modified verb invocation](800x600/pic-6.png)
 
@@ -287,7 +263,6 @@ Of course these setting can be mixed with all the possible combination allowed, 
 
 The following code change the orientation from the default +Z to the [1,1,1] vector.
 
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/spdts.scad>
 
     // arbitrary direction vector
@@ -298,7 +273,6 @@ The following code change the orientation from the default +Z to the [1,1,1] vec
 
 It is possible to combine the change of direction with a rotation around the new axis.
 
-    include <OFL/foundation/incs.scad>
     include <OFL/vitamins/spdts.scad>
 
     // arbitrary direction vector
@@ -349,13 +323,12 @@ For similar reasons all global constants used in OFL are prefixed with **'FL_'**
 
 $pecial variables used in OFL follow the same naming convention used for constants.
 
-| Name       | Default | Semantic                                                  |
-| ---------- | ------- | --------------------------------------------------------- |
-| $FL_DEBUG  | false   | May trigger debug statement in client modules / functions |
-| $FL_RENDER | false   | When true, disables PREVIEW corrections like FL_NIL       |
-| $FL_SAFE   | false   | When true, unsafe definitions are not allowed             |
-| $FL_TRACE  | false   | When true, fl_trace() messages are turned on              |
+| Name       | Default  | Semantic                                                  |
+| ---------- | -------  | --------------------------------------------------------- |
+| $fl_debug  | false    | May trigger debug statement in client modules / functions |
+| $FL_RENDER | false    | When true, disables PREVIEW corrections like FL_NIL       |
+| $FL_TRACE  | -2       | Manages [fl_trace()](../../orthodocs/foundation/core.md#module-fl_trace) nesting message setting                |
 
 ## OrthoDocs - API documentation
 
-An alpha release of the API documentation can be found [here](../../orthodocs/toc.md).
+A beta release of the API documentation can be found [here](../../orthodocs/toc.md).
