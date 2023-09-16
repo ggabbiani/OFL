@@ -113,7 +113,7 @@ module fl_box(
                 translate([0,thick,thick])
                   fl_fillet([FL_ADD],r=thick,h=sz_low.x,direction=[+X,90+i*90]);
           }
-          fl_cube(size=[size.x,size.y,thick]);
+          fl_cube(size=[size.x,size.y,thick],octant=O0);
         }
         translate(+Y(NIL))
           multmatrix(Mknut2)

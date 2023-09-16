@@ -181,7 +181,7 @@ module fl_heatsink(
             // metal block
             translate(bbox[0]+[corner_r,corner_r])
               minkowski() {
-                fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r, (fprint?holder_t:0)+base_t]);
+                fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r, (fprint?holder_t:0)+base_t],octant=O0);
                 fl_cylinder(r1=0, r2=corner_r, h=fluting_t);
               }
             if (!fprint) // add holders
@@ -213,7 +213,7 @@ module fl_heatsink(
               intersection() {
                 translate(bbox[0]+[corner_r,corner_r])
                   minkowski() {
-                    fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r,(fprint?holder_t:0)+base_t+fluting_t-2.3]);
+                    fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r,(fprint?holder_t:0)+base_t+fluting_t-2.3],octant=O0);
                     fl_cylinder(r2=0, r1=corner_r, h=2.3);
                   }
                 linear_extrude((fprint?holder_t:0)+base_t+fluting_t)

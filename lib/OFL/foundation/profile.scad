@@ -205,7 +205,7 @@ module fl_bentPlate(
       fl_modifier($FL_AXES)
         ; // fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_cube(size=size, octant=FL_O);
+      fl_modifier($modifier) fl_cube(size=size, octant=O);
     } else if ($verb==FL_FOOTPRINT) {
       fl_modifier($modifier) do_add(footprint=true);
     } else {

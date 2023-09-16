@@ -110,7 +110,7 @@ module fl_fillet(
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
     else if ($verb==FL_BBOX)
-      fl_modifier($modifier) fl_cube(size=size);
+      fl_modifier($modifier) fl_cube(size=size,octant=O0);
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
   }
@@ -170,7 +170,7 @@ module fl_90DegFillet(
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
     else if ($verb==FL_BBOX)
-      fl_modifier($modifier) translate(bbox[0]) fl_cube(size=size);
+      fl_modifier($modifier) translate(bbox[0]) fl_cube(size=size,octant=O0);
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
   }

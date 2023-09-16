@@ -24,18 +24,7 @@ module fl_doAxes(
 }
 
 /*!
- * cube defaults for positioning (fl_bb_cornersKV).
- */
-function fl_cube_defaults(
-  size=[1,1,1]
-)  = let(
-  size  = is_list(size) ? size : [size,size,size]
-) [
-  fl_bb_corners(value=[FL_O,size]),  // octant ⇒ +X+Y+Z
-];
-
-/*!
- * cube replacement
+ * cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
  */
 module fl_cube(
   //! FL_ADD,FL_AXES,FL_BBOX
@@ -43,27 +32,24 @@ module fl_cube(
   size      = [1,1,1],
   //! debug parameter as returned from fl_parm_Debug()
   debug,
-  /*!
-   * when undef, native positioning is used with the Low bounding box vertex
-   * into the origin O
-   */
+  //! when undef, native positioning is used with cube midpoint centered at origin O
   octant,
   //! desired direction [director,rotation] or native direction if undef
   direction
 ) {
   size  = is_list(size) ? size : [size,size,size];
-  defs  = fl_cube_defaults(size);
+  bbox  = [-size/2,+size/2];
 
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,type=defs);
+  D     = direction ? fl_direction(direction) : I;
+  M     = fl_octant(octant,bbox=bbox);
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) cube(size,false);
+      fl_modifier($modifier) cube(size,true);
     } else if ($verb==FL_AXES) {
       fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) cube(size);  // center=default=false ⇒ +X+Y+Z
+      fl_modifier($modifier) cube(size,true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
@@ -765,8 +751,8 @@ module fl_bb_add(
   fl_trace("$FL_ADD",$FL_ADD);
   assert(fl_tt_isBoundingBox(corners),corners)
   translate(corners[0])
-    if (!2d) fl_cube(size=corners[1]-corners[0],octant=+X+Y+Z);
-    else fl_square(size=corners[1]-corners[0],quadrant=+X+Y);
+    if (!2d) fl_cube(size=corners[1]-corners[0],octant=O0);
+    else fl_square(size=corners[1]-corners[0],quadrant=QI);
 }
 
 /*****************************************************************************

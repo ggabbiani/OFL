@@ -19,6 +19,33 @@ O = FL_O;
 //! see variable FL_I
 I = FL_I;
 
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping first octant
+O0 = FL_O0;
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 1
+O1 = FL_O1;
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 2
+O2 = FL_O2;
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 3
+O3 = FL_O3;
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 4
+O4 = FL_O4;
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 5
+O5 = FL_O5;
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 6
+O6 = FL_O6;
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 7
+O7 = FL_O7;
+
+//! Roman enumeration of first quadrant
+QI    = FL_QI;
+//! Roman enumeration of quadrant 2
+QII   = FL_QII;
+//! Roman enumeration of quadrant 3
+QIII  = FL_QIV;
+//! Roman enumeration of quadrant 4
+QIV   = FL_QIV;
+
+
 //! see variable NIL
 NIL     = FL_NIL;
 //! see variable FL_2xNIL

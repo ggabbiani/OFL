@@ -103,14 +103,14 @@ module blob(
 
   fl_manage(verbs,M,D)  {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) fl_cube(size=size);
+      fl_modifier($modifier) fl_cube(size=size,octant=O0);
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_cube(size=size);
+      fl_modifier($modifier) fl_cube(size=size,octant=O0);
 
     } else if ($verb==FL_CUTOUT) {
       fl_trace("$modifier",$modifier);

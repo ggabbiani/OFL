@@ -146,7 +146,7 @@ module fl_generic_vitamin(
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
-      if (!ghost) fl_modifier($modifier) translate(bbox[0])  fl_cube(size=size);
+      if (!ghost) fl_modifier($modifier) translate(bbox[0])  fl_cube(size=size,octant=O0);
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)

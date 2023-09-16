@@ -109,6 +109,32 @@ FL_Z = [0,0,1];
 //! Origin
 FL_O = [0,0,0];
 
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping first octant
+FL_O0 = [+1,+1,+1];
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 1
+FL_O1 = [-1,+1,+1];
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 2
+FL_O2 = [-1,-1,+1];
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 3
+FL_O3 = [+1,-1,+1];
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 4
+FL_O4 = [+1,-1,-1];
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 5
+FL_O5 = [-1,-1,-1];
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 6
+FL_O6 = [-1,+1,-1];
+//! [Gray code](https://en.wikipedia.org/wiki/Gray_code) enumeration mapping octant 7
+FL_O7 = [+1,+1,-1];
+
+//! Roman enumeration of first quadrant
+FL_QI   = [+1,+1,undef];
+//! Roman enumeration of quadrant 2
+FL_QII  = [-1,+1,undef];
+//! Roman enumeration of quadrant 3
+FL_QIII = [-1,-1,undef];
+//! Roman enumeration of quadrant 4
+FL_QIV  = [+1,-1,undef];
+
 //! identity matrix in homogeneous coordinates
 FL_I=[
   [1,0,0,0],
