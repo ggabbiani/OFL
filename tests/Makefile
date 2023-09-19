@@ -22,16 +22,19 @@ export TEMPLATE_DIR TEMPLATES DEF_RULES DEF_CONFS OSCAD
 include $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
+.PHONY: artifacts foundation tests
+
+all:
+	@for f in $(RESULTS) ; do rm -f $$f ; done
+	@$(MAKE) tests
 
 tests: $(RESULTS) artifacts foundation
 
-.PHONY: artifacts foundation
-
 artifacts:
-	@$(MAKE) -C $@ tests
+	@$(MAKE) -C $@
 
 foundation:
-	@$(MAKE) -C $@ tests
+	@$(MAKE) -C $@
 
 clean:
 	@for f in $(RESULTS) ; do rm -f $$f ; done

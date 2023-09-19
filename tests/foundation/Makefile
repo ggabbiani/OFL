@@ -15,6 +15,11 @@ RESULTS			= $(SOURCES:.scad=.echo)
 include $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
+.PHONY: tests
+
+all:
+	@for f in $(RESULTS) ; do rm -f $$f ; done
+	@$(MAKE) tests
 
 tests: $(RESULTS)
 
