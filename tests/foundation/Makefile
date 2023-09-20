@@ -8,7 +8,8 @@
 
 SOURCES			= 2d_grid-test.scad 2d-test.scad 3d-test.scad 3d_funcs-test.scad algo-test.scad \
 assertions-test.scad base_geo-test.scad base_string-test.scad bend-test.scad bend2-test.scad \
-connect-test.scad
+connect-test.scad core-comparison-test.scad core-symbols-test.scad fillet-test.scad hole-test.scad \
+label-test.scad layout-test.scad
 
 RESULTS			= $(SOURCES:.scad=.echo)
 

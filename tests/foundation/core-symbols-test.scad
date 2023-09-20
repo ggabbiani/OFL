@@ -1,8 +1,14 @@
 /*
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * Cores symbol test
+ *
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 
@@ -10,13 +16,19 @@ use <../../lib/OFL/foundation/3d-engine.scad>
 use <../../lib/OFL/foundation/hole.scad>
 use <../../lib/OFL/foundation/label.scad>
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -24,6 +36,9 @@ $FL_TRACES  = -2;     // [-2:10]
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+
+
+
 
 /* [Test hole] */
 
@@ -46,15 +61,18 @@ SYMBOL          = "direction";  // [direction,hole,plug,socket]
 DIRECTION       = [0,0,1];
 ROTATION        = 0;      // [-360:360]
 
+
 /* [Hidden] */
+
 fl_status();
 verbs=[
   if ($FL_ADD!="OFF")     FL_ADD,
   if ($FL_AXES!="OFF")    FL_AXES,
   if ($FL_LAYOUT!="OFF")  FL_LAYOUT,
 ];
-
 size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
+
+// end of automatically generated code
 
 if (SYMBOL=="hole")
   fl_hole_Context(fl_Hole(O,HOLE_D,HOLE_N,HOLE_DEPTH))

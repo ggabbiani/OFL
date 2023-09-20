@@ -1,23 +1,28 @@
 {
+    "fileFormatVersion": "1",
     "parameterSets": {
-        "design default values": {
+        "TEST_CASE-one-and-six": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
             "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "D": "2",
-            "DEPTH": "0.7",
+            "DEPTH": "2.1000000000000001",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
             "FIVE": "false",
             "FOUR": "false",
-            "LABELS": "true",
-            "ONE": "false",
+            "ONE": "true",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "true",
             "SIX": "true",
-            "SYMBOLS": "true",
             "THREE": "false",
             "TWO": "false",
-            "size": "20"
+            "X_PLACE": "undef",
+            "Y_PLACE": "undef",
+            "Z_PLACE": "undef"
         }
-    },
-    "fileFormatVersion": "1"
+    }
 }
