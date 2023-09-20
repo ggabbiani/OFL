@@ -45,7 +45,10 @@ on_exit() {
 VERBOSE="1"
 MODE="foundation"
 DRY="OFF"
-OSCAD="$(which openscad) --hardwarnings"
+# until [issue #3616](https://github.com/openscad/openscad/issues/3616) is not
+# applied to stable OpenSCAD branch we have to use a nightly build
+# OSCAD="$(which openscad) --hardwarnings"
+OSCAD="/home/giampa/projects/openscad/build/openscad --hardwarnings"
 TEMP_ROOT="/tmp"
 
 ##############################################################################
