@@ -716,8 +716,7 @@ module fl_layout(
 
     if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        // fl_doAxes(size);
-      fl_trace("FL_AXES DONE");
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier,false) fl_bb_add(bbox);
