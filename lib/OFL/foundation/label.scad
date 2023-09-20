@@ -54,7 +54,13 @@ module fl_label(
   assert(is_num(thick));
 
   bbox  = [O,Z(thick)];
-  M     = octant ? T(0.6*extra*[sign(octant.x),sign(octant.y),sign(octant.z)]) * fl_octant(octant=[0,0,octant.z],bbox=bbox) : I;
+  M     = let(
+    t = T(0.6*extra*[
+      octant.x ? sign(octant.x) : 0,
+      octant.y ? sign(octant.y) : 0,
+      octant.z ? sign(octant.z) : 0
+    ])
+  ) octant ? t * fl_octant(octant=[0,0,octant.z],bbox=bbox) : I;
   D     = direction ? fl_direction(direction)  : I;
 
   halign  = is_undef(octant) || octant.x==1 ? "left"    : !octant.x ? "center" : "right";
@@ -69,10 +75,12 @@ module fl_label(
   }
 
   fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
+    if ($verb==FL_ADD)
       fl_modifier($modifier) do_add();
-    } else {
+    else if ($verb==FL_AXES)
+      fl_modifier($FL_AXES)
+        fl_doAxes(size,direction);
+    else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    }
   }
 }
