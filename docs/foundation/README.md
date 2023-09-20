@@ -266,7 +266,7 @@ The following code change the orientation from the default +Z to the [1,1,1] vec
     include <OFL/vitamins/spdts.scad>
 
     // arbitrary direction vector setup
-    direction=[1,1,1];
+    direction=[-1,-1,+1];
     fl_spdt([FL_ADD,FL_AXES],FL_SODAL_SPDT,direction=[direction,0]);
 
 ![Default direction](800x600/pic-8.png)
@@ -276,7 +276,7 @@ It is possible to combine the change of direction with a rotation around the new
     include <OFL/vitamins/spdts.scad>
 
     // arbitrary direction vector
-    direction = [1,1,1];
+    direction = [-1,-1,+1];
     angle     = 30;
     fl_spdt([FL_ADD,FL_AXES],FL_SODAL_SPDT,direction=[direction,angle]);
 
