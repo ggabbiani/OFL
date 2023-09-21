@@ -26,7 +26,9 @@ export BIN					:= $(CURDIR)/bin
 
 .PHONY: docs tests
 
-all: api-docs docs tests
+# docs uses generated test scad files, so it's important to be executed AFTER
+# tests creation
+all: api-docs tests docs
 
 api-docs: $(LIB_SOURCES)
 	@$(MAKE) -C orthodocs all
