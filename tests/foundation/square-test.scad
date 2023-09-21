@@ -1,7 +1,10 @@
 /*
- * 2d square test.
+ * 2d square test
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-2d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -10,15 +13,19 @@ include <../../lib/OFL/foundation/core.scad>
 
 use <../../lib/OFL/foundation/2d-engine.scad>
 
-$fn         = 5000;           // [3:10000]
-// Debug statements are turned on
-$fl_debug   = false;
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -29,15 +36,17 @@ $FL_AXES  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-QUADRANT      = [0,0];  // [-1:+1]
+/* [2D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Square] */
 
 // primitive used
-MODE      = "square";  // ["frame", "square"]
+MODE      = "square";  // [frame, square]
 
 // overall size of the rectangle
 SIZE      = [15,10];
@@ -53,19 +62,16 @@ CORNER_3  = [0,0];
 // frame thickness
 T = 2.5;  // [0.1:0.1:5]
 
+
 /* [Hidden] */
 
-$vpr = [0, 0, 0];
-$vpt = [0.371305, 0.380909, 0.268921];
-$vpd = 43.9335;
-$vpf = 22.5;
+quadrant    = fl_parm_Quadrant(X_PLACE,Y_PLACE);
+debug       = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
-// echo($vpr=$vpr);
-// echo($vpt=$vpt);
-// echo($vpd=$vpd);
-// echo($vpf=$vpf);
+fl_status();
 
-quadrant  = PLACE_NATIVE  ? undef : QUADRANT;
+// end of automatically generated code
+
 verbs=[
   if ($FL_ADD!="OFF")   FL_ADD,
   if ($FL_AXES!="OFF")  FL_AXES,

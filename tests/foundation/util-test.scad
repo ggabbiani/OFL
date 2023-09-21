@@ -1,21 +1,34 @@
 /*
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * 3d utility tests
+ *
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <../../lib/OFL/foundation/util.scad>
 include <../../lib/OFL/vitamins/screw.scad>
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
-// When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
 
-FILAMENT  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
+// When true, disables PREVIEW corrections like FL_NIL
+$FL_RENDER     = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// -2⇒none, -1⇒all, [0..)⇒max depth allowed
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
+
+
+
 
 /* [Commons] */
 
@@ -57,7 +70,10 @@ CO_TRIM  = [0,0,0]; // [-5:0.1:5]
 // when true only the cutout plane is used for section
 CO_CUT    = false;
 
+
 /* [Hidden] */
+
+// end of automatically generated code
 
 module __test__() {
   // customizer helper
@@ -106,7 +122,7 @@ module __test__() {
   //   gap = 1.5 * 2 * screw_head_radius(screw);
   //   translate(-X(gap))
   //     screw(screw,META_LEN);
-  //   fl_color(FILAMENT)
+  //   fl_color($fl_filament)
   //     translate(X(gap))
   //       fl_metaScrew(screw,META_LEN);
   // }
@@ -118,7 +134,7 @@ module __test__() {
     size  = let(base=2*(screw_head_radius(screw)+PLANE_T)+RAIL_LEN) [base,base,cs ? PLANE_T : PLANE_T+hh];
     if (ADD)
       difference() {
-        fl_color(FILAMENT) translate(Z(hh)) fl_cube(size=size,octant=-Z);
+        fl_color($fl_filament) translate(Z(hh)) fl_cube(size=size,octant=-Z);
         translate(+Z(NIL)) fl_color() fl_rail(RAIL_LEN) fl_screw(FL_FOOTPRINT,screw,META_LEN);
       }
     if (ASSEMBLY)
@@ -134,7 +150,7 @@ module __test__() {
     }
 
     module shapes() {
-      fl_color(FILAMENT) translate(size/2)
+      fl_color($fl_filament) translate(size/2)
         fl_cylinder(r1=1,r2=0,h=1);
     }
 
@@ -187,7 +203,7 @@ module __test__() {
     }
 
     module plane() {
-      fl_color(FILAMENT) translate(distance*co_axes[0])
+      fl_color($fl_filament) translate(distance*co_axes[0])
         fl_cube(size=sz_plane,octant=+Z,direction=[co_axes[0],0]);
     }
 
@@ -197,7 +213,7 @@ module __test__() {
       plane();
       co() shapes();
     }
-    // if ($fl_debug)
+    // if ()
       #co() shapes();
   }
 
