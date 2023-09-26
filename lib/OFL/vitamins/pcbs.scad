@@ -770,6 +770,8 @@ module fl_pcb(
  *
  * - Placement    : working with the FL_BBOX limitations
  * - Orientation  : no changes
+ *
+ * TODO: fix FL_ASSEMBLY behavior splitting screws to FL_MOUNT
  */
 module fl_pcb_adapter(
   //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD

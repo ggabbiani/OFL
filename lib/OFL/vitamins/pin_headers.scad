@@ -111,7 +111,7 @@ let(
  * Pin headers engine.
  */
 module fl_pinHeader(
-  //! supported verbs: FL_ADD, FL_BBOX, FL_CUTOUT
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL
   verbs       = FL_ADD,
   type,
   color,
