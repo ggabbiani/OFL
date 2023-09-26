@@ -60,7 +60,7 @@ module fl_pcb_holderByHoles(
   screw   = fl_screw(pcb);
   // scr_r   = screw_radius(screw);
 
-  washer  = screw_washer(screw);
+  washer  = assert(screw,"PCB's screw is 'undef'") screw_washer(screw);
   wsh_t   = washer_thickness(washer);
   wsh_r   = washer_radius(washer);
 
