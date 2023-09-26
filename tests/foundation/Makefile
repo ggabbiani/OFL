@@ -6,27 +6,24 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-SOURCES			= 2d_grid-test.scad 2d-test.scad 3d-test.scad 3d_funcs-test.scad algo-test.scad \
-assertions-test.scad base_geo-test.scad base_string-test.scad bend-test.scad bend2-test.scad \
-connect-test.scad core-comparison-test.scad core-symbols-test.scad fillet-test.scad hole-test.scad \
-label-test.scad layout-test.scad limits-test.scad profile-test.scad square-test.scad torus-test.scad \
-trace-test.scad tube-test.scad type_trait-test.scad util-test.scad
-
-RESULTS			= $(SOURCES:.scad=.echo)
+T_LIST			= 2d_grid 2d 3d 3d_funcs algo assertions base_geo base_string \
+bend bend2 connect core-comparison core-symbols fillet hole label layout limits \
+profile square torus trace tube type_trait util
+SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
+RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
 include $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
-.PHONY: tests
 
-all:
-	@for f in $(RESULTS) ; do rm -f $$f ; done
-	@$(MAKE) tests
+sources: $(SOURCES)
 
-tests: $(RESULTS)
+runs: clean-results $(RESULTS)
 
-clean:
-	@for f in $(RESULTS) ; do rm -f $$f ; done
-	@echo "$(RESULTS): DELETED"
+clean: clean-results
 	@for f in $(SOURCES) ; do rm -f $$f ; done
 	@echo "$(SOURCES): DELETED"
+
+clean-results:
+	@for f in $(RESULTS) ; do rm -f $$f ; done
+	@echo "$(RESULTS): DELETED"

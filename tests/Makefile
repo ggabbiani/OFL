@@ -13,8 +13,9 @@ DEF_RULES		:= $(CURDIR)/defaults.mk
 DEF_CONFS		:= $(CURDIR)/defaults.conf
 
 # 'Lazy Set'
-SOURCES			= bb-test.scad octant-test.scad quadrant-test.scad
-RESULTS			= $(SOURCES:.scad=.echo)
+T_LIST			= bb octant quadrant
+SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
+RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 OSCAD			= openscad --hardwarnings
 
 export TEMPLATE_DIR TEMPLATES DEF_RULES DEF_CONFS OSCAD
@@ -22,13 +23,9 @@ export TEMPLATE_DIR TEMPLATES DEF_RULES DEF_CONFS OSCAD
 include $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
-.PHONY: artifacts foundation tests
+.PHONY: artifacts artifacts-runs exported foundation foundation-runs tests vitamins vitamins-runs
 
-all:
-	@for f in $(RESULTS) ; do rm -f $$f ; done
-	@$(MAKE) tests
-
-tests: $(RESULTS) artifacts foundation
+sources: $(SOURCES) artifacts foundation vitamins
 
 artifacts:
 	@$(MAKE) -C $@
@@ -36,10 +33,34 @@ artifacts:
 foundation:
 	@$(MAKE) -C $@
 
-clean:
+vitamins:
+	@$(MAKE) -C $@
+
+runs: clean-results $(RESULTS) artifacts-runs foundation-runs vitamins-runs
+
+clean-results:
 	@for f in $(RESULTS) ; do rm -f $$f ; done
 	@echo "$(RESULTS): DELETED"
+
+artifacts-runs:
+	@$(MAKE) -C artifacts runs
+
+foundation-runs:
+	@$(MAKE) -C foundation runs
+
+vitamins-runs:
+	@$(MAKE) -C vitamins runs
+
+clean: clean-results
 	@for f in $(SOURCES) ; do rm -f $$f ; done
 	@echo "$(SOURCES): DELETED"
 	@$(MAKE) -C artifacts $@
 	@$(MAKE) -C foundation $@
+
+# dump exported variables
+exported:
+	@echo DEF_CONFS=\'$(DEF_CONFS)\'
+	@echo DEF_RULES=\'$(DEF_RULES)\'
+	@echo OSCAD=\'$(OSCAD)\'
+	@echo TEMPLATE_DIR=\'$(TEMPLATE_DIR)\'
+	@echo TEMPLATES=\'$(TEMPLATES)\'

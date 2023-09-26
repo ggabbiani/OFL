@@ -1,36 +1,28 @@
 /*
- * PSU test.
+ * PSU test
  *
- * Copyright © 2021-2022 Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
  *
- * This file is part of the 'Raspberry PI4' (RPI4) project.
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
- * RPI4 is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * RPI4 is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with RPI4.  If not, see <http://www.gnu.org/licenses/>.
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// include <../../lib/OFL/foundation/unsafe_defs.scad>
 include <../../lib/OFL/vitamins/psus.scad>
 
-// include <../../lib/OFL/vitamins/incs.scad>
-
-$fn         = 50;           // [3:100]
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
-// -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// -2⇒none, -1⇒all, [0..)⇒max depth allowed
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -47,10 +39,13 @@ $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // mount shape through predefined screws
 $FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
+/* [3D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Direction] */
 
@@ -58,7 +53,8 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
+
 
 /* [PSU] */
 
@@ -73,20 +69,20 @@ T_z   = [2.5,2.5];  // [0:0.1:10]
 // layout direction
 LAY_DIRECTION  = ["-Z","+X","+Y"];
 
+
 /* [Hidden] */
 
-// thickness list built from customizer values
-T         = [T_x,T_y,T_z];
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
-verbs = [
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_MOUNT!="OFF")     FL_MOUNT,
-];
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+fl_status();
+
+// end of automatically generated code
+
+// thickness list built from customizer values
+T     = [T_x,T_y,T_z];
+verbs = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL,FL_MOUNT]);
 
 // target object(s)
 single  = SHOW=="FL_PSU_MeanWell_RS_25_5"  ? FL_PSU_MeanWell_RS_25_5

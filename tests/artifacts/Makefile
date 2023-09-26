@@ -6,17 +6,22 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-SOURCES			= tprofiles-test.scad tnut-test.scad
-RESULTS			= $(SOURCES:.scad=.echo)
+T_LIST			= box caddy-blob caddy pcb_holder spacer tnut tprofiles
+SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
+RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
 include $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
 
-tests: $(RESULTS)
+sources: $(SOURCES)
 
-clean:
-	@for f in $(RESULTS) ; do rm -f $$f ; done
-	@echo "$(RESULTS): DELETED"
+runs: clean-results $(RESULTS)
+
+clean: clean-results
 	@for f in $(SOURCES) ; do rm -f $$f ; done
 	@echo "$(SOURCES): DELETED"
+
+clean-results:
+	@for f in $(RESULTS) ; do rm -f $$f ; done
+	@echo "$(RESULTS): DELETED"

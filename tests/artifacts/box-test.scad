@@ -1,20 +1,32 @@
-/*!
- * Box artifact test.
+/*
+ * Box artifact test
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 
 include <../../lib/OFL/artifacts/box.scad>
 
 use <../../lib/OFL/foundation/2d-engine.scad>
 
-$fn         = 50;           // [3:100]
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -33,10 +45,13 @@ $FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
+/* [3D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Direction] */
 
@@ -44,7 +59,8 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
+
 
 /* [Box] */
 
@@ -76,10 +92,17 @@ FILLET          = true;
 LAY_NATIVE  = true;
 LAY_OCTANT  = [0,0,0];  // [-1:+1]
 
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+fl_status();
+
+// end of automatically generated code
+
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,

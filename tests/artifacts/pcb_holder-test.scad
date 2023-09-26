@@ -1,21 +1,31 @@
 /*
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * pcb_holder test
+ *
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <../../lib/OFL/artifacts/pcb_holder.scad>
 include <../../lib/OFL/vitamins/pcbs.scad>
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -36,10 +46,13 @@ $FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
+/* [3D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Direction] */
 
@@ -47,7 +60,8 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
+
 
 /* [PCB Holder]*/
 ENGINE  = "by holes"; // [by holes, by size]
@@ -64,10 +78,17 @@ LAYOUT_DIRS  = ["±z"];
 
 PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_HILETGO_SX1308, FL_PCB_RPI_uHAT, FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20, FL_PCB_MH4PU_P]
 
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+fl_status();
+
+// end of automatically generated code
+
 verbs=[
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
@@ -99,9 +120,13 @@ thick = [[0,0],[0,0],Tz];
 // fl_pcb_holder(verbs,holder,direction=direction,octant=octant,frame=frame,thick=T,knut=KNUT)
 //   fl_screw(type=$hole_screw,thick=H+fl_pcb_thick(pcb)+T);
 
-if (ENGINE=="by holes")
-  fl_pcb_holderByHoles(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,direction=direction,octant=octant)
-      fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+fl_pcb_thick($hld_pcb)+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
-else
+if (ENGINE=="by holes") {
+  if (fl_screw(pcb))
+    fl_pcb_holderByHoles(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,direction=direction,octant=octant)
+        fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+fl_pcb_thick($hld_pcb)+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
+  else {
+    echo("**NO SCREW ON PCB** either change PCB or choose another engine please");
+  }
+} else
   fl_pcb_holderBySize(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,tolerance=TOLERANCE,direction=direction,octant=octant)
     fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);

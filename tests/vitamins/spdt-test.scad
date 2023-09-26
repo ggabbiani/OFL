@@ -1,21 +1,30 @@
 /*
- * Single pole, double throw switch test file.
+ * Single pole, double throw switch test file
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <../../lib/OFL/vitamins/spdts.scad>
 
-$fn         = 50;           // [3:100]
-// When true, disables epsilon corrections
-$FL_RENDER    = false;
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
+// When true, disables PREVIEW corrections like FL_NIL
+$FL_RENDER     = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES    = -2;     // [-2:10]
-$fl_debug     = false;
-SHOW_LABELS   = false;
-SHOW_SYMBOLS  = false;
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -28,31 +37,34 @@ $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+
+/* [3D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
+
 /* [Direction] */
 
 DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [-360:1:360]
+DIR_R       = 0;        // [-360:360]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
 
-fl_status();
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
-debug     = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
-verbs=[
-  if ($FL_ADD!="OFF")   FL_ADD,
-  if ($FL_AXES!="OFF")  FL_AXES,
-  if ($FL_BBOX!="OFF")  FL_BBOX,
-  if ($FL_DRILL!="OFF") FL_DRILL,
-];
+fl_status();
+
+// end of automatically generated code
+
+verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_DRILL]);
 
 fl_spdt(verbs,FL_SODAL_SPDT,octant=octant,direction=direction,debug=debug);

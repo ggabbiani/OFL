@@ -1,20 +1,30 @@
 /*
- * NopSCADlib pin header wrapper test file.
+ * NopSCADlib pin header wrapper test file
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <../../lib/OFL/vitamins/pin_headers.scad>
 
-$fn         = 50;           // [3:100]
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -29,10 +39,13 @@ $FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
+/* [3D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Direction] */
 
@@ -40,12 +53,8 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
 
-/* [DEBUG] */
-
-LABELS      = false;
-SYMBOLS     = false;
 
 /* [Pin Header] */
 
@@ -63,23 +72,22 @@ TYPE  = "female"; // [male,female]
 // size in columns x rows
 GEOMETRY          = [10,1]; // [1:20]
 
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+fl_status();
+
+// end of automatically generated code
+
 thick     = $FL_CUTOUT!="OFF"||$FL_DRILL!="OFF" ? CO_T : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = COLOR=="base"?grey(20):COLOR;
 type      = fl_dict_search(FL_PHDR_DICT,SHOW)[0];
-debug     = fl_parm_Debug(labels=LABELS,symbols=SYMBOLS);
-
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
-];
+verbs     = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL]);
 
 module wrapIt(type) {
   fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,debug=debug,octant=octant,direction=direction);

@@ -1,25 +1,65 @@
 {
+    "fileFormatVersion": "1",
     "parameterSets": {
-        "TEST": {
-            "$FL_ADD": "DEBUG",
-            "$FL_ASSEMBLY": "ON",
+        "TEST_CASE-pimoroni-top": {
+            "$FL_ADD": "ON",
             "$FL_AXES": "OFF",
             "$FL_BBOX": "OFF",
-            "$FL_DEBUG": "false",
-            "$FL_DRILL": "OFF",
-            "$FL_FILAMENT": "DodgerBlue",
             "$FL_FOOTPRINT": "OFF",
-            "$FL_LAYOUT": "OFF",
             "$FL_RENDER": "false",
-            "$FL_SAFE": "false",
-            "$FL_TRACE": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
             "DIR_R": "0",
             "DIR_Z": "[0, 0, 1]",
-            "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true"
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "TYPE": "FL_HS_PIMORONI_TOP",
+            "X_PLACE": "undef",
+            "Y_PLACE": "undef",
+            "Z_PLACE": "undef"
+        },
+        "TEST_CASE-pimoroni-bottom": {
+            "$FL_ADD": "ON",
+            "$FL_AXES": "OFF",
+            "$FL_BBOX": "OFF",
+            "$FL_FOOTPRINT": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "TYPE": "FL_HS_PIMORONI_BOTTOM",
+            "X_PLACE": "undef",
+            "Y_PLACE": "undef",
+            "Z_PLACE": "undef"
+        },
+        "TEST_CASE-khadas": {
+            "$FL_ADD": "ON",
+            "$FL_AXES": "OFF",
+            "$FL_BBOX": "OFF",
+            "$FL_FOOTPRINT": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "TYPE": "FL_HS_KHADAS",
+            "X_PLACE": "undef",
+            "Y_PLACE": "undef",
+            "Z_PLACE": "undef"
         }
-    },
-    "fileFormatVersion": "1"
+    }
 }
