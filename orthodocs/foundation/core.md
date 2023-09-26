@@ -1422,6 +1422,51 @@ fl_vendor(type,value)
 
 ---
 
+### function fl_verbList
+
+__Syntax:__
+
+```text
+fl_verbList(supported)
+```
+
+setup a verb list according on the setting of the runtime attributes
+
+example:
+
+    verbs         = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES])
+
+is functionally equivalent to the following:
+
+    verbs = [
+      if ($FL_ADD!="OFF")      FL_ADD,
+      if ($FL_ASSEMBLY!="OFF") FL_ASSEMBLY,
+      if ($FL_BBOX!="OFF")     FL_BBOX,
+    ]
+
+if elsewhere the attribute variables as been set like this:
+
+    $FL_ADD       = "OFF"
+    $FL_ASSEMBLY  = "ON"
+    $FL_BBOX      = "DEBUG"
+
+«verbs» will hold the following contents:
+
+    [FL_ASSEMBLY,FL_BBOX]
+
+while FL_ADD is ignored since its runtime attribute is "OFF"
+
+
+__Parameters:__
+
+__supported__  
+list of supported verbs whose runtime attribute is checked for they
+eventual insertion in the returned list
+
+
+
+---
+
 ### function fl_version
 
 __Syntax:__
@@ -1561,7 +1606,7 @@ current call order is ≤ $FL_TRACES.
 
 Used $special variables:
 
-- $FL_TRACE affects trace messages according to its value:
+- $FL_TRACES affects trace messages according to its value:
   - -2   : all traces disabled
   - -1   : all traces enabled
   - [0,∞): traces with call order ≤ $FL_TRACES are enabled

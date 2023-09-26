@@ -386,6 +386,8 @@ Others:
 - Placement    : working with the FL_BBOX limitations
 - Orientation  : no changes
 
+TODO: fix FL_ASSEMBLY behavior splitting screws to FL_MOUNT
+
 
 __Parameters:__
 

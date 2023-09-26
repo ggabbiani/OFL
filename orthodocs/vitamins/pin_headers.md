@@ -192,7 +192,7 @@ Pin headers engine.
 __Parameters:__
 
 __verbs__  
-supported verbs: FL_ADD, FL_BBOX, FL_CUTOUT
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL
 
 __cut_thick__  
 thickness for FL_CUTOUT

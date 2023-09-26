@@ -707,6 +707,7 @@
 
 - [fl_vector (module)](foundation/core.md#module-fl_vector)
 - [fl_vendor (function)](foundation/core.md#function-fl_vendor)
+- [fl_verbList (function)](foundation/core.md#function-fl_verblist)
 - [fl_version (function)](foundation/core.md#function-fl_version)
 - [fl_versionNumber (function)](foundation/core.md#function-fl_versionnumber)
 - [fl_versor (function)](foundation/core.md#function-fl_versor)
