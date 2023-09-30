@@ -37,23 +37,6 @@ module fl_manage(
 
   // parse verbs and trigger children with predefined context
   module parse(verbs) {
-
-    // given a verb returns the corresponding modifier value
-    function verb2modifier(verb)  =
-        verb==FL_ADD        ? $FL_ADD
-      : verb==FL_ASSEMBLY   ? $FL_ASSEMBLY
-      : verb==FL_AXES       ? $FL_AXES
-      : verb==FL_BBOX       ? $FL_BBOX
-      : verb==FL_CUTOUT     ? $FL_CUTOUT
-      : verb==FL_DRILL      ? $FL_DRILL
-      : verb==FL_FOOTPRINT  ? $FL_FOOTPRINT
-      : verb==FL_HOLDERS    ? $FL_HOLDERS
-      : verb==FL_LAYOUT     ? $FL_LAYOUT
-      : verb==FL_MOUNT      ? $FL_MOUNT
-      : verb==FL_PAYLOAD    ? $FL_PAYLOAD
-      : verb==FL_SYMBOLS    ? $FL_SYMBOLS
-      : assert(false,str("Unsupported verb ",verb)) undef;
-
     assert(is_list(verbs)||is_string(verbs),verbs);
     fl_trace("verbs",verbs);
     for($verb=verbs) {
@@ -64,7 +47,7 @@ module fl_manage(
       } else if (fl_isSet("**OBSOLETE**",tokens)) {
         assert(false,str(tokens[0], " is marked as OBSOLETE!"));
       }
-      let($modifier = verb2modifier($verb))
+      let($modifier = fl_verb2modifier($verb))
         children();
     }
   }

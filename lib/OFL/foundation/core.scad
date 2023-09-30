@@ -248,6 +248,8 @@ FL_AXES       = "FL_AXES draw of local reference axes";
 FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
 //! layout of predefined cutout shapes (±X,±Y,±Z)
 FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (±X,±Y,±Z).";
+//! test verb for library development
+FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
 /*!
  * composite verb serializing one ADD and ASSEMBLY operation.
  * See also variable FL_ADD and variable FL_ASSEMBLY
@@ -263,14 +265,12 @@ FL_HOLDERS    = "FL_HOLDERS adds vitamine holders to the scene. **DEPRECATED**";
 FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws)";
 //! mount shape through predefined screws
 FL_MOUNT      = "FL_MOUNT mount shape through predefined screws";
+//! test verb for library development
+FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
 //! adds a box representing the payload of the shape
 FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
 //! add symbols and labels usually for debugging
 FL_SYMBOLS    = "FL_SYMBOLS adds symbols and labels usually for debugging";
-//! is a test verb for library development
-FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
-//! is a test verb for library development
-FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
 
 // Runtime behavior defaults
 $FL_ADD       = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
@@ -286,6 +286,22 @@ $FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_PAYLOAD   = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_SYMBOLS   = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+//! given a verb returns the corresponding modifier value
+function fl_verb2modifier(verb)  =
+    verb==FL_ADD        ? $FL_ADD
+  : verb==FL_ASSEMBLY   ? $FL_ASSEMBLY
+  : verb==FL_AXES       ? $FL_AXES
+  : verb==FL_BBOX       ? $FL_BBOX
+  : verb==FL_CUTOUT     ? $FL_CUTOUT
+  : verb==FL_DRILL      ? $FL_DRILL
+  : verb==FL_FOOTPRINT  ? $FL_FOOTPRINT
+  : verb==FL_HOLDERS    ? $FL_HOLDERS
+  : verb==FL_LAYOUT     ? $FL_LAYOUT
+  : verb==FL_MOUNT      ? $FL_MOUNT
+  : verb==FL_PAYLOAD    ? $FL_PAYLOAD
+  : verb==FL_SYMBOLS    ? $FL_SYMBOLS
+  : assert(false,str("Unsupported verb ",verb)) undef;
+
 /*!
  * Modifier module for verbs.
  */
@@ -296,18 +312,20 @@ module fl_modifier(
 ) {
   fl_trace("behavior",behavior);
   // Runtime behavior reset vs pass-through
-  $FL_ADD       = reset ? behavior : $FL_ADD;
-  $FL_ASSEMBLY  = reset ? behavior : $FL_ASSEMBLY;
-  $FL_AXES      = reset ? behavior : $FL_AXES;
-  $FL_BBOX      = reset ? behavior : $FL_BBOX;
-  $FL_CUTOUT    = reset ? behavior : $FL_CUTOUT;
-  $FL_DRILL     = reset ? behavior : $FL_DRILL;
-  $FL_FOOTPRINT = reset ? behavior : $FL_FOOTPRINT;
-  $FL_HOLDERS   = reset ? behavior : $FL_HOLDERS;
-  $FL_LAYOUT    = reset ? behavior : $FL_LAYOUT;
-  $FL_MOUNT     = reset ? behavior : $FL_MOUNT;
-  $FL_PAYLOAD   = reset ? behavior : $FL_PAYLOAD;
-  $FL_SYMBOLS   = reset ? behavior : $FL_SYMBOLS;
+  if (reset) {
+    $FL_ADD       = behavior;
+    $FL_ASSEMBLY  = behavior;
+    $FL_AXES      = behavior;
+    $FL_BBOX      = behavior;
+    $FL_CUTOUT    = behavior;
+    $FL_DRILL     = behavior;
+    $FL_FOOTPRINT = behavior;
+    $FL_HOLDERS   = behavior;
+    $FL_LAYOUT    = behavior;
+    $FL_MOUNT     = behavior;
+    $FL_PAYLOAD   = behavior;
+    $FL_SYMBOLS   = behavior;
+  }
   if      (behavior=="ON")                children();
   else if (behavior=="OFF")              *children();
   else if (behavior=="ONLY")             !children();
@@ -354,25 +372,11 @@ function fl_verbList(
    * eventual insertion in the returned list
    */
   supported
-) = let(
-  map = function(verb)
-      verb==FL_ADD        ? $FL_ADD
-    : verb==FL_ASSEMBLY   ? $FL_ASSEMBLY
-    : verb==FL_AXES       ? $FL_AXES
-    : verb==FL_BBOX       ? $FL_BBOX
-    : verb==FL_CUTOUT     ? $FL_CUTOUT
-    : verb==FL_DRILL      ? $FL_DRILL
-    : verb==FL_FOOTPRINT  ? $FL_FOOTPRINT
-    : verb==FL_LAYOUT     ? $FL_LAYOUT
-    : verb==FL_MOUNT      ? $FL_MOUNT
-    : verb==FL_PAYLOAD    ? $FL_PAYLOAD
-    : verb==FL_SYMBOLS    ? $FL_SYMBOLS
-    : undef
-) [
+) = [
   for(verb=supported)
-    let(attribute=map(verb))
+    let(attribute=fl_verb2modifier(verb))
     // assert(attribute!=undef,str("Unmapped verb ",verb))
-    if (!is_undef(attribute) && attribute!="OFF") verb
+    if (attribute!="OFF") assert(attribute,str("Unmapped verb ",verb)) verb
 ];
 
 //*****************************************************************************
