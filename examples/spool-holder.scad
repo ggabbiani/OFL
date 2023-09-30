@@ -14,7 +14,7 @@ MAX_SPOOLER_W = 80;
 TSP_length   = 463;
 TOLERANCE = true;
 PARTS="side";     // [all,side,central,stopper]
-MODE="assembly";  // [assembly,print me!]
+MODE="assembly";  // [assembly,print me!, cnc!]
 SIDE_T  = 5;
 FILAMENT_CENTRAL  = "DodgerBlue"; // [ignore,DodgerBlue,Blue,OrangeRed,SteelBlue]
 FILAMENT_SIDE  = "SteelBlue";     // [ignore,DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -187,7 +187,16 @@ module filamentStopper() {
   fl_tube(r=6,h=2,thick=3.9,direction=[+X,0],octant=-Z);
 }
 
-rotate(90,Y) {
+module show() {
+  if (MODE=="cnc!")
+    projection(cut = false)
+      children();
+  else
+    rotate(90,Y)
+      children();
+}
+
+show() {
   difference() {
     union() {
       if (PARTS=="central"||PARTS=="all")
