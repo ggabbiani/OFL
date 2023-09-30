@@ -119,13 +119,11 @@ module fl_pinHeader(
   cut_thick,
   //! tolerance used during FL_CUTOUT
   cut_tolerance=0,
-  //! see constructor fl_parm_Debug()
-  debug,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef
   direction,
-  // see constructor fl_parm_Debug()
+  //! see constructor fl_parm_Debug()
   debug
 ) {
   assert(type);
