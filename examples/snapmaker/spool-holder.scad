@@ -1,10 +1,10 @@
-include <../lib/OFL/foundation/hole.scad>
-include <../lib/OFL/foundation/limits.scad>
-include <../lib/OFL/vitamins/screw.scad>
-include <../lib/OFL/artifacts/t-nut.scad>
-include <../lib/OFL/artifacts/t-profiles.scad>
+include <../../lib/OFL/foundation/hole.scad>
+include <../../lib/OFL/foundation/limits.scad>
+include <../../lib/OFL/vitamins/screw.scad>
+include <../../lib/OFL/artifacts/t-nut.scad>
+include <../../lib/OFL/artifacts/t-profiles.scad>
 
-use <../lib/OFL/dxf.scad>
+use <../../lib/OFL/dxf.scad>
 
 $fn         = 50;           // [3:100]
 
