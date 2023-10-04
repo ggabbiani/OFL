@@ -120,4 +120,10 @@ screw = SCREW=="No632_pan_screw" ? No632_pan_screw
       : undef;
 assert(screw!=undef);
 
-fl_screw(verbs,screw,thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=NWASHER,len=FIXED_LEN?FIXED_LEN:undef,octant=octant,direction=direction);
+let(
+  d      = fl_screw_nominal(screw),
+  hd_typ = screw_head_type(screw),
+  found  = fl_screw_search(d=d, head_type=hd_typ)
+) assert(found && len(found)>=1)
+//   echo(found=found)
+  fl_screw(verbs,screw,thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=NWASHER,len=FIXED_LEN?FIXED_LEN:undef,octant=octant,direction=direction);

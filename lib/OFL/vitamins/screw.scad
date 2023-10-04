@@ -15,6 +15,80 @@ use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>
 
 
+//! screw namespace
+FL_SCREW_NS  = "screw";
+
+//! screw dictionary
+FL_SCREW_DICT = [
+  No632_pan_screw   ,
+  M2_cap_screw      ,
+  M2_cs_cap_screw   ,
+  M2_dome_screw     ,
+  M2p5_cap_screw    ,
+  M2p5_dome_screw   ,
+  M2p5_pan_screw    ,
+  M3_cap_screw      ,
+  M3_cs_cap_screw   ,
+  M3_dome_screw     ,
+  M3_grub_screw     ,
+  M3_hex_screw      ,
+  M3_low_cap_screw  ,
+  M3_pan_screw      ,
+  M3_shoulder_screw ,
+  M4_cap_screw      ,
+  M4_cs_cap_screw   ,
+  M4_dome_screw     ,
+  M4_grub_screw     ,
+  M4_hex_screw      ,
+  M4_pan_screw      ,
+  M4_shoulder_screw ,
+  M5_cap_screw      ,
+  M5_cs_cap_screw   ,
+  M5_dome_screw     ,
+  M5_grub_screw     ,
+  M5_hex_screw      ,
+  M5_pan_screw      ,
+  M6_cap_screw      ,
+  M6_cs_cap_screw   ,
+  M6_grub_screw     ,
+  M6_hex_screw      ,
+  M6_pan_screw      ,
+  M8_cap_screw      ,
+  M8_cs_cap_screw   ,
+  M8_hex_screw      ,
+  No2_screw         ,
+  No4_screw         ,
+  No6_cs_screw      ,
+  No6_screw         ,
+  No8_screw
+];
+
+/*!
+ * Return a list of screws from dictionary, matching the passed properties.
+ *
+ * __NOTE__: when a parameter is undef the corresponding property is not checked.
+ */
+function fl_screw_search(
+  //! nominal diameter
+  d,
+  /*!
+   * screw type is one of the following:
+   *  - hs_cap
+   *  - hs_pan
+   *  - hs_cs
+   *  - hs_hex
+   *  - hs_grub
+   *  - hs_cs_cap
+   *  - hs_dome
+   */
+  head_type
+) = echo(d=d, head_type=head_type) [
+  for(s=FL_SCREW_DICT)
+    if ( (is_undef(d)         || fl_screw_nominal(s) ==d         )
+      && (is_undef(head_type) || screw_head_type(s)   ==head_type )
+    ) s
+];
+
 //*****************************************************************************
 //! bounding box
 function fl_bb_screw(type,length) =
@@ -30,6 +104,9 @@ function fl_bb_screw(type,length) =
 
 //*****************************************************************************
 // helpers
+
+//! screw nominal diameter
+function fl_screw_nominal(nop)  = 2*screw_radius(nop);
 
 //! return the [x,y,z] size of the screw
 function fl_screw_size(type,length) = let(
