@@ -18,8 +18,9 @@ FL_CS_NS  = "cs";
 
 //*****************************************************************************
 // properties
-function fl_cs_d(type,value)      = fl_property(type,"cs/diameter",value);
-function fl_cs_angle(type,value)  = fl_property(type,"cs/angle",value);
+function fl_cs_d(type,value)        = fl_property(type,"cs/diameter",value);
+function fl_cs_angle(type,value)    = fl_property(type,"cs/angle",value);
+function fl_cs_nominal(type,value)  = fl_property(type,"cs/nominal diameter",value);
 
 //*****************************************************************************
 // getters
@@ -43,13 +44,14 @@ function fl_Countersink(
     r           = d/2,
     alpha       = angle/2,
     h           = r/tan(alpha),
-    description = description!=undef ? description : str("M",d,"countersink")
+    description = description ? description : str("M",d,"countersink")
   ) [
     fl_name(value=name),
     fl_description(value=description),
     fl_cs_d(value=d),
     fl_cs_angle(value=angle),
     fl_bb_corners(value=[[-r,-r,-h],[r,r,0]]),
+    fl_cs_nominal(value=d),
   ];
 
 FL_CS_M3  = fl_Countersink("FL_CS_M3","M3 countersink",6+3/5,angle=90);
@@ -73,6 +75,16 @@ FL_CS_DICT = [
   ,FL_CS_M16
   ,FL_CS_M20
 ];
+
+/*!
+ * return a countersink fitting the nominal diameter «d» or undef
+ */
+function fl_cs_search(
+  //! nominal diameter
+  d
+) = let(
+  list = [for(cs=FL_CS_DICT) if (fl_cs_nominal(cs)==d) cs]
+) list!=[] ? list[0] : undef;
 
 module fl_countersink(
   verbs=FL_ADD,

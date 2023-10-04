@@ -75,8 +75,12 @@ fl_status();
 
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX]);
 if (SHOW>-1)
-  echo("countersink ",fl_name(FL_CS_DICT[SHOW]))
-    fl_countersink(verbs,FL_CS_DICT[SHOW],tolerance=TOLERANCE,octant=octant,direction=direction);
+  let(
+    cs      = FL_CS_DICT[SHOW],
+    nominal = fl_cs_nominal(cs),
+    found   = fl_cs_search(nominal)
+  ) assert(found==cs)
+    fl_countersink(verbs,cs,tolerance=TOLERANCE,octant=octant,direction=direction);
 else
   fl_layout(axis=X,gap=GAP,types=FL_CS_DICT)
     fl_countersink(verbs,FL_CS_DICT[$i],tolerance=TOLERANCE,octant=octant,direction=direction);
