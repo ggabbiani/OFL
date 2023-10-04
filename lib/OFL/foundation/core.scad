@@ -394,6 +394,7 @@ function fl_description(type,value) = fl_property(type,"description",value);
 // function fl_director(type,value)    = fl_property(type,"director",value);
 function fl_dxf(type,value)         = fl_property(type,"DXF model file",value);
 function fl_engine(type,value)      = fl_property(type,"engine",value);
+function fl_holes(type,value)       = assert(is_undef(value)||fl_tt_isHoleList(value),value) fl_property(type,"holes",value);
 function fl_material(type,value,default)
                                     = fl_property(type,"material (actually a color)",value,default);
 function fl_name(type,value)        = fl_property(type,"name",value);
@@ -625,7 +626,28 @@ function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
 function fl_accum(v)          = [for(p=v) 1]*v;
 function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
 
+//**** lists ******************************************************************
+
+/*!
+ * return the list item whose calculated value is max.
+ *
+ * Return 'undef' in case of empty «list».
+ */
+function fl_max(
+  //! item list
+  list,
+  /*!
+   * string literal assigning items a value: essentially it determines the way
+   * a 'score' is mapped to a corresponding list item for the 'max' evaluation
+   *
+   * As default simply returns the item (i.e. the 'score' is the item itself).
+   */
+  value=function(item) item,
+  _i_=0
+) = (_i_+1)<len(list) ? let(other=fl_max(list,value,_i_+1)) value(list[_i_])>value(other) ? list[_i_] : list[_i_+1] : list[_i_];
+
 //**** dictionary *************************************************************
+
 function fl_dict_search(dictionary,name) = [
   for(item=dictionary) let(n=fl_name(item)) if (name==n) item
 ];

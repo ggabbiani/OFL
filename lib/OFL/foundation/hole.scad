@@ -8,11 +8,6 @@
 include <label.scad>
 
 //*****************************************************************************
-// General properties
-
-function fl_holes(type,value)               = assert(is_undef(value)||fl_tt_isHoleList(value),value) fl_property(type,"holes",value);
-
-//*****************************************************************************
 // Hole properties
 
 function fl_hole_d(hole,value)              = fl_property(hole,"hole/diameter",value);
