@@ -17,17 +17,24 @@ use <../foundation/mngm-engine.scad>
 // Knurl nuts properties
 // when invoked by «type» parameter act as getters
 // when invodec by «value» parameter act as property constructors
-function fl_knut_thick(type,value)  = fl_property(type,"knut/Z axis length",value);
-function fl_knut_tooth(type,value)  = fl_property(type,"knut/tooth height",value);
-function fl_knut_teeth(type,value)  = fl_property(type,"knut/teeth number",value);
-function fl_knut_r(type,value)      = fl_property(type,"knut/external radius",value);
-function fl_knut_rings(type,value)  = fl_property(type,"knut/rings array [[height1,position1],[height2,position2,..]]",value);
 
-//*****************************************************************************
-// key values
+//! Z axis length
+function fl_knut_thick(type,value)  = fl_property(type,"knut/Z axis length",value);
+//! tooth height
+function fl_knut_tooth(type,value)  = fl_property(type,"knut/tooth height",value);
+//! teeth number
+function fl_knut_teeth(type,value)  = fl_property(type,"knut/teeth number",value);
+//! external radius, the internal radius being: fl_knut_r()-fl_knut_tooth()
+function fl_knut_r(type,value)      = fl_property(type,"knut/external radius",value);
+//! rings array in the format '[[height1,position1],[height2,position2,..]]`
+function fl_knut_rings(type,value)  = fl_property(type,"knut/rings array [[height1,position1],[height2,position2,..]]",value);
 
 /*!
  * Constructor for brass knurl nuts.
+ *
+ * The diameter used during FL_DRILL is equal to:
+ *
+ *     «diameter» - 2 * «tooth» + 0.1mm
  */
 function fl_Knut(
   //! internal thread
@@ -68,37 +75,37 @@ assert(is_num(tooth),str("tooth=",tooth))
 /*!
  * - **internal thread**  : M2
  * - **length**           : 4mm
- * - **⌀ (min,max)**      : 2.8mm,3.5mm
- * - **⌀ hole**           : ≅ 2.9mm
+ * - **⌀ max**            : 3.5mm
+ * - **⌀ hole**           : ≅ 3mm
  */
 FL_KNUT_M2x4x3p5   = fl_Knut(M2_cap_screw,4,3.5,0.6, [1.15,  1.15      ]);
 /*!
  * - **internal thread**  : M2
  * - **length**           : 6mm
- * - **⌀ (min,max)**      : 2.8mm,3.5mm
- * - **⌀ hole**           : ≅ 2.9mm
+ * - **⌀ max**            : 3.5mm
+ * - **⌀ hole**           : ≅ 3mm
  */
 FL_KNUT_M2x6x3p5   = fl_Knut(M2_cap_screw,6,3.5,0.6, [1.5,   1.5       ]);
 /*!
  * - **internal thread**  : M2
  * - **length**           : 8mm
- * - **⌀ (min,max)**      : 2.8mm,3.5mm
- * - **⌀ hole**           : ≅ 2.9mm
+ * - **⌀ max**            : 3.5mm
+ * - **⌀ hole**           : ≅ 3mm
  */
 FL_KNUT_M2x8x3p5   = fl_Knut(M2_cap_screw,8,3.5,0.5, [1.3,   1.4,  1.3 ]);
 /*!
  * - **internal thread**  : M2
  * - **length**           : 10mm
- * - **⌀ (min,max)**      : 2.8mm,3.5mm
- * - **⌀ hole**           : ≅ 2.9mm
+ * - **⌀ max**            : 3.5mm
+ * - **⌀ hole**           : ≅ 3mm
  */
 FL_KNUT_M2x10x3p5  = fl_Knut(M2_cap_screw,10,3.5,0.5,[1.9,   2.0,  1.9 ]);
 
 /*!
  * - **internal thread**  : M3
  * - **length**           : 4mm
- * - **external diameter**: 5mm
- * - **hole diameter**    : ≅ 4mm
+ * - **⌀ max**            : 5mm
+ * - **⌀ hole**           : ≅ 4.6mm
  */
 FL_KNUT_M3x4x5     = fl_Knut(M3_cap_screw,4,5,0.5,   [1.2,   1.2       ]);
 /*!
@@ -111,23 +118,23 @@ FL_KNUT_M3x6x5     = fl_Knut(M3_cap_screw,6,5,0.5,   [1.5,   1.5       ]);
 /*!
  * - **internal thread**  : M3
  * - **length**           : 8mm
- * - **external diameter**: 5mm
- * - **hole diameter**    : ≅ 4mm
+ * - **⌀ max**            : 5mm
+ * - **⌀ hole**           : ≅ 4.6mm
  */
 FL_KNUT_M3x8x5     = fl_Knut(M3_cap_screw,8,5,0.5,   [1.9,   1.9       ]);
 /*!
  * - **internal thread**  : M3
  * - **length**           : 10mm
- * - **external diameter**: 5mm
- * - **hole diameter**    : ≅ 4mm
+ * - **⌀ max**            : 5mm
+ * - **⌀ hole**           : ≅ 4.6mm
  */
 FL_KNUT_M3x10x5    = fl_Knut(M3_cap_screw,10,5,0.5,  [1.6,   1.5,   1.6]);
 
 /*!
  * - **internal thread**  : M4
  * - **length**           : 4mm
- * - **external diameter**: 6mm
- * - **hole diameter**    : ≅ 5.6mm
+ * - **⌀ max**            : 6mm
+ * - **⌀ hole**           : ≅ 5.6mm
  */
 FL_KNUT_M4x4x6     = fl_Knut(M4_cap_screw,4,6,0.5,   [1.3,   1.3       ]);
 /*!
@@ -140,54 +147,44 @@ FL_KNUT_M4x6x6     = fl_Knut(M4_cap_screw,6,6,0.5,   [1.7,   1.7       ]);
 /*!
  * - **internal thread**  : M4
  * - **length**           : 8mm
- * - **external diameter**: 6mm
- * - **hole diameter**    : ≅ 5.6mm
+ * - **⌀ max**            : 6mm
+ * - **⌀ hole**           : ≅ 5.6mm
  */
 FL_KNUT_M4x8x6     = fl_Knut(M4_cap_screw,8,6,0.5,   [2.3,   2.3       ]);
 /*!
  * - **internal thread**  : M4
  * - **length**           : 10mm
- * - **external diameter**: 6mm
- * - **hole diameter**    : ≅ 5.6mm
+ * - **⌀ max**            : 6mm
+ * - **⌀ hole**           : ≅ 5.6mm
  */
 FL_KNUT_M4x10x6    = fl_Knut(M4_cap_screw,10,6,0.5,  [1.9,   1.7,   1.9]);
 
 /*!
  * - **internal thread**  : M5
  * - **length**           : 6mm
- * - **external diameter**: 7mm
- * - **hole diameter**    : ≅ 6.4mm
+ * - **⌀ max**            : 7mm
+ * - **⌀ hole**           : ≅ 6.6mm
  */
 FL_KNUT_M5x6x7     = fl_Knut(M5_cap_screw,6,7.0,0.5, [1.9,   1.9       ]);
 /*!
  * - **internal thread**  : M5
  * - **length**           : 8mm
- * - **external diameter**: 7mm
- * - **hole diameter**    : ≅ 6.4mm
+ * - **⌀ max**            : 7mm
+ * - **⌀ hole**           : ≅ 6.6mm
  */
 FL_KNUT_M5x8x7     = fl_Knut(M5_cap_screw,8,7.0,0.5, [2.4,   2.4       ]);
 /*!
  * - **internal thread**  : M5
  * - **length**           : 10mm
- * - **external diameter**: 7mm
- * - **hole diameter**    : ≅ 6.4mm
+ * - **⌀ max**            : 7mm
+ * - **⌀ hole**           : ≅ 6.6mm
  */
 FL_KNUT_M5x10x7    = fl_Knut(M5_cap_screw,10,7.0,0.8,[1.7,   1.5,  1.7 ]);
 
 /*!
- * Dictionary organized by internal thread __rows__
+ * Dictionary sorted by increasing internal thread
  */
 FL_KNUT_DICT = [
-  [FL_KNUT_M2x4x3p5, FL_KNUT_M2x6x3p5,  FL_KNUT_M2x8x3p5,  FL_KNUT_M2x10x3p5],
-  [FL_KNUT_M3x4x5,   FL_KNUT_M3x6x5,    FL_KNUT_M3x8x5,    FL_KNUT_M3x10x5  ],
-  [FL_KNUT_M4x4x6,   FL_KNUT_M4x6x6,    FL_KNUT_M4x8x6,    FL_KNUT_M4x10x6  ],
-  [FL_KNUT_M5x6x7,   FL_KNUT_M5x8x7,    FL_KNUT_M5x10x7                     ],
-];
-
-/*!
- * Dictionary sorted by internal thread
- */
-FL_KNUT_DICT_1 = [
   FL_KNUT_M2x4x3p5, FL_KNUT_M2x6x3p5,  FL_KNUT_M2x8x3p5,  FL_KNUT_M2x10x3p5,
   FL_KNUT_M3x4x5,   FL_KNUT_M3x6x5,    FL_KNUT_M3x8x5,    FL_KNUT_M3x10x5  ,
   FL_KNUT_M4x4x6,   FL_KNUT_M4x6x6,    FL_KNUT_M4x8x6,    FL_KNUT_M4x10x6  ,
@@ -195,35 +192,43 @@ FL_KNUT_DICT_1 = [
 ];
 
 /*!
- * return a knurl nut fitting the passed «screw» and «t».
+ * Search into dictionary for the best matching knut (default behavior) or all
+ * the matching knuts depending on the «best_one» parameter settings.
  *
- * returns undef when no knurl nut is found.
+ * | best_one | type      | value if no match |
+ * | ---      | ---       | ---               |
+ * | true     | list item | undef             |
+ * | false    | item list | []                |
+ *
  */
 function fl_knut_search(
-    //! screw to fit into
-    screw,
-    //! Z axis knurl nut thickness
-    t
-  ) =
-  assert(screw)
-  assert(t)
-  let(
-    r         = screw_radius(screw),
-    row       = let(i=search(r*2,[2,3,4,5])[0]) i!=undef ? FL_KNUT_DICT[i] : undef,
-    max_thick = function(list,current=[-1,undef])
-      assert(list!=[])
-      let(
-        len   = len(list),
-        first = list[0],
-        max   = first[0]>current[0] ? first : current
-      ) len==1 ? max : max_thick([for(i=[1:len-1]) list[i]],max),
-    list = row ? [
-      for(i=[0:len(row)-1])
-        let(thick = fl_knut_thick(row[i])) if (thick<=t) [thick,i]
-      ] : undef
-  ) row && list ? row[max_thick(list)[1]] : undef;
+  //! screw to fit into
+  screw,
+  //! Z axis knurl nut thickness
+  thick,
+  //! nominal diameter
+  d,
+  /*!
+   * when true returns the match with the highest thickness, otherwise a list
+   * of matching items.
+   *
+   * __NOTE__: as a consequence of the above, when the parameter is true
+   * function will always return __at most__ one item. Otherwise it returns
+   * always a list __eventually__ empty if no item match the passed criteria.
+   */
+  best_one=true
+) = let(
+  nominal = d ? d : screw ? fl_screw_nominalD(screw) : undef,
+  result  = [
+    for(nut=FL_KNUT_DICT)
+      if ( (is_undef(thick)   || fl_knut_thick(nut)<=thick)
+        && (is_undef(nominal) || nominal==fl_screw_nominalD(fl_screw(nut)))
+      ) nut
+  ]
+) best_one ? fl_max(result,function(item) fl_knut_thick(item)) : result;
 
 module fl_knut(
+  //! supported verbs: `FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_LAYOUT`
   verbs=FL_ADD,
   type,
   //! desired direction [director,rotation], native direction when undef ([+Z])
@@ -297,18 +302,17 @@ module fl_knut(
       }
       translate(-fl_Z(FL_NIL)) cylinder(r=screw_r, h=l+2*FL_NIL);
     }
-    // #cylinder(r=r, h=l);
   }
 
   module do_bbox() {
-    translate(+Z(l/2)) fl_cube(size=size+[0,0,2*NIL], octant=O);
+    translate(+Z(l/2)) fl_cube(size=size+[0,0,2xNIL], octant=O);
   }
 
   module do_layout()    {
     translate(fl_Z(l)) children();
   }
   module do_drill() {
-    fl_cylinder(r=r-0.2 /* tooth_h */, h=l,octant=+Z);
+    fl_cylinder(r=r-tooth_h+0.1/2, h=l,octant=+Z);
   }
 
   fl_manage(verbs,M,D) {

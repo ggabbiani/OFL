@@ -71,40 +71,32 @@ fl_status();
 
 // end of automatically generated code
 
-obj       = SHOW=="FL_KNUT_M2x4x3p5"  ? FL_KNUT_M2x4x3p5
-          : SHOW=="FL_KNUT_M2x6x3p5"  ? FL_KNUT_M2x6x3p5
-          : SHOW=="FL_KNUT_M2x8x3p5"  ? FL_KNUT_M2x8x3p5
-          : SHOW=="FL_KNUT_M2x10x3p5" ? FL_KNUT_M2x10x3p5
-          : SHOW=="FL_KNUT_M3x4x5"    ? FL_KNUT_M3x4x5
-          : SHOW=="FL_KNUT_M3x6x5"    ? FL_KNUT_M3x6x5
-          : SHOW=="FL_KNUT_M3x8x5"    ? FL_KNUT_M3x8x5
-          : SHOW=="FL_KNUT_M3x10x5"   ? FL_KNUT_M3x10x5
-          : SHOW=="FL_KNUT_M4x4x6"    ? FL_KNUT_M4x4x6
-          : SHOW=="FL_KNUT_M4x6x6"    ? FL_KNUT_M4x6x6
-          : SHOW=="FL_KNUT_M4x8x6"    ? FL_KNUT_M4x8x6
-          : SHOW=="FL_KNUT_M4x10x6"   ? FL_KNUT_M4x10x6
-          : SHOW=="FL_KNUT_M5x6x7"    ? FL_KNUT_M5x6x7
-          : SHOW=="FL_KNUT_M5x8x7"    ? FL_KNUT_M5x8x7
-          : SHOW=="FL_KNUT_M5x10x7"   ? FL_KNUT_M5x10x7
-          : undef;
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
-];
-fl_trace("verbs",verbs);
-
-module _knut_(verbs,obj) {
-  fl_knut(verbs,obj,octant=octant,direction=direction);
-}
+obj   = fl_switch(SHOW,cases=[
+  ["FL_KNUT_M2x4x3p5",  FL_KNUT_M2x4x3p5],
+  ["FL_KNUT_M2x6x3p5",  FL_KNUT_M2x6x3p5],
+  ["FL_KNUT_M2x8x3p5",  FL_KNUT_M2x8x3p5],
+  ["FL_KNUT_M2x10x3p5", FL_KNUT_M2x10x3p5],
+  ["FL_KNUT_M3x4x5",    FL_KNUT_M3x4x5],
+  ["FL_KNUT_M3x6x5",    FL_KNUT_M3x6x5],
+  ["FL_KNUT_M3x8x5",    FL_KNUT_M3x8x5],
+  ["FL_KNUT_M3x10x5",   FL_KNUT_M3x10x5],
+  ["FL_KNUT_M4x4x6",    FL_KNUT_M4x4x6],
+  ["FL_KNUT_M4x6x6",    FL_KNUT_M4x6x6],
+  ["FL_KNUT_M4x8x6",    FL_KNUT_M4x8x6],
+  ["FL_KNUT_M4x10x6",   FL_KNUT_M4x10x6],
+  ["FL_KNUT_M5x6x7",    FL_KNUT_M5x6x7],
+  ["FL_KNUT_M5x8x7",    FL_KNUT_M5x8x7],
+  ["FL_KNUT_M5x10x7",   FL_KNUT_M5x10x7]
+]);
+verbs = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL]);
 
 if (obj)
   fl_knut(verbs,obj,octant=octant,direction=direction);
-else
-  for(i=[0:len(FL_KNUT_DICT)-1]) let(row=FL_KNUT_DICT[i],l=len(row)) translate(fl_Y(12*i)) {
-    fl_trace("len(row)",len(row));
-    fl_layout(axis=+FL_X,gap=3,types=row)
-      fl_knut(verbs,$item,octant=octant,direction=direction);
-  }
+else {
+  // build a dictionary with rows constituted by items with equal internal thread
+  dict  = fl_dict_organize(FL_KNUT_DICT,[2:5],function(nut) 2*screw_radius(fl_screw(nut)));
+  for(i=[0:len(dict)-1]) let(row=dict[i],l=len(row))
+    translate(fl_Y(12*i))
+      fl_layout(axis=+FL_X,gap=3,types=row)
+        fl_knut(verbs,$item,octant=octant,direction=direction);
+}
