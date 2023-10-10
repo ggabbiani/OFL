@@ -15,14 +15,40 @@ use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 //*****************************************************************************
 // language extension
 
-function fl_switch(value,cases,otherwise) = let(
+/*!
+ * implementation of switch statement as a function: when «value» matches a case,
+ * corresponding value is returned, undef otherwise.
+ *
+ * example:
+ *
+ *     value = 2.5;
+ *     result = fl_switch(value,[
+ *         [2,  3.2],
+ *         [2.5,4.0],
+ *         [3,  4.0],
+ *         [5,  6.4],
+ *         [6,  8.0],
+ *         [8,  9.6]
+ *       ]
+ *     );
+ *
+ * result will be set to 4.0.
+ */
+function fl_switch(
+  //! the value to be checked
+  value,
+  //! a list with each item composed by a couple «expression result»/«value»
+  cases,
+  //! value returned in case of no match
+  otherwise=undef
+) = let(
   match = [for(case=cases) if (value==case[0]) case[1]]
 ) match ? match[0] : otherwise;
 
 //*****************************************************************************
 // versioning
 
-function fl_version() = [3,5,1];
+function fl_version() = [4,0,0];
 
 function fl_versionNumber() = let(
   version = fl_version()
@@ -85,7 +111,7 @@ function fl_push(list,item) = [each list,item];
 // OFL GLOBALS
 
 //! When true, disables PREVIEW corrections (see variable FL_NIL)
-$FL_RENDER  = !$preview;
+$FL_RENDER  = is_undef($FL_RENDER) ? !$preview : $FL_RENDER;
 
 //! simple workaround for the z-fighting problem during preview
 FL_NIL    = ($preview && !$FL_RENDER ? 0.01 : 0);
@@ -273,18 +299,18 @@ FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
 FL_SYMBOLS    = "FL_SYMBOLS adds symbols and labels usually for debugging";
 
 // Runtime behavior defaults
-$FL_ADD       = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_ASSEMBLY  = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_AXES      = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_BBOX      = "TRANSPARENT";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_CUTOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_DRILL     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_FOOTPRINT = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_HOLDERS   = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_LAYOUT    = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_MOUNT     = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_PAYLOAD   = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_SYMBOLS   = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = is_undef($FL_ADD)       ? "ON"          : $FL_ADD;        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = is_undef($FL_ASSEMBLY)  ? "ON"          : $FL_ASSEMBLY;   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES      = is_undef($FL_AXES)      ? "ON"          : $FL_AXES;       // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX      = is_undef($FL_BBOX)      ? "TRANSPARENT" : $FL_BBOX;       // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = is_undef($FL_CUTOUT)    ? "ON"          : $FL_CUTOUT;     // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_DRILL     = is_undef($FL_DRILL)     ? "ON"          : $FL_DRILL;      // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT = is_undef($FL_FOOTPRINT) ? "ON"          : $FL_FOOTPRINT;  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_HOLDERS   = is_undef($FL_HOLDERS)   ? "ON"          : $FL_HOLDERS;    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_LAYOUT    = is_undef($FL_LAYOUT)    ? "ON"          : $FL_LAYOUT;     // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_MOUNT     = is_undef($FL_MOUNT)     ? "ON"          : $FL_MOUNT;      // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD   = is_undef($FL_PAYLOAD)   ? "DEBUG"       : $FL_PAYLOAD;    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_SYMBOLS   = is_undef($FL_SYMBOLS)   ? "ON"          : $FL_SYMBOLS;    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 //! given a verb returns the corresponding modifier value
 function fl_verb2modifier(verb)  =
@@ -391,7 +417,6 @@ function fl_verbList(
 
 function fl_connectors(type,value)  = fl_property(type,"connectors",value);
 function fl_description(type,value) = fl_property(type,"description",value);
-// function fl_director(type,value)    = fl_property(type,"director",value);
 function fl_dxf(type,value)         = fl_property(type,"DXF model file",value);
 function fl_engine(type,value)      = fl_property(type,"engine",value);
 function fl_holes(type,value)       = assert(is_undef(value)||fl_tt_isHoleList(value),value) fl_property(type,"holes",value);
@@ -404,8 +429,9 @@ function fl_nopSCADlib(type,value,default)
 function fl_pcb(type,value)         = fl_property(type,"embedded OFL pcb",value);
 // pay-load bounding box, it contributes to the overall bounding box calculation
 function fl_payload(type,value)     = fl_property(type,"payload bounding box",value);
-// function fl_rotor(type,value)       = fl_property(type,"rotor",value);
+function fl_tag(type,value)         = fl_property(type,"product tag",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
+function fl_stl(type,value)         = fl_property(type,"STL geometry file",value);
 function fl_tolerance(type,value)   = fl_property(type,"tolerance",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 /*
@@ -651,6 +677,15 @@ function fl_max(
 function fl_dict_search(dictionary,name) = [
   for(item=dictionary) let(n=fl_name(item)) if (name==n) item
 ];
+
+/*!
+ * build a dictionary with rows constituted by items with equal property as
+ * retrieved by «func»
+ */
+function fl_dict_organize(dictionary,range,func) =
+  [for(value=range)
+    [for(item=dictionary) let(property=func(item)) if (property==value) item]
+  ];
 
 /*!
  * Optional getter, no error when property is not found.
