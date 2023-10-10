@@ -325,7 +325,7 @@ module fl_knut(
   }
   module do_drill() {
     // echo(d1=2*r,d2=2*(r-tooth_h),d3=2*(r-tooth_h)+0.1)
-    echo(str("drill ⌀: ",drill_d));
+    fl_trace("drill ⌀",drill_d);
     do_layout()
       fl_cylinder(d=drill_d, h=l,octant=-Z,$FL_ADD=$FL_DRILL);
   }
