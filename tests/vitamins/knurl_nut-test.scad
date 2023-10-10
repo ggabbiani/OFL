@@ -58,7 +58,8 @@ DIR_R       = 0;        // [-360:360]
 
 /* [Knurl nut] */
 
-SHOW    = "All"; // [All, FL_KNUT_M2x4x3p5, FL_KNUT_M2x6x3p5,  FL_KNUT_M2x8x3p5,  FL_KNUT_M2x10x3p5, FL_KNUT_M3x4x5,   FL_KNUT_M3x6x5,    FL_KNUT_M3x8x5,    FL_KNUT_M3x10x5, FL_KNUT_M4x4x6,   FL_KNUT_M4x6x6,    FL_KNUT_M4x8x6,    FL_KNUT_M4x10x6,FL_KNUT_M5x6x7,   FL_KNUT_M5x8x7,    FL_KNUT_M5x10x7]
+SHOW        = "ALL"; // [ALL, Linear M2x4mm,Linear M2x6mm,Linear M2x8mm,Linear M2x10mm,Linear M3x4mm,Linear M3x6mm,Linear M3x8mm,Linear M3x10mm,Linear M4x4mm,Linear M4x6mm,Linear M4x8mm,Linear M4x10mm,Linear M5x6mm,Linear M5x8mm,Linear M5x10mm,Spiral M2x4mm,Spiral M2p5x5.7mm,Spiral M3x5.7mm,Spiral M4x8.1mm,Spiral M5x9.5mm,Spiral M6x12.7mm,Spiral M8x12.7mm]
+PRODUCT_TAG = "ANY";  // [ANY,linear thread,double spiral thread]
 
 
 /* [Hidden] */
@@ -72,31 +73,53 @@ fl_status();
 // end of automatically generated code
 
 obj   = fl_switch(SHOW,cases=[
-  ["FL_KNUT_M2x4x3p5",  FL_KNUT_M2x4x3p5],
-  ["FL_KNUT_M2x6x3p5",  FL_KNUT_M2x6x3p5],
-  ["FL_KNUT_M2x8x3p5",  FL_KNUT_M2x8x3p5],
-  ["FL_KNUT_M2x10x3p5", FL_KNUT_M2x10x3p5],
-  ["FL_KNUT_M3x4x5",    FL_KNUT_M3x4x5],
-  ["FL_KNUT_M3x6x5",    FL_KNUT_M3x6x5],
-  ["FL_KNUT_M3x8x5",    FL_KNUT_M3x8x5],
-  ["FL_KNUT_M3x10x5",   FL_KNUT_M3x10x5],
-  ["FL_KNUT_M4x4x6",    FL_KNUT_M4x4x6],
-  ["FL_KNUT_M4x6x6",    FL_KNUT_M4x6x6],
-  ["FL_KNUT_M4x8x6",    FL_KNUT_M4x8x6],
-  ["FL_KNUT_M4x10x6",   FL_KNUT_M4x10x6],
-  ["FL_KNUT_M5x6x7",    FL_KNUT_M5x6x7],
-  ["FL_KNUT_M5x8x7",    FL_KNUT_M5x8x7],
-  ["FL_KNUT_M5x10x7",   FL_KNUT_M5x10x7]
+  ["Linear M2x4mm",     FL_KNUT_LINEAR_M2x4     ],
+  ["Linear M2x6mm",     FL_KNUT_LINEAR_M2x6     ],
+  ["Linear M2x8mm",     FL_KNUT_LINEAR_M2x8     ],
+  ["Linear M2x10mm",    FL_KNUT_LINEAR_M2x10    ],
+  ["Linear M3x4mm",     FL_KNUT_LINEAR_M3x4     ],
+  ["Linear M3x6mm",     FL_KNUT_LINEAR_M3x6     ],
+  ["Linear M3x8mm",     FL_KNUT_LINEAR_M3x8     ],
+  ["Linear M3x10mm",    FL_KNUT_LINEAR_M3x10    ],
+  ["Linear M4x4mm",     FL_KNUT_LINEAR_M4x4     ],
+  ["Linear M4x6mm",     FL_KNUT_LINEAR_M4x6     ],
+  ["Linear M4x8mm",     FL_KNUT_LINEAR_M4x8     ],
+  ["Linear M4x10mm",    FL_KNUT_LINEAR_M4x10    ],
+  ["Linear M5x6mm",     FL_KNUT_LINEAR_M5x6     ],
+  ["Linear M5x8mm",     FL_KNUT_LINEAR_M5x8     ],
+  ["Linear M5x10mm",    FL_KNUT_LINEAR_M5x10    ],
+  ["Spiral M2x4mm",     FL_KNUT_SPIRAL_M2x4     ],
+  ["Spiral M2p5x5.7mm", FL_KNUT_SPIRAL_M2p5x5p7 ],
+  ["Spiral M3x5.7mm",   FL_KNUT_SPIRAL_M3x5p7   ],
+  ["Spiral M4x8.1mm",   FL_KNUT_SPIRAL_M4x8p1   ],
+  ["Spiral M5x9.5mm",   FL_KNUT_SPIRAL_M5x9p5   ],
+  ["Spiral M6x12.7mm",  FL_KNUT_SPIRAL_M6x12p7  ],
+  ["Spiral M8x12.7mm",  FL_KNUT_SPIRAL_M8x12p7  ]
 ]);
 verbs = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL]);
 
 if (obj)
   fl_knut(verbs,obj,octant=octant,direction=direction);
 else {
+  // filter items by the product tag
+  items = PRODUCT_TAG=="ANY" ? FL_KNUT_DICT : fl_knut_search(tag=PRODUCT_TAG,best=false);
   // build a dictionary with rows constituted by items with equal internal thread
-  dict  = fl_dict_organize(FL_KNUT_DICT,[2:5],function(nut) 2*screw_radius(fl_screw(nut)));
+  dict  = fl_dict_organize(items,[2:0.5:8],function(nut) fl_knut_nominal(nut));
+  y_offsets = [for(i=[0:len(dict)-1]) i && dict[i] ? 12 : 0];
+  y_coords  = cumulativeSum(y_offsets);
   for(i=[0:len(dict)-1]) let(row=dict[i],l=len(row))
-    translate(fl_Y(12*i))
-      fl_layout(axis=+FL_X,gap=3,types=row)
-        fl_knut(verbs,$item,octant=octant,direction=direction);
+    if (row) { // ignore empty rows
+      translate(Y(y_coords[i])) {
+          label(str("M",fl_knut_nominal(row[0])),halign="center");
+        fl_layout(axis=+X,gap=3,types=row)
+          // echo(fl_name($item))
+            fl_knut(verbs,$item,octant=octant,direction=direction);
+      }
+    }
 }
+
+//! returns a vector in which each item is the sum of the previous ones
+function cumulativeSum(v) = [
+  for (i = [0 : len(v) - 1])
+    fl_accum([for(j=[0:i]) v[j]])
+];
