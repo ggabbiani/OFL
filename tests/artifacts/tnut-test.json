@@ -14,8 +14,6 @@
             "DIR_NATIVE": "false",
             "DIR_R": "270",
             "DIR_Z": "[1, 0, 0]",
-            "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true",
             "base_thick": "1",
             "cone_thick": "2",
             "countersink": "false",
@@ -25,7 +23,7 @@
             "length": "20",
             "nut_tolerance": "0",
             "opening": "6",
-            "screw_name": "M3_cs_cap_screw",
+            "screw_name": "M3_cap_screw",
             "wall_thick": "1"
         },
         "M4": {
@@ -41,8 +39,6 @@
             "DIR_NATIVE": "false",
             "DIR_R": "270",
             "DIR_Z": "[1, 0, 0]",
-            "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true",
             "base_thick": "1.7000000000000002",
             "cone_thick": "2",
             "countersink": "false",
@@ -52,7 +48,7 @@
             "length": "20",
             "nut_tolerance": "0",
             "opening": "6",
-            "screw_name": "M4_cs_cap_screw",
+            "screw_name": "M4_cap_screw",
             "wall_thick": "1"
         },
         "M5": {
@@ -68,8 +64,6 @@
             "DIR_NATIVE": "false",
             "DIR_R": "270",
             "DIR_Z": "[1, 0, 0]",
-            "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true",
             "base_thick": "2.2000000000000002",
             "cone_thick": "1.5",
             "countersink": "false",
@@ -79,7 +73,7 @@
             "length": "20",
             "nut_tolerance": "0",
             "opening": "6",
-            "screw_name": "M5_cs_cap_screw",
+            "screw_name": "M5_cap_screw",
             "wall_thick": "1"
         },
         "M6": {
@@ -95,8 +89,6 @@
             "DIR_NATIVE": "false",
             "DIR_R": "270",
             "DIR_Z": "[1, 0, 0]",
-            "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true",
             "base_thick": "1.3",
             "cone_thick": "5.3000000000000007",
             "countersink": "false",
@@ -106,7 +98,7 @@
             "length": "20",
             "nut_tolerance": "0",
             "opening": "8",
-            "screw_name": "M6_cs_cap_screw",
+            "screw_name": "M6_cap_screw",
             "wall_thick": "1.9000000000000001"
         },
         "snapmaker-at250-m3": {
@@ -123,8 +115,6 @@
             "DIR_NATIVE": "true",
             "DIR_R": "270",
             "DIR_Z": "[1, 0, 0]",
-            "OCTANT": "[0, 0, 0]",
-            "PLACE_NATIVE": "true",
             "SHOW_SYMBOLS": "false",
             "base_thick": "1",
             "cone_thick": "2",
@@ -136,7 +126,7 @@
             "length": "20",
             "nut_tolerance": "0",
             "opening": "6",
-            "screw_name": "M3_cs_cap_screw",
+            "screw_name": "M3_cap_screw",
             "wall_thick": "2"
         }
     }
