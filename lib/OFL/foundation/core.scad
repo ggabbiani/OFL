@@ -911,9 +911,9 @@ function fl_filament() = is_undef($fl_filament)
  * - -1,0,+1: untouched
  */
 function fl_parm_Octant(x,y,z) = let(
-  o_x = x=="undef" ? undef : x,
-  o_y = y=="undef" ? undef : y,
-  o_z = z=="undef" ? undef : z
+  o_x = x=="undef" ? undef : is_num(x) ? x : atoi(x),
+  o_y = y=="undef" ? undef : is_num(y) ? y : atoi(y),
+  o_z = z=="undef" ? undef : is_num(z) ? z : atoi(z)
 ) [o_x,o_y,o_z];
 
 //! constructor for debug context parameter
