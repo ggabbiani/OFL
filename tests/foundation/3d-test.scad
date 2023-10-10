@@ -30,11 +30,11 @@ SHOW_SYMBOLS    = false;
 /* [Supported verbs] */
 
 // adds shapes to scene.
-ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD   = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
 /* [3D Placement] */
@@ -75,16 +75,12 @@ fl_status();
 
 // end of automatically generated code
 
-verbs=[
-  if (ADD!="OFF")   FL_ADD,
-  if (AXES!="OFF")  FL_AXES,
-  if (BBOX!="OFF")  FL_BBOX,
-];
+verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX]);
 
 fl_trace("octant",octant);
 
-if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=SIZE.x,l2=SIZE.y,h=SIZE.z,debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
-else if (SHAPE == "pyramid" )  fl_pyramid(verbs,[[-1,-1],[+1,-1],[+1,+1],[-1,+1]], [0,0,2],debug=debug,octant=octant,direction=direction,$FL_ADD=ADD,$FL_AXES=AXES,$FL_BBOX=BBOX);
+if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,debug=debug,octant=octant,direction=direction);
+else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,debug=debug,octant=octant,direction=direction);
+else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,debug=debug,octant=octant,direction=direction);
+else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=SIZE.x,l2=SIZE.y,h=SIZE.z,debug=debug,octant=octant,direction=direction);
+else if (SHAPE == "pyramid" )  fl_pyramid(verbs,[[-1,-1],[+1,-1],[+1,+1],[-1,+1]], [0,0,2],debug=debug,octant=octant,direction=direction);
