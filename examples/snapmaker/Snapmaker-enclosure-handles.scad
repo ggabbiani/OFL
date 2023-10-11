@@ -32,16 +32,16 @@ MAGNET    = "FL_MAG_M3_CS_D10x2";               // [FL_MAG_M3_CS_D10x2,FL_MAG_M3
 VIEW_MODE = "FULL";                             // [FULL,PARTIAL,PRINT ME!]
 PART      = "Front";                            // [Front, Right]
 
-/* [hidden] */
+/* [Hidden] */
 
 clearance = fl_techLimit(FL_LIMIT_CLEARANCE)/2;
 
 magnet      = MAGNET=="FL_MAG_M3_CS_D10x2" ? FL_MAG_M3_CS_D10x2 : FL_MAG_M3_CS_D10x5;
-screw       = SCREW ? (SCREW=="M2_cs_cap_screw" ? M2_cs_cap_screw : M3_cs_cap_screw)
-              : fl_screw(magnet);
+screw       = fl_switch(SCREW,[["M2_cs_cap_screw",M2_cs_cap_screw],["M3_cs_cap_screw",M3_cs_cap_screw]],fl_screw(magnet));
 mag_sz      = fl_bb_size(magnet);
 T           = 2+clearance;
-knut        = screw_radius(screw)==1 ? FL_KNUT_M2x4x3p5 : FL_KNUT_M3x4x5;
+// shortest linear threaded nut matching screw
+knut        = fl_knut_search(screw,tag="linear thread",best=FL_KNUT_SHORTEST);
 knut_thick  = fl_knut_thick(knut);
 tube_thick  = 1.6; // from brass insert producer data it should be at least 1.6mm
 tube_d      = mag_sz.x+(tube_thick+clearance)*2;
@@ -51,7 +51,7 @@ tube_h      = max(mag_sz.z+knut_thick-(T+emi_d/2)+1,0);
 // ellipse geometry
 e         = [15,18];
 e_angles  = PART=="Front" ? [0,90] : [0,-90];
-// magnet translation matrix
+// magnet translation
 M_magnet  = PART=="Front" ? [0,e.y/2,h-12] : [0,e.y/2,h-17];
 // fillet radius
 fill_r    = 3;
@@ -69,7 +69,7 @@ difference() {
       // linear surface
       translate(Y(PART=="Front" ? 0 : T))
         fl_square(size = [T,e.y-T], quadrant=+X+Y);
-      *fl_circle(r = T/2,quadrant=+X);
+      // *fl_circle(r = T/2,quadrant=+X);
 
     }
 
@@ -106,7 +106,7 @@ difference() {
   translate(M_magnet)
     fl_magnet([FL_FOOTPRINT,FL_LAYOUT],type=magnet,fp_gross=clearance,thick=emi_d/2,octant=-Z,direction=[-X,90])
       translate(-Z(mag_sz.z+clearance-NIL))
-        fl_cylinder(h=T+emi_d/2+tube_h-mag_sz.z-clearance+NIL, d=2*fl_knut_r(knut)-1,octant=-Z);
+        fl_knut(FL_DRILL,type=knut,dri_thick=T+emi_d/2+tube_h-mag_sz.z-clearance+NIL,$FL_DRILL="ON");
 
 }
 
@@ -119,4 +119,4 @@ translate(M_magnet)
     $FL_ASSEMBLY  = VIEW_MODE=="FULL"?"ON":"OFF",
     $FL_LAYOUT    = VIEW_MODE!="PRINT ME!"?"ON":"OFF"
   ) translate(-Z(mag_sz.z+clearance))
-    fl_knut(type=knut,octant=-Z,$FL_ADD=VIEW_MODE!="PRINT ME!"?"ON":"OFF");
+    fl_knut(type=knut,$FL_ADD=VIEW_MODE!="PRINT ME!"?"ON":"OFF");
