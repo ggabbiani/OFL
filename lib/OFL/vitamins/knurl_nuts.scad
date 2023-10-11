@@ -62,7 +62,7 @@ function fl_knut_rings(type,value)  = fl_property(type,"knut/rings array [[heigh
 //*****************************************************************************
 // Knurl nuts getters
 
-//! nominal size for a knurl nut is the nominal size of the screw
+//! nominal diameter of the mounting screw
 function fl_knut_nominal(knut) = fl_screw_nominal(fl_screw(knut));
 
 /*!
@@ -212,6 +212,11 @@ FL_KNUT_DICT = [
   FL_KNUT_SPIRAL_M5x9p5,  FL_KNUT_SPIRAL_M6x12p7,   FL_KNUT_SPIRAL_M8x12p7
 ];
 
+//! in a list of knurl nuts find out the shortest one
+FL_KNUT_SHORTEST  = function(nuts) fl_min(nuts,function(item) fl_knut_thick(item));
+//! in a list of knurl nuts find out the longest one
+FL_KNUT_LONGEST   = function(nuts) fl_max(nuts,function(item) fl_knut_thick(item));
+
 /*!
  * Search into dictionary for the best matching knut (default behavior) or all
  * the matching knuts.
@@ -219,13 +224,13 @@ FL_KNUT_DICT = [
 function fl_knut_search(
   //! screw to fit into
   screw,
-  //! Z axis knurl nut thickness
+  //! max knurl nut thickness (Z axis size)
   thick,
   //! nominal diameter
   d,
   //! product tag
   tag,
-  best=function(matches) fl_max(matches,function(item) fl_knut_thick(item))
+  best=FL_KNUT_LONGEST
 ) = let(
   nominal = d ? d : screw ? fl_screw_nominal(screw) : undef,
   result  = [
@@ -241,6 +246,11 @@ module fl_knut(
   //! supported verbs: `FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_LAYOUT`
   verbs=FL_ADD,
   type,
+  /*!
+   * Overall thickness during FL_DRILL operations.
+   * Should be at least equal to the knurl nut thickness.
+   */
+  dri_thick,
   //! desired direction [director,rotation], native direction when undef ([+Z])
   direction,
   //! when undef native positioning is used
@@ -250,10 +260,11 @@ module fl_knut(
 
   r       = fl_knut_r(type);
   l       = fl_knut_thick(type);
+  dri_thick = dri_thick ? dri_thick : l;
   screw   = fl_screw(type);
   screw_r = screw_radius(screw);
   screw_l = screw_shorter_than(l);
-  nominal = 2*screw_r;
+  nominal = fl_knut_nominal(type);
   stl     = fl_optProperty(type,fl_stl()[0]);
   tooth_h = stl ? undef : fl_knut_tooth(type);
   drill_d = tooth_h ? 2*r-2*tooth_h+0.1 : fl_switch(nominal, FL_KNUT_NOMINAL_DRILL)[0];
@@ -326,8 +337,12 @@ module fl_knut(
   module do_drill() {
     // echo(d1=2*r,d2=2*(r-tooth_h),d3=2*(r-tooth_h)+0.1)
     fl_trace("drill ⌀",drill_d);
-    do_layout()
+    do_layout() {
       fl_cylinder(d=drill_d, h=l,octant=-Z,$FL_ADD=$FL_DRILL);
+      if (dri_thick>l)
+        translate(-Z(l))
+          fl_cylinder(d=nominal, h=dri_thick-l,octant=-Z,$FL_ADD=$FL_DRILL);
+    }
   }
 
   fl_manage(verbs,M,D) {
