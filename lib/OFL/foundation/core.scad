@@ -39,10 +39,10 @@ function fl_switch(
   value,
   //! a list with each item composed by a couple «expression result»/«value»
   cases,
-  //! value returned in case of no match
+  //! value returned in case of no match or when «value» is undef
   otherwise=undef
 ) = let(
-  match = [for(case=cases) if (value==case[0]) case[1]]
+  match = is_undef(value) ? [] : [for(case=cases) if (value==case[0]) case[1]]
 ) match ? match[0] : otherwise;
 
 //*****************************************************************************
@@ -671,6 +671,24 @@ function fl_max(
   value=function(item) item,
   _i_=0
 ) = (_i_+1)<len(list) ? let(other=fl_max(list,value,_i_+1)) value(list[_i_])>value(other) ? list[_i_] : list[_i_+1] : list[_i_];
+
+/*!
+ * return the list item whose calculated value is min.
+ *
+ * Return 'undef' in case of empty «list».
+ */
+function fl_min(
+  //! item list
+  list,
+  /*!
+   * string literal assigning items a value: essentially it determines the way
+   * a 'score' is mapped to a corresponding list item for the 'min' evaluation
+   *
+   * As default simply returns the item (i.e. the 'score' is the item itself).
+   */
+  value=function(item) item,
+  _i_=0
+) = (_i_+1)<len(list) ? let(other=fl_min(list,value,_i_+1)) value(list[_i_])<value(other) ? list[_i_] : list[_i_+1] : list[_i_];
 
 //**** dictionary *************************************************************
 
