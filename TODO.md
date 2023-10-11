@@ -25,7 +25,7 @@
 - [x] foundation/type_trait.scad: updated function fl_tt_isComponent() to the new record format used for components.
 - [x] artifacts/box.scad: modified signature for module fl_box(), implemented FL_LAYOUT verb and defined a variable context to be passed to children
 - [x] artifacts/t-nut.scad: added a T-nut engine.
-- [ ] artifacts/t-nut.scad: add a dictionary of predefined sizes aligned with [NopSCADlib](https://github.com/nophead/NopSCADlib) definitions (m3,M4,M5,M6)
+- [X] artifacts/t-nut.scad: add a dictionary of predefined sizes aligned with [NopSCADlib](https://github.com/nophead/NopSCADlib) definitions (M3,M4,M5,M6)
 - [x] examples/camera-mount.scad: camera mount for D-Link DCS 932L into SnapMaker 2.0 enclosure
 - [x] examples/rpi4-box: extend the auto adaptive box engine to the new Khadas VIM1 pcb. Example renamed into examples/sbc-box.scad
 - [x] tests/artifacts/box-test.scad: aligned with changes on artifacts/box.scad
@@ -46,8 +46,8 @@
 - [x] rewrite sata library with dxf
 - [x] fixed .dxf file warnings during OpenSCAD loading
 - [x] improved object positioning by fl_octant() extension now managing also 'undef' dimensional translations
-- [x] function fl_octant() extended in order to manage also the invariants
 - [x] all OFL base shapes but fl_cube() are centered to the origin: now fl_cube() is centered by default as well
+- [ ] standardize the common api parameter syntax
 
 
 ## Changed file names
