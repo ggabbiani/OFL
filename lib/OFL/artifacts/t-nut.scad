@@ -223,8 +223,7 @@ module fl_tnut(
   module do_assembly() {
     if (knut)
       do_layout()
-        translate(Y(NIL))
-          fl_knut(type=knut,direction=[-$hole_n,0],octant=+Z,$FL_ADD=$FL_ASSEMBLY);
+        fl_knut(type=knut,direction=[-$hole_n,0],octant=+Z,$FL_ADD=$FL_ASSEMBLY,$FL_AXES=$FL_ASSEMBLY);
   }
 
   module do_layout() {
@@ -237,7 +236,10 @@ module fl_tnut(
     assert(!is_undef(dri_thick),"FL_DRILL without thickness parameter");
     echo(dri_thick=dri_thick);
     do_layout() {
-      fl_cylinder(h=dri_thick,d=$hole_d+hole_t,direction=[$hole_n,0]);
+      if (knut)
+        fl_knut(FL_DRILL,type=knut,dri_thick=dri_thick,direction=[-$hole_n,0],octant=+Z);
+      else
+        fl_cylinder(h=dri_thick,d=$hole_d+hole_t,direction=[$hole_n,0],$FL_ADD=$FL_DRILL);
       // fl_screw(FL_DRILL,screw,len=dri_thick,direction=[-$hole_n,0]);
     }
   }
