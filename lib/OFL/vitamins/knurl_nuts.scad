@@ -247,10 +247,11 @@ module fl_knut(
   verbs=FL_ADD,
   type,
   /*!
-   * Overall thickness during FL_DRILL operations.
-   * Should be at least equal to the knurl nut thickness.
+   * thickness during FL_DRILL operations.
+   *
+   * __NOTE__: thickness is always added to the carving of the nut.
    */
-  dri_thick,
+  dri_thick=0,
   //! desired direction [director,rotation], native direction when undef ([+Z])
   direction,
   //! when undef native positioning is used
@@ -260,7 +261,6 @@ module fl_knut(
 
   r       = fl_knut_r(type);
   l       = fl_knut_thick(type);
-  dri_thick = dri_thick ? dri_thick : l;
   screw   = fl_screw(type);
   screw_r = screw_radius(screw);
   screw_l = screw_shorter_than(l);
@@ -335,13 +335,15 @@ module fl_knut(
     translate(Z(bbox[1].z)) children();
   }
   module do_drill() {
+    assert(dri_thick>=0,dri_thick);
     // echo(d1=2*r,d2=2*(r-tooth_h),d3=2*(r-tooth_h)+0.1)
     fl_trace("drill ⌀",drill_d);
     do_layout() {
-      fl_cylinder(d=drill_d, h=l,octant=-Z,$FL_ADD=$FL_DRILL);
-      if (dri_thick>l)
+      translate(-Z(NIL))
+        fl_cylinder(d=drill_d, h=l,octant=-Z,$FL_ADD=$FL_DRILL);
+      if (dri_thick)
         translate(-Z(l))
-          fl_cylinder(d=nominal, h=dri_thick-l,octant=-Z,$FL_ADD=$FL_DRILL);
+          fl_cylinder(d=nominal, h=dri_thick,octant=-Z,$FL_ADD=$FL_DRILL);
     }
   }
 
