@@ -60,7 +60,8 @@ DIR_R       = 0;        // [-360:360]
 
 SHOW        = "ALL";  // [ALL, Linear M2x4mm,Linear M2x6mm,Linear M2x8mm,Linear M2x10mm,Linear M3x4mm,Linear M3x6mm,Linear M3x8mm,Linear M3x10mm,Linear M4x4mm,Linear M4x6mm,Linear M4x8mm,Linear M4x10mm,Linear M5x6mm,Linear M5x8mm,Linear M5x10mm,Spiral M2x4mm,Spiral M2p5x5.7mm,Spiral M3x5.7mm,Spiral M4x8.1mm,Spiral M5x9.5mm,Spiral M6x12.7mm,Spiral M8x12.7mm]
 PRODUCT_TAG = "ANY";  // [ANY,linear thread,double spiral thread]
-DRILL_THICK = 0;      // [0:0.1:10]
+// FL_DRILL on Z axis
+DRILL_THICK = 0;      // [-10:0.1:10]
 
 
 /* [Hidden] */
@@ -73,6 +74,15 @@ fl_status();
 
 // end of automatically generated code
 
+//! Draw text that always faces the camera
+module label(str, scale = 0.25, valign = "baseline", halign = "left")
+  color("black")
+    rotate($vpr != [0, 0, 0] ? $vpr : [70, 0, 315])
+      linear_extrude(NIL)
+        scale(scale)
+          text(str, valign = valign, halign = halign, font="Symbola:style=Regular");
+
+verbs = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL]);
 obj   = fl_switch(SHOW,cases=[
   ["Linear M2x4mm",     FL_KNUT_LINEAR_M2x4     ],
   ["Linear M2x6mm",     FL_KNUT_LINEAR_M2x6     ],
@@ -97,30 +107,29 @@ obj   = fl_switch(SHOW,cases=[
   ["Spiral M6x12.7mm",  FL_KNUT_SPIRAL_M6x12p7  ],
   ["Spiral M8x12.7mm",  FL_KNUT_SPIRAL_M8x12p7  ]
 ]);
-verbs = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL]);
+drill_t = [DRILL_THICK];
 
 if (obj)
-  fl_knut(verbs,obj,dri_thick=DRILL_THICK,octant=octant,direction=direction);
+  fl_knut(verbs,obj,dri_thick=drill_t,octant=octant,direction=direction);
 else {
   // filter items by the product tag
   items = PRODUCT_TAG=="ANY" ? FL_KNUT_DICT : fl_knut_search(tag=PRODUCT_TAG,best=false);
   // build a dictionary with rows constituted by items with equal internal thread
   dict  = fl_dict_organize(items,[2:0.5:8],function(nut) fl_knut_nominal(nut));
-  y_offsets = [for(i=[0:len(dict)-1]) i && dict[i] ? 12 : 0];
-  y_coords  = cumulativeSum(y_offsets);
+  // for each not empty row calculates the offsets along Y axis
+  y_coords  = let(
+    y_offsets = [for(i=[0:len(dict)-1]) (i>0 && dict[i]) ? 12 : 0]
+  ) fl_cumulativeSum(y_offsets);
+
   for(i=[0:len(dict)-1]) let(row=dict[i],l=len(row))
-    if (row) { // ignore empty rows
+    if (row) { // no empty row
+      // row movement along Y axis
       translate(Y(y_coords[i])) {
+        translate(-X(12))
           label(str("M",fl_knut_nominal(row[0])),halign="center");
+        // horizontal layout of row screws
         fl_layout(axis=+X,gap=3,types=row)
-          // echo(fl_name($item))
-            fl_knut(verbs,$item,dri_thick=DRILL_THICK,octant=octant,direction=direction);
+          fl_knut(verbs,$item,dri_thick=drill_t,octant=octant,direction=direction);
       }
     }
 }
-
-//! returns a vector in which each item is the sum of the previous ones
-function cumulativeSum(v) = [
-  for (i = [0 : len(v) - 1])
-    fl_accum([for(j=[0:i]) v[j]])
-];
