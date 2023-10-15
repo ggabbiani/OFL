@@ -81,11 +81,24 @@ function fl_screw_search(
    *  - hs_cs_cap
    *  - hs_dome
    */
-  head_type
-) = echo(d=d, head_type=head_type) [
+  head_type,
+  //! bool, when true is required, when false or undef is ignored
+  nut,
+  //! "no", "default", "penny", "nylon". when "no" or undef is ignored
+  washer
+) = echo(d=d,head_type=head_type,nut=nut,washer=washer) [
   for(s=FL_SCREW_DICT)
-    if ( (is_undef(d)         || fl_screw_nominal(s) ==d         )
-      && (is_undef(head_type) || screw_head_type(s)   ==head_type )
+    let(
+      chk_washer  = function(screw) let(
+        w       = washer!="no" ? screw_washer(screw) : undef,
+        w_cond  = washer=="penny" ? w!=undef && penny_washer(w)!=undef
+                : (washer=="default"||washer=="nylon") && w!=undef
+      ) w_cond
+    )
+    if (   (is_undef(d)         || fl_screw_nominal(s)==d         )
+        && (is_undef(head_type) || screw_head_type(s)==head_type  )
+        && (is_undef(nut)       || nut==false   || screw_nut(s)   )
+        && (is_undef(washer)    || washer=="no" || chk_washer(s)  )
     ) s
 ];
 
@@ -167,7 +180,7 @@ let(
   thick_washer  =
       washer=="no"      ? 0
     : washer=="default"||washer=="nylon" ? washer_thickness(screw_washer)
-    : washer=="penny"   ? washer_thickness(penny_washer(screw_washer))
+    : washer=="penny"   ? let(penny=penny_washer(screw_washer)) penny ? washer_thickness(penny) : 0
     : assert(false,str("Unknown washer value ",washer)),
   thick_xwasher =
       xwasher=="no"     ? 0
@@ -202,10 +215,6 @@ module fl_screw(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  length  = len ? len : fl_screw_l(type,len,thick,washer,nut,xwasher,nwasher);
-  fl_trace("length",length);
-  fl_trace("type",type);
-
   screw_nut     = screw_nut(type);
   screw_washer  = screw_washer(type);
   lens          = fl_screw_lens(type,len,thick,washer,nut,xwasher,nwasher);
@@ -213,6 +222,7 @@ module fl_screw(
   thick_xwasher = lens[3];
   thick_nwasher = lens[4];
   thick_nut     = lens[5];
+  length        = len ? len : fl_screw_l(type,len,thick,washer,nut,xwasher,nwasher);
 
   r       = screw_radius(type);
   bbox    = fl_bb_transform(T(Z(thick_washer+thick_xwasher)), fl_bb_screw(type,length));
@@ -245,9 +255,12 @@ module fl_screw(
       rotate_extrude()
         intersection() {
           projection()
-            fl_direct(direction=[-Y,0]) screw(type,length);
-          translate([0,-screw_head_height(type)])
-            square(size=[screw_head_radius(type),length+screw_head_height(type)]);
+            fl_direct(direction=[-Y,0])
+              screw(type,length);
+          let(h=screw_head_height(type))
+            translate([0,-h])
+              let(w=let(r=screw_head_radius(type)) r?r:screw_radius(type))
+                square(size=[w,length+h]);
         }
   }
 
