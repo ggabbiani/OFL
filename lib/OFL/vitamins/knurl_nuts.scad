@@ -65,6 +65,9 @@ function fl_knut_rings(type,value)  = fl_property(type,"knut/rings array [[heigh
 //! nominal diameter of the mounting screw
 function fl_knut_nominal(knut) = fl_screw_nominal(fl_screw(knut));
 
+FL_KNUT_TAG_LINEAR  = "linear thread";
+FL_KNUT_TAG_SPIRAL  = "double spiral thread";
+
 /*!
  * Constructor for double spiral knurl nuts.
  *
@@ -93,15 +96,15 @@ assert(is_num(diameter),str("diameter=",diameter))
   fl_knut_r(value=diameter/2),
   fl_knut_drillD(value=assert(specs,str("Missing specs for '",name,"'")) specs[0]),
   fl_stl(value=stl_file),
-  fl_tag(value="double spiral thread"),
+  fl_tag(value=FL_KNUT_TAG_SPIRAL),
   fl_vendor(value=
     [
       ["Amazon",  "https://www.amazon.it/dp/B08K1BVGN9"],
     ]
   ),
   fl_bb_corners(value=[
-    [-diameter/2, -diameter/2,  -length], // negative corner
-    [+diameter/2, +diameter/2,  0],       // positive corner
+    [-diameter/2, -diameter/2,  -length-NIL], // negative corner
+    [+diameter/2, +diameter/2,  0-NIL],       // positive corner
   ]),
 ];
 
@@ -150,6 +153,7 @@ assert(is_num(tooth),str("tooth=",tooth))
 [
   fl_name(value=name),
   fl_screw(value=screw),
+  fl_knut_drillD(value=diameter-2*tooth+0.1),
   fl_knut_thick(value=length),
   fl_knut_r(value=diameter/2),
   fl_knut_tooth(value=tooth),
@@ -158,10 +162,10 @@ assert(is_num(tooth),str("tooth=",tooth))
     [for(i=[0:rlen-1]) [rings[i],(i<(rlen-1)/2 ? -rings[i]/2 : (i==(rlen-1)/2 ? 0 : rings[i]/2))-i*delta-rings[i]/2]]
   ),
   fl_bb_corners(value=[
-    [-diameter/2, -diameter/2,  -length], // negative corner
-    [+diameter/2, +diameter/2,  0],       // positive corner
+    [-diameter/2, -diameter/2,  -length-NIL], // negative corner
+    [+diameter/2, +diameter/2,  0-NIL],       // positive corner
   ]),
-  fl_tag(value="linear thread"),
+  fl_tag(value=FL_KNUT_TAG_LINEAR),
   fl_vendor(value=
     [
       ["Amazon",  "https://www.amazon.it/gp/product/B07QR6GVFJ"],
@@ -212,24 +216,29 @@ FL_KNUT_DICT = [
   FL_KNUT_SPIRAL_M5x9p5,  FL_KNUT_SPIRAL_M6x12p7,   FL_KNUT_SPIRAL_M8x12p7
 ];
 
-//! in a list of knurl nuts find out the shortest one
+//! in a list of knurl nuts find out the __shortest__ one
 FL_KNUT_SHORTEST  = function(nuts) fl_min(nuts,function(item) fl_knut_thick(item));
-//! in a list of knurl nuts find out the longest one
+//! in a list of knurl nuts find out the __longest__ one
 FL_KNUT_LONGEST   = function(nuts) fl_max(nuts,function(item) fl_knut_thick(item));
 
 /*!
  * Search into dictionary for the best matching knut (default behavior) or all
- * the matching knuts.
+ * the matching knurl nuts.
  */
 function fl_knut_search(
-  //! screw to fit into
+  //! screw to fit into: ignored if undef
   screw,
-  //! max knurl nut thickness (Z axis size)
+  //! max knurl nut thickness (along Z axis): ignored if undef
   thick,
-  //! nominal diameter
+  //! nominal diameter: ignored if undef/zero
   d,
-  //! product tag
+  //! product tag: ignored if undef
   tag,
+  /*!
+   * Lambda calculating the 'score' for determining the 'best' match.
+   *
+   * The default returns the longest knurl nut.
+   */
   best=FL_KNUT_LONGEST
 ) = let(
   nominal = d ? d : screw ? fl_screw_nominal(screw) : undef,
@@ -247,9 +256,30 @@ module fl_knut(
   verbs=FL_ADD,
   type,
   /*!
-   * thickness during FL_DRILL operations.
+   * List of Z-axis thickness for FL_DRILL operations or scalar value.
    *
-   * __NOTE__: thickness is always added to the carving of the nut.
+   * A positive value is for drill along +Z semi-axis.
+   * A negative value is for drill along -Z semi-axis.
+   * A scalar value is applied to both Z semi-axes.
+   *
+   * Example 1:
+   *
+   *     dri_thick = [+3,-1]
+   *
+   * is interpreted as drill of 3mm along +Z and 1mm along -Z
+   *
+   * Example 2:
+   *
+   *     dri_thick = [-1]
+   *
+   * is interpreted as drill of 1mm along -Z
+   *
+   * Example:
+   *
+   *     dri_thick = 2
+   *
+   * is interpreted as a drill of 2mm along +Z and -Z axes
+   *
    */
   dri_thick=0,
   //! desired direction [director,rotation], native direction when undef ([+Z])
@@ -258,7 +288,9 @@ module fl_knut(
   octant,
 ) {
   assert(type!=undef);
+  assert(is_num(dri_thick)||is_list(dri_thick));
 
+  dri_thick = is_list(dri_thick) ? dri_thick : [min(-dri_thick,dri_thick),max(-dri_thick,dri_thick)];
   r       = fl_knut_r(type);
   l       = fl_knut_thick(type);
   screw   = fl_screw(type);
@@ -267,7 +299,7 @@ module fl_knut(
   nominal = fl_knut_nominal(type);
   stl     = fl_optProperty(type,fl_stl()[0]);
   tooth_h = stl ? undef : fl_knut_tooth(type);
-  drill_d = tooth_h ? 2*r-2*tooth_h+0.1 : fl_switch(nominal, FL_KNUT_NOMINAL_DRILL)[0];
+  drill_d = fl_knut_drillD(type);
 
   rings   = stl ? undef : fl_knut_rings(type);
   teeth   = stl ? undef : fl_knut_teeth(type);
@@ -335,15 +367,17 @@ module fl_knut(
     translate(Z(bbox[1].z)) children();
   }
   module do_drill() {
-    assert(dri_thick>=0,dri_thick);
-    // echo(d1=2*r,d2=2*(r-tooth_h),d3=2*(r-tooth_h)+0.1)
     fl_trace("drill ⌀",drill_d);
     do_layout() {
+      for(z=dri_thick)
+        if (z<0)  // -Z semi-axis
+          translate(-Z(l))
+            fl_cylinder(d=nominal, h=-z,octant=-Z,$FL_ADD=$FL_DRILL);
+        else if (z>0) // +Z semi-axis
+          fl_cylinder(d=nominal,h=z,octant=+Z,$FL_ADD=$FL_DRILL);
+      // knurl nut carving
       translate(-Z(NIL))
         fl_cylinder(d=drill_d, h=l,octant=-Z,$FL_ADD=$FL_DRILL);
-      if (dri_thick)
-        translate(-Z(l))
-          fl_cylinder(d=nominal, h=dri_thick,octant=-Z,$FL_ADD=$FL_DRILL);
     }
   }
 

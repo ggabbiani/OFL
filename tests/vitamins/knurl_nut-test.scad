@@ -61,7 +61,7 @@ DIR_R       = 0;        // [-360:360]
 SHOW        = "ALL";  // [ALL, Linear M2x4mm,Linear M2x6mm,Linear M2x8mm,Linear M2x10mm,Linear M3x4mm,Linear M3x6mm,Linear M3x8mm,Linear M3x10mm,Linear M4x4mm,Linear M4x6mm,Linear M4x8mm,Linear M4x10mm,Linear M5x6mm,Linear M5x8mm,Linear M5x10mm,Spiral M2x4mm,Spiral M2p5x5.7mm,Spiral M3x5.7mm,Spiral M4x8.1mm,Spiral M5x9.5mm,Spiral M6x12.7mm,Spiral M8x12.7mm]
 PRODUCT_TAG = "ANY";  // [ANY,linear thread,double spiral thread]
 // FL_DRILL on Z axis
-DRILL_THICK = 0;      // [-10:0.1:10]
+DRILL_THICK = 0;        // [-10:0.1:10]
 
 
 /* [Hidden] */
