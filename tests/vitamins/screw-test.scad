@@ -133,7 +133,7 @@ if (screw)
 else {
   // ordered list of existing screw sizes
   sizes     = fl_list_sort(fl_list_unique([for(s=FL_SCREW_DICT) fl_screw_nominal(s)]));
-  // filter items with/without nuts according to customizer input
+  // filter items according to customizer input
   items     = fl_screw_search(head_type=h_filter,nut=n_filter,washer=WASHER);
   // build a dictionary organized by rows of screws with same nominal size
   dict      = fl_dict_organize(items,sizes,function(screw) fl_screw_nominal(screw));
@@ -143,7 +143,7 @@ else {
   ) fl_cumulativeSum(y_offsets);
 
   for(i=[0:len(dict)-1]) let(row=dict[i])
-    if (row) { // not empty empty row
+    if (row) { // no empty row
       wrappers  = [for(nop=row) Wrapper(nop)];
       // row movement along Y axis
       translate(Y(y_coords[i])) {
