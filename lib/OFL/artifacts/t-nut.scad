@@ -201,7 +201,8 @@ module fl_tnut(
         if (screw) { // subtract holes and countersink
           if (knut)
             fl_lay_holes(holes)
-              fl_knut(FL_DRILL,type=knut,direction=[-$hole_n,0],octant=+Z,$FL_DRILL=$FL_ADD);
+              resize([0,fl_bb_size(knut).y+2xNIL],0)
+                fl_knut(FL_DRILL,type=knut,direction=[-$hole_n,0],octant=+Z,$FL_DRILL=$FL_ADD);
           else
             fl_holes(holes,tolerance=hole_t);
           if (countersink)
@@ -214,8 +215,7 @@ module fl_tnut(
           let(h=size.y-fl_knut_thick(knut))
           if (h>0)
             do_layout()
-              translate(-0*Y(h+NIL))
-                translate(-Y(size.y+NIL))
+              translate(-Y(size.y+NIL))
                 fl_cylinder(h=h+2xNIL,r=ext_r,direction=[-$hole_n,0],octant=-Z);
       }
   }
@@ -234,10 +234,9 @@ module fl_tnut(
 
   module do_drill() {
     assert(!is_undef(dri_thick),"FL_DRILL without thickness parameter");
-    echo(dri_thick=dri_thick);
     do_layout() {
       if (knut)
-        fl_knut(FL_DRILL,type=knut,dri_thick=dri_thick,direction=[-$hole_n,0],octant=+Z);
+        fl_knut(FL_DRILL,type=knut,dri_thick=[-dri_thick],direction=[-$hole_n,0],octant=+Z);
       else
         fl_cylinder(h=dri_thick,d=$hole_d+hole_t,direction=[$hole_n,0],$FL_ADD=$FL_DRILL);
       // fl_screw(FL_DRILL,screw,len=dri_thick,direction=[-$hole_n,0]);
@@ -248,7 +247,8 @@ module fl_tnut(
     if (screw){
       assert(!is_undef(dri_thick),"FL_MOUNT without thickness parameter");
       do_layout()
-        fl_screw(FL_ADD,screw,len=dri_thick+size.y,direction=[$hole_n,0]);
+        translate($hole_n*dri_thick)
+          fl_screw(FL_ADD,screw,len=dri_thick+size.y,direction=[$hole_n,0]);
     }
   }
 
@@ -278,7 +278,7 @@ module fl_tnut(
         fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
-      echo($modifier=$modifier);
+      // echo($modifier=$modifier);
       fl_modifier($modifier) fl_bb_add(bbox);
 
     } else if ($verb==FL_DRILL) {
