@@ -651,6 +651,11 @@ function fl_transform(
 function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
 function fl_accum(v)          = [for(p=v) 1]*v;
 function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
+//! returns a vector in which each item is the sum of the previous ones
+function fl_cumulativeSum(v) = [
+  for (i = [0 : len(v) - 1])
+    fl_accum([for(j=[0:i]) v[j]])
+];
 
 //**** lists ******************************************************************
 
@@ -689,6 +694,33 @@ function fl_min(
   value=function(item) item,
   _i_=0
 ) = (_i_+1)<len(list) ? let(other=fl_min(list,value,_i_+1)) value(list[_i_])<value(other) ? list[_i_] : list[_i_+1] : list[_i_];
+
+//! strips duplicates from a «dict»
+function fl_list_unique(dict) =
+  len(dict)==1 ? dict : let(
+    // this lambda isolates the first list element (head) from the rest
+    split     = function (list) let(
+      len = len(list)
+    ) assert(len>1,"list must contain at least 2 items") len==2 ? [list[0],[list[1]]] : let(
+      head  = list[0],
+      tail  = [for(i=[1:len-1]) list[i]]
+    ) [head,tail],
+    partition = split(dict),
+    head      = partition[0],
+    tail      = partition[1],
+    result    = fl_list_unique(tail),
+    missing   = search([head],result)==[[]]
+  ) missing ? concat(head,result) : result;
+
+//! quick sort «vec» (from [oampo/missile](https://github.com/oampo/missile))
+function fl_list_sort(vec) =
+  (vec==[]) ? [] :
+  let(
+    pivot = vec[floor(len(vec)/2)],
+    below = [for (y = vec) if (y  < pivot) y],
+    equal = [for (y = vec) if (y == pivot) y],
+    above = [for (y = vec) if (y  > pivot) y]
+  ) concat(fl_list_sort(below), equal, fl_list_sort(above));
 
 //**** dictionary *************************************************************
 
