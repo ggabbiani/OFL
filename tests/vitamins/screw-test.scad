@@ -9,11 +9,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <NopSCADlib/utils/core/core.scad>
-use <NopSCADlib/utils/annotation.scad>
 
 include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/vitamins/screw.scad>
+
 
 $fn            = 50;           // [3:100]
 // When true, debug statements are turned on
@@ -62,16 +61,17 @@ DIR_R       = 0;        // [-360:360]
 
 /* [Screw] */
 
-SCREW     = "ALL";  // [ALL, No632_pan_screw,M2_cap_screw,M2_cs_cap_screw,M2_dome_screw,M2p5_cap_screw,M2p5_pan_screw,M3_cap_screw,M3_cs_cap_screw,M3_dome_screw,M3_grub_screw,M3_hex_screw,M3_low_cap_screw,M3_pan_screw,M4_cap_screw,M4_cs_cap_screw,M4_dome_screw,M4_grub_screw,M4_hex_screw,M4_pan_screw,M5_cap_screw,M5_cs_cap_screw,M5_dome_screw,M5_hex_screw,M5_pan_screw,M6_cap_screw,M6_cs_cap_screw,M6_hex_screw,M6_pan_screw,M8_cap_screw,M8_hex_screw,No2_screw,No4_screw,No6_cs_screw,No6_screw,No8_screw]
-FIXED_LEN = 0;
+SCREW       = "ALL";  // [ALL, No632_pan_screw,M2_cap_screw,M2_cs_cap_screw,M2_dome_screw,M2p5_cap_screw,M2p5_pan_screw,M3_cap_screw,M3_cs_cap_screw,M3_dome_screw,M3_grub_screw,M3_hex_screw,M3_low_cap_screw,M3_pan_screw,M4_cap_screw,M4_cs_cap_screw,M4_dome_screw,M4_grub_screw,M4_hex_screw,M4_pan_screw,M5_cap_screw,M5_cs_cap_screw,M5_dome_screw,M5_hex_screw,M5_pan_screw,M6_cap_screw,M6_cs_cap_screw,M6_hex_screw,M6_pan_screw,M8_cap_screw,M8_hex_screw,No2_screw,No4_screw,No6_cs_screw,No6_screw,No8_screw]
+FIXED_LEN   = 0;
 // thickness
-T       = 10;     // [1:0.1:20]
-WASHER  = "no";   // [no,default,penny,nylon]
-XWASHER = "no";   // [no,spring,star]
+T           = 10;     // [1:0.1:20]
+WASHER      = "no";   // [no,default,penny,nylon]
+XWASHER     = "no";   // [no,spring,star]
 // add a default washer before the nut
-NUT_WASHER = false;
-NUT     = "no";   // [no,default,nyloc]
-HEAD_TYPE    = "ANY";  // [ANY, hs_cap, hs_pan, hs_cs, hs_hex, hs_grub, hs_cs_cap, hs_dome]
+NUT_WASHER  = false;
+NUT         = "no";   // [no,default,nyloc]
+HEAD_TYPE   = "ANY";  // [ANY, cap, pan, cs, hex, grub, cs cap, dome]
+
 
 /* [Hidden] */
 
@@ -125,7 +125,7 @@ screw = fl_switch(SCREW,  cases=[
 // enable nut washer only when nut is required
 nut_washer  = NUT!="no" && NUT_WASHER;
 
-h_filter  = fl_switch(HEAD_TYPE,[["hs_cap",hs_cap], ["hs_pan",hs_pan], ["hs_cs",hs_cs], ["hs_hex",hs_hex], ["hs_grub",hs_grub], ["hs_cs_cap",hs_cs_cap], ["hs_dome",hs_dome]]);
+h_filter  = fl_switch(HEAD_TYPE,[["cap",hs_cap], ["pan",hs_pan], ["cs",hs_cs], ["hex",hs_hex], ["grub",hs_grub], ["cs cap",hs_cs_cap], ["dome",hs_dome]]);
 n_filter  = NUT!="no";
 
 if (screw)
