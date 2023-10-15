@@ -80,7 +80,7 @@ countersink_tolerance = 0;    // [-1:0.1:1]
 countersink           = false;
 knut                  = false;
 
-DRILL_THICKNESS       = 10; // [1:1:20]
+DRILL_THICKNESS       = 10; // [0:1:20]
 
 
 /* [Hidden] */
