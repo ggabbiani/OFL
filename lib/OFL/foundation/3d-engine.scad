@@ -828,38 +828,47 @@ function fl_3d_orthoPlane(
 
 //! returns the sign of a semi-axis (-1,+1)
 function fl_3d_sign(axis) = let(
-    s = sign(axis*[1,1,1])
-  ) assert(s!=0) s;
+  s = sign(axis*[1,1,1])
+) assert(s!=0) s;
 
 //! returns the «axis» value from a full semi-axis value list
 function fl_3d_axisValue(
-    axis,
-    values
-  ) = let(
-    r = axis==-X ? values[0][0]
-      : axis==+X ? values[0][1]
-      : axis==-Y ? values[1][0]
-      : axis==+Y ? values[1][1]
-      : axis==-Z ? values[2][0]
-      : axis==+Z ? values[2][1]
-      : undef
-  ) assert(r!=undef,r) r;
+  //! axis to retrieve corresponding value
+  axis,
+  //! full semi-axis value list (see also function fl_tt_isAxisVList())
+  values
+) = let(
+  r = axis==-X ? values[0][0]
+    : axis==+X ? values[0][1]
+    : axis==-Y ? values[1][0]
+    : axis==+Y ? values[1][1]
+    : axis==-Z ? values[2][0]
+    : axis==+Z ? values[2][1]
+    : undef
+) assert(r!=undef,r) r;
 
 /*!
- * Build an full semi-axis value list from the key/value list «kvs».
- * Build a full boolean semi-axis value list from literal semi-axis list «axes»
+ * Constructor for a  full semi-axis value list. The returned value can be
+ * built from a list of pairs ("string", value) or from a list of semi-axes name strings
+ *
+ * | parameter | result                                                                     |
+ * | --------- | ------                                                                     |
+ * | kvs       | full semi-axis value list initialized from the passed axis/value pair list |
+ * | values    | full boolean semi-axis value list from semi-axis literal                   |
+ *
+ * See also function fl_tt_isAxisVList()
  *
  * example 1:
  *
- *     values = fl_3d_AxisVList(kvs=[["-x",3],["±Z",4]]);
+ *     thick = fl_3d_AxisVList(kvs=[["-x",3],["±Z",4]]);
  *
  * is equivalent to:
  *
- *     values =
+ *     thick =
  *     [
- *      [3,0],
- *      [0,0],
- *      [4,4]
+ *      [3,0],  // -x and +x value pair
+ *      [0,0],  // -y and +y value pair
+ *      [4,4]   // -z and +z value pair
  *     ];
  *
  * example 2:
@@ -870,9 +879,9 @@ function fl_3d_axisValue(
  *
  *     values =
  *     [
- *      [true,  false],
- *      [false, false],
- *      [true,  true]
+ *      [true,  false], // -x and +x boolean
+ *      [false, false], // -y and +y boolean
+ *      [true,  true]   // -z and +z boolean
  *     ];
  */
 function fl_3d_AxisVList(
@@ -927,9 +936,9 @@ function fl_3d_AxisVList(
  *
  *     list =
  *     [
- *      [-1, 0,  0],
- *      [ 0, 0, -1],
- *      [ 0, 0, +1],
+ *      [-1, 0,  0],  // -X semi-axis
+ *      [ 0, 0, -1],  // -Z semi-axis
+ *      [ 0, 0, +1],  // +Z semi-axis
  *     ];
  */
 function fl_3d_AxisList(
