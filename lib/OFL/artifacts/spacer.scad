@@ -33,7 +33,7 @@ function fl_spc_holeRadius(
   ) =
   let(
     knut  = knut!=undef ? assert(is_list(knut)) knut : undef
-  ) knut ? fl_knut_r(knut)-0.3 : screw ? screw_radius(screw) : undef;
+  ) knut ? fl_knut_drillD(knut)/2 : screw ? screw_radius(screw) : undef;
 
 /*!
  * Children context:
@@ -53,13 +53,48 @@ module fl_spacer(
   r,
   //! external diameter (mutually exclusive with «r»)
   d,
-  //! FL_MOUNT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  //! FL_MOUNT thickness as a list of number or scalar shortcut
+  /*!
+   * List of Z-axis thickness or a scalar value for FL_DRILL and FL_MOUNT
+   * operations.
+   *
+   * A positive value represents thickness along +Z semi-axis.
+   * A negative value represents thickness along -Z semi-axis.
+   * A scalar value represents thickness for both Z semi-axes.
+   *
+   * Example 1:
+   *
+   *     thick = [+3,-1]
+   *
+   * is interpreted as thickness of 3mm along +Z and 1mm along -Z
+   *
+   * Example 2:
+   *
+   *     thick = [-1]
+   *
+   * is interpreted as thickness of 1mm along -Z
+   *
+   * Example:
+   *
+   *     thick = 2
+   *
+   * is interpreted as a thickness of 2mm along +Z and -Z axes
+   *
+   */
   thick=0,
-  //! FL_LAYOUT directions in floating semi-axis list
+  /*!
+   * FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
+   *
+   * __NOTE__: only Z semi-axes are used
+   */
   lay_direction=[+Z,-Z],
   //! optional screw
   screw,
-  //! optional knurl nut
+  /*!
+   * optional knurl nut.
+   *
+   * __NOTE__: when set true while no usable knurl nut is found an error is thrown
+   */
   knut=false,
   //! desired direction [director,rotation], native direction when undef ([+Z,0])
   direction,
@@ -68,15 +103,20 @@ module fl_spacer(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  fl_trace("thick",thick);
   r       = assert((r && !d) || (!r && d)) r ? r : d/2;
   bbox    = assert(h!=undef) fl_bb_spacer(h,r);
   size    = bbox[1]-bbox[0];
-  knut    = knut && screw ? fl_knut_search(screw,h) : undef;
-  hole_r  = fl_spc_holeRadius(screw,knut);
-  assert(r>hole_r,str("r=",r,",hole_r=",hole_r));
-  // thickness along ±Z only
-  thick   = is_num(thick) ? [thick,thick] : assert(fl_tt_isAxisVList(thick)) thick.z;
+  knut    = knut && screw ? let(kn=fl_knut_search(screw,h)) assert(kn,"No usable knurl nut found: try increasing external radius and/or spacer height!") kn : undef;
+  hole_r  = screw ? fl_spc_holeRadius(screw,knut) : undef;
+  assert(!screw || r>hole_r,"External radius insufficient for internal hole");
+
+  thick = is_undef(thick) ? [0,0]
+    : is_list(thick) ? thick==[] ? [0,0] : let(
+      negative = let(m=min(thick)) m<0 ? -m : 0,
+      positive = let(m=max(thick)) m>0 ? +m : 0
+    ) [negative,positive]
+    : assert(is_num(thick),thick) [abs(thick),abs(thick)];
+  thicks = fl_accum(thick);
 
   D       = direction ? fl_direction(direction) : FL_I;
   M       = fl_octant(octant,bbox=bbox);
@@ -91,24 +131,26 @@ module fl_spacer(
 
   module do_mount() {
     if (screw) {
-      washer  = let(htyp=screw_head_type(screw)) htyp==hs_cs||htyp==hs_cs_cap ? "no" : "nylon";
-      translate(+Z(h+thick[1]))
-        fl_screw(FL_DRAW,screw,thick=h+thick[0]+thick[1],washer=washer);
+      washer  = let(
+        htyp  = screw_head_type(screw)
+      ) (htyp==hs_cs||htyp==hs_cs_cap) ? "no" : "nylon";
+
+      z=thick[1];
+      translate(+Z(h+z))
+        fl_screw(FL_DRAW,screw,thick=h+thicks,washer=washer,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
     }
   }
 
   module do_assembly() {
     if (knut)
-      translate(+Z(h+NIL)) fl_knut(type=knut,octant=-Z);
+      translate(+Z(h)) fl_knut(type=knut,octant=-Z);
   }
 
   module do_layout() {
-    // if (screw) {
-      if (fl_3d_axisIsSet(+Z,lay_direction))
-        context(+Z) translate($spc_director*h) children();
-      if (fl_3d_axisIsSet(-Z,lay_direction))
-        context(-Z) children();
-    // }
+    if (fl_3d_axisIsSet(+Z,lay_direction))
+      context(+Z) translate($spc_director*h) children();
+    if (fl_3d_axisIsSet(-Z,lay_direction))
+      context(-Z) children();
   }
 
   module do_footprint() {
@@ -152,7 +194,7 @@ module fl_spacer(
         fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox+[[0,0,-NIL],[0,0,NIL]]);
 
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();
