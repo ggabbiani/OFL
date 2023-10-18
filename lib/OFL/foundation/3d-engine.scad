@@ -982,6 +982,75 @@ module fl_linear_extrude(
 }
 
 /*!
+ * linear_extrude{} with optional fillet radius on each end.
+ *
+ * Positive radii will expand outward towards their end, negative will shrink
+ * inward towards their end
+ *
+ * Limitations:
+ *
+ * - individual children of fillet_extrude should be convex
+ * - only straight extrudes with no twist or scaling supported
+ * - fillets only for 90 degrees between Z axis and top/bottom surface
+ */
+module fl_fillet_extrude(
+  //! total extrusion length including radii
+  height=100,
+  //! bottom radius
+  r1=0,
+  //! top radius
+  r2=0
+) {
+  function fragments(r=1) =
+    ($fn > 0) ? ($fn >= 3 ? $fn : 3) : ceil(max(min(360.0 / $fa, r*2*PI / $fs), 5));
+  assert(abs(r1)+abs(r2) <= height);
+  midh = height-abs(r1)-abs(r2);
+  eps = 1/1024;
+  union() {
+    if (r1!=0) {
+      fn1 = ceil(fragments(abs(r1))/4); // only covering 90 degrees
+      for(i=[0:1:$children-1], j=[1:1:fn1]) {
+        a1 = 90*(j-1)/fn1;        a2 = 90*j/fn1;
+        h1 = abs(r1)*(1-cos(a1)); h2 = abs(r1)*(1-cos(a2));
+        off1 = r1*(1-sin(a1));    off2 = r1*(1-sin(a2));
+        hull() {
+          translate([0,0,h1]) {
+            // in case radius*2 matches width of object, don't make first layer zero width
+            off1 = r1 < 0 && j==1 ? off1*(1-eps) : off1;
+            linear_extrude(eps) offset(r=off1) children(i);
+          }
+          translate([0,0,h2])
+            linear_extrude(eps) offset(r=off2) children(i);
+        }
+      }
+    }
+    if (midh > 0)  {
+      translate([0,0,abs(r1)])
+        for(i=[0:1:$children-1]) linear_extrude(midh) children(i);
+    }
+    if (r2!=0) {
+      fn2 = ceil(fragments(abs(r2))/4); // only covering 90 degrees
+      translate([0,0,height-abs(r2)-eps]) {
+      for(i=[0:1:$children-1], j=[1:1:fn2]) {
+          a1 = 90*(j-1)/fn2;      a2 = 90*j/fn2;
+          h1 = abs(r2)*(sin(a1)); h2 = abs(r2)*(sin(a2));
+          off1 = r2*(1-cos(a1));  off2 = r2*(1-cos(a2));
+          hull() {
+            translate([0,0,h1])
+              linear_extrude(eps) offset(r=off1) children(i);
+            translate([0,0,h2]) {
+              // in case radius*2 matches width of object, don't make last layer zero width
+              off2 = r2 < 0 && j==fn2 ? off2*(1-eps) : off2;
+              linear_extrude(eps) offset(r=off2) children(i);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*!
  * DXF files import with direction and rotation. By default DXF files are
  * imported in the XY plane with no rotation. The «direction» parameter
  * specifies a normal to the actual import plane and a rotation about it.
