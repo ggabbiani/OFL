@@ -949,7 +949,52 @@ function fl_filament() = is_undef($fl_filament)
 ? "DodgerBlue"
 : assert(is_string($fl_filament)) $fl_filament;
 
-//**** Common parameters ******************************************************
+//**** Common parameter helpers ***********************************************
+
+// function fl_parm_triState(value) = value=="undef" ? undef : is_num(value) ? x : atoi(value);
+
+/*!
+ * This format uses the real numbers sign to distinguish couple of values passed
+ * in a list.
+ *
+ * The function takes an unordered pair of two opposite signed values and
+ * returns an ordered list with the negative value at position 0 and the
+ * positive at position 1.
+ *
+ * When the input is in scalar form, both the negative/positive will be set to
+ * it with sign flag set accordingly.
+ *
+ * This type can be used for storing semi-axis related values like - for
+ * example - thickness values. While providing a free and compact input
+ * representation, the transformed value is still compatible with the input (so
+ * can be forwarded to other signed-value parameters), while simplifying the
+ * fetch of its components being the transformed positions 'normalized' in
+ * fixed-form with negative/positive parts at index 0/1 respectively.
+ *
+ * Example 1:
+ *
+ *     ordered    = fl_list_SignedPair([+3,-7]);
+ *
+ * «ordered» is equal to `[-7,+3]`.
+ *
+ * Example 2:
+ *
+ *     ordered    = fl_list_SignedPair(-5);
+ *
+ * «ordered» is now equal to `[-5,+5]`.
+ *
+ * This type is used - for example - for specifying a thickness value along an
+ * axis.
+ */
+function fl_parm_SignedPair(list) =
+    is_undef(list)  ? [0,0]
+  : is_list(list)   ?
+    list==[] ? [0,0]
+    : let(
+        negative = let(m=min(list)) m<0 ? m : 0,
+        positive = let(m=max(list)) m>0 ? m : 0
+      ) [negative,positive]
+  : assert(is_num(list),list) [-abs(list),abs(list)];
 
 /*!
  * Constructor for the octant parameter from values as passed by customizer
@@ -972,7 +1017,7 @@ function fl_parm_Debug(
   labels  = false,
   //! when true symbols are displayed
   symbols = false,
-  /*
+  /*!
    * a string or a list of strings equals to the component label of which
    * direction information will be shown
    */
