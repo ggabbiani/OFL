@@ -30,6 +30,7 @@ function fl_tnut_thickness(type,value) = fl_property(type,"tnut/[wall, base, con
 
 //*****************************************************************************
 // T-slot nut getters
+
 //! nominal size for a knurl nut is the nominal size of the screw
 function fl_tnut_nominal(tnut) = fl_screw_nominal(fl_screw(knut));
 
@@ -201,7 +202,7 @@ module fl_tnut(
         if (screw) { // subtract holes and countersink
           if (knut)
             fl_lay_holes(holes)
-              resize([0,fl_bb_size(knut).y+2xNIL],0)
+              translate(Y(NIL)) resize([0,fl_bb_size(knut).y+2xNIL],0)
                 fl_knut(FL_DRILL,type=knut,direction=[-$hole_n,0],octant=+Z,$FL_DRILL=$FL_ADD);
           else
             fl_holes(holes,tolerance=hole_t);
