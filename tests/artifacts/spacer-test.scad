@@ -69,12 +69,19 @@ H     = 4;  // [0.1:0.1:10]
 // external radius
 R     = 2;  // [0.1:0.1:10]
 
+SCREW_SIZE  = 2;         // [2,2.5,3,4,5,6,8]
 // when true the spacer must host a screw
 SCREW       = true;
-SCREW_SIZE  = 2;         // [2,2.5,3,4,5,6,8]
-
 // when true tries to find a screw fitting knurl nut
 KNUT  = false;
+// no fillet if zero
+FILLET  = 0;  // [0:0.1:5]
+
+ANCHOR_X_POS  = false;
+ANCHOR_X_NEG  = false;
+ANCHOR_Y_POS  = false;
+ANCHOR_Y_NEG  = false;
+ANCHOR_Z_NEG  = false;
 
 /* [TEST] */
 
@@ -96,6 +103,14 @@ debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 fl_status();
 
 // end of automatically generated code
+
+anchor  = [
+  if (ANCHOR_X_POS) +X,
+  if (ANCHOR_X_NEG) -X,
+  if (ANCHOR_Y_POS) +Y,
+  if (ANCHOR_Y_NEG) -Y,
+  if (ANCHOR_Z_NEG) -Z,
+];
 
 verbs = fl_verbList([
   FL_ADD,
@@ -121,5 +136,5 @@ if (SCREW && !screw)
 if (KNUT && !knut)
   echo(str("***WARN***: knurl nut set to false because no nut found."));
 
-fl_spacer(verbs,H,R,screw=screw,knut=knut,thick=thickness,lay_direction=dirs,octant=octant,direction=direction)
+fl_spacer(verbs,H,R,screw=screw,knut=knut,thick=thickness,lay_direction=dirs,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)
   fl_cylinder([FL_ADD,FL_AXES],h=5,d2=0,d1=fl_screw_nominal($spc_screw),direction=[$spc_director,0],$FL_ADD=$FL_LAYOUT,$FL_AXES="ON");

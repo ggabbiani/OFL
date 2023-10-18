@@ -11,6 +11,7 @@ include <../foundation/hole.scad>
 include <../foundation/unsafe_defs.scad>
 include <../vitamins/knurl_nuts.scad>
 
+use <../foundation/fillet.scad>
 use <../foundation/mngm-engine.scad>
 
 //! namespace
@@ -96,6 +97,10 @@ module fl_spacer(
    * __NOTE__: when set true while no usable knurl nut is found an error is thrown
    */
   knut=false,
+  //! anchor directions in floating semi-axis list
+  anchor,
+  //! when >0 a fillet is added to anchors
+  fillet=0,
   //! desired direction [director,rotation], native direction when undef ([+Z,0])
   direction,
   //! when undef native positioning is used
@@ -112,21 +117,129 @@ module fl_spacer(
 
   thick = is_undef(thick) ? [0,0]
     : is_list(thick) ? thick==[] ? [0,0] : let(
-      negative = let(m=min(thick)) m<0 ? -m : 0,
-      positive = let(m=max(thick)) m>0 ? +m : 0
+      negative = let(m=min(thick)) m<0 ? m : 0,
+      positive = let(m=max(thick)) m>0 ? m : 0
     ) [negative,positive]
-    : assert(is_num(thick),thick) [abs(thick),abs(thick)];
-  thicks = fl_accum(thick);
+    : assert(is_num(thick),thick) [-abs(thick),abs(thick)];
+  thicks = -thick[0]+thick[1];
 
+  anchor  = is_undef(anchor) ? [] : anchor;
   D       = direction ? fl_direction(direction) : FL_I;
   M       = fl_octant(octant,bbox=bbox);
 
+  module knut(verbs=FL_ADD)
+    translate(+Z(h))
+      fl_knut(verbs,knut,dri_thick=thick,octant=-Z);
+
   module do_add() {
-    fl_color()
+    module shape() {
+      fl_cylinder(h=h,r=r);
+      if (xp)
+        fl_cube(size=anchor_sz, octant=+X+Z);
+      if (xn)
+        fl_cube(size=anchor_sz, octant=-X+Z);
+      if (yp)
+        fl_cube(size=[2*r,r,h], octant=+Y+Z);
+      if (yn)
+        fl_cube(size=[2*r,r,h], octant=-Y+Z);
+
+      if (fillet) {
+        if (xp) {
+          if (!yp)
+            translate([r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,90]);
+          if (!yn)
+            translate([r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-180]);
+        }
+        if (xn) {
+          if (!yp)
+            translate([-r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,0]);
+          if (!yn)
+            translate([-r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-90]);
+        }
+        if (yp) {
+          if (!xp)
+            translate([r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-90]);
+          if (!xn)
+            translate([-r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-180]);
+        }
+        if (yn) {
+          if (!xn)
+            translate([-r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,90]);
+          if (!xp)
+            translate([r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,0]);
+        }
+      }
+    }
+
+    // quadrant angles
+    q1  = [0,90];
+    q2  = [90,180];
+    q3  = [180,270];
+    q4  = [270,360];
+
+    // anchor status
+    xp  = fl_3d_axisIsSet(+X,anchor);
+    xn  = fl_3d_axisIsSet(-X,anchor);
+    yp  = fl_3d_axisIsSet(+Y,anchor);
+    yn  = fl_3d_axisIsSet(-Y,anchor);
+    zn  = fl_3d_axisIsSet(-Z,anchor);
+
+    // quadrant as boolean function of anchors status
+    function q1(xp,xn,yp,yn) = (!xp && !yp);
+    function q2(xp,xn,yp,yn) = (!xn && !yp);
+    function q3(xp,xn,yp,yn) = (!xn && !yn);
+    function q4(xp,xn,yp,yn) = (!xp && !yn);
+
+    anchor_sz = [r,2*r,h];
+    fl_color() difference() {
+      union() {
+        shape();
+        if (fillet)
+          if (zn) {
+            if (xp) {
+              if (!yn)
+                translate(-Y(r))
+                  fl_fillet(r=fillet, h=r,direction=[+X,180],$FL_ADD="ON");
+              if (!yp)
+                translate(+Y(r))
+                  fl_fillet(r=fillet, h=r,direction=[+X,90],$FL_ADD="ON");
+            }
+            if (xn) {
+              if (!yn)
+                translate(-Y(r))
+                  fl_fillet(r=fillet, h=r,direction=[-X,90],$FL_ADD="ON");
+              if (!yp)
+                translate(+Y(r))
+                  fl_fillet(r=fillet, h=r,direction=[-X,0],$FL_ADD="ON");
+            }
+            if (yp) {
+              if (!xn)
+                translate(-X(r))
+                  fl_fillet(r=fillet, h=r,direction=[+Y,180],$FL_ADD="ON");
+              if (!xp)
+                translate(+X(r))
+                  fl_fillet(r=fillet, h=r,direction=[+Y,-90],$FL_ADD="ON");
+            }
+            if (yn) {
+              if (!xn)
+                translate(-X(r))
+                  fl_fillet(r=fillet, h=r,direction=[-Y,90],$FL_ADD="ON");
+              if (!xp)
+                translate(+X(r))
+                  fl_fillet(r=fillet, h=r,direction=[-Y,0],$FL_ADD="ON");
+            }
+            fl_fillet_extrude(height=fillet, r1=fillet) {
+              if (q1(xp,xn,yp,yn)) fl_sector(r=r, angles=q1);
+              if (q2(xp,xn,yp,yn)) fl_sector(r=r, angles=q2);
+              if (q3(xp,xn,yp,yn)) fl_sector(r=r, angles=q3);
+              if (q4(xp,xn,yp,yn)) fl_sector(r=r, angles=q4);
+            }
+          }
+      }
       if (hole_r)
-        fl_tube(h=h,r=r,thick=r-hole_r);
-      else
-        fl_cylinder(h=h,r=r);
+        translate(-Z(NIL))
+          fl_cylinder(h=h+2xNIL,r=hole_r);
+    }
   }
 
   module do_mount() {
@@ -143,7 +256,7 @@ module fl_spacer(
 
   module do_assembly() {
     if (knut)
-      translate(+Z(h)) fl_knut(type=knut,octant=-Z);
+      knut();
   }
 
   module do_layout() {
@@ -157,10 +270,12 @@ module fl_spacer(
     fl_cylinder(h=h,r=r);
   }
 
-  module do_drill() {
-    do_layout()
-      if ($spc_thick) fl_cylinder(h=$spc_thick,r=hole_r,octant=$spc_director);
-  }
+  module do_drill()
+    if (knut)
+      knut(FL_DRILL);
+    else if (screw)
+      do_layout()
+        if ($spc_thick) fl_cylinder(h=$spc_thick,r=hole_r,octant=$spc_director);
 
   /**
   * Set context for children()
@@ -176,7 +291,7 @@ module fl_spacer(
   ) {
     $spc_director = director;
     $spc_screw    = screw;
-    $spc_thick    = director==+Z ? thick[1] : thick[0];
+    $spc_thick    = director==+Z ? thick[1] : -thick[0];
     $spc_h        = h;
     $spc_holeR    = hole_r;
     children();
