@@ -129,4 +129,4 @@ fl_box(verbs,
   lay_octant=lay_octant,
   octant=octant,direction=direction
 )
-  fl_sphere([FL_AXES],r=10);
+  fl_sphere(FL_AXES,r=10,$FL_AXES="ON");
