@@ -80,7 +80,7 @@ module fl_fillet(
   rx,
   //! ellipse's vertical radius
   ry,
-  //! desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
+  //! desired direction [director,rotation], [+Z,0°] when undef
   direction,
   //! when undef native positioning is used (+Z)
   octant
