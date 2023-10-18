@@ -274,7 +274,7 @@ module fl_knut(
    *
    * is interpreted as drill of 1mm along -Z
    *
-   * Example:
+   * Example 3:
    *
    *     dri_thick = 2
    *
@@ -290,7 +290,8 @@ module fl_knut(
   assert(type!=undef);
   assert(is_num(dri_thick)||is_list(dri_thick));
 
-  dri_thick = is_list(dri_thick) ? dri_thick : [min(-dri_thick,dri_thick),max(-dri_thick,dri_thick)];
+  dri_thick = fl_parm_SignedPair(dri_thick);
+
   r       = fl_knut_r(type);
   l       = fl_knut_thick(type);
   screw   = fl_screw(type);
@@ -366,19 +367,23 @@ module fl_knut(
   module do_layout()    {
     translate(Z(bbox[1].z)) children();
   }
+
   module do_drill() {
     fl_trace("drill ⌀",drill_d);
-    do_layout() {
-      for(z=dri_thick)
-        if (z<0)  // -Z semi-axis
-          translate(-Z(l))
-            fl_cylinder(d=nominal, h=-z,octant=-Z,$FL_ADD=$FL_DRILL);
-        else if (z>0) // +Z semi-axis
-          fl_cylinder(d=nominal,h=z,octant=+Z,$FL_ADD=$FL_DRILL);
-      // knurl nut carving
-      translate(-Z(NIL))
-        fl_cylinder(d=drill_d, h=l,octant=-Z,$FL_ADD=$FL_DRILL);
-    }
+    // -Z semi-axis
+    let(
+      z = -dri_thick[0]
+    ) if (z)
+        translate(-Z(l))
+          fl_cylinder(d=nominal,h=z,octant=-Z,$FL_ADD=$FL_DRILL);
+    // +Z semi-axis
+    let(
+      z = dri_thick[1]
+    ) if (z)
+        fl_cylinder(d=nominal,h=z,octant=+Z,$FL_ADD=$FL_DRILL);
+    // knurl nut carving
+    translate(-Z(NIL))
+      fl_cylinder(d=drill_d, h=l,octant=-Z,$FL_ADD=$FL_DRILL);
   }
 
   fl_manage(verbs,M,D) {
