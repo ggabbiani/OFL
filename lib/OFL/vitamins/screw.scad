@@ -208,6 +208,8 @@ module fl_screw(
   xwasher = "no",
   //! nut washer
   nwasher = false,
+  //! drill type: "clearance" or "tap"
+  dri_type  = "clearance",
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -227,7 +229,7 @@ module fl_screw(
   r       = screw_radius(type);
   bbox    = fl_bb_transform(T(Z(thick_washer+thick_xwasher)), fl_bb_screw(type,length));
   size    = fl_screw_size(type,length);
-  hole_r  = screw_clearance_radius(type);
+  hole_r  = dri_type=="clearance" ? screw_clearance_radius(type) : fl_screw_nominal(type)/2;
   hole_l  = length-(thick_washer+thick_xwasher);
   D       = direction ? fl_direction(direction) : I;
   M       = fl_octant(octant,bbox=bbox);

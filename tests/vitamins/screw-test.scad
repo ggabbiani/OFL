@@ -62,6 +62,7 @@ DIR_R       = 0;        // [-360:360]
 /* [Screw] */
 
 SCREW       = "ALL";  // [ALL, No632_pan_screw,M2_cap_screw,M2_cs_cap_screw,M2_dome_screw,M2p5_cap_screw,M2p5_pan_screw,M3_cap_screw,M3_cs_cap_screw,M3_dome_screw,M3_grub_screw,M3_hex_screw,M3_low_cap_screw,M3_pan_screw,M4_cap_screw,M4_cs_cap_screw,M4_dome_screw,M4_grub_screw,M4_hex_screw,M4_pan_screw,M5_cap_screw,M5_cs_cap_screw,M5_dome_screw,M5_hex_screw,M5_pan_screw,M6_cap_screw,M6_cs_cap_screw,M6_hex_screw,M6_pan_screw,M8_cap_screw,M8_hex_screw,No2_screw,No4_screw,No6_cs_screw,No6_screw,No8_screw]
+HEAD_TYPE   = "ANY";  // [ANY, cap, pan, cs, hex, grub, cs cap, dome]
 FIXED_LEN   = 0;
 // thickness
 T           = 10;     // [1:0.1:20]
@@ -70,7 +71,7 @@ XWASHER     = "no";   // [no,spring,star]
 // add a default washer before the nut
 NUT_WASHER  = false;
 NUT         = "no";   // [no,default,nyloc]
-HEAD_TYPE   = "ANY";  // [ANY, cap, pan, cs, hex, grub, cs cap, dome]
+DRILL_TYPE  = "clearance";  // [clearance,tap]
 
 
 /* [Hidden] */
@@ -82,6 +83,11 @@ debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 fl_status();
 
 // end of automatically generated code
+
+module screw_proxy(screw) {
+  fl_screw(verbs,screw,thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=nut_washer,len=FIXED_LEN?FIXED_LEN:undef,dri_type=DRILL_TYPE,octant=octant,direction=direction)
+    children();
+}
 
 verbs = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL,FL_FOOTPRINT]);
 screw = fl_switch(SCREW,  cases=[
@@ -129,7 +135,7 @@ h_filter  = fl_switch(HEAD_TYPE,[["cap",hs_cap], ["pan",hs_pan], ["cs",hs_cs], [
 n_filter  = NUT!="no";
 
 if (screw)
-  fl_screw(verbs,screw,thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=nut_washer,len=FIXED_LEN?FIXED_LEN:undef,octant=octant,direction=direction);
+  screw_proxy(screw);
 else {
   // ordered list of existing screw sizes
   sizes     = fl_list_sort(fl_list_unique([for(s=FL_SCREW_DICT) fl_screw_nominal(s)]));
@@ -151,7 +157,7 @@ else {
           label(str("⌀",fl_screw_nominal(row[0])),halign="center");
         // horizontal layout of row screws
         fl_layout(axis=+X,gap=3,types=wrappers)
-          fl_screw(verbs,fl_screw($item),thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=nut_washer,len=FIXED_LEN?FIXED_LEN:undef,octant=octant,direction=direction);
+          screw_proxy(fl_screw($item));
       }
     }
 }
