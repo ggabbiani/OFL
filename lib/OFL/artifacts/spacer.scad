@@ -91,12 +91,8 @@ module fl_spacer(
   lay_direction=[+Z,-Z],
   //! optional screw
   screw,
-  /*!
-   * optional knurl nut.
-   *
-   * __NOTE__: when set true while no usable knurl nut is found an error is thrown
-   */
-  knut=false,
+  //! optional knurl nut: error if no screw is passed
+  knut,
   //! anchor directions in floating semi-axis list
   anchor,
   //! when >0 a fillet is added to anchors
@@ -111,90 +107,80 @@ module fl_spacer(
   r       = assert((r && !d) || (!r && d)) r ? r : d/2;
   bbox    = assert(h!=undef) fl_bb_spacer(h,r);
   size    = bbox[1]-bbox[0];
-  knut    = knut && screw ? let(kn=fl_knut_search(screw,h)) assert(kn,"No usable knurl nut found: try increasing external radius and/or spacer height!") kn : undef;
+  knut    = knut ? assert(screw) knut : undef;
+  kn_delta= knut ? size.z-fl_bb_size(knut).z : 0;
   hole_r  = screw ? fl_spc_holeRadius(screw,knut) : undef;
   assert(!screw || r>hole_r,"External radius insufficient for internal hole");
-
-  thick = is_undef(thick) ? [0,0]
-    : is_list(thick) ? thick==[] ? [0,0] : let(
-      negative = let(m=min(thick)) m<0 ? m : 0,
-      positive = let(m=max(thick)) m>0 ? m : 0
-    ) [negative,positive]
-    : assert(is_num(thick),thick) [-abs(thick),abs(thick)];
-  thicks = -thick[0]+thick[1];
+  thick   = fl_parm_SignedPair(thick);
+  thicks  = -thick[0]+thick[1];
 
   anchor  = is_undef(anchor) ? [] : anchor;
+  anchor_sz = [r,2*r,h];
+
+  // anchor status
+  xp  = fl_3d_axisIsSet(+X,anchor);
+  xn  = fl_3d_axisIsSet(-X,anchor);
+  yp  = fl_3d_axisIsSet(+Y,anchor);
+  yn  = fl_3d_axisIsSet(-Y,anchor);
+  zn  = fl_3d_axisIsSet(-Z,anchor);
+
   D       = direction ? fl_direction(direction) : FL_I;
   M       = fl_octant(octant,bbox=bbox);
 
   module knut(verbs=FL_ADD)
     translate(+Z(h))
-      fl_knut(verbs,knut,dri_thick=thick,octant=-Z);
+      fl_knut(verbs,knut,dri_thick=[thick[0]-kn_delta,thick[1]],octant=-Z);
+
+  module shape() {
+    fl_cylinder(h=h,r=r);
+    if (xp)
+      fl_cube(size=anchor_sz, octant=+X+Z);
+    if (xn)
+      fl_cube(size=anchor_sz, octant=-X+Z);
+    if (yp)
+      fl_cube(size=[2*r,r,h], octant=+Y+Z);
+    if (yn)
+      fl_cube(size=[2*r,r,h], octant=-Y+Z);
+
+    if (fillet) {
+    }
+  }
 
   module do_add() {
-    module shape() {
-      fl_cylinder(h=h,r=r);
-      if (xp)
-        fl_cube(size=anchor_sz, octant=+X+Z);
-      if (xn)
-        fl_cube(size=anchor_sz, octant=-X+Z);
-      if (yp)
-        fl_cube(size=[2*r,r,h], octant=+Y+Z);
-      if (yn)
-        fl_cube(size=[2*r,r,h], octant=-Y+Z);
-
-      if (fillet) {
-        if (xp) {
-          if (!yp)
-            translate([r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,90]);
-          if (!yn)
-            translate([r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-180]);
-        }
-        if (xn) {
-          if (!yp)
-            translate([-r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,0]);
-          if (!yn)
-            translate([-r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-90]);
-        }
-        if (yp) {
-          if (!xp)
-            translate([r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-90]);
-          if (!xn)
-            translate([-r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-180]);
-        }
-        if (yn) {
-          if (!xn)
-            translate([-r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,90]);
-          if (!xp)
-            translate([r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,0]);
-        }
-      }
-    }
-
     // quadrant angles
     q1  = [0,90];
     q2  = [90,180];
     q3  = [180,270];
     q4  = [270,360];
 
-    // anchor status
-    xp  = fl_3d_axisIsSet(+X,anchor);
-    xn  = fl_3d_axisIsSet(-X,anchor);
-    yp  = fl_3d_axisIsSet(+Y,anchor);
-    yn  = fl_3d_axisIsSet(-Y,anchor);
-    zn  = fl_3d_axisIsSet(-Z,anchor);
-
-    // quadrant as boolean function of anchors status
-    function q1(xp,xn,yp,yn) = (!xp && !yp);
-    function q2(xp,xn,yp,yn) = (!xn && !yp);
-    function q3(xp,xn,yp,yn) = (!xn && !yn);
-    function q4(xp,xn,yp,yn) = (!xp && !yn);
-
-    anchor_sz = [r,2*r,h];
     fl_color() difference() {
       union() {
         shape();
-        if (fillet)
+        if (fillet) {
+          if (xp) {
+            if (!yp)
+              translate([r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,90]);
+            if (!yn)
+              translate([r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-180]);
+          }
+          if (xn) {
+            if (!yp)
+              translate([-r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,0]);
+            if (!yn)
+              translate([-r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-90]);
+          }
+          if (yp) {
+            if (!xp)
+              translate([r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-90]);
+            if (!xn)
+              translate([-r,r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,-180]);
+          }
+          if (yn) {
+            if (!xn)
+              translate([-r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,90]);
+            if (!xp)
+              translate([r,-r,0]) fl_fillet(r=fillet,h=h,direction=[+Z,0]);
+          }
           if (zn) {
             if (xp) {
               if (!yn)
@@ -229,12 +215,13 @@ module fl_spacer(
                   fl_fillet(r=fillet, h=r,direction=[-Y,0],$FL_ADD="ON");
             }
             fl_fillet_extrude(height=fillet, r1=fillet) {
-              if (q1(xp,xn,yp,yn)) fl_sector(r=r, angles=q1);
-              if (q2(xp,xn,yp,yn)) fl_sector(r=r, angles=q2);
-              if (q3(xp,xn,yp,yn)) fl_sector(r=r, angles=q3);
-              if (q4(xp,xn,yp,yn)) fl_sector(r=r, angles=q4);
+              if (!xp && !yp) fl_sector(r=r, angles=q1);
+              if (!xn && !yp) fl_sector(r=r, angles=q2);
+              if (!xn && !yn) fl_sector(r=r, angles=q3);
+              if (!xp && !yn) fl_sector(r=r, angles=q4);
             }
           }
+        }
       }
       if (hole_r)
         translate(-Z(NIL))
@@ -261,13 +248,16 @@ module fl_spacer(
 
   module do_layout() {
     if (fl_3d_axisIsSet(+Z,lay_direction))
-      context(+Z) translate($spc_director*h) children();
+      context(+Z)
+        translate($spc_director*h)
+          children();
     if (fl_3d_axisIsSet(-Z,lay_direction))
-      context(-Z) children();
+      context(-Z)
+        children();
   }
 
   module do_footprint() {
-    fl_cylinder(h=h,r=r);
+    shape($FL_ADD=$FL_FOOTPRINT);
   }
 
   module do_drill()
@@ -282,7 +272,7 @@ module fl_spacer(
   *
   * $spc_director - layout direction
   * $spc_screw    - OPTIONAL screw
-  * $spc_thick    - thickness along $spc_director
+  * $spc_thick    - scalar thickness along $spc_director
   * $spc_h        - spacer height
   * $spc_holeR    - OPTIONAL internal hole radius
   */
@@ -298,6 +288,7 @@ module fl_spacer(
   }
 
   fl_manage(verbs,M,D) {
+
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
