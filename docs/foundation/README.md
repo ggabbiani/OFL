@@ -107,7 +107,7 @@ When a verb is passed as a single value the verb will be trivially executed.
     include <OFL/vitamins/magnets.scad>
 
     // multiple verb engine invocation
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6);
+    fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6);
     ^         ^                                    ^
     |         |                                    |
     |         |                                    +---> object
@@ -119,7 +119,7 @@ When a verb is passed as a single value the verb will be trivially executed.
 so that same invokation of the same primitive will actually perform the following actions:
 
  1. add of a magnet shape to the scene (FL_ADD);
- 2. default assembly of its accessories (FL_ASSEMBLY);
+ 2. mount shape through predefined screws (FL_MOUNT);
  3. draw of local reference axes (FL_AXES);
  4. the object bounding box is shown (FL_BBOX).
 
@@ -127,7 +127,7 @@ so that same invokation of the same primitive will actually perform the followin
 
 ### Verbs rendering
 
-Engine's behaviour when rendering verbs can be modified injecting well-known values into runtime variables with the same name of the verb. For modifying the FL_ADD rendering, the runtime variable to be used is $FL_ADD, for FL_PAYLOAD is $FL_PAYLOAD and so on.. .
+Engine's behavior when rendering verbs can be modified injecting well-known values into runtime variables with the same name of the verb. For modifying the FL_ADD rendering, the runtime variable to be used is $FL_ADD, for FL_PAYLOAD is $FL_PAYLOAD and so on.. .
 
 The list of modifier variables with their corresponding defaults are listed below:
 
@@ -161,7 +161,7 @@ In the previous example we can modify the rendering of the FL_AXES verb
     include <OFL/vitamins/magnets.scad>
 
     // multiple verb engine invocation
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,$FL_AXES="DEBUG");
+    fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,$FL_AXES="DEBUG");
     ^         ^                                    ^                  ^         ^
     |         |                                    |                  |         |
     |         |                                    |                  |         +---> DEBUG rendering
@@ -209,7 +209,7 @@ We can pass this value to our example for placing the object in the desired octa
 
     include <OFL/vitamins/magnets.scad>
 
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=+X+Y+Z);
+    fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=+X+Y+Z);
     ^         ^                                    ^                  ^
     |         |                                    |                  |
     |         |                                    |                  +---> octant expressed as [1,1,1] ⇒ first octant
@@ -226,7 +226,7 @@ If we want the object centered along the X axis, the octant will be [0,1,1] ⇒ 
 
     include <OFL/vitamins/magnets.scad>
 
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=+Y+Z);
+    fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=+Y+Z);
     ^         ^                                    ^                  ^
     |         |                                    |                  |
     |         |                                    |                  +---> octant expressed as [0,1,1] ⇒ x==0 means 'centered'
@@ -243,7 +243,7 @@ If we want the object centered on the origin the octant will be [0,0,0] ⇒ O (*
 
     include <OFL/vitamins/magnets.scad>
 
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=O);
+    fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=O);
 
 ![Modified verb invocation](800x600/pic-5.png)
 
@@ -251,7 +251,7 @@ Of course these setting can be mixed with all the possible combination allowed, 
 
     include <OFL/vitamins/magnets.scad>
 
-    fl_magnet([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=-Z);
+    fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=-Z);
 
 ![Modified verb invocation](800x600/pic-6.png)
 
