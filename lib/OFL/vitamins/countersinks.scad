@@ -10,17 +10,20 @@
 include <NopSCADlib/lib.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
+include <../foundation/core.scad>
+
 use <../foundation/bbox-engine.scad>
-use <../foundation/mngm-engine.scad>
+// use <../foundation/mngm-engine.scad>
 
 //! countersinks namespace
 FL_CS_NS  = "cs";
 
 //*****************************************************************************
 // properties
-function fl_cs_d(type,value)        = fl_property(type,"cs/diameter",value);
+function fl_cs_k(type,value)        = fl_property(type,"cs/head height",value);
+function fl_cs_dk(type,value)       = fl_property(type,"cs/head ⌀",value);
 function fl_cs_angle(type,value)    = fl_property(type,"cs/angle",value);
-function fl_cs_nominal(type,value)  = fl_property(type,"cs/nominal diameter",value);
+function fl_cs_nominal(type,value)  = fl_property(type,"cs/nominal ⌀",value);
 
 //*****************************************************************************
 // getters
@@ -33,36 +36,41 @@ function fl_cs_h(type)      = let(
 // constructor
 function fl_Countersink(
   name,
-  description,
-  d,
-  angle
+  //! nominal ⌀
+  nominal,
+  //! countersink head ⌀
+  dk,
+  //! head height
+  k,
+  //! countersink angle
+  alpha=90
 ) =
   assert(name!=undef)
-  assert(d>0)
-  assert(angle>0)
+  assert(dk>0,dk)
+  assert(nominal>0,nominal)
+  assert(alpha>0 && alpha<180,alpha)
+  assert(k>0,k)
   let(
-    r           = d/2,
-    alpha       = angle/2,
-    h           = r/tan(alpha),
-    description = description ? description : str("M",d,"countersink")
+    rk  = dk/2
   ) [
     fl_name(value=name),
-    fl_description(value=description),
-    fl_cs_d(value=d),
-    fl_cs_angle(value=angle),
-    fl_bb_corners(value=[[-r,-r,-h],[r,r,0]]),
-    fl_cs_nominal(value=d),
+    fl_description(value=str("M",nominal," countersink")),
+    fl_cs_dk(value=dk),
+    fl_cs_angle(value=alpha),
+    fl_bb_corners(value=[[-rk,-rk,-k],[rk,rk,0]]),
+    fl_cs_nominal(value=nominal),
+    fl_cs_k(value=k),
   ];
 
-FL_CS_M3  = fl_Countersink("FL_CS_M3","M3 countersink",6+3/5,angle=90);
-FL_CS_M4  = fl_Countersink("FL_CS_M4","M4 countersink",8+4/5,angle=90);
-FL_CS_M5  = fl_Countersink("FL_CS_M5","M5 countersink",10+5/5,angle=90);
-FL_CS_M6  = fl_Countersink("FL_CS_M6","M6 countersink",12+6/5,angle=90);
-FL_CS_M8  = fl_Countersink("FL_CS_M8","M8 countersink",16+8/5,angle=90);
-FL_CS_M10 = fl_Countersink("FL_CS_M10","M10 countersink",20+10/5,angle=90);
-FL_CS_M12 = fl_Countersink("FL_CS_M12","M12 countersink",24+12/5,angle=90);
-FL_CS_M16 = fl_Countersink("FL_CS_M16","M16 countersink",30+16/5,angle=90);
-FL_CS_M20 = fl_Countersink("FL_CS_M20","M20 countersink",36+20/5,angle=90);
+FL_CS_M3  = fl_Countersink("FL_CS_M3",3,6,1.7);
+FL_CS_M4  = fl_Countersink("FL_CS_M4",4,8,2.3);
+FL_CS_M5  = fl_Countersink("FL_CS_M5",5,10,2.8);
+FL_CS_M6  = fl_Countersink("FL_CS_M6",6,12,3.3);
+FL_CS_M8  = fl_Countersink("FL_CS_M8",8,16,4.4);
+FL_CS_M10 = fl_Countersink("FL_CS_M10",10,20,5.5);
+FL_CS_M12 = fl_Countersink("FL_CS_M12",12,24,6.5);
+FL_CS_M16 = fl_Countersink("FL_CS_M16",16,30,7.5);
+FL_CS_M20 = fl_Countersink("FL_CS_M20",20,36,8.5);
 
 FL_CS_DICT = [
   FL_CS_M3
@@ -77,14 +85,20 @@ FL_CS_DICT = [
 ];
 
 /*!
- * return a countersink fitting the nominal diameter «d» or undef
+ * return a countersink list fitting the passed properties or undef if no match
+ * no match found.
  */
 function fl_cs_search(
+  name,
   //! nominal diameter
   d
-) = let(
-  list = [for(cs=FL_CS_DICT) if (fl_cs_nominal(cs)==d) cs]
-) list!=[] ? list[0] : undef;
+) = [
+  for(cs=FL_CS_DICT)
+    if (
+          (is_undef(name) || fl_name(cs)==name    )
+      &&  (is_undef(d)    || fl_cs_nominal(cs)==d )
+    ) cs
+];
 
 module fl_countersink(
   verbs=FL_ADD,
@@ -97,24 +111,42 @@ module fl_countersink(
   octant
 ) {
   assert(verbs!=undef);
+  assert(type,type);
+  assert(tolerance>=0,tolerance);
 
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  d     = fl_cs_d(type)+tolerance;
-  h     = fl_cs_h(type);
-  D     = direction!=undef ? fl_direction(direction) : I;
-  M     = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
-  fl_trace("Verbs: ",verbs);
+  bbox    = assert(type,type) fl_bb_corners(type);
+  size    =  fl_bb_size(type);
+  nominal = fl_cs_nominal(type);
+  dk      = fl_cs_dk(type);
+  k       = fl_cs_k(type);
+  angle   = fl_cs_angle(type);
+  dx      = nominal/10*tan(angle/2);
+  D       = direction ? fl_direction(direction) : I;
+  M       = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
+
+  module tolerant()
+    if (tolerance)
+      resize(size+[2*tolerance,2*tolerance,tolerance])
+        children();
+    else
+      children();
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD)
-      fl_modifier($modifier)
-        fl_cylinder(d1=tolerance,d2=d,h=h,octant=-Z);
+      fl_modifier($modifier) let(edge=nominal/10) {
+        tolerant()
+          intersection() {
+            fl_cylinder(d1=nominal,d2=dk+2*dx,h=k,octant=-Z);
+            fl_cylinder(d=dk,h=k,octant=-Z);
+          }
+      }
     else if ($verb==FL_AXES)
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction,debug);
     else if ($verb==FL_BBOX)
-      fl_modifier($modifier) translate(Z(NIL)) fl_bb_add(bbox);
+      fl_modifier($modifier)
+        tolerant()
+          fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
   }
