@@ -191,10 +191,12 @@ module fl_magnet(
           mag_M4_cs_d32x6();
         else
           fl_cylinder(d=d, h=h, octant=+Z);
-        if (cs!=undef)
-            translate(+Z(h+NIL)) fl_countersink(FL_ADD,type=cs);
-        if (screw!=undef)
-          do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL);
+
+        if (cs)
+          translate(+Z(h+NIL)) fl_countersink(FL_ADD,type=cs,tolerance=0.1);
+
+        if (screw)
+          do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL,$FL_DRILL=$FL_ADD);
       }
     }
 
@@ -221,22 +223,29 @@ module fl_magnet(
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
+
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
+
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(-Z(NIL)) fl_cube(size=size+Z(2*NIL),octant=+Z);
+
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier)
         do_layout() children();
+
     } else if ($verb==FL_FOOTPRINT) {
       fl_modifier($modifier) do_footprint();
-    } else if ($verb==FL_ASSEMBLY) {
+
+    } else if ($verb==FL_MOUNT) {
       fl_modifier($modifier)
         do_layout() fl_screw(type=screw,thick=screw_thick);
+
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier)
         do_layout() fl_screw(FL_DRILL,screw,thick=screw_thick);
+
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }

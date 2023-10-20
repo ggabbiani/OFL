@@ -32,8 +32,6 @@ SHOW_SYMBOLS    = false;
 
 // adds shapes to scene.
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// layout of predefined auxiliary shapes (like predefined screws)
-$FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
@@ -44,6 +42,8 @@ $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// mount shape through predefined screws
+$FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
 /* [3D Placement] */
@@ -81,18 +81,18 @@ fl_status();
 
 // end of automatically generated code
 
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
-  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-];
+verbs=fl_verbList([
+  FL_ADD,
+  FL_AXES,
+  FL_BBOX,
+  FL_DRILL,
+  FL_FOOTPRINT,
+  FL_LAYOUT,
+  FL_MOUNT
+]);
 
 module do_test(magnet) {
-  echo(str("obj name:",fl_name(magnet)));
+  // echo(str("obj name:",fl_name(magnet)));
   fl_trace("DIR_NATIVE",DIR_NATIVE);
   fl_trace("DIR_Z",DIR_Z);
   fl_trace("DIR_R",DIR_R);
