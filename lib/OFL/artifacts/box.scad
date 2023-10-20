@@ -7,6 +7,7 @@
  */
 
 include <../artifacts/spacer.scad>
+include <../vitamins/countersinks.scad>
 include <../vitamins/knurl_nuts.scad>
 include <../vitamins/screw.scad>
 
@@ -62,22 +63,34 @@ module fl_box(
   sz_low  = size;
   sz_up   = [size.x,size.y-2*Treal,size.z-Treal];
   bbox    = pload ? [pload[0]-deltas/2,pload[1]+deltas/2] : [-size/2,+size/2];
+
   knut    = FL_KNUT_LINEAR_M3x8;
   screw   = M3_cs_cap_screw;
+  cs      = fl_cs_search(d=fl_screw_nominal(screw))[0];
+  assert(cs,cs);
   holder_sz = fl_bb_size(knut)+[3,3,-2*FL_NIL];
-  // Mknut   = T([0,size.y/2-thick-tolerance,sz_up.z/2-(holder_sz.y+thick-tolerance)/2]);
   Mfront_knut = T([size.x/2,thick+tolerance-0*(size.y-thick-tolerance),sz_up.z+tolerance]);
-  Mback_knut      = T([size.x/2,size.y-thick-tolerance,sz_up.z+tolerance]);
-  // Mholder = Mknut * Rx(90);
+  Mback_knut  = T([size.x/2,size.y-thick-tolerance,sz_up.z+tolerance]);
   D       = direction ? fl_direction(direction)  : I;
   M       = fl_octant(octant,bbox=bbox);
 
-  module back_spacer(verbs=FL_ADD)
-    fl_spacer(verbs,holder_sz.z,4,screw=screw,knut=true,anchor=[-Y],fillet=fillet?Treal/2:undef,thick=Treal,lay_direction=+Z,octant=+Y-Z,direction=[+Y,0],$fl_filament=undef)
-      children();
+  module back_spacer(verbs=FL_ADD,direction=[+Y,0])
+    fl_spacer(verbs,
+      h=holder_sz.z,
+      r=4,
+      screw=screw,
+      knut=knut,
+      anchor=[-Y],
+      fillet=fillet?Treal/2:undef,
+      thick=Treal,
+      lay_direction=[+Z],
+      octant=+Y-Z,
+      direction=direction,
+      $fl_filament=undef
+    ) children();
 
   module front_spacer(verbs=FL_ADD)
-    fl_spacer(verbs,holder_sz.z,4,screw=screw,knut=true,anchor=[-Y],fillet=fillet?Treal/2:undef,thick=Treal,lay_direction=+Z,octant=+Y-Z,direction=[-Y,180],$fl_filament=undef)
+    back_spacer(verbs, direction=[-Y,180])
       children();
 
   module context() {
@@ -124,9 +137,13 @@ module fl_box(
           fl_cube(size=[size.x,size.y,thick],octant=O0);
         }
         multmatrix(Mback_knut)
-          back_spacer(FL_DRILL);
+          back_spacer([FL_DRILL,FL_LAYOUT],$FL_LAYOUT="ON")
+            translate($spc_director*($spc_thick+NIL))
+              fl_countersink(type=cs);
         multmatrix(Mfront_knut)
-          front_spacer(FL_DRILL);
+          front_spacer([FL_DRILL,FL_LAYOUT],$FL_LAYOUT="ON")
+            translate($spc_director*($spc_thick+NIL))
+              fl_countersink(type=cs);
       }
   }
 
