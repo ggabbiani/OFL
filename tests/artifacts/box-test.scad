@@ -64,6 +64,7 @@ DIR_R       = 0;        // [-360:360]
 
 /* [Box] */
 
+PARTS           = "all";    // [all,upper,lower]
 // external dimensions
 XSIZE           = [100,60,40];
 // internal payload size
@@ -79,7 +80,6 @@ THICK           = 2.5;
 // fold internal radius (square if undef)
 RADIUS          = 1.1;
 
-PARTS           = "all";    // [all,upper,lower]
 TOLERANCE       = 0.3;
 // upper side color
 MATERIAL_UPPER  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
