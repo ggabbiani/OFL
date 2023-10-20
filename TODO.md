@@ -48,6 +48,7 @@
 - [x] improved object positioning by fl_octant() extension now managing also 'undef' dimensional translations
 - [x] all OFL base shapes but fl_cube() are centered to the origin: now fl_cube() is centered by default as well
 - [ ] standardize the common api parameter syntax
+- [ ] modify FL_DRILL verb implementation according to the type of drill to be performed: TAP drill vs CLEARANCE drill.
 
 
 ## Changed file names
