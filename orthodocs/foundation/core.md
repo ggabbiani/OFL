@@ -17,7 +17,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    "ON"
+    is_undef($FL_ADD)?"ON":$FL_ADD
 
 ---
 
@@ -25,7 +25,7 @@ __Default:__
 
 __Default:__
 
-    "ON"
+    is_undef($FL_ASSEMBLY)?"ON":$FL_ASSEMBLY
 
 ---
 
@@ -33,7 +33,7 @@ __Default:__
 
 __Default:__
 
-    "ON"
+    is_undef($FL_AXES)?"ON":$FL_AXES
 
 ---
 
@@ -41,7 +41,7 @@ __Default:__
 
 __Default:__
 
-    "TRANSPARENT"
+    is_undef($FL_BBOX)?"TRANSPARENT":$FL_BBOX
 
 ---
 
@@ -49,7 +49,7 @@ __Default:__
 
 __Default:__
 
-    "ON"
+    is_undef($FL_CUTOUT)?"ON":$FL_CUTOUT
 
 ---
 
@@ -57,7 +57,7 @@ __Default:__
 
 __Default:__
 
-    "ON"
+    is_undef($FL_DRILL)?"ON":$FL_DRILL
 
 ---
 
@@ -65,7 +65,7 @@ __Default:__
 
 __Default:__
 
-    "ON"
+    is_undef($FL_FOOTPRINT)?"ON":$FL_FOOTPRINT
 
 ---
 
@@ -73,7 +73,7 @@ __Default:__
 
 __Default:__
 
-    "ON"
+    is_undef($FL_HOLDERS)?"ON":$FL_HOLDERS
 
 ---
 
@@ -81,7 +81,7 @@ __Default:__
 
 __Default:__
 
-    "ON"
+    is_undef($FL_LAYOUT)?"ON":$FL_LAYOUT
 
 ---
 
@@ -89,7 +89,7 @@ __Default:__
 
 __Default:__
 
-    "ON"
+    is_undef($FL_MOUNT)?"ON":$FL_MOUNT
 
 ---
 
@@ -97,7 +97,7 @@ __Default:__
 
 __Default:__
 
-    "DEBUG"
+    is_undef($FL_PAYLOAD)?"DEBUG":$FL_PAYLOAD
 
 ---
 
@@ -105,7 +105,7 @@ __Default:__
 
 __Default:__
 
-    !$preview
+    is_undef($FL_RENDER)?!$preview:$FL_RENDER
 
 When true, disables PREVIEW corrections (see [variable FL_NIL](#variable-fl_nil))
 
@@ -115,7 +115,7 @@ When true, disables PREVIEW corrections (see [variable FL_NIL](#variable-fl_nil)
 
 __Default:__
 
-    "ON"
+    is_undef($FL_SYMBOLS)?"ON":$FL_SYMBOLS
 
 ---
 
@@ -186,7 +186,7 @@ __Default:__
 
     "FL_DEPRECATED is a test verb. **DEPRECATED**"
 
-is a test verb for library development
+test verb for library development
 
 ---
 
@@ -388,7 +388,7 @@ __Default:__
 
     "FL_OBSOLETE is a test verb. **OBSOLETE**"
 
-is a test verb for library development
+test verb for library development
 
 ---
 
@@ -764,6 +764,18 @@ fl_connectors(type,value)
 
 ---
 
+### function fl_cumulativeSum
+
+__Syntax:__
+
+```text
+fl_cumulativeSum(v)
+```
+
+returns a vector in which each item is the sum of the previous ones
+
+---
+
 ### function fl_cutout
 
 __Syntax:__
@@ -805,6 +817,20 @@ __Syntax:__
 ```text
 fl_description(type,value)
 ```
+
+---
+
+### function fl_dict_organize
+
+__Syntax:__
+
+```text
+fl_dict_organize(dictionary,range,func)
+```
+
+build a dictionary with rows constituted by items with equal property as
+retrieved by «func»
+
 
 ---
 
@@ -900,6 +926,16 @@ __Syntax:__
 
 ```text
 fl_height(type)
+```
+
+---
+
+### function fl_holes
+
+__Syntax:__
+
+```text
+fl_holes(type,value)
 ```
 
 ---
@@ -1006,6 +1042,30 @@ fl_list_has(list,item)
 
 ---
 
+### function fl_list_sort
+
+__Syntax:__
+
+```text
+fl_list_sort(vec)
+```
+
+quick sort «vec» (from [oampo/missile](https://github.com/oampo/missile))
+
+---
+
+### function fl_list_unique
+
+__Syntax:__
+
+```text
+fl_list_unique(dict)
+```
+
+strips duplicates from a «dict»
+
+---
+
 ### function fl_material
 
 __Syntax:__
@@ -1013,6 +1073,62 @@ __Syntax:__
 ```text
 fl_material(type,value,default)
 ```
+
+---
+
+### function fl_max
+
+__Syntax:__
+
+```text
+fl_max(list,value=function(item)item,_i_=0)
+```
+
+return the list item whose calculated value is max.
+
+Return 'undef' in case of empty «list».
+
+
+__Parameters:__
+
+__list__  
+item list
+
+__value__  
+string literal assigning items a value: essentially it determines the way
+a 'score' is mapped to a corresponding list item for the 'max' evaluation
+
+As default simply returns the item (i.e. the 'score' is the item itself).
+
+
+
+---
+
+### function fl_min
+
+__Syntax:__
+
+```text
+fl_min(list,value=function(item)item,_i_=0)
+```
+
+return the list item whose calculated value is min.
+
+Return 'undef' in case of empty «list».
+
+
+__Parameters:__
+
+__list__  
+item list
+
+__value__  
+string literal assigning items a value: essentially it determines the way
+a 'score' is mapped to a corresponding list item for the 'min' evaluation
+
+As default simply returns the item (i.e. the 'score' is the item itself).
+
+
 
 ---
 
@@ -1134,6 +1250,11 @@ when true, labels to symbols are assigned and displayed
 __symbols__  
 when true symbols are displayed
 
+__components__  
+a string or a list of strings equals to the component label of which
+direction information will be shown
+
+
 
 ---
 
@@ -1152,6 +1273,49 @@ Each dimension can assume one out of four values:
 
 - "undef": mapped to undef
 - -1,0,+1: untouched
+
+
+---
+
+### function fl_parm_SignedPair
+
+__Syntax:__
+
+```text
+fl_parm_SignedPair(list)
+```
+
+This format uses the real numbers sign to distinguish couple of values passed
+in a list.
+
+The function takes an unordered pair of two opposite signed values and
+returns an ordered list with the negative value at position 0 and the
+positive at position 1.
+
+When the input is in scalar form, both the negative/positive will be set to
+it with sign flag set accordingly.
+
+This type can be used for storing semi-axis related values like - for
+example - thickness values. While providing a free and compact input
+representation, the transformed value is still compatible with the input (so
+can be forwarded to other signed-value parameters), while simplifying the
+fetch of its components being the transformed positions 'normalized' in
+fixed-form with negative/positive parts at index 0/1 respectively.
+
+Example 1:
+
+    ordered    = fl_list_SignedPair([+3,-7]);
+
+«ordered» is equal to `[-7,+3]`.
+
+Example 2:
+
+    ordered    = fl_list_SignedPair(-5);
+
+«ordered» is now equal to `[-5,+5]`.
+
+This type is used - for example - for specifying a thickness value along an
+axis.
 
 
 ---
@@ -1313,6 +1477,16 @@ fl_size(type)
 
 ---
 
+### function fl_stl
+
+__Syntax:__
+
+```text
+fl_stl(type,value)
+```
+
+---
+
 ### function fl_str_lower
 
 __Syntax:__
@@ -1348,7 +1522,48 @@ fl_sub(list,from,to)
 __Syntax:__
 
 ```text
-fl_switch(value,cases,otherwise)
+fl_switch(value,cases,otherwise=undef)
+```
+
+implementation of switch statement as a function: when «value» matches a case,
+corresponding value is returned, undef otherwise.
+
+example:
+
+    value = 2.5;
+    result = fl_switch(value,[
+        [2,  3.2],
+        [2.5,4.0],
+        [3,  4.0],
+        [5,  6.4],
+        [6,  8.0],
+        [8,  9.6]
+      ]
+    );
+
+result will be set to 4.0.
+
+
+__Parameters:__
+
+__value__  
+the value to be checked
+
+__cases__  
+a list with each item composed by a couple «expression result»/«value»
+
+__otherwise__  
+value returned in case of no match or when «value» is undef
+
+
+---
+
+### function fl_tag
+
+__Syntax:__
+
+```text
+fl_tag(type,value)
 ```
 
 ---
@@ -1419,6 +1634,18 @@ __Syntax:__
 ```text
 fl_vendor(type,value)
 ```
+
+---
+
+### function fl_verb2modifier
+
+__Syntax:__
+
+```text
+fl_verb2modifier(verb)
+```
+
+given a verb returns the corresponding modifier value
 
 ---
 

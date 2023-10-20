@@ -17,6 +17,28 @@ Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
 
+## Variables
+
+---
+
+### variable FL_SCREW_DICT
+
+__Default:__
+
+    [No632_pan_screw,M2_cap_screw,M2_cs_cap_screw,M2_dome_screw,M2p5_cap_screw,M2p5_dome_screw,M2p5_pan_screw,M3_cap_screw,M3_cs_cap_screw,M3_dome_screw,M3_grub_screw,M3_hex_screw,M3_low_cap_screw,M3_pan_screw,M3_shoulder_screw,M4_cap_screw,M4_cs_cap_screw,M4_dome_screw,M4_grub_screw,M4_hex_screw,M4_pan_screw,M4_shoulder_screw,M5_cap_screw,M5_cs_cap_screw,M5_dome_screw,M5_grub_screw,M5_hex_screw,M5_pan_screw,M6_cap_screw,M6_cs_cap_screw,M6_grub_screw,M6_hex_screw,M6_pan_screw,M8_cap_screw,M8_cs_cap_screw,M8_hex_screw,No2_screw,No4_screw,No6_cs_screw,No6_screw,No8_screw]
+
+screw dictionary
+
+---
+
+### variable FL_SCREW_NS
+
+__Default:__
+
+    "screw"
+
+screw namespace
+
 ## Functions
 
 ---
@@ -97,6 +119,56 @@ nut washer
 
 ---
 
+### function fl_screw_nominal
+
+__Syntax:__
+
+```text
+fl_screw_nominal(nop)
+```
+
+screw nominal diameter
+
+---
+
+### function fl_screw_search
+
+__Syntax:__
+
+```text
+fl_screw_search(d,head_type,nut,washer)
+```
+
+Return a list of screws from dictionary, matching the passed properties.
+
+__NOTE__: when a parameter is undef the corresponding property is not checked.
+
+
+__Parameters:__
+
+__d__  
+nominal diameter
+
+__head_type__  
+screw type is one of the following:
+ - hs_cap
+ - hs_pan
+ - hs_cs
+ - hs_hex
+ - hs_grub
+ - hs_cs_cap
+ - hs_dome
+
+
+__nut__  
+bool, when true is required, when false or undef is ignored
+
+__washer__  
+"no", "default", "penny", "nylon". when "no" or undef is ignored
+
+
+---
+
 ### function fl_screw_size
 
 __Syntax:__
@@ -115,7 +187,7 @@ return the [x,y,z] size of the screw
 
 __Syntax:__
 
-    fl_screw(verbs=FL_ADD,type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false,direction,octant)
+    fl_screw(verbs=FL_ADD,type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false,dri_type="clearance",direction,octant)
 
 __Parameters:__
 
@@ -142,6 +214,9 @@ extra washer : "no","spring","star"
 
 __nwasher__  
 nut washer
+
+__dri_type__  
+drill type: "clearance" or "tap"
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

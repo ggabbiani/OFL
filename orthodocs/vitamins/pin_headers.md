@@ -184,7 +184,7 @@ __engine__
 
 __Syntax:__
 
-    fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,debug,octant,direction,debug)
+    fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,octant,direction,debug)
 
 Pin headers engine.
 
@@ -200,13 +200,13 @@ thickness for FL_CUTOUT
 __cut_tolerance__  
 tolerance used during FL_CUTOUT
 
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
-
 __octant__  
 when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef
+
+__debug__  
+see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 

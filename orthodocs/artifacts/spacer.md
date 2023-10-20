@@ -8,7 +8,8 @@ graph LR
     A1 --o|include| A3[foundation/hole]
     A1 --o|include| A4[foundation/unsafe_defs]
     A1 --o|include| A5[vitamins/knurl_nuts]
-    A1 --o|use| A6[foundation/mngm-engine]
+    A1 --o|use| A6[foundation/fillet]
+    A1 --o|use| A7[foundation/mngm-engine]
 ```
 
 Spacers with optional screw and knurl nuts.
@@ -72,7 +73,7 @@ optional knurl nut instance
 
 __Syntax:__
 
-    fl_spacer(verbs=FL_ADD,h,r,d,thick=0,lay_direction=[+Z,-Z],screw,knut=false,direction,octant)
+    fl_spacer(verbs=FL_ADD,h,r,d,thick=0,lay_direction=[+Z,-Z],screw,knut,anchor,fillet=0,direction,octant)
 
 Children context:
 
@@ -98,16 +99,50 @@ __d__
 external diameter (mutually exclusive with «r»)
 
 __thick__  
-FL_MOUNT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+List of Z-axis thickness or a scalar value for FL_DRILL and FL_MOUNT
+operations.
+
+A positive value represents thickness along +Z semi-axis.
+A negative value represents thickness along -Z semi-axis.
+A scalar value represents thickness for both Z semi-axes.
+
+Example 1:
+
+    thick = [+3,-1]
+
+is interpreted as thickness of 3mm along +Z and 1mm along -Z
+
+Example 2:
+
+    thick = [-1]
+
+is interpreted as thickness of 1mm along -Z
+
+Example:
+
+    thick = 2
+
+is interpreted as a thickness of 2mm along +Z and -Z axes
+
+
 
 __lay_direction__  
-FL_LAYOUT directions in floating semi-axis list
+FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
+
+__NOTE__: only Z semi-axes are used
+
 
 __screw__  
 optional screw
 
 __knut__  
-optional knurl nut
+optional knurl nut: error if no screw is passed
+
+__anchor__  
+anchor directions in floating semi-axis list
+
+__fillet__  
+when >0 a fillet is added to anchors
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+Z,0])

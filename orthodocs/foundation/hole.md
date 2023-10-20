@@ -124,16 +124,6 @@ fl_hole_screw(hole,value,default)
 
 ---
 
-### function fl_holes
-
-__Syntax:__
-
-```text
-fl_holes(type,value)
-```
-
----
-
 ### function fl_tt_isHole
 
 __Syntax:__

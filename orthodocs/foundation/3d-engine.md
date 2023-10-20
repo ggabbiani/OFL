@@ -4,10 +4,11 @@
 
 ```mermaid
 graph LR
-    A1[foundation/3d-engine] --o|include| A2[foundation/2d-engine]
-    A1 --o|include| A3[foundation/type_trait]
-    A1 --o|use| A4[dxf]
+    A1[foundation/3d-engine] --o|include| A2[foundation/type_trait]
+    A1 --o|include| A3[foundation/unsafe_defs]
+    A1 --o|use| A4[foundation/2d-engine]
     A1 --o|use| A5[foundation/bbox-engine]
+    A1 --o|use| A6[foundation/mngm-engine]
 ```
 
 3d primitives
@@ -39,9 +40,9 @@ is equivalent to:
 
     list =
     [
-     [-1, 0,  0],
-     [ 0, 0, -1],
-     [ 0, 0, +1],
+     [-1, 0,  0],  // -X semi-axis
+     [ 0, 0, -1],  // -Z semi-axis
+     [ 0, 0, +1],  // +Z semi-axis
     ];
 
 
@@ -61,20 +62,27 @@ __Syntax:__
 fl_3d_AxisVList(kvs,axes)
 ```
 
-Build an full semi-axis value list from the key/value list «kvs».
-Build a full boolean semi-axis value list from literal semi-axis list «axes»
+Constructor for a  full semi-axis value list. The returned value can be
+built from a list of pairs ("string", value) or from a list of semi-axes name strings
+
+| parameter | result                                                                     |
+| --------- | ------                                                                     |
+| kvs       | full semi-axis value list initialized from the passed axis/value pair list |
+| values    | full boolean semi-axis value list from semi-axis literal                   |
+
+See also function [fl_tt_isAxisVList()](type_trait.md#function-fl_tt_isaxisvlist)
 
 example 1:
 
-    values = fl_3d_AxisVList(kvs=[["-x",3],["±Z",4]]);
+    thick = fl_3d_AxisVList(kvs=[["-x",3],["±Z",4]]);
 
 is equivalent to:
 
-    values =
+    thick =
     [
-     [3,0],
-     [0,0],
-     [4,4]
+     [3,0],  // -x and +x value pair
+     [0,0],  // -y and +y value pair
+     [4,4]   // -z and +z value pair
     ];
 
 example 2:
@@ -85,9 +93,9 @@ is equivalent to:
 
     values =
     [
-     [true,  false],
-     [false, false],
-     [true,  true]
+     [true,  false], // -x and +x boolean
+     [false, false], // -y and +y boolean
+     [true,  true]   // -z and +z boolean
     ];
 
 
@@ -136,6 +144,15 @@ fl_3d_axisValue(axis,values)
 ```
 
 returns the «axis» value from a full semi-axis value list
+
+__Parameters:__
+
+__axis__  
+axis to retrieve corresponding value
+
+__values__  
+full semi-axis value list (see also function [fl_tt_isAxisVList()](type_trait.md#function-fl_tt_isaxisvlist))
+
 
 ---
 
@@ -759,6 +776,38 @@ desired direction in axis-angle representation [axis,rotation about]
 __Syntax:__
 
     fl_doAxes(size,direction,debug)
+
+---
+
+### module fl_fillet_extrude
+
+__Syntax:__
+
+    fl_fillet_extrude(height=100,r1=0,r2=0)
+
+linear_extrude{} with optional fillet radius on each end.
+
+Positive radii will expand outward towards their end, negative will shrink
+inward towards their end
+
+Limitations:
+
+- individual children of fillet_extrude should be convex
+- only straight extrudes with no twist or scaling supported
+- fillets only for 90 degrees between Z axis and top/bottom surface
+
+
+__Parameters:__
+
+__height__  
+total extrusion length including radii
+
+__r1__  
+bottom radius
+
+__r2__  
+top radius
+
 
 ---
 

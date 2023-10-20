@@ -4,8 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/countersinks] --o|use| A2[foundation/bbox-engine]
-    A1 --o|use| A3[foundation/mngm-engine]
+    A1[vitamins/countersinks] --o|include| A2[foundation/core]
+    A1 --o|use| A3[foundation/bbox-engine]
 ```
 
 Countersink definitions, data taken from:
@@ -32,7 +32,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M10","M10 countersink",20+10/5,angle=90)
+    fl_Countersink("FL_CS_M10",10,20,5.5)
 
 ---
 
@@ -40,7 +40,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M12","M12 countersink",24+12/5,angle=90)
+    fl_Countersink("FL_CS_M12",12,24,6.5)
 
 ---
 
@@ -48,7 +48,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M16","M16 countersink",30+16/5,angle=90)
+    fl_Countersink("FL_CS_M16",16,30,7.5)
 
 ---
 
@@ -56,7 +56,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M20","M20 countersink",36+20/5,angle=90)
+    fl_Countersink("FL_CS_M20",20,36,8.5)
 
 ---
 
@@ -64,7 +64,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M3","M3 countersink",6+3/5,angle=90)
+    fl_Countersink("FL_CS_M3",3,6,1.7)
 
 ---
 
@@ -72,7 +72,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M4","M4 countersink",8+4/5,angle=90)
+    fl_Countersink("FL_CS_M4",4,8,2.3)
 
 ---
 
@@ -80,7 +80,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M5","M5 countersink",10+5/5,angle=90)
+    fl_Countersink("FL_CS_M5",5,10,2.8)
 
 ---
 
@@ -88,7 +88,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M6","M6 countersink",12+6/5,angle=90)
+    fl_Countersink("FL_CS_M6",6,12,3.3)
 
 ---
 
@@ -96,7 +96,7 @@ __Default:__
 
 __Default:__
 
-    fl_Countersink("FL_CS_M8","M8 countersink",16+8/5,angle=90)
+    fl_Countersink("FL_CS_M8",8,16,4.4)
 
 ---
 
@@ -117,8 +117,23 @@ countersinks namespace
 __Syntax:__
 
 ```text
-fl_Countersink(name,description,d,angle)
+fl_Countersink(name,nominal,dk,k,alpha=90)
 ```
+
+__Parameters:__
+
+__nominal__  
+nominal ⌀
+
+__dk__  
+countersink head ⌀
+
+__k__  
+head height
+
+__alpha__  
+countersink angle
+
 
 ---
 
@@ -132,12 +147,12 @@ fl_cs_angle(type,value)
 
 ---
 
-### function fl_cs_d
+### function fl_cs_dk
 
 __Syntax:__
 
 ```text
-fl_cs_d(type,value)
+fl_cs_dk(type,value)
 ```
 
 ---
@@ -149,6 +164,46 @@ __Syntax:__
 ```text
 fl_cs_h(type)
 ```
+
+---
+
+### function fl_cs_k
+
+__Syntax:__
+
+```text
+fl_cs_k(type,value)
+```
+
+---
+
+### function fl_cs_nominal
+
+__Syntax:__
+
+```text
+fl_cs_nominal(type,value)
+```
+
+---
+
+### function fl_cs_search
+
+__Syntax:__
+
+```text
+fl_cs_search(name,d)
+```
+
+return a countersink list fitting the passed properties or undef if no match
+no match found.
+
+
+__Parameters:__
+
+__d__  
+nominal diameter
+
 
 ## Modules
 

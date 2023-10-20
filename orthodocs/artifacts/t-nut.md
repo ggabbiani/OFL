@@ -34,7 +34,47 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    []
+    [FL_TNUT_M3_CS,FL_TNUT_M4_CS,FL_TNUT_M5_CS,FL_TNUT_M6_CS]
+
+---
+
+### variable FL_TNUT_M3_CS
+
+__Default:__
+
+    fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],screw=M3_cs_cap_screw)
+
+---
+
+### variable FL_TNUT_M3_SM
+
+__Default:__
+
+    fl_TNut(opening=6,size=[10,20],thickness=[2,1,2],screw=M3_cs_cap_screw)
+
+---
+
+### variable FL_TNUT_M4_CS
+
+__Default:__
+
+    fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],screw=M4_cs_cap_screw)
+
+---
+
+### variable FL_TNUT_M5_CS
+
+__Default:__
+
+    fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],screw=M5_cs_cap_screw)
+
+---
+
+### variable FL_TNUT_M6_CS
+
+__Default:__
+
+    fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],screw=M6_cs_cap_screw)
 
 ---
 
@@ -43,6 +83,8 @@ __Default:__
 __Default:__
 
     "tnut"
+
+namespace
 
 ## Functions
 
@@ -58,25 +100,22 @@ fl_TNut(opening,size,thickness,screw,knut=false,holes)
 
 Constructor returning a T-slot nut.
 
-                       screw M
-                     ⭰─────────⇥
-           ________________________________
-         ╱           ░░░░░░░░░░░░           ╲       ⤒         ⤒
-       ╱             ░░░░░░░░░░░░             ╲    cone
-     ╱               ░░░░░░░░░░░░               ╲   ⤓         h
-    │                ░░░░░░░░░░░░                │  ⤒         e
-    │                ░░░░░░░░░░░░                │ base       i
-    │_________       ░░░░░░░░░░░░       _________│  ⤓         g
-              │      ░░░░░░░░░░░░      │            ⤒         t
-              │      ░░░░░░░░░░░░      │           wall       h
-              │      ░░░░░░░░░░░░      │            ⤓         ⤓
-              └────────────────────────┘
-                       opening
-              ⭰───────────────────────⇥
-
-                        width
-    ⭰──────────────────────────────────────────⇥
-
+                               width
+           ⭰──────────────────────────────────────────⇥
+                              opening
+                     ⭰───────────────────────⇥
+      ⤒              ┌────────────────────────┐            ⤒
+      │              │      ░░░░░░░░░░░░      │            │ wall
+    h │              │      ░░░░░░░░░░░░      │            ⤓
+    e │    ┌─────────┘      ░░░░░░░░░░░░      └─────────┐  ⤒
+    i │    │                ░░░░░░░░░░░░                │  │ base
+    g │    │                ░░░░░░░░░░░░                │  ⤓
+    h │     ╲               ░░░░░░░░░░░░               ╱   ⤒
+    t │       ╲             ░░░░░░░░░░░░             ╱     │ cone
+      │         ╲           ░░░░░░░░░░░░           ╱       │
+      ⤓           ╲______________________________╱         ⤓
+                            ⭰─────────⇥
+                              screw M
 
 
 __Parameters:__
@@ -85,7 +124,9 @@ __opening__
 the opening of the T-slot
 
 __size__  
-2d size in the form [width,length], the height being calculated from «thickness».
+2d size in the form [width (X size), length (Z size)], the height (Y size)
+being calculated from «thickness».
+
 The resulting bounding box is: `[width, ∑ thickness, length]`
 
 
@@ -101,6 +142,41 @@ eventual knurl nut
 
 __holes__  
 list of user defined holes usually positioned on the 'opening' side
+
+
+---
+
+### function fl_tnut_nominal
+
+__Syntax:__
+
+```text
+fl_tnut_nominal(tnut)
+```
+
+nominal size for a knurl nut is the nominal size of the screw
+
+---
+
+### function fl_tnut_search
+
+__Syntax:__
+
+```text
+fl_tnut_search(screw,d,best=function(matches)matches[0])
+```
+
+Search into dictionary for the best matching T-slot nut (default behavior)
+or all the matching T-lot nuts depending on the «best_match» parameter.
+
+
+__Parameters:__
+
+__screw__  
+screw to fit into
+
+__d__  
+nominal diameter
 
 
 ---
@@ -121,18 +197,28 @@ fl_tnut_thickness(type,value)
 
 __Syntax:__
 
-    fl_tnut(verbs=FL_ADD,type,tolerance=0,countersink=false,debug,direction,octant)
+    fl_tnut(verbs=FL_ADD,type,tolerance=0,countersink=false,dri_thick,debug,direction,octant)
+
+T-slot nut engine.
+
+See [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context) for context variables passed to children() during
+FL_LAYOUT.
+
+
 
 __Parameters:__
 
 __verbs__  
-supported verbs: `FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT`
+supported verbs: `FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT, FL_MOUNT`
 
 __tolerance__  
 tolerances added to [nut, hole, countersink] dimensions
 
 tolerance=x means [x,x,x]
 
+
+__dri_thick__  
+scalar thickness for FL_DRILL
 
 __debug__  
 see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)

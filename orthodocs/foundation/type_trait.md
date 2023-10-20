@@ -9,6 +9,8 @@ graph LR
 
 Type traits implementation file.
 
+TODO: rename as "type_traits-engine.scad"
+
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 
 SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)

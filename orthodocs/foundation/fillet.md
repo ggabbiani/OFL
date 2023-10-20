@@ -91,7 +91,7 @@ __ry__
 ellipse's vertical radius
 
 __direction__  
-desired direction [director,rotation], [+Z,0°] native direction when undef [+Z,+X]
+desired direction [director,rotation], [+Z,0°] when undef
 
 __octant__  
 when undef native positioning is used (+Z)
