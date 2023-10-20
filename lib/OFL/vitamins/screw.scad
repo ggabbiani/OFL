@@ -86,7 +86,7 @@ function fl_screw_search(
   nut,
   //! "no", "default", "penny", "nylon". when "no" or undef is ignored
   washer
-) = echo(d=d,head_type=head_type,nut=nut,washer=washer) [
+) = [
   for(s=FL_SCREW_DICT)
     let(
       chk_washer  = function(screw) let(
@@ -216,6 +216,7 @@ module fl_screw(
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(type,type);
 
   screw_nut     = screw_nut(type);
   screw_washer  = screw_washer(type);
