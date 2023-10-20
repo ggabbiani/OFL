@@ -12,6 +12,7 @@
 
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 include <../../lib/OFL/vitamins/countersinks.scad>
+include <../../lib/OFL/vitamins/screw.scad>
 
 use <../../lib/OFL/foundation/3d-engine.scad>
 
@@ -57,7 +58,7 @@ DIR_R       = 0;        // [-360:360]
 
 /* [Countersink] */
 
-TOLERANCE = 0;  // [-1:0.1:1]
+TOLERANCE = 0;  // [0:0.1:1]
 // -1 for all, the ordinal dictionary member otherwise
 SHOW    = -1;   // [-1:1:8]
 GAP     = 5;
@@ -78,9 +79,9 @@ if (SHOW>-1)
   let(
     cs      = FL_CS_DICT[SHOW],
     nominal = fl_cs_nominal(cs),
-    found   = fl_cs_search(nominal)
-  ) assert(found==cs)
+    found   = fl_cs_search(d=nominal)[0]
+  ) assert(found==cs,found)
     fl_countersink(verbs,cs,tolerance=TOLERANCE,octant=octant,direction=direction);
 else
   fl_layout(axis=X,gap=GAP,types=FL_CS_DICT)
-    fl_countersink(verbs,FL_CS_DICT[$i],tolerance=TOLERANCE,octant=octant,direction=direction);
+    fl_countersink(verbs,$item,tolerance=TOLERANCE,octant=octant,direction=direction);
