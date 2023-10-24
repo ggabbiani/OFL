@@ -59,9 +59,10 @@ DIR_R       = 0;        // [-360:360]
 /* [Countersink] */
 
 TOLERANCE = 0;  // [0:0.1:1]
-// -1 for all, the ordinal dictionary member otherwise
-SHOW    = -1;   // [-1:1:8]
-GAP     = 5;
+TYPE      = "ISO";  // [ISO,UNI]
+// 'ALL' for complete dictionary, nominal size for single display
+SIZE      = "ALL";
+GAP       = 5;
 
 
 /* [Hidden] */
@@ -74,14 +75,24 @@ fl_status();
 
 // end of automatically generated code
 
+//! Draw text that always faces the camera
+module label(str, scale = 0.25, valign = "baseline", halign = "left")
+  color("black")
+    rotate($vpr != [0, 0, 0] ? $vpr : [70, 0, 315])
+      linear_extrude(NIL)
+        scale(scale)
+          text(str, valign = valign, halign = halign, font="Symbola:style=Regular");
+
+dictionary = TYPE=="ISO"?FL_CS_ISO_DICT:FL_CS_UNI_DICT;
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX]);
-if (SHOW>-1)
-  let(
-    cs      = FL_CS_DICT[SHOW],
-    nominal = fl_cs_nominal(cs),
-    found   = fl_cs_search(d=nominal)[0]
-  ) assert(found==cs,found)
+if (SIZE!="ALL") {
+  cs = fl_cs_search(dictionary=dictionary,d=atof(SIZE))[0];
+  assert(cs,str("No M",SIZE," ",TYPE," countersink found."))
     fl_countersink(verbs,cs,tolerance=TOLERANCE,octant=octant,direction=direction);
-else
-  fl_layout(axis=X,gap=GAP,types=FL_CS_DICT)
+} else
+  fl_layout(axis=X,gap=GAP,types=dictionary) {
+    let(delta=fl_bb_size($item).y/2+2)
+      translate(+Y(delta))
+        label(str("M",fl_cs_nominal($item)),halign="center");
     fl_countersink(verbs,$item,tolerance=TOLERANCE,octant=octant,direction=direction);
+  }
