@@ -67,13 +67,13 @@ module fl_status() {
 // lists
 
 //! quick sort algorithm
-function sort(vec) =
-  len(vec)==0 ? [] : let(
-    pivot = vec[floor(len(vec)/2)],
-    below = [for (y = vec) if (y  < pivot) y],
-    equal = [for (y = vec) if (y == pivot) y],
-    above = [for (y = vec) if (y  > pivot) y]
-  ) concat(sort(below), equal, sort(above));
+// function sort(vec) =
+//   len(vec)==0 ? [] : let(
+//     pivot = vec[floor(len(vec)/2)],
+//     below = [for (y = vec) if (y  < pivot) y],
+//     equal = [for (y = vec) if (y == pivot) y],
+//     above = [for (y = vec) if (y  > pivot) y]
+//   ) concat(sort(below), equal, sort(above));
 
 //*****************************************************************************
 // assertions
@@ -656,6 +656,18 @@ function fl_cumulativeSum(v) = [
   for (i = [0 : len(v) - 1])
     fl_accum([for(j=[0:i]) v[j]])
 ];
+
+/*!
+ * Ascii string to number conversion function atof() by Jesse Campbell.
+ *
+ * Scientific notation support added by Alexander Pruss (thingiverse user
+ * arpruss).
+ *
+ * Copyright © 2017, Jesse Campbell <www.jbcse.com>
+ *
+ * SPDX-License-Identifier: CC-BY-4.0
+ */
+function atof(str) = len(str) == 0 ? 0 : let( expon1 = search("e", str), expon = len(expon1) ? expon1 : search("E", str)) len(expon) ? atof(substr(str,pos=0,len=expon[0])) * pow(10, atoi(substr(str,pos=expon[0]+1))) : let( multiplyBy = (str[0] == "-") ? -1 : 1, str = (str[0] == "-" || str[0] == "+") ? substr(str, 1, len(str)-1) : str, decimal = search(".", str), beforeDecimal = decimal == [] ? str : substr(str, 0, decimal[0]), afterDecimal = decimal == [] ? "0" : substr(str, decimal[0]+1) ) (multiplyBy * (atoi(beforeDecimal) + atoi(afterDecimal)/pow(10,len(afterDecimal))));
 
 //**** lists ******************************************************************
 
