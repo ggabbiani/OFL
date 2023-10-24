@@ -69,6 +69,8 @@ FL_SCREW_DICT = [
  * __NOTE__: when a parameter is undef the corresponding property is not checked.
  */
 function fl_screw_search(
+  //! search dictionary
+  dictionary=FL_SCREW_DICT,
   //! nominal diameter
   d,
   /*!
@@ -87,7 +89,7 @@ function fl_screw_search(
   //! "no", "default", "penny", "nylon". when "no" or undef is ignored
   washer
 ) = [
-  for(s=FL_SCREW_DICT)
+  for(s=dictionary)
     let(
       chk_washer  = function(screw) let(
         w       = washer!="no" ? screw_washer(screw) : undef,
