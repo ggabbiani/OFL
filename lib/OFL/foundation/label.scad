@@ -37,12 +37,13 @@ function fl_repos(oldpos,oldsize,newsize) =
 module fl_label(
   //! supported verbs: FL_ADD, FL_AXES
   verbs   = FL_ADD,
+  //! TODO: rename as «text»
   string,
   fg      = "white",
   //! font y-size
   size,
   //! depth along z-axis
-  thick,
+  thick=0.1,
   //! extra delta to add to octant placement
   extra=0,
   //! String. The name of the font that should be used.
@@ -55,6 +56,7 @@ module fl_label(
   assert(is_list(verbs)||is_string(verbs));
   assert(is_num(thick));
 
+  string  = is_string(string) ? string : is_list(string) ? fl_str_concat(string) : str(string);
   bbox  = [O,Z(thick)];
   M     = let(
     t = T(0.6*extra*[
