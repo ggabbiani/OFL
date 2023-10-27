@@ -8,7 +8,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
 include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
@@ -668,7 +667,7 @@ function fl_cumulativeSum(v) = [
  *
  * SPDX-License-Identifier: CC-BY-4.0
  */
-function atof(str) = len(str) == 0 ? 0 : let( expon1 = search("e", str), expon = len(expon1) ? expon1 : search("E", str)) len(expon) ? atof(substr(str,pos=0,len=expon[0])) * pow(10, atoi(substr(str,pos=expon[0]+1))) : let( multiplyBy = (str[0] == "-") ? -1 : 1, str = (str[0] == "-" || str[0] == "+") ? substr(str, 1, len(str)-1) : str, decimal = search(".", str), beforeDecimal = decimal == [] ? str : substr(str, 0, decimal[0]), afterDecimal = decimal == [] ? "0" : substr(str, decimal[0]+1) ) (multiplyBy * (atoi(beforeDecimal) + atoi(afterDecimal)/pow(10,len(afterDecimal))));
+function fl_atof(str) = len(str) == 0 ? 0 : let( expon1 = search("e", str), expon = len(expon1) ? expon1 : search("E", str)) len(expon) ? fl_atof(substr(str,pos=0,len=expon[0])) * pow(10, atoi(substr(str,pos=expon[0]+1))) : let( multiplyBy = (str[0] == "-") ? -1 : 1, str = (str[0] == "-" || str[0] == "+") ? substr(str, 1, len(str)-1) : str, decimal = search(".", str), beforeDecimal = decimal == [] ? str : substr(str, 0, decimal[0]), afterDecimal = decimal == [] ? "0" : substr(str, decimal[0]+1) ) (multiplyBy * (atoi(beforeDecimal) + atoi(afterDecimal)/pow(10,len(afterDecimal))));
 
 //**** lists ******************************************************************
 
@@ -906,6 +905,16 @@ function fl_str_lower(s) = let(
       lc = cp>=65 && cp<=90 ? str(chr(ord(c)+32)) : c
     ) lc
   : str(fl_str_lower(s[0]),fl_str_lower([for(i=[1:len-1]) s[i]]));
+
+//! return a string that is the concatenation of all the list members
+function fl_str_concat(list) =
+  assert(is_list(list))
+  len(list)==0 ? ""
+  : len(list)==1 ? list[0]
+  : let(
+    first=list[0],
+    rest=[for(i=[1:len(list)-1]) list[i]]
+  ) str(first,fl_str_concat(rest));
 
 //! recursively flatten infinitely nested list
 function fl_list_flatten(list) =
