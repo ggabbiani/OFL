@@ -45,6 +45,8 @@ module fl_label(
   thick,
   //! extra delta to add to octant placement
   extra=0,
+  //! String. The name of the font that should be used.
+  font="Symbola:style=Regular",
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation] or native direction if undef
@@ -71,7 +73,7 @@ module fl_label(
       fl_color(fg)
         resize([0,size,thick],auto=true)
           linear_extrude(thick)
-            text(string, valign=valign, halign=halign);
+            text(string, valign=valign, halign=halign, font=font);
   }
 
   fl_manage(verbs,M,D) {
