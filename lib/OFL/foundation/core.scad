@@ -672,6 +672,48 @@ function fl_atof(str) = len(str) == 0 ? 0 : let( expon1 = search("e", str), expo
 //**** lists ******************************************************************
 
 /*!
+ * return a list of items from «list» whose items successfully matched a list of
+ * conditions.
+ *
+ * example 1: filter out numbers from a list of heterogeneous values
+ *
+ *     heters = ["a", 4, -1, false, 5, "a string"];
+ *     nums   = fl_list_filter(heters,function(item) is_num(item));
+ *
+ * the returned list «nums» is equal to `[4, -1, 5]`
+ *
+ * example 2 - include only items matching two conditions executed in sequence:
+ *
+ * 1. is a number
+ * 2. is positive
+ *
+ *     let(
+ *       list      = ["a", 4, -1, false, 5, "a string"],
+ *       expected  = [4,5],
+ *       result    = fl_list_filter(list,[
+ *         function(item) is_num(item),// check if number (first)
+ *         function(item) item>0       // check if positive (last)
+ *       ])
+ *     ) assert(result==expected,result) echo(result=result);
+ *
+ * __NOTE__: filter execution order is the same of their occurrence in
+ * «filters». In the example above the list is first reduced to just the
+ * numbers, then each remaining item is checked for positiveness.
+ */
+function fl_list_filter(
+  //! the list to be filtered
+  list,
+  //! function filter or list of function filters called for each «list» item
+  filter
+) = let(
+    filter  = is_list(filter) ? filter : assert(is_undef(filter) || is_function(filter),filter) [filter]
+  ) len(filter)==0 ? list
+  : len(filter)==1 ? let(f=filter[0]) [for(item=list) if (!f || f(item)) item]
+  : let(
+      f_len  = len(filter)
+    ) fl_list_filter(fl_list_filter(list,[for(i=[0:f_len-2]) filter[i]]),filter[f_len-1]);
+
+/*!
  * return the list item whose calculated value is max.
  *
  * Return 'undef' in case of empty «list».
@@ -924,29 +966,7 @@ function fl_list_flatten(list) =
       for (i=sub) i
   ];
 
-//! see fl_list_filter() «operator» parameter
-FL_EXCLUDE_ANY  = ["AND",function(one,other) one!=other];
-//! see fl_list_filter() «operator» parameter
-FL_INCLUDE_ALL  = ["OR", function(one,other) one==other];
-
-function fl_list_filter(list,operator,compare,__result__=[],__first__=true) =
-// echo(list=list,compare=compare,operator=operator,__result__=__result__,__first__=__first__)
-assert(is_list(list)||is_string(list),list)
-assert(is_list(compare)||is_string(compare),compare)
-let(
-  s_list  = is_list(list) ? list : [list],
-  c_list  = is_string(compare) ? [compare] : compare,
-  len     = len(c_list),
-  logic   = operator[0],
-  f       = operator[1],
-  string  = c_list[0],
-  match   = [for(item=(logic=="OR" || __first__) ? s_list:__result__) if (f(item,string)) item],
-  result  = (logic=="OR") ? concat(__result__,match) : match
-)
-// echo(match=match, result=result)
-len==1 ? result : fl_list_filter(s_list,operator,[for(i=[1:len-1]) c_list[i]],result,false);
-
-function fl_list_has(list,item) = len(fl_list_filter(list,FL_INCLUDE_ALL,item))>0;
+function fl_list_has(list,item) = len(fl_list_filter(list,function(curr) curr==item))>0;
 
 /*****************************************************************************
  * Common parameter helpers

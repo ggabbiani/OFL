@@ -31,7 +31,7 @@ module fl_manage(
     flat  = fl_list_flatten(is_list(verb_list)?verb_list:[verb_list]);
     let(
       $_axes_   = fl_list_has(flat,FL_AXES),
-      $_verbs_  = fl_list_filter(flat,FL_EXCLUDE_ANY,FL_AXES)
+      $_verbs_  = fl_list_filter(flat,function(item) item!=FL_AXES)
     ) children();
   }
 
