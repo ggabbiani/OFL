@@ -672,6 +672,29 @@ function fl_atof(str) = len(str) == 0 ? 0 : let( expon1 = search("e", str), expo
 //**** lists ******************************************************************
 
 /*!
+ * pack two list in a new one like in the following code:
+ *
+ *     labels = ["label 1", "label 2", "label 3", "label 4"];
+ *     values = [1, 2, 3];
+ *     result = fl_list_pack(labels,values);
+ *
+ * if equivalent to:
+ *
+ *     result = [
+ *       ["label 1",  1     ],
+ *       ["label 2",  2     ],
+ *       ["label 3",  3     ],
+ *       ["label 4",  undef ]
+ *     ]
+ */
+function fl_list_pack(left,right) = let(
+  l_len = len(left),
+  r_len = len(right)
+) [
+  for(i=[0:max(l_len,r_len)-1]) [i<l_len ? left[i] : undef, i<r_len ? right[i] : undef]
+];
+
+/*!
  * return a list of items from «list» whose items successfully matched a list of
  * conditions.
  *
