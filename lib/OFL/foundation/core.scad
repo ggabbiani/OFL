@@ -737,40 +737,44 @@ function fl_list_filter(
     ) fl_list_filter(fl_list_filter(list,[for(i=[0:f_len-2]) filter[i]]),filter[f_len-1]);
 
 /*!
- * return the list item whose calculated value is max.
- *
- * Return 'undef' in case of empty «list».
+ * return the list item whose calculated score is max or undef in case of empty
+ * «list».
  */
-function fl_max(
-  //! item list
+function fl_list_max(
   list,
   /*!
-   * string literal assigning items a value: essentially it determines the way
-   * a 'score' is mapped to a corresponding list item for the 'max' evaluation
-   *
-   * As default simply returns the item (i.e. the 'score' is the item itself).
+   * function that assigns a score to an element in the «list»: default to item
+   * itself.
    */
-  value=function(item) item,
-  _i_=0
-) = (_i_+1)<len(list) ? let(other=fl_max(list,value,_i_+1)) value(list[_i_])>value(other) ? list[_i_] : list[_i_+1] : list[_i_];
+  score=function(item) item
+) =
+  assert(is_list(list),list)
+  list==[] ? undef : len(list)==1 ? list[0]
+  : let(
+      head  = list[0],
+      rest  = [for(i=[1:len(list)-1]) list[i]],
+      other = fl_list_max(rest,score)
+    ) score(head)>score(other) ? head : other;
 
 /*!
- * return the list item whose calculated value is min.
- *
- * Return 'undef' in case of empty «list».
+ * return the list item whose calculated score is min or undef in case of empty
+ * «list».
  */
-function fl_min(
-  //! item list
+function fl_list_min(
   list,
   /*!
-   * string literal assigning items a value: essentially it determines the way
-   * a 'score' is mapped to a corresponding list item for the 'min' evaluation
-   *
-   * As default simply returns the item (i.e. the 'score' is the item itself).
+   * function that assigns a score to an element in the «list»: default to item
+   * itself.
    */
-  value=function(item) item,
-  _i_=0
-) = (_i_+1)<len(list) ? let(other=fl_min(list,value,_i_+1)) value(list[_i_])<value(other) ? list[_i_] : list[_i_+1] : list[_i_];
+  score=function(item) item
+) =
+  assert(is_list(list),list)
+  list==[] ? undef : len(list)==1 ? list[0]
+  : let(
+      head  = list[0],
+      rest  = [for(i=[1:len(list)-1]) list[i]],
+      other = fl_list_min(rest,score)
+    ) score(head)<score(other) ? head : other;
 
 //! strips duplicates from a «dict»
 function fl_list_unique(dict) =

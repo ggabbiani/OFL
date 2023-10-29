@@ -93,3 +93,44 @@ let(
     [undef    ,  4    ]
   ]
 ) assert(result==expected) echo(result=result);
+
+//**** fl_list_max() *********************************************************
+
+let(
+  list      = [],
+  expected  = undef,
+  result    = fl_list_max(list)
+) assert(result==expected,result) echo(result=result);
+
+let(
+  list      = [7],
+  expected  = 7,
+  result    = fl_list_max(list)
+) assert(result==expected,result) echo(result=result);
+
+let(
+  list      = [-2, 5, 0, 7],
+  expected  = 7,
+  result    = fl_list_max(list)
+) assert(result==expected,result) echo(result=result);
+
+//**** fl_list_min() *********************************************************
+
+let(
+  list      = [],
+  expected  = undef,
+  result    = fl_list_min(list)
+) assert(result==expected,result) echo(result=result);
+
+let(
+  list      = [7],
+  expected  = 7,
+  result    = fl_list_min(list)
+) assert(result==expected,result) echo(result=result);
+
+let(
+  list      = [-2, 5, 0, 7],
+  expected  = -2,
+  result    = fl_list_min(list)
+) assert(result==expected,result) echo(result=result);
+
