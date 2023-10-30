@@ -43,8 +43,7 @@ FL_KNUT_NOMINAL_DRILL = [
   [8,   [9.6, 13.7, 4.5]]
 ];
 
-//*****************************************************************************
-// Knurl nuts properties
+//**** Knurl nuts properties **************************************************
 
 //! Z axis length
 function fl_knut_thick(type,value)  = fl_property(type,"knut/Z axis length",value);
@@ -244,34 +243,54 @@ function fl_knut_names(dictionary) = [for(knut=dictionary) fl_name(knut)];
  */
 function fl_knut_dict() = concat(fl_knut_spiralDict(),fl_knut_linearDict());
 
-//**** filter constructors ****************************************************
-
-//! return a filter by knurl nut nominal «value»
-function fl_knut_byNominal(value) = function (item) fl_nominal(item)==value;
-
-/*!
- * creates a filter for the knurl nut length.
- *
- * __NOTE__: all the expression parameter are checked when !undef
- */
-function fl_knut_byLength(
-  less,
-  greater,
-  equal,
-  less_equal,
-  greater_equal
+function fl_knut_find(
+  inventory = fl_knut_dict(),
+  nominal,
+  //! selector by thread type ("linear" or "spiral")
+  thread,
+  length_less,
+  length_greater,
+  length_equal,
+  length_less_equal,
+  length_greater_equal
 ) = let(
-) function (item) let(
-  l=fl_knut_thick(item)
-)
-      (!less          || l<less)
-  &&  (!greater       || l>greater)
-  &&  (!equal         || l==equal)
-  &&  (!less_equal    || l<=less_equal)
-  &&  (!greater_equal || l>=greater_equal)
-  ;
-//! creates a filter for the knurl nut product tag expressed by «value»
-function fl_knut_byThread(value) = function(knut) fl_knut_thread(knut)==value;
+
+  // nominal «value» filter factory
+  byNominal = function(value) let(
+    nominal = is_num(value) ? value : assert(is_string(value),value) fl_atof(value)
+  ) function (item) fl_nominal(item)==nominal,
+
+  // length filter factory
+  byLength  = function(
+    less,
+    greater,
+    equal,
+    less_equal,
+    greater_equal
+  ) function (item) let(
+      l=fl_knut_thick(item)
+    ) (
+          (!less          || l<less)
+      &&  (!greater       || l>greater)
+      &&  (!equal         || l==equal)
+      &&  (!less_equal    || l<=less_equal)
+      &&  (!greater_equal || l>=greater_equal)
+    ),
+  // thread type ("linear" or "spiral") filter factory
+  byThread  = function(value) function(knut) fl_knut_thread(knut)==value,
+
+  filters = [
+    if (!is_undef(nominal))
+      byNominal(nominal),
+    if (!is_undef(thread))
+      byThread(thread),
+    if (!is_undef(length_less) || !is_undef(length_greater) || !is_undef(length_equal) || !is_undef(length_less_equal) || !is_undef(length_greater_equal))
+      byLength(length_less,length_greater,length_equal,length_less_equal,length_greater_equal)
+  ]
+) fl_list_filter(inventory,filters);
+
+function fl_knut_shortest(inventory)  = fl_list_min(inventory,function(knut) fl_knut_thick(knut));
+function fl_knut_longest(inventory)   = fl_list_max(inventory,function(knut) fl_knut_thick(knut));
 
 //! filter the passed inventory with «knut» feasible screws
 function fl_knut_screws(
@@ -300,8 +319,8 @@ function fl_knut_search(
   thick,
   //! nominal diameter: ignored if undef/zero
   d,
-  //! product tag: ignored if undef
-  tag,
+  //! thread type: ignored if undef
+  thread,
   /*!
    * Lambda calculating the 'score' for determining the 'best' match.
    *
@@ -314,7 +333,7 @@ function fl_knut_search(
     for(nut=fl_knut_dict())
       if ( (is_undef(thick)   || fl_knut_thick(nut)<=thick)
         && (is_undef(nominal) || nominal==fl_nominal(nut))
-        && (is_undef(tag)     || tag==fl_optProperty(nut,fl_tag()[0]))
+        && (is_undef(thread)  || thread==fl_knut_thread(nut))
       ) nut
   ]
 ) best ? best(result) : result;

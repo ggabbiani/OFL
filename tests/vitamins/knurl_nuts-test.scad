@@ -79,10 +79,11 @@ fl_status();
 // end of automatically generated code
 
 verbs         = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL,FL_LAYOUT]);
-inventory     = fl_knut_dict();
-one           = fl_switch(SHOW,fl_list_pack(fl_knut_names(inventory),inventory));
+one           = let(all=fl_knut_dict())
+                  fl_switch(SHOW,fl_list_pack(fl_knut_names(all),all));
 scr_inventory = screw_lists[0]; // cap screws only from NopSCADlib
 drill_t       = [DRILL_THICK];
+thread_type   = THREAD_TYPE!="ANY" ? THREAD_TYPE : undef;
 
 if (one) {
   fl_knut(verbs,one,dri_thick=drill_t,octant=octant,direction=direction) {
@@ -97,7 +98,7 @@ if (one) {
   }
 } else {
   // filter items by the thread type
-  items = fl_list_filter(inventory,THREAD_TYPE!="ANY" ? fl_knut_byThread(THREAD_TYPE) : undef);
+  items = fl_knut_find(thread=thread_type);
   // organize items by rows with same nominal size
   dict  = fl_dict_organize(items,[2:0.5:8],function(nut) fl_nominal(nut));
   // for each not empty row calculates the offsets along Y axis
