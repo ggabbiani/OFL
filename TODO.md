@@ -49,6 +49,11 @@
 - [x] all OFL base shapes but fl_cube() are centered to the origin: now fl_cube() is centered by default as well
 - [ ] standardize the common api parameter syntax
 - [ ] modify FL_DRILL verb implementation according to the type of drill to be performed: TAP drill vs CLEARANCE drill.
+- [ ] differentiate documentation by release
+- [ ] fully wrap the NopSCADlib screw library
+- [x] rename knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}
+- [ ] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name space»_find(). Eliminate fl_«name space»_search()
+
 
 
 ## Changed file names
