@@ -91,7 +91,7 @@ module fl_spacer(
   lay_direction=[+Z,-Z],
   //! optional screw
   screw,
-  //! optional knurl nut: error if no screw is passed
+  //! optional knurl nut object: error if no screw is passed
   knut,
   //! anchor directions in floating semi-axis list
   anchor,
@@ -107,10 +107,11 @@ module fl_spacer(
   r       = assert((r && !d) || (!r && d)) r ? r : d/2;
   bbox    = assert(h!=undef) fl_bb_spacer(h,r);
   size    = bbox[1]-bbox[0];
-  knut    = knut ? assert(screw) knut : undef;
-  kn_delta= knut ? size.z-fl_bb_size(knut).z : 0;
+  knut    = knut ? assert(is_list(screw),screw) knut : undef;
+  kn_delta= knut ? assert(is_list(knut),knut) size.z-fl_bb_size(knut).z : 0;
   hole_r  = screw ? fl_spc_holeRadius(screw,knut) : undef;
   assert(!screw || r>hole_r,"External radius insufficient for internal hole");
+  assert(!knut  || r>fl_knut_r(knut),"External radius insufficient for the requested knurl nut");
   thick   = fl_parm_SignedPair(thick);
   thicks  = -thick[0]+thick[1];
 
