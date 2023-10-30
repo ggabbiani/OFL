@@ -64,6 +64,13 @@ FL_SCREW_DICT = [
 ];
 
 /*!
+ * return a filter by screw nominal «diameter»
+ *
+ * This can be used by function fl_list_filter().
+ */
+function fl_screw_byNominal(diameter) = function(nop_screw) fl_screw_nominal(nop_screw)==diameter;
+
+/*!
  * Return a list of screws from dictionary, matching the passed properties.
  *
  * __NOTE__: when a parameter is undef the corresponding property is not checked.
