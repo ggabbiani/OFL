@@ -24,7 +24,7 @@ FL_KNUT_NS  = "knut";
  *
  * | Metric ISO Thread | Inch UNC thread | hole ⌀ | min. hole length | min. hole wall |
  * | ----------------- | --------------- | ------ | ---------------- | -------------- |
- * | M2                | #2-56           | 3.6    |  5.0             | 1.3            |
+ * | M2                | #2-56           | 3.2    |  5.0             | 1.3            |
  * | M2,5              |                 | 4.0    |  6.7             | 1.6            |
  * | M3                | #4-40           | 4.0    |  6.7             | 1.6            |
  * | M4                | #8-32           | 5.6    |  9.1             | 2.1            |
@@ -32,9 +32,10 @@ FL_KNUT_NS  = "knut";
  * | M6                | ¼"-20           | 8.0    | 13.7             | 3.3            |
  * | M8                |                 | 9.6    | 13.7             | 4.5            |
  *
+ * TODO: replace this variable with a function
  */
 FL_KNUT_NOMINAL_DRILL = [
-  [2,   [3.6,  5.0, 1.3]],
+  [2,   [3.2,  5.0, 1.3]],
   [2.5, [4.0,  6.7, 1.6]],
   [3,   [4.0,  6.7, 1.6]],
   [4,   [5.6,  9.1, 2.1]],
@@ -47,7 +48,7 @@ FL_KNUT_NOMINAL_DRILL = [
 
 //! Z axis length
 function fl_knut_thick(type,value)  = fl_property(type,"knut/Z axis length",value);
-//! suggested drill diameter for FL_DRILL
+//! diameter for FL_DRILL
 function fl_knut_drillD(type,value)  = fl_property(type,"knut/drill hole diameter",value);
 //! tooth height
 function fl_knut_tooth(type,value)  = fl_property(type,"knut/tooth height",value);
@@ -310,7 +311,7 @@ FL_KNUT_LONGEST   = function(nuts) fl_list_max(nuts,function(item) fl_knut_thick
  * the matching knurl nuts.
  *
  * This function is **DEPRECATED** and is going to be removed: use
- * function fl_list_filter() instead.
+ * function fl_knut_find() instead.
  */
 function fl_knut_search(
   //! screw to fit into: ignored if undef
