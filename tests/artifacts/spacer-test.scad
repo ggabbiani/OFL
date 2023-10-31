@@ -66,11 +66,11 @@ DIR_R       = 0;        // [-360:360]
 /* [FACTORY] */
 
 // height
-H     = 9;  // [0.1:0.1:15]
-// external radius
-R     = 6;  // [0.1:0.1:10]
-
-SCREW  = "4";       // [none,2,2.5,3,4,5,6,8]
+H_MIN     = 9;  // [0:0.1:15]
+// minimum external ⌀
+D_MIN     = 12;  // [0:0.1:20]
+// nominal screw size
+SCREW_SIZE  = "4";       // [no screw,2,2.5,3,4,5,6,8]
 KNUT_TYPE   = "spiral";  // [none, linear, spiral]
 // no fillet if zero
 FILLET  = 1;  // [0:0.1:5]
@@ -125,21 +125,26 @@ thickness = let(t= [
   if (THICK_POSITIVE) +THICK_POSITIVE
 ]) t ? t : undef;
 
-scr_inventory = screw_lists[0]; // cap screws only from NopSCADlib
-screw         = SCREW!="none" ? fl_list_filter(scr_inventory,fl_screw_byNominal(fl_atof(SCREW)))[0] : undef;
-knut  = KNUT_TYPE!="none" ?
-          screw ?
-            fl_knut_shortest(fl_knut_find(length_less_equal=H,thread=KNUT_TYPE,nominal=SCREW))
-          : echo("***WARN***: knut ignored since no screw provided") undef
-        : undef;
-cs    = screw ? fl_cs_search(d=fl_screw_nominal(screw))[0] : undef;
-dirs  = fl_3d_AxisList([LAYOUT_DIRS]);
+scr_inventory = screw_lists[0]; // cap screws from NopSCADlib
+scr_size      = SCREW_SIZE!="no screw" ? fl_atof(SCREW_SIZE) : undef;
+screw         = scr_size ? fl_list_filter(scr_inventory,fl_screw_byNominal(scr_size))[0] : undef;
+knut          = KNUT_TYPE!="none" ? assert(scr_size,"***TEST ERROR***: specify a screw size for knut") fl_knut_shortest(fl_knut_find(thread=KNUT_TYPE,nominal=scr_size)) : undef;
+assert(KNUT_TYPE=="none"||knut,str("***TEST ERROR***: no M",SCREW_SIZE," ",KNUT_TYPE," knurl nut found in inventory"));
+cs            = let(d=knut?fl_nominal(knut):screw?fl_screw_nominal(screw):undef)
+                d ? fl_cs_search(d=d)[0] : undef;
+dirs          = fl_3d_AxisList([LAYOUT_DIRS]);
 
-if (SCREW!="none" && !screw)
-  echo(str("***WARN***: no ",SCREW_TYPE," screw M",SCREW," found."));
-if (KNUT_TYPE!="none" && screw && !knut)
-  echo(str("***WARN***: no knurl nut suitable for M",SCREW," found."));
-
-fl_spacer(verbs,H,R,screw=screw,knut=knut,thick=thickness,lay_direction=dirs,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)
+// echo("***knut***",knut);
+// echo("***screw***",screw);
+// echo("***spacer***",spacer);
+// echo(knut=knut,screw=screw,spacer=spacer);
+spacer = fl_Spacer(h_min=H_MIN,d_min=D_MIN,screw_size=scr_size,knut=knut);
+fl_spacer(verbs,spacer,thick=thickness,lay_direction=dirs,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)
+  if ($spc_verb==FL_LAYOUT)
     translate($spc_director*($spc_thick-2xNIL))
       fl_countersink(type=cs,direction=[$spc_director,0],$FL_ADD=$FL_LAYOUT);
+  else if ($spc_verb==FL_MOUNT)
+    let(
+      htyp    = screw_head_type(screw),
+      washer  = (htyp==hs_cs||htyp==hs_cs_cap) ? "no" : "nylon"
+    ) fl_screw(FL_DRAW,screw,thick=$spc_thickness,washer=washer,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
