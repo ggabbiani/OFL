@@ -52,7 +52,14 @@
 - [ ] differentiate documentation by release
 - [ ] fully wrap the NopSCADlib screw library
 - [x] rename knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}
-- [ ] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name space»_find(). Eliminate fl_«name space»_search()
+- [ ] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name
+  space»\_find(). Eliminate fl_«name space»_search(). Involved libraries (not
+  exhaustive list):
+  - countersinks
+  - screw (after wrapper setup)
+- [ ] move vitamins dictionaries into inventories (dictionaries should be used
+  only in generic libraries)
+- [ ] add constructors to spacer and pcb_holder libraries
 
 
 
