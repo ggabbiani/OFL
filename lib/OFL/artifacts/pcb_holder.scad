@@ -36,7 +36,13 @@ module fl_pcb_holderByHoles(
   h,
   //! FL_DRILL thickness
   thick=0,
-  //! knurl nut
+  /*!
+   * knurl nut, can assume one of these values:
+   *
+   * - false (no knurl nut)
+   * - "linear"
+   * - "spiral"
+   */
   knut=false,
   frame,
   //! FL_LAYOUT directions in floating semi-axis list
@@ -67,8 +73,9 @@ module fl_pcb_holderByHoles(
   radius  = wsh_r;
   size    = bbox[1]-bbox[0];
 
-  // NOTE: thickness along ±Z only
-  thick   = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : assert(fl_tt_isAxisVList(thick)) thick;
+  // NOTE: thickness along ±Z only passed in signed-pair format
+  thick   = fl_parm_SignedPair(thick);
+  echo(thick=thick);
 
   // echo(holes=fl_holes(pcb));
   holes = [
@@ -95,19 +102,31 @@ module fl_pcb_holderByHoles(
     children();
   }
 
-  function optimal_r(center,bb,screw) = let(
+  function optimal_r(center,bb,screw,knut) = let(
       dx0 = abs(abs(bb[0].x)-abs(center.x)),
       dy0 = abs(abs(bb[0].y)-abs(center.y)),
       dx1 = abs(abs(bb[1].x)-abs(center.x)),
       dy1 = abs(abs(bb[1].y)-abs(center.y)),
       w   = screw ? screw_washer(screw) : undef,
+      kr  = knut ? let(
+        specs = fl_switch(fl_screw_nominal(screw), FL_KNUT_NOMINAL_DRILL),
+        w     = assert(specs,specs) specs[2]
+      ) fl_knut_r(knut)+w : 0,
       v   = [if (w) washer_radius(w),dx0,dy0,dx1,dy1]
-    ) min(v);
+    ) max(min(v),kr);
 
-  module spacer(verbs,position,screw,dirs=lay_direction,Zt) {
-    thick=Zt?[[0,0],[0,0],Zt]:thick+[[0,0],[0,0],[0,pcb_t]];
-    r=optimal_r(position,pcb_bb,screw);
-    // echo(thick=thick);
+  module spacer(verbs=FL_ADD,position,screw,dirs=lay_direction,Zt) {
+    // echo(Zt=Zt);
+    knut  = knut ?
+      assert(knut=="linear" || knut=="FL_KNUT_TAG_SPIRAL",knut)
+        let(
+          kn = fl_knut_search(screw=screw,thread=knut,thick=h)
+        ) assert(kn,str("No ",knut," knurl nut found for M",fl_screw_nominal(screw)," screw.")) echo(fl_name(kn)) kn
+      : undef;
+    thick = Zt ? Zt : thick+[0,pcb_t];
+    r     = optimal_r(position,pcb_bb,screw,knut);
+    // echo("pcb_holderByHoles::spacer{}:",thick=thick,knut=knut);
+    echo(r=r)
     fl_spacer(verbs,h=h,r=r,screw=screw,knut=knut,thick=thick,lay_direction=dirs)
       children();
   }
@@ -115,16 +134,21 @@ module fl_pcb_holderByHoles(
   module do_add() {
     fl_lay_holes(holes)
       context()
-        spacer(FL_ADD,position=$hole_pos,screw=$hld_screw);
+        spacer(position=$hole_pos,screw=$hld_screw);
 
-    if (frame) difference() {
-      translate(bbox[0]) fl_color() linear_extrude(frame)
-        fl_square(size=[pcb_sz.x,pcb_sz.y],corners=pcb_r,quadrant=+X+Y);
-      translate(+Z(frame))
-        fl_lay_holes(holes)
-          context()
-            translate(+Z(NIL))
-              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[frame+2xNIL,0]);
+    // echo("pcb_holderByHoles::do_add():",frame=frame,holes=holes,frame=frame);
+    if (frame)
+      difference() {
+        translate(bbox[0])
+          fl_color()
+            linear_extrude(frame)
+              fl_square(size=[pcb_sz.x,pcb_sz.y],corners=pcb_r,quadrant=+X+Y);
+
+        translate(+Z(frame))
+          fl_lay_holes(holes)
+            context()
+              translate(+Z(NIL))
+                spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[-frame-2xNIL],$FL_DRILL=$FL_ADD);
     }
   }
 
@@ -333,23 +357,26 @@ module fl_pcb_holderBySize(
     children();
   }
 
-  module spacer(verbs,position,screw,dirs=lay_direction,Zt) {
-    thick=Zt?[[0,0],[0,0],Zt]:thick;
+  module spacer(verbs=FL_ADD,position,screw,dirs=lay_direction,Zt) {
+    thick = Zt ? Zt : thick;
     fl_spacer(verbs,h=h,r=R,screw=screw,knut=knut,thick=thick,lay_direction=dirs)
       children();
   }
 
   module do_add() {
+    echo("pcb_holderBySize::do_add(): ",frame=frame);
+    // spacers
     difference() {
       fl_lay_holes(holes)
         context()
-          spacer(FL_ADD,position=$hole_pos,screw=$hld_screw);
+          spacer(position=$hole_pos,screw=$hld_screw);
       multmatrix(Mpcb)
         fl_bb_add([
           [pcb_bb[0].x,pcb_bb[0].y,-pcb_t]-tolerance*[1,1,1]-Z(NIL),
           [pcb_bb[1].x,pcb_bb[1].y,0]+tolerance*[1,1,0]+Z(NIL)
         ]);
     }
+    // frame
     if (frame) difference() {
       translate(bbox[0]) fl_color() linear_extrude(frame)
         // fl_square(size=[pcb_sz.x,pcb_sz.y],corners=pcb_r,quadrant=+X+Y);
@@ -358,7 +385,7 @@ module fl_pcb_holderBySize(
         fl_lay_holes(holes)
           context()
             translate(+Z(NIL))
-              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[frame+2xNIL,0]);
+              spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[-frame-2xNIL,0],$FL_DRILL=$FL_ADD);
     }
   }
 

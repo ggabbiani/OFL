@@ -69,14 +69,16 @@ H   = 4;  // [0.1:0.1:10]
 // frame thickness on Z axis
 FRAME_T  = 0; // [0:0.1:5]
 TOLERANCE = 0.5;  // [0:0.1:1]
-// thickness along ±Z semi axes
-Tz = [0,0];  // [0:0.1:10]
+// thickness along +Z semi axis
+T_zp = 0;  // [0:0.1:10]
+// thickness along -Z semi axis
+T_zn = 0;  // [-10:0.1:0]
 // knurl nut
-KNUT  = false;
+KNUT  = "none";  // [none,linear,spiral]
 // FL_LAYOUT directions in floating semi-axis list
 LAYOUT_DIRS  = ["±z"];
 
-PCB         = "FL_PCB_PERF80x20";  // [FL_PCB_HILETGO_SX1308, FL_PCB_RPI_uHAT, FL_PCB_RPI4, FL_PCB_PERF70x50, FL_PCB_PERF60x40, FL_PCB_PERF70x30, FL_PCB_PERF80x20, FL_PCB_MH4PU_P]
+PCB         = "Perfboard 80 x 20mm";  //  ["HiLetgo SX1308 DC-DC Step up power module", "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port", "Perfboard 70 x 50mm", "Perfboard 60 x 40mm", "Perfboard 70 x 30mm", "Perfboard 80 x 20mm", "RPI4-MODBP-8GB", "Raspberry PI uHAT", "KHADAS-SBC-VIM1"]
 
 
 /* [Hidden] */
@@ -89,28 +91,22 @@ fl_status();
 
 // end of automatically generated code
 
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-  if ($FL_MOUNT!="OFF")     FL_MOUNT,
-  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
-];
-pcb = PCB=="FL_PCB_RPI4"      ? FL_PCB_RPI4
-    : PCB=="FL_PCB_PERF70x50" ? FL_PCB_PERF70x50
-    : PCB=="FL_PCB_PERF60x40" ? FL_PCB_PERF60x40
-    : PCB=="FL_PCB_PERF70x30" ? FL_PCB_PERF70x30
-    : PCB=="FL_PCB_PERF80x20" ? FL_PCB_PERF80x20
-    : PCB=="FL_PCB_MH4PU_P"   ? FL_PCB_MH4PU_P
-    : PCB=="FL_PCB_RPI_uHAT"  ? FL_PCB_RPI_uHAT
-    : PCB=="FL_PCB_HILETGO_SX1308"  ? FL_PCB_HILETGO_SX1308
-    : undef;
+thick = [if (T_zn) T_zn,if (T_zp) T_zp];
 
+verbs=fl_verbList([
+    FL_ADD,
+    FL_ASSEMBLY,
+    FL_AXES,
+    FL_BBOX,
+    FL_DRILL,
+    FL_LAYOUT,
+    FL_MOUNT,
+    FL_PAYLOAD,
+  ]
+);
+pcb   = let(all=FL_PCB_DICT) fl_switch(PCB,fl_list_pack(fl_dict_names(all),all));
 dirs  = fl_3d_AxisList(LAYOUT_DIRS);
-thick = [[0,0],[0,0],Tz];
+knut  = KNUT=="none" ? false : KNUT;
 
 // screw   = SCREW=="M2" ? M2_cap_screw : M3_cap_screw;
 
@@ -122,11 +118,13 @@ thick = [[0,0],[0,0],Tz];
 
 if (ENGINE=="by holes") {
   if (fl_screw(pcb))
-    fl_pcb_holderByHoles(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,direction=direction,octant=octant)
-        fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+fl_pcb_thick($hld_pcb)+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
+    fl_pcb_holderByHoles(verbs,pcb,H,knut=knut,frame=FRAME_T,thick=thick,lay_direction=dirs,direction=direction,octant=octant) {
+      echo($hld_thick=$hld_thick);
+      fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+fl_pcb_thick($hld_pcb)-$hld_thick[0]+$hld_thick[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
+    }
   else {
     echo("**NO SCREW ON PCB** either change PCB or choose another engine please");
   }
 } else
-  fl_pcb_holderBySize(verbs,pcb,H,knut=KNUT,frame=FRAME_T,thick=thick,lay_direction=dirs,tolerance=TOLERANCE,direction=direction,octant=octant)
-    fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+$hld_thick.z[0]+$hld_thick.z[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
+  fl_pcb_holderBySize(verbs,pcb,H,knut=knut,frame=FRAME_T,thick=thick,lay_direction=dirs,tolerance=TOLERANCE,direction=direction,octant=octant)
+    fl_screw(FL_DRAW,type=$hld_screw,thick=$hld_h+$hld_thick[0]+$hld_thick[1],washer="nylon",nut="default",nwasher="nylon",direction=[$spc_director,0]);
