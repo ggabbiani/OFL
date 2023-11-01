@@ -63,18 +63,6 @@ module fl_status() {
 }
 
 //*****************************************************************************
-// lists
-
-//! quick sort algorithm
-// function sort(vec) =
-//   len(vec)==0 ? [] : let(
-//     pivot = vec[floor(len(vec)/2)],
-//     below = [for (y = vec) if (y  < pivot) y],
-//     equal = [for (y = vec) if (y == pivot) y],
-//     above = [for (y = vec) if (y  > pivot) y]
-//   ) concat(sort(below), equal, sort(above));
-
-//*****************************************************************************
 // assertions
 // TODO: remove this section since DEPRECATED
 
@@ -804,6 +792,9 @@ function fl_list_sort(vec) =
   ) concat(fl_list_sort(below), equal, fl_list_sort(above));
 
 //**** dictionary *************************************************************
+
+//! return a list with the names of the objects present in «dictionary»
+function fl_dict_names(dictionary) = [for(item=dictionary) fl_name(item)];
 
 function fl_dict_search(dictionary,name) = [
   for(item=dictionary) let(n=fl_name(item)) if (name==n) item
