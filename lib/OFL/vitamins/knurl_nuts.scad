@@ -236,9 +236,6 @@ function fl_knut_linearDict() = [
   FL_KNUT_LINEAR_M5x10
 ];
 
-//! return a list with the names of the knurl nuts present in «dictionary»
-function fl_knut_names(dictionary) = [for(knut=dictionary) fl_name(knut)];
-
 /*!
  * full knurl nuts dictionary
  */
