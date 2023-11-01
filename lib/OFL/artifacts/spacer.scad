@@ -285,7 +285,7 @@ module fl_spacer(
 
   module do_assembly() {
     if (knut)
-      knut();
+      knut($FL_ADD=$FL_ASSEMBLY);
   }
 
   module do_layout() {
