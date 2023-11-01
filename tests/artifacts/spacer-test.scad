@@ -138,6 +138,7 @@ dirs          = fl_3d_AxisList([LAYOUT_DIRS]);
 // echo("***screw***",screw);
 // echo("***spacer***",spacer);
 // echo(knut=knut,screw=screw,spacer=spacer);
+// echo(verbs=verbs);
 spacer = fl_Spacer(h_min=H_MIN,d_min=D_MIN,screw_size=scr_size,knut=knut);
 fl_spacer(verbs,spacer,thick=thickness,lay_direction=dirs,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)
   if ($spc_verb==FL_LAYOUT)
