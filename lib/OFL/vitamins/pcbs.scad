@@ -41,6 +41,13 @@ function fl_pcb_components(type,value)  = fl_property(type,"pcb/components",valu
 function fl_pcb_radius(type,value)      = fl_property(type,"pcb/corners radius",value);
 function fl_pcb_thick(type,value)       = fl_property(type,"pcb/thickness",value);
 function fl_pcb_grid(type,value)        = fl_property(type,"pcb/grid",value);
+/*!
+ * Translation matrices used during children() layout as returned by
+ * fl_lay_holes().
+ *
+ * TODO: remove if unused
+ */
+function fl_pcb_layoutArray(type,value) = fl_property(type,"pcb/layout translation array",value);
 
 //! base constructor
 function fl_PCB(
@@ -116,6 +123,7 @@ function fl_PCB(
     if (dxf!=undef) fl_dxf(value=dxf),
     if (vendors) fl_vendor(value=vendors),
     if (connectors) fl_connectors(value=connectors),
+    fl_pcb_layoutArray(value=fl_lay_holes(holes)),
   ];
 
 /*!
@@ -383,6 +391,13 @@ FL_PCB_DICT = [
   FL_PCB_VIM1,
 ];
 
+//! select a pcb by name
+function fl_pcb_select(
+  //! name as returned by fl_name()
+  name,
+  inventory = FL_PCB_DICT
+) = fl_switch(name,fl_list_pack(fl_dict_names(inventory),inventory));
+
 /*!
  * PCB engine.
  *
@@ -449,6 +464,7 @@ module fl_pcb(
   grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
   dxf       = fl_optional(type,fl_dxf()[0]);
   conns     = fl_optional(type,fl_connectors()[0]);
+  lay_array = fl_pcb_layoutArray(type);
 
   M         = fl_octant(octant,bbox=bbox);
   D         = direction ? fl_direction(direction)  : I;
@@ -599,7 +615,8 @@ module fl_pcb(
         }
       else if (class=="holes")
         fl_lay_holes(holes,lay_direction,screw=screw)
-          context() children();
+          context()
+            children();
       else
         assert(false,str("unknown component class '",class,"'."));
     }
