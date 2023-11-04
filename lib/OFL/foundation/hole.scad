@@ -114,6 +114,17 @@ module fl_hole_Context(
 }
 
 /*!
+ * return a matrix list with each item containing the corresponding hole
+ * position translation. Functionally equivalent to translation used during
+ * fl_lay_holes{}.
+ *
+ * TODO: remove if unused
+ */
+function fl_lay_holes(holes) = [
+  for(hole=holes) fl_T(fl_hole_pos(hole))
+];
+
+/*!
  * Layouts children along a list of holes.
  *
  * See fl_hole_Context{} for context variables passed to children().
