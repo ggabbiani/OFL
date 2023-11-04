@@ -9,204 +9,216 @@ include <spacer.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>
 
-/******************************************************************************
- * Hole driven PCB holders
- *****************************************************************************/
+// TODO: shouldn't this be private?
+function fl_pcbh_spacers(type,value) =  fl_property(type,"pcbh/list of spacers",value);
 
-function fl_bb_holderByHoles(
-    pcb,
-    // spacers height
-    h
-  ) = let(
-    pcb_bb  = fl_bb_corners(pcb),
-    pcb_sz  = pcb_bb[1]-pcb_bb[0]
-  ) [[pcb_bb[0].x,pcb_bb[0].y,0],[pcb_bb[1].x,pcb_bb[1].y,pcb_sz.z]+Z(h)];
+//**** Hole driven PCB holders ************************************************
 
 /*!
- * PCB holder by holes engine
- *
- * children() context:
- *
- * - $holder_screw
+ * Hole driven PCB holder constructor
  */
-module fl_pcb_holderByHoles(
-  verbs,
+function fl_PCBHolderByHoles(
+  //! PCB to be held
   pcb,
-  //! spacers height
-  h,
-  //! FL_DRILL thickness
-  thick=0,
   /*!
-   * knurl nut, can assume one of these values:
+   * this is the minimum height asked for spacers
    *
-   * - false (no knurl nut)
-   * - "linear"
-   * - "spiral"
+   * __NOTE__: the actual spacer height can be different depending on the knurl
+   * nut constrains
    */
-  knut=false,
-  frame,
-  //! FL_LAYOUT directions in floating semi-axis list
+  h_min = 0,
+  /*!
+   * when using spacers without knurl nut, this is the wall thickness around the
+   * spacers' holes
+   */
+  wall =1,
+  knut_type
+) = let(
+  pcb_bb    = fl_bb_corners(pcb),
+  pcb_t     = fl_pcb_thick(pcb),
+  pcb_screw = fl_screw(pcb),
+  holes     = fl_holes(pcb),
+  spacers   = [for(hole=holes) let(
+      screw   = let(screw = fl_hole_screw(hole)) screw ? screw : pcb_screw,
+      nominal = screw ? fl_screw_nominal(screw) : 0,
+      knut    = knut_type ? fl_knut_shortest(fl_knut_find(thread=knut_type,nominal=nominal)) : undef
+    ) fl_Spacer(h_min=h_min,d_min=fl_hole_d(hole)+wall,knut=knut)
+  ],
+  xs = concat(
+    [for(i=[0:len(spacers)-1]) let(
+        spacer= spacers[i],
+        hole = holes[i],
+        spc_r = fl_spc_d(spacer)/2,
+        center = fl_hole_pos(hole)
+      ) center.x+spc_r],
+    [for(i=[0:len(spacers)-1]) let(
+        spacer= spacers[i],
+        hole = holes[i],
+        spc_r = fl_spc_d(spacer)/2,
+        center = fl_hole_pos(hole)
+      ) center.x-spc_r]
+  ),
+  ys = concat(
+    [for(i=[0:len(spacers)-1]) let(
+        spacer= spacers[i],
+        hole = holes[i],
+        spc_r = fl_spc_d(spacer)/2,
+        center = fl_hole_pos(hole)
+      ) center.y+spc_r],
+    [for(i=[0:len(spacers)-1]) let(
+        spacer= spacers[i],
+        hole = holes[i],
+        spc_r = fl_spc_d(spacer)/2,
+        center = fl_hole_pos(hole)
+      ) center.y-spc_r]
+  ),
+  zs = [for(spacer=spacers) fl_spc_h(spacer)],
+  spc_height  = max(zs),
+  this_bb = [[min(xs),min(ys),0],[max(xs),max(ys),spc_height+pcb_t]],
+  // sums pcb holder bare bounding block with the pcb one translated of +Z(spc_height+pcb_t)
+  bbox  = fl_bb_calc([this_bb,[for(point=pcb_bb) fl_transform(T(+Z(spc_height+pcb_t+NIL)), point)]])
+) [
+  fl_OFL(value=true),
+  fl_pcb(value=pcb),
+  fl_bb_corners(value=bbox),
+  fl_pcbh_spacers(value=spacers),
+  fl_spc_h(value=spc_height),
+];
+
+/*!
+ * PCB holder engine.
+ *
+ * Children context:
+ *
+ *   - inherits fl_pcb{} context
+ *   - inherits fl_spacer{} context
+ *   - $pcbh_spacer : current processed spacer
+ *   - $pcbh_verb   : current triggering verb
+ */
+module fl_pcbHolder(
+  /*!
+   * supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_LAYOUT,
+   * FL_DRILL, FL_MOUNT
+   */
+  verbs,
+  this,
+  //! when >0 a fillet is added to anchors
+  fillet=0,
+  //! FL_ASSEMBLY modifier: when true also PCB will be shown during FL_ASSEMBLY
+  asm_all=false,
+  /*!
+   * List of Z-axis thickness or a scalar value for FL_DRILL and FL_MOUNT
+   * operations.
+   *
+   * A positive value represents thickness along +Z semi-axis.
+   * A negative value represents thickness along -Z semi-axis.
+   * A scalar value represents thickness for both Z semi-axes.
+   *
+   * Example 1:
+   *
+   *     thick = [+3,-1]
+   *
+   * is interpreted as thickness of 3mm along +Z and 1mm along -Z
+   *
+   * Example 2:
+   *
+   *     thick = [-1]
+   *
+   * is interpreted as thickness of 1mm along -Z
+   *
+   * Example:
+   *
+   *     thick = 2
+   *
+   * is interpreted as a thickness of 2mm along +Z and -Z axes
+   *
+   */
+  thick,
+  /*!
+   * FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
+   *
+   * __NOTE__: only Z semi-axes are used
+   */
   lay_direction=[+Z,-Z],
-  //! desired direction [director,rotation], native direction when undef
+  //! see constructor fl_parm_Debug()
+  debug,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
   octant,
 ) {
-  assert(verbs!=undef);
-  assert(pcb);
-  assert(h);
+  assert(is_list(verbs)||is_string(verbs),verbs);
 
-  bbox    = fl_bb_holderByHoles(pcb,h);
+  bbox  = fl_bb_corners(this);
+  size  = fl_bb_size(this);
+  D     = direction ? fl_direction(direction)     : I;
+  M     = octant    ? fl_octant(octant,bbox=bbox) : I;
 
-  pcb_t   = fl_pcb_thick(pcb);
-  pcb_bb  = fl_bb_corners(pcb);
-  pcb_r   = fl_pcb_radius(pcb);
-  pcb_sz  = pcb_bb[1]-pcb_bb[0];
+  // resulting spacers' height
+  spc_height  = fl_spc_h(this);
+  pcb         = fl_pcb(this);
+  pcb_t       = fl_pcb_thick(pcb);
+  pcb_screw   = fl_screw(pcb);
+  pcb_M       = T(+Z(spc_height+pcb_t));
+  pcb_bb      = fl_bb_corners(pcb);
+  holes       = fl_holes(pcb);
+  spcs        = fl_pcbh_spacers(this);
+  thick       = fl_parm_SignedPair(thick);
+  thickness   = abs(thick[0])+thick[1]+spc_height;
 
-  screw   = fl_screw(pcb);
-  // scr_r   = screw_radius(screw);
-
-  washer  = assert(screw,"PCB's screw is 'undef'") screw_washer(screw);
-  wsh_t   = washer_thickness(washer);
-  wsh_r   = washer_radius(washer);
-
-  radius  = wsh_r;
-  size    = bbox[1]-bbox[0];
-
-  // NOTE: thickness along ±Z only passed in signed-pair format
-  thick   = fl_parm_SignedPair(thick);
-  echo(thick=thick);
-
-  // echo(holes=fl_holes(pcb));
-  holes = [
-    for(hole=fl_holes(pcb)) let(
-        p     = let(p=fl_hole_pos(hole)) [p.x,p.y,0],
-        n     = fl_hole_n(hole),
-        d     = fl_hole_d(hole),
-        ldir  = fl_hole_ldir(hole),
-        loct  = fl_hole_loct(hole),
-        screw = fl_hole_screw(hole)
-      ) fl_Hole(p,d,n,0,ldir,loct,screw)
-  ];
-  // echo(holes=holes);
-  D     = direction ? fl_direction(direction) : I;
-  M     = fl_octant(octant,bbox=bbox);
-  Mpcb  = T(Z(h+pcb_t));
-
-  module context() {
-    $hld_thick  = thick;
-    $hld_h      = h;
-    $hld_screw  = $hole_screw ? $hole_screw : screw;
-    $hld_pcb    = pcb;
-    // $hld_director = director;
-    children();
-  }
-
-  function optimal_r(center,bb,screw,knut) = let(
-      dx0 = abs(abs(bb[0].x)-abs(center.x)),
-      dy0 = abs(abs(bb[0].y)-abs(center.y)),
-      dx1 = abs(abs(bb[1].x)-abs(center.x)),
-      dy1 = abs(abs(bb[1].y)-abs(center.y)),
-      w   = screw ? screw_washer(screw) : undef,
-      kr  = knut ? let(
-        specs = fl_switch(fl_screw_nominal(screw), FL_KNUT_NOMINAL_DRILL),
-        w     = assert(specs,specs) specs[2]
-      ) fl_knut_r(knut)+w : 0,
-      v   = [if (w) washer_radius(w),dx0,dy0,dx1,dy1]
-    ) max(min(v),kr);
-
-  module spacer(verbs=FL_ADD,position,screw,dirs=lay_direction,Zt) {
-    // echo(Zt=Zt);
-    knut  = knut ?
-      assert(knut=="linear" || knut=="FL_KNUT_TAG_SPIRAL",knut)
-        let(
-          kn = fl_knut_search(screw=screw,thread=knut,thick=h)
-        ) assert(kn,str("No ",knut," knurl nut found for M",fl_screw_nominal(screw)," screw.")) echo(fl_name(kn)) kn
-      : undef;
-    thick = Zt ? Zt : thick+[0,pcb_t];
-    r     = optimal_r(position,pcb_bb,screw,knut);
-    // echo("pcb_holderByHoles::spacer{}:",thick=thick,knut=knut);
-    echo(r=r)
-    fl_spacer(verbs,h=h,r=r,screw=screw,knut=knut,thick=thick,lay_direction=dirs)
-      children();
-  }
-
-  module do_add() {
-    fl_lay_holes(holes)
-      context()
-        spacer(position=$hole_pos,screw=$hld_screw);
-
-    // echo("pcb_holderByHoles::do_add():",frame=frame,holes=holes,frame=frame);
-    if (frame)
-      difference() {
-        translate(bbox[0])
-          fl_color()
-            linear_extrude(frame)
-              fl_square(size=[pcb_sz.x,pcb_sz.y],corners=pcb_r,quadrant=+X+Y);
-
-        translate(+Z(frame))
-          fl_lay_holes(holes)
-            context()
-              translate(+Z(NIL))
-                spacer(FL_DRILL,position=$hole_pos,screw=$hld_screw,dirs=[-Z],Zt=[-frame-2xNIL],$FL_DRILL=$FL_ADD);
-    }
-  }
-
-  module do_drill() {
-    fl_lay_holes(holes,thick=thick)
-      context()
-        spacer(FL_DRILL,$hole_pos,screw=$hld_screw);
-  }
-
-  module do_layout() {
-    fl_lay_holes(holes,thick=thick,screw=screw)
-      let(s=$hole_screw ? $hole_screw : screw)
-        spacer(FL_LAYOUT,$hole_pos,s)
-          translate($spc_director*$spc_thick)
-            context()
-              children();
-  }
-
-  module do_mount() {
-    fl_lay_holes(holes,thick=thick)
-      context()
-        spacer(FL_MOUNT,$hole_pos,screw=$hld_screw);
-  }
+  module contextualLayout()
+    let($pcbh_verb  = $verb)
+      fl_pcb(FL_LAYOUT,pcb)
+        let($pcbh_spacer=spcs[$hole_i])
+          children();
 
   module do_assembly() {
-    // translate(Z(h-pcb_bb[0].z))
-    multmatrix(Mpcb)
-      fl_pcb(FL_DRAW,pcb,thick=h);
-    fl_lay_holes(holes)
-      context()
-        spacer(FL_ASSEMBLY,position=$hole_pos,screw=$hld_screw);
+    contextualLayout($FL_LAYOUT=$FL_ASSEMBLY)
+      fl_spacer(FL_ASSEMBLY,spacer=$pcbh_spacer,fillet=fillet,anchor=[-Z]);
+    if (asm_all)
+      multmatrix(pcb_M)
+        fl_pcb(FL_DRAW,pcb);
   }
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+      fl_modifier($modifier)
+        contextualLayout($FL_LAYOUT=$FL_ADD)
+          fl_spacer(spacer=$pcbh_spacer,fillet=fillet,anchor=[-Z]);
 
     } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
+      fl_modifier($modifier)
+        do_assembly();
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size);
+        fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_modifier($modifier)
+        fl_bb_add(bbox);
 
     } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier) do_drill();
+      fl_modifier($modifier)
+        contextualLayout($FL_LAYOUT=$FL_DRILL)
+          fl_spacer(FL_DRILL,$pcbh_spacer,thick=thick,lay_direction=lay_direction);
 
     } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout() children();
+      fl_modifier($modifier)
+        contextualLayout()
+          fl_spacer(FL_LAYOUT,$pcbh_spacer,thick=thick,lay_direction=lay_direction)
+            children();
 
     } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier) do_mount();
+      fl_modifier($modifier)
+        contextualLayout($FL_LAYOUT=$FL_MOUNT)
+            fl_spacer(FL_MOUNT,$pcbh_spacer,thick=thick)
+              children();
 
     } else if ($verb==FL_PAYLOAD) {
-      fl_modifier($modifier) multmatrix(Mpcb) fl_bb_add(pcb_bb);
+      fl_modifier($modifier)
+        multmatrix(pcb_M)
+          fl_bb_add(pcb_bb);;
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
