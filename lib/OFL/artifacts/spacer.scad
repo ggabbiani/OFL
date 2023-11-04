@@ -67,6 +67,8 @@ function fl_Spacer(
 ) assert(d && h,"***OFL ERROR***: missing «h» and «d» parameters or «knut» and «screw_size» constrains")
   assert(!screw_size||d>screw_size,"***OFL ERROR***: minimum external ⌀ must be greater than screw size")
   [
+  fl_OFL(value=true),
+  fl_name(value=str("Spacer ",d,"mm ⌀ x ",h,"mm length")),
   fl_bb_corners(value=fl_bb_cylinder(h,d=d)),
   fl_spc_d(value=d),
   fl_spc_h(value=h),
@@ -74,28 +76,12 @@ function fl_Spacer(
   if (knut) fl_spc_knut(value=knut),
 ];
 
-// no constructor for spacer since no predefined variable
-function fl_bb_spacer(h,r) = fl_bb_cylinder(h,r);
-
-/*!
- * calculates the internal spacer radius.
- */
-function fl_spc_holeRadius(
-    //! optional nop screw object
-    screw,
-    //! optional knurl nut instance
-    knut
-  ) =
-  let(
-    knut  = knut!=undef ? assert(is_list(knut)) knut : undef
-  ) knut ? fl_knut_drillD(knut)/2 : screw ? screw_radius(screw) : undef;
-
 /*!
  * Children context:
  *
  * - $spc_director  : layout direction
- * - $spc_screw     : OPTIONAL screw
- * - $spc_thick     : scalar thickness along $spc_director
+ * - $spc_nominal   : OPTIONAL screw nominal ⌀
+ * - $spc_thick     : scalar thickness (always≥0) along $spc_director
  * - $spc_thickness : overall thickness (spacer length + ∑thick[i]),
  * - $spc_h         : spacer height
  * - $spc_holeR     : OPTIONAL internal hole radius
@@ -150,6 +136,7 @@ module fl_spacer(
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  assert(spacer && fl_OFL(spacer),spacer);
 
   r         = fl_spc_d(spacer)/2;
   h         = fl_spc_h(spacer);
@@ -289,11 +276,12 @@ module fl_spacer(
   }
 
   module do_layout() {
-    if (fl_3d_axisIsSet(+Z,lay_direction))
+    // echo(SPACER_THICK=thick);
+    if (fl_3d_axisIsSet(+Z,lay_direction)) // echo("*** +Z ***")
       context(+Z)
         translate($spc_director*h)
           children();
-    if (fl_3d_axisIsSet(-Z,lay_direction))
+    if (fl_3d_axisIsSet(-Z,lay_direction)) // echo("*** -Z ***")
       context(-Z)
         children();
   }
@@ -305,7 +293,7 @@ module fl_spacer(
   module do_drill()
     if (knut)
       knut(FL_DRILL);
-    else if (screw)
+    else if (scr_size)
       do_layout()
         if ($spc_thick) fl_cylinder(h=$spc_thick,r=hole_r,octant=$spc_director);
 
@@ -313,7 +301,7 @@ module fl_spacer(
     director
   ) {
     $spc_director   = director;
-    $spc_screw      = screw;
+    $spc_nominal    = scr_size;
     $spc_thick      = director==+Z ? thick[1] : -thick[0];
     $spc_thickness  = thickness;
     $spc_h          = h;
