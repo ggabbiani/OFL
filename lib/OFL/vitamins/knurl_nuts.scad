@@ -251,8 +251,9 @@ function fl_knut_find(
   length_equal,
   length_less_equal,
   length_greater_equal
-) = let(
-
+) =
+assert(is_undef(thread) || thread=="linear" || thread=="spiral",thread)
+let(
   // nominal «value» filter factory
   byNominal = function(value) let(
     nominal = is_num(value) ? value : assert(is_string(value),value) fl_atof(value)
