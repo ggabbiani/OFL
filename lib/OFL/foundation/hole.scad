@@ -18,8 +18,7 @@ function fl_hole_ldir(hole,value)           = fl_optProperty(hole,"hole/label [d
 function fl_hole_loct(hole,value)           = fl_optProperty(hole,"hole/label octant",value);
 function fl_hole_screw(hole,value,default)  = fl_optProperty(hole,"hole/screw",value,default);
 
-//*****************************************************************************
-// type traits
+//**** type traits ************************************************************
 
 /*!
  * Hole representation as mandatory properties check:

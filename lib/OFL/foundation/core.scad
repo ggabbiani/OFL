@@ -11,8 +11,7 @@
 include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
-//*****************************************************************************
-// language extension
+//**** language extension *****************************************************
 
 /*!
  * implementation of switch statement as a function: when «value» matches a case,
@@ -392,7 +391,8 @@ function fl_verbList(
     if (attribute!="OFF") assert(attribute,str("Unmapped verb ",verb)) verb
 ];
 
-//*****************************************************************************
+//**** General properties *****************************************************
+
 // General properties
 // when invoked by «type» parameter act as getters
 // when invoked by «value» parameter act as property constructors
