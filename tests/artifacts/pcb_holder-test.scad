@@ -63,26 +63,21 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 DIR_R       = 0;        // [-360:360]
 
 
-/* [FACTORY]*/
-ENGINE  = "by holes"; // [by holes, by size]
-H_MIN   = 4;  // [0.1:0.1:10]
-// frame thickness on Z axis
-FRAME_T  = 0; // [0:0.1:5]
-TOLERANCE = 0.5;  // [0:0.1:1]
+/* [Constructor]*/
+H_MIN = 4;  // [0.1:0.1:10]
 // knurl nut
 KNUT  = "none";  // [none,linear,spiral]
+PCB   = "Perfboard 80 x 20mm";  //  ["HiLetgo SX1308 DC-DC Step up power module", "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port", "Perfboard 70 x 50mm", "Perfboard 60 x 40mm", "Perfboard 70 x 30mm", "Perfboard 80 x 20mm", "RPI4-MODBP-8GB", "Raspberry PI uHAT", "KHADAS-SBC-VIM1"]
 
-PCB         = "Perfboard 80 x 20mm";  //  ["HiLetgo SX1308 DC-DC Step up power module", "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port", "Perfboard 70 x 50mm", "Perfboard 60 x 40mm", "Perfboard 70 x 30mm", "Perfboard 80 x 20mm", "RPI4-MODBP-8GB", "Raspberry PI uHAT", "KHADAS-SBC-VIM1"]
-
-/* [TEST] */
+/* [Engine] */
 // no fillet if zero
-FILLET  = 1;  // [0:0.1:5]
+FILLET  = .5;  // [0:0.1:5]
 // when true also PCB will be shown during FL_ASSEMBLY
 ASSEMBLY_ALL  = false;
 // thickness on +Z axis
-THICK_POSITIVE = 1;      // [0:0.1:10]
+THICK_POSITIVE = 1.6;      // [0:0.1:10]
 // thickness on -Z axis
-THICK_NEGATIVE = 2;      // [0:0.1:10]
+THICK_NEGATIVE = 2.5;      // [0:0.1:10]
 // FL_LAYOUT directions
 LAYOUT_DIRS  = "±z";  // [±z, -z, +z]
 
@@ -116,9 +111,7 @@ pcb     = fl_pcb_select(PCB);
 pcb_scr = fl_screw(pcb);
 dirs    = fl_3d_AxisList([LAYOUT_DIRS]);
 thread  = KNUT!="none" ? KNUT : undef;
-
-pcbh    = fl_PCBHolderByHoles(pcb,h_min=H_MIN,knut_type=thread);
-// spacer  = fl_pcbh_spacers(pcbh);
+pcbh    = fl_PCBHolder(pcb,h_min=H_MIN,knut_type=thread);
 
 fl_pcbHolder(verbs,pcbh,thick=thickness,lay_direction=dirs,fillet=FILLET,asm_all=ASSEMBLY_ALL,direction=direction,octant=octant)
   if ($pcbh_verb==FL_LAYOUT) {
@@ -127,7 +120,7 @@ fl_pcbHolder(verbs,pcbh,thick=thickness,lay_direction=dirs,fillet=FILLET,asm_all
         fl_cube(size=[l,l,$spc_thick],octant=-$spc_director,$FL_ADD=$FL_LAYOUT);
   } else if ($pcbh_verb==FL_MOUNT)
     let(
-      htyp    = screw_head_type(pcb_scr),
+      htyp    = screw_head_type($pcbh_screw),
       washer  = (htyp==hs_cs||htyp==hs_cs_cap) ? "no" : "nylon"
-    ) fl_screw(FL_DRAW,$hole_screw,thick=$spc_thickness,washer=washer,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
+    ) fl_screw(FL_DRAW,$pcbh_screw,thick=$spc_thickness,washer=washer,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
   else echo($pcbh_verb=$pcbh_verb);
