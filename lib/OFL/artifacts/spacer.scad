@@ -57,7 +57,12 @@ function fl_Spacer(
    */
   screw_size = 0,
 
-  //! knurl nut: set constrains on both the external ⌀ and minimum height.
+  /*!
+   * Knurl nut object.
+   *
+   * This parameter constrains both the external ⌀ and the minimum spacer
+   * height.
+   */
   knut
 ) = let(
   wall  = knut ? let(nominal=fl_nominal(knut)) fl_switch(nominal, FL_KNUT_NOMINAL_DRILL)[2] : undef,
@@ -163,8 +168,12 @@ module fl_spacer(
   M       = fl_octant(octant,bbox=bbox);
 
   module knut(verbs=FL_ADD)
-    translate(+Z(h))
-      fl_knut(verbs,knut,dri_thick=[thick[0]-kn_delta,thick[1]],octant=-Z);
+    let(dri_thick=[
+        if (fl_3d_axisIsSet(-Z,lay_direction)) thick[0]-kn_delta,
+        if (fl_3d_axisIsSet(+Z,lay_direction)) thick[1],
+      ]
+    ) translate(+Z(h))
+      fl_knut(verbs,knut,dri_thick=dri_thick,octant=-Z);
 
   module shape() {
     fl_cylinder(h=h,r=r);
