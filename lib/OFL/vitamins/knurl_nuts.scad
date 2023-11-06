@@ -288,7 +288,9 @@ let(
   ]
 ) fl_list_filter(inventory,filters);
 
+//! return the shortest knurl nut in «inventory»
 function fl_knut_shortest(inventory)  = fl_list_min(inventory,function(knut) fl_knut_thick(knut));
+//! return the longest knurl nut in «inventory»
 function fl_knut_longest(inventory)   = fl_list_max(inventory,function(knut) fl_knut_thick(knut));
 
 //! filter the passed inventory with «knut» feasible screws
