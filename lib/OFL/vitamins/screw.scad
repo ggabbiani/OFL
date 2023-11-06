@@ -95,7 +95,9 @@ function fl_screw_search(
   nut,
   //! "no", "default", "penny", "nylon". when "no" or undef is ignored
   washer
-) = [
+) =
+assert(is_undef(d)||is_num(d),str("***OFL ERROR***: «d» parameter is not a number"))
+[
   for(s=dictionary)
     let(
       chk_washer  = function(screw) let(
