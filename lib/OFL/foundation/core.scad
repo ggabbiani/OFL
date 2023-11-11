@@ -38,7 +38,7 @@ function fl_switch(
   //! a list with each item composed by a couple «expression result»/«value»
   cases,
   //! value returned in case of no match or when «value» is undef
-  otherwise=undef
+  otherwise
 ) = let(
   match = is_undef(value) ? [] : [for(case=cases) if (value==case[0]) case[1]]
 ) match ? match[0] : otherwise;
@@ -677,8 +677,8 @@ function fl_atof(str) = len(str) == 0 ? 0 : let( expon1 = search("e", str), expo
  *     ]
  */
 function fl_list_pack(left,right) = let(
-  l_len = len(left),
-  r_len = len(right)
+  l_len = assert(is_list(left))   len(left),
+  r_len = assert(is_list(right))  len(right)
 ) [
   for(i=[0:max(l_len,r_len)-1]) [i<l_len ? left[i] : undef, i<r_len ? right[i] : undef]
 ];
