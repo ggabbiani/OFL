@@ -344,18 +344,32 @@ function fl_knut_search(
  *
  * Children context for FL_ASSEMBLY and FL_DRILL:
  *
+ *     $knut_director   - layout direction
  *     $knut_thick      - Z-axis thickness vector
  *     $knut_thickness  - overall thickness (insert length + ∑dri_thick),
  *     $knut_length     - insert length
  *     $knut_nominal    - nominal ⌀
- *     $knut_obj        - insert type
+ *     $knut_obj        - OFL insert object
  *     $knut_verb       - verb currently triggering children (FL_ASSEMBLY or
  *                        FL_LAYOUT)
  *
  * __NOTE__: FL_ASSEMBLY expects a child screw to be passed
  */
 module fl_knut(
-  //! supported verbs: `FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_LAYOUT`
+  /*!
+   * supported verbs: `FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_DRILL,
+   * FL_LAYOUT`
+   *
+   * - `FL_ASSEMBLY`: The implementation of the `FL_ASSEMBLY` verb involves
+   *   using screws as child modules, which is typically done when executing the
+   *   `FL_MOUNT` verb elsewhere in OFL. In this case, however, a different choice
+   *   was made since in reality the inserts are fixed by casting the support
+   *   frame and therefore the screws are considered as accessory components
+   *   (which excludes, among other things, the implementation of the verb
+   *   `FL_MOUNT`). During assembly, the positive part of the «dri_thick»
+   *   parameter is used to translate the screws along Z+ semi-axis.
+   *   The context variable $knut_thickness can be used for the screw length.
+   */
   verbs=FL_ADD,
   type,
   /*!
@@ -468,10 +482,11 @@ module fl_knut(
     }
   }
 
-  module context()
+  module context(director)
     let(
+      $knut_director  = director,
       $knut_thickness = thickness,
-      $knut_thick     = dri_thick,
+      $knut_thick     = director==+Z ? dri_thick[1] : director==-Z ? -dri_thick[0] : undef,
       $knut_nominal   = nominal,
       $knut_obj       = type,
       $knut_verb      = $verb,
@@ -479,8 +494,11 @@ module fl_knut(
     ) children();
 
   module do_layout()    {
-    context()
-      translate(Z(bbox[1].z))
+    // echo($FL_LAYOUT=$FL_LAYOUT);
+    context(+Z)
+        children();
+    context(-Z)
+      translate(-Z*size.z)
         children();
   }
 
@@ -514,7 +532,10 @@ module fl_knut(
       fl_modifier($modifier) fl_bb_add(bbox);
 
     } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_layout() children();
+      fl_modifier($modifier)
+        context()
+          translate(+Z(dri_thick[1]))
+            children();
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout() children();

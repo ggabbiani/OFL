@@ -84,9 +84,9 @@ ANCHOR_Z_NEG  = true;
 /* [TEST] */
 
 // thickness on +Z axis
-THICK_POSITIVE = 1;      // [0:0.1:10]
+THICK_POSITIVE = 1.6;      // [0:0.1:10]
 // thickness on -Z axis
-THICK_NEGATIVE = 2;      // [0:0.1:10]
+THICK_NEGATIVE = 2.5;      // [0:0.1:10]
 
 // FL_LAYOUT directions
 LAYOUT_DIRS  = "±z";  // [±z, -z, +z]
@@ -134,18 +134,22 @@ cs            = let(d=knut?fl_nominal(knut):screw?fl_screw_nominal(screw):undef)
                 d ? fl_cs_search(d=d)[0] : undef;
 dirs          = fl_3d_AxisList([LAYOUT_DIRS]);
 
-// echo("***knut***",knut);
-// echo("***screw***",screw);
-// echo("***spacer***",spacer);
-// echo(knut=knut,screw=screw,spacer=spacer);
-// echo(verbs=verbs);
 spacer = fl_Spacer(h_min=H_MIN,d_min=D_MIN,screw_size=scr_size,knut=knut);
 fl_spacer(verbs,spacer,thick=thickness,lay_direction=dirs,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)
   if ($spc_verb==FL_LAYOUT)
-    translate($spc_director*($spc_thick-2xNIL))
-      fl_countersink(type=cs,direction=[$spc_director,0],$FL_ADD=$FL_LAYOUT);
-  else if ($spc_verb==FL_MOUNT)
+    /*
+     * CHILDREN LAYOUT: by default spacers layout children on the top of the ±Z
+     * surfaces.
+     */
+    translate($spc_director*($spc_thick))
+      let(l=1.5*fl_spc_d(spacer))
+        fl_cube(size=[l,l,$spc_thick],octant=-$spc_director,$FL_ADD=$FL_LAYOUT);
+  else if ($spc_verb==FL_MOUNT) // SCREW MOUNT
     let(
       htyp    = screw_head_type(screw),
       washer  = (htyp==hs_cs||htyp==hs_cs_cap) ? "no" : "nylon"
     ) fl_screw(FL_DRAW,screw,thick=$spc_thickness,washer=washer,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
+
+
+
+
