@@ -73,21 +73,11 @@ module fl_box(
   Mback_knut  = T([size.x/2,size.y-thick-tolerance,sz_up.z+tolerance]);
   D       = direction ? fl_direction(direction)  : I;
   M       = fl_octant(octant,bbox=bbox);
+  spacer  = fl_Spacer(h_min=holder_sz.z,knut=knut);
 
   module back_spacer(verbs=FL_ADD,direction=[+Y,0])
-    fl_spacer(verbs,
-      h=holder_sz.z,
-      r=4,
-      screw=screw,
-      knut=knut,
-      anchor=[-Y],
-      fillet=fillet?Treal/2:undef,
-      thick=Treal,
-      lay_direction=[+Z],
-      octant=+Y-Z,
-      direction=direction,
-      $fl_filament=undef
-    ) children();
+    fl_spacer(verbs,spacer,anchor=[-Y],fillet=fillet?Treal/2:undef,thick=[0,Treal],octant=+Y-Z,direction=direction,$fl_filament=undef)
+      children();
 
   module front_spacer(verbs=FL_ADD)
     back_spacer(verbs, direction=[-Y,180])
@@ -188,9 +178,11 @@ module fl_box(
     translate(bbox[0]) {
       if (parts=="all" || parts=="lower") {
         multmatrix(Mback_knut)
-          back_spacer(FL_MOUNT);
+          back_spacer(FL_MOUNT)
+            fl_screw(FL_DRAW,screw,thick=$spc_thickness,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
         multmatrix(Mfront_knut)
-          front_spacer(FL_MOUNT);
+          front_spacer(FL_MOUNT)
+            fl_screw(FL_DRAW,screw,thick=$spc_thickness,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
       }
     }
   }
