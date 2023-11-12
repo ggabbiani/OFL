@@ -125,12 +125,6 @@ module fl_spacer(
    *
    */
   thick=0,
-  /*!
-   * FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
-   *
-   * __NOTE__: only Z semi-axes are used
-   */
-  lay_direction=[+Z,-Z],
   //! anchor directions in floating semi-axis list
   anchor,
   //! when >0 a fillet is added to anchors
@@ -168,12 +162,9 @@ module fl_spacer(
   M       = fl_octant(octant,bbox=bbox);
 
   module knut(verbs=FL_ADD)
-    let(dri_thick=[
-        if (fl_3d_axisIsSet(-Z,lay_direction)) thick[0]-kn_delta,
-        if (fl_3d_axisIsSet(+Z,lay_direction)) thick[1],
-      ]
-    ) translate(+Z(h))
-      fl_knut(verbs,knut,dri_thick=dri_thick,octant=-Z);
+    let(dri_thick=[thick[0]-kn_delta,thick[1]])
+      translate(+Z(h))
+        fl_knut(verbs,knut,dri_thick=dri_thick,octant=-Z);
 
   module shape() {
     fl_cylinder(h=h,r=r);
@@ -285,12 +276,11 @@ module fl_spacer(
   }
 
   module do_layout() {
-    // echo(SPACER_THICK=thick);
-    if (fl_3d_axisIsSet(+Z,lay_direction)) // echo("*** +Z ***")
-      context(+Z)
-        translate($spc_director*h)
-          children();
-    if (fl_3d_axisIsSet(-Z,lay_direction)) // echo("*** -Z ***")
+    // echo("*** +Z ***")
+    context(+Z)
+      translate($spc_director*h)
+        children();
+    // echo("*** -Z ***")
       context(-Z)
         children();
   }

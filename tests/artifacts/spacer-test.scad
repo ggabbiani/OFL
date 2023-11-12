@@ -32,7 +32,7 @@ SHOW_SYMBOLS    = false;
 // adds shapes to scene.
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-$FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY  = "ON";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
@@ -135,7 +135,7 @@ cs            = let(d=knut?fl_nominal(knut):screw?fl_screw_nominal(screw):undef)
 dirs          = fl_3d_AxisList([LAYOUT_DIRS]);
 
 spacer = fl_Spacer(h_min=H_MIN,d_min=D_MIN,screw_size=scr_size,knut=knut);
-fl_spacer(verbs,spacer,thick=thickness,lay_direction=dirs,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)
+fl_spacer(verbs,spacer,thick=thickness,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)
   if ($spc_verb==FL_LAYOUT)
     /*
      * CHILDREN LAYOUT: by default spacers layout children on the top of the ±Z
