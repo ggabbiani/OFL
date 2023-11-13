@@ -59,22 +59,28 @@
   - screw (after wrapper setup)
 - [ ] move vitamins dictionaries into inventories (dictionaries should be used
   only in generic libraries)
-- [ ] add constructors to spacer and pcb_holder libraries
+- [x] add constructors to spacer and pcb_holder libraries
+- [ ] add new artifact: pcb_frame adapting a pcb to holes in order to be later
+  mounted on standard pcb holder
 
 
 
 ## Changed file names
 
-| old                               | new                           |
-| --------                          | --------                      |
-| foundation/2d.scad                | foundation/2d-engine.scad     |
-| foundation/3d.scad                | foundation/3d-engine.scad     |
-| foundation/base_geo.scad          | foundation/core.scad          |
-| foundation/base_kv.scad           | foundation/core.scad          |
-| foundation/base_parameters.scad   | foundation/core.scad          |
-| foundation/base_string.scad       | foundation/core.scad          |
-| foundation/base_trace.scad        | foundation/core.scad          |
-| foundation/bbox.scad              | foundation/bbox-engine.scad   |
-| foundation/defs.scad              | foundation/core.scad          |
-| foundation/mngm.scad              | foundation/mngm-engine.scad   |
-| foundation/symbol.scad            | -                             |
+| old                               | new                               |
+| --------                          | --------                          |
+| foundation/2d.scad                | foundation/2d-engine.scad         |
+| foundation/3d.scad                | foundation/3d-engine.scad         |
+| foundation/base_geo.scad          | foundation/core.scad              |
+| foundation/base_kv.scad           | foundation/core.scad              |
+| foundation/base_parameters.scad   | foundation/core.scad              |
+| foundation/base_string.scad       | foundation/core.scad              |
+| foundation/base_trace.scad        | foundation/core.scad              |
+| foundation/bbox.scad              | foundation/bbox-engine.scad       |
+| foundation/defs.scad              | foundation/core.scad              |
+| foundation/mngm.scad              | foundation/mngm-engine.scad       |
+| foundation/symbol.scad            | -                                 |
+| tests/vitamins/knu_nut-test.conf  | tests/vitamins/knu_nuts-test.conf |
+| tests/vitamins/knu_nut-test.json  | tests/vitamins/knu_nuts-test.json |
+| tests/vitamins/knu_nut-test.scad  | tests/vitamins/knu_nuts-test.scad |
+
