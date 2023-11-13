@@ -169,11 +169,11 @@ module fl_holes(
   thick=0,
   //! fallback screw
   screw,
-  //! tolerance radius
-  tolerance=0
+  //! tolerance ⌀
+  tolerance=2xNIL
 ) fl_lay_holes(holes,enable,thick,screw)
     translate(NIL*$hole_n)
-      fl_cylinder(h=$hole_depth+2xNIL,d=$hole_d+tolerance,direction=[-$hole_n,0]);
+      fl_cylinder(h=$hole_depth+tolerance,d=$hole_d+tolerance,direction=[-$hole_n,0]);
 
 /*!
   * Layouts of hole symbols
