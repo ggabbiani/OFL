@@ -35,6 +35,9 @@
 - [ ] global: extend the OFL APIs for implementing the newly introduced 'standard' parameter «debug»
 - [ ] documentation: introduce parameter standardization
 - [x] tests: implement an automatic test generator mechanism able to standardize - where possible - the customizer parameters
+- [ ] tests: replace / unify tests executions
+- [ ] tests: 'make' driven test generation: make hem independent from calling
+  context including their parent defs
 - [x] global: implement an automatic documentation picture generator mechanism
 - [x] vitamins/generic.scad: new generic vitamins with no-op FL_ADD semantic but fully programmable FL_CUTOUT implementation. This module has been used for implementing proper component cutout on complex PCBs.
 - [x] test/vitamins/generic.scad: first implementation
@@ -60,7 +63,7 @@
 - [ ] move vitamins dictionaries into inventories (dictionaries should be used
   only in generic libraries)
 - [x] add constructors to spacer and pcb_holder libraries
-- [ ] add new artifact: pcb_frame adapting a pcb to holes in order to be later
+- [ ] add new artifact: fl_pcb_frame adapting a pcb to holes in order to be later
   mounted on standard pcb holder
 
 
