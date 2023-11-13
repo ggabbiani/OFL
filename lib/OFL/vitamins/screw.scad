@@ -12,6 +12,7 @@ include <../foundation/unsafe_defs.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
+use <../foundation/hole.scad>
 use <../foundation/mngm-engine.scad>
 
 
@@ -298,5 +299,42 @@ module fl_screw(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
+  }
+}
+
+/*!
+ * Screw driven hole execution. The main difference between this module and
+ * fl_lay_holes{} is that the FL_DRILL verb is delegated to screws.
+ *
+ * See fl_hole_Context{} for context variables passed to children().
+ *
+ * **NOTE:** supported normals are x,y or z semi-axis ONLY
+ *
+ */
+module fl_screw_holes(
+  //! list of hole specs
+  holes,
+  //! enabled normals in floating semi-axis list form
+  enable  = [-X,+X,-Y,+Y,-Z,+Z],
+  //! pass-through thickness
+  thick=0,
+  //! fallback screw
+  screw,
+  //! drill type ("clearance" or "tap")
+  type="clearance",
+  //! tolerance ⌀
+  tolerance=2xNIL,
+  countersunk=false
+) {
+  fl_lay_holes(holes,enable,thick) let(
+    screw = $hole_screw ? $hole_screw : screw,
+    len   = $hole_depth ? $hole_depth : thick,
+    d     = screw_head_radius(screw)*2
+  ) assert(screw) {
+    resize([0,0,len+tolerance],auto=true)
+      fl_screw(FL_DRILL,screw,len,dri_type=type);
+    if (countersunk)
+      resize([d+tolerance,0,0],auto=true)
+        screw_countersink(screw);
   }
 }
