@@ -1,0 +1,23 @@
+{
+    "parameterSets": {
+        "Snapmaster A250T": {
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "SteelBlue",
+            "$fn": "100",
+            "COUNTERSUNK": "true",
+            "DRILL_TYPE": "clearance",
+            "HEIGHT": "21",
+            "HORIZ_T": "6.8",
+            "LENGTH": "248",
+            "RADIUS": "1.9",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "TOLERANCE": "1.5",
+            "VERT_T": "4",
+            "WIDTH": "36"
+        }
+    },
+    "fileFormatVersion": "1"
+}
