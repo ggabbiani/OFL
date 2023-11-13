@@ -50,13 +50,23 @@ screw = No6_cs_screw;
 scr_nominal = fl_screw_nominal(screw);
 
 holes = [
-  fl_Hole([30.5,8,HORIZ_T],scr_nominal),
-  fl_Hole([131.5,8.5,HORIZ_T],scr_nominal),
-  fl_Hole([223.5,9.5,HORIZ_T],scr_nominal),
-  fl_Hole([29,29,HORIZ_T],scr_nominal),
-  fl_Hole([130.5,29.5,HORIZ_T],scr_nominal),
-  fl_Hole([222.5,30,HORIZ_T],scr_nominal),
+  fl_Hole([30.5,  7,HORIZ_T],scr_nominal),
+  fl_Hole([131.5, 7,HORIZ_T],scr_nominal),
+  fl_Hole([223.5, 8,HORIZ_T],scr_nominal),
+
+  fl_Hole([29,    28,HORIZ_T],scr_nominal),
+  fl_Hole([130.5, 28,HORIZ_T],scr_nominal),
+  fl_Hole([222.5, 28.5,HORIZ_T],scr_nominal),
 ];
+// holes = [
+//   fl_Hole([30.5, 8,HORIZ_T],scr_nominal),
+//   fl_Hole([131.5,8.5,HORIZ_T],scr_nominal),
+//   fl_Hole([223.5,9.5,HORIZ_T],scr_nominal),
+
+//   fl_Hole([29,   29,HORIZ_T],scr_nominal),
+//   fl_Hole([130.5,29.5,HORIZ_T],scr_nominal),
+//   fl_Hole([222.5,30,HORIZ_T],scr_nominal),
+// ];
 
 difference() {
   rotate(90,Y) rotate(-90,Z) translate(-X(WIDTH/2)-Y((HORIZ_T-VERT_T))) {
