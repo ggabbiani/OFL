@@ -38,6 +38,7 @@
 - [ ] tests: replace / unify tests executions
 - [ ] tests: 'make' driven test generation: make hem independent from calling
   context including their parent defs
+- [ ] tests: make them available on all supported platform
 - [x] global: implement an automatic documentation picture generator mechanism
 - [x] vitamins/generic.scad: new generic vitamins with no-op FL_ADD semantic but fully programmable FL_CUTOUT implementation. This module has been used for implementing proper component cutout on complex PCBs.
 - [x] test/vitamins/generic.scad: first implementation
