@@ -7,6 +7,7 @@
  */
 
 include <../lib/OFL/artifacts/caddy.scad>
+include <../lib/OFL/artifacts/pcb_holder.scad>
 include <../lib/OFL/artifacts/spacer.scad>
 include <../lib/OFL/vitamins/hds.scad>
 include <../lib/OFL/vitamins/heatsinks.scad>
@@ -44,8 +45,13 @@ CUT_TOLERANCE = 0.6;
 FILLET        = true;
 UPPER_PART    = true;
 LOWER_PART    = true;
-SPACER_T      = 2;    // [1:0.1:2]
 
+/* [Fixings] */
+
+// Knurl nut thread type
+FAST_TYPE  = "linear"; // [linear,spiral]
+// Knurl nut screw nominal ⌀
+FAST_NOMINAL = 3;  // [2,3,4,5,6,8]
 
 /* [Hidden] */
 
@@ -61,95 +67,64 @@ parts = (LOWER_PART && UPPER_PART) ? "all"
       : UPPER_PART ? "upper"
       : "none";
 
-sbc_direction = SBC=="rpi4" ? undef : [+Z,180];
-sbc_octant    = SBC=="rpi4" ? undef : +Z;
+// sbc_direction = SBC=="rpi4" ? undef : [+Z,180];
+// sbc_octant    = SBC=="rpi4" ? undef : +Z;
 
-/*
- * The box is built using the sbc bounding box passed as payload.
- * Since Khadas is rotated of 180° around Z axis and translated on +Z
- * semi-space, its bounding box must be transformed consequently.
- *
- * Finally the resulting bounding box is always enhanced on the Z axis for
- * hosting the box fixing screws
- */
-box_payload = let(
-  bb  = SBC=="rpi4"
-      ? fl_bb_corners(sbc)
-      : fl_bb_transform(Rz(180)*fl_octant(sbc_octant,sbc),fl_bb_corners(sbc)+[[-T,0,0],[T,1,0]])
-) [bb[0],bb[1]+Z(EXTRA_H)];
+holder  = fl_PCBHolder(sbc,knut_type=FAST_TYPE);
+payload = fl_bb_corners(holder);
 
-// box rendering
-difference() {
-  // adding part
-  fl_box(
-    [FL_ADD,FL_LAYOUT],
-    pload=box_payload,thick=T,radius=radius,parts=parts,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=BOX_TOLERANCE,fillet=FILLET,
-    // lay_octant=O,
+module sbcBox(mode)
+  let(
+    verbs = mode=="add"?[FL_ADD,FL_LAYOUT,if (VIEW_MODE!="PRINT ME!") FL_ASSEMBLY]:FL_LAYOUT
+  ) /* echo(mode=mode) */ fl_box(verbs,pload=payload,
+    thick=T,
+    radius=radius,
+    parts=parts,
+    material_upper=FILAMENT_UPPER,
+    material_lower=FILAMENT_LOWER,
+    tolerance=BOX_TOLERANCE,
+    fillet=FILLET,
+    fastenings=[FAST_TYPE,FAST_NOMINAL],
+    // lay_octant=-Z,
     octant=+Z
     // $FL_ADD="DEBUG"
-  ) translate(X(T)) fl_pcb(
-    [FL_LAYOUT],
-    sbc,
-    octant=sbc_octant,
-    direction=sbc_direction
-  ) translate(-Z($pcb_thick))
-      fl_spacer(
-        [FL_ADD],
-        spacer_h,
-        d=$hole_d+SPACER_T*2,
-        screw=$hole_screw,
-        knut=true,
-        thick=T,
-        lay_direction=[$hole_n],
-        octant=-$hole_n,
-        $fl_filament=$box_materials[0],
-        $FL_ADD=LOWER_PART?"ON":"OFF"
+  ) if (mode=="add") // echo("***ADD***")
+        let(
+          verbs = LOWER_PART?FL_ADD:[],
+          thick   = [-(T+NIL),fl_pcb_thick(sbc)],
+          fillet  = FILLET?0.5:undef
+        ) fl_pcbHolder(
+          verbs,
+          holder,
+          thick=thick,
+          fillet=fillet,
+          $fl_filament=FILAMENT_LOWER
+        );
+    else if (mode=="assembly") // echo("***ASSEMBLY***")
+      let(
+        verbs = LOWER_PART?FL_ASSEMBLY:[],
+        thick   = [-(T+NIL),fl_pcb_thick(sbc)],
+        fillet  = FILLET?0.5:undef
+      ) fl_pcbHolder(
+        verbs,
+        holder,
+        thick=thick,
+        fillet=fillet,
+        asm_all=VIEW_MODE=="FULL"
       );
-  // cut out
-  fl_box(
-    [FL_LAYOUT],
-    pload=box_payload,thick=T,radius=radius,parts=parts,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=BOX_TOLERANCE,fillet=FILLET,
-    // lay_octant=O,
-    octant=+Z
-  ) translate(X(T)) fl_pcb(
-      [FL_CUTOUT],
-      sbc,
-      thick=3*T,
-      cut_tolerance=CUT_TOLERANCE,
-      cut_direction=[-X,-Y,+Y],
-      octant=sbc_octant,
-      direction=sbc_direction
-    );
+    else // echo("***CUTOUT***")
+      translate(+Z(fl_spc_h(fl_pcbh_spacers(holder)[0])+fl_pcb_thick(sbc)))
+        fl_pcb(
+          FL_CUTOUT,
+          sbc,
+          thick=3*T,
+          cut_tolerance=CUT_TOLERANCE,
+          cut_direction=[if (SBC=="rpi4") +X, -X,-Y,+Y]
+        );
+
+difference() {
+  sbcBox("add");
+  sbcBox("cut out");
 }
-
-// assembly
-fl_box(
-  [FL_ASSEMBLY,FL_LAYOUT,FL_MOUNT],
-  pload=box_payload,thick=T,radius=radius,parts=parts,material_upper=FILAMENT_UPPER,material_lower=FILAMENT_LOWER,tolerance=BOX_TOLERANCE,fillet=FILLET,
-  // lay_octant=O,
-  octant=+Z,
-  $FL_ADD="ON",
-  $FL_ASSEMBLY=(VIEW_MODE=="FULL"||VIEW_MODE=="PARTIAL")?"ON":"OFF",
-  $FL_MOUNT=(VIEW_MODE=="FULL")?"ON":"OFF"
-) translate(X(T)) fl_pcb(
-    [FL_ADD,FL_ASSEMBLY,FL_LAYOUT],
-    sbc,
-    octant=sbc_octant,
-    direction=sbc_direction,
-    $FL_ADD=(VIEW_MODE=="FULL")?"ON":"OFF",
-    $FL_ASSEMBLY=(VIEW_MODE=="FULL")?"ON":"OFF"
-  ) translate(-Z($pcb_thick))
-      fl_spacer(
-        [FL_ASSEMBLY],
-        spacer_h,
-        d=$hole_d+SPACER_T*2,
-        screw=$hole_screw,
-        knut=true,
-        thick=T,
-        lay_direction=[$hole_n],
-        octant=-$hole_n,
-        $FL_ASSEMBLY=(LOWER_PART&&(VIEW_MODE=="FULL"||VIEW_MODE=="PARTIAL"))?"ON":"OFF"
-      );
-    // translate($spc_director*$spc_thick)
-    //   fl_screw(FL_DRAW,$spc_screw,thick=$spc_h+$spc_thick,washer="nylon",direction=[$spc_director,0]);
-
+if (VIEW_MODE!="PRINT ME!")
+  sbcBox("assembly");
