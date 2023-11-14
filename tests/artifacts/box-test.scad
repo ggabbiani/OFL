@@ -61,7 +61,6 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
-
 /* [Box] */
 
 PARTS           = "all";    // [all,upper,lower]
@@ -80,7 +79,7 @@ THICK           = 2.5;
 // fold internal radius (square if undef)
 RADIUS          = 1.1;
 
-TOLERANCE       = 0.3;
+TOLERANCE       = 0.3;  // [0:0.1:1]
 // upper side color
 MATERIAL_UPPER  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // lower side color
@@ -91,6 +90,13 @@ FILLET          = true;
 
 LAY_NATIVE  = true;
 LAY_OCTANT  = [0,0,0];  // [-1:+1]
+
+/* [Fixings] */
+
+// Knurl nut thread type
+FAST_TYPE  = "linear"; // [linear,spiral]
+// Knurl nut screw nominal ⌀
+FAST_NOMINAL = 3;  // [2,3,4,5,6,8]
 
 
 /* [Hidden] */
@@ -127,6 +133,7 @@ fl_box(verbs,
   tolerance=TOLERANCE,
   fillet=FILLET,
   lay_octant=lay_octant,
+  fastenings=[FAST_TYPE,FAST_NOMINAL],
   octant=octant,direction=direction
 )
   fl_sphere(FL_AXES,r=10,$FL_AXES="ON");

@@ -114,10 +114,11 @@ thread  = KNUT!="none" ? KNUT : undef;
 pcbh    = fl_PCBHolder(pcb,h_min=H_MIN,knut_type=thread);
 
 fl_pcbHolder(verbs,pcbh,thick=thickness,lay_direction=dirs,fillet=FILLET,asm_all=ASSEMBLY_ALL,direction=direction,octant=octant)
-  if ($pcbh_verb==FL_LAYOUT) {
-    translate($spc_director*($spc_thick))
-      let(l=1.5*fl_spc_d($pcbh_spacer))
-        fl_cube(size=[l,l,$spc_thick],octant=-$spc_director,$FL_ADD=$FL_LAYOUT);
+  if ($pcbh_verb==FL_LAYOUT) echo($spc_thick=$spc_thick) {
+    if ($spc_thick)
+      translate($spc_director*($spc_thick))
+        let(l=1.5*fl_spc_d($pcbh_spacer))
+          fl_cube(size=[l,l,$spc_thick],octant=-$spc_director,$FL_ADD=$FL_LAYOUT);
   } else if ($pcbh_verb==FL_MOUNT)
     let(
       htyp    = screw_head_type($pcbh_screw),

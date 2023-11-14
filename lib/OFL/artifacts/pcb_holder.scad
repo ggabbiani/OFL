@@ -75,8 +75,8 @@ function fl_PCBHolder(
         center = fl_hole_pos(hole)
       ) center.y-spc_r]
   ),
-  zs = [for(spacer=spacers) fl_spc_h(spacer)],
-  spc_height  = max(zs),
+  // spc_height  = max([for(spacer=spacers) fl_spc_h(spacer)]),
+  spc_height  = fl_spc_h(spacers[0]),
   this_bb = [[min(xs),min(ys),0],[max(xs),max(ys),spc_height+pcb_t]],
   // sums pcb holder bare bounding block with the pcb one translated of +Z(spc_height+pcb_t)
   bbox  = fl_bb_calc([this_bb,[for(point=pcb_bb) fl_transform(T(+Z(spc_height+pcb_t+NIL)), point)]])
@@ -97,8 +97,8 @@ function fl_PCBHolder(
  *
  *   - inherits fl_pcb{} context
  *   - inherits fl_spacer{} context
- *   - $pcbh_spacer : current processed spacer
- *   - $pcbh_verb   : current triggering verb
+ *   - $pcbh_spacer   : current processed spacer
+ *   - $pcbh_verb     : current triggering verb
  */
 module fl_pcbHolder(
   /*!
@@ -177,10 +177,7 @@ module fl_pcbHolder(
     ) fl_pcb(FL_LAYOUT,pcb)
         let(
           $pcbh_spacer= spcs[$hole_i],
-          // $pcbh_spc_d = fl_spc_d($pcbh_spacer),
           $pcbh_screw = $hole_screw
-          // $pcbh_hole  = holes[$hole_i],
-          // $pcbh_hole_d  = fl_hole_d($pcbh_hole)
         ) children();
   }
 
@@ -197,6 +194,7 @@ module fl_pcbHolder(
       fl_modifier($modifier)
         contextualLayout($FL_LAYOUT=$FL_ADD)
           fl_spacer(spacer=$pcbh_spacer,fillet=fillet,anchor=[-Z]);
+
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier)
         do_assembly();
@@ -212,12 +210,12 @@ module fl_pcbHolder(
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier)
         contextualLayout($FL_LAYOUT=$FL_DRILL)
-          fl_spacer(FL_DRILL,$pcbh_spacer,thick=thick,lay_direction=lay_direction);
+          fl_spacer(FL_DRILL,$pcbh_spacer,thick=thick);
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier)
         contextualLayout()
-          fl_spacer(FL_LAYOUT,$pcbh_spacer,thick=thick,lay_direction=lay_direction)
+          fl_spacer(FL_LAYOUT,$pcbh_spacer,thick=thick)
             children();
 
     } else if ($verb==FL_MOUNT) {
