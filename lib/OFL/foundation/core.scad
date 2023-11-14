@@ -1098,3 +1098,19 @@ function fl_parm_components(debug,label) = let(
   : is_list(dbg) ? search([label],dbg)!=[[]]
   : is_string(dbg) ? dbg==label
   : assert(false,str("debug information must be a string or a list of strings: ", dbg)) undef;
+
+module fl_context_dump()
+  echo(
+  $FL_ADD        = $FL_ADD       ,
+  $FL_ASSEMBLY   = $FL_ASSEMBLY  ,
+  $FL_AXES       = $FL_AXES      ,
+  $FL_BBOX       = $FL_BBOX      ,
+  $FL_CUTOUT     = $FL_CUTOUT    ,
+  $FL_DRILL      = $FL_DRILL     ,
+  $FL_FOOTPRINT  = $FL_FOOTPRINT ,
+  $FL_HOLDERS    = $FL_HOLDERS   ,
+  $FL_LAYOUT     = $FL_LAYOUT    ,
+  $FL_MOUNT      = $FL_MOUNT     ,
+  $FL_PAYLOAD    = $FL_PAYLOAD   ,
+  $FL_SYMBOLS    = $FL_SYMBOLS
+  ) children();
