@@ -579,6 +579,7 @@ module fl_pcb(
     fl_trace("label",label);
     fl_trace("children",$children);
 
+    // echo(str("fl_pcb{} do_layout{class=",class,",label=",label,",directions=",directions,"}"))
     if (label) {
       assert(!fl_debug() || class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
       // $label      = label;
@@ -623,7 +624,7 @@ module fl_pcb(
   }
 
   module do_assembly() {
-    function verbs() = echo($comp_label=$comp_label) [
+    function verbs() = /* echo($comp_label=$comp_label) */ [
       FL_ADD,
       if (fl_parm_components(debug,$comp_label)) FL_AXES
     ];
@@ -673,6 +674,8 @@ module fl_pcb(
       cut_thick = $comp_director==+X ? cut_thick.x[1] : $comp_director==-X ? cut_thick.x[0]
                 : $comp_director==+Y ? cut_thick.y[1] : $comp_director==-Y ? cut_thick.y[0]
                 : $comp_director==+Z ? cut_thick.z[1] : cut_thick.z[0];
+      // echo(str("fl_pcb{} do_cutout{} trigger{",$comp_engine,"} cut_thick=",cut_thick))
+
       if ($comp_engine==FL_USB_NS)
         fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
       else if ($comp_engine==FL_HDMI_NS)
@@ -705,7 +708,7 @@ module fl_pcb(
     if (cut_label)
       do_layout("components",cut_label)
         trigger();
-    else
+    else // echo("fl_pcb{} do_cutout{} COMPONENTS")
       do_layout("components",undef,cut_direction)
         trigger();
   }

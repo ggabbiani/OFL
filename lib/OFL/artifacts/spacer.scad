@@ -187,7 +187,7 @@ module fl_spacer(
     q2  = [90,180];
     q3  = [180,270];
     q4  = [270,360];
-
+    // echo($fl_filament=$fl_filament)
     fl_color() difference() {
       union() {
         shape();

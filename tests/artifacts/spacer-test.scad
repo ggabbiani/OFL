@@ -88,10 +88,6 @@ THICK_POSITIVE = 1.6;      // [0:0.1:10]
 // thickness on -Z axis
 THICK_NEGATIVE = 2.5;      // [0:0.1:10]
 
-// FL_LAYOUT directions
-LAYOUT_DIRS  = "±z";  // [±z, -z, +z]
-
-
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
@@ -132,7 +128,6 @@ knut          = KNUT_TYPE!="none" ? assert(scr_size,"***TEST ERROR***: specify a
 assert(KNUT_TYPE=="none"||knut,str("***TEST ERROR***: no M",SCREW_SIZE," ",KNUT_TYPE," knurl nut found in inventory"));
 cs            = let(d=knut?fl_nominal(knut):screw?fl_screw_nominal(screw):undef)
                 d ? fl_cs_search(d=d)[0] : undef;
-dirs          = fl_3d_AxisList([LAYOUT_DIRS]);
 
 spacer = fl_Spacer(h_min=H_MIN,d_min=D_MIN,screw_size=scr_size,knut=knut);
 fl_spacer(verbs,spacer,thick=thickness,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)
