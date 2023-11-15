@@ -88,6 +88,7 @@ THICK_POSITIVE = 1.6;      // [0:0.1:10]
 // thickness on -Z axis
 THICK_NEGATIVE = 2.5;      // [0:0.1:10]
 
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
@@ -144,7 +145,3 @@ fl_spacer(verbs,spacer,thick=thickness,anchor=anchor,fillet=FILLET,octant=octant
       htyp    = screw_head_type(screw),
       washer  = (htyp==hs_cs||htyp==hs_cs_cap) ? "no" : "nylon"
     ) fl_screw(FL_DRAW,screw,thick=$spc_thickness,washer=washer,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
-
-
-
-
