@@ -1,23 +1,28 @@
-.PHONY: 800x600 artifacts foundation vitamins
+include $(FUNCTIONS)
 
-all: 800x600 architecture.png artifacts foundation vitamins
+# .PHONY: 800x600 artifacts foundation vitamins
 
-800x600:
-	@$(MAKE) -C $@
+top:
+	@$(MAKE) -C $(realpath ..) docs/all
+
+all: 800x600/all architecture.png artifacts/all foundation/all vitamins/all
+
+800x600/%:
+	$(call make_sub,800x600,"OFL/docs")
 
 architecture.png: architecture.drawio
 	@drawio --export --format png --border 10 --output $(CURDIR)/$@ $<
 	@echo -n "$(CURDIR)/$@: "
 	@echo -e "\e[32mOK\e[0m"
 
-artifacts:
-	@$(MAKE) -C $@
+artifacts/%:
+	$(call make_sub,artifacts,"OFL/docs")
 
-foundation:
-	@$(MAKE) -C $@
+foundation/%:
+	$(call make_sub,foundation,"OFL/docs")
 
-vitamins:
-	@$(MAKE) -C $@
+vitamins/%:
+	$(call make_sub,vitamins,"OFL/docs")
 
 clean:
 	@rm -f architecture.png

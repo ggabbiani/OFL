@@ -10,9 +10,12 @@ T_LIST			= box caddy-blob caddy pcb_holder spacer tnut tprofiles
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
-include $(DEF_RULES)
+include $(FUNCTIONS) $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
+
+top:
+	@$(MAKE) -C $(realpath ../..) tests/artifacts/sources
 
 sources: $(SOURCES)
 

@@ -16,6 +16,9 @@ include $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
 
+top:
+	@$(MAKE) -C $(realpath ../..) tests/foundation/sources
+
 sources: $(SOURCES)
 
 runs: clean-results $(RESULTS)

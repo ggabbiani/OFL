@@ -23,25 +23,22 @@ export TEMP_ROOT			:= /tmp
 export SCAD					:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make --view axes
 export DEPS					:= $(PRJ_ROOT)/bin/deps.sh --silent
 export BIN					:= $(CURDIR)/bin
+export FUNCTIONS			:= $(CURDIR)/functions.mk
 
-.PHONY: docs exported exports tests
+include $(FUNCTIONS)
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
-all: api-docs tests docs
+all: orthodocs tests/sources docs/all
 
-api-docs: $(LIB_SOURCES)
-	@$(MAKE) -C orthodocs all
-#	@$(MAKE) -C new-orthodocs
+orthodocs/%: $(LIB_SOURCES)
+	$(call make_sub)
 
-docs:
-	@$(MAKE) -C $(DOCS)
+docs/%:
+	$(call make_sub)
 
-tests:
-	@$(MAKE) -C $(TESTS)
-
-test-runs:
-	@$(MAKE) -C $(TESTS) runs
+tests/%:
+	$(call make_sub)
 
 clean: docs-clean tests-clean
 
@@ -51,21 +48,3 @@ docs-clean:
 
 tests-clean:
 	@$(MAKE) -C $(TESTS) clean
-
-# dump exported variables
-exported:
-	@echo ARTIFACTS_SOURCES=\'$(ARTIFACTS_SOURCES)\'
-	@echo BIN=\'$(BIN)\'
-	@echo DEPS=\'$(DEPS)\'
-	@echo DOCS=\'$(DOCS)\'
-	@echo EXAMPLES=\'$(EXAMPLES)\'
-	@echo FOUNDATION_SOURCES=\'$(FOUNDATION_SOURCES)\'
-	@echo LIB_DIRS=\'$(LIB_DIRS)\'
-	@echo LIB_ROOT=\'$(LIB_ROOT)\'
-	@echo LIB_SOURCES=\'$(LIB_SOURCES)\'
-	@echo PRJ_ROOT=\'$(PRJ_ROOT)\'
-	@echo SCAD=\'$(SCAD)\'
-	@echo SRC_ROOT=\'$(SRC_ROOT)\'
-	@echo TEMP_ROOT=\'$(TEMP_ROOT)\'
-	@echo TESTS=\'$(TESTS)\'
-	@echo VITAMINS_SOURCES=\'$(VITAMINS_SOURCES)\'

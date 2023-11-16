@@ -1,9 +1,14 @@
 ODOX		:= orthodocs
 DOC_ROOT	:= $(CURDIR)
 
-.PHONY: pics
+# .PHONY: pics
 
-all: api-docs pics
+top:
+	@$(MAKE) -C $(realpath ..) orthodocs/all
+
+include $(FUNCTIONS)
+
+all: api-docs artifacts/all foundation/all
 
 api-docs: $(LIB_SOURCES)
 	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
@@ -11,9 +16,11 @@ api-docs: $(LIB_SOURCES)
 	@touch $@
 	@echo -e "\e[32mOK\e[0m"
 
-pics:
-	@$(MAKE) -C artifacts
-	@$(MAKE) -C foundation
+artifacts/%:
+	$(call make_sub)
+
+foundation/%:
+	$(call make_sub)
 
 clean:
 	@rm -f *.md

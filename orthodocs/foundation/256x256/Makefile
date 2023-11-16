@@ -1,10 +1,13 @@
 # explicit wildcard expansion suppresses errors when no files are found
-include $(wildcard *.deps)
+# include $(wildcard *.deps)
 
 # get desired image sizes from current directory name
 SIZE		:= $(notdir $(CURDIR))
 SOURCES 	:= $(wildcard *.scad)
 TARGETS		:= $(SOURCES:.scad=.png)
+
+top:
+	@$(MAKE) -C $(realpath ../../..) orthodocs/foundation/256x256/all
 
 all: $(TARGETS)
 

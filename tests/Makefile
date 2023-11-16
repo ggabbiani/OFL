@@ -20,47 +20,32 @@ OSCAD			= openscad --hardwarnings
 
 export TEMPLATE_DIR TEMPLATES DEF_RULES DEF_CONFS OSCAD
 
-include $(DEF_RULES)
+include $(FUNCTIONS) $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
-.PHONY: artifacts artifacts-runs exported foundation foundation-runs tests vitamins vitamins-runs
 
-sources: $(SOURCES) artifacts foundation vitamins
+top:
+	$(MAKE) -C $(realpath ..) tests/sources
 
-artifacts:
-	@$(MAKE) -C $@
+sources: $(SOURCES) artifacts/sources foundation/sources vitamins/sources
 
-foundation:
-	@$(MAKE) -C $@
+artifacts/%:
+	$(call make_sub)
 
-vitamins:
-	@$(MAKE) -C $@
+foundation/%:
+	$(call make_sub)
 
-runs: clean-results $(RESULTS) artifacts-runs foundation-runs vitamins-runs
+vitamins/%:
+	$(call make_sub)
+
+runs: clean-results $(RESULTS) artifacts/runs foundation/runs vitamins/runs
 
 clean-results:
 	@for f in $(RESULTS) ; do rm -f $$f ; done
 	@echo "$(RESULTS): DELETED"
-
-artifacts-runs:
-	@$(MAKE) -C artifacts runs
-
-foundation-runs:
-	@$(MAKE) -C foundation runs
-
-vitamins-runs:
-	@$(MAKE) -C vitamins runs
 
 clean: clean-results
 	@for f in $(SOURCES) ; do rm -f $$f ; done
 	@echo "$(SOURCES): DELETED"
 	@$(MAKE) -C artifacts $@
 	@$(MAKE) -C foundation $@
-
-# dump exported variables
-exported:
-	@echo DEF_CONFS=\'$(DEF_CONFS)\'
-	@echo DEF_RULES=\'$(DEF_RULES)\'
-	@echo OSCAD=\'$(OSCAD)\'
-	@echo TEMPLATE_DIR=\'$(TEMPLATE_DIR)\'
-	@echo TEMPLATES=\'$(TEMPLATES)\'

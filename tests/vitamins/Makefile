@@ -16,6 +16,9 @@ include $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
 
+top:
+	@$(MAKE) -C $(realpath ../..) tests/vitamins/sources
+
 sources: $(SOURCES)
 
 last: $(word $(words $(RESULTS)),$(RESULTS))

@@ -6,6 +6,11 @@ PICTURES	:= fig-FL_TSP_E1515.png fig-FL_TSP_E2020.png fig-FL_TSP_E2020t.png fig-
 comma		:= ,
 CMD			:= $(SCAD) --hardwarnings --imgsize $(subst x,$(comma),$(SIZE)) --projection ortho --export-format png --camera=0,0,0,0,0,0,200 --viewall
 
+top:
+	@$(MAKE) -C $(realpath ../../..) orthodocs/artifacts/256x256/all
+
+include $(FUNCTIONS)
+
 all:	$(PICTURES)
 
 clean:

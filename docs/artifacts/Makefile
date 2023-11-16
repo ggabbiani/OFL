@@ -4,7 +4,12 @@
 # %.png: %.scad
 # 	openscad -m make -o $@ -d $@.deps $<
 
-.PHONY: all
+# .PHONY: all
+
+include $(FUNCTIONS)
+
+top:
+	@$(MAKE) -C $(realpath ../..) docs/artifacts/all
 
 all: dependencies.svg
 
