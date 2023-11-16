@@ -36,8 +36,8 @@
 - [ ] documentation: introduce parameter standardization
 - [x] tests: implement an automatic test generator mechanism able to standardize - where possible - the customizer parameters
 - [ ] tests: replace / unify tests executions
-- [ ] tests: 'make' driven test generation: make hem independent from calling
-  context including their parent defs
+- [x] tests: 'make' driven test generation and execution, now independent from root
+- [x] documentation: 'make' driven documentation and picture generation, now independent from root
 - [ ] tests: make them available on all supported platform
 - [x] global: implement an automatic documentation picture generator mechanism
 - [x] vitamins/generic.scad: new generic vitamins with no-op FL_ADD semantic but fully programmable FL_CUTOUT implementation. This module has been used for implementing proper component cutout on complex PCBs.
@@ -57,7 +57,7 @@
 - [ ] fully wrap the NopSCADlib screw library
 - [x] rename knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}
 - [ ] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name
-  space»\_find(). Eliminate fl_«name space»_search(). Involved libraries (not
+  space»_find/select() (see fl_pcb_select{}). Eliminate fl_«name space»_search(). Involved libraries (not
   exhaustive list):
   - countersinks
   - screw (after wrapper setup)
