@@ -26,8 +26,6 @@ use <../foundation/util.scad>
 module fl_box(
   //! supported verbs: FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
   verbs           = FL_ADD,
-  //! preset profiles (UNUSED)
-  preset,
   //! external dimensions
   xsize,
   //! internal dimensions
