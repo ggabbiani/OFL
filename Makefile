@@ -29,7 +29,7 @@ include $(FUNCTIONS)
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
-all: orthodocs/all tests/sources docs/all
+all: tests/sources docs/all orthodocs/all
 
 clean: docs/clean orthodocs/clean tests/clean
 
