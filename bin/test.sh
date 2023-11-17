@@ -4,7 +4,7 @@
 #
 # An OpenSCAD script is recognized as 'test' when following conditions are met:
 #
-# * script is inside <OFL>/src/tests directory
+# * script is inside <OFL>/tests directory
 # * script file name is in the form <name>"-test.scad"
 #
 # <OFL> repo root is auto-retrieved from this script real path.
