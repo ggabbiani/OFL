@@ -52,12 +52,15 @@ TODO: either remove or move elsewhere
 
 __Syntax:__
 
-    fl_label(verbs=FL_ADD,string,fg="white",size,thick,extra=0,octant,direction)
+    fl_label(verbs=FL_ADD,string,fg="white",size,thick=0.1,extra=0,font="Symbola:style=Regular",octant,direction)
 
 __Parameters:__
 
 __verbs__  
 supported verbs: FL_ADD, FL_AXES
+
+__string__  
+TODO: rename as «text»
 
 __size__  
 font y-size
@@ -67,6 +70,9 @@ depth along z-axis
 
 __extra__  
 extra delta to add to octant placement
+
+__font__  
+String. The name of the font that should be used.
 
 __octant__  
 when undef native positioning is used

@@ -699,19 +699,19 @@ function fl_list_pack(left,right) = let(
  *
  * the returned list «nums» is equal to `[4, -1, 5]`
  *
- * example 2 - include only items matching two conditions executed in sequence:
+ * example 2: include only items matching two conditions executed in sequence:
  *
  * 1. is a number
  * 2. is positive
  *
- *     let(
- *       list      = ["a", 4, -1, false, 5, "a string"],
- *       expected  = [4,5],
- *       result    = fl_list_filter(list,[
- *         function(item) is_num(item),// check if number (first)
- *         function(item) item>0       // check if positive (last)
- *       ])
- *     ) assert(result==expected,result) echo(result=result);
+ *         let(
+ *           list      = ["a", 4, -1, false, 5, "a string"],
+ *           expected  = [4,5],
+ *           result    = fl_list_filter(list,[
+ *             function(item) is_num(item),// check if number (first)
+ *             function(item) item>0       // check if positive (last)
+ *           ])
+ *         ) assert(result==expected,result) echo(result=result);
  *
  * __NOTE__: filter execution order is the same of their occurrence in
  * «filters». In the example above the list is first reduced to just the
@@ -731,8 +731,8 @@ function fl_list_filter(
     ) fl_list_filter(fl_list_filter(list,[for(i=[0:f_len-2]) filter[i]]),filter[f_len-1]);
 
 /*!
- * return the list item whose calculated score is max or undef in case of empty
- * «list».
+ * Return the list item whose calculated score is max. Return undef when «list»
+ * is empty.
  */
 function fl_list_max(
   list,
@@ -751,8 +751,8 @@ function fl_list_max(
     ) score(head)>score(other) ? head : other;
 
 /*!
- * return the list item whose calculated score is min or undef in case of empty
- * «list».
+ * Return the list item whose calculated score is min. Return undef when «list»
+ * is empty.
  */
 function fl_list_min(
   list,

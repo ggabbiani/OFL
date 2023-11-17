@@ -272,6 +272,22 @@ TODO: fix and complete
 
 ---
 
+### function fl_pcb_layoutArray
+
+__Syntax:__
+
+```text
+fl_pcb_layoutArray(type,value)
+```
+
+Translation matrices used during children() layout as returned by
+[fl_lay_holes()](../foundation/hole.md#function-fl_lay_holes).
+
+TODO: remove if unused
+
+
+---
+
 ### function fl_pcb_radius
 
 __Syntax:__
@@ -279,6 +295,24 @@ __Syntax:__
 ```text
 fl_pcb_radius(type,value)
 ```
+
+---
+
+### function fl_pcb_select
+
+__Syntax:__
+
+```text
+fl_pcb_select(name,inventory=FL_PCB_DICT)
+```
+
+select a pcb by name
+
+__Parameters:__
+
+__name__  
+name as returned by [fl_name()](../foundation/core.md#function-fl_name)
+
 
 ---
 

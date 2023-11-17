@@ -212,16 +212,6 @@ layout of predefined drill shapes (like holes with predefined screw diameter)
 
 ---
 
-### variable FL_EXCLUDE_ANY
-
-__Default:__
-
-    ["AND",function(one,other)one!=other]
-
-see [fl_list_filter()](#function-fl_list_filter) «operator» parameter
-
----
-
 ### variable FL_FOOTPRINT
 
 __Default:__
@@ -249,16 +239,6 @@ __Default:__
     [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1],]
 
 identity matrix in homogeneous coordinates
-
----
-
-### variable FL_INCLUDE_ALL
-
-__Default:__
-
-    ["OR",function(one,other)one==other]
-
-see [fl_list_filter()](#function-fl_list_filter) «operator» parameter
 
 ---
 
@@ -550,6 +530,18 @@ transforms 3D coords to homogeneous
 
 ---
 
+### function fl_OFL
+
+__Syntax:__
+
+```text
+fl_OFL(type,value,default)
+```
+
+when present and true indicates the object is an OFL one
+
+---
+
 ### function fl_R
 
 __Syntax:__
@@ -754,6 +746,25 @@ When true [fl_assert()](#function-fl_assert) is enabled
 
 ---
 
+### function fl_atof
+
+__Syntax:__
+
+```text
+fl_atof(str)
+```
+
+Ascii string to number conversion function atof() by Jesse Campbell.
+
+Scientific notation support added by Alexander Pruss.
+
+Copyright © 2017, Jesse Campbell <www.jbcse.com>
+
+SPDX-License-Identifier: [CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)
+
+
+---
+
 ### function fl_connectors
 
 __Syntax:__
@@ -820,6 +831,18 @@ fl_description(type,value)
 
 ---
 
+### function fl_dict_names
+
+__Syntax:__
+
+```text
+fl_dict_names(dictionary)
+```
+
+return a list with the names of the objects present in «dictionary»
+
+---
+
 ### function fl_dict_organize
 
 __Syntax:__
@@ -829,7 +852,42 @@ fl_dict_organize(dictionary,range,func)
 ```
 
 build a dictionary with rows constituted by items with equal property as
-retrieved by «func»
+retrieved by «func».
+
+example:
+
+      dict = [
+        ["first", 7],
+        ["second",9],
+        ["third", 9],
+        ["fourth",2],
+        ["fifth", 2],
+      ];
+
+      result   = fl_dict_organize(dictionary=dict, range=[0:10], func=function(item) item[1]);
+
+is functional equal to:
+
+      result = [
+        [], // 0
+        [], //  1
+        [   //  2
+          ["fourth", 2],
+          ["fifth",  2]
+        ],
+        [], // 3
+        [], // 4
+        [], // 5
+        [], // 6
+        [   // 7
+          ["first", 7]
+        ],
+        [], // 8
+        [   // 9
+          ["second", 9], ["third", 9]
+        ],
+        []  // 10
+      ];
 
 
 ---
@@ -1015,8 +1073,46 @@ TODO: make a case insensitive option
 __Syntax:__
 
 ```text
-fl_list_filter(list,operator,compare,__result__=[],__first__=true)
+fl_list_filter(list,filter)
 ```
+
+return a list of items from «list» whose items successfully matched a list of
+conditions.
+
+example 1: filter out numbers from a list of heterogeneous values
+
+    heters = ["a", 4, -1, false, 5, "a string"];
+    nums   = fl_list_filter(heters,function(item) is_num(item));
+
+the returned list «nums» is equal to `[4, -1, 5]`
+
+example 2: include only items matching two conditions executed in sequence:
+
+1. is a number
+2. is positive
+
+        let(
+          list      = ["a", 4, -1, false, 5, "a string"],
+          expected  = [4,5],
+          result    = fl_list_filter(list,[
+            function(item) is_num(item),// check if number (first)
+            function(item) item>0       // check if positive (last)
+          ])
+        ) assert(result==expected,result) echo(result=result);
+
+__NOTE__: filter execution order is the same of their occurrence in
+«filters». In the example above the list is first reduced to just the
+numbers, then each remaining item is checked for positiveness.
+
+
+__Parameters:__
+
+__list__  
+the list to be filtered
+
+__filter__  
+function filter or list of function filters called for each «list» item
+
 
 ---
 
@@ -1039,6 +1135,76 @@ __Syntax:__
 ```text
 fl_list_has(list,item)
 ```
+
+---
+
+### function fl_list_max
+
+__Syntax:__
+
+```text
+fl_list_max(list,score=function(item)item)
+```
+
+Return the list item whose calculated score is max. Return undef when «list»
+is empty.
+
+
+__Parameters:__
+
+__score__  
+function that assigns a score to an element in the «list»: default to item
+itself.
+
+
+
+---
+
+### function fl_list_min
+
+__Syntax:__
+
+```text
+fl_list_min(list,score=function(item)item)
+```
+
+Return the list item whose calculated score is min. Return undef when «list»
+is empty.
+
+
+__Parameters:__
+
+__score__  
+function that assigns a score to an element in the «list»: default to item
+itself.
+
+
+
+---
+
+### function fl_list_pack
+
+__Syntax:__
+
+```text
+fl_list_pack(left,right)
+```
+
+pack two list in a new one like in the following code:
+
+    labels = ["label 1", "label 2", "label 3", "label 4"];
+    values = [1, 2, 3];
+    result = fl_list_pack(labels,values);
+
+if equivalent to:
+
+    result = [
+      ["label 1",  1     ],
+      ["label 2",  2     ],
+      ["label 3",  3     ],
+      ["label 4",  undef ]
+    ]
+
 
 ---
 
@@ -1076,62 +1242,6 @@ fl_material(type,value,default)
 
 ---
 
-### function fl_max
-
-__Syntax:__
-
-```text
-fl_max(list,value=function(item)item,_i_=0)
-```
-
-return the list item whose calculated value is max.
-
-Return 'undef' in case of empty «list».
-
-
-__Parameters:__
-
-__list__  
-item list
-
-__value__  
-string literal assigning items a value: essentially it determines the way
-a 'score' is mapped to a corresponding list item for the 'max' evaluation
-
-As default simply returns the item (i.e. the 'score' is the item itself).
-
-
-
----
-
-### function fl_min
-
-__Syntax:__
-
-```text
-fl_min(list,value=function(item)item,_i_=0)
-```
-
-return the list item whose calculated value is min.
-
-Return 'undef' in case of empty «list».
-
-
-__Parameters:__
-
-__list__  
-item list
-
-__value__  
-string literal assigning items a value: essentially it determines the way
-a 'score' is mapped to a corresponding list item for the 'min' evaluation
-
-As default simply returns the item (i.e. the 'score' is the item itself).
-
-
-
----
-
 ### function fl_name
 
 __Syntax:__
@@ -1148,6 +1258,16 @@ __Syntax:__
 
 ```text
 fl_native(type,value)
+```
+
+---
+
+### function fl_nominal
+
+__Syntax:__
+
+```text
+fl_nominal(type,value)
 ```
 
 ---
@@ -1487,6 +1607,18 @@ fl_stl(type,value)
 
 ---
 
+### function fl_str_concat
+
+__Syntax:__
+
+```text
+fl_str_concat(list)
+```
+
+return a string that is the concatenation of all the list members
+
+---
+
 ### function fl_str_lower
 
 __Syntax:__
@@ -1522,7 +1654,7 @@ fl_sub(list,from,to)
 __Syntax:__
 
 ```text
-fl_switch(value,cases,otherwise=undef)
+fl_switch(value,cases,otherwise)
 ```
 
 implementation of switch statement as a function: when «value» matches a case,
@@ -1732,18 +1864,6 @@ __Syntax:__
 fl_width(type)
 ```
 
----
-
-### function sort
-
-__Syntax:__
-
-```text
-sort(vec)
-```
-
-quick sort algorithm
-
 ## Modules
 
 ---
@@ -1782,6 +1902,14 @@ Set current color and alpha channel, using variable $fl_filament when «color» 
 undef. When variable $fl_debug is true, color information is ignored and debug
 modifier is applied to children().
 
+
+---
+
+### module fl_context_dump
+
+__Syntax:__
+
+    fl_context_dump()
 
 ---
 

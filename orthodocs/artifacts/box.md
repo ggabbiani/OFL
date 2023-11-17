@@ -29,7 +29,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Syntax:__
 
-    fl_box(verbs=FL_ADD,preset,xsize,isize,pload,thick,radius,parts,tolerance=0.3,material_upper,material_lower,fillet=true,lay_octant,direction,octant)
+    fl_box(verbs=FL_ADD,xsize,isize,pload,thick,radius,parts="all",tolerance=0.3,material_upper,material_lower,fillet=true,lay_octant,fastenings=["linear",3],direction,octant)
 
 engine for generating boxes.
 
@@ -43,17 +43,14 @@ __Parameters:__
 __verbs__  
 supported verbs: FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD
 
-__preset__  
-preset profiles (UNUSED)
-
 __xsize__  
 external dimensions
 
 __isize__  
-internal payload size
+internal dimensions
 
 __pload__  
-internal bounding box
+payload bounding box
 
 __thick__  
 sheet thickness
@@ -69,6 +66,18 @@ upper side color
 
 __material_lower__  
 lower side color
+
+__lay_octant__  
+payload octant for content positioning
+
+
+__fastenings__  
+Specifications for the fastenings of the upper part to the lower in
+[«knurl nut thread type»,«screw nominal size»] format with:
+
+  - «knurl nut thread type»: either "linear" or "spiral".
+  - «screw nominal size»   : countersink screw nominal size
+
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

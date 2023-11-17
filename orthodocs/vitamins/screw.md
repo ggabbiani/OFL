@@ -7,7 +7,8 @@ graph LR
     A1[vitamins/screw] --o|include| A2[foundation/unsafe_defs]
     A1 --o|use| A3[foundation/3d-engine]
     A1 --o|use| A4[foundation/bbox-engine]
-    A1 --o|use| A5[foundation/mngm-engine]
+    A1 --o|use| A5[foundation/hole]
+    A1 --o|use| A6[foundation/mngm-engine]
 ```
 
 Screw implementation file for OpenSCAD Foundation Library.
@@ -52,6 +53,21 @@ fl_bb_screw(type,length)
 ```
 
 bounding box
+
+---
+
+### function fl_screw_byNominal
+
+__Syntax:__
+
+```text
+fl_screw_byNominal(diameter)
+```
+
+return a filter by screw nominal «diameter»
+
+This can be used by function [fl_list_filter()](../foundation/core.md#function-fl_list_filter).
+
 
 ---
 
@@ -136,7 +152,7 @@ screw nominal diameter
 __Syntax:__
 
 ```text
-fl_screw_search(d,head_type,nut,washer)
+fl_screw_search(dictionary=FL_SCREW_DICT,d,head_type,nut,washer)
 ```
 
 Return a list of screws from dictionary, matching the passed properties.
@@ -145,6 +161,9 @@ __NOTE__: when a parameter is undef the corresponding property is not checked.
 
 
 __Parameters:__
+
+__dictionary__  
+search dictionary
 
 __d__  
 nominal diameter
@@ -223,5 +242,43 @@ desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 __octant__  
 when undef native positioning is used
+
+
+---
+
+### module fl_screw_holes
+
+__Syntax:__
+
+    fl_screw_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,type="clearance",tolerance=2xNIL,countersunk=false)
+
+Screw driven hole execution. The main difference between this module and
+[fl_lay_holes{}](../foundation/hole.md#module-fl_lay_holes) is that the FL_DRILL verb is delegated to screws.
+
+See [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context) for context variables passed to children().
+
+:memo: **NOTE:** supported normals are x,y or z semi-axis ONLY
+
+
+
+__Parameters:__
+
+__holes__  
+list of hole specs
+
+__enable__  
+enabled normals in floating semi-axis list form
+
+__thick__  
+pass-through thickness
+
+__screw__  
+fallback screw
+
+__type__  
+drill type ("clearance" or "tap")
+
+__tolerance__  
+tolerance ⌀
 
 

@@ -41,7 +41,7 @@ __Default:__
 
 __Default:__
 
-    fl_Magnet(name="mag_M3_cs_d10x2",description="M3 countersink magnet d10x2mm 1.2kg",d=10,thick=2,cs=FL_CS_M3,csh=2,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B007UOXRY0/"],])
+    fl_Magnet(name="mag_M3_cs_d10x2",description="M3 countersink magnet d10x2mm 1.2kg",d=10,thick=2,cs=FL_CS_UNI_M3,csh=2,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B007UOXRY0/"],])
 
 ---
 
@@ -49,7 +49,7 @@ __Default:__
 
 __Default:__
 
-    fl_Magnet(name="mag_M3_cs_d10x5",description="M3 countersink magnet d10x5mm 2.0kg",d=10,thick=5,cs=FL_CS_M3,csh=3,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B001TOJESK/"],])
+    fl_Magnet(name="mag_M3_cs_d10x5",description="M3 countersink magnet d10x5mm 2.0kg",d=10,thick=5,cs=FL_CS_UNI_M3,csh=3,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B001TOJESK/"],])
 
 ---
 
@@ -57,7 +57,7 @@ __Default:__
 
 __Default:__
 
-    fl_Magnet(name="mag_M4_cs_d32x6",description="M4 countersink magnet d32x6mm 29.0kg",d=32,thick=6,cs=FL_CS_M3,csh=2,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B07RQL2ZSS/"],])
+    fl_Magnet(name="mag_M4_cs_d32x6",description="M4 countersink magnet d32x6mm 29.0kg",d=32,thick=6,cs=FL_CS_UNI_M3,csh=2,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B07RQL2ZSS/"],])
 
 ---
 

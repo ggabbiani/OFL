@@ -18,120 +18,121 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### function fl_bb_holderByHoles
+### function fl_PCBHolder
 
 __Syntax:__
 
 ```text
-fl_bb_holderByHoles(pcb,h)
+fl_PCBHolder(pcb,h_min=0,wall=1,knut_type)
 ```
 
----
+Hole driven PCB holder constructor
 
-### function fl_bb_holderBySize
-
-__Syntax:__
-
-```text
-fl_bb_holderBySize(pcb,h,tolerance=0.5,screw=M3_cap_screw,knut=false)
-```
 
 __Parameters:__
 
-__h__  
-spacers height
+__pcb__  
+PCB to be held
 
-__tolerance__  
-used for the pcb joints
+__h_min__  
+Minimum spacer height.
 
-__screw__  
-mounting screw
+__NOTE__: the actual spacer height can be different depending on the knurl
+nut constrains
 
-__knut__  
-knurl nut
 
+__wall__  
+when using spacers without knurl nut, this is the wall thickness around the
+spacers' holes
+
+
+__knut_type__  
+Knurl nut thread type: either 'undef', "linear" or "spiral".
+
+
+
+---
+
+### function fl_pcbh_spacers
+
+__Syntax:__
+
+```text
+fl_pcbh_spacers(type,value)
+```
 
 ## Modules
 
 ---
 
-### module fl_pcb_holderByHoles
+### module fl_pcbHolder
 
 __Syntax:__
 
-    fl_pcb_holderByHoles(verbs,pcb,h,thick=0,knut=false,frame,lay_direction=[+Z,-Z],direction,octant)
+    fl_pcbHolder(verbs,this,fillet=0,asm_all=false,thick,lay_direction=[+Z,-Z],debug,direction,octant)
 
-PCB holder by holes engine
+PCB holder engine.
 
-children() context:
+Children context:
 
-- $holder_screw
+  - inherits [fl_pcb{}](../vitamins/pcbs.md#module-fl_pcb) context
+  - inherits [fl_spacer{}](spacer.md#module-fl_spacer) context
+  - $pcbh_spacer   : current processed spacer
+  - $pcbh_verb     : current triggering verb
 
 
 __Parameters:__
 
-__h__  
-spacers height
+__verbs__  
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_LAYOUT,
+FL_DRILL, FL_MOUNT
+
+
+__fillet__  
+when >0 a fillet is added to anchors
+
+__asm_all__  
+FL_ASSEMBLY modifier: when true also PCB will be shown during FL_ASSEMBLY
 
 __thick__  
-FL_DRILL thickness
+List of Z-axis thickness or a scalar value for FL_DRILL and FL_MOUNT
+operations.
 
-__knut__  
-knurl nut
+A positive value represents thickness along +Z semi-axis.
+A negative value represents thickness along -Z semi-axis.
+A scalar value represents thickness for both Z semi-axes.
 
-__lay_direction__  
-FL_LAYOUT directions in floating semi-axis list
+Example 1:
 
-__direction__  
-desired direction [director,rotation], native direction when undef
+    thick = [+3,-1]
 
-__octant__  
-when undef native positioning is used
+is interpreted as thickness of 3mm along +Z and 1mm along -Z
 
+Example 2:
 
----
+    thick = [-1]
 
-### module fl_pcb_holderBySize
+is interpreted as thickness of 1mm along -Z and 0mm along +Z
 
-__Syntax:__
+Example:
 
-    fl_pcb_holderBySize(verbs,pcb,h,tolerance=0.5,screw=M3_cap_screw,knut=false,thick=0,frame=0,lay_direction=[+Z,-Z],direction,octant)
+    thick = 2
 
-engine for pcb holder by size
-
-children() context:
-
-- $holder_screw
+is interpreted as a thickness of 2mm along +Z and -Z axes
 
 
-__Parameters:__
-
-__h__  
-spacers height
-
-__tolerance__  
-used for the pcb joints
-
-__screw__  
-MANDATORY mounting screw
-
-__knut__  
-knurl nut
-
-__thick__  
-FL_DRILL thickness
-
-FIXME: rename as dri_thick
-
-
-__frame__  
-frame thickness. 0 means 'no frame'
 
 __lay_direction__  
-FL_LAYOUT directions in floating semi-axis list
+FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
+
+__NOTE__: only Z semi-axes are used
+
+
+__debug__  
+see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
-desired direction [director,rotation], native direction when undef
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 __octant__  
 when undef native positioning is used

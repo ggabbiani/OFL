@@ -29,41 +29,103 @@ __Default:__
 
     "spc"
 
-namespace
+namespace for spacer objects
 
 ## Functions
 
 ---
 
-### function fl_bb_spacer
+### function fl_Spacer
 
 __Syntax:__
 
 ```text
-fl_bb_spacer(h,r)
+fl_Spacer(h_min=0,d_min=0,screw_size=0,knut)
 ```
 
----
-
-### function fl_spc_holeRadius
-
-__Syntax:__
-
-```text
-fl_spc_holeRadius(screw,knut)
-```
-
-calculates the internal spacer radius.
-
+Spacer constructor.
 
 __Parameters:__
 
-__screw__  
-optional screw
+__h_min__  
+height along Z axis: knurl nut length constraints may override.
+This parameter is mandatory if no knurl nut is passed.
+
+When knurl nut is required, this parameter ignored if shorter than the
+minimum knurl nut length + 1mm.
+
+
+__d_min__  
+External diameter: knurl nut constraints may override.
+This parameter is mandatory if no knurl nut or screw nominal size is passed.
+
+Knurl nuts required a bigger hole to host screws (namely the knurl nut
+physical dimension plus a minimum wall thick around). When knurl nut is
+required, this parameter is ignored if too small.
+
+
+__screw_size__  
+optional screw nominal ⌀, 0 if no screw. This parameter is ignored if a
+knut is required.
+
+Passing a screw size constrains the minimum external ⌀.
+
 
 __knut__  
-optional knurl nut instance
+Knurl nut object.
 
+This parameter constrains both the external ⌀ and the minimum spacer
+height.
+
+
+
+---
+
+### function fl_spc_d
+
+__Syntax:__
+
+```text
+fl_spc_d(type,value)
+```
+
+external ⌀ property
+
+---
+
+### function fl_spc_h
+
+__Syntax:__
+
+```text
+fl_spc_h(type,value)
+```
+
+height along Z axis property
+
+---
+
+### function fl_spc_knut
+
+__Syntax:__
+
+```text
+fl_spc_knut(type,value)
+```
+
+knurl nut optional property
+
+---
+
+### function fl_spc_nominalScrew
+
+__Syntax:__
+
+```text
+fl_spc_nominalScrew(type,value)
+```
+
+nominal screw size optional property
 
 ## Modules
 
@@ -73,15 +135,17 @@ optional knurl nut instance
 
 __Syntax:__
 
-    fl_spacer(verbs=FL_ADD,h,r,d,thick=0,lay_direction=[+Z,-Z],screw,knut,anchor,fillet=0,direction,octant)
+    fl_spacer(verbs=FL_ADD,spacer,thick=0,anchor,fillet=0,direction,octant)
 
 Children context:
 
-- $spc_director: layout direction
-- $spc_screw   : OPTIONAL screw
-- $spc_thick   : thickness along $spc_director
-- $spc_h       : spacer height
-- $spc_holeR   : OPTIONAL internal hole radius
+- $spc_director  : layout direction
+- $spc_nominal   : OPTIONAL screw nominal ⌀
+- $spc_thick     : scalar thickness (always≥0) along $spc_director
+- $spc_thickness : overall thickness (spacer length + ∑thick[i]),
+- $spc_h         : spacer height
+- $spc_holeR     : OPTIONAL internal hole radius
+- $spc_verb      : triggered verb
 
 
 __Parameters:__
@@ -89,14 +153,8 @@ __Parameters:__
 __verbs__  
 supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
 
-__h__  
-height along Z axis
-
-__r__  
-external radius
-
-__d__  
-external diameter (mutually exclusive with «r»)
+__spacer__  
+OFL spacer
 
 __thick__  
 List of Z-axis thickness or a scalar value for FL_DRILL and FL_MOUNT
@@ -116,27 +174,15 @@ Example 2:
 
     thick = [-1]
 
-is interpreted as thickness of 1mm along -Z
+is interpreted as thickness of 1mm along -Z 0mm along +Z
 
 Example:
 
     thick = 2
 
-is interpreted as a thickness of 2mm along +Z and -Z axes
+is interpreted as a thickness of 2mm along ±Z
 
 
-
-__lay_direction__  
-FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
-
-__NOTE__: only Z semi-axes are used
-
-
-__screw__  
-optional screw
-
-__knut__  
-optional knurl nut: error if no screw is passed
 
 __anchor__  
 anchor directions in floating semi-axis list

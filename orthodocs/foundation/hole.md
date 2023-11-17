@@ -124,6 +124,23 @@ fl_hole_screw(hole,value,default)
 
 ---
 
+### function fl_lay_holes
+
+__Syntax:__
+
+```text
+fl_lay_holes(holes)
+```
+
+return a matrix list with each item containing the corresponding hole
+position translation. Functionally equivalent to translation used during
+[fl_lay_holes{}](#module-fl_lay_holes).
+
+TODO: remove if unused
+
+
+---
+
 ### function fl_tt_isHole
 
 __Syntax:__
@@ -225,7 +242,7 @@ see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 __Syntax:__
 
-    fl_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,tolerance=0)
+    fl_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,tolerance=2xNIL)
 
 Layouts holes according to their defined positions, depth and enabled normals.
 
@@ -247,7 +264,7 @@ __screw__
 fallback screw
 
 __tolerance__  
-tolerance radius
+tolerance ⌀
 
 
 ---

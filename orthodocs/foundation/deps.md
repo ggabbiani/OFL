@@ -27,7 +27,5 @@ graph TD
     A6 --o|include| A8
     A2 --o|include| A8
     A11 --o|include| A5
-    A20[foundation/xsect] --o|include| A5
-    A20 --o|use| A4
 ```
 

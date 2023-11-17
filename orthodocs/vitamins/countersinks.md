@@ -8,8 +8,7 @@ graph LR
     A1 --o|use| A3[foundation/bbox-engine]
 ```
 
-Countersink definitions, data taken from:
-https://www.sailornautica.it/viti-metallo-inox-aisi-316-e-304/927-vite-testa-svasata-piana-esagono-incassato-m3-uni-5933-acciaio-inox-aisi-316.html
+Countersink definitions based on UNI 5933 and ISO 10642
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 
@@ -20,83 +19,107 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_CS_DICT
+### variable FL_CS_ISO_DICT
 
 __Default:__
 
-    [FL_CS_M3,FL_CS_M4,FL_CS_M5,FL_CS_M6,FL_CS_M8,FL_CS_M10,FL_CS_M12,FL_CS_M16,FL_CS_M20]
+    [FL_CS_ISO_M2,FL_CS_ISO_M2p5,FL_CS_ISO_M3,FL_CS_ISO_M4,FL_CS_ISO_M5,FL_CS_ISO_M6,FL_CS_ISO_M8,FL_CS_ISO_M10,FL_CS_ISO_M12,FL_CS_ISO_M14,FL_CS_ISO_M16,FL_CS_ISO_M20]
 
 ---
 
-### variable FL_CS_M10
+### variable FL_CS_ISO_M10
 
 __Default:__
 
-    fl_Countersink("FL_CS_M10",10,20,5.5)
+    fl_Countersink("Countersink ISO 10642 M10",10,20.69,6.200)
 
 ---
 
-### variable FL_CS_M12
+### variable FL_CS_ISO_M12
 
 __Default:__
 
-    fl_Countersink("FL_CS_M12",12,24,6.5)
+    fl_Countersink("Countersink ISO 10642 M12",12,24.81,7.440)
 
 ---
 
-### variable FL_CS_M16
+### variable FL_CS_ISO_M14
 
 __Default:__
 
-    fl_Countersink("FL_CS_M16",16,30,7.5)
+    fl_Countersink("Countersink ISO 10642 M14",14,28.31,8.400)
 
 ---
 
-### variable FL_CS_M20
+### variable FL_CS_ISO_M16
 
 __Default:__
 
-    fl_Countersink("FL_CS_M20",20,36,8.5)
+    fl_Countersink("Countersink ISO 10642 M16",16,30.61,8.800)
 
 ---
 
-### variable FL_CS_M3
+### variable FL_CS_ISO_M2
 
 __Default:__
 
-    fl_Countersink("FL_CS_M3",3,6,1.7)
+    fl_Countersink("Countersink ISO 10642 M2",2,4.09,1.350)
 
 ---
 
-### variable FL_CS_M4
+### variable FL_CS_ISO_M20
 
 __Default:__
 
-    fl_Countersink("FL_CS_M4",4,8,2.3)
+    fl_Countersink("Countersink ISO 10642 M20",20,36.75,10.160)
 
 ---
 
-### variable FL_CS_M5
+### variable FL_CS_ISO_M2p5
 
 __Default:__
 
-    fl_Countersink("FL_CS_M5",5,10,2.8)
+    fl_Countersink("Countersink ISO 10642 M2.5",2.5,5.08,1.690)
 
 ---
 
-### variable FL_CS_M6
+### variable FL_CS_ISO_M3
 
 __Default:__
 
-    fl_Countersink("FL_CS_M6",6,12,3.3)
+    fl_Countersink("Countersink ISO 10642 M3",3,5.81,1.860)
 
 ---
 
-### variable FL_CS_M8
+### variable FL_CS_ISO_M4
 
 __Default:__
 
-    fl_Countersink("FL_CS_M8",8,16,4.4)
+    fl_Countersink("Countersink ISO 10642 M4",4,7.96,2.480)
+
+---
+
+### variable FL_CS_ISO_M5
+
+__Default:__
+
+    fl_Countersink("Countersink ISO 10642 M5",5,10.07,3.100)
+
+---
+
+### variable FL_CS_ISO_M6
+
+__Default:__
+
+    fl_Countersink("Countersink ISO 10642 M6",6,12.16,3.720)
+
+---
+
+### variable FL_CS_ISO_M8
+
+__Default:__
+
+    fl_Countersink("Countersink ISO 10642 M8",8,16.43,4.960)
 
 ---
 
@@ -107,6 +130,86 @@ __Default:__
     "cs"
 
 countersinks namespace
+
+---
+
+### variable FL_CS_UNI_DICT
+
+__Default:__
+
+    [FL_CS_UNI_M3,FL_CS_UNI_M4,FL_CS_UNI_M5,FL_CS_UNI_M6,FL_CS_UNI_M8,FL_CS_UNI_M10,FL_CS_UNI_M12,FL_CS_UNI_M16,FL_CS_UNI_M20]
+
+---
+
+### variable FL_CS_UNI_M10
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M10",10,20,5.5)
+
+---
+
+### variable FL_CS_UNI_M12
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M12",12,24,6.5)
+
+---
+
+### variable FL_CS_UNI_M16
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M16",16,30,7.5)
+
+---
+
+### variable FL_CS_UNI_M20
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M20",20,36,8.5)
+
+---
+
+### variable FL_CS_UNI_M3
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M3",3,6,1.7)
+
+---
+
+### variable FL_CS_UNI_M4
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M4",4,8,2.3)
+
+---
+
+### variable FL_CS_UNI_M5
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M5",5,10,2.8)
+
+---
+
+### variable FL_CS_UNI_M6
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M6",6,12,3.3)
+
+---
+
+### variable FL_CS_UNI_M8
+
+__Default:__
+
+    fl_Countersink("Countersink UNI 5933 M8",8,16,4.4)
 
 ## Functions
 
@@ -192,7 +295,7 @@ fl_cs_nominal(type,value)
 __Syntax:__
 
 ```text
-fl_cs_search(name,d)
+fl_cs_search(dictionary=FL_CS_ISO_DICT,name,d)
 ```
 
 return a countersink list fitting the passed properties or undef if no match
@@ -216,6 +319,9 @@ __Syntax:__
     fl_countersink(verbs=FL_ADD,type,tolerance=0,direction,octant)
 
 __Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_AXES, FL_BBOX.
 
 __tolerance__  
 tolerance added to countersink's dimensions

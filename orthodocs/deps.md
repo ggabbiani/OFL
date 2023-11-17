@@ -117,6 +117,7 @@ graph TD
     A13 --o|include| A2
     A13 --o|use| A5
     A13 --o|use| A3
+    A13 --o|use| A27
     A13 --o|use| A4
     A39 --o|use| A5
     A39 --o|use| A3
@@ -164,7 +165,5 @@ graph TD
     A42 --o|use| A4
     A42 --o|use| A16
     A16 --o|include| A5
-    A51[foundation/xsect] --o|include| A5
-    A51 --o|use| A4
 ```
 

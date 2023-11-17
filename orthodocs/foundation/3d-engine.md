@@ -907,6 +907,16 @@ direction in [axis,angle] representation
 
 ---
 
+### module fl_lookAtMe
+
+__Syntax:__
+
+    fl_lookAtMe()
+
+rotates children to face camera
+
+---
+
 ### module fl_place
 
 __Syntax:__
