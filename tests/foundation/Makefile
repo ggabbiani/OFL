@@ -12,7 +12,7 @@ layout limits profile square torus trace tube type_trait util
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
-include $(DEF_RULES)
+include $(FUNCTIONS) $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
 

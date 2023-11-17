@@ -75,7 +75,7 @@ fl_status();
 
 // end of automatically generated code
 
-//! Draw text that always faces the camera
+// Draw text that always faces the camera
 module label(str, scale = 0.25, valign = "baseline", halign = "left")
   color("black")
     rotate($vpr != [0, 0, 0] ? $vpr : [70, 0, 315])
