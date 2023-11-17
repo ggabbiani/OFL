@@ -9,7 +9,10 @@ TARGETS		:= $(SOURCES:.scad=.png)
 top:
 	@$(MAKE) -C $(realpath ../../..) orthodocs/foundation/256x256/all
 
+include $(FUNCTIONS)
+
 all: $(TARGETS)
+
 
 %.png: %.scad
 	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "

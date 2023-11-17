@@ -8,7 +8,7 @@ top:
 
 include $(FUNCTIONS)
 
-all: api-docs artifacts/all foundation/all
+all: api-docs artifacts/all foundation/all vitamins/all
 
 api-docs: $(LIB_SOURCES)
 	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
@@ -22,8 +22,9 @@ artifacts/%:
 foundation/%:
 	$(call make_sub)
 
-clean:
+vitamins/%:
+	$(call make_sub)
+
+clean: artifacts/clean foundation/clean vitamins/clean
 	@rm -f *.md
 	@rm -f api-docs
-	@$(MAKE) -C artifacts $@
-	@$(MAKE) -C foundation $@

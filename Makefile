@@ -31,6 +31,8 @@ include $(FUNCTIONS)
 # tests creation
 all: orthodocs/all tests/sources docs/all
 
+clean: docs/clean orthodocs/clean tests/clean
+
 orthodocs/%: $(LIB_SOURCES)
 	$(call make_sub)
 
@@ -39,12 +41,3 @@ docs/%:
 
 tests/%:
 	$(call make_sub)
-
-clean: docs-clean tests-clean
-
-docs-clean:
-	@$(MAKE) -C $(DOCS) clean
-	@$(MAKE) -C orthodocs clean
-
-tests-clean:
-	@$(MAKE) -C $(TESTS) clean

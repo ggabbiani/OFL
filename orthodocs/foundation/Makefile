@@ -1,6 +1,8 @@
 top:
 	@$(MAKE) -C $(realpath ../..) orthodocs/foundation/all
 
+include $(FUNCTIONS)
+
 all: 256x256/all
 
 256x256/%:
