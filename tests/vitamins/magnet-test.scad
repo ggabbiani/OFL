@@ -92,10 +92,6 @@ verbs=fl_verbList([
 ]);
 
 module do_test(magnet) {
-  // echo(str("obj name:",fl_name(magnet)));
-  fl_trace("DIR_NATIVE",DIR_NATIVE);
-  fl_trace("DIR_Z",DIR_Z);
-  fl_trace("DIR_R",DIR_R);
   screw = fl_screw(magnet);
   fl_magnet(verbs,magnet,fp_gross=FP_EXTRA,thick=T,octant=octant,direction=direction)
       if (screw!=undef) fl_color("green") fl_cylinder(h=fl_thick(magnet),r=screw_radius(screw),octant=-Z);
