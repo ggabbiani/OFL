@@ -12,7 +12,7 @@ screw sd spdt switch trimpot usb
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
-include $(DEF_RULES)
+include $(FUNCTIONS) $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
 
