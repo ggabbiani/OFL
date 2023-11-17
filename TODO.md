@@ -35,7 +35,8 @@
 - [ ] global: extend the OFL APIs for implementing the newly introduced 'standard' parameter «debug»
 - [ ] documentation: introduce parameter standardization
 - [x] tests: implement an automatic test generator mechanism able to standardize - where possible - the customizer parameters
-- [ ] tests: replace / unify tests executions
+- [ ] tests: replace / unify tests executions (remove old bin/test.sh, replace
+  it with 'make' driven ones and made the test cross-platform executable)
 - [x] tests: 'make' driven test generation and execution, now independent from root
 - [x] documentation: 'make' driven documentation and picture generation, now independent from root
 - [ ] tests: make them available on all supported platform
