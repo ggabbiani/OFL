@@ -528,6 +528,7 @@ module fl_planeAlign(ax,ay,bx,by,ech=false) {
   if (ech) #children();
 }
 
+//! rotates children to face camera
 module fl_lookAtMe()
   rotate($vpr ? $vpr : [70, 0, 315])
     children();

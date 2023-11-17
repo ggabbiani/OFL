@@ -14,21 +14,21 @@ include <../vitamins/knurl_nuts.scad>
 use <../foundation/fillet.scad>
 use <../foundation/mngm-engine.scad>
 
-//! namespace
+//! namespace for spacer objects
 FL_SPC_NS  = "spc";
 
 //**** spacer properties ******************************************************
 
-//! external ⌀
+//! external ⌀ property
 function fl_spc_d(type,value)  = fl_property(type,"spc/external ⌀",value);
-//! height along Z axis
+//! height along Z axis property
 function fl_spc_h(type,value)  = fl_property(type,"spc/height along Z axis",value);
-//! optional nominal screw size
+//! nominal screw size optional property
 function fl_spc_nominalScrew(type,value)  = fl_optProperty(type,"spc/nominal screw size",value);
-//! optional knurl nut
+//! knurl nut optional property
 function fl_spc_knut(type,value)  = fl_optProperty(type,"spc/knurl nut",value);
 
-//! Spacer built according to passed constraints.
+//! Spacer constructor.
 function fl_Spacer(
   /*!
    * height along Z axis: knurl nut length constraints may override.
@@ -115,13 +115,13 @@ module fl_spacer(
    *
    *     thick = [-1]
    *
-   * is interpreted as thickness of 1mm along -Z
+   * is interpreted as thickness of 1mm along -Z 0mm along +Z
    *
    * Example:
    *
    *     thick = 2
    *
-   * is interpreted as a thickness of 2mm along +Z and -Z axes
+   * is interpreted as a thickness of 2mm along ±Z
    *
    */
   thick=0,

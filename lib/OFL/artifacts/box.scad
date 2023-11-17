@@ -50,8 +50,8 @@ module fl_box(
   lay_octant,
   /*!
    * Specifications for the fastenings of the upper part to the lower in
-   * [«knurl nut thread type»,«screw nominal size»]
-   * where:
+   * [«knurl nut thread type»,«screw nominal size»] format with:
+   *
    *   - «knurl nut thread type»: either "linear" or "spiral".
    *   - «screw nominal size»   : countersink screw nominal size
    */

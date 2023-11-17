@@ -419,6 +419,7 @@ function fl_native(type,value)      = fl_property(type,"OFL native type (boolean
 function fl_nominal(type,value)     = fl_property(type,"Nominal property for «type»",value);
 function fl_nopSCADlib(type,value,default)
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
+//! when present and true indicates the object is an OFL one
 function fl_OFL(type,value,default) = fl_property(type,"Naturally born OFL",value,default);
 function fl_pcb(type,value)         = fl_property(type,"embedded OFL pcb",value);
 // pay-load bounding box, it contributes to the overall bounding box calculation
@@ -654,8 +655,7 @@ function fl_cumulativeSum(v) = [
 /*!
  * Ascii string to number conversion function atof() by Jesse Campbell.
  *
- * Scientific notation support added by Alexander Pruss (thingiverse user
- * arpruss).
+ * Scientific notation support added by Alexander Pruss.
  *
  * Copyright © 2017, Jesse Campbell <www.jbcse.com>
  *
@@ -808,7 +808,42 @@ function fl_dict_search(dictionary,name) = [
 
 /*!
  * build a dictionary with rows constituted by items with equal property as
- * retrieved by «func»
+ * retrieved by «func».
+ *
+ * example:
+ *
+ *       dict = [
+ *         ["first", 7],
+ *         ["second",9],
+ *         ["third", 9],
+ *         ["fourth",2],
+ *         ["fifth", 2],
+ *       ];
+ *
+ *       result   = fl_dict_organize(dictionary=dict, range=[0:10], func=function(item) item[1]);
+ *
+ * is functional equal to:
+ *
+ *       result = [
+ *         [], // 0
+ *         [], //  1
+ *         [   //  2
+ *           ["fourth", 2],
+ *           ["fifth",  2]
+ *         ],
+ *         [], // 3
+ *         [], // 4
+ *         [], // 5
+ *         [], // 6
+ *         [   // 7
+ *           ["first", 7]
+ *         ],
+ *         [], // 8
+ *         [   // 9
+ *           ["second", 9], ["third", 9]
+ *         ],
+ *         []  // 10
+ *       ];
  */
 function fl_dict_organize(dictionary,range,func) =
   [for(value=range)

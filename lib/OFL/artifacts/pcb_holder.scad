@@ -129,7 +129,7 @@ module fl_pcbHolder(
    *
    *     thick = [-1]
    *
-   * is interpreted as thickness of 1mm along -Z
+   * is interpreted as thickness of 1mm along -Z and 0mm along +Z
    *
    * Example:
    *
