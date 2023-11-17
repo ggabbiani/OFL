@@ -44,8 +44,6 @@ clean-results:
 	@for f in $(RESULTS) ; do rm -f $$f ; done
 	@echo "$(RESULTS): DELETED"
 
-clean: clean-results
+clean: clean-results artifacts/clean foundation/clean vitamins/clean
 	@for f in $(SOURCES) ; do rm -f $$f ; done
 	@echo "$(SOURCES): DELETED"
-	@$(MAKE) -C artifacts $@
-	@$(MAKE) -C foundation $@
