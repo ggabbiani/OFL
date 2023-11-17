@@ -261,13 +261,15 @@ Of course these setting can be mixed with all the possible combination allowed, 
 
 ![Default direction](800x600/pic-7.png)
 
-The following code change the orientation from the default +Z to the [1,1,1] vector.
+The following code change the orientation from the default +Z to the [-1,-1,1] vector.
 
     include <OFL/vitamins/spdts.scad>
 
     // arbitrary direction vector setup
     direction=[-1,-1,+1];
     fl_spdt([FL_ADD,FL_AXES],FL_SODAL_SPDT,direction=[direction,0]);
+
+producing a change in the orientation as shown in the following picture.
 
 ![Default direction](800x600/pic-8.png)
 
@@ -279,6 +281,8 @@ It is possible to combine the change of direction with a rotation around the new
     direction = [-1,-1,+1];
     angle     = 30;
     fl_spdt([FL_ADD,FL_AXES],FL_SODAL_SPDT,direction=[direction,angle]);
+
+producing the following result.
 
 ![Default direction](800x600/pic-9.png)
 
