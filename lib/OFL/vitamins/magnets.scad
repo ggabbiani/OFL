@@ -52,7 +52,7 @@ FL_MAG_M3_CS_D10x2 = fl_Magnet(
   name        = "mag_M3_cs_d10x2",
   description = "M3 countersink magnet d10x2mm 1.2kg",
   d           = 10, thick = 2,
-  cs          = FL_CS_M3, csh = 2,
+  cs          = FL_CS_UNI_M3, csh = 2,
   screw       = M3_cs_cap_screw,
   vendors     = [
       ["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/"],
@@ -72,7 +72,7 @@ FL_MAG_M3_CS_D10x5 = fl_Magnet(
   name        = "mag_M3_cs_d10x5",
   description = "M3 countersink magnet d10x5mm 2.0kg",
   d           = 10, thick = 5,
-  cs          = FL_CS_M3, csh = 3,
+  cs          = FL_CS_UNI_M3, csh = 3,
   screw       = M3_cs_cap_screw,
   vendors     = [
       ["Amazon", "https://www.amazon.it/gp/product/B001TOJESK/"],
@@ -84,7 +84,7 @@ FL_MAG_M4_CS_D32x6  = fl_Magnet(
   description = "M4 countersink magnet d32x6mm 29.0kg",
   d           = 32, // actual: 31.89 31.89 31.92 31.88 31.88 31.81 31.88 31.88  ⇒ average: 31.88mm ±0.04mm
   thick       = 6,
-  cs          = FL_CS_M3, csh = 2,
+  cs          = FL_CS_UNI_M3, csh = 2,
   screw       = M3_cs_cap_screw,
   vendors     = [
       ["Amazon", "https://www.amazon.it/gp/product/B07RQL2ZSS/"],
