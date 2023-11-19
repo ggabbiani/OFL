@@ -171,14 +171,13 @@ function fl_T(
    */
   t
 ) = let(
-  l = len(t),
-  t = is_undef(l) ? [t,t,t] : l==2 ? [t.x,t.y,0] : t
-) assert(len(t)>=3) [
-    [1,0,0, t.x ],
-    [0,1,0, t.y ],
-    [0,0,1, t.z ],
-    [0,0,0, 1   ]
-  ];
+  t = is_num(t) ? [t,t,t] : assert(is_list(t),t) len(t)==2 ? [t.x,t.y,0] : assert(len(t)>=3,t) [t.x,t.y,t.z]
+) [
+  [1,0,0, t.x ],
+  [0,1,0, t.y ],
+  [0,0,1, t.z ],
+  [0,0,0, 1   ]
+];
 
 //! scale matrix in homogeneous coordinates
 function fl_S(s) = is_list(s)
@@ -247,9 +246,7 @@ function fl_Z(z) = [0,0,z];
  */
 function fl_isSet(flag,list) = search([flag],list)!=[[]];
 
-/******************************************************************************
- * verbs
- *****************************************************************************/
+//**** verbs ******************************************************************
 
 //! add a base shape (with no components nor screws)
 FL_ADD        = "FL_ADD add base shape (no components nor screws)";
@@ -645,7 +642,7 @@ function fl_transform(
 
 function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
 function fl_accum(v)          = [for(p=v) 1]*v;
-function fl_sub(list,from,to) = [for(i=from;i<to;i=i+1) list[i]];
+
 //! returns a vector in which each item is the sum of the previous ones
 function fl_cumulativeSum(v) = [
   for (i = [0 : len(v) - 1])
@@ -664,6 +661,40 @@ function fl_cumulativeSum(v) = [
 function fl_atof(str) = len(str) == 0 ? 0 : let( expon1 = search("e", str), expon = len(expon1) ? expon1 : search("E", str)) len(expon) ? fl_atof(substr(str,pos=0,len=expon[0])) * pow(10, atoi(substr(str,pos=expon[0]+1))) : let( multiplyBy = (str[0] == "-") ? -1 : 1, str = (str[0] == "-" || str[0] == "+") ? substr(str, 1, len(str)-1) : str, decimal = search(".", str), beforeDecimal = decimal == [] ? str : substr(str, 0, decimal[0]), afterDecimal = decimal == [] ? "0" : substr(str, decimal[0]+1) ) (multiplyBy * (atoi(beforeDecimal) + atoi(afterDecimal)/pow(10,len(afterDecimal))));
 
 //**** lists ******************************************************************
+
+//! returns a sub list
+function fl_list_sub(list,from,to) = let(
+  to  = is_undef(to) ? len(list)-1 : to
+) assert(from) [for(i=from;i<to;i=i+1) list[i]];
+
+/*!
+ * Transforms each item in «list» applying the homogeneous transformation matrix
+ * «M». By default the in() and out() lambdas manage 3d points, but overloading
+ * them it is possible to manage different input/output formats like in the
+ * following example:
+ *
+ *     // list of 2d points
+ *     list    = [[1,2],[3,4],[5,6]];
+ *     // desired translation in 2d space
+ *     t       = [1,2];
+ *     // translation matrix
+ *     M       = fl_T(t);
+ *     result  = fl_list_transform(
+ *       list,
+ *       M,
+ *       // extend a 2d point into 3d space plane Z==0
+ *       function(2d) [2d.x,2d.y,0],
+ *       // conversion from 3d to 2d space again
+ *       function(3d) [3d.x,3d.y]
+ *     );
+ *     // «expected» result is a list of translated 2d points
+ *     expected = [for(item=list) item+t];
+ *     assert(result==expected);
+ *
+ */
+function fl_list_transform(list,M,in=function(3d) 3d,out=function(3d) 3d)  = [
+  for(p=[for(p=list) fl_transform(M,in(p))]) out(p)
+];
 
 /*!
  * pack two list in a new one like in the following code:
