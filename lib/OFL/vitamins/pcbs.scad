@@ -166,6 +166,7 @@ function fl_pcb_NopHoles(nop) = let(
     )
   ]
 ) holes;
+
 /*!
  * Model for Raspberry PI 4.
  *
@@ -727,6 +728,15 @@ module fl_pcb(
     }
   }
 
+  module do_fprint() {
+    translate(-Z(pcb_t)) linear_extrude(pcb_t)
+      if (dxf)
+        fl_importDxf(file=dxf,layer="0");
+      else
+        translate(bbox[0])
+          fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y,$FL_ADD=$FL_FOOTPRINT);
+  }
+
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
       do_symbols(debug,conns,holes);
@@ -747,6 +757,9 @@ module fl_pcb(
 
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();
+
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_fprint();
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout("holes")
@@ -896,3 +909,5 @@ module fl_pcb_adapter(
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
   }
 }
+
+

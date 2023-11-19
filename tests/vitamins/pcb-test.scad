@@ -40,6 +40,8 @@ $FL_BBOX      = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_CUTOUT    = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds a footprint to scene, usually a simplified ADD operation (see variable FL_ADD)
+$FL_FOOTPRINT = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws or supports)
 $FL_LAYOUT    = "OFF";          // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // add mounting accessories shapes
@@ -68,7 +70,7 @@ DIR_R       = 0;        // [-360:360]
 
 /* [PCB] */
 
-TYPE  = "FL_PCB_VIM1";  // [FL_PCB_VIM1,FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,ALL]
+TYPE  = "HiLetgo SX1308 DC-DC Step up power module";  // [ALL,"HiLetgo SX1308 DC-DC Step up power module", "ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port", "Perfboard 70 x 50mm", "Perfboard 60 x 40mm", "Perfboard 70 x 30mm", "Perfboard 80 x 20mm", "RPI4-MODBP-8GB", "Raspberry PI uHAT", "KHADAS-SBC-VIM1"]
 
 // FL_DRILL and FL_CUTOUT thickness
 T             = 2.5;
@@ -93,20 +95,9 @@ fl_status();
 co_direction  = CO_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]) if (CO_DIRECTION[i]) CO_DIRECTION[i]*axes[i]];
 co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
 filament      = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
-verbs         = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_LAYOUT,FL_MOUNT,FL_PAYLOAD,FL_SYMBOLS]);
+verbs         = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT,FL_PAYLOAD,FL_SYMBOLS]);
 
-fl_trace("***VERBS***",[for(verb=fl_list_flatten(verbs)) split(verb)[0]]);
-
-single  = TYPE=="FL_PCB_HILETGO_SX1308"  ? FL_PCB_HILETGO_SX1308
-        : TYPE=="FL_PCB_MH4PU_P"         ? FL_PCB_MH4PU_P
-        : TYPE=="FL_PCB_PERF70x50"       ? FL_PCB_PERF70x50
-        : TYPE=="FL_PCB_PERF60x40"       ? FL_PCB_PERF60x40
-        : TYPE=="FL_PCB_PERF70x30"       ? FL_PCB_PERF70x30
-        : TYPE=="FL_PCB_PERF80x20"       ? FL_PCB_PERF80x20
-        : TYPE=="FL_PCB_RPI4"            ? FL_PCB_RPI4
-        : TYPE=="FL_PCB_RPI_uHAT"        ? FL_PCB_RPI_uHAT
-        : TYPE=="FL_PCB_VIM1"            ? FL_PCB_VIM1
-        : undef;
+single  = fl_pcb_select(TYPE);
 
 module test() {
   module pcb(type) {
