@@ -58,7 +58,7 @@ function fl_bb_transform(M,corners) = let(
 ) [[min(Xs),min(Ys),min(Zs)],[max(Xs),max(Ys),max(Zs)]];
 
 /*!
- * Calculates a cubic bounding block from a bounding blocks list or 3d point set
+ * Calculates a cubic bounding block from a bounding blocks list
  */
 function fl_bb_calc(
     //! list of bounding blocks to be included in the new one
@@ -76,7 +76,7 @@ let(
 
 /*!
  * Calculates a cubic bounding block from a 3d point set.
- * See also function fl_bb_polygon().
+ * See also 2d counter-part function fl_bb_polygon().
  */
 function fl_bb_polyhedron(points) = let(
   xs  = [for(p=points) p.x],

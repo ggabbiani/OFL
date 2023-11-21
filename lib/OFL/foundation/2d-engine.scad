@@ -22,14 +22,14 @@ function fl_2d_angleBetween(a,b) = atan2(b.y,b.x)-atan2(a.y,a.x);;
 
 /*!
  * Returns the bounding box of a 2d polygon.
- * See also function fl_bb_polyhedron().
+ * See also 3d counter-part function fl_bb_polyhedron().
  */
 function fl_bb_polygon(
   /*!
    * list of x,y points of the polygon to be used with
    * [polygon](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#polygon)
    *
-   * **NOTE**: even if it is safe to 3d points, in any case the result will be
+   * **NOTE**: even if safe to be used for 3d points, the result will be
    * a 2d bounding box.
    */
   points
