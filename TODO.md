@@ -67,6 +67,8 @@
 - [x] add constructors to spacer and pcb_holder libraries
 - [ ] add new artifact: fl_pcb_frame adapting a pcb to holes in order to be later
   mounted on standard pcb holder
+- [ ] fix bug in fl_sector(): order of generated points must follow the sign of
+  the angle.
 
 
 
