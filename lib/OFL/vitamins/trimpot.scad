@@ -23,6 +23,7 @@ FL_TRIM_POT10  = let(
 ) [
   fl_name(value="ten turn trimpot"),
   fl_bb_corners(value=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]),
+  fl_cutout(value=[-Y]),
 ];
 
 module fl_trimpot(
@@ -61,11 +62,11 @@ module fl_trimpot(
       fl_modifier($modifier) fl_bb_add(bbox);
 
     } else if ($verb==FL_CUTOUT) {
-      assert(cut_thick);
-      fl_modifier($modifier)
-        translate(-Y(6.5+cut_drift))
-          fl_cutout(len=cut_thick,delta=cut_tolerance,trim=[0,5.1,0],z=-Y,cut=true)
-            do_add();
+      if (cut_thick)
+        fl_modifier($modifier)
+          translate(-Y(6.5+cut_drift))
+            fl_cutout(len=cut_thick,delta=cut_tolerance,trim=[0,5.1,0],z=-Y,cut=true)
+              do_add();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
