@@ -10,7 +10,7 @@
  */
 
 
-include <../../lib/OFL/vitamins/pcbs.scad>
+include <../../lib/OFL/artifacts/pcb_frame.scad>
 
 
 $fn            = 50;           // [3:100]
@@ -31,7 +31,7 @@ SHOW_SYMBOLS    = false;
 // adds shapes to scene.
 $FL_ADD        = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-$FL_ASSEMBLY   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY   = "ON";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
 $FL_AXES       = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
