@@ -91,6 +91,8 @@ TOLERANCE=0;  // [0:0.1:1]
 
 /* [TEST] */
 T=2.5;  // [0:0.1:10]
+// when !=[0,0,0], FL_CUTOUT is triggered only on components oriented accordingly to any of the not-null axis values
+CUT_DIRECTION  = [0,0,0];  // [-1:+1]
 
 
 /* [Hidden] */
@@ -117,9 +119,10 @@ verbs = fl_verbList([
   FL_SYMBOLS
 ]);
 
-
-
+cut_direction = CUT_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]) if (CUT_DIRECTION[i]) CUT_DIRECTION[i]*axes[i]];
 pcb   = fl_pcb_select(PCB);
 frame = fl_pcb_Frame(pcb,d=D,faces=FACE_T,wall=WALL,overlap=[WIDE_OVER,THIN_OVER],inclusion=INCLUSION,countersink=COUNTERSINK,layout=LAYOUT);
 
-fl_pcb_frame(verbs,frame,parts=[LEFT,RIGHT],tolerance=TOLERANCE,thick=T,debug=debug,octant=octant,direction=direction);
+fl_pcb_frame(verbs,frame,parts=[LEFT,RIGHT],tolerance=TOLERANCE,thick=T,cut_direction=cut_direction,debug=debug,octant=octant,direction=direction)
+  translate(-Z($hole_depth))
+    fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);

@@ -308,7 +308,7 @@ FL_PCB_HILETGO_SX1308 = let(
     holes = let(r=0.75,d=r*2) [
       for(i=[0:len(holes)-1])
         let(pos=holes[i])
-          fl_Hole(pos,d,+Z,0,loct=-sign(pos.x)*X-sign(pos.y)*Y)
+          fl_Hole(pos,d,+Z,pcb_t,loct=-sign(pos.x)*X-sign(pos.y)*Y)
     ],
     components=comps,
     vendors=[["Amazon","https://www.amazon.it/gp/product/B07ZYW68C4"]]
@@ -687,10 +687,11 @@ module fl_pcb(
       else if ($comp_engine==FL_ETHER_NS)
         fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
       else if ($comp_engine==FL_PHDR_NS) let(
-          thick = size.z-pcb_t+cut_thick
+          thick = bbox[1].z+cut_thick
         ) fl_pinHeader(FL_CUTOUT,$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
       else if ($comp_engine==FL_TRIM_NS) let(
-          thick = size.z-pcb_t-11.5+cut_thick
+          sz    = fl_bb_size($comp_type),
+          thick = bbox[1].z-sz.y+cut_thick
         ) fl_trimpot(FL_CUTOUT,type=$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,direction=$comp_direction,octant=$comp_octant);
       else if ($comp_engine==FL_SD_NS)
         fl_sd_usocket(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick+2,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
@@ -717,7 +718,7 @@ module fl_pcb(
 
   module do_payload() {
     if (pload)
-      fl_bb_add(pload);
+      fl_bb_add(pload,$FL_ADD=$FL_PAYLOAD);
   }
 
   module do_symbols(debug,connectors,holes) {
@@ -1081,6 +1082,12 @@ module fl_pcb_frame(
   thick=0,
   //! see homonymous parameter for fl_pcb{}
   lay_direction=[+Z],
+  //! see homonymous parameter for fl_pcb{}
+  cut_tolerance=0,
+  //! see homonymous parameter for fl_pcb{}
+  cut_label,
+  //! see homonymous parameter for fl_pcb{}
+  cut_direction,
   //! see constructor fl_parm_Debug()
   debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -1148,25 +1155,28 @@ module fl_pcb_frame(
   }
 
   module do_cutout() {
-
+    fl_pcb(FL_CUTOUT,pcb,cut_tolerance=cut_tolerance,cut_label=cut_label,cut_direction=cut_direction,thick=thick,debug=debug, direction=direction, octant=octant);
   }
 
   module do_drill() {
-
+    translate(-Z(depth))
+    fl_screw_holes(holes,thick=thick,enable=lay_direction);
   }
 
   module do_footprint() {
-
+    translate(-Z(pcb_t-faces[0]))
+      linear_extrude(depth)
+        fl_square(size=[size.x,size.y],corners=[for(hole=holes) fl_hole_d(hole)],$FL_ADD=$FL_FOOTPRINT);
   }
 
   module do_layout() {
-
+    fl_lay_holes(holes,lay_direction)
+      children();
   }
 
   module do_mount() {
-    if (holes)
-      fl_lay_holes(holes,lay_direction)
-        fl_screw([FL_ADD,FL_ASSEMBLY],type=$hole_screw,thick=dr_thick);
+    fl_lay_holes(holes,lay_direction)
+      fl_screw([FL_ADD,FL_ASSEMBLY],type=$hole_screw,thick=dr_thick);
   }
 
   module do_pload() {
@@ -1186,7 +1196,7 @@ module fl_pcb_frame(
         fl_doAxes(size,direction,debug);
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
 
     } else if ($verb==FL_CUTOUT) {
       fl_modifier($modifier) do_cutout();
@@ -1206,8 +1216,8 @@ module fl_pcb_frame(
         children();
 
     } else if ($verb==FL_PAYLOAD) {
-      fl_modifier($modifier) do_pload()
-        children();
+      fl_modifier($modifier)
+        fl_pcb($verb,pcb,debug=debug);
 
     } else if ($verb==FL_SYMBOLS) {
       fl_modifier($modifier) fl_doSymbols()
