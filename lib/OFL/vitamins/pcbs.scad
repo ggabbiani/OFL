@@ -417,13 +417,11 @@ module fl_pcb(
   //! FL_CUTOUT component filter by label. For the possible values consult the relevant «type» supported labels.
   cut_label,
   /*!
-   * component filter list in floating semi-axis list (see also fl_tt_isAxisList()).
+   * Component filter list in floating semi-axis list (see also fl_tt_isAxisList()).
    *
-   * this parameter sets a filter used during FL_CUTOUT, when set all and only
-   * components implementing cut out along at least one of the passed directions
-   * will be actually triggered.
-   *
-   * example:
+   * this parameter sets a filter used during FL_CUTOUT, causing the trigger of
+   * all and only the PCB components implementing cut out along at least one of
+   * the passed directions
    *
    *    cut_direction=[+X,-Z]
    *
@@ -431,9 +429,12 @@ module fl_pcb(
    * be triggered during the FL_CUTOUT.
    */
   cut_direction,
-  //! FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+  /*!
+   * thickness of any surrounding surface in fixed form
+   *  [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+   */
   thick=0,
-  //! FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
+  //! FL_ASSEMBLY,FL_LAYOUT,FL_MOUNT directions in floating semi-axis list form
   lay_direction=[+Z],
   //! see constructor fl_parm_Debug()
   debug,
@@ -1056,12 +1057,30 @@ function fl_pcb_Frame(
   ["pcbf/[bottom,top] face thickness",faces],
 ];
 
+/*
+ * PCB frame engine.
+ *
+ * This engine acts mostly as a proxy forwarding verbs to its embedded PCB.
+ *
+ */
 module fl_pcb_frame(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   this,
   tolerance=0.2,
+  /*!
+   * PCB frame part visibility: defines which frame parts are shown.
+   *
+   * The full form is [«left|bottom part»,«right|top part»], where each list
+   * item is a boolean managing the visibility of the corresponding part.
+   *
+   * Setting this parameter as a single boolean extends its value to both the parts.
+   */
   parts=true,
+  //! see homonymous parameter for fl_pcb{}
+  thick=0,
+  //! see homonymous parameter for fl_pcb{}
+  lay_direction=[+Z],
   //! see constructor fl_parm_Debug()
   debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -1083,6 +1102,11 @@ module fl_pcb_frame(
   pcb_bb      = fl_bb_corners(pcb);
   pcb_t       = fl_pcb_thick(pcb);
   pcb_bare_sz = let(sz=pcb_bb[1]-pcb_bb[0]) [sz.x,sz.y,pcb_t];
+  faces       = fl_property(this,"pcbf/[bottom,top] face thickness");
+  depth       = abs(faces[0])+faces[1]+pcb_t;
+  thick       = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
+              : assert(!fl_debug() || fl_tt_isAxisVList(thick)) thick;
+  dr_thick    = depth+thick.z[0]; // thickness along -Z
   holes       = fl_holes(this);
   wall        = fl_property(this,"pcbf/wall");
   inclusion   = fl_property(this,"pcbf/inclusion");
@@ -1091,8 +1115,6 @@ module fl_pcb_frame(
   t_over      = overlap[1];
   left        = (is_bool(parts) ? parts : parts[0]) ? fl_property(this,"pcbf/left side points") : undef;
   right       = (is_bool(parts) ? parts : parts[1]) ? fl_property(this,"pcbf/right side points") : undef;
-  faces       = fl_property(this,"pcbf/[bottom,top] face thickness");
-  depth       = abs(faces[0])+faces[1]+pcb_t;
 
   module do_symbols(debug,holes) {
     if (debug) {
@@ -1142,7 +1164,9 @@ module fl_pcb_frame(
   }
 
   module do_mount() {
-
+    if (holes)
+      fl_lay_holes(holes,lay_direction)
+        fl_screw([FL_ADD,FL_ASSEMBLY],type=$hole_screw,thick=dr_thick);
   }
 
   module do_pload() {

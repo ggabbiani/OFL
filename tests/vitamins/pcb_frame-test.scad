@@ -1,5 +1,5 @@
 /*
- * 
+ * PCB frame test.
  *
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
@@ -29,27 +29,27 @@ SHOW_SYMBOLS    = false;
 /* [Supported verbs] */
 
 // adds shapes to scene.
-$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD        = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined auxiliary shapes (like predefined screws)
-$FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ASSEMBLY   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
-$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_AXES       = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
-$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_BBOX       = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT     = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
-$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_DRILL      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
-$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_FOOTPRINT  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
-$FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_LAYOUT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // mount shape through predefined screws
 $FL_MOUNT      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
-$FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_PAYLOAD    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // add symbols and labels usually for debugging
-$FL_SYMBOLS   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_SYMBOLS    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
 /* [3D Placement] */
@@ -89,6 +89,9 @@ THIN_OVER = 1;  // [0:0.1:10]
 INCLUSION = 10; // [0.1:20]
 TOLERANCE=0;  // [0:0.1:1]
 
+/* [TEST] */
+T=2.5;  // [0:0.1:10]
+
 
 /* [Hidden] */
 
@@ -119,4 +122,4 @@ verbs = fl_verbList([
 pcb   = fl_pcb_select(PCB);
 frame = fl_pcb_Frame(pcb,d=D,faces=FACE_T,wall=WALL,overlap=[WIDE_OVER,THIN_OVER],inclusion=INCLUSION,countersink=COUNTERSINK,layout=LAYOUT);
 
-fl_pcb_frame(verbs,frame,parts=[LEFT,RIGHT],tolerance=TOLERANCE,debug=debug,octant=octant,direction=direction);
+fl_pcb_frame(verbs,frame,parts=[LEFT,RIGHT],tolerance=TOLERANCE,thick=T,debug=debug,octant=octant,direction=direction);
