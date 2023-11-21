@@ -1,3 +1,10 @@
+#
+# This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+#
+# Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 top:
 	@$(MAKE) -C $(realpath ..) docs/all
@@ -20,6 +27,7 @@ foundation/%:
 
 vitamins/%:
 	$(call make_sub,vitamins,"OFL/docs")
+
 architecture.png: architecture.drawio
 	@drawio --export --format png --border 10 --output $(CURDIR)/$@ $<
 	@echo -n "$(CURDIR)/$@: "

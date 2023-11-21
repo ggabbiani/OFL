@@ -1,15 +1,15 @@
-# explicit wildcard expansion suppresses errors when no files are found
-# include $(wildcard *.deps)
-
-# %.png: %.scad
-# 	openscad -m make -o $@ -d $@.deps $<
-
-# .PHONY: all
-
-include $(FUNCTIONS)
+#
+# This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+#
+# Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 top:
 	@$(MAKE) -C $(realpath ../..) docs/foundation/all
+
+include $(FUNCTIONS)
 
 all: dependencies.svg 800x600/all
 
@@ -19,7 +19,7 @@ dependencies.svg: $(FOUNDATION_SOURCES)
 	@echo -e "\e[32mOK\e[0m"
 
 800x600/%:
-	$(call make_sub,800x600,"OFL/docs/foundation")
+	$(call make_sub,800x600)
 
 clean:
 	@$(MAKE) -C 800x600 $@
