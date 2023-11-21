@@ -1,5 +1,5 @@
 /*
- * Vitamins test template.
+ * PCB frame test.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
