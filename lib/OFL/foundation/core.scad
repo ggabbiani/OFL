@@ -98,6 +98,32 @@ function fl_pop(l,i=0) =
 //! push «item» on tail of list «l»
 function fl_push(list,item) = [each list,item];
 
+//**** base transformations ***************************************************
+
+//! transforms 3D to 2D coords by clipping Z plane
+function fl_2(v) = assert(len(v)>1) [v.x,v.y];
+
+//! transforms homogeneous to 3D coords
+function fl_3(v)  = assert(len(v)>2) len(v)==3 ? v : [v.x,v.y,v.z] / v[3];
+
+//! transforms 3D coords to homogeneous
+function fl_4(v)  = assert(len(v)>2) len(v)==3 ? [v.x,v.y,v.z,1] : v / v[3];
+
+/*!
+ * Returns M * v , actually transforming v by M.
+ *
+ * **NOTE:** result in 3d format
+ */
+function fl_transform(
+  //! 4x4 transformation matrix
+  M,
+  //! fl_vector (in homogeneous or 3d format)
+  v
+) =
+  assert(len(M)==4 && len(M[0])==4,str("Bad matrix M(",M,")"))
+  assert(is_list(v) && len(v)>2,str("Bad vector v(",v,")"))
+  fl_3(M * fl_4(v));
+
 //*****************************************************************************
 // OFL GLOBALS
 
@@ -116,6 +142,20 @@ fl_JNgauge  = fl_MVgauge/4;
 
 //! Recommended tolerance for FDM as stated in [How do you design snap-fit joints for 3D printing?](https://www.3dhubs.com/knowledge-base/how-design-snap-fit-joints-3d-printing/)
 fl_FDMtolerance = 0.5;
+
+/*!
+ * function literal converting from 2d to 3d by projection on plane Z==0
+ *
+ * NOTE: it's safe to be used as function literal parameter in fl_list_transform()
+ */
+FL_3D = function(2d) [2d.x,2d.y,0];
+
+/*!
+ * function literal converting 3D to 2D coords by clipping Z plane
+ *
+ * NOTE: it's safe to be used as function literal parameter in fl_list_transform()
+ */
+FL_2D = function(3d) fl_2(3d);
 
 //! X axis
 FL_X = [1,0,0];
@@ -607,36 +647,6 @@ function fl_isEven(n) = fl_isMultiple(n,2);
 
 //! true when n is odd
 function fl_isOdd(n) = !fl_isEven(n);
-
-//! transforms 3D to 2D coords
-function fl_2(v) =
-  assert(len(v)>1)
-  [v.x,v.y];
-
-//! transforms homogeneous to 3D coords
-function fl_3(v)  =
-  assert(len(v)>2)
-  len(v)==3 ? v : [v.x,v.y,v.z] / v[3];
-
-//! transforms 3D coords to homogeneous
-function fl_4(v)  =
-  assert(len(v)>2)
-  len(v)==3 ? [v.x,v.y,v.z,1] : v / v[3];
-
-/*!
- * Returns M * v , actually transforming v by M.
- *
- * **NOTE:** result in 3d format
- */
-function fl_transform(
-  //! 4x4 transformation matrix
-  M,
-  //! fl_vector (in homogeneous or 3d format)
-  v
-) =
-  assert(len(M)==4 && len(M[0])==4,str("Bad matrix M(",M,")"))
-  assert(is_list(v) && len(v)>2,str("Bad vector v(",v,")"))
-  fl_3(M * fl_4(v));
 
 //**** math utils *************************************************************
 
