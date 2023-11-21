@@ -250,7 +250,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_screw_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,type="clearance",tolerance=2xNIL,countersunk=false)
+    fl_screw_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,type="clearance",tolerance=0,countersunk=false)
 
 Screw driven hole execution. The main difference between this module and
 [fl_lay_holes{}](../foundation/hole.md#module-fl_lay_holes) is that the FL_DRILL verb is delegated to screws.

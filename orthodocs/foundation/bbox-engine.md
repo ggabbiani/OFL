@@ -26,7 +26,7 @@ __Syntax:__
 fl_bb_calc(bbs)
 ```
 
-Calculates a cubic bounding block from a bounding blocks list or 3d point set
+Calculates a cubic bounding block from a bounding blocks list
 
 
 __Parameters:__
@@ -85,7 +85,7 @@ fl_bb_polyhedron(points)
 ```
 
 Calculates a cubic bounding block from a 3d point set.
-See also function [fl_bb_polygon()](2d-engine.md#function-fl_bb_polygon).
+See also 2d counter-part function [fl_bb_polygon()](2d-engine.md#function-fl_bb_polygon).
 
 
 ---

@@ -46,7 +46,7 @@ __Default:__
 
 __Default:__
 
-    let(pcb_t=1.6,sz=[23,16,pcb_t],holes=[for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5])[x,y,0]],1PIN=fl_PinHeader("1-pin",nop=2p54header,engine="male"),comps=[["TRIMPOT",fl_Component(FL_TRIM_NS,[-5,-sz.y/2+0.5,0],[+Y,0],FL_TRIM_POT10,[[FL_COMP_OCTANT,+X-Y+Z]])],for(i=[0:len(holes)-1])let(label=str("PIN-",i))[label,fl_Component(FL_PHDR_NS,holes[i],[+Z,0],1PIN)],])fl_PCB(name="HiLetgo SX1308 DC-DC Step up power module",bare=[[-sz.x/2,-sz.y/2,-sz.z],[+sz.x/2,+sz.y/2,0]],thick=pcb_t,color="DarkCyan",holes=let(r=0.75,d=r*2)[for(i=[0:len(holes)-1])let(pos=holes[i])fl_Hole(pos,d,+Z,0,loct=-sign(pos.x)*X-sign(pos.y)*Y)],components=comps,vendors=[["Amazon","https://www.amazon.it/gp/product/B07ZYW68C4"]])
+    let(pcb_t=1.6,sz=[23,16,pcb_t],holes=[for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5])[x,y,0]],1PIN=fl_PinHeader("1-pin",nop=2p54header,engine="male"),comps=[["TRIMPOT",fl_Component(FL_TRIM_NS,[-5,-sz.y/2+0.5,0],[+Y,0],FL_TRIM_POT10,[[FL_COMP_OCTANT,+X-Y+Z]])],for(i=[0:len(holes)-1])let(label=str("PIN-",i))[label,fl_Component(FL_PHDR_NS,holes[i],[+Z,0],1PIN)],])fl_PCB(name="HiLetgo SX1308 DC-DC Step up power module",bare=[[-sz.x/2,-sz.y/2,-sz.z],[+sz.x/2,+sz.y/2,0]],thick=pcb_t,color="DarkCyan",holes=let(r=0.75,d=r*2)[for(i=[0:len(holes)-1])let(pos=holes[i])fl_Hole(pos,d,+Z,pcb_t,loct=-sign(pos.x)*X-sign(pos.y)*Y)],components=comps,vendors=[["Amazon","https://www.amazon.it/gp/product/B07ZYW68C4"]])
 
 ---
 
@@ -355,13 +355,11 @@ __cut_label__
 FL_CUTOUT component filter by label. For the possible values consult the relevant «type» supported labels.
 
 __cut_direction__  
-component filter list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist)).
+Component filter list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist)).
 
-this parameter sets a filter used during FL_CUTOUT, when set all and only
-components implementing cut out along at least one of the passed directions
-will be actually triggered.
-
-example:
+this parameter sets a filter used during FL_CUTOUT, causing the trigger of
+all and only the PCB components implementing cut out along at least one of
+the passed directions
 
    cut_direction=[+X,-Z]
 
@@ -370,10 +368,12 @@ be triggered during the FL_CUTOUT.
 
 
 __thick__  
-FL_DRILL and FL_CUTOUT thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+thickness of any surrounding surface in fixed form
+ [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
+
 
 __lay_direction__  
-FL_LAYOUT,FL_ASSEMBLY directions in floating semi-axis list form
+FL_ASSEMBLY,FL_LAYOUT,FL_MOUNT directions in floating semi-axis list form
 
 __debug__  
 see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)

@@ -119,11 +119,37 @@ __Default:__
 
 ---
 
+### variable FL_2D
+
+__Default:__
+
+    function(3d)fl_2(3d)
+
+function literal converting 3D to 2D coords by clipping Z plane
+
+NOTE: it's safe to be used as function literal parameter in [fl_list_transform()](#function-fl_list_transform)
+
+
+---
+
 ### variable FL_2xNIL
 
 __Default:__
 
     2*FL_NIL
+
+---
+
+### variable FL_3D
+
+__Default:__
+
+    function(2d)[2d.x,2d.y,0]
+
+function literal converting from 2d to 3d by projection on plane Z==0
+
+NOTE: it's safe to be used as function literal parameter in [fl_list_transform()](#function-fl_list_transform)
+
 
 ---
 
@@ -502,7 +528,7 @@ __Syntax:__
 fl_2(v)
 ```
 
-transforms 3D to 2D coords
+transforms 3D to 2D coords by clipping Z plane
 
 ---
 
@@ -1220,6 +1246,53 @@ quick sort «vec» (from [oampo/missile](https://github.com/oampo/missile))
 
 ---
 
+### function fl_list_sub
+
+__Syntax:__
+
+```text
+fl_list_sub(list,from,to)
+```
+
+returns a sub list
+
+---
+
+### function fl_list_transform
+
+__Syntax:__
+
+```text
+fl_list_transform(list,M,in=function(3d)3d,out=function(3d)3d)
+```
+
+Transforms each item in «list» applying the homogeneous transformation matrix
+«M». By default the in() and out() lambdas manage 3d points, but overloading
+them it is possible to manage different input/output formats like in the
+following example:
+
+    // list of 2d points
+    list    = [[1,2],[3,4],[5,6]];
+    // desired translation in 2d space
+    t       = [1,2];
+    // translation matrix
+    M       = fl_T(t);
+    result  = fl_list_transform(
+      list,
+      M,
+      // extend a 2d point into 3d space plane Z==0
+      function(2d) [2d.x,2d.y,0],
+      // conversion from 3d to 2d space again
+      function(3d) [3d.x,3d.y]
+    );
+    // «expected» result is a list of translated 2d points
+    expected = [for(item=list) item+t];
+    assert(result==expected);
+
+
+
+---
+
 ### function fl_list_unique
 
 __Syntax:__
@@ -1635,16 +1708,6 @@ __Syntax:__
 
 ```text
 fl_str_upper(s)
-```
-
----
-
-### function fl_sub
-
-__Syntax:__
-
-```text
-fl_sub(list,from,to)
 ```
 
 ---
