@@ -323,7 +323,7 @@ module fl_screw_holes(
   //! drill type ("clearance" or "tap")
   type="clearance",
   //! tolerance ⌀
-  tolerance=2xNIL,
+  tolerance=0,
   countersunk=false
 ) {
   fl_lay_holes(holes,enable,thick) let(
@@ -331,8 +331,9 @@ module fl_screw_holes(
     len   = $hole_depth ? $hole_depth : thick,
     d     = screw_head_radius(screw)*2
   ) assert(screw) {
-    resize([0,0,len+tolerance],auto=true)
-      fl_screw(FL_DRILL,screw,len,dri_type=type);
+    translate(+Z(NIL))
+      resize([0,0,len+tolerance+2xNIL],auto=true)
+        fl_screw(FL_DRILL,screw,len,dri_type=type);
     if (countersunk)
       resize([d+tolerance,0,0],auto=true)
         screw_countersink(screw);
