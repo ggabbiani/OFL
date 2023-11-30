@@ -1,10 +1,14 @@
 /*!
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <spacer.scad>
+include <../vitamins/pcbs.scad>
 
 use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>

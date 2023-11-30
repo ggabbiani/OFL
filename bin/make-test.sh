@@ -46,9 +46,11 @@ VERBOSE="1"
 MODE="foundation"
 DRY="OFF"
 # until [issue #3616](https://github.com/openscad/openscad/issues/3616) is not
-# applied to stable OpenSCAD branch we have to use a nightly build
+# applied to stable OpenSCAD branch we have to use a nightly build or check the
+# command output
 # OSCAD="$(which openscad) --hardwarnings"
 OSCAD="/home/giampa/projects/openscad/build/openscad --hardwarnings"
+# OSCAD="/home/giampa/projects/openscad/build/openscad"
 TEMP_ROOT="/tmp"
 
 ##############################################################################

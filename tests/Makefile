@@ -16,9 +16,8 @@ DEF_CONFS		:= $(CURDIR)/defaults.conf
 T_LIST			= bb octant quadrant
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
-OSCAD			= openscad --hardwarnings
 
-export TEMPLATE_DIR TEMPLATES DEF_RULES DEF_CONFS OSCAD
+export TEMPLATE_DIR TEMPLATES DEF_RULES DEF_CONFS
 
 include $(FUNCTIONS) $(DEF_RULES)
 
