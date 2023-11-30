@@ -136,8 +136,8 @@ done
 eval set -- "$POSITIONALS"
 
 modules=$(modules)
-includes=$(locals | grep_no_rc -e '\:include\:' | sed -e 's/^/"/' -e 's/\:include\:/" -> "/g' -e 's/$/"/')
-uses=$(locals | grep_no_rc -e '\:use\:'  | sed -e 's/^/"/' -e 's/\:use\:/" -> "/g' -e 's/$/"/')
+includes=$(locals | grep_no_rc -e ':include:' | sed -e 's/^/"/' -e 's/\:include\:/" -> "/g' -e 's/$/"/')
+uses=$(locals | grep_no_rc -e ':use:'  | sed -e 's/^/"/' -e 's/\:use\:/" -> "/g' -e 's/$/"/')
 
 info "modules: $modules"
 info "includes: $includes"
