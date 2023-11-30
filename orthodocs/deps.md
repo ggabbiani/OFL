@@ -77,6 +77,7 @@ graph TD
     A4 --o|include| A8
     A36[artifacts/pcb_frame] --o|include| A37[vitamins/pcbs]
     A38[artifacts/pcb_holder] --o|include| A10
+    A38 --o|include| A37
     A38 --o|use| A3
     A38 --o|use| A4
     A37 --o|include| A18

@@ -5,11 +5,14 @@
 ```mermaid
 graph LR
     A1[artifacts/pcb_holder] --o|include| A2[artifacts/spacer]
-    A1 --o|use| A3[foundation/bbox-engine]
-    A1 --o|use| A4[foundation/mngm-engine]
+    A1 --o|include| A3[vitamins/pcbs]
+    A1 --o|use| A4[foundation/bbox-engine]
+    A1 --o|use| A5[foundation/mngm-engine]
 ```
 
-Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+
+Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
 
 SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
