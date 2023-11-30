@@ -6,3 +6,4 @@ nogit-*
 .DS_Store
 orthodocs/api-docs
 *.deps
+__pycache__
