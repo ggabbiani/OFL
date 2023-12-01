@@ -40,6 +40,12 @@ def error(message):
   if verbosity>=ERROR:
     return cprint("[*ERR*] "+message, 'red')
 
+def read_lines(fname):
+  file = open(fname)
+  lines = file.readlines()
+  file.close()
+  return lines
+
 SILENT  = 0
 ERROR   = 1
 WARN    = 2

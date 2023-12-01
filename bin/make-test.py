@@ -18,14 +18,66 @@ import sys
 
 import ofl
 
+from termcolor import colored, cprint
+
+def get_camera(arg,file):
+  result = []
+  if arg:
+    result  = [arg]
+  elif os.path.isfile(conf):
+    dict    = dotenv.dotenv_values(conf)
+    for key in dict:
+      if key=='CAMERA':
+        result  = [dict[key]]
+  return ['--camera'] + result if result else []
+
+def test_cases(lines):
+  result = []
+  for line in lines:
+    match   = re.findall('"TEST_CASE.*":',line)
+    if match:
+      # just one match for row so we take first occurrence
+      # stripping first one (") and last two (":) characters
+      result.append(str(match[0])[1:-2])
+  return result
+
+def run(base,test,output,dry_run=False,case=None):
+  test_cmd = test + ['-o', output]
+  if dry_run:
+    print(test_cmd)
+    return 0
+  else:
+    if (case):
+      print((colored(base+f" [{case}]: ", 'yellow')),end="",flush=True)
+    else:
+      print((colored(base+": ", 'yellow')),end="",flush=True)
+    result = subprocess.run(test_cmd)
+    if result.returncode==0:
+      lines = ofl.read_lines(output)
+      # until [issue #3616](https://github.com/openscad/openscad/issues/3616) is not
+      # applied to stable OpenSCAD branch we have to use a nightly build or check the
+      # command output
+      for line in lines:
+        match   = re.findall('^WARNING:',line)
+        if match:
+          cprint(f'✝ (see echo file {output})','red')
+          return 1
+      cprint('✔','green')
+      return 0
+    else:
+      cprint(f'✝ {result.returncode}','red')
+      return result.returncode
+
+def echo(path,base):
+  return os.path.join(path,base+'.echo')
+
 parser = argparse.ArgumentParser()
-# parser.add_argument("test", type=str, help="test name")
 parser.add_argument("-c", "--camera", help = "OpenSCAD camera position")
-parser.add_argument("-d", "--dry-run", type=bool, help = "On screen dump only of the generated dot file",default=False)
+parser.add_argument("-d", "--dry-run", action='store_true', help = "On screen dump only of the generated dot file")
 parser.add_argument("test", type=str, help="Full test path WITHOUT SUFFIX")
 parser.add_argument("-t", "--temp-root", type=str, help = "Temporary directory path", choices=["/var/tmp","/tmp"],default="/tmp")
 parser.add_argument("-v", "--verbosity", type=int, help = "Increase verbosity", choices=[ofl.SILENT,ofl.ERROR,ofl.WARN,ofl.INFO,ofl.DEBUG],default=ofl.ERROR)
-# Read arguments from command line
+
 args = parser.parse_args()
 
 ofl.verbosity   = args.verbosity
@@ -41,52 +93,41 @@ base    = os.path.basename(full)
 conf    = os.path.join(path,base+'.conf')
 json    = os.path.join(path,base+'.json')
 scad    = os.path.join(path,base+'.scad')
-echo    = os.path.join(path,base+'.echo')
 
 ofl.debug("path : % s" %path)
 ofl.debug("base : % s" %base)
 
-camera = []
-if args.camera:
-    camera  = [args.camera]
-elif os.path.isfile(conf):
-    dict    = dotenv.dotenv_values(conf)
-    for key in dict:
-        if key=='CAMERA':
-            camera  = [dict[key]]
-if camera:
-    camera = ['--camera'] + camera
+camera  = get_camera(args.camera,conf)
+command = ofl.oscad + (camera if camera else [])
 
-oscad = ofl.oscad
-if camera:
-    oscad = ofl.oscad + camera
-oscad = oscad + ["-o",echo,scad]
-
+cmds = []
+cases = []
 if os.path.isfile(json):
-    ofl.debug(f"found JSON file {json}")
-    f = open(json)
-    lines = f.readlines()
-    f.close()
-
-    cases = []
-    for l in lines:
-        match   = re.findall('"TEST_CASE.*"\:',l)
-        if match:
-            print(match)
-            # just one match for row so we take first occurrence
-            # stripping first one (") and last two (":) characters
-            cases.append(str(match[0])[1:-2])
-    size = len(cases)
-    if size:
-        print(cases)
-        ofl.debug(f"{size} TEST CONFIG(s) found in {json} file")
-    else:
-        ofl.debug(f"NO TEST CONFIG(s) found in {json} file")
+  ofl.debug("JSON file found")
+  cases = test_cases(ofl.read_lines(json))
+  if cases:
+    ofl.debug(str(len(cases))+" TEST CONFIG(s) found")
+    for case in cases:
+      cmds.append(command+['-P',case])
+  else:
+    ofl.debug("NO TEST CONFIG(s) found")
+    cmds.append(command)
 else:
-    ofl.debug(f"{json} file not found")
+  ofl.debug("JSON file not found")
+  cmds.append(command)
 
-if args.dry_run:
-    print(oscad)
-else:
-    result = subprocess.run(oscad,capture_output=True)
-    print(result)
+for i, cmd in enumerate(cmds):
+  if cases:
+    case = cases[i]
+    o_base = case
+    o_dir = os.path.join(path,base+'.echo')
+    if not os.path.exists(o_dir) and not args.dry_run:
+      os.mkdir(o_dir)
+  else:
+    case =None
+    o_base=base
+    o_dir=path
+  rc = run(base,cmd+[scad],echo(o_dir,o_base),args.dry_run,case)
+  if rc!=0:
+    exit(rc)
+

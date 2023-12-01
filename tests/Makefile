@@ -40,7 +40,7 @@ vitamins/%:
 runs: clean-results $(RESULTS) artifacts/runs foundation/runs vitamins/runs
 
 clean-results:
-	@for f in $(RESULTS) ; do rm -f $$f ; done
+	@for f in $(RESULTS) ; do rm -rf $$f ; done
 	@echo "$(RESULTS): DELETED"
 
 clean: clean-results artifacts/clean foundation/clean vitamins/clean

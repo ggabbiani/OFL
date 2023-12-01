@@ -26,5 +26,5 @@ clean: clean-results
 	@echo "$(SOURCES): DELETED"
 
 clean-results:
-	@for f in $(RESULTS) ; do rm -f $$f ; done
+	@for f in $(RESULTS) ; do rm -rf $$f ; done
 	@echo "$(RESULTS): DELETED"

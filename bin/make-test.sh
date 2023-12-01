@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # test execution helper for makefile usage
+# this file is now OBSOLETE: use make-test.py in place of this
 #
 # This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 #
@@ -48,8 +49,8 @@ DRY="OFF"
 # until [issue #3616](https://github.com/openscad/openscad/issues/3616) is not
 # applied to stable OpenSCAD branch we have to use a nightly build or check the
 # command output
-# OSCAD="$(which openscad) --hardwarnings"
-OSCAD="/home/giampa/projects/openscad/build/openscad --hardwarnings"
+OSCAD="$(which openscad) --hardwarnings"
+# OSCAD="/home/giampa/projects/openscad/build/openscad --hardwarnings"
 # OSCAD="/home/giampa/projects/openscad/build/openscad"
 TEMP_ROOT="/tmp"
 

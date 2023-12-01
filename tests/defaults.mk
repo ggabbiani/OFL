@@ -1,6 +1,6 @@
 # test execution
 %.echo : %.scad
-	@source $(realpath $*.conf) && $(BIN)/make-test.sh $$CAMERA --silent $*
+	@source $(realpath $*.conf) && $(BIN)/make-test.py $$CAMERA $*
 
 # source creation
 %.scad : %.conf $(TEMPLATES) $(DEF_CONFS)
