@@ -41,6 +41,9 @@ def test_cases(lines):
       result.append(str(match[0])[1:-2])
   return result
 
+def cat(f_name):
+  print(open(f_name, 'r').read())
+
 def run(base,test,output,dry_run=False,case=None):
   test_cmd = test + ['-o', output]
   if dry_run:
@@ -60,12 +63,12 @@ def run(base,test,output,dry_run=False,case=None):
       for line in lines:
         match   = re.findall('^WARNING:',line)
         if match:
-          cprint(f'✝ (see echo file {output})','red')
-          return 1
+          cprint(f'✝','red')
+          return -1
       cprint('✔','green')
       return 0
     else:
-      cprint(f'✝ {result.returncode}','red')
+      cprint(f'✝ ({result.returncode})','red')
       return result.returncode
 
 def echo(path,base):
@@ -127,7 +130,8 @@ for i, cmd in enumerate(cmds):
     case =None
     o_base=base
     o_dir=path
-  rc = run(base,cmd+[scad],echo(o_dir,o_base),args.dry_run,case)
+  o_file = echo(o_dir,o_base)
+  rc = run(base,cmd+[scad],o_file,args.dry_run,case)
   if rc!=0:
+    cat(echo(o_dir,o_base))
     exit(rc)
-
