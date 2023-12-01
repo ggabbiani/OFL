@@ -1,5 +1,7 @@
 #!/bin/bash
 ###############################################################################
+# THIS FILE IS OBSOLETE
+###############################################################################
 # Executes all the OpenSCAD scripts present in the <OFL>/src/tests directory.
 #
 # An OpenSCAD script is recognized as 'test' when following conditions are met:
