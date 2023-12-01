@@ -1,4 +1,13 @@
 #!/bin/bash
+#
+# Entry point for test runner. This file is now OBSOLETE
+#
+# This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+#
+# Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 help() {
 cat <<EoH
