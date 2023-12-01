@@ -134,4 +134,5 @@ for i, cmd in enumerate(cmds):
   rc = run(base,cmd+[scad],o_file,args.dry_run,case)
   if rc!=0:
     cat(echo(o_dir,o_base))
+    cat(scad)
     exit(rc)
