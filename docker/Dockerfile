@@ -5,7 +5,7 @@ ARG libs=/root/.local/share/OpenSCAD/libraries
 ARG nop_ver=v21.8.0
 ###############################################################################
 # system pre requisites
-RUN dnf install -y openscad git which make python3-dotenv python3-termcolor
+RUN dnf install -y openscad git which make python3-dotenv python3-termcolor gettext-envsubst
 ###############################################################################
 # directory structure setup
 RUN mkdir -p ${libs}
