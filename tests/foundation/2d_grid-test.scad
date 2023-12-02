@@ -54,6 +54,8 @@ ROTATION    = 0;    // [0:360]
 
 /* [Hidden] */
 
+fl_status();
+
 // end of automatically generated code
 
 sheet_metal = [[0,0],GRID_SIZE];
