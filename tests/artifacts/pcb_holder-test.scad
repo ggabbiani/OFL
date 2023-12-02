@@ -10,7 +10,6 @@
  */
 
 
-include <../../lib/OFL/artifacts/pcb_frame.scad>
 include <../../lib/OFL/artifacts/pcb_holder.scad>
 include <../../lib/OFL/vitamins/pcbs.scad>
 
