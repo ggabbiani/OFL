@@ -9,10 +9,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+// **** TEST_INCLUDES *********************************************************
+
 include <../../lib/OFL/foundation/core.scad>
 
 use <../../lib/OFL/foundation/2d-engine.scad>
 
+// **** TAB_PARAMETERS ********************************************************
 
 $fn            = 50;           // [3:100]
 // When true, debug statements are turned on
@@ -26,6 +29,7 @@ $FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
 
+// **** TAB_Verbs *************************************************************
 
 /* [Supported verbs] */
 
@@ -36,12 +40,14 @@ $FL_AXES  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+// **** TAB_Placement *********************************************************
 
 /* [2D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
 Y_PLACE = "undef";  // [undef,-1,0,+1]
 
+// **** TAB_TEST **************************************************************
 
 /* [Square] */
 
@@ -62,15 +68,15 @@ CORNER_3  = [0,0];
 // frame thickness
 T = 2.5;  // [0.1:0.1:5]
 
-
 /* [Hidden] */
+// **** TEST_PROLOGUE *********************************************************
 
 quadrant    = fl_parm_Quadrant(X_PLACE,Y_PLACE);
 debug       = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();
 
-// end of automatically generated code
+// **** end of automatically generated code ***********************************
 
 verbs=[
   if ($FL_ADD!="OFF")   FL_ADD,
@@ -81,3 +87,4 @@ corners  = [CORNER_0,CORNER_1,CORNER_2,CORNER_3];
 
 if (MODE=="square") fl_square(verbs,size=SIZE,corners=corners,quadrant=quadrant);
 else fl_2d_frame(verbs,size=SIZE,corners=corners,thick=T,quadrant=quadrant);
+

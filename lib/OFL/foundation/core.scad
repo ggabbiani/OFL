@@ -63,6 +63,9 @@ module fl_status() {
     echo(str("**OFL** Viewport translation  : ",$vpt));
     echo(str("**OFL** Viewport rotation     : ",$vpr));
     echo(str("**OFL** Camera distance       : ",$vpd));
+    let(
+      v = concat($vpt,$vpr,[$vpd])
+    ) echo(str("**OFL** camera parameters  : ",v[0],",",v[1],",",v[2],",",v[3],",",v[4],",",v[5],",",v[6]));
   }
 }
 

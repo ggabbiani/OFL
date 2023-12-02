@@ -9,9 +9,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+// **** TEST_INCLUDES *********************************************************
+
 include <../../lib/OFL/foundation/core.scad>
 use <../../lib/OFL/foundation/2d-engine.scad>
 
+// **** TAB_PARAMETERS ********************************************************
 
 $fn            = 50;           // [3:100]
 // When true, debug statements are turned on
@@ -25,6 +28,7 @@ $FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
 
+// **** TAB_Verbs *************************************************************
 
 /* [Supported verbs] */
 
@@ -35,12 +39,14 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+// **** TAB_Placement *********************************************************
 
 /* [2D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
 Y_PLACE = "undef";  // [undef,-1,0,+1]
 
+// **** TAB_TEST **************************************************************
 
 /* [2D primitives] */
 
@@ -61,15 +67,15 @@ IPOLY_N       = 3;  // [3:50]
 IPOLY_CIRCLE  = true;
 SQUARE_SIZE   = [40,30];
 
-
 /* [Hidden] */
+// **** TEST_PROLOGUE *********************************************************
 
 quadrant    = fl_parm_Quadrant(X_PLACE,Y_PLACE);
 debug       = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();
 
-// end of automatically generated code
+// **** end of automatically generated code ***********************************
 
 // echo($vpr=$vpr);
 // echo($vpt=$vpt);
@@ -105,3 +111,4 @@ else if (PRIMITIVE == "elliptic annulus"  ) fl_ellipticAnnulus(verbs,[A,B],ARC_T
 else if (PRIMITIVE == "frame"             ) fl_2d_frame(verbs,size=SQUARE_SIZE,thick=ARC_T,quadrant=quadrant);
 else if (PRIMITIVE == "inscribed polygon" ) ipoly();
 else if (PRIMITIVE == "square"            ) fl_square(verbs,size=SQUARE_SIZE,quadrant=quadrant);
+
