@@ -1,34 +1,39 @@
 /*
- * 2D foundation ellipse primitives tests.
+ * 2D foundation ellipse primitives tests
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * NOTE: this file is generated automatically from 'template-2d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
+// **** TEST_INCLUDES *********************************************************
 
 include <../../lib/OFL/foundation/core.scad>
 
 use <../../lib/OFL/foundation/2d-engine.scad>
 
-$fn         = 50;     // [3:100]
+// **** TAB_PARAMETERS ********************************************************
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
 
-/* [Supported verbs] */
+// **** TAB_Verbs *************************************************************
 
-// adds shapes to scene.
-$FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds local reference axes
-$FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a bounding box containing the object
-$FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// **** TAB_Placement *********************************************************
 
-/* [Placement] */
-
-PLACE_NATIVE  = true;
-QUADRANT      = [+1,+1];  // [-1:+1]
+// **** TAB_TEST **************************************************************
 
 /* [Ellipse] */
 
@@ -39,9 +44,9 @@ T           = false;
 T_REAL      = false;
 
 // horizontal semi axis
-A             = 10.0; // [0.1:0.01:5]
+A             = 10.0; // [0.1:0.01:10]
 // vertical semi axis
-B             = 6.0;  // [0.1:0.01:5]
+B             = 6.0;  // [0.1:0.01:10]
 ARC_START   = -180; // [-720:720]
 ARC_END     = +45;  // [-720:720]
 ARC_STEP    = 1;    // [1:5]
@@ -49,6 +54,11 @@ ARC_STEP    = 1;    // [1:5]
 ARC_T         = 1;  // [0:10]
 
 /* [Hidden] */
+// **** TEST_PROLOGUE *********************************************************
+
+fl_status();
+
+// **** end of automatically generated code ***********************************
 
 // echo($vpr=$vpr);
 // echo($vpt=$vpt);
@@ -62,12 +72,6 @@ ARC_T         = 1;  // [0:10]
 
 angles  = ARC_START<ARC_END ? [ARC_START,ARC_END] : [ARC_END,ARC_START];
 e       = [A,B];
-
-verbs=[
-  if ($FL_ADD!="OFF")   FL_ADD,
-  if ($FL_AXES!="OFF")  FL_AXES,
-  if ($FL_BBOX!="OFF")  FL_BBOX,
-];
 
 module polar() {
   for(theta=[angles[0]:ARC_STEP:angles[1]])
@@ -141,3 +145,4 @@ echo(str("t_real(",singularity+1,")=",fl_ellipseT(e,singularity+1)));
 
 v=fl_ellipseXY(e=[0.9, 0.63],angle=-90);
 echo(v=v);
+
