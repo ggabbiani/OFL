@@ -20,16 +20,16 @@ import ofl
 
 from termcolor import colored, cprint
 
-def get_camera(arg,file):
-  result = []
-  if arg:
-    result  = [arg]
-  elif os.path.isfile(conf):
-    dict    = dotenv.dotenv_values(conf)
-    for key in dict:
-      if key=='CAMERA':
-        result  = [dict[key]]
-  return ['--camera'] + result if result else []
+def arguments(conf_file):
+  result      = []
+  dictionary  = dotenv.dotenv_values(conf_file) if os.path.isfile(conf_file) else []
+  camera      = args.camera      if args.camera     else dictionary.get('ARG_CAMERA')
+  projection  = args.projection  if args.projection else dictionary.get('ARG_PROJECTION')
+  if camera:
+    result = result + ['--camera', camera]
+  if projection:
+    result = result + ['--projection', projection]
+  return result
 
 def test_cases(lines):
   result = []
@@ -63,7 +63,7 @@ def run(base,test,output,dry_run=False,case=None):
       for line in lines:
         match   = re.findall('^WARNING:',line)
         if match:
-          cprint(f'✝','red')
+          cprint('✝','red')
           return -1
       cprint('✔','green')
       return 0
@@ -77,9 +77,11 @@ def echo(path,base):
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--camera", help = "OpenSCAD camera position")
 parser.add_argument("-d", "--dry-run", action='store_true', help = "On screen dump only of the generated dot file")
-parser.add_argument("test", type=str, help="Full test path WITHOUT SUFFIX")
+parser.add_argument("-p", "--projection", help = "(o)rtho or (p)erspective when exporting png")
 parser.add_argument("-t", "--temp-root", type=str, help = "Temporary directory path", choices=["/var/tmp","/tmp"],default="/tmp")
 parser.add_argument("-v", "--verbosity", type=int, help = "Increase verbosity", choices=[ofl.SILENT,ofl.ERROR,ofl.WARN,ofl.INFO,ofl.DEBUG],default=ofl.ERROR)
+
+parser.add_argument("test", type=str, help="Full test path WITHOUT SUFFIX")
 
 args = parser.parse_args()
 
@@ -100,11 +102,10 @@ scad    = os.path.join(path,base+'.scad')
 ofl.debug("path : % s" %path)
 ofl.debug("base : % s" %base)
 
-camera  = get_camera(args.camera,conf)
-command = ofl.oscad + (camera if camera else [])
+command = ofl.oscad + arguments(conf)
+cmds    = []
+cases   = []
 
-cmds = []
-cases = []
 if os.path.isfile(json):
   ofl.debug("JSON file found")
   cases = test_cases(ofl.read_lines(json))
@@ -127,9 +128,10 @@ for i, cmd in enumerate(cmds):
     if not os.path.exists(o_dir) and not args.dry_run:
       os.mkdir(o_dir)
   else:
-    case =None
-    o_base=base
-    o_dir=path
+    case    = None
+    o_base  = base
+    o_dir   = path
+
   o_file = echo(o_dir,o_base)
   rc = run(base,cmd+[scad],o_file,args.dry_run,case)
   if rc!=0:

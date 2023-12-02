@@ -41,10 +41,8 @@ def error(message):
     return cprint("[*ERR*] "+message, 'red')
 
 def read_lines(fname):
-  file = open(fname)
-  lines = file.readlines()
-  file.close()
-  return lines
+  with open(fname) as file:
+    return file.readlines()
 
 SILENT  = 0
 ERROR   = 1
