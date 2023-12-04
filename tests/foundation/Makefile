@@ -6,20 +6,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-T_LIST			= 2d 2d-ellipse 2d_grid 3d 3d_funcs algo assertions base_geo base_list \
-base_string bend bend2 connect core-comparison core-symbols fillet hole label \
-layout limits lists profile square torus trace tube type_trait util
-
-# profile
-# square
-# template
-# torus
-# trace
-# tube
-# type_trait
-# util
-
-
+T_LIST			= 2d 2d-ellipse 2d_grid 3d 3d_funcs algo assertions base_geo \
+base_list base_string bend bend2 connect core-comparison core-symbols fillet \
+hole label layout limits lists profile square torus trace tube type_trait util
 
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
