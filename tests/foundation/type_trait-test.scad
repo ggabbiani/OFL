@@ -9,9 +9,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+// **** TEST_INCLUDES *********************************************************
 
 include <../../lib/OFL/foundation/type_trait.scad>
 include <../../lib/OFL/foundation/unsafe_defs.scad>
+
+// **** TEST_PROLOGUE *********************************************************
+
+fl_status();
 
 // end of automatically generated code
 

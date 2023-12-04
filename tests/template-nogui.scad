@@ -9,6 +9,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+// **** TEST_INCLUDES *********************************************************
 ${TEST_INCLUDES}
+// **** TEST_PROLOGUE *********************************************************
+${TEST_PROLOGUE}
 // end of automatically generated code
 ${TEST_CODE}
