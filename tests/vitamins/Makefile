@@ -9,6 +9,7 @@
 T_LIST			= countersinks ether generic hd hdmi heatsink jack knurl_nuts \
 magnet pcb pcb_adapter pcb_custom pcb_import pin_header psu sata \
 sata-adapter screw sd spdt switch trimpot usb
+
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
