@@ -18,7 +18,7 @@ from termcolor import colored, cprint
 import ofl
 
 def handler(signum, frame):
-    cprint('***INTERRUPTED***\n','red')
+    cprint('\n\n***INTERRUPTED***\n','red')
     exit(0)
 
 def git_version_tag():
