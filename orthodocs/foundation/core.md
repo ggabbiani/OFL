@@ -1585,6 +1585,8 @@ __Syntax:__
 fl_payload(type,value)
 ```
 
+pay-load bounding box, it contributes to the overall bounding box calculation
+
 ---
 
 ### function fl_pcb
