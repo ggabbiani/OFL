@@ -7,8 +7,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 T_LIST			= countersinks ether generic hd hdmi heatsink jack knurl_nuts \
-magnet pcb pcb_adapter pcb_custom pcb_import pin_header psu sata \
-sata-adapter screw sd spdt switch trimpot usb
+magnet pcb pcb_adapter pcb_custom pcb_frame pcb_import pcb_proxy pin_header \
+psu sata sata-adapter screw sd spdt switch trimpot usb
 
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
@@ -31,5 +31,6 @@ clean: clean-results
 	@echo "$(SOURCES): DELETED"
 
 clean-results:
-	@for f in $(RESULTS) ; do rm -rf $$f ; done
-	@echo "$(RESULTS): DELETED"
+	@echo -n -e "\e[33m$@ [tests/vitamins]\e[0m: "
+	@for f in $(RESULTS) ; do rm -fr $$f ; done
+	@echo -e "\e[32m✔\e[0m"

@@ -29,5 +29,6 @@ clean: clean-results
 	@echo "$(SOURCES): DELETED"
 
 clean-results:
+	@echo -n -e "\e[33m$@ [tests/foundation]\e[0m: "
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
-	@echo "$(RESULTS): DELETED"
+	@echo -e "\e[32m✔\e[0m"

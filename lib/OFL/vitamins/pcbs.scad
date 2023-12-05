@@ -33,6 +33,9 @@ use <../foundation/mngm-engine.scad>
 //! namespace for PCB engine
 FL_PCB_NS  = "pcb";
 
+//! PCB frame engine
+FL_PCB_ENGINE_FRAME="PCB frame engine";
+
 //*****************************************************************************
 // PCB properties
 // when invoked by «type» parameter act as getters
@@ -100,7 +103,7 @@ function fl_PCB(
   let(
     comp_bbox = components ? fl_comp_BBox(components) : undef,
     pload     = payload ? payload : comp_bbox,
-    bbox      = function (type) pload
+    bbox      = function (type,key,default) pload
                   ? [
                       [bare[0].x,bare[0].y,min(bare[0].z,pload[0].z)],
                       [bare[1].x,bare[1].y,max(bare[1].z,pload[1].z)]
@@ -448,333 +451,343 @@ module fl_pcb(
 
   fl_trace("thick",thick);
 
-  pcb_t     = fl_pcb_thick(type);
-  comps     = fl_pcb_components(type);
-  size      = fl_bb_size(type);
-  bbox      = fl_bb_corners(type);
-  pload     = fl_has(type,fl_payload()[0]) ? fl_payload(type) : undef;
-  holes     = fl_holes(type);
-  screw     = fl_has(type,fl_screw()[0]) ? fl_screw(type) : undef;
-  screw_r   = screw ? screw_radius(screw) : 0;
-  thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
-            : assert(!fl_debug() || fl_tt_isAxisVList(thick)) thick;
-  neg_delta = -pcb_t-bbox[0].z;
-  dr_thick  = pcb_t+neg_delta+thick.z[0]; // thickness along -Z
-  cut_thick = thick;
-  material  = fl_material(type,default="green");
-  radius    = fl_pcb_radius(type);
-  grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
-  dxf       = fl_optional(type,fl_dxf()[0]);
-  conns     = fl_optional(type,fl_connectors()[0]);
-  lay_array = fl_pcb_layoutArray(type);
+  module native() {
 
-  M         = fl_octant(octant,bbox=bbox);
-  D         = direction ? fl_direction(direction)  : I;
+    pcb_t     = fl_pcb_thick(type);
+    comps     = fl_pcb_components(type);
+    size      = fl_bb_size(type);
+    bbox      = fl_bb_corners(type);
+    pload     = fl_has(type,fl_payload()[0]) ? fl_payload(type) : undef;
+    holes     = fl_holes(type);
+    screw     = fl_has(type,fl_screw()[0]) ? fl_screw(type) : undef;
+    screw_r   = screw ? screw_radius(screw) : 0;
+    thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
+              : assert(!fl_debug() || fl_tt_isAxisVList(thick)) thick;
+    neg_delta = -pcb_t-bbox[0].z;
+    dr_thick  = pcb_t+neg_delta+thick.z[0]; // thickness along -Z
+    cut_thick = thick;
+    material  = fl_material(type,default="green");
+    radius    = fl_pcb_radius(type);
+    grid      = fl_has(type,fl_pcb_grid()[0]) ? fl_pcb_grid(type) : undef;
+    dxf       = fl_optional(type,fl_dxf()[0]);
+    conns     = fl_optional(type,fl_connectors()[0]);
+    lay_array = fl_pcb_layoutArray(type);
 
-  function fl_pcb_NopHoles(nop) = let(
-    pcb_t     = pcb_thickness(nop),
-    hole_d    = pcb_hole_d(nop),
-    nop_holes = pcb_holes(nop),
-    holes     = [
-      for(h=nop_holes) [
-        let(p=pcb_coord(nop, h)) [p.x,p.y,pcb_t],  // 3d point
-        +Z,                           // plane normal
-        hole_d,                       // hole diameter
-        pcb_t                         // hole depth
+    M         = fl_octant(octant,bbox=bbox);
+    D         = direction ? fl_direction(direction)  : I;
+
+    function fl_pcb_NopHoles(nop) = let(
+      pcb_t     = pcb_thickness(nop),
+      hole_d    = pcb_hole_d(nop),
+      nop_holes = pcb_holes(nop),
+      holes     = [
+        for(h=nop_holes) [
+          let(p=pcb_coord(nop, h)) [p.x,p.y,pcb_t],  // 3d point
+          +Z,                           // plane normal
+          hole_d,                       // hole diameter
+          pcb_t                         // hole depth
+        ]
       ]
-    ]
-  ) holes;
+    ) holes;
 
-  module grid_plating() {
-  /*!
-   * Return the grid size in [cols,rows] format
-   */
-  function fl_grid_geometry(grid,size) = let(
-      cols  = is_undef(grid[2]) ? round((size.x - 2 * grid.x) / inch(0.1))  : grid[2] - 1,
-      rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
-    ) [cols,rows];
+    module grid_plating() {
+    /*!
+    * Return the grid size in [cols,rows] format
+    */
+    function fl_grid_geometry(grid,size) = let(
+        cols  = is_undef(grid[2]) ? round((size.x - 2 * grid.x) / inch(0.1))  : grid[2] - 1,
+        rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
+      ) [cols,rows];
 
-    t               = size.z;
-    plating         = 0.1;
-    fr4             = material != "sienna";
-    plating_color  = is_undef(grid[4]) ? ((material == "green" || material == "#2140BE") ? silver : material == "sienna" ? copper : gold) : grid[4];
-    color(plating_color)
-      translate(-Z(plating))
-        linear_extrude(fr4 ? t + 2 * plating : plating) {
-          fl_grid_layout(
-            step    = inch(0.1),
-            bbox    = bbox+[grid,-grid],
-            clip    = false
-          ) difference() {
-            circle(d=2);
-            circle(d=2-2xNIL-2*0.5);
-          };
-
-          // oval lands at the ends
-          if (fr4 && len(grid) < 3) {
-            screw_x = fl_hole_pos(holes[0]).x;
-            y0      = grid.y;
-            rows    = fl_grid_geometry(grid,size).y;
-            for(end = [-1, 1], y = [1 : rows - 1])
-              translate([end * screw_x, y0 + y * inch(0.1) - size.y / 2])
-                hull()
-                  for(x = [-1, 1])
-                    translate([x * 1.6 / 2, 0])
-                      circle(d = 2);
-          }
-        }
-  }
-
-  // TODO: better clarify the kind of native positioning, right now it places pcb on first quadrant
-  // then translate according the bounding box. This doesn't match the behavior followed
-  // for holes, that are instead already placed in the final full 3d space
-  module do_add() {
-    fl_color(material) difference() {
-      translate(-Z(pcb_t)) linear_extrude(pcb_t)
-        difference() {
-          if (dxf) {
-            fl_importDxf(file=dxf,layer="0");
-            // fl_importDxf(file=dxf,layer="PG_SILKSCREEN_TOP");
-          } else
-            translate(bbox[0])
-              fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
-          if (grid)
+      t               = size.z;
+      plating         = 0.1;
+      fr4             = material != "sienna";
+      plating_color  = is_undef(grid[4]) ? ((material == "green" || material == "#2140BE") ? silver : material == "sienna" ? copper : gold) : grid[4];
+      color(plating_color)
+        translate(-Z(plating))
+          linear_extrude(fr4 ? t + 2 * plating : plating) {
             fl_grid_layout(
               step    = inch(0.1),
               bbox    = bbox+[grid,-grid],
               clip    = false
-            ) circle(d=1);
-        }
+            ) difference() {
+              circle(d=2);
+              circle(d=2-2xNIL-2*0.5);
+            };
+
+            // oval lands at the ends
+            if (fr4 && len(grid) < 3) {
+              screw_x = fl_hole_pos(holes[0]).x;
+              y0      = grid.y;
+              rows    = fl_grid_geometry(grid,size).y;
+              for(end = [-1, 1], y = [1 : rows - 1])
+                translate([end * screw_x, y0 + y * inch(0.1) - size.y / 2])
+                  hull()
+                    for(x = [-1, 1])
+                      translate([x * 1.6 / 2, 0])
+                        circle(d = 2);
+            }
+          }
+    }
+
+    // TODO: better clarify the kind of native positioning, right now it places pcb on first quadrant
+    // then translate according the bounding box. This doesn't match the behavior followed
+    // for holes, that are instead already placed in the final full 3d space
+    module do_add() {
+      fl_color(material) difference() {
+        translate(-Z(pcb_t)) linear_extrude(pcb_t)
+          difference() {
+            if (dxf) {
+              fl_importDxf(file=dxf,layer="0");
+              // fl_importDxf(file=dxf,layer="PG_SILKSCREEN_TOP");
+            } else
+              translate(bbox[0])
+                fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
+            if (grid)
+              fl_grid_layout(
+                step    = inch(0.1),
+                bbox    = bbox+[grid,-grid],
+                clip    = false
+              ) circle(d=1);
+          }
+          do_layout("components")
+            if ($comp_subtract!=undef) {
+              // TODO: either extend to all the engines once sure FL_FOOTPRINT is implemented for all of them or eliminate it and use dxf
+              if ($comp_engine==FL_USB_NS) fl_USB(verbs=FL_FOOTPRINT,type=$comp_type,direction=$comp_direction,tolerance=$comp_subtract);
+            }
+        if (holes)
+          fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z],pcb_t);
+
+        // generates drills on pcb from components
+        // TODO: extends to all the supported components
         do_layout("components")
-          if ($comp_subtract!=undef) {
-            // TODO: either extend to all the engines once sure FL_FOOTPRINT is implemented for all of them or eliminate it and use dxf
-            if ($comp_engine==FL_USB_NS) fl_USB(verbs=FL_FOOTPRINT,type=$comp_type,direction=$comp_direction,tolerance=$comp_subtract);
-          }
-      if (holes)
-        fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z],pcb_t);
+          if ($comp_director==+Z||$comp_director==-Z)
+            if ($comp_engine==FL_PHDR_NS)
+              translate(+Z(NIL)) fl_pinHeader([FL_DRILL],$comp_type,cut_thick=pcb_t+2xNIL,octant=$comp_octant,direction=$comp_direction);
 
-      // generates drills on pcb from components
-      // TODO: extends to all the supported components
+      }
+      if (grid)
+        translate(-Z(pcb_t)) grid_plating();
+
+    }
+
+    module context() {
+      $pcb_radius = radius;
+      $pcb_thick  = pcb_t;
+      children();
+    }
+
+    module do_layout(class,label,directions) {
+      assert(!fl_debug() || is_string(class),class);
+      assert(!fl_debug() || label==undef||is_string(label),label);
+      assert(!fl_debug() || directions==undef||is_list(directions),directions);
+      fl_trace("class",class);
+      fl_trace("directions",directions);
+      fl_trace("label",label);
+      fl_trace("children",$children);
+
+      // echo(str("fl_pcb{} do_layout{class=",class,",label=",label,",directions=",directions,"}"))
+      if (label) {
+        assert(!fl_debug() || class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
+        // $label      = label;
+        component  = fl_optional(comps,label);
+        if (component!=undef)
+          fl_comp_Context(component)
+            translate($comp_position)
+              children();
+        else
+          echo(str("***WARN***: component '",label,"' not found"));
+      } else if (directions) {
+        assert(!fl_debug() ||class=="components",str("Cannot layout BY DIRECTION on class '",class,"'"));
+        // note:
+        // union() is mandatory until version 2021.01
+        // from version 2023.05.19 it could be removed
+        // «c» = ["label",component]
+        for(c=comps) fl_comp_Specs(c) let(
+          // transform component directions into pcb coordinate system
+          dirs  = fl_cutout($comp_type),
+          D     = fl_direction($comp_direction),
+          new   = [for(d=dirs) fl_transform(D,d)]
+        ) // triggers a component when any cut_direction(s) is present in the
+          // component direction list
+          if (search(new,cut_direction)!=[[]])
+            translate($comp_position)
+              children();
+      } else {  // by class
+        if (class=="components")
+          for(c=comps) {
+            fl_trace("c:",c);
+            fl_comp_Specs(c) {  // «c» = ["label",component]
+              translate($comp_position) children();
+            }
+          }
+        else if (class=="holes")
+          fl_lay_holes(holes,lay_direction,screw=screw)
+            context()
+              children();
+        else
+          assert(false,str("unknown component class '",class,"'."));
+      }
+    }
+
+    module do_assembly() {
+      function verbs() = /* echo($comp_label=$comp_label) */ [
+        FL_ADD,
+        if (fl_parm_components(debug,$comp_label)) FL_AXES
+      ];
+      function render() = fl_parm_components(debug,$comp_label) ? "DEBUG" : $FL_ADD;
+
       do_layout("components")
-        if ($comp_director==+Z||$comp_director==-Z)
-          if ($comp_engine==FL_PHDR_NS)
-            translate(+Z(NIL)) fl_pinHeader([FL_DRILL],$comp_type,cut_thick=pcb_t+2xNIL,octant=$comp_octant,direction=$comp_direction);
-
-    }
-    if (grid)
-      translate(-Z(pcb_t)) grid_plating();
-
-  }
-
-  module context() {
-    $pcb_radius = radius;
-    $pcb_thick  = pcb_t;
-    children();
-  }
-
-  module do_layout(class,label,directions) {
-    assert(!fl_debug() || is_string(class),class);
-    assert(!fl_debug() || label==undef||is_string(label),label);
-    assert(!fl_debug() || directions==undef||is_list(directions),directions);
-    fl_trace("class",class);
-    fl_trace("directions",directions);
-    fl_trace("label",label);
-    fl_trace("children",$children);
-
-    // echo(str("fl_pcb{} do_layout{class=",class,",label=",label,",directions=",directions,"}"))
-    if (label) {
-      assert(!fl_debug() || class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
-      // $label      = label;
-      component  = fl_optional(comps,label);
-      if (component!=undef)
-        fl_comp_Context(component)
-          translate($comp_position)
-            children();
-      else
-        echo(str("***WARN***: component '",label,"' not found"));
-    } else if (directions) {
-      assert(!fl_debug() ||class=="components",str("Cannot layout BY DIRECTION on class '",class,"'"));
-      // note:
-      // union() is mandatory until version 2021.01
-      // from version 2023.05.19 it could be removed
-      // «c» = ["label",component]
-      for(c=comps) fl_comp_Specs(c) let(
-        // transform component directions into pcb coordinate system
-        dirs  = fl_cutout($comp_type),
-        D     = fl_direction($comp_direction),
-        new   = [for(d=dirs) fl_transform(D,d)]
-      ) // triggers a component when any cut_direction(s) is present in the
-        // component direction list
-        if (search(new,cut_direction)!=[[]])
-          translate($comp_position)
-            children();
-    } else {  // by class
-      if (class=="components")
-        for(c=comps) {
-          fl_trace("c:",c);
-          fl_comp_Specs(c) {  // «c» = ["label",component]
-            translate($comp_position) children();
-          }
-        }
-      else if (class=="holes")
-        fl_lay_holes(holes,lay_direction,screw=screw)
-          context()
-            children();
-      else
-        assert(false,str("unknown component class '",class,"'."));
-    }
-  }
-
-  module do_assembly() {
-    function verbs() = /* echo($comp_label=$comp_label) */ [
-      FL_ADD,
-      if (fl_parm_components(debug,$comp_label)) FL_AXES
-    ];
-    function render() = fl_parm_components(debug,$comp_label) ? "DEBUG" : $FL_ADD;
-
-    do_layout("components")
-      if ($comp_engine==FL_USB_NS)          // USB
-        fl_USB(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,tongue=$comp_color,debug=debug,$FL_ADD=render());
-      else if ($comp_engine==FL_HDMI_NS)    // HDMI
-        fl_hdmi(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
-      else if ($comp_engine==FL_JACK_NS)    // JACK
-        fl_jack(verbs(),type=$comp_type,direction=$comp_direction,octant=$comp_octant,debug=debug,$FL_ADD=render());
-      else if ($comp_engine==FL_ETHER_NS)   // ETHERNET
-        fl_ether(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
-      else if ($comp_engine==FL_PHDR_NS)    // PIN HEADER
-        fl_pinHeader(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
-      else if ($comp_engine==FL_TRIM_NS)    // TRIM POT
-        fl_trimpot(verbs(),type=$comp_type,direction=$comp_direction,octant=$comp_octant,$FL_ADD=render());
-      else if ($comp_engine==FL_SD_NS)      // SECURE DIGITAL
-        fl_sd_usocket(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
-      else if ($comp_engine==FL_SWT_NS) {   // SWITCH
-        fl_switch(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
-      } else if ($comp_engine==FL_HS_NS)    // HEAT SINK
-        fl_heatsink(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
-      else if ($comp_engine==FL_GENERIC_NS) // GENERIC VITAMIN
-        fl_generic_vitamin(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
-      else
-        assert(false,str("Unknown engine ",$comp_engine));
-  }
-
-  // FIXME: components should modify also the hole layout
-  module do_mount() {
-    if (holes)
-      fl_lay_holes(holes,lay_direction)
-        let(scr = is_undef($hole_screw) ? screw : $hole_screw)
-          if (scr) fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,thick=dr_thick);
-  }
-
-  module do_drill() {
-    fl_lay_holes(holes,lay_direction)
-      fl_cylinder(d=$hole_d,h=dr_thick,octant=-$hole_n);
-  }
-
-  module do_cutout() {
-    // triggers the component in context
-    module trigger() {
-      cut_thick = $comp_director==+X ? cut_thick.x[1] : $comp_director==-X ? cut_thick.x[0]
-                : $comp_director==+Y ? cut_thick.y[1] : $comp_director==-Y ? cut_thick.y[0]
-                : $comp_director==+Z ? cut_thick.z[1] : cut_thick.z[0];
-      // echo(str("fl_pcb{} do_cutout{} trigger{",$comp_engine,"} cut_thick=",cut_thick))
-
-      if ($comp_engine==FL_USB_NS)
-        fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
-      else if ($comp_engine==FL_HDMI_NS)
-        fl_hdmi(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_JACK_NS)
-        fl_jack(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_ETHER_NS)
-        fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_PHDR_NS) let(
-          thick = bbox[1].z+cut_thick
-        ) fl_pinHeader(FL_CUTOUT,$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_TRIM_NS) let(
-          sz    = fl_bb_size($comp_type),
-          thick = bbox[1].z-sz.y+cut_thick
-        ) fl_trimpot(FL_CUTOUT,type=$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,direction=$comp_direction,octant=$comp_octant);
-      else if ($comp_engine==FL_SD_NS)
-        fl_sd_usocket(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick+2,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_SWT_NS)
-        fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
-      else if ($comp_engine==FL_HS_NS)
-        // TODO: implement a rationale for heat-sinks cut-out operations
-        // fl_heatsink(FL_CUTOUT,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-        ;
-      else if ($comp_engine==FL_GENERIC_NS)
-        fl_generic_vitamin(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
-      else
-        assert(false,str("Unknown engine ",$comp_engine));
+        if ($comp_engine==FL_USB_NS)          // USB
+          fl_USB(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,tongue=$comp_color,debug=debug,$FL_ADD=render());
+        else if ($comp_engine==FL_HDMI_NS)    // HDMI
+          fl_hdmi(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+        else if ($comp_engine==FL_JACK_NS)    // JACK
+          fl_jack(verbs(),type=$comp_type,direction=$comp_direction,octant=$comp_octant,debug=debug,$FL_ADD=render());
+        else if ($comp_engine==FL_ETHER_NS)   // ETHERNET
+          fl_ether(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+        else if ($comp_engine==FL_PHDR_NS)    // PIN HEADER
+          fl_pinHeader(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+        else if ($comp_engine==FL_TRIM_NS)    // TRIM POT
+          fl_trimpot(verbs(),type=$comp_type,direction=$comp_direction,octant=$comp_octant,$FL_ADD=render());
+        else if ($comp_engine==FL_SD_NS)      // SECURE DIGITAL
+          fl_sd_usocket(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+        else if ($comp_engine==FL_SWT_NS) {   // SWITCH
+          fl_switch(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+        } else if ($comp_engine==FL_HS_NS)    // HEAT SINK
+          fl_heatsink(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+        else if ($comp_engine==FL_GENERIC_NS) // GENERIC VITAMIN
+          fl_generic_vitamin(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+        else
+          assert(false,str("Unknown engine ",$comp_engine));
     }
 
-    fl_trace("cut_label: ",cut_label);
-    if (cut_label)
-      do_layout("components",cut_label)
-        trigger();
-    else // echo("fl_pcb{} do_cutout{} COMPONENTS")
-      do_layout("components",undef,cut_direction)
-        trigger();
-  }
-
-  module do_payload() {
-    if (pload)
-      fl_bb_add(pload,$FL_ADD=$FL_PAYLOAD);
-  }
-
-  module do_symbols(debug,connectors,holes) {
-    if (debug) {
-      if (connectors)
-        fl_conn_debug(connectors,debug=debug);
+    // FIXME: components should modify also the hole layout
+    module do_mount() {
       if (holes)
-        fl_hole_debug(holes,debug=debug);
+        fl_lay_holes(holes,lay_direction)
+          let(scr = is_undef($hole_screw) ? screw : $hole_screw)
+            if (scr) fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,thick=dr_thick);
+    }
+
+    module do_drill() {
+      fl_lay_holes(holes,lay_direction)
+        fl_cylinder(d=$hole_d,h=dr_thick,octant=-$hole_n);
+    }
+
+    module do_cutout() {
+      // triggers the component in context
+      module trigger() {
+        cut_thick = $comp_director==+X ? cut_thick.x[1] : $comp_director==-X ? cut_thick.x[0]
+                  : $comp_director==+Y ? cut_thick.y[1] : $comp_director==-Y ? cut_thick.y[0]
+                  : $comp_director==+Z ? cut_thick.z[1] : cut_thick.z[0];
+        // echo(str("fl_pcb{} do_cutout{} trigger{",$comp_engine,"} cut_thick=",cut_thick))
+
+        if ($comp_engine==FL_USB_NS)
+          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
+        else if ($comp_engine==FL_HDMI_NS)
+          fl_hdmi(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+        else if ($comp_engine==FL_JACK_NS)
+          fl_jack(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+        else if ($comp_engine==FL_ETHER_NS)
+          fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+        else if ($comp_engine==FL_PHDR_NS) let(
+            thick = bbox[1].z+cut_thick
+          ) fl_pinHeader(FL_CUTOUT,$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
+        else if ($comp_engine==FL_TRIM_NS) let(
+            sz    = fl_bb_size($comp_type),
+            thick = bbox[1].z-sz.y+cut_thick
+          ) fl_trimpot(FL_CUTOUT,type=$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,direction=$comp_direction,octant=$comp_octant);
+        else if ($comp_engine==FL_SD_NS)
+          fl_sd_usocket(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick+2,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
+        else if ($comp_engine==FL_SWT_NS)
+          fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+        else if ($comp_engine==FL_HS_NS)
+          // TODO: implement a rationale for heat-sinks cut-out operations
+          // fl_heatsink(FL_CUTOUT,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
+          ;
+        else if ($comp_engine==FL_GENERIC_NS)
+          fl_generic_vitamin(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+        else
+          assert(false,str("Unknown engine ",$comp_engine));
+      }
+
+      fl_trace("cut_label: ",cut_label);
+      if (cut_label)
+        do_layout("components",cut_label)
+          trigger();
+      else // echo("fl_pcb{} do_cutout{} COMPONENTS")
+        do_layout("components",undef,cut_direction)
+          trigger();
+    }
+
+    module do_payload() {
+      if (pload)
+        fl_bb_add(pload,$FL_ADD=$FL_PAYLOAD);
+    }
+
+    module do_symbols(debug,connectors,holes) {
+      if (debug) {
+        if (connectors)
+          fl_conn_debug(connectors,debug=debug);
+        if (holes)
+          fl_hole_debug(holes,debug=debug);
+      }
+    }
+
+    module do_fprint() {
+      translate(-Z(pcb_t)) linear_extrude(pcb_t)
+        if (dxf)
+          fl_importDxf(file=dxf,layer="0");
+        else
+          translate(bbox[0])
+            fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y,$FL_ADD=$FL_FOOTPRINT);
+    }
+
+    fl_manage(verbs,M,D) {
+      if ($verb==FL_ADD) {
+        do_symbols(debug,conns,holes);
+        fl_modifier($modifier) do_add();
+
+      } else if ($verb==FL_ASSEMBLY) {
+        fl_modifier($modifier) do_assembly();
+
+      } else if ($verb==FL_AXES) {
+        fl_modifier($FL_AXES)
+          fl_doAxes(size,direction,debug);
+
+      } else if ($verb==FL_BBOX) {
+        fl_modifier($modifier) fl_bb_add(bbox);
+
+      } else if ($verb==FL_CUTOUT) {
+        fl_modifier($modifier) do_cutout($fl_debug=true);
+
+      } else if ($verb==FL_DRILL) {
+        fl_modifier($modifier) do_drill();
+
+      } else if ($verb==FL_FOOTPRINT) {
+        fl_modifier($modifier) do_fprint();
+
+      } else if ($verb==FL_LAYOUT) {
+        fl_modifier($modifier) do_layout("holes")
+          children();
+
+      } else if ($verb==FL_MOUNT) {
+        fl_modifier($modifier) do_mount();
+
+      } else if ($verb==FL_PAYLOAD) {
+        fl_modifier($modifier) do_payload();
+
+      } else
+        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
   }
 
-  module do_fprint() {
-    translate(-Z(pcb_t)) linear_extrude(pcb_t)
-      if (dxf)
-        fl_importDxf(file=dxf,layer="0");
-      else
-        translate(bbox[0])
-          fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y,$FL_ADD=$FL_FOOTPRINT);
-  }
-
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
-      do_symbols(debug,conns,holes);
-      fl_modifier($modifier) do_add();
-
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
-
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
-
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
-
-    } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier) do_cutout($fl_debug=true);
-
-    } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier) do_drill();
-
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) do_fprint();
-
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout("holes")
-        children();
-
-    } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier) do_mount();
-
-    } else if ($verb==FL_PAYLOAD) {
-      fl_modifier($modifier) do_payload();
-
-    } else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+  if (fl_optProperty(type,fl_engine()[0])==FL_PCB_ENGINE_FRAME)
+    fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=cut_tolerance,cut_label=cut_label,cut_direction=cut_direction,debug=debug,direction=direction,octant=octant)
+      children();
+  else {
+    native() children();
   }
 }
 
@@ -909,5 +922,333 @@ module fl_pcb_adapter(
 
     } else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+  }
+}
+
+//**** PCB Frames *************************************************************
+
+/*!
+ * A PCB frame is a size driven adapter for PCBs, providing them the necessary
+ * holes to be fixed in a box.
+ *
+ * This Constructor assumes the bare PCB bounding box depth is from -«pcb thick»
+ * to 0.
+ */
+function fl_pcb_Frame(
+  //! pcb object to be framed
+  pcb,
+  //! nominal screw ⌀
+  d=2,
+  /*!
+   * List of Z-axis thickness for top and bottom faces or a common scalar value
+   * for both.
+   *
+   * Positive value set thickness for the top face, negative for bottom while a
+   * scalar can be used for both.
+   *
+   *     faces = [+3,-1]
+   *
+   * is interpreted as 3mm top, 1mm bottom
+   *
+   *     faces = [-1]
+   *
+   * is interpreted as 1mm bottom
+   *
+   *     faces = 2
+   *
+   * is interpreted as 2mm for top and bottom faces
+   *
+   */
+  faces=1.2,
+  //! distance between holes and external frame dimensions
+  wall=1.5,
+  /*!
+   * overlap in the form [wide,thin]: wide overlap is along major pcb dimension,
+   * thin overlap is along the minor pcb one
+   */
+  overlap=[1,0.5],
+  /*!
+   * inclusion is the size along major pcb dimension, laterally surrounding the pcb
+   */
+  inclusion=5,
+  countersink=false,
+  /*!
+   * Frame layout method:
+   *
+   *     - "auto" (default) : auto detected based on PCB dimensions
+   *     - "horizontal"     : holders are deployed horizontally from left to
+   *                          right
+   *     - "vertical"       : holders are deployed vertically from bottom to top
+   */
+  layout="auto"
+) = let(
+  horizontal  = layout=="auto" ? assert(pcb) let(sz=fl_bb_size(pcb)) sz.x>sz.y : layout=="horizontal",
+  r           = d/2,
+  pcb_bb      =
+    assert(pcb)
+    let(
+      bb  = fl_bb_corners(pcb)
+    ) horizontal ? bb : let(
+      cog     = bb[0]+(bb[1]-bb[0])/2,
+      R       = T(cog)*fl_R(+Z,90)*T(-cog),
+      corners = fl_list_transform(bb,R)
+    ) [
+      [min(corners[0].x,corners[1].x),min(corners[0].y,corners[1].y),min(corners[0].z,corners[1].z)],
+      [max(corners[0].x,corners[1].x),max(corners[0].y,corners[1].y),max(corners[0].z,corners[1].z)]
+    ],
+
+  // FROM HERE ONWARDS THE ALGORITHM BEHAVES AS IF THE LAYOUT WERE 'HORIZONTAL'
+  pcb_cog = pcb_bb[0]+(pcb_bb[1]-pcb_bb[0])/2,  // PCB's center of gravity
+  pcb_t   = fl_pcb_thick(pcb),
+  pcb_sz  = pcb_bb[1]-pcb_bb[0],
+  screw   = fl_screw_search(d=d,head_type=countersink?hs_cs_cap:hs_cap)[0],
+  faces   = fl_parm_SignedPair(faces),
+  depth   = abs(faces[0])+faces[1]+pcb_t,
+  delta   = [+r,-(r+wall)],
+  bbox    = fl_bb_calc([
+    // bare holder bounding box
+    [[pcb_bb[0].x-wall, pcb_bb[0].y-(d+2*wall),-(1+pcb_t)],[pcb_bb[1].x+wall,pcb_bb[1].y+(d+2*wall),+1]],
+    // PCB bounding box
+    pcb_bb
+    ]),
+  // four holes at the pcb corners + Δ
+  holes   = [
+      for(
+        x=[pcb_bb[0].x+delta.x,pcb_bb[1].x-delta.x],
+        y=[pcb_bb[0].y+delta.y,pcb_bb[1].y-delta.y]
+      ) fl_Hole([x,y,faces[1]],d,depth=depth,screw=screw)
+    ],
+  w_over  = overlap[0],
+  t_over  = overlap[1],
+  /*
+   * left bottom corner sector: we use the list transform function for
+   * translating the 2d points returned from fl_sector() to the first hole.
+   * NOTE: we drop first sector point (the center)
+   */
+  sec_lb  = fl_list_transform(
+    // exclude first point (i.e. sector's center)
+    fl_list_sub(fl_sector(r=r+wall, angles=[180,270]),1),
+    // translation to holes[0]
+    T(fl_hole_pos(holes[0])),
+    FL_3D,FL_2D
+  ),
+  // left side internal points
+  pts_l     = [
+    [pcb_bb[0].x+inclusion, pcb_bb[0].y-(d+2*wall)],
+    [pcb_bb[0].x+inclusion, pcb_bb[0].y+t_over],
+    [pcb_bb[0].x+w_over,    pcb_bb[0].y+t_over],
+    [pcb_bb[0].x+w_over,    pcb_bb[1].y-t_over],
+    [pcb_bb[0].x+inclusion, pcb_bb[1].y-t_over],
+    [pcb_bb[0].x+inclusion, pcb_bb[1].y+(d+2*wall)],
+  ],
+  // left top corner sector: see comment about left bottom corner sector
+  sec_lt  = fl_list_transform(
+    // sector center removal
+    fl_list_sub(fl_sector(r=r+wall, angles=[90,180]),1),
+    // translation to holes[1]
+    T(fl_hole_pos(holes[1])),
+    FL_3D,FL_2D
+  ),
+  left = concat(sec_lb,pts_l,sec_lt),
+  // +180° rotation around axis PCB's center of gravity
+  right = fl_list_transform(left,T(pcb_cog) * fl_R(+Z,180) * T(-pcb_cog),FL_3D,FL_2D),
+  // if the layout is 'vertical' we need to rotate back -90° the results
+  M_back        = horizontal ? I      : T(pcb_cog) * fl_R(+Z,-90) * T(-pcb_cog),
+  result_bbox   = horizontal ? bbox   : fl_bb_polyhedron(fl_list_transform(bbox,M_back)),
+  result_left   = horizontal ? left   : fl_list_transform(left,M_back,FL_3D,FL_2D),
+  result_right  = horizontal ? right  : fl_list_transform(right,M_back,FL_3D,FL_2D),
+  result_holes  = horizontal ? holes : [
+      for(hole=holes)
+        let(p=fl_transform(M_back,fl_hole_pos(hole)))
+          fl_Hole([p.x,p.y,faces[1]],d,depth=depth,screw=screw)
+    ]
+) [
+  fl_OFL(value=true),
+  fl_pcb(value=pcb),
+  fl_bb_corners(value=result_bbox),
+  ["pcbf/wall",wall],
+  ["pcbf/inclusion",inclusion],
+  ["pcbf/overlap",overlap],
+  ["pcbf/left side points",result_left],
+  fl_screw(value=screw),
+  fl_holes(value=result_holes),
+  ["pcbf/right side points",result_right],
+  ["pcbf/[bottom,top] face thickness",faces],
+  fl_engine(value=FL_PCB_ENGINE_FRAME),
+  // 'proxyfied' properties
+  fl_pcb_thick(value=function(frame,key,default)        fl_pcb_thick(pcb)),
+  fl_pcb_components(value=function(frame,key,default)   fl_pcb_components(pcb)),
+  fl_pcb_radius(value=function(frame,key,default)       fl_pcb_radius(pcb)),
+  fl_pcb_layoutArray(value=function(frame,key,default)  fl_pcb_layoutArray(pcb)),
+];
+
+/*
+ * PCB frame engine.
+ *
+ * This engine acts mostly as a proxy forwarding verbs to its embedded PCB.
+ *
+ */
+module fl_pcb_frame(
+  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  verbs       = FL_ADD,
+  this,
+  //! see homonymous parameter for fl_pcb{}
+  cut_tolerance=0,
+  //! see homonymous parameter for fl_pcb{}
+  cut_label,
+  //! see homonymous parameter for fl_pcb{}
+  cut_direction,
+  //! see homonymous parameter for fl_pcb{}
+  thick=0,
+  //! see homonymous parameter for fl_pcb{}
+  lay_direction=[+Z],
+  frame_tolerance=0.2,
+  /*!
+   * PCB frame part visibility: defines which frame parts are shown.
+   *
+   * The full form is [«left|bottom part»,«right|top part»], where each list
+   * item is a boolean managing the visibility of the corresponding part.
+   *
+   * Setting this parameter as a single boolean extends its value to both the parts.
+   */
+  frame_parts=true,
+  //! see constructor fl_parm_Debug()
+  debug,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! when undef native positioning is used
+  octant,
+) {
+  assert(is_list(verbs)||is_string(verbs),verbs);
+
+  bbox  = fl_bb_corners(this);
+  size  = fl_bb_size(this);
+  D     = direction ? fl_direction(direction) : I;
+  M     = octant    ? fl_octant(octant,bbox=bbox) : I;
+
+  screw       = fl_screw(this);
+  d           = fl_screw_nominal(screw);
+  r           = d/2;
+  pcb         = fl_pcb(this);
+  pcb_bb      = fl_bb_corners(pcb);
+  pcb_t       = fl_pcb_thick(pcb);
+  pcb_bare_sz = let(sz=pcb_bb[1]-pcb_bb[0]) [sz.x,sz.y,pcb_t];
+  faces       = fl_property(this,"pcbf/[bottom,top] face thickness");
+  depth       = abs(faces[0])+faces[1]+pcb_t;
+  thick       = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
+              : assert(!fl_debug() || fl_tt_isAxisVList(thick)) thick;
+  dr_thick    = depth+thick.z[0]; // thickness along -Z
+  holes       = fl_holes(this);
+  wall        = fl_property(this,"pcbf/wall");
+  inclusion   = fl_property(this,"pcbf/inclusion");
+  overlap     = fl_property(this,"pcbf/overlap");
+  w_over      = overlap[0];
+  t_over      = overlap[1];
+  left        = (is_bool(frame_parts) ? frame_parts : frame_parts[0]) ? fl_property(this,"pcbf/left side points") : undef;
+  right       = (is_bool(frame_parts) ? frame_parts : frame_parts[1]) ? fl_property(this,"pcbf/right side points") : undef;
+
+  module do_symbols(debug,holes) {
+    if (debug) {
+      if (holes)
+        fl_hole_debug(holes,debug=debug);
+    }
+  }
+
+  module do_add() {
+    fl_color()
+      difference() {
+        translate(-Z(abs(faces[0])+pcb_t))
+          linear_extrude(depth) {
+            if (left)
+              polygon(left);
+            if (right)
+              polygon(right);
+          }
+        // remove PCB footprint
+        translate(+Z(frame_tolerance/2))
+          resize(pcb_bare_sz+frame_tolerance*[1,1,1])
+            fl_pcb(FL_FOOTPRINT,pcb,$FL_FOOTPRINT="ON");
+        // remove holes
+        translate(-Z(0))
+          fl_screw_holes(holes,[+Z], countersunk=true, tolerance=frame_tolerance, $FL_DRILL="ON");
+      }
+  }
+
+  module do_assembly() {
+    fl_pcb(FL_DRAW,type=pcb);
+  }
+
+  module do_cutout() {
+    fl_pcb(FL_CUTOUT,pcb,cut_tolerance=cut_tolerance,cut_label=cut_label,cut_direction=cut_direction,thick=thick,debug=debug, direction=direction, octant=octant);
+  }
+
+  module do_drill() {
+    translate(-Z(depth))
+    fl_screw_holes(holes,thick=thick,enable=lay_direction);
+  }
+
+  module do_footprint() {
+    translate(-Z(pcb_t-faces[0]))
+      linear_extrude(depth)
+        fl_square(size=[size.x,size.y],corners=[for(hole=holes) fl_hole_d(hole)],$FL_ADD=$FL_FOOTPRINT);
+  }
+
+  module do_layout() {
+    fl_lay_holes(holes,lay_direction)
+      children();
+  }
+
+  module do_mount() {
+    fl_lay_holes(holes,lay_direction)
+      fl_screw([FL_ADD,FL_ASSEMBLY],type=$hole_screw,thick=dr_thick);
+  }
+
+  module do_pload() {
+
+  }
+
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD) {
+      do_symbols(debug,holes=holes);
+      fl_modifier($modifier) do_add();
+
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly();
+
+    } else if ($verb==FL_AXES) {
+      fl_modifier($modifier)
+        fl_doAxes(size,direction,debug);
+
+    } else if ($verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
+
+    } else if ($verb==FL_CUTOUT) {
+      fl_modifier($modifier) do_cutout();
+
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_drill();
+
+    } else if ($verb==FL_FOOTPRINT) {
+      fl_modifier($modifier) do_footprint();
+
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout()
+        children();
+
+    } else if ($verb==FL_MOUNT) {
+      fl_modifier($modifier) do_mount()
+        children();
+
+    } else if ($verb==FL_PAYLOAD) {
+      fl_modifier($modifier)
+        fl_pcb($verb,pcb,debug=debug);
+
+    } else if ($verb==FL_SYMBOLS) {
+      fl_modifier($modifier) fl_doSymbols()
+        children();
+
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
   }
 }

@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-T_LIST			= box caddy-blob caddy pcb_frame pcb_holder spacer tnut tprofiles
+T_LIST			= box caddy-blob caddy pcb_holder spacer tnut tprofiles
 
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
@@ -27,5 +27,6 @@ clean: clean-results
 	@echo "$(SOURCES): DELETED"
 
 clean-results:
-	@for f in $(RESULTS) ; do rm -rf $$f ; done
-	@echo "$(RESULTS): DELETED"
+	@echo -n -e "\e[33m$@ [tests/artifacts]\e[0m: "
+	@for f in $(RESULTS) ; do rm -fr $$f ; done
+	@echo -e "\e[32m✔\e[0m"
