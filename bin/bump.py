@@ -13,10 +13,12 @@ import re
 import subprocess
 import signal
 
+from termcolor import colored, cprint
+
 import ofl
 
 def handler(signum, frame):
-    print('\n')
+    cprint('***INTERRUPTED***\n','red')
     exit(0)
 
 def git_version_tag():
