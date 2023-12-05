@@ -13,10 +13,7 @@ include <core.scad>
  *
  * invoked by «value» parameter acts as property constructor
  */
-function fl_bb_corners(type,value)  = let(key="bb/bounding corners")
-  type!=undef
-  ? let(value = fl_property(type,key)) is_function(value) ? value(type) : value
-  : fl_property(key=key,value=value);
+function fl_bb_corners(type,value)  = fl_property(type,"bb/bounding corners",value);
 
 //! computes size from the bounding corners.
 function fl_bb_size(type)       = assert(type,type) let(c=fl_bb_corners(type)) c[1]-c[0];

@@ -462,7 +462,7 @@ function fl_nopSCADlib(type,value,default)
 //! when present and true indicates the object is an OFL one
 function fl_OFL(type,value,default) = fl_property(type,"Naturally born OFL",value,default);
 function fl_pcb(type,value)         = fl_property(type,"embedded OFL pcb",value);
-// pay-load bounding box, it contributes to the overall bounding box calculation
+//! pay-load bounding box, it contributes to the overall bounding box calculation
 function fl_payload(type,value)     = fl_property(type,"payload bounding box",value);
 function fl_tag(type,value)         = fl_property(type,"product tag",value);
 function fl_screw(type,value)       = fl_property(type,"screw",value);
@@ -927,7 +927,7 @@ function fl_get(type,key,default) =
   assert(type!=undef)
   let(index_list=search([key],type))
   index_list != [[]]
-  ? type[index_list[0]][1]
+  ? (let(value=type[index_list[0]][1]) is_function(value) ? value(type,key,default) : value)
   : assert(default!=undef,str("Key not found ***",key,"*** in ",type)) default;
 
 //**** key/values *************************************************************
