@@ -41,7 +41,7 @@ screw       = fl_switch(SCREW,[["M2_cs_cap_screw",M2_cs_cap_screw],["M3_cs_cap_s
 mag_sz      = fl_bb_size(magnet);
 T           = 2+clearance;
 // shortest linear threaded nut matching screw
-knut        = fl_knut_search(screw,tag="linear thread",best=FL_KNUT_SHORTEST);
+knut        = fl_knut_search(screw,thread="linear",best=FL_KNUT_SHORTEST);
 knut_thick  = fl_knut_thick(knut);
 tube_thick  = 1.6; // from brass insert producer data it should be at least 1.6mm
 tube_d      = mag_sz.x+(tube_thick+clearance)*2;
@@ -112,7 +112,7 @@ difference() {
 
 translate(M_magnet)
   fl_magnet(
-    [FL_ADD,FL_ASSEMBLY,FL_LAYOUT],
+    [FL_ADD,FL_MOUNT,FL_LAYOUT],
     type=magnet,octant=-Z,direction=[-X,90],
     $FL_ADD       = VIEW_MODE=="FULL"?"ON":"OFF",
     $FL_ASSEMBLY  = VIEW_MODE=="FULL"?"ON":"OFF",
