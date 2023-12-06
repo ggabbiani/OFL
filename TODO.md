@@ -100,6 +100,7 @@
 - [ ] fix bug in fl_sector(): order of generated points must follow the sign of
   the angle.
 - [x] implemented PCB frames as PCB proxies
+- [ ] integrate in tests also the examples
 
 
 
