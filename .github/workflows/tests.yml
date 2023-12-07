@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  NopVer: v21.8.0
+  NopVer: 21.8.0
   NopTarBall: v21.8.0.tar.gz
   NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/v21.8.0.tar.gz
   scad_utils: https://github.com/openscad/scad-utils.git
