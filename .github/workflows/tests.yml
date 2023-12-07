@@ -15,8 +15,8 @@ on:
 
 env:
   NopVer: v21.8.0
-  NopTarBall: ${NopVer}.tar.gz
-  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/${NopTarBall}
+  NopTarBall: v21.8.0.tar.gz
+  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/v21.8.0.tar.gz
   scad_utils: https://github.com/openscad/scad-utils.git
   LIBS: /home/runner/.local/share/OpenSCAD/libraries
 
