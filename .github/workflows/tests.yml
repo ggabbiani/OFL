@@ -20,6 +20,7 @@ env:
   scad_utils: https://github.com/openscad/scad-utils.git
   LIBS: /home/runner/.local/share/OpenSCAD/libraries
   ODOX_URL: https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
+  PY_COLORS: "1"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
