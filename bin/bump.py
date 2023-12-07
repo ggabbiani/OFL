@@ -34,7 +34,7 @@ def git_branch():
     try:
         branch = str(
             subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], stderr=subprocess.STDOUT)
-        ).strip('\'b\\n')
+        ).strip('\b\\n')
     except subprocess.CalledProcessError as exc_info:
         raise RuntimeError(str(exc_info.output))
     return branch
