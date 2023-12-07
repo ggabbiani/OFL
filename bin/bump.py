@@ -73,6 +73,7 @@ parser.add_argument('-M', '--major',  action='store_true', help='auto increment 
 parser.add_argument('-m', '--minor',  action='store_true', help='auto increment current minor release number')
 parser.add_argument('-p', '--patch',  action='store_true', help='auto increment current patch release number (default)', default=True)
 args = parser.parse_args()
+ofl.verbosity   = args.verbosity
 
 try:
     if args.major:
