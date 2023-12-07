@@ -60,7 +60,7 @@ jobs:
       run: |
         git clone https://github.com/openscad/scad-utils.git
 
-    - name: Documentation buid
+    - name: Documentation build
       working-directory: ${{github.workspace}}
       run: |
         python -m venv .venv
