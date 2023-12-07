@@ -24,6 +24,7 @@ export SCAD					:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make -
 export DEPS					:= $(PRJ_ROOT)/bin/deps.sh --silent
 export BIN					:= $(CURDIR)/bin
 export FUNCTIONS			:= $(CURDIR)/functions.mk
+export SHELL				:= /bin/bash
 
 include $(FUNCTIONS)
 
