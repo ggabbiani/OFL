@@ -62,7 +62,7 @@ jobs:
       run: |
         git clone https://github.com/openscad/scad-utils.git
 
-    - name: make sources and documentation
+    - name: Documentation buid
       working-directory: ${{github.workspace}}
       run: |
         python -m venv .venv
@@ -72,11 +72,11 @@ jobs:
         Xvfb :99 & export DISPLAY=:99
         make -s
 
-    # - name: Performs tests
-    #   working-directory: ${{github.workspace}}/build
-    #   # Execute tests defined by the CMake configuration.
-    #   # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-    #   run: ctest -C ${{env.BUILD_TYPE}}
+    - name: Test runs
+      working-directory: ${{github.workspace}}
+      run: |
+        source .venv/bin/activate
+        make -s tests/runs
 
     # - name: Create platform dependent binary packages
     #   working-directory: ${{github.workspace}}/build
