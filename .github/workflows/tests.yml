@@ -15,6 +15,49 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  ubuntu-test:
+    name: Ubuntu tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Project checkout
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      uses: actions/checkout@v3
+      # with:
+      #   # Number of commits to fetch. 0 indicates all history for all branches and tags (default 1).
+      #   fetch-depth: '0'
+    # - name: Checkout submodules
+    #   run: git submodule update --init --recursive
+
+    - name: Install project pre-requisites
+      # install Ninja 'cause of the automatic build parallelism tuned with the
+      # number of processors found in the hosting system
+      run: |
+        sudo apt update
+        sudo apt upgrade -y
+        sudo apt install -y openscad
+
+    - name: make sources and documentation
+      run: |
+        echo $PWD && ls -al
+        echo $GITHUB_WORKSPACE && ls -al $GITHUB_WORKSPACE
+
+    # - name: Performs tests
+    #   working-directory: ${{github.workspace}}/build
+    #   # Execute tests defined by the CMake configuration.
+    #   # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+    #   run: ctest -C ${{env.BUILD_TYPE}}
+
+    # - name: Create platform dependent binary packages
+    #   working-directory: ${{github.workspace}}/build
+    #   run: cpack
+
+    # - name: Upload produced artifacts
+    #   uses: actions/upload-artifact@v3
+    #   id: upload-artifacts
+    #   with:
+    #     name: ${{env.ARTIFACTS}}
+    #     path: ${{github.workspace}}/build/*.deb
+
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
