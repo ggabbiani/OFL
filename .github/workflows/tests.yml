@@ -45,7 +45,7 @@ jobs:
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
         sudo apt install -y graphviz openscad python3-venv wget xvfb
         wget ${{env.ODOX_URL}}/${{env.ODOX_PKG}}
-        apt install ./${{env.ODOX_PKG}}
+        sudo apt install ./${{env.ODOX_PKG}}
         mkdir -p ${{env.LIBS}}
 
     - name: NopSCADlib
