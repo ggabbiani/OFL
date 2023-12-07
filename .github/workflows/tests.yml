@@ -39,7 +39,8 @@ jobs:
       run: |
         sudo apt update
         sudo apt upgrade -y
-        sudo apt install -y openscad python3-venv wget xvfb
+        # TODO: replace deps.sh with a python version based on pydot (installed via pip)
+        sudo apt install -y graphviz openscad python3-venv wget xvfb
         mkdir -p ${{env.LIBS}}
 
     - name: NopSCADlib
