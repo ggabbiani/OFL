@@ -34,7 +34,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt upgrade -y
-        sudo apt install -y openscad
+        sudo apt install -y openscad python3-venv
 
     - name: make sources and documentation
       run: |
