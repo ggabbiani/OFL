@@ -14,7 +14,6 @@ RUN mkdir -p ${libs}
 WORKDIR ${libs}
 RUN git clone https://github.com/nophead/NopSCADlib.git && cd NopSCADlib && git checkout tags/${nop_ver}
 RUN git clone https://github.com/openscad/scad-utils.git
-COPY TOUL.scad .
 ###############################################################################
 # entrypoint
 ENTRYPOINT [ "/usr/bin/make", "-s", "-C", "/import", "tests/runs" ]

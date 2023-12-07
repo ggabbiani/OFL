@@ -40,7 +40,7 @@ module fl_manage(
     assert(is_list(verbs)||is_string(verbs),verbs);
     fl_trace("verbs",verbs);
     for($verb=verbs) {
-      tokens  = split($verb);
+      tokens  = fl_split($verb);
       fl_trace("tokens[0]",tokens[0]);
       if (fl_isSet("**DEPRECATED**",tokens)) {
         fl_trace(str("***WARN*** ", tokens[0], " is marked as DEPRECATED and will be removed in future version!"),always=true);

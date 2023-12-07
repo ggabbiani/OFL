@@ -791,6 +791,46 @@ SPDX-License-Identifier: [CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)
 
 ---
 
+### function fl_atoi
+
+__Syntax:__
+
+```text
+fl_atoi(str,base=10,i=0,nb=0)
+```
+
+Returns the numerical form of a string
+
+Usage:
+    echo(fl_atoi("491585"));              // 491585
+    echo(fl_atoi("-15"));                 // -15
+    echo(fl_atoi("01110", 2));            // 14
+    echo(fl_atoi("D5A4", 16));            // 54692
+    echo(fl_atoi("-5") + fl_atoi("10") + 5); // 10
+
+Original code pasted from TOUL: The [OpenScad Usefull
+Library](http://www.thingiverse.com/thing:1237203)
+
+Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
+
+SPDX-License-Identifier: [CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)
+
+
+__Parameters:__
+
+__str__  
+The string to converts (representing a number)
+
+__base__  
+The base conversion of the number
+- 2 for binary
+- 10 for decimal (default)
+- 16 for hexadecimal
+
+
+
+---
+
 ### function fl_connectors
 
 __Syntax:__
@@ -1672,6 +1712,43 @@ fl_size(type)
 
 ---
 
+### function fl_split
+
+__Syntax:__
+
+```text
+fl_split(str,sep=" ",i=0,word="",v=[])
+```
+
+Returns a vector of substrings by cutting the string `str` each time where `sep` appears.
+See also: [fl_strcat()](#function-fl_strcat), str2vec()
+
+Usage:
+
+    str = "OpenScad is a free CAD software.";
+    echo(fl_split(str)); // ["OpenScad", "is", "a", "free", "CAD", "software."]
+    echo(fl_split(str)[3]); // "free"
+    echo(fl_split("foo;bar;baz", ";")); // ["foo", "bar", "baz"]
+
+Original code pasted from TOUL: The [OpenScad Usefull
+Library](http://www.thingiverse.com/thing:1237203)
+
+Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
+
+SPDX-License-Identifier: [CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)
+
+
+__Parameters:__
+
+__str__  
+the original string
+
+__sep__  
+The separator who cuts the string (" " by default)
+
+
+---
+
 ### function fl_stl
 
 __Syntax:__
@@ -1711,6 +1788,41 @@ __Syntax:__
 ```text
 fl_str_upper(s)
 ```
+
+---
+
+### function fl_strcat
+
+__Syntax:__
+
+```text
+fl_strcat(v,sep="",str="",i=0,j=0)
+```
+
+Returns a string of a concatenated vector of substrings `v`, with an optionally
+separator `sep` between each. See also: [fl_split()](#function-fl_split).
+
+Usage:
+    v = ["OpenScad", "is", "a", "free", "CAD", "software."];
+    echo(fl_strcat(v)); // "OpenScadisafreeCADsoftware."
+    echo(fl_strcat(v, " ")); // "OpenScad is a free CAD software."
+
+Original code pasted from TOUL: The [OpenScad Usefull
+Library](http://www.thingiverse.com/thing:1237203)
+
+Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
+
+SPDX-License-Identifier: [CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)
+
+
+__Parameters:__
+
+__v__  
+The vector of string to concatenate
+
+__sep__  
+A separator which will added between each substrings
+
 
 ---
 

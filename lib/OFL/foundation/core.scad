@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
+// include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
 use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 //**** language extension *****************************************************
@@ -671,7 +671,112 @@ function fl_cumulativeSum(v) = [
  *
  * SPDX-License-Identifier: CC-BY-4.0
  */
-function fl_atof(str) = len(str) == 0 ? 0 : let( expon1 = search("e", str), expon = len(expon1) ? expon1 : search("E", str)) len(expon) ? fl_atof(substr(str,pos=0,len=expon[0])) * pow(10, atoi(substr(str,pos=expon[0]+1))) : let( multiplyBy = (str[0] == "-") ? -1 : 1, str = (str[0] == "-" || str[0] == "+") ? substr(str, 1, len(str)-1) : str, decimal = search(".", str), beforeDecimal = decimal == [] ? str : substr(str, 0, decimal[0]), afterDecimal = decimal == [] ? "0" : substr(str, decimal[0]+1) ) (multiplyBy * (atoi(beforeDecimal) + atoi(afterDecimal)/pow(10,len(afterDecimal))));
+function fl_atof(str) =
+  len(str)==0 ?
+    0 : let(
+      expon1 = search("e", str),
+      expon = len(expon1) ? expon1 : search("E", str)
+    ) len(expon) ? fl_atof(substr(str,pos=0,len=expon[0])) * pow(10, fl_atoi(substr(str,pos=expon[0]+1)))
+    : let(
+      multiplyBy = (str[0] == "-") ? -1 : 1,
+      str = (str[0] == "-" || str[0] == "+") ? substr(str, 1, len(str)-1) : str,
+      decimal = search(".", str),
+      beforeDecimal = decimal == [] ? str : substr(str, 0, decimal[0]),
+      afterDecimal = decimal == [] ? "0" : substr(str, decimal[0]+1)
+    ) (multiplyBy * (fl_atoi(beforeDecimal) + fl_atoi(afterDecimal)/pow(10,len(afterDecimal))));
+
+/*!
+ * Returns the numerical form of a string
+ *
+ * Usage:
+ *     echo(fl_atoi("491585"));              // 491585
+ *     echo(fl_atoi("-15"));                 // -15
+ *     echo(fl_atoi("01110", 2));            // 14
+ *     echo(fl_atoi("D5A4", 16));            // 54692
+ *     echo(fl_atoi("-5") + fl_atoi("10") + 5); // 10
+ *
+ * Original code pasted from TOUL: [The OpenScad Usefull
+ * Library](http://www.thingiverse.com/thing:1237203)
+ *
+ * Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
+ *
+ * SPDX-License-Identifier: CC-BY-4.0
+ */
+function fl_atoi(
+  //! The string to converts (representing a number)
+  str,
+  /*!
+   * The base conversion of the number
+   * - 2 for binary
+   * - 10 for decimal (default)
+   * - 16 for hexadecimal
+   */
+  base=10,
+  i=0, nb=0
+) =
+	i == len(str) ? (str[0] == "-" ? -nb : nb) :
+	i == 0 && str[0] == "-" ? fl_atoi(str, base, 1) :
+	fl_atoi(str, base, i + 1,
+		nb + search(str[i], "0123456789ABCDEF")[0] * pow(base, len(str) - i - 1));
+
+//**** strings ****************************************************************
+
+/*!
+ * Returns a string of a concatenated vector of substrings `v`, with an optionally
+ * separator `sep` between each. See also: fl_split().
+ *
+ * Usage:
+ *     v = ["OpenScad", "is", "a", "free", "CAD", "software."];
+ *     echo(fl_strcat(v)); // "OpenScadisafreeCADsoftware."
+ *     echo(fl_strcat(v, " ")); // "OpenScad is a free CAD software."
+ *
+ * Original code pasted from TOUL: [The OpenScad Usefull
+ * Library](http://www.thingiverse.com/thing:1237203)
+ *
+ * Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
+ *
+ * SPDX-License-Identifier: CC-BY-4.0
+*/
+function fl_strcat(
+  //! The vector of string to concatenate
+  v,
+  //! A separator which will added between each substrings
+  sep="",
+  str="", i=0, j=0
+) =
+	i == len(v) ? str :
+	j == len(v[i])-1 ? fl_strcat(v, sep,
+		str(str, v[i][j], i == len(v)-1 ? "" : sep),   i+1, 0) :
+	fl_strcat(v, sep, str(str, v[i][j]), i, j+1);
+
+/*!
+ * Returns a vector of substrings by cutting the string `str` each time where `sep` appears.
+ * See also: fl_strcat(), str2vec()
+ *
+ * Usage:
+ *
+ *     str = "OpenScad is a free CAD software.";
+ *     echo(fl_split(str)); // ["OpenScad", "is", "a", "free", "CAD", "software."]
+ *     echo(fl_split(str)[3]); // "free"
+ *     echo(fl_split("foo;bar;baz", ";")); // ["foo", "bar", "baz"]
+ *
+ * Original code pasted from TOUL: [The OpenScad Usefull
+ * Library](http://www.thingiverse.com/thing:1237203)
+ *
+ * Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
+ *
+ * SPDX-License-Identifier: CC-BY-4.0
+ */
+function fl_split(
+  //! the original string
+  str,
+  //! The separator who cuts the string (" " by default)
+  sep=" ",
+  i=0, word="", v=[]
+) =
+	i == len(str) ? concat(v, word) :
+	str[i] == sep ? fl_split(str, sep, i+1, "", concat(v, word)) :
+	fl_split(str, sep, i+1, str(word, str[i]), v);
 
 //**** lists ******************************************************************
 
@@ -818,13 +923,13 @@ function fl_list_min(
 function fl_list_unique(dict) =
   len(dict)==1 ? dict : let(
     // this lambda isolates the first list element (head) from the rest
-    split     = function (list) let(
+    fl_split     = function (list) let(
       len = len(list)
     ) assert(len>1,"list must contain at least 2 items") len==2 ? [list[0],[list[1]]] : let(
       head  = list[0],
       tail  = [for(i=[1:len-1]) list[i]]
     ) [head,tail],
-    partition = split(dict),
+    partition = fl_split(dict),
     head      = partition[0],
     tail      = partition[1],
     result    = fl_list_unique(tail),
@@ -992,7 +1097,7 @@ function fl_isOrthogonal(a,b) = a*b==0;
  * See module fl_trace{}.
  */
 function fl_trace(msg,result,always=false) = let(
-  call_chain  = strcat([for (i=[$parent_modules-1:-1:0]) parent_module(i)],"->"),
+  call_chain  = fl_strcat([for (i=[$parent_modules-1:-1:0]) parent_module(i)],"->"),
   mdepth      = $parent_modules
 ) assert(msg)
   (always||(!is_undef($FL_TRACES) && ($FL_TRACES==-1||$FL_TRACES>=mdepth)))
@@ -1023,7 +1128,7 @@ module fl_trace(
   mdepth      = $parent_modules-1;
   if (always||(!is_undef($FL_TRACES) && ($FL_TRACES==-1||$FL_TRACES>=mdepth)))
     let(
-      call_chain  = strcat([for (i=[$parent_modules-1:-1:1]) parent_module(i)],"->")
+      call_chain  = fl_strcat([for (i=[$parent_modules-1:-1:1]) parent_module(i)],"->")
     ) echo(mdepth,str(call_chain?call_chain:"***",": ",is_undef(value)?msg:str(msg,"==",value))) children();
   else
     children();
@@ -1096,7 +1201,7 @@ function fl_filament() = is_undef($fl_filament)
 
 //**** Common parameter helpers ***********************************************
 
-// function fl_parm_triState(value) = value=="undef" ? undef : is_num(value) ? x : atoi(value);
+// function fl_parm_triState(value) = value=="undef" ? undef : is_num(value) ? x : fl_atoi(value);
 
 /*!
  * This format uses the real numbers sign to distinguish couple of values passed
@@ -1151,9 +1256,9 @@ function fl_parm_SignedPair(list) =
  * - -1,0,+1: untouched
  */
 function fl_parm_Octant(x,y,z) = let(
-  o_x = x=="undef" ? undef : is_num(x) ? x : atoi(x),
-  o_y = y=="undef" ? undef : is_num(y) ? y : atoi(y),
-  o_z = z=="undef" ? undef : is_num(z) ? z : atoi(z)
+  o_x = x=="undef" ? undef : is_num(x) ? x : fl_atoi(x),
+  o_y = y=="undef" ? undef : is_num(y) ? y : fl_atoi(y),
+  o_z = z=="undef" ? undef : is_num(z) ? z : fl_atoi(z)
 ) [o_x,o_y,o_z];
 
 //! constructor for debug context parameter
