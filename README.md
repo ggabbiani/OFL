@@ -12,7 +12,6 @@ The following libraries are used and must be installed for using all the OFL fea
 
 * [NopSCADlib Release v21.8.0](https://github.com/nophead/NopSCADlib/releases/tag/v21.8.0)
 * [scad-utils](https://github.com/openscad/scad-utils)
-* [TOUL: The OpenScad Useful Library](https://www.thingiverse.com/thing:1237203)
 
 ## Usage
 
