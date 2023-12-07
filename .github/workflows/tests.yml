@@ -15,7 +15,7 @@ on:
 
 env:
   NopSCADlibVer: v21.8.0.tar.gz
-  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/${{NopSCADlibVer}}
+  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/${NopSCADlibVer}
   scad_utils: https://github.com/openscad/scad-utils.git
   LIBS: .local/share/OpenSCAD/libraries
 
