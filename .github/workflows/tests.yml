@@ -13,6 +13,12 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  NopSCADlibVer: v21.8.0.tar.gz
+  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/${{NopSCADlibVer}}
+  scad_utils: https://github.com/openscad/scad-utils.git
+  LIBS: .local/share/OpenSCAD/libraries
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   ubuntu-test:
@@ -25,16 +31,28 @@ jobs:
       with:
         # Number of commits to fetch. 0 indicates all history for all branches and tags (default 1).
         fetch-depth: '0'
-    # - name: Checkout submodules
-    #   run: git submodule update --init --recursive
 
-    - name: Install project pre-requisites
+    - name: pre-requisites
       # install Ninja 'cause of the automatic build parallelism tuned with the
       # number of processors found in the hosting system
       run: |
+        whoami
         sudo apt update
         sudo apt upgrade -y
-        sudo apt install -y openscad python3-venv
+        sudo apt install -y openscad python3-venv wget
+        mkdir -p ${HOME}/${{env.LIBS}}
+
+    - name: NopSCADlib
+      run: |
+        working-directory: ${HOME}/${{env.LIBS}}
+        wget ${{env.NopSCADlib}}/${{env.NopSCADlibVer}}
+        tar -xzf ${{env.NopSCADlibVer}}
+        ln -s ${{env.NopSCADlibVer}} NopSCADlib
+
+    - name: scad-utils
+      run: |
+        working-directory: ${HOME}/${{env.LIBS}}
+        git clone https://github.com/openscad/scad-utils.git
 
     - name: make sources and documentation
       run: |
@@ -42,7 +60,7 @@ jobs:
         source .venv/bin/activate
         pip install --upgrade pip
         pip install -r pyreqs.txt
-        make
+        make -s
 
     # - name: Performs tests
     #   working-directory: ${{github.workspace}}/build
@@ -61,8 +79,8 @@ jobs:
     #     name: ${{env.ARTIFACTS}}
     #     path: ${{github.workspace}}/build/*.deb
 
-  # This workflow contains a single job called "build"
-  build:
+  # docker based tests (will be replaced by native-tests)
+  docker-tests:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -73,10 +91,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: run tests
-        run: docker run -v $GITHUB_WORKSPACE/:/import:Z  -t ggabbiani/openscad:v1.4.0
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+        run: docker run -v $GITHUB_WORKSPACE/:/import:Z  -t ggabbiani/openscad:v1.5.0
