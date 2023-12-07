@@ -20,7 +20,6 @@ env:
   scad_utils: https://github.com/openscad/scad-utils.git
   LIBS: /home/runner/.local/share/OpenSCAD/libraries
   ODOX_URL: https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
-  PY_COLORS: "1"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -52,11 +51,9 @@ jobs:
     - name: NopSCADlib
       working-directory: ${{env.LIBS}}
       run: |
-        echo "NopSCADlib: ${{env.NopSCADlib}}"
         wget ${{env.NopSCADlib}}
         tar -xzf ${{env.NopTarBall}}
         ln -s NopSCADlib-${{env.NopVer}} NopSCADlib
-        ls -al
 
     - name: scad-utils
       working-directory: ${{env.LIBS}}
@@ -67,7 +64,7 @@ jobs:
       working-directory: ${{github.workspace}}
       run: |
         python -m venv .venv
-        source .venv/bin/activate
+        . .venv/bin/activate
         pip install --upgrade pip
         pip install -r pyreqs.txt
         Xvfb :99 & export DISPLAY=:99
@@ -76,7 +73,7 @@ jobs:
     - name: Test runs
       working-directory: ${{github.workspace}}
       run: |
-        source .venv/bin/activate
+        . .venv/bin/activate
         make -s tests/runs
 
     # - name: Create platform dependent binary packages
