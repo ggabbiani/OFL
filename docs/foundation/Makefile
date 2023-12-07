@@ -14,9 +14,9 @@ include $(FUNCTIONS)
 all: dependencies.svg 800x600/all
 
 dependencies.svg: $(FOUNDATION_SOURCES)
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	@$(DEPS) --foundation
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 800x600/%:
 	$(call make_sub,800x600)

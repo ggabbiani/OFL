@@ -27,6 +27,6 @@ clean: clean-results
 	@echo "$(SOURCES): DELETED"
 
 clean-results:
-	@echo -n -e "\e[33m$@ [tests/artifacts]\e[0m: "
+	@printf "\e[33m$@ [tests/artifacts]\e[0m: "
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
-	@echo -e "\e[32m✔\e[0m"
+	@printf "\e[32m✔\e[0m\n"

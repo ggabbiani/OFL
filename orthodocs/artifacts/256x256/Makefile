@@ -17,56 +17,56 @@ clean:
 	@rm -f *.png *.deps
 
 fig-FL_TSP_E1515.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E2020.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E2020t.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E2040.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E2060.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E2080.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E3030.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E3060.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E4040.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E4040t.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 fig-FL_TSP_E4080.png: $(TESTS)/$(CURR_BASE)/tprofiles-test.scad $(TESTS)/$(CURR_BASE)/tprofiles-test.json
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	$(CMD)  -d $(@:.png=.deps) --p $(word 2,$^) --P $(@:.png=) -o $@ $<
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"

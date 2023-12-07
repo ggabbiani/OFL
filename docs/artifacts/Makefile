@@ -14,9 +14,9 @@ top:
 all: dependencies.svg
 
 dependencies.svg: $(ARTIFACTS_SOURCES)
-	@echo -n -e "\e[33m$(CURDIR)/$@\e[0m: "
+	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	@$(DEPS) --artifacts
-	@echo -e "\e[32mOK\e[0m"
+	@printf "\e[32mOK\e[0m\n"
 
 clean:
 	@rm -f dependencies.svg

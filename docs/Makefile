@@ -30,6 +30,6 @@ vitamins/%:
 
 architecture.png: architecture.drawio
 	@drawio --export --format png --border 10 --output $(CURDIR)/$@ $<
-	@echo -n "$(CURDIR)/$@: "
-	@echo -e "\e[32mOK\e[0m"
+	@printf "$(CURDIR)/$@: "
+	@printf "\e[32mOK\e[0m\n"
 

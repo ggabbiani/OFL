@@ -40,9 +40,9 @@ vitamins/%:
 runs: clean-results $(RESULTS) artifacts/runs foundation/runs vitamins/runs
 
 clean-results:
-	@echo -n -e "\e[33m$@ [tests]\e[0m: "
+	@printf "\e[33m$@ [tests]\e[0m: "
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
-	@echo -e "\e[32m✔\e[0m"
+	@printf "\e[32m✔\e[0m\n"
 
 clean: clean-results artifacts/clean foundation/clean vitamins/clean
 	@for f in $(SOURCES) ; do rm -f $$f ; done
