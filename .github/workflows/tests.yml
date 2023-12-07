@@ -14,8 +14,9 @@ on:
   workflow_dispatch:
 
 env:
-  NopSCADlibVer: v21.8.0.tar.gz
-  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/${NopSCADlibVer}
+  NopSCADlibVer: v21.8.0
+  NopTarBall: ${{NopSCADlibVer}}.tar.gz
+  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/${NopTarBall}
   scad_utils: https://github.com/openscad/scad-utils.git
   LIBS: .local/share/OpenSCAD/libraries
 
@@ -45,9 +46,9 @@ jobs:
     - name: NopSCADlib
       run: |
         working-directory: ${HOME}/${{env.LIBS}}
-        wget ${{env.NopSCADlib}}/${{env.NopSCADlibVer}}
-        tar -xzf ${{env.NopSCADlibVer}}
-        ln -s ${{env.NopSCADlibVer}} NopSCADlib
+        wget ${{env.NopSCADlib}}
+        tar -xzf ${{env.NopTarBall}}
+        ln -s ${{env.NopTarBall}} NopSCADlib
 
     - name: scad-utils
       run: |
