@@ -39,7 +39,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt upgrade -y
-        sudo apt install -y openscad python3-venv wget
+        sudo apt install -y openscad python3-venv wget xvfb
         mkdir -p ${{env.LIBS}}
 
     - name: NopSCADlib
@@ -63,6 +63,7 @@ jobs:
         source .venv/bin/activate
         pip install --upgrade pip
         pip install -r pyreqs.txt
+        Xvfb :99 & export DISPLAY=:99
         make -s
 
     # - name: Performs tests
