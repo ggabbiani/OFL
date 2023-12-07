@@ -86,7 +86,7 @@ try:
     PROJECT_VERSION = git_version_tag()
     BUMPED_VERSION  = bump_version(PROJECT_VERSION, mode)
     PROJECT_BRANCH  = git_branch()
-    TAG             = 'v{0}'.format(BUMPED_VERSION)
+    TAG             = f'v{BUMPED_VERSION}'
     git_chk()
 
     ofl.info(f"Mode                 : {mode}")
