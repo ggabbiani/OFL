@@ -548,10 +548,12 @@ function lay_bb_size(axis,gap,types) = let(c = lay_bb_corners(axis,gap,types)) c
 function lay_group(axis,gap,types) = [fl_bb_corners(value=lay_bb_corners(axis,gap,types))];
 
 /*!
- * returns the bounding box corners of a layout
+ * returns the bounding box corners of a layout.
+ *
+ * See also fl_bb_accum().
  */
 function lay_bb_corners(
-  //! cartesian axis ([-1,0,0]==[1,0,0]==X)
+  //! layout direction
   axis,
   //! gap to be inserted between bounding boxes along axis
   gap=0,
@@ -578,17 +580,17 @@ function lay_bb_corners(
  * - for planar component, the new negative and positive corners are calculated
  *   with the minimum dimensions between the current one and the result of the
  *   recursive call;
- * - for the axial component when axis is positive:
+ * - for the axial component when «axis» is positive:
  *   - negative corner is equal to the current corner;
  *   - positive corner is equal to the current positive corner PLUS the gap and
  *     the axial dimension of the result;
- *   - when axis is negative:
+ *   - when «axis» is negative:
  *     - negative corner is equal to the current one MINUS the gap and the
  *       axial dimension of the result
  *     - the positive corner is equal to the current corner.
  */
 function fl_bb_accum(
-  //! cartesian axis ([-1,0,0]==[1,0,0]==X)
+  //! layout direction
   axis,
   //! gap to be inserted between bounding boxes along axis
   gap=0,

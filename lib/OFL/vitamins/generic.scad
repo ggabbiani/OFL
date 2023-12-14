@@ -19,6 +19,8 @@ FL_GENERIC_NS = "GENERIC";
 
 /*
  * generic vitamin constructor
+ *
+ * TODO: add support for holes / FL_DRILL
  */
 function fl_generic_Vitamin(
   name,
@@ -31,7 +33,6 @@ function fl_generic_Vitamin(
    * See also fl_tt_isAxisList()
    */
   cut_directions
-
 ) =
 assert(bbox)
 assert(cut_directions && (!fl_debug() || fl_tt_isAxisList(cut_directions)))
@@ -46,6 +47,8 @@ assert(cut_directions && (!fl_debug() || fl_tt_isAxisList(cut_directions)))
 /*
  * generic vitamin engine, usable when a cut out operation is needed for
  * a component not yet available as vitamin.
+ *
+ * TODO: add support for holes / FL_DRILL
  */
 module fl_generic_vitamin(
   // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT

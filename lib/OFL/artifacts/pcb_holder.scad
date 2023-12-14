@@ -20,6 +20,8 @@ function fl_pcbh_spacers(type,value) =  fl_property(type,"pcbh/list of spacers",
 
 /*!
  * Hole driven PCB holder constructor
+ *
+ * TODO: set PCB holder namespace as 'engine' property
  */
 function fl_PCBHolder(
   //! PCB to be held

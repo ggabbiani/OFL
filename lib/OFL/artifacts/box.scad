@@ -21,7 +21,11 @@ use <../foundation/util.scad>
  *
  * __children context__:
  *
- * - $box_materials - list of used materials [«material_lower», «material_upper»]
+ * - $box_materials - list of used materials [«material_lower»,
+ *    «material_upper»]
+ *
+ * TODO: external function returning the resulting bounding box having the
+ * payload as input (and vice versa?)
  */
 module fl_box(
   //! supported verbs: FL_ADD, FL_AXES, FL_ASSEMBLY, FL_BBOX, FL_LAYOUT, FL_MOUNT, FL_PAYLOAD

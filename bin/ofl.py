@@ -42,6 +42,9 @@ def error(message):
     return cprint("[*ERR*] "+message, 'red')
 
 def read_lines(fname):
+  '''
+  returns all «fname» lines
+  '''
   with open(fname) as file:
     return file.readlines()
 
