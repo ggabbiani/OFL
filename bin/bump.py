@@ -158,6 +158,7 @@ try:
         cmd_push    = ['git', 'push', '--follow-tags']
         if CLI.dry_run:
             print(cmd_doc)
+            print(cmd_commit)
             print(cmd_tag)
             print(cmd_push)
         else:
