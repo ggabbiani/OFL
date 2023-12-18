@@ -9,9 +9,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-import argparse
-import sys
+import argparse, os, sys
 
+from pathlib import Path
 from termcolor import colored, cprint
 
 def debug(message):
@@ -56,6 +56,9 @@ DEBUG   = 4
 
 verbosity = ERROR
 oscad     = ["openscad", "--hardwarnings"]
+# path      = os.path.realpath(__file__).dirname()
+path      = Path(__file__).parent.parent.absolute()
+lib       = path.joinpath('lib')
 
 # if __name__ == "__main__":
 #     import sys
