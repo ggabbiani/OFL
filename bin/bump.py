@@ -153,6 +153,7 @@ try:
 
     if ofl.confirm("press 'y' to continue or 'n' to exit"):
         cmd_doc     = ['make', '-s', 'docs/all']
+        cmd_commit  = ['git', 'commit', '-m', f'Version {str(bumped)} bumped', '-a']
         cmd_tag     = ['git', 'tag', '-m', f'Version {str(bumped)} bumped', bumped.tag(), branch]
         cmd_push    = ['git', 'push', '--follow-tags']
         if CLI.dry_run:
