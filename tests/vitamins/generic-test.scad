@@ -38,7 +38,9 @@ $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
 $FL_CUTOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
-
+$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of user passed accessories (like alternative screws)
+$FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [3D Placement] */
 
@@ -55,25 +57,36 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
+/* [Constructor parameters] */
 
-/* [Bounding box] */
+// when true FL_ADD is a no-op
+GHOST=false;
 
+// Bounding box low corner
 BB_NEGATIVE = [-1,-1,-0.5]; // [-10:0.05:10]
+// Bounding box high corner
 BB_POSITIVE = [1,1,0];      // [-10:0.05:10]
 
-/* [Cut out] */
+// cut directions
+CUT_DIRECTIONS = ["±x","±y","±z"];
 
-TOLERANCE = 0;  // [0:0.1:5]
+/* [Engine parameters] */
 
-T_X = [0,0];  // [0:0.1:1]
-T_Y = [0,0];  // [0:0.1:1]
-T_Z = [0,0];  // [0:0.1:1]
+CUT_TOLERANCE = 0;  // [0:0.1:0.5]
 
-/* [Drift] */
+// thickness for FL_CUTOUT along X semi axes
+THICK_X = [0,0];  // [0:0.1:3]
+// thickness for FL_CUTOUT along Y semi axes
+THICK_Y = [0,0];  // [0:0.1:3]
+// thickness for FL_CUTOUT along Z semi axes
+THICK_Z = [0,0];  // [0:0.1:3]
 
-D_X = [0,0];  // [-1:0.1:1]
-D_Y = [0,0];  // [-1:0.1:1]
-D_Z = [0,0];  // [-1:0.1:1]
+// translation for FL_CUTOUT along X semi axes
+CUT_DRIFT_X = [0,0];  // [-1:0.1:1]
+// translation for FL_CUTOUT along Y semi axes
+CUT_DRIFT_Y = [0,0];  // [-1:0.1:1]
+// translation for FL_CUTOUT along Z semi axes
+CUT_DRIFT_Z = [0,0];  // [-1:0.1:1]
 
 
 /* [Hidden] */
@@ -86,10 +99,22 @@ fl_status();
 
 // end of automatically generated code
 
-verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT]);
+verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_LAYOUT]);
 bbox  = [BB_NEGATIVE,BB_POSITIVE];
+cut_directions = fl_3d_AxisList(CUT_DIRECTIONS);
+holes = let(size=bbox[1]-bbox[0]) [
+  fl_Hole(bbox[0]+[size.x/2,size.y/2,size.z],min(size.x,size.y)/3,depth=size.z),
+  fl_Hole(bbox[0]+[size.x/4,size.y/4,size.z],min(size.x,size.y)/6,depth=size.z)
+];
 
-type  = fl_generic_Vitamin("Test type",bbox=bbox,cut_directions=[-X,+X,-Y,+Y,-Z,+Z]);
-drift = D_X && D_Y && D_Z ? [D_X,D_Y,D_Z] : undef;
+type  = fl_generic_Vitamin(bbox,"Test type",ghost=GHOST,cut_directions=cut_directions,holes=holes);
+drift = CUT_DRIFT_X[0] || CUT_DRIFT_X[1] || CUT_DRIFT_Y[0] || CUT_DRIFT_Y[1] || CUT_DRIFT_Z[0] || CUT_DRIFT_Z[1] ? [CUT_DRIFT_X,CUT_DRIFT_Y,CUT_DRIFT_Z] : 0;
+thick = THICK_X[0] || THICK_X[1] || THICK_Y[0] || THICK_Y[1] || THICK_Z[0] || THICK_Z[1] ? [THICK_X,THICK_Y,THICK_Z] : 0;
 
-fl_generic_vitamin(verbs,type,cut_tolerance=TOLERANCE,cut_thick=[T_X,T_Y,T_Z],cut_drift=drift,direction=direction,octant=octant);
+fl_generic_vitamin(verbs,type,
+  cut_tolerance=CUT_TOLERANCE,
+  thick=thick,
+  cut_drift=drift,
+  direction=direction,octant=octant,
+  debug=debug
+) fl_cylinder(h=$hole_depth,d=$hole_d,direction=$hole_direction,$FL_ADD=$FL_LAYOUT);

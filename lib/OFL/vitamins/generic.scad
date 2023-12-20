@@ -13,85 +13,100 @@ include <../foundation/core.scad>
 use <../foundation/2d-engine.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
+use <../foundation/hole.scad>
 use <../foundation/mngm-engine.scad>
 
 FL_GENERIC_NS = "GENERIC";
 
-/*
- * generic vitamin constructor
- *
- * TODO: add support for holes / FL_DRILL
+/*!
+ * Generic vitamin constructor
  */
 function fl_generic_Vitamin(
-  name,
+  //! bounding box
   bbox,
-  // when true FL_ADD is a no-op.
+  //! optional name, a default is created if 'undef'
+  name,
+  /*!
+   * optional hole list.
+   *
+   * **NOTE**: the hole list will drive FL_DRILL operations.
+   */
+  holes,
+  //! when true FL_ADD is a no-op.
   ghost=true,
-  /*
-   * cut directions in floating semi-axis list format. This parameter defines
-   * the cut out directions available.
-   * See also fl_tt_isAxisList()
+  /*!
+   * cut directions in floating semi-axis list format.
+   *
+   * See also fl_tt_isAxisList() and fl_3d_AxisList()
    */
   cut_directions
 ) =
 assert(bbox)
 assert(cut_directions && (!fl_debug() || fl_tt_isAxisList(cut_directions)))
+assert(is_undef(holes) || (!fl_debug() || fl_tt_isHoleList(holes)))
 [
   fl_name(value=name?name:str("Generic vitamin ",bbox[1]-bbox[0])),
   fl_bb_corners(value=bbox),
   fl_cutout(value=cut_directions),
-  // ["cut directions",cut_directions],
+  if (holes)
+    fl_holes(value=holes),
+  // if (holes) let(
+  //   dirs = fl_list_unique([for(pair=[for(hole=holes) let(n=fl_hole_n(hole)) [n,-n]]) each pair])
+  // ) fl_layouts(value=dirs),
   ["ghost", ghost],
 ];
 
-/*
- * generic vitamin engine, usable when a cut out operation is needed for
- * a component not yet available as vitamin.
+/*!
+ * Generic vitamin engine, usable when a cut out, drill or layout operation is
+ * needed for a component not yet available as vitamin.
  *
- * TODO: add support for holes / FL_DRILL
+ * Children context: the whole hole context is passed during FL_LAYOUT (see also
+ * fl_hole_Context()).
  */
 module fl_generic_vitamin(
-  // supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
+  //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL
   verbs       = FL_ADD,
-  type,
-  // thickness for FL_CUTOUT as scalar or full semi axis value list (see fl_tt_isAxisVList())
-  cut_thick=0,
-  // tolerance used during FL_CUTOUT
+  this,
+  /*!
+   * Scalar or full semi axis value list for FL_CUTOUT, FL_DRILL and FL_LAYOUT
+   * thickness (see fl_tt_isAxisVList()).
+   *
+   * This parameter represents the surface thickness along semi-axes to be
+   * drilled and/or cut out.
+   */
+  thick=0,
+  //! tolerance used during FL_CUTOUT
   cut_tolerance=0,
-  // translation applied to cutout as scalar or full semi axis value list (see fl_tt_isAxisVList())
+  /*!
+   * Scalar or full semi axis value list for translation applied to cutout
+   * (see  fl_tt_isAxisVList())
+   */
   cut_drift=0,
-  // debug parameter as returned from fl_parm_Debug()
+  //! debug parameter as returned from fl_parm_Debug()
   debug,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant,
-  // desired direction [director,rotation], native direction when undef
+  //! desired direction [director,rotation], native direction when undef
   direction
 ) {
-  assert(!fl_debug() || (is_num(cut_thick) || fl_tt_isAxisVList(cut_thick)));
-  cut_thick       = is_num(cut_thick) ? [[cut_thick,cut_thick],[cut_thick,cut_thick],[cut_thick,cut_thick]] : cut_thick;
+  assert(!fl_debug() || (is_num(thick) || fl_tt_isAxisVList(thick)));
+  thick           = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
   cut_drift       = is_num(cut_drift) ? [[cut_drift,cut_drift],[cut_drift,cut_drift],[cut_drift,cut_drift]] : cut_drift;
-  cut_directions  = fl_cutout(type);
-  ghost           = fl_property(type,"ghost");
+  cut_directions  = fl_cutout(this);
+  ghost           = fl_property(this,"ghost");
+  holes           = fl_optional(this,key=fl_holes()[0]);
+  // layouts         = fl_optional(this,key=fl_layouts()[0]);
+  // echo(holes=holes,layouts=layouts);
 
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
+  bbox  = fl_bb_corners(this);
+  size  = fl_bb_size(this);
   D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
-  // return true if «axis» is present in «list»
-  function isAxisInList(axis,list) = (search([axis],list)!=[[]]);
-
   module do_cutout() {
-    // echo(cut_thick=cut_thick);
     2tol_2d = 2*[cut_tolerance,cut_tolerance];
-    // echo(str("Axis -X in list: ",isAxisInList(-X,cut_directions)));
-    // echo(str("Axis +X in list: ",isAxisInList(+X,cut_directions)));
-    // echo(str("Axis -Y in list: ",isAxisInList(-Y,cut_directions)));
-    // echo(str("Axis +Y in list: ",isAxisInList(+Y,cut_directions)));
-    // echo(str("Axis -Z in list: ",isAxisInList(-Z,cut_directions)));
-    // echo(str("Axis +Z in list: ",isAxisInList(+Z,cut_directions)));
-    if (cut_thick.x[0] && isAxisInList(-X,cut_directions)) { // cut-out along -X semi axis
-      T     = cut_thick.x[0];
+    if (thick.x[0] && fl_3d_axisIsSet(-X,cut_directions)) { // cut-out along -X semi axis
+      T     = thick.x[0];
       drift = cut_drift.x[0];
       sz    = [size.y,size.z]+2tol_2d;
       translate([bbox[0].x,bbox[0].y,bbox[0].z]+[-T-drift,-cut_tolerance,-cut_tolerance])
@@ -100,8 +115,8 @@ module fl_generic_vitamin(
           linear_extrude(height = T)
             fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (cut_thick.x[1] && isAxisInList(+X,cut_directions)) { // cut-out along +X semi axis
-      T     = cut_thick.x[1];
+    if (thick.x[1] && fl_3d_axisIsSet(+X,cut_directions)) { // cut-out along +X semi axis
+      T     = thick.x[1];
       drift = cut_drift.x[1];
       sz    = [size.y,size.z]+2tol_2d;
       translate([bbox[1].x,bbox[0].y,bbox[0].z]+[drift,-cut_tolerance,-cut_tolerance])
@@ -110,8 +125,8 @@ module fl_generic_vitamin(
           linear_extrude(height = T)
             fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (cut_thick.y[0] && isAxisInList(-Y,cut_directions)) { // cut-out along -Y semi axis
-      T     = cut_thick.y[0];
+    if (thick.y[0] && fl_3d_axisIsSet(-Y,cut_directions)) { // cut-out along -Y semi axis
+      T     = thick.y[0];
       drift = cut_drift.y[0];
       sz    = [size.x,size.z]+2tol_2d;
       translate([bbox[0].x,bbox[0].y,bbox[0].z]+[-cut_tolerance,-drift,-cut_tolerance])
@@ -119,8 +134,8 @@ module fl_generic_vitamin(
           linear_extrude(height = T)
             fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (cut_thick.y[1] && isAxisInList(+Y,cut_directions)) { // cut-out along +Y semi axis
-      T     = cut_thick.y[1];
+    if (thick.y[1] && fl_3d_axisIsSet(+Y,cut_directions)) { // cut-out along +Y semi axis
+      T     = thick.y[1];
       drift = cut_drift.y[1];
       sz    = [size.x,size.z]+2tol_2d;
       translate([bbox[0].x,bbox[1].y,bbox[0].z]+[-cut_tolerance,T+drift,-cut_tolerance])
@@ -128,16 +143,16 @@ module fl_generic_vitamin(
           linear_extrude(height = T)
             fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (cut_thick.z[0] && isAxisInList(-Z,cut_directions)) { // cut-out along -Z semi axis
-      T     = cut_thick.z[0];
+    if (thick.z[0] && fl_3d_axisIsSet(-Z,cut_directions)) { // cut-out along -Z semi axis
+      T     = thick.z[0];
       drift = cut_drift.z[0];
       sz    = [size.x,size.y]+2tol_2d;
       translate(bbox[0]-[cut_tolerance,cut_tolerance,T+drift])
         linear_extrude(height = T)
           fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (cut_thick.z[1] && isAxisInList(+Z,cut_directions)) { // cut-out along +Z semi axis
-      T     = cut_thick.z[1];
+    if (thick.z[1] && fl_3d_axisIsSet(+Z,cut_directions)) { // cut-out along +Z semi axis
+      T     = thick.z[1];
       drift = cut_drift.z[1];
       sz    = [size.x,size.y]+2tol_2d;;
       translate([bbox[0].x-cut_tolerance,bbox[0].y-cut_tolerance,bbox[1].z+drift])
@@ -147,9 +162,30 @@ module fl_generic_vitamin(
 
   }
 
+  module do_add() {
+    if (!ghost)
+      difference() {
+        translate(bbox[0])
+          fl_cube(size=size,octant=O0);
+        do_drill();
+    }
+    if (holes)
+      fl_hole_debug(holes=holes, debug=debug);
+  }
+
+  module do_drill(enable=[+X,-X,+Y,-Y,+Z,-Z]) {
+    fl_holes(holes,enable);
+  }
+
+  module do_layout() {
+    fl_lay_holes(holes)
+      children();
+  }
+
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
-      if (!ghost) fl_modifier($modifier) translate(bbox[0])  fl_cube(size=size,octant=O0);
+      fl_modifier($modifier)
+        do_add();
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
@@ -160,6 +196,12 @@ module fl_generic_vitamin(
 
     } else if ($verb==FL_CUTOUT) {
       fl_modifier($modifier) do_cutout();
+
+    } else if ($verb==FL_DRILL) {
+      fl_modifier($modifier) do_drill();
+
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout() children();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
