@@ -42,6 +42,7 @@ $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+
 /* [3D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
@@ -56,6 +57,7 @@ DIR_NATIVE  = true;
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
+
 
 /* [Constructor parameters] */
 
