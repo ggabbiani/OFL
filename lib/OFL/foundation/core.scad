@@ -452,6 +452,15 @@ function fl_description(type,value) = fl_property(type,"description",value);
 function fl_dxf(type,value)         = fl_property(type,"DXF model file",value);
 function fl_engine(type,value)      = fl_property(type,"engine",value);
 function fl_holes(type,value)       = assert(is_undef(value)||fl_tt_isHoleList(value),value) fl_property(type,"holes",value);
+/*
+ * Layout directions in floating semi-axis list form as described in
+ * fl_tt_isAxisList(). Represents the list of layout directions supported by the
+ * passed type.
+ *
+ * **NOTE**: this property is generally setup automatically by constructors
+ * from normals to holes eventually defined.
+ */
+// function fl_layouts(type,value)      = fl_property(type,"layout direction list",value);
 function fl_material(type,value,default)
                                     = fl_property(type,"material (actually a color)",value,default);
 function fl_name(type,value)        = fl_property(type,"name",value);
@@ -470,9 +479,13 @@ function fl_stl(type,value)         = fl_property(type,"STL geometry file",value
 function fl_tolerance(type,value)   = fl_property(type,"tolerance",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 /*
- * cut-out directions in floating semi-axis list form as described in fl_tt_isAxisList().
+ * cut-out directions in floating semi-axis list form as described in
+ * fl_tt_isAxisList().
  *
- * This property represents the list of cut-out directions supported by the passed type.
+ * This property represents the list of cut-out directions supported by the
+ * passed type.
+ *
+ * TODO: rename as plural
  */
 function fl_cutout(type,value)      = fl_property(type,"cut-out direction list",value);
 //*****************************************************************************
@@ -730,7 +743,7 @@ function fl_atoi(
  *     echo(fl_strcat(v)); // "OpenScadisafreeCADsoftware."
  *     echo(fl_strcat(v, " ")); // "OpenScad is a free CAD software."
  *
- * Original code pasted from TOUL: [The OpenScad Usefull
+ * Original code pasted from TOUL: [The OpenScad Useful
  * Library](http://www.thingiverse.com/thing:1237203)
  *
  * Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
@@ -760,7 +773,7 @@ function fl_strcat(
  *     echo(fl_split(str)[3]); // "free"
  *     echo(fl_split("foo;bar;baz", ";")); // ["foo", "bar", "baz"]
  *
- * Original code pasted from TOUL: [The OpenScad Usefull
+ * Original code pasted from TOUL: [The OpenScad Useful
  * Library](http://www.thingiverse.com/thing:1237203)
  *
  * Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
@@ -783,7 +796,7 @@ function fl_split(
 //! returns a sub list
 function fl_list_sub(list,from,to) = let(
   to  = is_undef(to) ? len(list)-1 : to
-) assert(from) [for(i=from;i<to;i=i+1) list[i]];
+) [for(i=from;i<to;i=i+1) list[i]];
 
 /*!
  * Transforms each item in «list» applying the homogeneous transformation matrix
@@ -923,28 +936,31 @@ function fl_list_min(
 function fl_list_unique(dict) =
   len(dict)==1 ? dict : let(
     // this lambda isolates the first list element (head) from the rest
-    fl_split     = function (list) let(
+    split     = function (list) let(
       len = len(list)
-    ) assert(len>1,"list must contain at least 2 items") len==2 ? [list[0],[list[1]]] : let(
-      head  = list[0],
-      tail  = [for(i=[1:len-1]) list[i]]
-    ) [head,tail],
-    partition = fl_split(dict),
+    ) assert(len>1,"list must contain at least 2 items")
+      len==2 ? [list[0],[list[1]]]
+      : let(
+        head  = list[0],
+        tail  = [for(i=[1:len-1]) list[i]]
+      ) [head,tail],
+    // search    = function(match,list) [for(i=[0:len(list)-1]) if (list[i]==match) i],
+    partition = split(dict),
     head      = partition[0],
     tail      = partition[1],
     result    = fl_list_unique(tail),
     missing   = search([head],result)==[[]]
-  ) missing ? concat(head,result) : result;
+  ) missing ? concat([head],result) : result;
 
 //! quick sort «vec» (from [oampo/missile](https://github.com/oampo/missile))
-function fl_list_sort(vec) =
-  (vec==[]) ? [] :
+function fl_list_sort(vec,cmp=function(e1,e2) (e1-e2)) =
+  vec==[] ? vec :
   let(
     pivot = vec[floor(len(vec)/2)],
-    below = [for (y = vec) if (y  < pivot) y],
-    equal = [for (y = vec) if (y == pivot) y],
-    above = [for (y = vec) if (y  > pivot) y]
-  ) concat(fl_list_sort(below), equal, fl_list_sort(above));
+    below = [for (e=vec) if (cmp(e,pivot)<0)  e],
+    equal = [for (e=vec) if (cmp(e,pivot)==0) e],
+    above = [for (e=vec) if (cmp(e,pivot)>0)  e]
+  ) concat(fl_list_sort(below,cmp), equal, fl_list_sort(above,cmp));
 
 //**** dictionary *************************************************************
 
