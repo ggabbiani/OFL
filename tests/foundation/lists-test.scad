@@ -40,3 +40,22 @@ let(
   list    = ["one","two","three"],
   result  = fl_push(list,"four")
 ) assert(len(result)==len(list)+1) echo(list=list,result=result);
+
+let(
+  list      = [0, 1, 2, 3, 4, 4, 1, 2, 3, 3, 2, 3],
+  expected  = [0, 1, 2, 3, 4],
+  result    = fl_list_sort(fl_list_unique(list))
+) echo(result=result) assert(result==expected,result);
+
+let(
+  list      = [[1,0,0],[0, 0, 1], [0, 0, -1], [0, 0, 1], [0, 0, -1]],
+  expected  = [[0, 0, -1], [0, 0, 1],[1,0,0]],
+  unique    = fl_list_unique(list),
+  result    = fl_list_sort(
+    unique,
+    function(ax1,ax2) let(
+      first=[4,2,1]*ax1,
+      second=[4,2,1]*ax2
+    ) first-second
+  )
+) echo(result=result) assert(result==expected,result);
