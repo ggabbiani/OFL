@@ -8,7 +8,8 @@ graph LR
     A1 --o|use| A3[foundation/2d-engine]
     A1 --o|use| A4[foundation/3d-engine]
     A1 --o|use| A5[foundation/bbox-engine]
-    A1 --o|use| A6[foundation/mngm-engine]
+    A1 --o|use| A6[foundation/hole]
+    A1 --o|use| A7[foundation/mngm-engine]
 ```
 
 ## Variables
@@ -30,8 +31,35 @@ __Default:__
 __Syntax:__
 
 ```text
-fl_generic_Vitamin(name,bbox,ghost=true,cut_directions)
+fl_generic_Vitamin(bbox,name,holes,ghost=true,cut_directions)
 ```
+
+Generic vitamin constructor
+
+
+__Parameters:__
+
+__bbox__  
+bounding box
+
+__name__  
+optional name, a default is created if 'undef'
+
+__holes__  
+optional hole list.
+
+**NOTE**: the hole list will drive FL_DRILL operations.
+
+
+__ghost__  
+when true FL_ADD is a no-op.
+
+__cut_directions__  
+cut directions in floating semi-axis list format.
+
+See also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist) and [fl_3d_AxisList()](../foundation/3d-engine.md#function-fl_3d_axislist)
+
+
 
 ## Modules
 
@@ -41,5 +69,43 @@ fl_generic_Vitamin(name,bbox,ghost=true,cut_directions)
 
 __Syntax:__
 
-    fl_generic_vitamin(verbs=FL_ADD,type,cut_thick=0,cut_tolerance=0,cut_drift=0,debug,octant,direction)
+    fl_generic_vitamin(verbs=FL_ADD,this,thick=0,cut_tolerance=0,cut_drift=0,debug,octant,direction)
+
+Generic vitamin engine, usable when a cut out, drill or layout operation is
+needed for a component not yet available as vitamin.
+
+Children context: the whole hole context is passed during FL_LAYOUT (see also
+fl_hole_Context()).
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL
+
+__thick__  
+Scalar or full semi axis value list for FL_CUTOUT, FL_DRILL and FL_LAYOUT
+thickness (see [fl_tt_isAxisVList()](../foundation/type_trait.md#function-fl_tt_isaxisvlist)).
+
+This parameter represents the surface thickness along semi-axes to be
+drilled and/or cut out.
+
+
+__cut_tolerance__  
+tolerance used during FL_CUTOUT
+
+__cut_drift__  
+Scalar or full semi axis value list for translation applied to cutout
+(see  [fl_tt_isAxisVList()](../foundation/type_trait.md#function-fl_tt_isaxisvlist))
+
+
+__debug__  
+debug parameter as returned from [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
+
+__octant__  
+when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef
+
 

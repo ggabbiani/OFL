@@ -62,8 +62,9 @@ __Syntax:__
 fl_3d_AxisVList(kvs,axes)
 ```
 
-Constructor for a  full semi-axis value list. The returned value can be
-built from a list of pairs ("string", value) or from a list of semi-axes name strings
+Constructor for a full semi-axis value list. The returned value can be built
+from a list of pairs ("string", value) or from a list of semi-axes name
+strings
 
 | parameter | result                                                                     |
 | --------- | ------                                                                     |
@@ -131,7 +132,14 @@ __Syntax:__
 fl_3d_axisIsSet(axis,list)
 ```
 
-wether «axis» is present in floating semi-axis list
+Wether «axis» is present in floating semi-axis «list».
+
+TODO: this is a recursive solution that could be more quickly solved by a
+mere call to the OpenSCAD builtin search() function like in the example
+below:
+
+    function fl_3d_axisIsSet(axis,list) = search([axis],list)!=[[]]
+
 
 ---
 
@@ -271,11 +279,11 @@ new bounding box as follows:
 - for planar component, the new negative and positive corners are calculated
   with the minimum dimensions between the current one and the result of the
   recursive call;
-- for the axial component when axis is positive:
+- for the axial component when «axis» is positive:
   - negative corner is equal to the current corner;
   - positive corner is equal to the current positive corner PLUS the gap and
     the axial dimension of the result;
-  - when axis is negative:
+  - when «axis» is negative:
     - negative corner is equal to the current one MINUS the gap and the
       axial dimension of the result
     - the positive corner is equal to the current corner.
@@ -284,7 +292,7 @@ new bounding box as follows:
 __Parameters:__
 
 __axis__  
-cartesian axis ([-1,0,0]==[1,0,0]==X)
+layout direction
 
 __gap__  
 gap to be inserted between bounding boxes along axis
@@ -616,13 +624,15 @@ __Syntax:__
 lay_bb_corners(axis,gap=0,types)
 ```
 
-returns the bounding box corners of a layout
+returns the bounding box corners of a layout.
+
+See also [fl_bb_accum()](#function-fl_bb_accum).
 
 
 __Parameters:__
 
 __axis__  
-cartesian axis ([-1,0,0]==[1,0,0]==X)
+layout direction
 
 __gap__  
 gap to be inserted between bounding boxes along axis

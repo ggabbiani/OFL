@@ -31,6 +31,8 @@ fl_PCBHolder(pcb,h_min=0,wall=1,knut_type)
 
 Hole driven PCB holder constructor
 
+TODO: set PCB holder namespace as 'engine' property
+
 
 __Parameters:__
 

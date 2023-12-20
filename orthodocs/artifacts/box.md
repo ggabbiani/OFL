@@ -35,7 +35,11 @@ engine for generating boxes.
 
 __children context__:
 
-- $box_materials - list of used materials [«material_lower», «material_upper»]
+- $box_materials - list of used materials [«material_lower»,
+   «material_upper»]
+
+TODO: external function returning the resulting bounding box having the
+payload as input (and vice versa?)
 
 
 __Parameters:__

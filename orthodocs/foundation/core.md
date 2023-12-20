@@ -1279,7 +1279,7 @@ if equivalent to:
 __Syntax:__
 
 ```text
-fl_list_sort(vec)
+fl_list_sort(vec,cmp=function(e1,e2)(e1-e2))
 ```
 
 quick sort «vec» (from [oampo/missile](https://github.com/oampo/missile))
@@ -1730,7 +1730,7 @@ Usage:
     echo(fl_split(str)[3]); // "free"
     echo(fl_split("foo;bar;baz", ";")); // ["foo", "bar", "baz"]
 
-Original code pasted from TOUL: [The OpenScad Usefull
+Original code pasted from TOUL: [The OpenScad Useful
 Library](http://www.thingiverse.com/thing:1237203)
 
 Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
@@ -1807,7 +1807,7 @@ Usage:
     echo(fl_strcat(v)); // "OpenScadisafreeCADsoftware."
     echo(fl_strcat(v, " ")); // "OpenScad is a free CAD software."
 
-Original code pasted from TOUL: [The OpenScad Usefull
+Original code pasted from TOUL: [The OpenScad Useful
 Library](http://www.thingiverse.com/thing:1237203)
 
 Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
