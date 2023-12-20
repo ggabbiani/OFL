@@ -855,8 +855,9 @@ function fl_3d_axisValue(
 ) assert(r!=undef,r) r;
 
 /*!
- * Constructor for a  full semi-axis value list. The returned value can be
- * built from a list of pairs ("string", value) or from a list of semi-axes name strings
+ * Constructor for a full semi-axis value list. The returned value can be built
+ * from a list of pairs ("string", value) or from a list of semi-axes name
+ * strings
  *
  * | parameter | result                                                                     |
  * | --------- | ------                                                                     |
@@ -963,7 +964,15 @@ function fl_3d_AxisList(
     if (r[7]!=[] || r[8]!=[] || r[7+9]!=[] || r[8+9]!=[]) +Z,
   ];
 
-//! wether «axis» is present in floating semi-axis list
+/*!
+ * Wether «axis» is present in floating semi-axis «list».
+ *
+ * TODO: this is a recursive solution that could be more quickly solved by a
+ * mere call to the OpenSCAD builtin search() function like in the example
+ * below:
+ *
+ *     function fl_3d_axisIsSet(axis,list) = search([axis],list)!=[[]]
+ */
 function fl_3d_axisIsSet(
     axis,
     list
