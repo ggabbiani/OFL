@@ -209,7 +209,7 @@ module fl_tnut(
           if (countersink)
             do_layout()
               translate(-Y(size.y+NIL))
-                fl_countersink(type=FL_CS_M3,tolerance=cs_t,direction=[-$hole_n,0],octant=-Z);
+                fl_countersink(type=FL_CS_ISO_M3,tolerance=cs_t,direction=[-$hole_n,0],octant=-Z);
         }
         // subtract the cylinder guide for insert
         if (knut)
