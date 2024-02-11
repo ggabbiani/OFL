@@ -155,7 +155,7 @@ assert(is_num(tooth),str("tooth=",tooth))
 [
   fl_name(value=name),
   fl_nominal(value=nominal),
-  fl_knut_drillD(value=diameter-2*tooth+0.1),
+  fl_knut_drillD(value=diameter-2*tooth+0.2),
   fl_knut_thick(value=length),
   fl_knut_r(value=diameter/2),
   fl_knut_tooth(value=tooth),
@@ -241,8 +241,13 @@ function fl_knut_linearDict() = [
  */
 function fl_knut_dict() = concat(fl_knut_spiralDict(),fl_knut_linearDict());
 
+/*!
+ * returns a list of knurl nuts fitting requirements (empty list if none was
+ * found)
+ */
 function fl_knut_find(
   inventory = fl_knut_dict(),
+  //! nominal ⌀ in mm
   nominal,
   //! selector by thread type ("linear" or "spiral")
   thread,
