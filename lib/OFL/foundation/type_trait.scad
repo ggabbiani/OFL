@@ -80,7 +80,8 @@ function fl_tt_isCompSpecList(specs) =
  */
 function fl_tt_isBoundingBox(
   //! bounding box to be verified
-  bbox
+  bbox,
+  2d=false
 ) = let(l1=len(bbox[0]), l2=len(bbox[1])) (
   len(bbox)==2
   && (l1==2 || l1==3)
@@ -88,7 +89,7 @@ function fl_tt_isBoundingBox(
   && (l1==l2)
   && bbox[0].x<=bbox[1].x
   && bbox[0].y<=bbox[1].y
-  &&  (l1==2 ? true : bbox[0].z<=bbox[1].z)
+  &&  (l1==2 ? 2d : bbox[0].z<=bbox[1].z)
 );
 
 /*!
