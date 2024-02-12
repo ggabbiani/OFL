@@ -997,6 +997,39 @@ module fl_square(
 
 //**** frame ******************************************************************
 
+function fl_2d_frame_intCorners(
+  //! outer size
+  size    = [1,1],
+  /*!
+   * List of four radiuses, one for each quadrant's corners.
+   * Each zero means that the corresponding corner is squared.
+   * Defaults to a 'perfect' rectangle with four squared corners.
+   * One scalar value R means corners=[R,R,R,R]
+   */
+  corners = [0,0,0,0],
+  //! subtracted to size defines the internal size
+  thick
+) = let(
+  delta = [thick,thick],
+  zero  = [0,0]
+) // corners==scalar
+  is_num(corners) ? let(
+    e = corners>thick ? [corners,corners]-delta : zero
+  ) [e,e,e,e]
+  // corners==ellipsis ([a,b])
+  : len(corners)==2 ? let(
+    e = min(corners)>thick ? corners-delta : zero
+  ) [e,e,e,e]
+  // corners==[scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,scalar|ellipsis]
+  : len(corners)==4 ? [
+    for(v=corners)
+      // scalar
+      is_num(v) ? v>thick ? [v,v]-delta : zero
+      // ellipsis
+      : min(v)>thick ? v-delta : zero
+  ]
+  : assert(false,corners) undef;
+
 module fl_2d_frame(
   verbs   = FL_ADD,
   //! outer size
@@ -1014,28 +1047,9 @@ module fl_2d_frame(
 ) {
   assert(is_num(thick));
 
+  size        = is_num(size) ? [size,size] : size;
   size_int    = size - 2*[thick,thick];
-  corners_int = let(
-      delta = [thick,thick],
-      zero  = [0,0]
-    )
-    // corners==scalar
-    is_num(corners) ? let(
-      e = corners>thick ? [corners,corners]-delta : zero
-    ) [e,e,e,e]
-    // corners==ellipsis ([a,b])
-    : len(corners)==2 ? let(
-      e = min(corners)>thick ? corners-delta : zero
-    ) [e,e,e,e]
-    // corners==[scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,]
-    : len(corners)==4 ? [
-      for(v=corners)
-        // 4 scalar
-        is_num(v) ? v>thick ? [v,v]-delta : zero
-        // 4 ellipses
-        : min(v)>thick ? v-delta : zero
-    ]
-    : assert(false,corners);
+  corners_int = fl_2d_frame_intCorners(size,corners,thick);
 
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
   M       = fl_quadrant(quadrant,bbox=bbox);
