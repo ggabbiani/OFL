@@ -799,6 +799,54 @@ function fl_list_sub(list,from,to) = let(
 ) [for(i=from;i<to;i=i+1) list[i]];
 
 /*!
+ * when positive returns the first «n» elements of «list»
+ *
+ * when negative subtracts the last «n» from «list»
+ *
+ * if 0 returns []
+ *
+ * example:
+ *
+ *     list=[1,2,3,4,5,6,7,8,9,10]
+ *     fl_list_head(list,3)==[1,2,3]
+ *
+ * example:
+ *
+ *     list=[1,2,3,4,5,6,7,8,9,10]
+ *     fl_list_head(list,-7)==[1,2,3]
+ */
+function fl_list_head(list,n) =
+  n==0 ?
+    [] :
+    let(len=len(list)) n>0 ?
+      [for(i=[0 : n-1     ]) list[i]] :
+      [for(i=[0 : len-1+n ]) list[i]];
+
+/*!
+ * when positive returns the last «n» elements of «list»
+ *
+ * when negative subtracts the first «n» from «list»
+ *
+ * if 0 returns []
+ *
+ * example:
+ *
+ *     list=[1,2,3,4,5,6,7,8,9,10]
+ *     fl_list_tail(list,3)==[8,9,10]
+ *
+ * example:
+ *
+ *     list=[1,2,3,4,5,6,7,8,9,10]
+ *     fl_list_tail(list,-7)==[8,9,10]
+ */
+function fl_list_tail(list,n) =
+  n==0 ?
+    [] :
+    let(len=len(list)) n>0 ?
+      [for(i=[len-n :len-1  ]) list[i]] :
+      [for(i=[-n    :len-1  ]) list[i]];
+
+/*!
  * Transforms each item in «list» applying the homogeneous transformation matrix
  * «M». By default the in() and out() lambdas manage 3d points, but overloading
  * them it is possible to manage different input/output formats like in the
@@ -851,8 +899,7 @@ function fl_list_pack(left,right) = let(
 ];
 
 /*!
- * return a list of items from «list» whose items successfully matched a list of
- * conditions.
+ * return the items from «list» matching a list of conditions.
  *
  * example 1: filter out numbers from a list of heterogeneous values
  *
@@ -893,8 +940,7 @@ function fl_list_filter(
     ) fl_list_filter(fl_list_filter(list,[for(i=[0:f_len-2]) filter[i]]),filter[f_len-1]);
 
 /*!
- * Return the list item whose calculated score is max. Return undef when «list»
- * is empty.
+ * Return the «list» item with max score. Return undef if «list» is empty.
  */
 function fl_list_max(
   list,
@@ -913,8 +959,7 @@ function fl_list_max(
     ) score(head)>score(other) ? head : other;
 
 /*!
- * Return the list item whose calculated score is min. Return undef when «list»
- * is empty.
+ * Return the «list» item with min score. Return undef if «list» is empty.
  */
 function fl_list_min(
   list,
@@ -987,10 +1032,10 @@ function fl_dict_search(dictionary,name) = [
  *
  *       result   = fl_dict_organize(dictionary=dict, range=[0:10], func=function(item) item[1]);
  *
- * is functional equal to:
+ * is functionally equal to:
  *
  *       result = [
- *         [], // 0
+ *         [], //  0
  *         [], //  1
  *         [   //  2
  *           ["fourth", 2],
