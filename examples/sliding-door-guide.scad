@@ -14,6 +14,7 @@ include <../lib/OFL/foundation/hole.scad>
 
 use <../lib/OFL/foundation/fillet.scad>
 use <../lib/OFL/foundation/profile.scad>
+use <../lib/OFL/foundation/util.scad>
 
 $fn            = 50;           // [3:100]
 // When true, debug statements are turned on
@@ -50,22 +51,22 @@ screw = No6_cs_screw;
 scr_nominal = fl_screw_nominal(screw);
 
 holes = [
-  fl_Hole([30.5,  7,HORIZ_T],scr_nominal),
-  fl_Hole([131.5, 7,HORIZ_T],scr_nominal),
-  fl_Hole([223.5, 8,HORIZ_T],scr_nominal),
+  fl_Hole([30,  8,HORIZ_T],scr_nominal),
+  fl_Hole([131, 8,HORIZ_T],scr_nominal),
+  fl_Hole([223, 8,HORIZ_T],scr_nominal),
 
-  fl_Hole([29,    28,HORIZ_T],scr_nominal),
-  fl_Hole([130.5, 28,HORIZ_T],scr_nominal),
-  fl_Hole([222.5, 28.5,HORIZ_T],scr_nominal),
+  fl_Hole([30,    28,HORIZ_T],scr_nominal),
+  fl_Hole([131, 28,HORIZ_T],scr_nominal),
+  fl_Hole([223, 28,HORIZ_T],scr_nominal),
 ];
 // holes = [
-//   fl_Hole([30.5, 8,HORIZ_T],scr_nominal),
-//   fl_Hole([131.5,8.5,HORIZ_T],scr_nominal),
-//   fl_Hole([223.5,9.5,HORIZ_T],scr_nominal),
+//   fl_Hole([30.5,  7+1,HORIZ_T],scr_nominal),
+//   fl_Hole([131.5, 7+1,HORIZ_T],scr_nominal),
+//   fl_Hole([223.5, 8+1,HORIZ_T],scr_nominal),
 
-//   fl_Hole([29,   29,HORIZ_T],scr_nominal),
-//   fl_Hole([130.5,29.5,HORIZ_T],scr_nominal),
-//   fl_Hole([222.5,30,HORIZ_T],scr_nominal),
+//   fl_Hole([29,    28+1,HORIZ_T],scr_nominal),
+//   fl_Hole([130.5, 28+1,HORIZ_T],scr_nominal),
+//   fl_Hole([222.5, 28.5+1,HORIZ_T],scr_nominal),
 // ];
 
 difference() {
@@ -85,6 +86,11 @@ difference() {
           fl_fillet(r=RADIUS, h=LENGTH,direction=[+Z,45-i*135]);
   }
   // screw holes
-  translate(X(LENGTH-252))
-    fl_screw_holes(holes, thick=HORIZ_T, screw=screw, type = DRILL_TYPE, tolerance=TOLERANCE, countersunk=COUNTERSUNK);
+  // translate(X(LENGTH-252))
+    // fl_screw_holes(holes, thick=HORIZ_T, screw=screw, type = DRILL_TYPE,
+    // tolerance=TOLERANCE, countersunk=COUNTERSUNK);
+  translate(+Z(0.1))
+    fl_lay_holes(holes)
+      fl_rail(5)
+        fl_screw(FL_FOOTPRINT,screw,10);
 }
