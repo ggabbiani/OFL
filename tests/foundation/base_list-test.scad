@@ -19,6 +19,8 @@ fl_status();
 
 // end of automatically generated code
 
+//**** fl_list_filter() *******************************************************
+
 // extracts numbers from an heterogeneous item list
 let(
   list      = ["a", 4, -1, false, 5, "a string"],
@@ -66,6 +68,41 @@ let(
     function(item) item>0       // check if positive (last)
   ])
 ) assert(result==expected,result) echo(result=result);
+
+let(
+  list = ["POWER IN", "HDMI0", "HDMI1", "A/V", "USB2", "USB3", "ETHERNET", "GPIO", "uSD", "PIM TOP", "PIM BOT"],
+  expected    = ["HDMI0", "HDMI1"],
+  or_filters  = ["HDMI0", "HDMI1"],
+  result = fl_list_filter(list,function(item) item==or_filters[0] || item==or_filters[1])
+) assert(result==expected,result);
+
+//**** fl_list_head() *********************************************************
+
+let(
+  list      = [1,2,3,4,5,6,7,8,9,10],
+  expected  = [1,2,3],
+  result    = fl_list_head(list,3)
+) assert(result==expected,result);
+
+let(
+  list      = [1,2,3,4,5,6,7,8,9,10],
+  expected  = [1,2,3],
+  result    = fl_list_head(list,-7)
+) assert(result==expected,result);
+
+//**** fl_list_tail() *********************************************************
+
+let(
+  list      = [1,2,3,4,5,6,7,8,9,10],
+  expected  = [8,9,10],
+  result    = fl_list_tail(list,3)
+) assert(result==expected,result);
+
+let(
+  list      = [1,2,3,4,5,6,7,8,9,10],
+  expected  = [8,9,10],
+  result    = fl_list_tail(list,-7)
+) assert(result==expected,result);
 
 //**** fl_list_pack() *********************************************************
 
