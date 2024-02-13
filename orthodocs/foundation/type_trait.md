@@ -146,7 +146,7 @@ indicates a value of 3 along +X, 1.5 along -Z and 0 otherwise.
 __Syntax:__
 
 ```text
-fl_tt_isBoundingBox(bbox)
+fl_tt_isBoundingBox(bbox,2d=false)
 ```
 
 return true when «bbox» is a bounding box in [low,high] format.

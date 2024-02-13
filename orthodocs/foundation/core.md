@@ -932,10 +932,10 @@ example:
 
       result   = fl_dict_organize(dictionary=dict, range=[0:10], func=function(item) item[1]);
 
-is functional equal to:
+is functionally equal to:
 
       result = [
-        [], // 0
+        [], //  0
         [], //  1
         [   //  2
           ["fourth", 2],
@@ -1142,8 +1142,7 @@ __Syntax:__
 fl_list_filter(list,filter)
 ```
 
-return a list of items from «list» whose items successfully matched a list of
-conditions.
+return the items from «list» matching a list of conditions.
 
 example 1: filter out numbers from a list of heterogeneous values
 
@@ -1204,6 +1203,33 @@ fl_list_has(list,item)
 
 ---
 
+### function fl_list_head
+
+__Syntax:__
+
+```text
+fl_list_head(list,n)
+```
+
+Returns the «list» head according to «n»:
+
+- n>0: returns the first «n» elements of «list»
+- n<0: returns «list» minus the last «n» items
+- n==0: returns []
+
+example:
+
+    list=[1,2,3,4,5,6,7,8,9,10]
+    fl_list_head(list,3)==[1,2,3]
+
+example:
+
+    list=[1,2,3,4,5,6,7,8,9,10]
+    fl_list_head(list,-7)==[1,2,3]
+
+
+---
+
 ### function fl_list_max
 
 __Syntax:__
@@ -1212,8 +1238,7 @@ __Syntax:__
 fl_list_max(list,score=function(item)item)
 ```
 
-Return the list item whose calculated score is max. Return undef when «list»
-is empty.
+Return the «list» item with max score. Return undef if «list» is empty.
 
 
 __Parameters:__
@@ -1234,8 +1259,7 @@ __Syntax:__
 fl_list_min(list,score=function(item)item)
 ```
 
-Return the list item whose calculated score is min. Return undef when «list»
-is empty.
+Return the «list» item with min score. Return undef if «list» is empty.
 
 
 __Parameters:__
@@ -1295,6 +1319,33 @@ fl_list_sub(list,from,to)
 ```
 
 returns a sub list
+
+---
+
+### function fl_list_tail
+
+__Syntax:__
+
+```text
+fl_list_tail(list,n)
+```
+
+Returns the «list» tail according to «n»:
+
+- n>0: returns the last «n» elements of «list»
+- n<0: returns «list» minus the first «n» items
+- n==0: returns []
+
+example:
+
+    list=[1,2,3,4,5,6,7,8,9,10]
+    fl_list_tail(list,3)==[8,9,10]
+
+example:
+
+    list=[1,2,3,4,5,6,7,8,9,10]
+    fl_list_tail(list,-7)==[8,9,10]
+
 
 ---
 

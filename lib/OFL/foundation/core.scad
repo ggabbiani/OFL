@@ -799,11 +799,11 @@ function fl_list_sub(list,from,to) = let(
 ) [for(i=from;i<to;i=i+1) list[i]];
 
 /*!
- * when positive returns the first «n» elements of «list»
+ * Returns the «list» head according to «n»:
  *
- * when negative subtracts the last «n» from «list»
- *
- * if 0 returns []
+ * - n>0: returns the first «n» elements of «list»
+ * - n<0: returns «list» minus the last «n» items
+ * - n==0: returns []
  *
  * example:
  *
@@ -823,11 +823,11 @@ function fl_list_head(list,n) =
       [for(i=[0 : len-1+n ]) list[i]];
 
 /*!
- * when positive returns the last «n» elements of «list»
+ * Returns the «list» tail according to «n»:
  *
- * when negative subtracts the first «n» from «list»
- *
- * if 0 returns []
+ * - n>0: returns the last «n» elements of «list»
+ * - n<0: returns «list» minus the first «n» items
+ * - n==0: returns []
  *
  * example:
  *

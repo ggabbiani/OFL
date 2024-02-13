@@ -32,6 +32,32 @@ returns the angle between vector «a» and «b»
 
 ---
 
+### function fl_2d_frame_intCorners
+
+__Syntax:__
+
+```text
+fl_2d_frame_intCorners(size=[1,1],corners=[0,0,0,0],thick)
+```
+
+__Parameters:__
+
+__size__  
+outer size
+
+__corners__  
+List of four radiuses, one for each quadrant's corners.
+Each zero means that the corresponding corner is squared.
+Defaults to a 'perfect' rectangle with four squared corners.
+One scalar value R means corners=[R,R,R,R]
+
+
+__thick__  
+subtracted to size defines the internal size
+
+
+---
+
 ### function fl_bb_arc
 
 __Syntax:__

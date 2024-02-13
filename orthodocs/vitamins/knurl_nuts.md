@@ -436,7 +436,14 @@ __Syntax:__
 fl_knut_find(inventory=fl_knut_dict(),nominal,thread,length_less,length_greater,length_equal,length_less_equal,length_greater_equal)
 ```
 
+returns a list of knurl nuts fitting requirements (empty list if none was
+found)
+
+
 __Parameters:__
+
+__nominal__  
+nominal ⌀ in mm
 
 __thread__  
 selector by thread type ("linear" or "spiral")
