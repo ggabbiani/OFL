@@ -55,9 +55,11 @@ VIEW_MODE = "FULL"; // [FULL,ASSEMBLED,MOUNTED,PRINT ME!]
 DIRECTION       = [0,1,-0.4];  // [-1:0.1:+1]
 
 // show T-NUT
-T_NUT                 = true;
+T_NUT               = true;
 // show arm
-ARM                   = true;
+ARM                 = true;
+// camera stopper
+CAMERA_STOPPER      = true;
 
 /* [Hidden] */
 
