@@ -10,6 +10,7 @@ use     <NopSCADlib/vitamins/pcb.scad>
 
 include <../foundation/unsafe_defs.scad>
 
+use <../foundation/2d-engine.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>
