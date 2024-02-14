@@ -90,6 +90,18 @@ let(
   result    = fl_list_head(list,-7)
 ) assert(result==expected,result);
 
+let(
+  list      = [1],
+  expected  = [],
+  result    = fl_list_head(list,-1)
+) assert(result==expected,result);
+
+let(
+  list      = [1],
+  expected  = [1],
+  result    = fl_list_head(list,1)
+) assert(result==expected,result);
+
 //**** fl_list_tail() *********************************************************
 
 let(
@@ -102,6 +114,18 @@ let(
   list      = [1,2,3,4,5,6,7,8,9,10],
   expected  = [8,9,10],
   result    = fl_list_tail(list,-7)
+) assert(result==expected,result);
+
+let(
+  list      = [1],
+  expected  = [],
+  result    = fl_list_tail(list,-1)
+) assert(result==expected,result);
+
+let(
+  list      = [1],
+  expected  = [1],
+  result    = fl_list_tail(list,1)
 ) assert(result==expected,result);
 
 //**** fl_list_pack() *********************************************************

@@ -815,12 +815,16 @@ function fl_list_sub(list,from,to) = let(
  *     list=[1,2,3,4,5,6,7,8,9,10]
  *     fl_list_head(list,-7)==[1,2,3]
  */
-function fl_list_head(list,n) =
+function fl_list_head(list,n) = let(
+    len=len(list)
+  )
   n==0 ?
     [] :
-    let(len=len(list)) n>0 ?
-      [for(i=[0 : n-1     ]) list[i]] :
-      [for(i=[0 : len-1+n ]) list[i]];
+    len==0 ?
+      [] :
+      n>0 ?
+        +n>=len ? list : [for(i=[0 : n-1     ]) list[i]]:
+        -n>=len ? []   : [for(i=[0 : len-1+n ]) list[i]];
 
 /*!
  * Returns the «list» tail according to «n»:
@@ -839,12 +843,16 @@ function fl_list_head(list,n) =
  *     list=[1,2,3,4,5,6,7,8,9,10]
  *     fl_list_tail(list,-7)==[8,9,10]
  */
-function fl_list_tail(list,n) =
+function fl_list_tail(list,n) = let(
+    len=len(list)
+  )
   n==0 ?
     [] :
-    let(len=len(list)) n>0 ?
-      [for(i=[len-n :len-1  ]) list[i]] :
-      [for(i=[-n    :len-1  ]) list[i]];
+    len==0 ?
+      [] :
+      n>0 ?
+        +n>=len ? list  : [for(i=[len-n :len-1  ]) list[i]]:
+        -n>=len ? []    : [for(i=[-n    :len-1  ]) list[i]];
 
 /*!
  * Transforms each item in «list» applying the homogeneous transformation matrix
@@ -929,15 +937,18 @@ function fl_list_pack(left,right) = let(
 function fl_list_filter(
   //! the list to be filtered
   list,
-  //! function filter or list of function filters called for each «list» item
+  //! either a function literal or a list of function literals called on each «list» item
   filter
 ) = let(
-    filter  = is_list(filter) ? filter : assert(is_undef(filter) || is_function(filter),filter) [filter]
-  ) len(filter)==0 ? list
-  : len(filter)==1 ? let(f=filter[0]) [for(item=list) if (!f || f(item)) item]
-  : let(
-      f_len  = len(filter)
-    ) fl_list_filter(fl_list_filter(list,[for(i=[0:f_len-2]) filter[i]]),filter[f_len-1]);
+  filter  = is_list(filter) ? filter : filter ? [filter] : [],
+  len     = len(filter)
+)
+len==0 ?
+  list :
+  let(
+    current = filter[0],
+    result  = [for(item=list) if (current(item)) item]
+  ) fl_list_filter(result,fl_list_tail(filter,-1));
 
 /*!
  * Return the «list» item with max score. Return undef if «list» is empty.
@@ -1341,13 +1352,16 @@ function fl_parm_labels(debug) = is_undef(debug) ? false : assert(is_bool(debug[
 //! When true debug symbols are turned on
 function fl_parm_symbols(debug) = is_undef(debug) ? false : assert(is_bool(debug[1])) debug[1];
 
-// When true show direction information of the component with «label»
-function fl_parm_components(debug,label) = let(
-  dbg = debug[2]
-)   is_undef(debug) ? false
-  : is_list(dbg) ? search([label],dbg)!=[[]]
-  : is_string(dbg) ? dbg==label
-  : assert(false,str("debug information must be a string or a list of strings: ", dbg)) undef;
+//! When «debug» is true check if component is marked for debugging
+function fl_parm_components(debug,label) =
+  is_undef(debug) ?
+    false :
+    let(components = debug[2])
+    is_list(components) ?
+      search([label],components)!=[[]] :
+      is_string(components) ?
+        components==label :
+        assert(false,str("debug information must be a string or a list of strings: ", components)) undef;
 
 module fl_context_dump()
   echo(
