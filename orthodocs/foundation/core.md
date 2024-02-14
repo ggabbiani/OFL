@@ -1176,7 +1176,7 @@ __list__
 the list to be filtered
 
 __filter__  
-function filter or list of function filters called for each «list» item
+either a function literal or a list of function literals called on each «list» item
 
 
 ---
@@ -1611,6 +1611,8 @@ __Syntax:__
 ```text
 fl_parm_components(debug,label)
 ```
+
+When «debug» is true check if component is marked for debugging
 
 ---
 

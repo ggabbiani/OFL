@@ -51,7 +51,7 @@ namespace
 
 __Default:__
 
-    let(Tbase=2,Tfluting=2.3,Tholders=3,size=[56,87,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - bottom"),fl_bb_corners(value=[[-size.x/2,0,-size.z],[+size.x/2,size.y,0],]),fl_screw(value=M2p5_cap_screw),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),fl_cutout(value=[FL_Z]),["corner radius",3],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","bottom"],]
+    let(Tbase=2,Tfluting=2.3,Tholders=3,Tchamfer=2.3,size=[56,87,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - bottom"),fl_bb_corners(value=[[-size.x/2,0,-size.z],[+size.x/2,size.y,0],]),fl_screw(value=M2p5_cap_screw),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),fl_cutout(value=[-FL_Z]),["corner radius",3],["chamfer thickness",Tchamfer],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","bottom"],]
 
 ---
 
@@ -59,7 +59,7 @@ __Default:__
 
 __Default:__
 
-    let(Tbase=1.5,Tfluting=8.6,Tholders=5.5,size=[56,70,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - top"),fl_bb_corners(value=[[-size.x/2,0,0],[+size.x/2,size.y,size.z],]),fl_screw(value=M2p5_cap_screw),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),fl_cutout(value=[+FL_Z]),["corner radius",3],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","top"],]
+    let(Tbase=1.5,Tfluting=8.6,Tholders=5.5,Tchamfer=2.3,size=[56,70,Tbase+Tfluting+Tholders])[fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - top"),fl_bb_corners(value=[[-size.x/2,0,0],[+size.x/2,size.y,size.z],]),fl_screw(value=M2p5_cap_screw),fl_dxf(value="vitamins/pimoroni.dxf"),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B082Y21GX5/"],]),fl_engine(value="Pimoroni"),fl_cutout(value=[+FL_Z]),["corner radius",3],["chamfer thickness",Tchamfer],["base thickness",Tbase],["fluting thickness",Tfluting],["holders thickness",Tholders],["part","top"],]
 
 ## Functions
 
@@ -108,7 +108,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_heatsink(verbs=FL_ADD,type,direction,octant,debug)
+    fl_heatsink(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,direction,octant,debug)
 
 common wrapper for different heat sink model engines.
 
@@ -116,7 +116,13 @@ common wrapper for different heat sink model engines.
 __Parameters:__
 
 __verbs__  
-supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_FOOTPRINT
+
+__cut_thick__  
+thickness for FL_CUTOUT
+
+__cut_tolerance__  
+tolerance used during FL_CUTOUT
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

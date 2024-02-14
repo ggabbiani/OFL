@@ -32,6 +32,7 @@ graph TD
     A20[foundation/drawio] --o|include| A1
     A21[dxf]
     A22[vitamins/ethers] --o|include| A2
+    A22 --o|use| A1
     A22 --o|use| A5
     A22 --o|use| A3
     A22 --o|use| A4
