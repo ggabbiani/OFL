@@ -19,7 +19,7 @@ use <../foundation/mngm-engine.scad>
 FL_HS_NS  = "hs";
 
 FL_HS_PIMORONI_TOP = let(
-  Tbase = 1.5, Tfluting = 8.6, Tholders = 5.5,
+  Tbase = 1.5, Tfluting = 8.6, Tholders = 5.5, Tchamfer = 2.3,
   size  = [56,70,Tbase+Tfluting+Tholders]
 ) [
   fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - top"),
@@ -38,6 +38,7 @@ FL_HS_PIMORONI_TOP = let(
 
   // private/undocumented properties
   ["corner radius",     3         ],
+  ["chamfer thickness", Tchamfer  ],
   ["base thickness",    Tbase     ],
   ["fluting thickness", Tfluting  ],
   ["holders thickness", Tholders  ],
@@ -45,7 +46,7 @@ FL_HS_PIMORONI_TOP = let(
 ];
 
 FL_HS_PIMORONI_BOTTOM = let(
-  Tbase = 2, Tfluting = 2.3, Tholders = 3,
+  Tbase = 2, Tfluting = 2.3, Tholders = 3, Tchamfer = 2.3,
   size  = [56,87,Tbase+Tfluting+Tholders]
 ) [
   fl_name(value="PIMORONI Raspberry Pi 4 Heatsink Case - bottom"),
@@ -60,10 +61,11 @@ FL_HS_PIMORONI_BOTTOM = let(
     ]
   ),
   fl_engine(value="Pimoroni"),
-  fl_cutout(value=[FL_Z]),
+  fl_cutout(value=[-FL_Z]),
 
   // private/undocumented properties
   ["corner radius",     3         ],
+  ["chamfer thickness", Tchamfer  ],
   ["base thickness",    Tbase     ],
   ["fluting thickness", Tfluting  ],
   ["holders thickness", Tholders  ],
@@ -142,9 +144,13 @@ function fl_pimoroni(
  * common wrapper for different heat sink model engines.
  */
 module fl_heatsink(
-  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_FOOTPRINT
   verbs       = FL_ADD,
   type,
+  //! thickness for FL_CUTOUT
+  cut_thick,
+  //! tolerance used during FL_CUTOUT
+  cut_tolerance=0,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -164,6 +170,7 @@ module fl_heatsink(
     dxf       = fl_dxf(type);
     // private properties
     corner_r  = fl_get(type,"corner radius");
+    chamfer_t = fl_property(type,"chamfer thickness");
     base_t    = fl_property(type,"base thickness");
     fluting_t = fl_property(type,"fluting thickness");
     holder_t  = fl_property(type,"holders thickness");
@@ -213,8 +220,8 @@ module fl_heatsink(
               intersection() {
                 translate(bbox[0]+[corner_r,corner_r])
                   minkowski() {
-                    fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r,(fprint?holder_t:0)+base_t+fluting_t-2.3],octant=O0);
-                    fl_cylinder(r2=0, r1=corner_r, h=2.3);
+                    fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r,(fprint?holder_t:0)+base_t+fluting_t-chamfer_t],octant=O0);
+                    fl_cylinder(r2=0, r1=corner_r, h=chamfer_t);
                   }
                 linear_extrude((fprint?holder_t:0)+base_t+fluting_t)
                   fl_importDxf(file=dxf,layer="1");
@@ -252,9 +259,22 @@ module fl_heatsink(
         bottom(fprint);
     }
 
+    module do_cutout() {
+      assert(cut_thick!=undef);
+      assert(cut_tolerance!=undef);
+
+      cut_direction = fl_cutout(type)[0];
+      translate((abs(cut_direction*size)-chamfer_t)*cut_direction)
+        fl_cutout(len=cut_thick+chamfer_t+cut_tolerance,delta=cut_tolerance,z=cut_direction)
+          do_add(fprint=true);
+    }
+
     if (verb==FL_ADD) {
       fl_trace("$FL_ADD",$FL_ADD);
       do_add(false);
+
+    } else if (verb==FL_CUTOUT) {
+      do_cutout();
 
     } else if (verb==FL_FOOTPRINT) {
       fl_trace("$FL_FOOTPRINT",$FL_FOOTPRINT);
@@ -324,22 +344,7 @@ module fl_heatsink(
   }
 
   fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier)
-        wrap($verb);
-
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
-
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
-
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) wrap($verb);
-
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    }
+    fl_modifier($modifier)
+      wrap($verb);
   }
 }

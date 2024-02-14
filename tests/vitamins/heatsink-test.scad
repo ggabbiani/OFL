@@ -36,6 +36,8 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
+$FL_CUTOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -59,7 +61,10 @@ DIR_R       = 0;        // [-360:360]
 /* [Heatsink] */
 
 TYPE  = "FL_HS_PIMORONI_TOP"; // [FL_HS_PIMORONI_TOP,FL_HS_PIMORONI_BOTTOM,FL_HS_KHADAS]
-
+// Thickness during FL_CUTOUT
+CUT_THICK = 10; // [0:1:10]
+// Tolerance during FL_CUTOUT
+CUT_TOLERANCE = 1; // [0:0.1:2]
 
 /* [Hidden] */
 
@@ -71,15 +76,10 @@ fl_status();
 
 // end of automatically generated code
 
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
-];
+verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT]);
 type  = (TYPE=="FL_HS_PIMORONI_TOP") ? FL_HS_PIMORONI_TOP
       : (TYPE=="FL_HS_PIMORONI_BOTTOM") ? FL_HS_PIMORONI_BOTTOM
       : FL_HS_KHADAS;
 
-fl_heatsink(verbs, type=type, direction=direction, octant=octant)
+fl_heatsink(verbs, type=type, cut_thick=CUT_THICK, cut_tolerance=CUT_TOLERANCE, direction=direction, octant=octant)
   fl_color() fl_cylinder(h=10,d=5,octant=$hs_normal);
