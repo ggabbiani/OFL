@@ -90,7 +90,7 @@ module fl_hdmi(
     } else if ($verb==FL_CUTOUT) {
       assert(cut_thick!=undef);
       fl_modifier($modifier)
-        translate(X(size.x/2+cut_drift)) fl_cutout(len=cut_thick,z=X,x=-Z,delta=cut_tolerance) hdmi(nop,false);
+        translate(X(size.x/2+cut_drift)) fl_cutout(len=cut_thick,z=FL_X,x=-FL_Z,delta=cut_tolerance) hdmi(nop,false);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
