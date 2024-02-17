@@ -9,6 +9,8 @@
 include <unsafe_defs.scad>
 include <type_trait.scad>
 
+use <../dxf.scad>
+
 use <2d-engine.scad>
 use <bbox-engine.scad>
 use <mngm-engine.scad>
@@ -494,10 +496,15 @@ module fl_direct(
 function fl_planeAlign(ax,ay,bx,by,a,b) =
   assert(fl_XOR(ax && ay,a),str("ax,ay parameters are mutually exclusive with a: ax=",ax,",ay=",ay,",a=",a))
   assert(fl_XOR(bx && by,b),str("bx,by parameters are mutually exclusive with b: bx=",bx,",by=",by,",b=",b))
-  // assert(!ortho||ax*ay==0,str("ax=",ax," must be orthogonal to ay=",ay))
-  // assert(!ortho||bx*by==0,str("bx=",bx," must be orthogonal to by=",by))
+  let(
+    ax  = fl_versor(a?a.x:ax),
+    ay  = fl_versor(a?a.y:ay),
+    bx  = fl_versor(b?b.x:bx),
+    by  = fl_versor(b?b.y:by)
+  )
+  (ax==bx && ay==by) ?
+  FL_I :
   let (
-    ax    = fl_versor(a?a.x:ax),ay=fl_versor(a?a.y:ay),bx=fl_versor(b?b.x:bx),by=fl_versor(b?b.y:by),
     az    = cross(ax,ay),
     ortho = (ax*ay==0) && (bx*by==0),
     A=[
@@ -948,6 +955,8 @@ function fl_3d_AxisVList(
  *      [ 0, 0, -1],  // -Z semi-axis
  *      [ 0, 0, +1],  // +Z semi-axis
  *     ];
+ *
+ * **NOTE:** the negative ('-') or positive ('+') sign must always be set.
  */
 function fl_3d_AxisList(
   //! semi-axis list (es.["-x","±Z"])
@@ -972,6 +981,8 @@ function fl_3d_AxisList(
  * below:
  *
  *     function fl_3d_axisIsSet(axis,list) = search([axis],list)!=[[]]
+ *
+ * TODO: eventually replace it with fl_isInAxisList()
  */
 function fl_3d_axisIsSet(
     axis,
@@ -981,6 +992,13 @@ function fl_3d_axisIsSet(
     curr  = len ? list[0] : undef,
     rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
   ) curr==axis ? true : len>1 ? fl_3d_axisIsSet(axis,rest) :  false;
+
+  function fl_isInAxisList(axis,list) =
+    list==[] ?
+      false :
+      list[0]==axis ?
+        true :
+        fl_isInAxisList(axis,fl_list_tail(list,-1));
 
 /*!
  * Extrusion along arbitrary axis with eventual rotation
