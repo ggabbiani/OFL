@@ -7,7 +7,7 @@
  */
 
 include <NopSCADlib/utils/core/core.scad>
-include <../foundation/core.scad>
+include <../foundation/unsafe_defs.scad>
 
 use <../foundation/2d-engine.scad>
 use <../foundation/3d-engine.scad>
@@ -31,7 +31,7 @@ FL_USB_TYPE_Ax1_NF_SM = let(
   fl_engine(value="USB/A SM"),
   fl_bb_corners(value=[[-l,-w/2,0],[0,+w/2,h]]),
   // fl_director(value=+X),fl_rotor(value=+Y),
-  fl_cutout(value=[+FL_X]),
+  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
   fl_USB_flange(value=false),
 ];
 
@@ -44,7 +44,7 @@ FL_USB_TYPE_Ax1 = let(
   fl_engine(value="USB/Ax1"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
   // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-  fl_cutout(value=[+FL_X]),
+  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
   fl_USB_flange(value=true),
 ];
 
@@ -57,7 +57,7 @@ FL_USB_TYPE_Ax1_NF = let(
   fl_engine(value="USB/Ax1"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
   // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-  fl_cutout(value=[+FL_X]),
+  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
   fl_USB_flange(value=false),
 ];
 
@@ -70,7 +70,7 @@ FL_USB_TYPE_Ax2 = let(
   fl_engine(value="USB/Ax2"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
   // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-  fl_cutout(value=[+FL_X]),
+  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
   fl_USB_flange(value=true),
 ];
 
@@ -81,7 +81,7 @@ FL_USB_TYPE_B   = let(
   fl_engine(value="USB/B"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
   // fl_director(value=+FL_X),fl_rotor(value=+Y),
-  fl_cutout(value=[+FL_X]),
+  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
   fl_USB_flange(value=false),
 ];
 
@@ -92,7 +92,7 @@ FL_USB_TYPE_C   = let(
   fl_engine(value="USB/C"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
   // fl_director(value=+X),fl_rotor(value=+Y),
-  fl_cutout(value=[+FL_X]),
+  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
   fl_USB_flange(value=false),
 ];
 
@@ -103,7 +103,7 @@ FL_USB_TYPE_uA = let(
   fl_engine(value="USB/uA"),
   fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),
   // fl_director(value=+X),fl_rotor(value=+Y),
-  fl_cutout(value=[+FL_X]),
+  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
   fl_USB_flange(value=true),
 ];
 
@@ -114,7 +114,7 @@ FL_USB_TYPE_uA_NF = let(
   fl_engine(value="USB/uA"),
   fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),
   // fl_director(value=+X),fl_rotor(value=+Y),
-  fl_cutout(value=[+FL_X]),
+  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
   fl_USB_flange(value=false),
 ];
 
@@ -136,11 +136,24 @@ module fl_USB(
   //! thickness for FL_CUTOUT
   cut_thick,
   //! tolerance used during FL_CUTOUT
-  tolerance=0,
+  cut_tolerance=0,
   //! translation applied to cutout (default 0)
   cut_drift=0,
-  //! tongue color (default "white")
-  tongue,
+  /*!
+   * Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
+   *
+   * Example:
+   *
+   *     cut_direction=[+X,+Z]
+   *
+   * in this case the usb will perform a cutout along +X and +Z.
+   *
+   * **Note:** axes specified must be present in the supported cutout direction
+   * list (retrievable through fl_cutout() getter)
+   */
+  cut_direction,
+  //! tongue color
+  tongue="white",
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -151,15 +164,12 @@ module fl_USB(
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
 
-  tongue  = tongue!=undef ? tongue : "white";
   flange  = fl_USB_flange(type);
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(direction) : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
-  engine = fl_engine(type);
-  fl_trace("D",D);
-  fl_trace("cutout drift",cut_drift);
+  bbox    = fl_bb_corners(type);
+  size    = fl_bb_size(type);
+  D       = direction ? fl_direction(direction) : FL_I;
+  M       = fl_octant(octant,bbox=bbox);
+  engine  = fl_engine(type);
 
   module wrap() {
     if      (engine=="USB/A SM") usb_A_sm($verb);
@@ -208,53 +218,27 @@ module fl_USB(
       }
     }
 
-    module do_cutout() {
-      translate(+fl_X(cut_thick+cut_drift)+Z(size.z/2))
-        fl_linear_extrude(length=cut_thick,direction=[-FL_X,0])
-          offset(r=tolerance)
-            fl_square(size=[size.z,size.y],corners=Rint);
-    }
-
-    // module do_assembly() {}
-    // module do_drill() {}
-    // module do_footprint() {}
-    // module do_layout() {}
-    // module do_mount() {}
-    // module do_pload() {}
-
     if (verb==FL_ADD) {
       do_add();
-
-    // } else if (verb==FL_ASSEMBLY) {
-    //   fl_modifier($modifier) do_assembly();
-
-    // } else if (verb==FL_BBOX) {
-    //   fl_bb_add(bbox);
-
-    } else if (verb==FL_CUTOUT) {
-      do_cutout();
-
-    // } else if (verb==FL_DRILL) {
-    //   do_drill();
-
-    // } else if (verb==FL_FOOTPRINT) {
-    //   do_footprint();
-
-    // } else if (verb==FL_LAYOUT) {
-    //   do_layout()
-    //     children();
-
-    // } else if (verb==FL_MOUNT) {
-    //   do_mount()
-    //     children();
-
-    // } else if (verb==FL_PAYLOAD) {
-    //   do_pload()
-    //     children();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",verb));
     }
+  }
+
+  module do_cutout() {
+    for(axis=cut_direction)
+      if (fl_isInAxisList(axis,fl_cutout(type)))
+        let(
+          sys = [axis.x ? -Z : X ,O,axis],
+          t   = (bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
+        )
+        translate(t)
+          fl_cutout(cut_thick,sys.z,sys.x,delta=cut_tolerance)
+            wrap($verb=FL_ADD,$FL_ADD=$FL_CUTOUT);
+            // do_footprint();
+      else
+        echo(str("***WARN***: Axis ",axis," not supported"));
   }
 
   fl_manage(verbs,M,D) {
@@ -274,12 +258,13 @@ module fl_USB(
       assert(cut_thick!=undef);
 
       fl_modifier($modifier)
-        if (engine=="USB/A SM")
-          wrap();
-        else
-          translate(+fl_X(size.x/2+cut_drift))
-            fl_cutout(len=cut_thick,z=FL_X,x=FL_Y,delta=tolerance)
-              wrap();
+        // if (engine=="USB/A SM")
+        //   wrap();
+        // else
+          // translate(+fl_X(size.x/2+cut_drift))
+            do_cutout();
+            // fl_cutout(len=cut_thick,z=FL_X,x=FL_Y,delta=tolerance)
+            //   wrap();
 
     } else if ($verb==FL_FOOTPRINT) {
       assert(tolerance!=undef,tolerance);
@@ -292,30 +277,28 @@ module fl_USB(
 }
 
 module usb_A_tongue(color) {
-    l = 9;
-    w = 12;
-    h = 2;
-
-    color(color==undef?"white":color)
-        translate([-1, 0 , h / 2])
-            rotate([90, 0, 90])
-                hull() {
-                    linear_extrude(l - 2)
-                        square([w, h], center = true);
-
-                    linear_extrude(l)
-                        square([w - 1, h - 1], center = true);
-                }
+  l = 9;
+  w = 12;
+  h = 2;
+  fl_color(color?color:"white")
+    translate([-1, 0 , h / 2])
+      rotate([90, 0, 90])
+        hull() {
+          linear_extrude(l - 2)
+            square([w, h], center = true);
+          linear_extrude(l)
+            square([w - 1, h - 1], center = true);
+        }
 }
 
 //! Draw USB type A single socket
 module usb_Ax1(cutout = false,tongue="white",flange=true) {
-    usb_A(h = 6.5, v_flange_l = 4.5, bar = 0, cutout = cutout, tongue=tongue, flange=flange);
+  usb_A(h = 6.5, v_flange_l = 4.5, bar = 0, cutout = cutout, tongue=tongue, flange=flange);
 }
 
 //! Draw USB type A dual socket
 module usb_Ax2(cutout = false,tongue="white") {
-    usb_A(h = 15.6, v_flange_l = 12.15, bar = 3.4, cutout = cutout, tongue=tongue);
+  usb_A(h = 15.6, v_flange_l = 12.15, bar = 3.4, cutout = cutout, tongue=tongue);
 }
 
 module usb_A(h, v_flange_l, bar, cutout, tongue, flange=true) {
