@@ -65,10 +65,10 @@ ETHER = "FL_ETHER_RJ45";  // [FL_ETHER_RJ45, FL_ETHER_RJ45_SM]
 // tolerance used during FL_CUTOUT
 CO_TOLERANCE   = 0;  // [0:0.1:5]
 // thickness for FL_CUTOUT
-CO_T  = 2.5;
+CO_T  = 2.5;          // [0:0.5:5]
 // translation applied to cutout
-CO_DRIFT = 0; // [-5:0.05:5]
-
+CO_DRIFT = 0; // [-5:0.5:5]
+CO_DIRECTION  = ["+X"]; // [+X,-X,+Y,-Y,+Z,-Z]
 
 /* [Hidden] */
 
@@ -87,12 +87,14 @@ drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
 p_thick = thick!=undef && drift!=undef ? thick-drift : undef;
 
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT]);
-ether = ETHER=="FL_ETHER_RJ45"  ? FL_ETHER_RJ45
-      : FL_ETHER_RJ45_SM;
-
-fl_trace("verbs",verbs);
+ether = ETHER=="FL_ETHER_RJ45" ?
+          FL_ETHER_RJ45 :
+          FL_ETHER_RJ45_SM;
+co_direction  = fl_3d_AxisList(CO_DIRECTION);
+echo(co_direction=co_direction);
 
 fl_ether(verbs,ether,
   debug=debug,direction=direction,octant=octant,
-  cut_thick=p_thick,cut_tolerance=tolerance,cut_drift=drift
+  // cut_direction=co_direction,cut_thick=p_thick,cut_tolerance=tolerance,cut_drift=drift
+  cut_direction=co_direction,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift
 );

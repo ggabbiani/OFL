@@ -1,6 +1,4 @@
 /*
- * 
- *
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
  *
@@ -70,7 +68,7 @@ CO_T      = 2.5;
 CO_DRIFT  = 0;      // [-5:0.05:5]
 // tongue color
 COLOR     = "white";  // [white, OrangeRed, DodgerBlue]
-
+CUT_DIRECTION  = ["±x","±y","±z"]; // [+X,-X,+Y,-Y,+Z,-Z,±x,±y,±z]
 
 /* [Hidden] */
 
@@ -96,8 +94,10 @@ single  = SHOW=="FL_USB_TYPE_Ax1_NF_SM"  ? FL_USB_TYPE_Ax1_NF_SM
         : SHOW=="FL_USB_TYPE_uA"    ? FL_USB_TYPE_uA
         : undef;
 
+dirs  = fl_3d_AxisList(CUT_DIRECTION);
+
 if (single)
-  fl_USB(verbs,single,direction=direction,octant=octant,cut_thick=thick,tolerance=tolerance,cut_drift=drift,tongue=COLOR);
+  fl_USB(verbs,single,direction=direction,octant=octant,cut_thick=thick,cut_direction=dirs,cut_tolerance=tolerance,cut_drift=drift,tongue=COLOR);
 else
   layout([for(socket=FL_USB_DICT) fl_width(socket)], 10)
-    fl_USB(verbs,FL_USB_DICT[$i],direction=direction,octant=octant,cut_thick=thick,tolerance=tolerance,cut_drift=drift,tongue=COLOR);
+    fl_USB(verbs,FL_USB_DICT[$i],direction=direction,octant=octant,cut_thick=thick,cut_direction=dirs,cut_tolerance=tolerance,cut_drift=drift,tongue=COLOR);
