@@ -4,7 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/usbs] --o|include| A2[foundation/core]
+    A1[vitamins/usbs] --o|include| A2[foundation/unsafe_defs]
     A1 --o|use| A3[foundation/2d-engine]
     A1 --o|use| A4[foundation/3d-engine]
     A1 --o|use| A5[foundation/bbox-engine]
@@ -43,7 +43,7 @@ __Default:__
 
 __Default:__
 
-    let(h=6.5,v_flange_l=4.5,bar=0,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax1"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X]),fl_USB_flange(value=true),]
+    let(h=6.5,v_flange_l=4.5,bar=0,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax1"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_USB_flange(value=true),]
 
 ---
 
@@ -51,7 +51,7 @@ __Default:__
 
 __Default:__
 
-    let(h=6.5,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax1"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X]),fl_USB_flange(value=false),]
+    let(h=6.5,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax1"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_USB_flange(value=false),]
 
 ---
 
@@ -59,7 +59,7 @@ __Default:__
 
 __Default:__
 
-    let(h=5.8,l=10,w=13.25)[fl_engine(value="USB/A SM"),fl_bb_corners(value=[[-l,-w/2,0],[0,+w/2,h]]),fl_cutout(value=[+FL_X]),fl_USB_flange(value=false),]
+    let(h=5.8,l=10,w=13.25)[fl_engine(value="USB/A SM"),fl_bb_corners(value=[[-l,-w/2,0],[0,+w/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_USB_flange(value=false),]
 
 ---
 
@@ -67,7 +67,7 @@ __Default:__
 
 __Default:__
 
-    let(h=15.6,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax2"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X]),fl_USB_flange(value=true),]
+    let(h=15.6,l=17,w=13.25,flange_t=0.4)[fl_engine(value="USB/Ax2"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_USB_flange(value=true),]
 
 ---
 
@@ -75,7 +75,7 @@ __Default:__
 
 __Default:__
 
-    let(l=16.4,w=12.2,h=11)[fl_engine(value="USB/B"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X]),fl_USB_flange(value=false),]
+    let(l=16.4,w=12.2,h=11)[fl_engine(value="USB/B"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_USB_flange(value=false),]
 
 ---
 
@@ -83,7 +83,7 @@ __Default:__
 
 __Default:__
 
-    let(l=7.35,w=8.94,h=3.26)[fl_engine(value="USB/C"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X]),fl_USB_flange(value=false),]
+    let(l=7.35,w=8.94,h=3.26)[fl_engine(value="USB/C"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_USB_flange(value=false),]
 
 ---
 
@@ -91,7 +91,7 @@ __Default:__
 
 __Default:__
 
-    let(l=6,iw1=7,h=2.65,t=0.4)[fl_engine(value="USB/uA"),fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),fl_cutout(value=[+FL_X]),fl_USB_flange(value=true),]
+    let(l=6,iw1=7,h=2.65,t=0.4)[fl_engine(value="USB/uA"),fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_USB_flange(value=true),]
 
 ---
 
@@ -99,7 +99,7 @@ __Default:__
 
 __Default:__
 
-    let(l=6,iw1=7,h=2.65,t=0.4)[fl_engine(value="USB/uA"),fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),fl_cutout(value=[+FL_X]),fl_USB_flange(value=false),]
+    let(l=6,iw1=7,h=2.65,t=0.4)[fl_engine(value="USB/uA"),fl_bb_corners(value=[[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_USB_flange(value=false),]
 
 ## Functions
 
@@ -121,7 +121,7 @@ fl_USB_flange(type,value)
 
 __Syntax:__
 
-    fl_USB(verbs=FL_ADD,type,cut_thick,tolerance=0,cut_drift=0,tongue,direction,octant,debug)
+    fl_USB(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,tongue="white",direction,octant,debug)
 
 __Parameters:__
 
@@ -131,14 +131,27 @@ supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
 __cut_thick__  
 thickness for FL_CUTOUT
 
-__tolerance__  
+__cut_tolerance__  
 tolerance used during FL_CUTOUT
 
 __cut_drift__  
 translation applied to cutout (default 0)
 
+__cut_direction__  
+Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist)).
+
+Example:
+
+    cut_direction=[+X,+Z]
+
+in this case the usb will perform a cutout along +X and +Z.
+
+:memo: **Note:** axes specified must be present in the supported cutout direction
+list (retrievable through [fl_cutout()](../foundation/core.md#function-fl_cutout) getter)
+
+
 __tongue__  
-tongue color (default "white")
+tongue color
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

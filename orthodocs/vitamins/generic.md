@@ -31,7 +31,7 @@ __Default:__
 __Syntax:__
 
 ```text
-fl_generic_Vitamin(bbox,name,holes,ghost=true,cut_directions)
+fl_generic_Vitamin(bbox,name,holes,ghost=true,cut_directions,engine="Generic",specs=[])
 ```
 
 Generic vitamin constructor
@@ -60,6 +60,16 @@ cut directions in floating semi-axis list format.
 See also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist) and [fl_3d_AxisList()](../foundation/3d-engine.md#function-fl_3d_axislist)
 
 
+
+---
+
+### function fl_generic_ghost
+
+__Syntax:__
+
+```text
+fl_generic_ghost(type,value)
+```
 
 ## Modules
 

@@ -6,9 +6,10 @@
 graph LR
     A1[foundation/3d-engine] --o|include| A2[foundation/type_trait]
     A1 --o|include| A3[foundation/unsafe_defs]
-    A1 --o|use| A4[foundation/2d-engine]
-    A1 --o|use| A5[foundation/bbox-engine]
-    A1 --o|use| A6[foundation/mngm-engine]
+    A1 --o|use| A4[dxf]
+    A1 --o|use| A5[foundation/2d-engine]
+    A1 --o|use| A6[foundation/bbox-engine]
+    A1 --o|use| A7[foundation/mngm-engine]
 ```
 
 3d primitives
@@ -44,6 +45,8 @@ is equivalent to:
      [ 0, 0, -1],  // -Z semi-axis
      [ 0, 0, +1],  // +Z semi-axis
     ];
+
+:memo: **NOTE:** the negative ('-') or positive ('+') sign must always be set.
 
 
 __Parameters:__
@@ -139,6 +142,8 @@ mere call to the OpenSCAD builtin search() function like in the example
 below:
 
     function fl_3d_axisIsSet(axis,list) = search([axis],list)!=[[]]
+
+TODO: eventually replace it with [fl_isInAxisList()](#function-fl_isinaxislist)
 
 
 ---
@@ -484,6 +489,16 @@ __Parameters:__
 __direction__  
 desired direction in axis-angle representation [axis,rotation about]
 
+
+---
+
+### function fl_isInAxisList
+
+__Syntax:__
+
+```text
+fl_isInAxisList(axis,list)
+```
 
 ---
 

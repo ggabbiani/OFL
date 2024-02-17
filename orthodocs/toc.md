@@ -303,6 +303,7 @@
 - [fl_intersection (function)](foundation/2d-engine.md#function-fl_intersection)
 - [fl_ipoly (module)](foundation/2d-engine.md#module-fl_ipoly)
 - [fl_isEven (function)](foundation/core.md#function-fl_iseven)
+- [fl_isInAxisList (function)](foundation/3d-engine.md#function-fl_isinaxislist)
 - [fl_isMultiple (function)](foundation/core.md#function-fl_ismultiple)
 - [fl_isOdd (function)](foundation/core.md#function-fl_isodd)
 - [fl_isOrthogonal (function)](foundation/core.md#function-fl_isorthogonal)
