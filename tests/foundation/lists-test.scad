@@ -45,7 +45,7 @@ let(
   list      = [0, 1, 2, 3, 4, 4, 1, 2, 3, 3, 2, 3],
   expected  = [0, 1, 2, 3, 4],
   result    = fl_list_sort(fl_list_unique(list))
-) echo(result=result) assert(result==expected,result);
+) assert(result==expected,result);
 
 let(
   list      = [[1,0,0],[0, 0, 1], [0, 0, -1], [0, 0, 1], [0, 0, -1]],
@@ -58,4 +58,4 @@ let(
       second=[4,2,1]*ax2
     ) first-second
   )
-) echo(result=result) assert(result==expected,result);
+) assert(result==expected,result);
