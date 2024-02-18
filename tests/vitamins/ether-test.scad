@@ -68,7 +68,8 @@ CO_TOLERANCE   = 0;  // [0:0.1:5]
 CO_T  = 2.5;          // [0:0.5:5]
 // translation applied to cutout
 CO_DRIFT = 0; // [-5:0.5:5]
-CO_DIRECTION  = ["+X"]; // [+X,-X,+Y,-Y,+Z,-Z]
+CO_DIRECTION  = ["+X"];
+
 
 /* [Hidden] */
 
@@ -91,10 +92,8 @@ ether = ETHER=="FL_ETHER_RJ45" ?
           FL_ETHER_RJ45 :
           FL_ETHER_RJ45_SM;
 co_direction  = fl_3d_AxisList(CO_DIRECTION);
-echo(co_direction=co_direction);
 
 fl_ether(verbs,ether,
   debug=debug,direction=direction,octant=octant,
-  // cut_direction=co_direction,cut_thick=p_thick,cut_tolerance=tolerance,cut_drift=drift
-  cut_direction=co_direction,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift
+  cut_direction=co_direction,cut_thick=p_thick,cut_tolerance=tolerance,cut_drift=drift
 );
