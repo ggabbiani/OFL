@@ -1,4 +1,6 @@
 /*
+ * USB test file
+ *
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
  *
@@ -69,6 +71,7 @@ CO_DRIFT  = 0;      // [-5:0.05:5]
 // tongue color
 COLOR     = "white";  // [white, OrangeRed, DodgerBlue]
 CUT_DIRECTION  = ["±x","±y","±z"]; // [+X,-X,+Y,-Y,+Z,-Z,±x,±y,±z]
+
 
 /* [Hidden] */
 

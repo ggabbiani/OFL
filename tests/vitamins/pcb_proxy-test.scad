@@ -9,7 +9,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <../../lib/OFL/vitamins/pcbs.scad>
+
 
 $fn            = 50;           // [3:100]
 // When true, debug statements are turned on
@@ -22,6 +24,7 @@ $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 $FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -64,6 +67,7 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
+
 /* [PCB Frame] */
 
 LAYOUT  = "auto"; // [auto,horizontal,vertical]
@@ -96,6 +100,7 @@ CO_DIRECTION  = [0,0,0];  // [-1:+1]
 
 TOLERANCE=0.5;  // [0:0.1:1]
 PROXY=false;
+
 
 /* [Hidden] */
 
