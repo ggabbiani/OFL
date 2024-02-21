@@ -464,11 +464,18 @@ function fl_holes(type,value)       = assert(is_undef(value)||fl_tt_isHoleList(v
 function fl_material(type,value,default)
                                     = fl_property(type,"material (actually a color)",value,default);
 function fl_name(type,value)        = fl_property(type,"name",value);
+/*!
+ * TODO: duplicate of fl_OFL()?!
+ */
 function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,type!=undef?false:undef);
 function fl_nominal(type,value)     = fl_property(type,"Nominal property for «type»",value);
 function fl_nopSCADlib(type,value,default)
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
-//! when present and true indicates the object is an OFL one
+/*!
+ * when present and true indicates the object is an OFL one
+ *
+ * TODO: duplicate of fl_native()?!
+ */
 function fl_OFL(type,value,default) = fl_property(type,"Naturally born OFL",value,default);
 function fl_pcb(type,value)         = fl_property(type,"embedded OFL pcb",value);
 //! pay-load bounding box, it contributes to the overall bounding box calculation
