@@ -269,7 +269,7 @@ module fl_psu(
         t   = fl_3d_axisValue($hole_n,thick),
         len = screw_longer_than(t+grid_t)
       ) translate((t+NIL)*$hole_n)
-        fl_screw(type=screw,len=len,direction=[$hole_n,0]);
+        fl_screw(type=screw,len=len,direction=[$hole_n,0],$FL_ADD="ON");
   }
 
   module do_drill()  {
