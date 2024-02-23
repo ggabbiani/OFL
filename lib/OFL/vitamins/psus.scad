@@ -35,6 +35,7 @@ FL_PSU_MeanWell_RS_25_5 = let(
     ]
   ) [
     ["name",                "PSU MeanWell RS-25-5 25W 5V 5A"],
+    fl_native(value=true),
     fl_engine(value=FL_PSU_NS),
     fl_bb_corners(value=bbox),
     fl_screw(value=M3_cs_cap_screw),
@@ -86,6 +87,7 @@ FL_PSU_MeanWell_RS_15_5 = let(
     ]
   ) [
     ["name",                "PSU MeanWell RS-15-5 15W 5V 3A"],
+    fl_native(value=true),
     fl_engine(value=FL_PSU_NS),
     fl_bb_corners(value=bbox),
     fl_screw(value=M3_cs_cap_screw),
