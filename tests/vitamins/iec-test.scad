@@ -67,6 +67,8 @@ iec   = fl_switch(IEC, [
     ["YUNPEN",                        FL_IEC_YUNPEN],
     ["OUTLET",                        FL_IEC_OUTLET],
   ]);
+
 echo(size=fl_bb_size(iec),description=fl_description(iec));
+
 fl_iec(verbs,iec,thick=thick,direction=direction,octant=octant)
   fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
