@@ -1,14 +1,30 @@
+/*
+ * NopSCADlib IEC wrapper
+ *
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+
 include <../../lib/OFL/vitamins/iec.scad>
 
-$fn           = 50;   // [3:100]
-// When true, disables epsilon corrections
-$FL_RENDER    = false;
+
+$fn            = 50;           // [3:100]
+// When true, debug statements are turned on
+$fl_debug      = false;
+// When true, disables PREVIEW corrections like FL_NIL
+$FL_RENDER     = false;
+// Default color for printable items (i.e. artifacts)
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES    = -2;   // [-2:10]
-$fl_debug     = false;
-SHOW_LABELS   = false;
-SHOW_SYMBOLS  = false;
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$FL_TRACES     = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -27,10 +43,13 @@ $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // mount shape through predefined screws
 $FL_MOUNT      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
+/* [3D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Direction] */
 
@@ -38,7 +57,8 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
+
 
 /* [Iec] */
 
@@ -46,16 +66,18 @@ IEC = "INLET";  // [FUSED_INLET,FUSED_INLET2,320_C14_SWITCHED_FUSED_INLET,INLET,
 // thickness for FL_CUTOUT and FL_DRILL
 T   = 2.5;      // [0:0.5:5]
 
-/* [hidden] */
+
+/* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
-
-verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,,FL_LAYOUT,FL_MOUNT]);
 
 fl_status();
 
+// end of automatically generated code
+
+verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,,FL_LAYOUT,FL_MOUNT]);
 thick = $FL_CUTOUT!="OFF"||$FL_DRILL ? T : undef;
 iec   = fl_switch(IEC, [
     ["FUSED_INLET",                   FL_IEC_FUSED_INLET],
