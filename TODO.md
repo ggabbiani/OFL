@@ -102,6 +102,12 @@
 - [x] implemented PCB frames as PCB proxies
 - [ ] integrate in tests also the examples
 - [ ] constructor for fl_layout()
+- [ ] review and apply everywhere the new generalized cutout algorithm. Use
+  vitamins/{ethers,heatsink,usbs}.scad as implementation example/reference.
+- [] review and apply everywhere the new polymorph engine for rewriting and
+  subtyping all the existing modules. Use vitamins/iec.scad as implementation
+  example/reference.
+
 
 
 

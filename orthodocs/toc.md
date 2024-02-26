@@ -544,6 +544,8 @@
 - [fl_planeAlign (function)](foundation/3d-engine.md#function-fl_planealign)
 - [fl_planeAlign (module)](foundation/3d-engine.md#module-fl_planealign)
 - [fl_planes (module)](foundation/algo-engine.md#module-fl_planes)
+- [fl_polymorph (module)](foundation/polymorphic-engine.md#module-fl_polymorph)
+- [foundation/polymorphic-engine (package)](foundation/polymorphic-engine.md#package-foundationpolymorphic-engine)
 - [fl_pop (function)](foundation/core.md#function-fl_pop)
 - [$fl_print_tech (variable)](foundation/limits.md#variable-$fl_print_tech)
 - [fl_prism (module)](foundation/3d-engine.md#module-fl_prism)

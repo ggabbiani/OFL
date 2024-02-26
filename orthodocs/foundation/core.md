@@ -566,6 +566,9 @@ fl_OFL(type,value,default)
 
 when present and true indicates the object is an OFL one
 
+TODO: duplicate of [fl_native()](#function-fl_native)?!
+
+
 ---
 
 ### function fl_R
@@ -1423,6 +1426,9 @@ __Syntax:__
 ```text
 fl_native(type,value)
 ```
+
+TODO: duplicate of [fl_OFL()](#function-fl_ofl)?!
+
 
 ---
 

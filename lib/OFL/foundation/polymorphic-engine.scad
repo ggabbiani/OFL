@@ -16,51 +16,51 @@ use <mngm-engine.scad>
 /*!
  * This module manages OFL types leveraging children implementation of the
  * actual engine while decoupling standard OFL parameters manipulation from
-   other engine specific ones.
-   Essentially it uses children module in place of not yet implemented module
-   literals, simplifying the new type module writing.
-
-   A typical use of this high-level management module is the following:
-
-       // this engine is called one for every verb passed to fl_polymorph{}
-       module engine(thick) let(
-         ...
-       ) if ($this_verb==FL_ADD)
-         ...;
-
-         else if ($this_verb==FL_AXES)
-           fl_doAxes($this_size,$this_direction);
-
-         else if ($this_verb==FL_BBOX)
-         ...;
-
-         else if ($this_verb==FL_CUTOUT)
-         ...;
-
-         else if ($this_verb==FL_DRILL)
-         ...;
-
-         else if ($this_verb==FL_LAYOUT)
-         ...;
-
-         else if ($this_verb==FL_MOUNT)
-         ...;
-
-         else
-           assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
-
-       // this is the actual object definition as a list of [key,values] items
-       object = let(
-         ...
-       ) [
-         fl_native(value=true),
-         ...
-       ];
-
-       fl_polymorph(verbs,object,direction=direction,octant=octant)
-         engine(thick=T)
-           // child passed to engine for further manipulation (ex. during FL_LAYOUT)
-           fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
+ * other engine specific ones.
+ * Essentially it uses children module in place of not yet implemented module
+ * literals, simplifying the new type module writing.
+ *
+ * A typical use of this high-level management module is the following:
+ *
+ *     // this engine is called one for every verb passed to fl_polymorph{}
+ *     module engine(thick) let(
+ *       ...
+ *     ) if ($this_verb==FL_ADD)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_AXES)
+ *         fl_doAxes($this_size,$this_direction);
+ *
+ *       else if ($this_verb==FL_BBOX)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_CUTOUT)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_DRILL)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_LAYOUT)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_MOUNT)
+ *       ...;
+ *
+ *       else
+ *         assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
+ *
+ *     // this is the actual object definition as a list of [key,values] items
+ *     object = let(
+ *       ...
+ *     ) [
+ *       fl_native(value=true),
+ *       ...
+ *     ];
+ *
+ *     fl_polymorph(verbs,object,direction=direction,octant=octant)
+ *       engine(thick=T)
+ *         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
+ *         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
  *
  * Children context:
  *

@@ -105,20 +105,24 @@ graph TD
     A38 --o|include| A2
     A38 --o|use| A4
     A38 --o|use| A17
-    A16 --o|include| A5
-    A43[vitamins/psus] --o|include| A25
-    A43 --o|include| A24
-    A43 --o|include| A2
-    A43 --o|include| A14
+    A43[foundation/polymorphic-engine] --o|include| A9
+    A43 --o|use| A5
+    A43 --o|use| A3
     A43 --o|use| A4
-    A43 --o|use| A17
+    A16 --o|include| A5
+    A44[vitamins/psus] --o|include| A25
+    A44 --o|include| A24
+    A44 --o|include| A2
+    A44 --o|include| A14
+    A44 --o|use| A4
+    A44 --o|use| A17
     A28 --o|include| A20
     A28 --o|include| A21
     A28 --o|use| A7
     A28 --o|use| A8
     A28 --o|use| A4
-    A44[vitamins/sata-adapters] --o|include| A28
-    A44 --o|use| A4
+    A45[vitamins/sata-adapters] --o|include| A28
+    A45 --o|use| A4
     A14 --o|include| A2
     A14 --o|use| A5
     A14 --o|use| A3
@@ -134,28 +138,28 @@ graph TD
     A11 --o|include| A13
     A11 --o|use| A15
     A11 --o|use| A4
-    A45[vitamins/spdts] --o|include| A9
-    A45 --o|use| A5
-    A45 --o|use| A3
-    A45 --o|use| A4
+    A46[vitamins/spdts] --o|include| A9
+    A46 --o|use| A5
+    A46 --o|use| A3
+    A46 --o|use| A4
     A40 --o|include| A2
     A40 --o|use| A1
     A40 --o|use| A5
     A40 --o|use| A3
     A40 --o|use| A4
-    A46[artifacts/t-nut] --o|include| A2
-    A46 --o|include| A12
-    A46 --o|include| A14
-    A46 --o|use| A5
-    A46 --o|use| A3
-    A46 --o|use| A24
-    A46 --o|use| A4
-    A47[artifacts/t-profiles] --o|include| A5
+    A47[artifacts/t-nut] --o|include| A2
+    A47 --o|include| A12
+    A47 --o|include| A14
+    A47 --o|use| A5
+    A47 --o|use| A3
+    A47 --o|use| A24
     A47 --o|use| A4
-    A48[artifacts/template] --o|include| A2
+    A48[artifacts/t-profiles] --o|include| A5
     A48 --o|use| A4
-    A49[foundation/template] --o|include| A5
-    A50[vitamins/template] --o|use| A4
+    A49[artifacts/template] --o|include| A2
+    A49 --o|use| A4
+    A50[foundation/template] --o|include| A5
+    A51[vitamins/template] --o|use| A4
     A41 --o|include| A2
     A41 --o|use| A5
     A41 --o|use| A3

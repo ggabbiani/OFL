@@ -22,8 +22,12 @@ graph TD
     A16 --o|include| A5
     A17[foundation/limits] --o|include| A8
     A4 --o|include| A8
-    A18[foundation/profile] --o|include| A5
-    A19[foundation/template] --o|include| A5
+    A18[foundation/polymorphic-engine] --o|include| A8
+    A18 --o|use| A5
+    A18 --o|use| A3
+    A18 --o|use| A4
+    A19[foundation/profile] --o|include| A5
+    A20[foundation/template] --o|include| A5
     A6 --o|include| A8
     A2 --o|include| A8
     A11 --o|include| A5
