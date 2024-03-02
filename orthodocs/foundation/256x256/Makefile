@@ -13,7 +13,6 @@ include $(FUNCTIONS)
 
 all: $(TARGETS)
 
-
 %.png: %.scad
 	@printf "\e[33m$(CURDIR)/$@\e[0m: "
 	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ $<
