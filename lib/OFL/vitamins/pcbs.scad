@@ -173,7 +173,7 @@ function fl_pcb_NopHoles(nop) = let(
 /*!
  * Model for Raspberry PI 4.
  *
- * The following labels can be passed as **cut_label** parameter to fl_pcb{} when
+ * The following labels can be passed as **components** parameter to fl_pcb{} when
  * performing FL_CUTOUT:
  *
  * | Label      | Description                                   |
@@ -228,7 +228,7 @@ FL_PCB_RPI4 = let(
 /*!
  * PCB RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
  *
- * The following labels can be passed as **cut_label** parameter to fl_pcb{} when performing FL_CUTOUT:
+ * The following labels can be passed as **components** parameter to fl_pcb{} when performing FL_CUTOUT:
  *
  * | Label      | Description                             |
  * |------------|-----------------------------------------|
@@ -320,7 +320,7 @@ FL_PCB_HILETGO_SX1308 = let(
 /*
  * Model for Khadas SBC VIM1.
  *
- * The following labels can be passed as **cut_label** parameter to fl_pcb{} when
+ * The following labels can be passed as **components** parameter to fl_pcb{} when
  * performing FL_CUTOUT:
  *
  * | Label            | Description                               |
@@ -402,6 +402,78 @@ function fl_pcb_select(
   inventory = FL_PCB_DICT
 ) = fl_switch(name,fl_list_pack(fl_dict_names(inventory),inventory));
 
+//! returns a list with all the components label
+function fl_pcb_compLabels(type)  = let(
+  specs = fl_pcb_components(type)
+) [for(s=specs) s[0]];
+
+/*!
+  * Filter the pcb component labels according to «rules».
+  *
+  * The algorithm used will setup one function literal for all the assertive
+  * labels (the ones without any preceding '-' char) and as many function
+  * literals as the negate labels (the ones with '-' char) present in the list.
+  * This function literals list will be passed to fl_list_filter(). The
+  * resulting logic will include all the component labels of a pcb appearing in
+  * the assertive filter AND not listed in any of the negative ones.
+  *
+  * When undef all the supported components are used.
+  *
+  * Example:
+  *
+  *     // ASSEMBLY all components but "PIM BOT"
+  *     fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components="-PIM BOT");
+  *
+  *     // ASSEMBLY all components but "PIM BOT" and "PIM TOP"
+  *     fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components=["-PIM BOT","-PIM TOP"]);
+  *
+  *     // ASSEMBLY with only "PIM TOP" component
+  *     fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components="PIM TOP");
+  *
+  *     // ASSEMBLY with only "PIM BOT" and "PIM TOP" components
+  *     fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components=["PIM BOT","PIM TOP"]);
+  *
+  */
+function fl_pcb_compFilter(pcb,rules) = let(
+  rules = is_list(rules) ? rules : rules ? [rules] : [],
+  // list of all component specifications ["label",component]
+  all   = fl_pcb_components(pcb),
+  neg_f = [
+    // one filter function for each negative rule
+    for(rule=rules)
+      if (rule[0]=="-")
+        let(_r = rule)
+        function(comp_specs)
+        let(comp_label=comp_specs[0])
+        comp_label!=fl_substr(_r,1),
+  ],
+  add_f =
+    let(add=[for(rule=rules) if (rule[0]!="-") rule])
+    add ?
+      function(comp_specs,_list=add)
+        let(
+          len       = len(_list),
+          comp_label= comp_specs[0]
+        )
+        len==0 ?
+          false :
+          comp_label==_list[0] ?
+            true :
+            len==1 ?
+              false :
+              let(rest=fl_list_tail(_list,-1)) add_f(comp_specs,rest) :
+      undef,
+  filters = concat(
+    neg_f,
+    [
+      // one filter function for all positive rule (if any)
+      // this realizes the positive 'or' logic
+      if (add_f)
+        add_f
+    ]
+  )
+) fl_list_filter(all,filters);
+
 /*!
  * PCB engine.
  *
@@ -417,8 +489,38 @@ module fl_pcb(
   type,
   //! FL_CUTOUT tolerance
   cut_tolerance=0,
-  //! FL_CUTOUT component filter by label. For the possible values consult the relevant «type» supported labels.
-  cut_label,
+  /*!
+   * List of labels defining the components used during FL_ASSEMBLY and
+   * FL_CUTOUT. The possible value are all the component labels defined by the
+   * pcb. When inserting a plain label, the corresponding component will be used
+   * during verb execution, while a label preceded with the '-' will exclude it
+   * from verb execution.
+   *
+   * The algorithm used will setup one function literal for all the assertive
+   * labels (the ones without any preceding '-' char) and as many function
+   * literals as the negate labels (the ones with '-' char) present in the list.
+   * This function literals list will be passed to fl_list_filter(). The
+   * resulting logic will include all the component labels of a pcb appearing in
+   * the assertive filter AND not listed in any of the negative ones.
+   *
+   * When undef all the supported components are used.
+   *
+   * Example:
+   *
+   *     // ASSEMBLY all components but "PIM BOT"
+   *     fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components="-PIM BOT");
+   *
+   *     // ASSEMBLY all components but "PIM BOT" and "PIM TOP"
+   *     fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components=["-PIM BOT","-PIM TOP"]);
+   *
+   *     // ASSEMBLY with only "PIM TOP" component
+   *     fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components="PIM TOP");
+   *
+   *     // ASSEMBLY with only "PIM BOT" and "PIM TOP" components
+   *     fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components=["PIM BOT","PIM TOP"]);
+   *
+   */
+  components,
   /*!
    * Component filter list in floating semi-axis list (see also fl_tt_isAxisList()).
    *
@@ -447,14 +549,10 @@ module fl_pcb(
   octant
 ) {
   assert(!fl_debug() || is_list(verbs)||is_string(verbs),verbs);
-  assert(!fl_debug() || !(cut_direction!=undef && cut_label!=undef),"cutout filtering cannot be done by label and direction at the same time");
-
-  fl_trace("thick",thick);
 
   module native() {
 
     pcb_t     = fl_pcb_thick(type);
-    comps     = fl_pcb_components(type);
     size      = fl_bb_size(type);
     bbox      = fl_bb_corners(type);
     pload     = fl_has(type,fl_payload()[0]) ? fl_payload(type) : undef;
@@ -472,6 +570,10 @@ module fl_pcb(
     dxf       = fl_optional(type,fl_dxf()[0]);
     conns     = fl_optional(type,fl_connectors()[0]);
     lay_array = fl_pcb_layoutArray(type);
+    comps     = components ?
+      fl_pcb_compFilter(type,components) :
+      fl_pcb_components(type);
+    echo(verbs=verbs, comps=[for(c=comps) c[0]]);
 
     M         = fl_octant(octant,bbox=bbox);
     D         = direction ? fl_direction(direction)  : I;
@@ -537,10 +639,9 @@ module fl_pcb(
       fl_color(material) difference() {
         translate(-Z(pcb_t)) linear_extrude(pcb_t)
           difference() {
-            if (dxf) {
+            if (dxf)
               fl_importDxf(file=dxf,layer="0");
-              // fl_importDxf(file=dxf,layer="PG_SILKSCREEN_TOP");
-            } else
+            else
               translate(bbox[0])
                 fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y);
             if (grid)
@@ -577,65 +678,48 @@ module fl_pcb(
       children();
     }
 
-    module do_layout(class,label,directions) {
-      assert(!fl_debug() || is_string(class),class);
-      assert(!fl_debug() || label==undef||is_string(label),label);
-      assert(!fl_debug() || directions==undef||is_list(directions),directions);
-      fl_trace("class",class);
-      fl_trace("directions",directions);
-      fl_trace("label",label);
-      fl_trace("children",$children);
+    module do_layout(class,directions) {
 
-      // echo(str("fl_pcb{} do_layout{class=",class,",label=",label,",directions=",directions,"}"))
-      if (label) {
-        assert(!fl_debug() || class=="components",str("Cannot layout BY LABEL on class '",class,"'"));
-        // $label      = label;
-        component  = fl_optional(comps,label);
-        if (component!=undef)
-          fl_comp_Context(component)
-            translate($comp_position)
+      module filter(dirs)
+        for(c=comps)
+          fl_comp_Specs(c)
+            if (dirs) {
+              // filter component whose cut_direction(s) is present in the
+              // component direction list
+              let(
+                // transform component directions into pcb coordinate system
+                dirs  = fl_cutout($comp_type),
+                D     = fl_direction($comp_direction),
+                new   = [for(d=dirs) fl_transform(D,d)]
+              )
+              if (search(new,cut_direction)!=[[]])
+                children();
+            } else {
+              // no direction filtering
               children();
-        else
-          echo(str("***WARN***: component '",label,"' not found"));
-      } else if (directions) {
-        assert(!fl_debug() ||class=="components",str("Cannot layout BY DIRECTION on class '",class,"'"));
-        // note:
-        // union() is mandatory until version 2021.01
-        // from version 2023.05.19 it could be removed
-        // «c» = ["label",component]
-        for(c=comps) fl_comp_Specs(c) let(
-          // transform component directions into pcb coordinate system
-          dirs  = fl_cutout($comp_type),
-          D     = fl_direction($comp_direction),
-          new   = [for(d=dirs) fl_transform(D,d)]
-        ) // triggers a component when any cut_direction(s) is present in the
-          // component direction list
-          if (search(new,cut_direction)!=[[]])
-            translate($comp_position)
-              children();
-      } else {  // by class
-        if (class=="components")
-          for(c=comps) {
-            fl_trace("c:",c);
-            fl_comp_Specs(c) {  // «c» = ["label",component]
-              translate($comp_position) children();
             }
-          }
-        else if (class=="holes")
-          fl_lay_holes(holes,lay_direction,screw=screw)
-            context()
-              children();
-        else
-          assert(false,str("unknown component class '",class,"'."));
-      }
+
+      if (class=="components")
+        filter(directions)
+          translate($comp_position)
+            children();
+      else if (class=="holes")
+        fl_lay_holes(holes,lay_direction,screw=screw)
+          context()
+            children();
+      else
+        assert(false,str("unknown component class '",class,"'."));
     }
 
     module do_assembly() {
-      function verbs() = /* echo($comp_label=$comp_label) */ [
+      function verbs() = [
         FL_ADD,
         if (fl_parm_components(debug,$comp_label)) FL_AXES
       ];
-      function render() = fl_parm_components(debug,$comp_label) ? "DEBUG" : $FL_ADD;
+      function render() =
+        fl_parm_components(debug,$comp_label) ?
+          "DEBUG" :
+          $FL_ADD;
 
       do_layout("components")
         if ($comp_engine==FL_USB_NS)          // USB
@@ -684,13 +768,13 @@ module fl_pcb(
         // echo(str("fl_pcb{} do_cutout{} trigger{",$comp_engine,"} cut_thick=",cut_thick))
 
         if ($comp_engine==FL_USB_NS)
-          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
+          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_direction=cut_direction,octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
         else if ($comp_engine==FL_HDMI_NS)
           fl_hdmi(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_JACK_NS)
           fl_jack(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_ETHER_NS)
-          fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,cut_direction=cut_direction,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_PHDR_NS) let(
             thick = bbox[1].z+cut_thick
           ) fl_pinHeader(FL_CUTOUT,$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
@@ -704,21 +788,15 @@ module fl_pcb(
           fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_HS_NS)
           // TODO: implement a rationale for heat-sinks cut-out operations
-          // fl_heatsink(FL_CUTOUT,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-          ;
+          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_direction=cut_direction,cut_thick=cut_thick-$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_GENERIC_NS)
           fl_generic_vitamin(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else
           assert(false,str("Unknown engine ",$comp_engine));
       }
 
-      fl_trace("cut_label: ",cut_label);
-      if (cut_label)
-        do_layout("components",cut_label)
-          trigger();
-      else // echo("fl_pcb{} do_cutout{} COMPONENTS")
-        do_layout("components",undef,cut_direction)
-          trigger();
+      do_layout(class="components", directions=cut_direction)
+        trigger();
     }
 
     module do_payload() {
@@ -760,7 +838,7 @@ module fl_pcb(
         fl_modifier($modifier) fl_bb_add(bbox);
 
       } else if ($verb==FL_CUTOUT) {
-        fl_modifier($modifier) do_cutout($fl_debug=true);
+        fl_modifier($modifier) do_cutout();
 
       } else if ($verb==FL_DRILL) {
         fl_modifier($modifier) do_drill();
@@ -784,7 +862,7 @@ module fl_pcb(
   }
 
   if (fl_optProperty(type,fl_engine()[0])==FL_PCB_ENGINE_FRAME)
-    fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=cut_tolerance,cut_label=cut_label,cut_direction=cut_direction,debug=debug,direction=direction,octant=octant)
+    fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=cut_tolerance,components=components,cut_direction=cut_direction,debug=debug,direction=direction,octant=octant)
       children();
   else {
     native() children();
@@ -1095,7 +1173,7 @@ module fl_pcb_frame(
   //! see homonymous parameter for fl_pcb{}
   cut_tolerance=0,
   //! see homonymous parameter for fl_pcb{}
-  cut_label,
+  components,
   //! see homonymous parameter for fl_pcb{}
   cut_direction,
   //! see homonymous parameter for fl_pcb{}
@@ -1120,6 +1198,7 @@ module fl_pcb_frame(
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  echo(components=components);
 
   bbox  = fl_bb_corners(this);
   size  = fl_bb_size(this);
@@ -1175,11 +1254,11 @@ module fl_pcb_frame(
   }
 
   module do_assembly() {
-    fl_pcb(FL_DRAW,type=pcb);
+    fl_pcb(FL_DRAW,type=pcb,components=components);
   }
 
   module do_cutout() {
-    fl_pcb(FL_CUTOUT,pcb,cut_tolerance=cut_tolerance,cut_label=cut_label,cut_direction=cut_direction,thick=thick,debug=debug, direction=direction, octant=octant);
+    fl_pcb(FL_CUTOUT,pcb,cut_tolerance=cut_tolerance,components=components,cut_direction=cut_direction,thick=thick,debug=debug, direction=direction, octant=octant);
   }
 
   module do_drill() {

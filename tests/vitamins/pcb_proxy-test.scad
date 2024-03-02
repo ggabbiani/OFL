@@ -91,8 +91,8 @@ INCLUSION = 10; // [0.1:20]
 
 // FL_DRILL and FL_CUTOUT thickness
 T             = 2.5;  // [0:0.1:3]
-// when !="undef", FL_CUTOUT verb is triggered only on the labelled component
-CO_LABEL      = "undef";
+// when !="undef", FL_CUTOUT verb is triggered only on components whose label match the rule
+COMPS      = "undef";
 // when !=[0,0,0], FL_CUTOUT is triggered only on components oriented accordingly to any of the not-null axis values
 CO_DIRECTION  = [0,0,0];  // [-1:+1]
 
@@ -114,11 +114,11 @@ fl_status();
 
 verbs = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT,FL_PAYLOAD,FL_SYMBOLS]);
 co_direction  = CO_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]) if (CO_DIRECTION[i]) CO_DIRECTION[i]*axes[i]];
-co_label      = CO_LABEL=="undef" ? undef : CO_LABEL;
+comps      = COMPS=="undef" ? undef : COMPS;
 
 pcb = FL_PCB_HILETGO_SX1308;
 frame = fl_pcb_Frame(pcb,d=D,faces=FACE_T,wall=WALL,overlap=[WIDE_OVER,THIN_OVER],inclusion=INCLUSION,countersink=COUNTERSINK,layout=LAYOUT);
 
 
 fl_pcb(verbs,PROXY?frame:pcb,
-    direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,cut_label=co_label,cut_direction=co_direction,debug=debug);
+    direction=direction,octant=octant,thick=T,cut_tolerance=TOLERANCE,components=comps,cut_direction=co_direction,debug=debug);
