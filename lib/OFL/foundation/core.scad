@@ -742,6 +742,39 @@ function fl_atoi(
 //**** strings ****************************************************************
 
 /*!
+ *
+ * Returns a substring of a string.
+ *
+ * Usage:
+ *
+ *     str = "OpenScad is a free CAD software.";
+ *     echo(substr(str, 12)); // "a free CAD software."
+ *     echo(substr(str, 12, 10)); // "a free CAD"
+ *     echo(substr(str, len=8)); // or substr(str, 0, 8); // "OpenScad"
+ *
+ * Original code pasted from TOUL: [The OpenScad Useful
+ * Library](http://www.thingiverse.com/thing:1237203)
+ *
+ * Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
+ *
+ * SPDX-License-Identifier: CC-BY-4.0
+ */
+function fl_substr(
+  //! the original string
+  str,
+  //! (optional): the substring position (0 by default).
+  pos=0,
+  //! (optional): the substring length (string length by default).
+  len=-1,
+  substr=""
+) =
+	len == 0 ?
+    substr :
+    len == -1 ?
+      fl_substr(str, pos, len(str)-pos, substr) :
+      fl_substr(str, pos+1, len-1, str(substr, str[pos]));
+
+/*!
  * Returns a string of a concatenated vector of substrings `v`, with an optionally
  * separator `sep` between each. See also: fl_split().
  *
