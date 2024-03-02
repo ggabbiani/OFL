@@ -18,6 +18,8 @@ use <../foundation/mngm-engine.scad>
 
 FL_GENERIC_NS = "GENERIC";
 
+function fl_generic_ghost(type,value) = fl_property(type,"generic/ghost (boolean)",value);
+
 /*!
  * Generic vitamin constructor
  */
@@ -39,22 +41,23 @@ function fl_generic_Vitamin(
    *
    * See also fl_tt_isAxisList() and fl_3d_AxisList()
    */
-  cut_directions
+  cut_directions,
+  engine="Generic",
+  specs=[]
 ) =
-assert(bbox)
+
 assert(cut_directions && (!fl_debug() || fl_tt_isAxisList(cut_directions)))
 assert(is_undef(holes) || (!fl_debug() || fl_tt_isHoleList(holes)))
-[
-  fl_name(value=name?name:str("Generic vitamin ",bbox[1]-bbox[0])),
-  fl_bb_corners(value=bbox),
-  fl_cutout(value=cut_directions),
-  if (holes)
-    fl_holes(value=holes),
-  // if (holes) let(
-  //   dirs = fl_list_unique([for(pair=[for(hole=holes) let(n=fl_hole_n(hole)) [n,-n]]) each pair])
-  // ) fl_layouts(value=dirs),
-  ["ghost", ghost],
-];
+  concat(
+    [
+      fl_name(value=name?name:str("Generic vitamin ",bbox[1]-bbox[0])),
+      fl_generic_ghost(value=ghost),
+      assert(bbox)        fl_bb_corners(value=bbox),
+      if (cut_directions) fl_cutout(value=cut_directions),
+      if (holes)          fl_holes(value=holes),
+    ],
+    specs
+  );
 
 /*!
  * Generic vitamin engine, usable when a cut out, drill or layout operation is
@@ -93,7 +96,7 @@ module fl_generic_vitamin(
   thick           = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
   cut_drift       = is_num(cut_drift) ? [[cut_drift,cut_drift],[cut_drift,cut_drift],[cut_drift,cut_drift]] : cut_drift;
   cut_directions  = fl_cutout(this);
-  ghost           = fl_property(this,"ghost");
+  ghost           = fl_generic_ghost(this);
   holes           = fl_optional(this,key=fl_holes()[0]);
   // layouts         = fl_optional(this,key=fl_layouts()[0]);
   // echo(holes=holes,layouts=layouts);
@@ -167,7 +170,8 @@ module fl_generic_vitamin(
       difference() {
         translate(bbox[0])
           fl_cube(size=size,octant=O0);
-        do_drill();
+        if (holes)
+          fl_holes(holes);
     }
     if (holes)
       fl_hole_debug(holes=holes, debug=debug);
