@@ -7,13 +7,53 @@ include <screw.scad>
 
 FL_IEC_NS="iec";
 
+/*!
+ * IEC fused inlet JR-101-1F.
+ *
+ * ![FL_IEC_FUSED_INLET](256x256/fig_FL_IEC_FUSED_INLET.png)
+ */
 FL_IEC_FUSED_INLET                  = fl_IEC(IEC_fused_inlet);
+/*!
+ * IEC fused inlet old.
+ *
+ * ![FL_IEC_FUSED_INLET](256x256/fig_FL_IEC_FUSED_INLET2.png)
+ */
 FL_IEC_FUSED_INLET2                 = fl_IEC(IEC_fused_inlet2);
+/*!
+ * IEC320 C14 switched fused inlet module.
+ *
+ * ![FL_IEC_320_C14_SWITCHED_FUSED_INLET](256x256/fig_FL_IEC_320_C14_SWITCHED_FUSED_INLET.png)
+ */
 FL_IEC_320_C14_SWITCHED_FUSED_INLET = fl_IEC(IEC_320_C14_switched_fused_inlet);
+/*!
+ * IEC inlet.
+ *
+ * ![FL_IEC_INLET](256x256/fig_FL_IEC_INLET.png)
+ */
 FL_IEC_INLET                        = fl_IEC(IEC_inlet);
+/*!
+ * IEC inlet for ATX.
+ *
+ * ![FL_IEC_INLET_ATX](256x256/fig_FL_IEC_INLET_ATX.png)
+ */
 FL_IEC_INLET_ATX                    = fl_IEC(IEC_inlet_atx);
+/*!
+ * IEC die cast inlet for ATX.
+ *
+ * ![FL_IEC_INLET_ATX2](256x256/fig_FL_IEC_INLET_ATX2.png)
+ */
 FL_IEC_INLET_ATX2                   = fl_IEC(IEC_inlet_atx2);
+/*!
+ * IEC inlet filtered.
+ *
+ * ![FL_IEC_YUNPEN](256x256/fig_FL_IEC_YUNPEN.png)
+ */
 FL_IEC_YUNPEN                       = fl_IEC(IEC_yunpen);
+/*!
+ * IEC outlet RS 811-7193.
+ *
+ * ![FL_IEC_OUTLET](256x256/fig_FL_IEC_OUTLET.png)
+ */
 FL_IEC_OUTLET                       = fl_IEC(IEC_outlet);
 
 FL_IEC_DICT = [
