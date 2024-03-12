@@ -12,7 +12,7 @@ RUN mkdir -p ${libs}
 ###############################################################################
 # libraries pre requisites
 WORKDIR ${libs}
-RUN git clone https://github.com/nophead/NopSCADlib.git && cd NopSCADlib && git checkout tags/${nop_ver}
+RUN git clone https://github.com/nophead/NopSCADlib.git && cd NopSCADlib && git -c advice.detachedHead=false checkout tags/${nop_ver}
 RUN git clone https://github.com/openscad/scad-utils.git
 ###############################################################################
 # entrypoint
