@@ -1885,6 +1885,46 @@ A separator which will added between each substrings
 
 ---
 
+### function fl_substr
+
+__Syntax:__
+
+```text
+fl_substr(str,pos=0,len=-1,substr="")
+```
+
+
+Returns a substring of a string.
+
+Usage:
+
+    str = "OpenScad is a free CAD software.";
+    echo(substr(str, 12)); // "a free CAD software."
+    echo(substr(str, 12, 10)); // "a free CAD"
+    echo(substr(str, len=8)); // or substr(str, 0, 8); // "OpenScad"
+
+Original code pasted from TOUL: [The OpenScad Useful
+Library](http://www.thingiverse.com/thing:1237203)
+
+Copyright © 2015, Nathanaël Jourdane <nathanael@jourdane.net>
+
+SPDX-License-Identifier: [CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)
+
+
+__Parameters:__
+
+__str__  
+the original string
+
+__pos__  
+(optional): the substring position (0 by default).
+
+__len__  
+(optional): the substring length (string length by default).
+
+
+---
+
 ### function fl_switch
 
 __Syntax:__

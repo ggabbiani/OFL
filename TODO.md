@@ -107,6 +107,7 @@
 - [] review and apply everywhere the new polymorph engine for rewriting and
   subtyping all the existing modules. Use vitamins/iec.scad as implementation
   example/reference.
+- [x] implemented new PCB component filtering.
 
 
 

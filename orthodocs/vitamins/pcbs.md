@@ -118,7 +118,7 @@ __Default:__
 
 Model for Raspberry PI 4.
 
-The following labels can be passed as **cut_label** parameter to [fl_pcb{}](#module-fl_pcb) when
+The following labels can be passed as **components** parameter to [fl_pcb{}](#module-fl_pcb) when
 performing FL_CUTOUT:
 
 | Label      | Description                                   |
@@ -146,7 +146,7 @@ __Default:__
 
 PCB RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
 
-The following labels can be passed as **cut_label** parameter to [fl_pcb{}](#module-fl_pcb) when performing FL_CUTOUT:
+The following labels can be passed as **components** parameter to [fl_pcb{}](#module-fl_pcb) when performing FL_CUTOUT:
 
 | Label      | Description                             |
 |------------|-----------------------------------------|
@@ -304,6 +304,55 @@ Helper for conversion from NopSCADlib hole format to OFL.
 
 ---
 
+### function fl_pcb_compFilter
+
+__Syntax:__
+
+```text
+fl_pcb_compFilter(pcb,rules)
+```
+
+Filter the pcb component labels according to «rules».
+
+The algorithm used will setup one function literal for all the assertive
+labels (the ones without any preceding '-' char) and as many function
+literals as the negate labels (the ones with '-' char) present in the list.
+This function literals list will be passed to [fl_list_filter()](../foundation/core.md#function-fl_list_filter). The
+resulting logic will include all the component labels of a pcb appearing in
+the assertive filter AND not listed in any of the negative ones.
+
+When undef all the supported components are used.
+
+Example:
+
+    // ASSEMBLY all components but "PIM BOT"
+    fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components="-PIM BOT");
+
+    // ASSEMBLY all components but "PIM BOT" and "PIM TOP"
+    fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components=["-PIM BOT","-PIM TOP"]);
+
+    // ASSEMBLY with only "PIM TOP" component
+    fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components="PIM TOP");
+
+    // ASSEMBLY with only "PIM BOT" and "PIM TOP" components
+    fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components=["PIM BOT","PIM TOP"]);
+
+
+
+---
+
+### function fl_pcb_compLabels
+
+__Syntax:__
+
+```text
+fl_pcb_compLabels(type)
+```
+
+returns a list with all the components label
+
+---
+
 ### function fl_pcb_components
 
 __Syntax:__
@@ -410,7 +459,7 @@ fl_pcb_thick(type,value)
 
 __Syntax:__
 
-    fl_pcb(verbs=FL_ADD,type,cut_tolerance=0,cut_label,cut_direction,thick=0,lay_direction=[+Z],debug,direction,octant)
+    fl_pcb(verbs=FL_ADD,type,cut_tolerance=0,components,cut_direction,thick=0,lay_direction=[+Z],debug,direction,octant)
 
 PCB engine.
 
@@ -429,8 +478,37 @@ FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOA
 __cut_tolerance__  
 FL_CUTOUT tolerance
 
-__cut_label__  
-FL_CUTOUT component filter by label. For the possible values consult the relevant «type» supported labels.
+__components__  
+List of labels defining the components used during FL_ASSEMBLY and
+FL_CUTOUT. The possible value are all the component labels defined by the
+pcb. When inserting a plain label, the corresponding component will be used
+during verb execution, while a label preceded with the '-' will exclude it
+from verb execution.
+
+The algorithm used will setup one function literal for all the assertive
+labels (the ones without any preceding '-' char) and as many function
+literals as the negate labels (the ones with '-' char) present in the list.
+This function literals list will be passed to [fl_list_filter()](../foundation/core.md#function-fl_list_filter). The
+resulting logic will include all the component labels of a pcb appearing in
+the assertive filter AND not listed in any of the negative ones.
+
+When undef all the supported components are used.
+
+Example:
+
+    // ASSEMBLY all components but "PIM BOT"
+    fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components="-PIM BOT");
+
+    // ASSEMBLY all components but "PIM BOT" and "PIM TOP"
+    fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components=["-PIM BOT","-PIM TOP"]);
+
+    // ASSEMBLY with only "PIM TOP" component
+    fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components="PIM TOP");
+
+    // ASSEMBLY with only "PIM BOT" and "PIM TOP" components
+    fl_pcb(FL_ASSEMBLY,FL_PCB_RPI4,components=["PIM BOT","PIM TOP"]);
+
+
 
 __cut_direction__  
 Component filter list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist)).
@@ -525,7 +603,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_pcb_frame(verbs=FL_ADD,this,cut_tolerance=0,cut_label,cut_direction,thick=0,lay_direction=[+Z],frame_tolerance=0.2,frame_parts=true,debug,direction,octant)
+    fl_pcb_frame(verbs=FL_ADD,this,cut_tolerance=0,components,cut_direction,thick=0,lay_direction=[+Z],frame_tolerance=0.2,frame_parts=true,debug,direction,octant)
 
 __Parameters:__
 
@@ -535,7 +613,7 @@ supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
 __cut_tolerance__  
 see homonymous parameter for [fl_pcb{}](#module-fl_pcb)
 
-__cut_label__  
+__components__  
 see homonymous parameter for [fl_pcb{}](#module-fl_pcb)
 
 __cut_direction__  
