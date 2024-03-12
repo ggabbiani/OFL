@@ -14,9 +14,9 @@ on:
   workflow_dispatch:
 
 env:
-  NopVer: 21.8.0
-  NopTarBall: v21.8.0.tar.gz
-  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/v21.8.0.tar.gz
+  NopVer: 21.10.1
+  NopTarBall: v21.10.1.tar.gz
+  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/v21.10.1.tar.gz
   scad_utils: https://github.com/openscad/scad-utils.git
   LIBS: /home/runner/.local/share/OpenSCAD/libraries
   ODOX_URL: https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
