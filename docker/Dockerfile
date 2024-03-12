@@ -2,7 +2,7 @@ FROM fedora:39
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 
 ARG libs=/root/.local/share/OpenSCAD/libraries
-ARG nop_ver=v21.8.0
+ARG nop_ver=v21.10.1
 ###############################################################################
 # system pre requisites
 RUN dnf install -y openscad git which make python3-dotenv python3-termcolor gettext-envsubst
