@@ -1,0 +1,14 @@
+*_canute.bat
+Thumbs.db
+__pycache__
+*.pyc
+tests/bom/
+*.deps
+*.log
+*.html
+bounds.json
+options.json
+times.txt
+*_diff.png
+*.echo
+cmd_times.txt
