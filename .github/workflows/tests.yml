@@ -99,4 +99,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: run tests
-        run: docker run -v $GITHUB_WORKSPACE/:/import:Z  -t ggabbiani/openscad:v1.5.0
+        run: docker run -v $GITHUB_WORKSPACE/:/import:Z  -t ggabbiani/openscad:v1.5.1
