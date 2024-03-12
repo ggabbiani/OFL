@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <NopSCADlib/lib.scad>
+include <../../NopSCADlib/lib.scad>
 
 include <../foundation/unsafe_defs.scad>
 

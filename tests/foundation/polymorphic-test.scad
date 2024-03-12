@@ -10,8 +10,8 @@
  */
 
 
-include <NopSCADlib/core.scad>
-include <NopSCADlib/vitamins/iecs.scad>
+include <../../lib/NopSCADlib/core.scad>
+include <../../lib/NopSCADlib/vitamins/iecs.scad>
 
 include <../../lib/OFL/vitamins/screw.scad>
 

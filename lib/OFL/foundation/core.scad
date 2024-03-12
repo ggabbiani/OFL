@@ -9,7 +9,7 @@
  */
 
 // include <TOUL.scad>               // TOUL       : The OpenScad Useful Library
-use     <scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
+use     <../../scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 //**** language extension *****************************************************
 

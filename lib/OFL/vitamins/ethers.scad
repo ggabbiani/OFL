@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-use     <NopSCADlib/vitamins/pcb.scad>
+use     <../../NopSCADlib/vitamins/pcb.scad>
 
 include <../foundation/unsafe_defs.scad>
 

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <NopSCADlib/lib.scad>
+include <../../NopSCADlib/lib.scad>
 include <3d-engine.scad>
 
 //! use children(0) for making a rail

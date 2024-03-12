@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <NopSCADlib/utils/core/core.scad>
-use <NopSCADlib/utils/annotation.scad>
+include <../../NopSCADlib/utils/core/core.scad>
+use <../../NopSCADlib/utils/annotation.scad>
 
 include <../foundation/core.scad>
 include <screw.scad>

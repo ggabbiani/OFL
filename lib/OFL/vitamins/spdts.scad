@@ -12,7 +12,7 @@ use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>
 
-include <NopSCADlib/vitamins/spades.scad>
+include <../../NopSCADlib/vitamins/spades.scad>
 
 FL_SODAL_SPDT = let(
   len    = 40,

@@ -7,8 +7,8 @@
  */
 use     <../dxf.scad>
 
-include <NopSCADlib/lib.scad>
-include <NopSCADlib/vitamins/screws.scad>
+include <../../NopSCADlib/lib.scad>
+include <../../NopSCADlib/vitamins/screws.scad>
 
 // include <../foundation/actions.scad>
 include <../foundation/components.scad>

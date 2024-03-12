@@ -12,8 +12,8 @@ include <../foundation/label.scad>
 use <../foundation/mngm-engine.scad>
 use <../foundation/util.scad>
 
-include <NopSCADlib/lib.scad>
-include <NopSCADlib/vitamins/pin_headers.scad>
+include <../../NopSCADlib/lib.scad>
+include <../../NopSCADlib/vitamins/pin_headers.scad>
 
 //! namespace for pin headers engine
 FL_PHDR_NS  = "phdr";

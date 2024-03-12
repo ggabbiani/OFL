@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <NopSCADlib/vitamins/pcb.scad>
+include <../../NopSCADlib/vitamins/pcb.scad>
 
 use <../foundation/bbox-engine.scad>
 use <../foundation/3d-engine.scad>

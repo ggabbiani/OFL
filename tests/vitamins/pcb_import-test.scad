@@ -13,8 +13,8 @@
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 include <../../lib/OFL/vitamins/pcbs.scad>
 
-include <NopSCADlib/core.scad>
-include <NopSCADlib/vitamins/pcbs.scad>
+include <../../lib/NopSCADlib/core.scad>
+include <../../lib/NopSCADlib/vitamins/pcbs.scad>
 
 
 $fn            = 50;           // [3:100]

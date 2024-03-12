@@ -7,11 +7,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <core.scad>
-
-use <3d-engine.scad>
-use <bbox-engine.scad>
-use <mngm-engine.scad>
+include <3d-engine.scad>
 
 /*!
  * This module manages OFL types leveraging children implementation of the

@@ -6,14 +6,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <unsafe_defs.scad>
-include <type_trait.scad>
-
 use <../dxf.scad>
 
-use <2d-engine.scad>
-use <bbox-engine.scad>
-use <mngm-engine.scad>
+include <2d-engine.scad>
+include <type_trait.scad>
 
 module fl_doAxes(
   size,

@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <NopSCADlib/core.scad>
-include <NopSCADlib/vitamins/iecs.scad>
+include <../../NopSCADlib/core.scad>
+include <../../NopSCADlib/vitamins/iecs.scad>
 
 include <../foundation/unsafe_defs.scad>
 include <../foundation/polymorphic-engine.scad>

@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <NopSCADlib/utils/core/core.scad>
+include <../../NopSCADlib/utils/core/core.scad>
 include <../foundation/unsafe_defs.scad>
 
 use <../foundation/2d-engine.scad>
