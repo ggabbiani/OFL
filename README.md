@@ -10,7 +10,7 @@
 
 The following libraries are used and must be installed for using all the OFL features:
 
-* [NopSCADlib Release v21.8.0](https://github.com/nophead/NopSCADlib/releases/tag/v21.8.0)
+* [NopSCADlib Release v21.10.1](https://github.com/nophead/NopSCADlib/releases/tag/v21.10.1)
 * [scad-utils](https://github.com/openscad/scad-utils)
 
 ## Usage

@@ -4,12 +4,9 @@
 
 ```mermaid
 graph LR
-    A1[foundation/3d-engine] --o|include| A2[foundation/type_trait]
-    A1 --o|include| A3[foundation/unsafe_defs]
+    A1[foundation/3d-engine] --o|include| A2[foundation/2d-engine]
+    A1 --o|include| A3[foundation/type_trait]
     A1 --o|use| A4[dxf]
-    A1 --o|use| A5[foundation/2d-engine]
-    A1 --o|use| A6[foundation/bbox-engine]
-    A1 --o|use| A7[foundation/mngm-engine]
 ```
 
 3d primitives

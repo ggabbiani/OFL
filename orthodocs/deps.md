@@ -5,12 +5,9 @@ graph TD
     A1[foundation/2d-engine] --o|include| A2[foundation/unsafe_defs]
     A1 --o|use| A3[foundation/bbox-engine]
     A1 --o|use| A4[foundation/mngm-engine]
-    A5[foundation/3d-engine] --o|include| A6[foundation/type_trait]
-    A5 --o|include| A2
+    A5[foundation/3d-engine] --o|include| A1
+    A5 --o|include| A6[foundation/type_trait]
     A5 --o|use| A7[dxf]
-    A5 --o|use| A1
-    A5 --o|use| A3
-    A5 --o|use| A4
     A8[foundation/algo-engine] --o|include| A5
     A3 --o|include| A9[foundation/core]
     A10[artifacts/box] --o|include| A11[artifacts/spacer]
@@ -108,10 +105,7 @@ graph TD
     A40 --o|include| A2
     A40 --o|use| A4
     A40 --o|use| A17
-    A32 --o|include| A9
-    A32 --o|use| A5
-    A32 --o|use| A3
-    A32 --o|use| A4
+    A32 --o|include| A5
     A16 --o|include| A5
     A45[vitamins/psus] --o|include| A25
     A45 --o|include| A24

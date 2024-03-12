@@ -4,10 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/polymorphic-engine] --o|include| A2[foundation/core]
-    A1 --o|use| A3[foundation/3d-engine]
-    A1 --o|use| A4[foundation/bbox-engine]
-    A1 --o|use| A5[foundation/mngm-engine]
+    A1[foundation/polymorphic-engine] --o|include| A2[foundation/3d-engine]
 ```
 
 ## Modules
