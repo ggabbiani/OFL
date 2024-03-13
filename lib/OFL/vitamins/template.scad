@@ -98,10 +98,6 @@ module __stub__(
       fl_modifier($modifier) do_pload()
         children();
 
-    } else if ($verb==FL_SYMBOLS) {
-      fl_modifier($modifier) fl_doSymbols()
-        children();
-
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }

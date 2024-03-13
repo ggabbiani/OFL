@@ -48,8 +48,6 @@ $FL_LAYOUT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_MOUNT      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// add symbols and labels usually for debugging
-$FL_SYMBOLS    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
 /* [3D Placement] */
@@ -115,8 +113,7 @@ verbs = fl_verbList([
   FL_FOOTPRINT,
   FL_LAYOUT,
   FL_MOUNT,
-  FL_PAYLOAD,
-  FL_SYMBOLS
+  FL_PAYLOAD
 ]);
 
 cut_direction = CUT_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]) if (CUT_DIRECTION[i]) CUT_DIRECTION[i]*axes[i]];

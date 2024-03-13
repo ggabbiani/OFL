@@ -326,8 +326,6 @@ FL_MOUNT      = "FL_MOUNT mount shape through predefined screws";
 FL_OBSOLETE   = "FL_OBSOLETE is a test verb. **OBSOLETE**";
 //! adds a box representing the payload of the shape
 FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
-//! add symbols and labels usually for debugging
-FL_SYMBOLS    = "FL_SYMBOLS adds symbols and labels usually for debugging";
 
 // Runtime behavior defaults
 $FL_ADD       = is_undef($FL_ADD)       ? "ON"          : $FL_ADD;        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
@@ -341,7 +339,6 @@ $FL_HOLDERS   = is_undef($FL_HOLDERS)   ? "ON"          : $FL_HOLDERS;    // [OF
 $FL_LAYOUT    = is_undef($FL_LAYOUT)    ? "ON"          : $FL_LAYOUT;     // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_MOUNT     = is_undef($FL_MOUNT)     ? "ON"          : $FL_MOUNT;      // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_PAYLOAD   = is_undef($FL_PAYLOAD)   ? "DEBUG"       : $FL_PAYLOAD;    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-$FL_SYMBOLS   = is_undef($FL_SYMBOLS)   ? "ON"          : $FL_SYMBOLS;    // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 //! given a verb returns the corresponding modifier value
 function fl_verb2modifier(verb)  =
@@ -356,7 +353,6 @@ function fl_verb2modifier(verb)  =
   : verb==FL_LAYOUT     ? $FL_LAYOUT
   : verb==FL_MOUNT      ? $FL_MOUNT
   : verb==FL_PAYLOAD    ? $FL_PAYLOAD
-  : verb==FL_SYMBOLS    ? $FL_SYMBOLS
   : assert(false,str("Unsupported verb ",verb)) undef;
 
 /*!
@@ -381,7 +377,6 @@ module fl_modifier(
     $FL_LAYOUT    = behavior;
     $FL_MOUNT     = behavior;
     $FL_PAYLOAD   = behavior;
-    $FL_SYMBOLS   = behavior;
   }
   if      (behavior=="ON")                children();
   else if (behavior=="OFF")              *children();
@@ -1415,6 +1410,5 @@ module fl_context_dump()
   $FL_HOLDERS    = $FL_HOLDERS   ,
   $FL_LAYOUT     = $FL_LAYOUT    ,
   $FL_MOUNT      = $FL_MOUNT     ,
-  $FL_PAYLOAD    = $FL_PAYLOAD   ,
-  $FL_SYMBOLS    = $FL_SYMBOLS
+  $FL_PAYLOAD    = $FL_PAYLOAD
   ) children();

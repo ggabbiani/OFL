@@ -688,8 +688,6 @@
 - [fl_sym_plug (module)](foundation/3d-engine.md#module-fl_sym_plug)
 - [fl_sym_socket (module)](foundation/3d-engine.md#module-fl_sym_socket)
 - [fl_symbol (module)](foundation/3d-engine.md#module-fl_symbol)
-- [$FL_SYMBOLS (variable)](foundation/core.md#variable-$fl_symbols)
-- [FL_SYMBOLS (variable)](foundation/core.md#variable-fl_symbols)
 
 ## T
 

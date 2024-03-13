@@ -111,14 +111,6 @@ When true, disables PREVIEW corrections (see [variable FL_NIL](#variable-fl_nil)
 
 ---
 
-### variable $FL_SYMBOLS
-
-__Default:__
-
-    is_undef($FL_SYMBOLS)?"ON":$FL_SYMBOLS
-
----
-
 ### variable FL_2D
 
 __Default:__
@@ -445,16 +437,6 @@ __Default:__
     [+1,-1,undef]
 
 Roman enumeration of quadrant 4
-
----
-
-### variable FL_SYMBOLS
-
-__Default:__
-
-    "FL_SYMBOLS adds symbols and labels usually for debugging"
-
-add symbols and labels usually for debugging
 
 ---
 

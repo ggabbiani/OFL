@@ -573,7 +573,7 @@ module fl_pcb(
     comps     = components ?
       fl_pcb_compFilter(type,components) :
       fl_pcb_components(type);
-    echo(verbs=verbs, comps=[for(c=comps) c[0]]);
+    // echo(verbs=verbs, comps=[for(c=comps) c[0]]);
 
     M         = fl_octant(octant,bbox=bbox);
     D         = direction ? fl_direction(direction)  : I;
@@ -1321,10 +1321,6 @@ module fl_pcb_frame(
     } else if ($verb==FL_PAYLOAD) {
       fl_modifier($modifier)
         fl_pcb($verb,pcb,debug=debug);
-
-    } else if ($verb==FL_SYMBOLS) {
-      fl_modifier($modifier) fl_doSymbols()
-        children();
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));

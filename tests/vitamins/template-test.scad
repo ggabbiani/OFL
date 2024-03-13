@@ -39,8 +39,6 @@ $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_MOUNT      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// add symbols and labels usually for debugging
-$FL_SYMBOLS   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 /* [Placement] */
 
@@ -64,16 +62,15 @@ direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
-  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-  if ($FL_MOUNT!="OFF")     FL_MOUNT,
-  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
-  if ($FL_SYMBOLS!="OFF")   FL_SYMBOLS,
-];
+verbs=fl_verbList([
+  FL_ADD,
+  FL_ASSEMBLY,
+  FL_AXES,
+  FL_BBOX,
+  FL_CUTOUT,
+  FL_DRILL,
+  FL_FOOTPRINT,
+  FL_LAYOUT,
+  FL_MOUNT,
+  FL_PAYLOAD
+]);
