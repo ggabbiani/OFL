@@ -56,13 +56,13 @@ MODE      = "square";  // [frame, square]
 
 // overall size of the rectangle
 SIZE      = [15,10];
-// Quadrant I
+// Quadrant I [x radius,y radius]
 CORNER_0  = [6,3];
-// Quadrant II
+// Quadrant II [x radius,y radius]
 CORNER_1  = [2,2];
-// Quadrant III
+// Quadrant III [x radius,y radius]
 CORNER_2  = [3,6];
-// Quadrant IV
+// Quadrant IV [x radius,y radius]
 CORNER_3  = [0,0];
 
 // frame thickness

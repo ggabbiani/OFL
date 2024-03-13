@@ -14,6 +14,8 @@ type_trait util
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
+# $(info $$RESULTS is [${RESULTS}])
+
 include $(FUNCTIONS) $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)

@@ -1030,6 +1030,28 @@ function fl_2d_frame_intCorners(
   ]
   : assert(false,corners) undef;
 
+/*!
+ * Add a 2d square frame according to corners and thick specifications.
+ *
+ * Example:
+ *
+ * A frame with the following corners:
+ *
+ * - I quadrant: r=3
+ * - II quadrant: r=2
+ * - III quadrant: r=4
+ * - IV quadrant: r=0 (no roundness)
+ *
+ * is produced by the following code
+ *
+ *     use <OFL/foundation/2d-engine.scad>
+ *     ...
+ *     fl_2d_frame(size=[15,10],corners=[3,2,4,0],thick=2,$fn=50);
+ *
+ * and will result as in the following picture:
+ *
+ * ![2d frame](256x256/fig_2d_frame.png)
+ */
 module fl_2d_frame(
   verbs   = FL_ADD,
   //! outer size
@@ -1077,15 +1099,19 @@ module fl_2d_frame(
  * Constructor for the quadrant parameter from values as passed by customizer
  * (see fl_quadrant() for the semantic behind).
  *
- * Each dimension can assume one out of four values:
+ * Each dimension can assume one out of the following values:
  *
  * - "undef": mapped to undef
+ * - "-1","0","+1": mapped to -1,0,+1 respectively
  * - -1,0,+1: untouched
  */
 function fl_parm_Quadrant(x,y) = let(
-  o_x = x=="undef" ? undef : x,
-  o_y = y=="undef" ? undef : y
-) [o_x,o_y];
+  o_x = x=="undef" ? undef : is_string(x) ? let(value=fl_atoi(x)) assert(is_num(value)) value : x,
+  o_y = y=="undef" ? undef : is_string(y) ? let(value=fl_atoi(y)) assert(is_num(value)) value : y
+) [
+  assert(is_undef(o_x)||o_x==0||abs(o_x)==1,x) o_x,
+  assert(is_undef(o_y)||o_y==0||abs(o_y)==1,y) o_y
+];
 
 /*!
  * Calculates the translation matrix needed for moving a shape in the provided
@@ -1130,8 +1156,8 @@ function fl_quadrant(
     corner  = bbox ? bbox : fl_bb_corners(type),
     half    = (corner[1] - corner[0]) / 2,
     delta   = [
-      is_undef(quadrant.x) ? undef : sign(quadrant.x) * half.x,
-      is_undef(quadrant.y) ? undef : sign(quadrant.y) * half.y,
+      is_undef(quadrant.x) ? undef : assert(is_num(quadrant.x),quadrant) sign(quadrant.x) * half.x,
+      is_undef(quadrant.y) ? undef : assert(is_num(quadrant.y),quadrant) sign(quadrant.y) * half.y,
       0
     ],
     t       = [

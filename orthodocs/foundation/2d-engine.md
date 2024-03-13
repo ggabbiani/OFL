@@ -454,9 +454,10 @@ fl_parm_Quadrant(x,y)
 Constructor for the quadrant parameter from values as passed by customizer
 (see [fl_quadrant()](#function-fl_quadrant) for the semantic behind).
 
-Each dimension can assume one out of four values:
+Each dimension can assume one out of the following values:
 
 - "undef": mapped to undef
+- "-1","0","+1": mapped to -1,0,+1 respectively
 - -1,0,+1: untouched
 
 
@@ -594,6 +595,28 @@ __Syntax:__
 __Syntax:__
 
     fl_2d_frame(verbs=FL_ADD,size=[1,1],corners=[0,0,0,0],thick,quadrant)
+
+Add a 2d square frame according to corners and thick specifications.
+
+Example:
+
+A frame with the following corners:
+
+- I quadrant: r=3
+- II quadrant: r=2
+- III quadrant: r=4
+- IV quadrant: r=0 (no roundness)
+
+is produced by the following code
+
+    use <OFL/foundation/2d-engine.scad>
+    ...
+    fl_2d_frame(size=[15,10],corners=[3,2,4,0],thick=2,$fn=50);
+
+and will result as in the following picture:
+
+![2d frame](256x256/fig_2d_frame.png)
+
 
 __Parameters:__
 

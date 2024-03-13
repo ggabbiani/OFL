@@ -1,27 +1,6 @@
 {
     "fileFormatVersion": "1",
     "parameterSets": {
-        "New set 1": {
-            "$FL_ADD": "ON",
-            "$FL_AXES": "OFF",
-            "$FL_BBOX": "OFF",
-            "$FL_RENDER": "false",
-            "$FL_TRACES": "-2",
-            "$fl_debug": "false",
-            "$fl_filament": "DodgerBlue",
-            "$fn": "80",
-            "CORNER_0": "[6, 3]",
-            "CORNER_1": "[2, 2]",
-            "CORNER_2": "[3, 6]",
-            "CORNER_3": "[0, 0]",
-            "MODE": "square",
-            "SHOW_LABELS": "false",
-            "SHOW_SYMBOLS": "false",
-            "SIZE": "[15, 10]",
-            "T": "2.5",
-            "X_PLACE": "0",
-            "Y_PLACE": "0"
-        },
         "TEST_CASE-frame": {
             "$FL_ADD": "ON",
             "$FL_AXES": "OFF",
@@ -61,6 +40,27 @@
             "SHOW_SYMBOLS": "false",
             "SIZE": "[15, 10]",
             "T": "2.5",
+            "X_PLACE": "0",
+            "Y_PLACE": "0"
+        },
+        "fig_2d_frame": {
+            "$FL_ADD": "ON",
+            "$FL_AXES": "OFF",
+            "$FL_BBOX": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "100",
+            "CORNER_0": "[3, 3]",
+            "CORNER_1": "[2, 2]",
+            "CORNER_2": "[4, 4]",
+            "CORNER_3": "[0, 0]",
+            "MODE": "frame",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "SIZE": "[15, 10]",
+            "T": "2",
             "X_PLACE": "0",
             "Y_PLACE": "0"
         }
