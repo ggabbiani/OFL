@@ -18,11 +18,11 @@ use <bbox-engine.scad>
  * Essentially it uses children module in place of not yet implemented module
  * literals, simplifying the new type module writing.
  *
- * __NOTE__: this module can be used only by OFL 'objects'.
+ * __NOTE:__ this module can be used only by OFL 'objects'.
  *
  * A typical use of this high-level management module is the following:
  *
- *     // this engine is called one for every verb passed to fl_polymorph{}
+ *     // this engine is called once for every verb passed to module fl_polymorph
  *     module engine(thick) let(
  *       ...
  *     ) if ($this_verb==FL_ADD)
@@ -64,8 +64,8 @@ use <bbox-engine.scad>
  *
  * Children context:
  *
- * - $this
- * - $this_verb       : current verb passed to children
+ * - $this            : 3d object
+ * - $this_verb       : currently processed verb
  * - $this_size       : object 3d dimensions
  * - $this_bbox       : bounding box corners in [low,high] format
  * - $this_direction  : orientation in [director,rotation] format
