@@ -4,7 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[foundation/polymorphic-engine] --o|include| A2[foundation/3d-engine]
+    A1[foundation/polymorphic-engine] --o|include| A2[foundation/core]
+    A1 --o|use| A3[foundation/bbox-engine]
 ```
 
 ## Modules
@@ -22,6 +23,8 @@ actual engine while decoupling standard OFL parameters manipulation from
 other engine specific ones.
 Essentially it uses children module in place of not yet implemented module
 literals, simplifying the new type module writing.
+
+__NOTE__: this module can be used only by OFL 'objects'.
 
 A typical use of this high-level management module is the following:
 

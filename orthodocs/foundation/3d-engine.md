@@ -7,6 +7,7 @@ graph LR
     A1[foundation/3d-engine] --o|include| A2[foundation/2d-engine]
     A1 --o|include| A3[foundation/type_trait]
     A1 --o|use| A4[dxf]
+    A1 --o|use| A5[foundation/polymorphic-engine]
 ```
 
 3d primitives
@@ -829,6 +830,45 @@ bottom radius
 
 __r2__  
 top radius
+
+
+---
+
+### module fl_frame
+
+__Syntax:__
+
+    fl_frame(verbs=FL_ADD,size=[1,1,1],corners=[0,0,0,0],thick,debug,octant,direction)
+
+3d extension of [fl_2d_frame{}](2d-engine.md#module-fl_2d_frame).
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_AXES, FL_BBOX
+
+__size__  
+outer size
+
+__corners__  
+List of four radiuses, one for each base quadrant's corners.
+Each zero means that the corresponding corner is squared.
+Defaults to a 'perfect' rectangle with four squared corners.
+One scalar value R means corners=[R,R,R,R]
+
+
+__thick__  
+subtracted to size defines the internal size
+
+__debug__  
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
+
+__octant__  
+when undef, native positioning is used with cube midpoint centered at origin O
+
+__direction__  
+desired direction [director,rotation] or native direction if undef
 
 
 ---
