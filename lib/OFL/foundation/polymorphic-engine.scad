@@ -9,7 +9,9 @@
  */
 include <core.scad>
 
+use <3d-engine.scad>
 use <bbox-engine.scad>
+use <mngm-engine.scad>
 
 /*!
  * This module manages OFL types leveraging children implementation of the
