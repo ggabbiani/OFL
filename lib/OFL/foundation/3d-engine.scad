@@ -11,6 +11,8 @@ use <../dxf.scad>
 include <2d-engine.scad>
 include <type_trait.scad>
 
+use <polymorphic-engine.scad>
+
 module fl_doAxes(
   size,
   direction,
@@ -20,6 +22,56 @@ module fl_doAxes(
   fl_axes(sz);
   if (debug && direction && fl_parm_symbols(debug))
     fl_sym_direction(direction=direction,size=sz);
+}
+
+/*!
+ * 3d extension of fl_2d_frame{}.
+ */
+module fl_frame(
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX
+  verbs   = FL_ADD,
+  //! outer size
+  size    = [1,1,1],
+  /*!
+   * List of four radiuses, one for each base quadrant's corners.
+   * Each zero means that the corresponding corner is squared.
+   * Defaults to a 'perfect' rectangle with four squared corners.
+   * One scalar value R means corners=[R,R,R,R]
+   */
+  corners = [0,0,0,0],
+  //! subtracted to size defines the internal size
+  thick,
+  //! debug parameter as returned from fl_parm_Debug()
+  debug,
+  //! when undef, native positioning is used with cube midpoint centered at origin O
+  octant,
+  //! desired direction [director,rotation] or native direction if undef
+  direction
+) {
+
+  size  = is_list(size) ? size : [size,size,size];
+  bbox  = [[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,size.z]];
+
+  D     = direction ? fl_direction(direction) : I;
+  M     = fl_octant(octant,bbox=bbox);
+
+  fl_manage(verbs,M,D) {
+    if ($verb==FL_ADD)
+      fl_modifier($modifier)
+        linear_extrude(size.z)
+          fl_2d_frame(size=[size.x,size.y], corners=corners, thick=thick);
+
+    else if ($verb==FL_AXES)
+      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+
+    else if ($verb==FL_BBOX)
+      fl_modifier($modifier)
+        fl_bb_add(bbox+FL_NIL*([[-1,-1,-1],[1,1,1]]));
+
+    else
+      assert(false,str("***OFL ERROR***: unimplemented verb ",$verb));
+
+  }
 }
 
 /*!
