@@ -10,7 +10,6 @@ use     <../dxf.scad>
 include <../../NopSCADlib/lib.scad>
 include <../../NopSCADlib/vitamins/screws.scad>
 
-// include <../foundation/actions.scad>
 include <../foundation/components.scad>
 include <../foundation/grid.scad>
 include <../foundation/hole.scad>
@@ -541,12 +540,12 @@ module fl_pcb(
   thick=0,
   //! FL_ASSEMBLY,FL_LAYOUT,FL_MOUNT directions in floating semi-axis list form
   lay_direction=[+Z],
-  //! see constructor fl_parm_Debug()
-  debug,
+  //! when undef native positioning is used
+  octant,
   //! desired direction [director,rotation], native direction when undef
   direction,
-  //! when undef native positioning is used
-  octant
+  //! see constructor fl_parm_Debug()
+  debug
 ) {
   assert(!fl_debug() || is_list(verbs)||is_string(verbs),verbs);
 
@@ -907,10 +906,15 @@ module fl_pcb_adapter(
   thick=0,
   //! pay-load bounding box, is added to the overall bounding box calculation
   payload,
+  //! when undef native positioning is used
+  octant,
   //! desired direction [director,rotation], native direction when undef
   direction,
-  //! when undef native positioning is used
-  octant
+  /*!
+   * As returned from constructor fl_parm_Debug(). This parameter is currently
+   * unused.
+   */
+  debug
 ) {
   assert(!fl_debug() || is_list(verbs)||is_string(verbs),verbs);
 
