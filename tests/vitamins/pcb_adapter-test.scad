@@ -123,5 +123,5 @@ payload = let(
     bare  = [[-sz.x/2,-sz.y/2,0],[+sz.x/2,+sz.y/2,+sz.z]]
   ) [[bare[0].x-PAY_LOAD.x,bare[0].y-PAY_LOAD.y,bare[1].z],[bare[1].x+PAY_LOAD.x,bare[1].y+PAY_LOAD.y,bare[1].z+PAY_LOAD.z]];
 
-fl_pcb_adapter(verbs,nop,payload=payload, direction=direction,octant=octant,thick=T) fl_color()
+fl_pcb_adapter(verbs,nop,payload=payload, direction=direction,octant=octant,thick=T,debug=debug) fl_color()
   fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);
