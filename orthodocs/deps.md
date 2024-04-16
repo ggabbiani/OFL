@@ -107,7 +107,9 @@ graph TD
     A40 --o|use| A4
     A40 --o|use| A18
     A8 --o|include| A10
+    A8 --o|use| A5
     A8 --o|use| A3
+    A8 --o|use| A4
     A17 --o|include| A5
     A45[vitamins/psus] --o|include| A26
     A45 --o|include| A25

@@ -459,7 +459,7 @@ fl_pcb_thick(type,value)
 
 __Syntax:__
 
-    fl_pcb(verbs=FL_ADD,type,cut_tolerance=0,components,cut_direction,thick=0,lay_direction=[+Z],debug,direction,octant)
+    fl_pcb(verbs=FL_ADD,type,cut_tolerance=0,components,cut_direction,thick=0,lay_direction=[+Z],octant,direction,debug)
 
 PCB engine.
 
@@ -531,14 +531,14 @@ thickness of any surrounding surface in fixed form
 __lay_direction__  
 FL_ASSEMBLY,FL_LAYOUT,FL_MOUNT directions in floating semi-axis list form
 
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
+__octant__  
+when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef
 
-__octant__  
-when undef native positioning is used
+__debug__  
+see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 
 ---
@@ -547,7 +547,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_pcb_adapter(verbs=FL_ADD,type,thick=0,payload,direction,octant)
+    fl_pcb_adapter(verbs=FL_ADD,type,thick=0,payload,octant,direction,debug)
 
 PCB adapter for NopSCADlib.
 
@@ -590,11 +590,16 @@ FL_DRILL thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]] or scalar shortcut
 __payload__  
 pay-load bounding box, is added to the overall bounding box calculation
 
+__octant__  
+when undef native positioning is used
+
 __direction__  
 desired direction [director,rotation], native direction when undef
 
-__octant__  
-when undef native positioning is used
+__debug__  
+As returned from constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug). This parameter is currently
+unused.
+
 
 
 ---

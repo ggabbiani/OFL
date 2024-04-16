@@ -2,7 +2,7 @@
 
 ## General TODOs
 
-- [ ] implement module fl_frame() for 3d frames;
+- [x] implement module fl_frame() for 3d frames;
 - [x] remove fl_director() and fl_rotor() properties. In place of them use
   default native coordinate system [+Z,+X];
 - [ ] transform some of the special global constants into special module
@@ -12,11 +12,11 @@
 
 ## v4.0.0 TODOs
 
-- [ ] foundation/unsafe_defs.scad should be used only from examples and tests
+- [x] foundation/unsafe_defs.scad should be used only when code is NOT mixed
+  with external libraries
 - [x] re-implement FL_AXES verb
 - [x] detect all the 'objects' instantiating fl_director() and fl_rotor() and
   check their client modules for the new local coordinate system settings
-- [ ] implement FL_SYMBOLS verb
 - [x] foundation/components.scad: added fl_Component() constructor. Modified
   component data record removing the cut direction ($comp_cutdir) and updated
   fl_comp_Context() consequently.
@@ -54,9 +54,11 @@
   actually implementing the FL_CUTOUT verb
 - [ ] global: extend the OFL APIs for implementing the newly introduced
   'standard' parameter «debug»
-- [ ] documentation: introduce parameter standardization
-- [x] tests: implement an automatic test generator mechanism able to standardize
-  - where possible - the customizer parameters
+- [ ] engine parameter standardization:
+
+        engine_stub(verbs=FL_ADD,this,...,octant,direction,debug);
+- [x] tests: implement an automatic test generator mechanism able to
+  standardize, where possible, the customizer parameters
 - [x] tests: tests executions now under GNU Make (removed old bin/test.sh,
   replaced by its 'python' version to be more cross-platform executable)
 - [x] tests: 'make' driven test generation and execution, now independent from

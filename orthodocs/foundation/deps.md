@@ -21,7 +21,9 @@ graph TD
     A18[foundation/limits] --o|include| A9
     A4 --o|include| A9
     A7 --o|include| A9
+    A7 --o|use| A5
     A7 --o|use| A3
+    A7 --o|use| A4
     A19[foundation/profile] --o|include| A5
     A20[foundation/template] --o|include| A5
     A6 --o|include| A9
