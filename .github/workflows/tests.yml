@@ -68,7 +68,7 @@ jobs:
         pip install --upgrade pip
         pip install -r pyreqs.txt
         Xvfb :99 & export DISPLAY=:99
-        make -s
+        make
 
     - name: Test runs
       working-directory: ${{github.workspace}}
