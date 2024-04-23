@@ -14,51 +14,35 @@ on:
   workflow_dispatch:
 
 env:
-  NopVer: 21.10.1
-  NopTarBall: v21.10.1.tar.gz
-  NopSCADlib: https://github.com/nophead/NopSCADlib/archive/refs/tags/v21.10.1.tar.gz
-  scad_utils: https://github.com/openscad/scad-utils.git
-  LIBS: /home/runner/.local/share/OpenSCAD/libraries
-  ODOX_URL: https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
+  ODOX_URL:   https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   ubuntu-test:
-    name: Ubuntu tests
+    name: Ubuntu
     runs-on: ubuntu-latest
     env:
       ODOX_PKG: orthodocs_1.2.1_amd64.deb
     steps:
     - name: Project checkout
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can
+      # access it
       uses: actions/checkout@v3
       with:
-        # Number of commits to fetch. 0 indicates all history for all branches and tags (default 1).
+        # Number of commits to fetch. 0 indicates all history for all branches
+        # and tags (default 1).
         fetch-depth: '0'
 
     - name: pre-requisites
-      # install Ninja 'cause of the automatic build parallelism tuned with the
-      # number of processors found in the hosting system
+      # install Ninja 'cause of the automatic build parallelism turned on with
+      # the number of processors found in the hosting system
       run: |
         sudo apt update
         sudo apt upgrade -y
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
-        sudo apt install -y graphviz openscad python3-venv wget xvfb
+        sudo apt install -y apt-utils openscad git graphviz imagemagick make python3-venv wget which xvfb
         wget ${{env.ODOX_URL}}/${{env.ODOX_PKG}}
         sudo apt install ./${{env.ODOX_PKG}}
-        mkdir -p ${{env.LIBS}}
-
-    - name: NopSCADlib
-      working-directory: ${{env.LIBS}}
-      run: |
-        wget ${{env.NopSCADlib}}
-        tar -xzf ${{env.NopTarBall}}
-        ln -s NopSCADlib-${{env.NopVer}} NopSCADlib
-
-    - name: scad-utils
-      working-directory: ${{env.LIBS}}
-      run: |
-        git clone https://github.com/openscad/scad-utils.git
 
     - name: Documentation build
       working-directory: ${{github.workspace}}
@@ -67,8 +51,7 @@ jobs:
         . .venv/bin/activate
         pip install --upgrade pip
         pip install -r pyreqs.txt
-        Xvfb :99 & export DISPLAY=:99
-        make
+        make -s
 
     - name: Test runs
       working-directory: ${{github.workspace}}
@@ -76,27 +59,27 @@ jobs:
         . .venv/bin/activate
         make -s tests/runs
 
-    # - name: Create platform dependent binary packages
-    #   working-directory: ${{github.workspace}}/build
-    #   run: cpack
-
-    # - name: Upload produced artifacts
-    #   uses: actions/upload-artifact@v3
-    #   id: upload-artifacts
-    #   with:
-    #     name: ${{env.ARTIFACTS}}
-    #     path: ${{github.workspace}}/build/*.deb
-
   # docker based tests (will be replaced by native-tests)
-  docker-tests:
-    # The type of runner that the job will run on
+  fedora-tests:
+    name: Fedora
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    - name: Project checkout
+      # Checks-out repository under $GITHUB_WORKSPACE
+      uses: actions/checkout@v3
+      with:
+        # Number of commits to fetch. 0 indicates all history for all branches
+        # and tags (default 1).
+        fetch-depth: '0'
 
-      # Runs a single command using the runners shell
-      - name: run tests
-        run: docker run -v $GITHUB_WORKSPACE/:/import:Z  -t ggabbiani/openscad:v1.5.1
+    - name: Documentation build
+      working-directory: ${{github.workspace}}
+      run: |
+        . .venv/bin/activate
+        make -s docker/fedora
+
+    - name: Test runs
+      working-directory: ${{github.workspace}}
+      run: |
+        . .venv/bin/activate
+        make -s docker/fedora-tests

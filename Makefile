@@ -20,11 +20,11 @@ export EXAMPLES				:= $(CURDIR)/examples
 export TESTS				:= $(CURDIR)/tests
 export DOCS					:= $(CURDIR)/docs
 export TEMP_ROOT			:= /tmp
-export SCAD					:= OPENSCADPATH="$(SRC_ROOT):${OPENSCADPATH}" openscad -m make --view axes
 export DEPS					:= $(PRJ_ROOT)/bin/deps.sh --silent
 export BIN					:= $(CURDIR)/bin
 export FUNCTIONS			:= $(CURDIR)/functions.mk
 export SHELL				:= /bin/bash
+export SCAD					:= $(BIN)/openscad.py -m make --view axes
 
 include $(FUNCTIONS)
 
@@ -32,7 +32,7 @@ include $(FUNCTIONS)
 # tests creation
 all: tests/sources docs/all orthodocs/all
 
-clean: docs/clean orthodocs/clean tests/clean
+clean: docs/clean orthodocs/clean tests/clean docker/clean
 
 orthodocs/%: $(LIB_SOURCES)
 	$(call make_sub)
@@ -42,3 +42,9 @@ docs/%:
 
 tests/%:
 	$(call make_sub)
+
+docker/%: ALWAYS
+	$(call make_sub)
+
+# fake target forcing pattern rules that cannot be '.PHONY'
+ALWAYS:

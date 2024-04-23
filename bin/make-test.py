@@ -44,32 +44,17 @@ def test_cases(lines):
 def cat(f_name):
   print(open(f_name, 'r').read())
 
-def run(base,test,output,dry_run=False,case=None):
-  test_cmd = test + ['-o', output]
-  if dry_run:
-    print(test_cmd)
-    return 0
+def prologue(title,case=None):
+  if (case):
+    print((colored(title+f" [{case}]: ", 'yellow')),end="",flush=True)
   else:
-    if (case):
-      print((colored(base+f" [{case}]: ", 'yellow')),end="",flush=True)
-    else:
-      print((colored(base+": ", 'yellow')),end="",flush=True)
-    result = subprocess.run(test_cmd)
-    if result.returncode==0:
-      lines = ofl.read_lines(output)
-      # until [issue #3616](https://github.com/openscad/openscad/issues/3616) is not
-      # applied to stable OpenSCAD branch we have to use a nightly build or check the
-      # command output
-      for line in lines:
-        match   = re.findall('^WARNING:',line)
-        if match:
-          cprint('✝','red')
-          return -1
-      cprint('✔','green')
-      return 0
-    else:
-      cprint(f'✝ ({result.returncode})','red')
-      return result.returncode
+    print((colored(title+": ", 'yellow')),end="",flush=True)
+
+def run(title,test,parms,output,dry_run=False,case=None):
+  if not dry_run:
+    prologue(title,case=case)
+  rc = ofl.openscad(test,parms=parms,echo_f=output,hw=True,dry_run=dry_run)
+  return ofl.rc_epilogue(rc) if not dry_run else rc
 
 def echo(path,base):
   return os.path.join(path,base+'.echo')
@@ -102,7 +87,7 @@ scad    = os.path.join(path,base+'.scad')
 ofl.debug("path : % s" %path)
 ofl.debug("base : % s" %base)
 
-command = ofl.oscad + arguments(conf)
+command = arguments(conf)
 cmds    = []
 cases   = []
 
@@ -122,7 +107,7 @@ else:
 
 for i, cmd in enumerate(cmds):
   if cases:
-    case = cases[i]
+    case = cases[i][10:]
     o_base = case
     o_dir = os.path.join(path,base+'.echo')
     if not os.path.exists(o_dir) and not args.dry_run:
@@ -132,9 +117,11 @@ for i, cmd in enumerate(cmds):
     o_base  = base
     o_dir   = path
 
-  o_file = echo(o_dir,o_base)
-  rc = run(base,cmd+[scad],o_file,args.dry_run,case)
-  if rc!=0:
+  o_file  = echo(o_dir,o_base)
+  rc      = ofl.openscad(scad,parms=cmd,echo_f=o_file,hw=True,dry_run=args.dry_run)
+  if rc==0:
+    cprint(f'{case if case else "✔"} ','green',end="")
+  else:
+    cprint(f'{case if case else "✝"} ({rc})','red')
     cat(echo(o_dir,o_base))
-    # cat(scad)
     exit(rc)

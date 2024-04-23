@@ -40,10 +40,12 @@ vitamins/%:
 runs: clean-results $(RESULTS) artifacts/runs foundation/runs vitamins/runs
 
 clean-results:
-	@printf "\e[33m$@ [tests]\e[0m: "
+	$(call aggregate-prologue)
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
-	@printf "\e[32m✔\e[0m\n"
+	$(call aggregate-epilogue)
 
 clean: clean-results artifacts/clean foundation/clean vitamins/clean
+	$(call aggregate-prologue)
 	@for f in $(SOURCES) ; do rm -f $$f ; done
-	@echo "$(SOURCES): DELETED"
+	$(call aggregate-epilogue)
+#	@echo "$(SOURCES): DELETED"

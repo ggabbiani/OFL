@@ -14,9 +14,9 @@ top:
 all: dependencies.svg
 
 dependencies.svg: $(ARTIFACTS_SOURCES)
-	@printf "\e[33m$(CURDIR)/$@\e[0m: "
+	$(call target-prologue)
 	@$(DEPS) --artifacts
-	@printf "\e[32mOK\e[0m\n"
+	$(call target-epilogue-success)
 
 clean:
 	@rm -f dependencies.svg

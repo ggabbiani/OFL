@@ -110,6 +110,8 @@
   subtyping all the existing modules. Use vitamins/iec.scad as implementation
   example/reference.
 - [x] implemented new PCB component filtering.
+- [x] fix documentation generation under Ubuntu
+- [ ] fix regression after the generic cutout algorithm implementation
 
 
 

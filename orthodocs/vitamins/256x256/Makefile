@@ -19,18 +19,18 @@ include $(FUNCTIONS)
 all: $(TARGETS)
 
 fig_FL_IEC_%.png: iecs.scad iecs.json
-	@printf "\e[33m$(CURDIR)/$@\e[0m: "
-	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ --p iecs.json --P $(@:.png=) $<
+	$(call target-prologue)
+	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ --p iecs.json --P $(@:.png=) --ofl-script $<
 	@convert unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
-	@printf "\e[32mOK\e[0m\n"
+	$(call target-epilogue-success)
 
 %.png: %.scad
-	@printf "\e[33m$(CURDIR)/$@\e[0m: "
-	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ $<
+	$(call target-prologue)
+	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ --ofl-script $<
 	@convert unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
-	@printf "\e[32mOK\e[0m\n"
+	$(call target-epilogue-success)
 
 clean:
 	@rm -f *.png *.deps

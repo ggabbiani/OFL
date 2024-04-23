@@ -9,7 +9,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-import argparse, os, sys
+import argparse, os, re, subprocess, sys
 
 from pathlib import Path
 from termcolor import colored, cprint
@@ -41,12 +41,43 @@ def error(message):
   if verbosity>=ERROR:
     return cprint("[*ERR*] "+message, 'red')
 
+def rc_epilogue(rc):
+  if rc==0:
+    cprint('✔','green')
+  else:
+    cprint(f'✝ ({rc})','red')
+  return rc
+
 def read_lines(fname):
   '''
   returns all «fname» lines
   '''
   with open(fname) as file:
     return file.readlines()
+
+def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, quiet=False):
+  scad_f  = os.path.normpath(scad_f)
+  if echo_f is None:
+    echo_f  = os.path.join(os.path.dirname(scad_f),os.path.splitext(os.path.basename(scad_f))[0]+'.echo')
+  cmd = ["openscad"] + parms
+  if hw:
+    cmd += ["--hardwarnings","-o",echo_f]
+  cmd += [scad_f]
+  if dry_run:
+    print(cmd)
+    return 0
+  else:
+    result = subprocess.run(cmd,stdout=subprocess.DEVNULL if quiet else None,stderr=subprocess.STDOUT if quiet else None)
+    debug("result: % s" %result)
+    if result.returncode==0 and hw:
+      lines = read_lines(echo_f)
+      for line in lines:
+        match   = re.findall('^WARNING:',line)
+        if match:
+          return -1
+      return 0
+    else:
+      return result.returncode
 
 SILENT  = 0
 ERROR   = 1
@@ -56,7 +87,6 @@ DEBUG   = 4
 
 verbosity = ERROR
 oscad     = ["openscad", "--hardwarnings"]
-# path      = os.path.realpath(__file__).dirname()
 path      = Path(__file__).parent.parent.absolute()
 lib       = path.joinpath('lib')
 

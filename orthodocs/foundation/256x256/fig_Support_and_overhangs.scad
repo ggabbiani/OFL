@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <OFL/library.scad>
+include <../../../lib/OFL/library.scad>
 
 $vpr = [90, 0, 0];
 $vpt = [6.99216, -1.5, 8.13173];

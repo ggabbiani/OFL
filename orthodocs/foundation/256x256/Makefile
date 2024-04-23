@@ -14,19 +14,18 @@ include $(FUNCTIONS)
 all: $(TARGETS)
 
 fig_2d_frame.png: $(TESTS)/foundation/square-test.scad
-	$(info $$CAMERA is [${CAMERA}])
-	@printf "\e[33m$(CURDIR)/$@\e[0m: "
-	@source $(TESTS)/foundation/square-test.conf && $(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ --p $(TESTS)/foundation/square-test.json --P $(@:.png=) $$CAMERA $$PROJECTION $<
+	$(call target-prologue)
+	@source $(TESTS)/foundation/square-test.conf && $(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ --p $(TESTS)/foundation/square-test.json --P $(@:.png=) $$CAMERA $$PROJECTION --ofl-script $<
 	@convert unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
-	@printf "\e[32mOK\e[0m\n"
+	$(call target-epilogue-success)
 
 %.png: %.scad
-	@printf "\e[33m$(CURDIR)/$@\e[0m: "
-	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ $<
+	$(call target-prologue)
+	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ --ofl-script $<
 	@convert unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
-	@printf "\e[32mOK\e[0m\n"
+	$(call target-epilogue-success)
 
 clean:
 	@rm -f *.png *.deps

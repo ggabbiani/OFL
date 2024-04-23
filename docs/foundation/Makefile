@@ -14,9 +14,9 @@ include $(FUNCTIONS)
 all: dependencies.svg 800x600/all
 
 dependencies.svg: $(FOUNDATION_SOURCES)
-	@printf "\e[33m$(CURDIR)/$@\e[0m: "
+	$(call target-prologue)
 	@$(DEPS) --foundation
-	@printf "\e[32mOK\e[0m\n"
+	$(call target-epilogue-success)
 
 800x600/%:
 	$(call make_sub,800x600)

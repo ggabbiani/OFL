@@ -23,10 +23,12 @@ sources: $(SOURCES)
 runs: clean-results $(RESULTS)
 
 clean: clean-results
+	$(call aggregate-prologue)
 	@for f in $(SOURCES) ; do rm -f $$f ; done
-	@echo "$(SOURCES): DELETED"
+	$(call aggregate-epilogue)
+#	@echo "$(SOURCES): DELETED"
 
 clean-results:
-	@printf "\e[33m$@ [tests/artifacts]\e[0m: "
+	$(call aggregate-prologue)
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
-	@printf "\e[32m✔\e[0m\n"
+	$(call aggregate-epilogue)
