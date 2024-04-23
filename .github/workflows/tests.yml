@@ -37,6 +37,7 @@ jobs:
       # install Ninja 'cause of the automatic build parallelism turned on with
       # the number of processors found in the hosting system
       run: |
+        cat /etc/os-releases
         sudo apt update
         sudo apt upgrade -y
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
