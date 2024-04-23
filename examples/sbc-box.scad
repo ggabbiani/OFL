@@ -124,7 +124,7 @@ module sbcBox(mode)
 
 difference() {
   sbcBox("add");
-  sbcBox("cut out");
+  #sbcBox("cut out");
 }
 if (VIEW_MODE!="PRINT ME!")
   sbcBox("assembly");
