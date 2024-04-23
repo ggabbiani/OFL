@@ -84,6 +84,7 @@ jobs:
     - name: Documentation build
       working-directory: ${{github.workspace}}
       run: |
+        python3 -m venv .venv
         . .venv/bin/activate
         make -s docker/fedora
 
