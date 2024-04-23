@@ -1,4 +1,4 @@
-#/bin/bash.sh
+#!/bin/bash
 
 set -e # exit immediately in case of error
 OFL="$(realpath $(dirname $0)/..)"
