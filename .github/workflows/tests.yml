@@ -41,7 +41,7 @@ jobs:
         sudo apt update
         sudo apt upgrade -y
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
-        sudo apt install -y apt-utils openscad git graphviz imagemagick make python3-venv wget which xvfb
+        sudo apt install -y apt-utils openscad git graphviz imagemagick make python3-venv wget xvfb
         wget ${{env.ODOX_URL}}/${{env.ODOX_PKG}}
         sudo apt install ./${{env.ODOX_PKG}}
 
