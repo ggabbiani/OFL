@@ -740,7 +740,7 @@ module fl_pcb(
         } else if ($comp_engine==FL_HS_NS)    // HEAT SINK
           fl_heatsink(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
         else if ($comp_engine==FL_GENERIC_NS) // GENERIC VITAMIN
-          fl_generic_vitamin(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+          fl_generic_vitamin(verbs(),$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
         else
           assert(false,str("Unknown engine ",$comp_engine));
     }
@@ -789,7 +789,7 @@ module fl_pcb(
           // TODO: implement a rationale for heat-sinks cut-out operations
           fl_heatsink(FL_CUTOUT,type=$comp_type,cut_direction=cut_direction,cut_thick=cut_thick-$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_GENERIC_NS)
-          fl_generic_vitamin(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_generic_vitamin(FL_CUTOUT,$comp_type,thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else
           assert(false,str("Unknown engine ",$comp_engine));
       }
