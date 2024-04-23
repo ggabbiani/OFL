@@ -61,7 +61,7 @@ jobs:
 
   # docker based tests (will be replaced by native-tests)
   fedora-tests:
-    name: Fedora
+    name: Fedora (Docker)
     runs-on: ubuntu-latest
     steps:
     - name: Project checkout
@@ -71,6 +71,15 @@ jobs:
         # Number of commits to fetch. 0 indicates all history for all branches
         # and tags (default 1).
         fetch-depth: '0'
+
+    - name: Initial warm-up
+      # install Ninja 'cause of the automatic build parallelism turned on with
+      # the number of processors found in the hosting system
+      run: |
+        sudo apt update
+        sudo apt upgrade -y
+        # TODO: replace deps.sh with a python version based on pydot (installed via pip)
+        sudo apt install -y apt-utils make python3-venv
 
     - name: Documentation build
       working-directory: ${{github.workspace}}
