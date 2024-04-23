@@ -1,4 +1,5 @@
-FROM ubuntu:23.10
+# aligned with github runner version at 23/4/2024
+FROM ubuntu:22.04
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 ARG ODOX_VERSION=1.2.1
 ARG DRAWIO_VERSION=24.2.5
@@ -14,7 +15,6 @@ RUN apt update \
         make \
         python3-venv \
         wget \
-        which \
         xvfb \
     && apt clean
 # orthodocs must be downloaded
