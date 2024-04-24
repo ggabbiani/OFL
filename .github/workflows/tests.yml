@@ -74,7 +74,7 @@ jobs:
         # and tags (default 1).
         fetch-depth: '0'
 
-    - name: warming-up
+    - name: Warming-up
       run: |
         sudo apt update
         sudo apt upgrade -y
@@ -98,6 +98,8 @@ jobs:
   fedora-docker:
     name: Fedora (Docker)
     runs-on: ubuntu-latest
+    env:
+      IMAGE: ggabbiani/ofl:fedora-39
     steps:
     - name: Project checkout
       # Checks-out repository under $GITHUB_WORKSPACE
@@ -107,7 +109,7 @@ jobs:
         # and tags (default 1).
         fetch-depth: '0'
 
-    - name: Initial warm-up
+    - name: Warming-up
       # install Ninja 'cause of the automatic build parallelism turned on with
       # the number of processors found in the hosting system
       run: |
@@ -117,14 +119,7 @@ jobs:
         sudo apt install -y apt-utils make python3-venv
 
     - name: Documentation
-      working-directory: ${{github.workspace}}
-      run: |
-        python3 -m venv .venv
-        . .venv/bin/activate
-        make -s docker/fedora
+      run: docker run -v ${{github.workspace}}:/import -it --rm ${{IMAGE}}
 
     - name: Tests
-      working-directory: ${{github.workspace}}
-      run: |
-        . .venv/bin/activate
-        make -s docker/fedora-tests
+      run: docker run -v ${{github.workspace}}:/import -it --rm ${{IMAGE}} tests/runs
