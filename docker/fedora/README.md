@@ -8,7 +8,12 @@ for OFL under Fedora.
     $ cd <this directory>
     $ podman build -t ofl:fedora .
 
-## Execution
+## Project setup and documentation generation
 
     $ cd <OFL root directory>
-    $ podman run -v ./:/import:Z  -it ofl:fedora
+    $ podman run -v ./:/import:Z  -it --rm ofl:fedora
+
+## Tests execution
+
+    $ cd <OFL root directory>
+    $ podman run -v ./:/import:Z  -it --rm ofl:fedora tests/runs
