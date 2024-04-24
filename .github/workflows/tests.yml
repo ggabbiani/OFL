@@ -109,15 +109,6 @@ jobs:
         # and tags (default 1).
         fetch-depth: '0'
 
-    - name: Warming-up
-      # install Ninja 'cause of the automatic build parallelism turned on with
-      # the number of processors found in the hosting system
-      run: |
-        sudo apt update
-        sudo apt upgrade -y
-        # TODO: replace deps.sh with a python version based on pydot (installed via pip)
-        sudo apt install -y apt-utils make python3-venv
-
     - name: Documentation
       run: docker run -v ${{github.workspace}}:/import -it --rm ${{env.IMAGE}}
 
