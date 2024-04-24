@@ -18,8 +18,9 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  ubuntu-test:
-    name: Ubuntu
+  ubuntu-native:
+    if: false
+    name: Ubuntu (native)
     runs-on: ubuntu-latest
     env:
       ODOX_PKG: orthodocs_1.2.1_amd64.deb
@@ -60,8 +61,41 @@ jobs:
         . .venv/bin/activate
         make -s tests/runs
 
-  # docker based tests (will be replaced by native-tests)
-  fedora-tests:
+  # Project build and run tests on Ubuntu based Docker image
+  ubuntu-docker:
+    name: Ubuntu (Docker)
+    runs-on: ubuntu-latest
+    steps:
+    - name: Project checkout
+      # Checks-out repository under $GITHUB_WORKSPACE
+      uses: actions/checkout@v3
+      with:
+        # Number of commits to fetch. 0 indicates all history for all branches
+        # and tags (default 1).
+        fetch-depth: '0'
+
+    - name: warming-up
+      run: |
+        sudo apt update
+        sudo apt upgrade -y
+        # TODO: replace deps.sh with a python version based on pydot (installed via pip)
+        sudo apt install -y apt-utils make python3-venv
+
+    - name: Documentation
+      working-directory: ${{github.workspace}}
+      run: |
+        python3 -m venv .venv
+        . .venv/bin/activate
+        make -s docker/ubuntu
+
+    - name: Tests
+      working-directory: ${{github.workspace}}
+      run: |
+        . .venv/bin/activate
+        make -s docker/ubuntu-tests
+
+  # Project build and run tests on Fedora based Docker image
+  fedora-docker:
     name: Fedora (Docker)
     runs-on: ubuntu-latest
     steps:
@@ -82,14 +116,14 @@ jobs:
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
         sudo apt install -y apt-utils make python3-venv
 
-    - name: Documentation build
+    - name: Documentation
       working-directory: ${{github.workspace}}
       run: |
         python3 -m venv .venv
         . .venv/bin/activate
         make -s docker/fedora
 
-    - name: Test runs
+    - name: Tests
       working-directory: ${{github.workspace}}
       run: |
         . .venv/bin/activate
