@@ -6,8 +6,6 @@ POD_BUILD		= podman build
 FEDORA_BUILD	= $(POD_BUILD) -t ofl:fedora
 UBUNTU_BUILD	= $(POD_BUILD) -t ofl:ubuntu
 
-# .PHONY: fedora fedora-build
-
 clean:
 	$(call aggregate-prologue)
 	podman rmi --ignore ofl:fedora ofl:ubuntu
