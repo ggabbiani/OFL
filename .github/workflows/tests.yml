@@ -119,7 +119,7 @@ jobs:
         sudo apt install -y apt-utils make python3-venv
 
     - name: Documentation
-      run: docker run -v ${{github.workspace}}:/import -it --rm ${{IMAGE}}
+      run: docker run -v ${{github.workspace}}:/import -it --rm ${{env.IMAGE}}
 
     - name: Tests
-      run: docker run -v ${{github.workspace}}:/import -it --rm ${{IMAGE}} tests/runs
+      run: docker run -v ${{github.workspace}}:/import -it --rm ${{env.IMAGE}} tests/runs
