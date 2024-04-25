@@ -1,4 +1,4 @@
-POD_RUN			= docker run -v $(PRJ_ROOT):/import:Z -it --rm
+POD_RUN			= docker run -v $(PRJ_ROOT):/import:Z --rm
 FEDORA_MAKE		= $(POD_RUN) ofl:fedora
 UBUNTU_MAKE		= $(POD_RUN) ofl:ubuntu
 
