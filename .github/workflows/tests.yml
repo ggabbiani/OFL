@@ -25,8 +25,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      VERSION: 39
-      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-${VERSION}
+      LOCAL_IMAGE: ofl:fedora
+      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
 
     steps:
 
@@ -60,8 +60,8 @@ jobs:
           # local image tests
           make -s docker/fedora-tests
           # local image push on DockerHub
-          docker tag ofl:fedora ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
+          docker tag ${{env.LOCAL_IMAGE}} ${{ env.DOCKER_IMAGE }}
+          docker push ${{ env.DOCKER_IMAGE }}
 
   ubuntu-native:
     if: false
