@@ -15,7 +15,7 @@ on:
 
 env:
   ODOX_URL:   https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
-  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
+  # DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,7 +26,7 @@ jobs:
 
     env:
       VERSION: 39
-      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-$VERSION
+      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-${VERSION}
 
     steps:
 
