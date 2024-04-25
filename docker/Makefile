@@ -1,6 +1,5 @@
-$(info tty: $(shell tty))
-$(info risultato: $(patsubst not a tty,,$(shell tty)))
-
+# DOCKER_RUN gets '-it' options only if the current bash has tty attached to
+# stdin
 DOCKER_RUN		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shell tty)),-it) --rm
 FEDORA_MAKE		= $(DOCKER_RUN) ofl:fedora
 UBUNTU_MAKE		= $(DOCKER_RUN) ofl:ubuntu
@@ -8,8 +7,6 @@ UBUNTU_MAKE		= $(DOCKER_RUN) ofl:ubuntu
 DOCKER_BUILD	= docker build
 FEDORA_BUILD	= $(DOCKER_BUILD) -t ofl:fedora
 UBUNTU_BUILD	= $(DOCKER_BUILD) -t ofl:ubuntu
-
-$(info DOCKER_RUN: $(DOCKER_RUN))
 
 clean:
 	$(call aggregate-prologue)
