@@ -26,7 +26,7 @@ jobs:
 
     env:
       VERSION: 39
-      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-${{ VERSION }}
+      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-$VERSION
 
     steps:
 
