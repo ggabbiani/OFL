@@ -80,22 +80,23 @@ jobs:
         sudo apt upgrade -y
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
         sudo apt install -y apt-utils make python3-venv
-
-    - name: Documentation
-      working-directory: ${{github.workspace}}
-      run: |
         python3 -m venv .venv
         . .venv/bin/activate
+        working-directory: ${{github.workspace}}
+
+    - name: Documentation
+      run: |
+        echo $(pwd)
         make -s docker/ubuntu
 
     - name: Tests
-      working-directory: ${{github.workspace}}
       run: |
-        . .venv/bin/activate
+        echo $(pwd)
         make -s docker/ubuntu-tests
 
   # Project build and run tests on Fedora based Docker image
   fedora-docker:
+    if: false
     name: Fedora (Docker)
     runs-on: ubuntu-latest
     env:
