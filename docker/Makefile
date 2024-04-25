@@ -1,8 +1,8 @@
-POD_RUN			= podman run -v $(PRJ_ROOT):/import:Z -it --rm
+POD_RUN			= docker run -v $(PRJ_ROOT):/import:Z -it --rm
 FEDORA_MAKE		= $(POD_RUN) ofl:fedora
 UBUNTU_MAKE		= $(POD_RUN) ofl:ubuntu
 
-POD_BUILD		= podman build
+POD_BUILD		= docker build
 FEDORA_BUILD	= $(POD_BUILD) -t ofl:fedora
 UBUNTU_BUILD	= $(POD_BUILD) -t ofl:ubuntu
 

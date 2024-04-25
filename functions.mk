@@ -22,7 +22,7 @@ printf "$(COLOR_YELLOW)$(relative-dir)/$@$(COLOR_RESET): "
 endef
 
 define target-epilogue
-printf "$(COLOR_GREEN)$(if $(1),$(1))$(COLOR_RESET)\n"
+printf "$(if $(1),$(COLOR_GREEN)$(1)$(COLOR_RESET))\n"
 endef
 
 define target-epilogue-success

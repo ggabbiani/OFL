@@ -81,14 +81,10 @@ jobs:
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
         python3 -m venv .venv
 
-    - name: Documentation build
+    - name: Documentation and tests
       run: |
         . .venv/bin/activate
         make -s docker/ubuntu
-
-    - name: Tests run
-      run: |
-        . .venv/bin/activate
         make -s docker/ubuntu-tests
 
   # Project build and run tests on Fedora based Docker image
