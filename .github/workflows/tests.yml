@@ -75,6 +75,7 @@ jobs:
         fetch-depth: '0'
 
     - name: Warming-up
+      working-directory: ${{github.workspace}}
       run: |
         sudo apt update
         sudo apt upgrade -y
@@ -82,7 +83,6 @@ jobs:
         sudo apt install -y apt-utils make python3-venv
         python3 -m venv .venv
         . .venv/bin/activate
-        working-directory: ${{github.workspace}}
 
     - name: Documentation
       run: |
