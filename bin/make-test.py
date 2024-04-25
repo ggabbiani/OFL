@@ -120,8 +120,8 @@ for i, cmd in enumerate(cmds):
   o_file  = echo(o_dir,o_base)
   rc      = ofl.openscad(scad,parms=cmd,echo_f=o_file,hw=True,dry_run=args.dry_run)
   if rc==0:
-    print(colored(case if case else '✔','green'),end="")
+    cprint(f'{case if case else "✔"} ','green',end="")
   else:
-    print(colored(case if case else '✝','red'))
+    cprint(f'{case if case else "✝"} ({rc})','red')
     cat(echo(o_dir,o_base))
     exit(rc)
