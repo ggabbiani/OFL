@@ -18,6 +18,15 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  docker-login:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Docker Hub Login
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
   ubuntu-native:
     if: false
     name: Ubuntu (native)
