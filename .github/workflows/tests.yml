@@ -15,12 +15,21 @@ on:
 
 env:
   ODOX_URL:   https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  docker-login:
+
+  fedora:
+    name: Fedora 39
     runs-on: ubuntu-latest
+
+    env:
+      VERSION: 39
+      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-${{ VERSION }}
+
     steps:
+
       - name: Project checkout
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can
         # access it
@@ -44,9 +53,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Docker build and push
+      - name: Docker image build, test and push
         run: |
-          make -s docker/fedora-build
+          # local image build and project documentation generation
+          make -s docker/fedora
+          # local image tests
+          make -s docker/fedora-tests
+          # local image push on DockerHub
           docker tag ofl:fedora ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
 
