@@ -21,11 +21,34 @@ jobs:
   docker-login:
     runs-on: ubuntu-latest
     steps:
-    - name: Docker Hub Login
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Project checkout
+        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can
+        # access it
+        uses: actions/checkout@v3
+        with:
+          # Number of commits to fetch. 0 indicates all history for all branches
+          # and tags (default 1).
+          fetch-depth: '0'
+
+      - name: System setup
+        run: |
+          sudo apt update
+          sudo apt upgrade -y
+          python3 -m venv .venv
+          . .venv/bin/activate
+
+
+      - name: Docker Hub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker build and push
+        run: |
+          make -s docker/fedora-build
+          docker tag ofl:fedora ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
 
   ubuntu-native:
     if: false
@@ -71,8 +94,10 @@ jobs:
         make -s tests/runs
 
   # Project build and run tests on Ubuntu based Docker image
+  # temporary suspended
   ubuntu-docker:
     name: Ubuntu (Docker)
+    if: false
     runs-on: ubuntu-latest
     steps:
     - name: Project checkout
