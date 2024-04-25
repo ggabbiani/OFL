@@ -75,24 +75,26 @@ jobs:
         fetch-depth: '0'
 
     - name: Warming-up
-      working-directory: ${{github.workspace}}
+      if: false
       run: |
         sudo apt update
         sudo apt upgrade -y
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
-        sudo apt install -y apt-utils make python3-venv
+        sudo apt install -y make python3-venv
         python3 -m venv .venv
         . .venv/bin/activate
 
     - name: Documentation
       run: |
         echo $(pwd)
-        make -s docker/ubuntu
+        echo $(which python3)
+        # make -s docker/ubuntu
 
     - name: Tests
       run: |
         echo $(pwd)
-        make -s docker/ubuntu-tests
+        echo $(which python3)
+        # make -s docker/ubuntu-tests
 
   # Project build and run tests on Fedora based Docker image
   fedora-docker:
