@@ -75,10 +75,9 @@ jobs:
         fetch-depth: '0'
 
     - name: Warming-up
-      if: false
       run: |
         sudo apt update
-        sudo apt upgrade -y
+        # sudo apt upgrade -y
         # TODO: replace deps.sh with a python version based on pydot (installed via pip)
         sudo apt install -y make python3-venv
         python3 -m venv .venv
