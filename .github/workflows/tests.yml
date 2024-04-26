@@ -15,7 +15,6 @@ on:
 
 env:
   ODOX_URL:   https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
-  # DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -25,20 +24,20 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      LOCAL_IMAGE: ofl:fedora
-      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora-39
+      IMAGE_NAME: ofl:fedora
+      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}
 
     steps:
 
+      # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Project checkout
-        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can
-        # access it
         uses: actions/checkout@v3
         with:
           # Number of commits to fetch. 0 indicates all history for all branches
           # and tags (default 1).
           fetch-depth: '0'
 
+      # System update and pre-requisite install
       - name: System setup
         run: |
           sudo apt update
@@ -60,8 +59,8 @@ jobs:
           # local image tests
           make -s docker/fedora-tests
           # local image push on DockerHub
-          docker tag ${{env.LOCAL_IMAGE}} ${{ env.DOCKER_IMAGE }}
-          docker push ${{ env.DOCKER_IMAGE }}
+          docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
+          docker push ${DOCKER_IMAGE}
 
   ubuntu-native:
     if: false
