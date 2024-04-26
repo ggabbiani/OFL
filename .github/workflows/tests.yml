@@ -45,20 +45,21 @@ jobs:
           . .venv/bin/activate
 
       - name: Docker changes
+        id: docker
         run: |
           set +e
           git diff --name-only HEAD HEAD~1 | grep -e '^docker'
-          NO_DOCKER_CHANGES=$?
+          echo "::set-output name=has_changes::$?"
 
       - name: Docker Hub Login
-        if: $NO_DOCKER_CHANGES == '0'
+        if: contains(steps.docker.outputs.has_changes, '1')
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker image build, test and push
-        if: $NO_DOCKER_CHANGES == '0'
+        if: contains(steps.docker.outputs.has_changes, '1')
         run: |
           # local image build and project documentation generation
           make -s docker/fedora
