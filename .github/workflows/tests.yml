@@ -49,17 +49,18 @@ jobs:
         run: |
           set +e
           git diff --name-only HEAD HEAD~1 | grep -e '^docker'
-          echo "has_changes=$?" >> "$GITHUB_ENV"
+          echo "has_changes=$?" >> "$GITHUB_OUTPUT"
+#          echo "has_changes=$?" >> "$GITHUB_ENV"
 
       - name: Docker Hub Login
-        if: contains(steps.docker.outputs.has_changes, '0')
+        if: steps.docker.outputs.has_changes=='0'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker image build, test and push
-        if: contains(steps.docker.outputs.has_changes, '0')
+        if: steps.docker.outputs.has_changes=='0'
         run: |
           # local image build and project documentation generation
           make -s docker/fedora
