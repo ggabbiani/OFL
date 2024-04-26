@@ -1,14 +1,19 @@
 # README
 
-This directory contains the Dockerfile for building an OpenSCAD test environment
-for OFL under Ubuntu.
+This directory contains the Dockerfile for building an OFL test environment on
+Ubuntu.
+
+## Build
+
+    $ cd <this directory>
+    $ docker build -t ofl:ubuntu .
 
 ## Project setup and documentation generation
 
     $ cd <OFL root directory>
-    $ podman run -v ./:/import:Z  -it --rm ofl:ubuntu
+    $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu
 
 ## Tests execution
 
     $ cd <OFL root directory>
-    $ podman run -v ./:/import:Z  -it --rm ofl:ubuntu tests/runs
+    $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu tests/runs
