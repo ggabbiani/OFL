@@ -53,3 +53,21 @@ endef
 define relative-dir
 $(subst $(PRJ_ROOT)/,,$(CURDIR))
 endef
+
+define _win_
+$(findstring Windows_NT,$(OS))
+endef
+
+define _linux_
+$(findstring Linux,$(shell uname -s))
+endef
+
+define _mac_
+$(findstring Darwin,$(shell uname -s))
+endef
+
+# returns 'Windows_NT','Linux' or 'Darwin' according to the underlying
+# operating system.
+define os
+$(if $(call _win_),Windows_NT,$(if $(call _linux_),Linux,$(if $(call _mac_),Darwin)))
+endef
