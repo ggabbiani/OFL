@@ -53,14 +53,14 @@ jobs:
 #          echo "has_changes=$?" >> "$GITHUB_ENV"
 
       - name: Docker Hub Login
-        if: steps.docker.outputs.has_changes=='0'
+        if: steps.docker.outputs.has_changes=='1'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker image build, test and push
-        if: steps.docker.outputs.has_changes=='0'
+        if: steps.docker.outputs.has_changes=='1'
         run: |
           # local image build and project documentation generation
           make -s docker/fedora
