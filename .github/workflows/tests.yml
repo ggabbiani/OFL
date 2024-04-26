@@ -24,7 +24,7 @@ jobs:
 
     env:
       IMAGE_NAME: ofl:fedora
-      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}
+      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:fedora
 
     steps:
 
@@ -44,23 +44,27 @@ jobs:
           python3 -m venv .venv
           . .venv/bin/activate
 
+      # Check if any docker/* file changed in the last commit.
+      # See also
+      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+      # and
+      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
       - name: Docker changes
         id: docker
         run: |
           set +e
-          git diff --name-only HEAD HEAD~1 | grep -e '^docker'
-          echo "has_changes=$?" >> "$GITHUB_OUTPUT"
-#          echo "has_changes=$?" >> "$GITHUB_ENV"
+          git diff --name-only HEAD HEAD~1 | grep -e '^docker/'
+          echo "$?" | sed -e 's/0/yes/' -e 's/1/no/' | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
 
       - name: Docker Hub Login
-        if: steps.docker.outputs.has_changes=='1'
+        if: steps.docker.outputs.changed=='yes'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker image build, test and push
-        if: steps.docker.outputs.has_changes=='1'
+        if: steps.docker.outputs.changed=='yes'
         run: |
           # local image build and project documentation generation
           make -s docker/fedora
@@ -69,6 +73,19 @@ jobs:
           # local image push on DockerHub
           docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
           docker push ${DOCKER_IMAGE}
+
+      - name: Docker image pull, test and push
+        if: steps.docker.outputs.changed=='no'
+        run: |
+          docker pull ${DOCKER_IMAGE}
+          # local image build and project documentation generation
+          make -s docker/fedora
+          # local image tests
+          make -s docker/fedora-tests
+          # local image push on DockerHub
+          docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
+          docker push ${DOCKER_IMAGE}
+
 
   ubuntu-native:
     if: false
