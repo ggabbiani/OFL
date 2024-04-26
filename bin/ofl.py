@@ -9,7 +9,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-import argparse, os, re, subprocess, sys
+import argparse, os, platform, re, subprocess, sys
 
 from pathlib import Path
 from termcolor import colored, cprint
@@ -59,7 +59,7 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, quiet=False
   scad_f  = os.path.normpath(scad_f)
   if echo_f is None:
     echo_f  = os.path.join(os.path.dirname(scad_f),os.path.splitext(os.path.basename(scad_f))[0]+'.echo')
-  cmd = ["openscad"] + parms
+  cmd = [oscad_cmd] + parms
   if hw:
     cmd += ["--hardwarnings","-o",echo_f]
   cmd += [scad_f]
@@ -85,8 +85,13 @@ WARN    = 2
 INFO    = 3
 DEBUG   = 4
 
+oscad_cmd = "openscad" if platform.system()=='Linux' else "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" if platform.system()=='Darwin' else 'Badula'
+
 verbosity = ERROR
-oscad     = ["openscad", "--hardwarnings"]
+oscad     = [
+  oscad_cmd,
+  "--hardwarnings"
+]
 path      = Path(__file__).parent.parent.absolute()
 lib       = path.joinpath('lib')
 
