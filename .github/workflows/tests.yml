@@ -16,7 +16,6 @@ on:
 env:
   ODOX_URL:   https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
   fedora:
@@ -29,7 +28,7 @@ jobs:
 
     steps:
 
-      # Checks-out your repository under $GITHUB_WORKSPACE
+      # Checks-out repo on $GITHUB_WORKSPACE
       - name: Project checkout
         uses: actions/checkout@v3
         with:
@@ -45,14 +44,21 @@ jobs:
           python3 -m venv .venv
           . .venv/bin/activate
 
+      - name: Docker changes
+        run: |
+          set +e
+          git diff --name-only HEAD HEAD~1 | grep -e '^docker'
+          NO_DOCKER_CHANGES=$?
 
       - name: Docker Hub Login
+        if: $NO_DOCKER_CHANGES == '0'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker image build, test and push
+        if: $NO_DOCKER_CHANGES == '0'
         run: |
           # local image build and project documentation generation
           make -s docker/fedora
