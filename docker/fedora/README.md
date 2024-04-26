@@ -1,7 +1,7 @@
 # README
 
-This directory contains the Dockerfile for building an OpenSCAD test environment
-for OFL under Fedora.
+This directory contains the Dockerfile for building an OFL test environment on
+Fedora.
 
 ## Build
 

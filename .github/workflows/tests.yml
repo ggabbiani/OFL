@@ -53,7 +53,7 @@ jobs:
         id: docker
         run: |
           set +e
-          (git diff --name-only HEAD HEAD~1| grep -e '^docker/fedora/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
+          (git diff --name-only HEAD HEAD~1 | grep -e '^docker/fedora/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
 
       - name: Docker Hub Login
         if: steps.docker.outputs.changed=='yes'
@@ -65,7 +65,6 @@ jobs:
       - name: Docker image build, test and push
         if: steps.docker.outputs.changed=='yes'
         run: |
-          # local image build and project documentation generation
           make -s docker/fedora
           docker run -v .:/import:Z --rm ${IMAGE_NAME}
           docker run -v .:/import:Z --rm ${IMAGE_NAME} tests/runs
