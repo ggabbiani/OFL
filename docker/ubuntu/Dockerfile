@@ -7,7 +7,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 ARG ODOX_VERSION=1.2.1
 ###############################################################################
@@ -22,6 +22,7 @@ RUN apt update \
         make \
         python3-venv \
         wget \
+        which \
         xvfb \
     && apt clean
 # orthodocs must be downloaded

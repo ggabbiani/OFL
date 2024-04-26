@@ -19,7 +19,7 @@ env:
 jobs:
 
   fedora:
-    name: Fedora 39
+    name: Fedora
     runs-on: ubuntu-latest
 
     env:
@@ -41,8 +41,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt upgrade -y
-          python3 -m venv .venv
-          . .venv/bin/activate
 
       # Check if any docker/fedora/* file changed in the last commit.
       # See also
@@ -54,6 +52,7 @@ jobs:
         run: |
           set +e
           (git diff --name-only HEAD HEAD~1 | grep -e '^docker/fedora/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
 
       - name: Docker Hub Login
         if: steps.docker.outputs.changed=='yes'
@@ -77,96 +76,60 @@ jobs:
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE}
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE} tests/runs
 
-
-  ubuntu-native:
-    if: false
-    name: Ubuntu (native)
+  ubuntu:
+    name: Ubuntu
     runs-on: ubuntu-latest
+
     env:
-      ODOX_PKG: orthodocs_1.2.1_amd64.deb
+      IMAGE_NAME: ofl:ubuntu
+      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:ubuntu
+
     steps:
-    - name: Project checkout
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can
-      # access it
-      uses: actions/checkout@v3
-      with:
-        # Number of commits to fetch. 0 indicates all history for all branches
-        # and tags (default 1).
-        fetch-depth: '0'
 
-    - name: pre-requisites
-      # install Ninja 'cause of the automatic build parallelism turned on with
-      # the number of processors found in the hosting system
-      run: |
-        cat /etc/os-release
-        sudo apt update
-        sudo apt upgrade -y
-        # TODO: replace deps.sh with a python version based on pydot (installed via pip)
-        sudo apt install -y apt-utils openscad git graphviz imagemagick make python3-venv wget xvfb
-        wget ${{env.ODOX_URL}}/${{env.ODOX_PKG}}
-        sudo apt install ./${{env.ODOX_PKG}}
+      # Checks-out repo on $GITHUB_WORKSPACE
+      - name: Project checkout
+        uses: actions/checkout@v3
+        with:
+          # Number of commits to fetch. 0 indicates all history for all branches
+          # and tags (default 1).
+          fetch-depth: '0'
 
-    - name: Documentation build
-      working-directory: ${{github.workspace}}
-      run: |
-        python -m venv .venv
-        . .venv/bin/activate
-        pip install --upgrade pip
-        pip install -r pyreqs.txt
-        make -s
+      # System update and pre-requisite install
+      - name: System setup
+        run: |
+          sudo apt update
+          sudo apt upgrade -y
 
-    - name: Test runs
-      working-directory: ${{github.workspace}}
-      run: |
-        . .venv/bin/activate
-        make -s tests/runs
+      # Check if any docker/ubuntu/* file changed in the last commit.
+      # See also
+      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+      # and
+      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
+      - name: Docker changes
+        id: docker
+        run: |
+          set +e
+          (git diff --name-only HEAD HEAD~1 | grep -e '^docker/ubuntu/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
 
-  # Project build and run tests on Ubuntu based Docker image
-  # temporary suspended
-  ubuntu-docker:
-    name: Ubuntu (Docker)
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-    - name: Project checkout
-      # Checks-out repository under $GITHUB_WORKSPACE
-      uses: actions/checkout@v3
-      with:
-        # Number of commits to fetch. 0 indicates all history for all branches
-        # and tags (default 1).
-        fetch-depth: '0'
+      - name: Docker Hub Login
+        if: steps.docker.outputs.changed=='yes'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Warming-up
-      run: |
-        sudo apt update
-        sudo apt upgrade -y
-        # TODO: replace deps.sh with a python version based on pydot (installed via pip)
-        python3 -m venv .venv
+      - name: Docker image build, test and push
+        if: steps.docker.outputs.changed=='yes'
+        run: |
+          make -s docker/ubuntu
+          docker run -v .:/import:Z --rm ${IMAGE_NAME}
+          docker run -v .:/import:Z --rm ${IMAGE_NAME} tests/runs
+          docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
+          docker push ${DOCKER_IMAGE}
 
-    - name: Documentation & tests
-      run: |
-        . .venv/bin/activate
-        make -s docker/ubuntu
-        make -s docker/ubuntu-tests
-
-        # Project build and run tests on Fedora based Docker image
-  fedora-docker:
-    if: false
-    name: Fedora (Docker)
-    runs-on: ubuntu-latest
-    env:
-      IMAGE: ggabbiani/ofl:fedora-39
-    steps:
-    - name: Project checkout
-      # Checks-out repository under $GITHUB_WORKSPACE
-      uses: actions/checkout@v3
-      with:
-        # Number of commits to fetch. 0 indicates all history for all branches
-        # and tags (default 1).
-        fetch-depth: '0'
-
-    - name: Documentation
-      run: docker run -v ${{github.workspace}}:/import -it --rm ${{env.IMAGE}}
-
-    - name: Tests
-      run: docker run -v ${{github.workspace}}:/import -it --rm ${{env.IMAGE}} tests/runs
+      - name: Docker image pull, test and push
+        if: steps.docker.outputs.changed=='no'
+        run: |
+          docker run -v .:/import:Z --rm ${DOCKER_IMAGE}
+          docker run -v .:/import:Z --rm ${DOCKER_IMAGE} tests/runs
