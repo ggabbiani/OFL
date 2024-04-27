@@ -1007,7 +1007,7 @@ function fl_3d_AxisVList(
  * **NOTE:** the negative ('-') or positive ('+') sign must always be set.
  */
 function fl_3d_AxisList(
-  //! semi-axis list (es.["-x","±Z"])
+  //! semi-axis literals list (es.["-x","±Z"])
   axes
 ) = let(
     //            0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17
