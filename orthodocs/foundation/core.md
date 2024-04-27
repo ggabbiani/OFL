@@ -1119,6 +1119,27 @@ TODO: make a case insensitive option
 
 ---
 
+### function fl_list_AND
+
+__Syntax:__
+
+```text
+fl_list_AND(a,b,index_only=false)
+```
+
+Logic AND between two lists.
+
+Example:
+
+    a         = [   +X,+Y,-Y,-Z],
+    b         = [-X      ,-Y,-Z],
+    result    = fl_list_AND(a,b),
+    expected  = [-Y,-Z]
+
+
+
+---
+
 ### function fl_list_filter
 
 __Syntax:__

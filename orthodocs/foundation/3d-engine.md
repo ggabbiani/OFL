@@ -50,7 +50,7 @@ is equivalent to:
 __Parameters:__
 
 __axes__  
-semi-axis list (es.["-x","±Z"])
+semi-axis literals list (es.["-x","±Z"])
 
 
 ---

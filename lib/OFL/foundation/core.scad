@@ -1053,6 +1053,19 @@ function fl_list_sort(vec,cmp=function(e1,e2) (e1-e2)) =
     above = [for (e=vec) if (cmp(e,pivot)>0)  e]
   ) concat(fl_list_sort(below,cmp), equal, fl_list_sort(above,cmp));
 
+/*!
+ * Logic AND between two lists.
+ *
+ * Example:
+ *
+ *     a         = [   +X,+Y,-Y,-Z],
+ *     b         = [-X      ,-Y,-Z],
+ *     result    = fl_list_AND(a,b),
+ *     expected  = [-Y,-Z]
+ *
+ */
+function fl_list_AND(a,b,index_only=false) = [for(i=search(a,b)) if (i!=[]) index_only ? i : b[i]];
+
 //**** dictionary *************************************************************
 
 //! return a list with the names of the objects present in «dictionary»

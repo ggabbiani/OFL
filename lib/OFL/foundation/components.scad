@@ -38,31 +38,77 @@ FL_COMP_OCTANT = str(FL_COMP_NS,"/octant");
  * Component constructor
  */
 function fl_Component(
+  //! engine to be triggered during component rendering
   engine,
   position,
+  //! new coordinate system in [[direction], rotation] format
   direction,
+  /*!
+   * List of floating semi-axes in the host's reference system. Defines the
+   * cutout directions that the host object would like the component to
+   * handle.
+   */
+  cutdirs,
   type,
+  /*!
+   * list of optional component properties:
+   *
+   * - FL_COMP_SUB - see variable FL_COMP_SUB
+   * - FL_COMP_DRIFT - see variable FL_COMP_DRIFT
+   * - FL_COMP_COLOR - see variable FL_COMP_COLOR
+   * - FL_COMP_OCTANT - see variable FL_COMP_OCTANT
+   */
   parameters
+) = let(
+  // transform component directions into host coordinate system
+  comp_dirs       = fl_cutout(type),
+  D               = fl_direction(direction),
+  // host-coordinate-system component direction
+  host_dirs       = [for(d=comp_dirs) fl_transform(D,d)],
+  // the following indexes are valid for host_dirs and comp_dirs
+  indexes         = fl_list_AND(cutdirs,host_dirs,true),
+  // component-coordinate-system available directions
+  comp_available  = [for (i=indexes) comp_dirs[i]],
+  // host-coordinate-system available directions
+  host_available  = [for (i=indexes) host_dirs[i]]
+) [engine,position,comp_available,direction,type,parameters,host_available];
+
+/*!
+ * Returns the floating semi-axes list in the component's reference system,
+ * defining all the cutout directions a component is called to manage.
+ * Concretely filters the requested __host__ cut directions to a subset of the
+ * __component__ configured ones
+ */
+function fl_comp_actualCuts(
+  /*!
+   * floating semi-axes list in host's reference system
+   */
+  directions
 ) =
-assert(!fl_debug(),fl_debug())
-[engine,position,undef,direction,type,parameters];
+  directions ?
+    [for (i=fl_list_AND(directions,$host_cutdirs,true)) $comp_cutdirs[i]] :
+    undef;
 
 /*!
  * Component context:
  *
- *  - $comp_engine    : engine to be triggered for component rendering
+ *  - $comp_engine    : engine to be triggered during component rendering
  *  - $comp_position  : component position
  *  - $comp_direction : new coordinate system in [[direction], rotation] format
  *  - $comp_director  : new coordinate system direction vector
  *  - $comp_rotation  : new coordinate system rotation value around new direction
  *  - $comp_type
- *  - $comp_subtract  : the tolerance to be used during component FL_FOOTPRINT difference from parent shape
+ *  - $comp_subtract  : the tolerance to be used during component FL_FOOTPRINT
+ *    difference from parent shape
  *  - $comp_drift     : additional delta during component FL_CUTOUT
  *  - $comp_color
  *  - $comp_octant
- *  - $comp_cutdir    : cutout direction for the component in the __hosting__ coordinate system
- *                      TODO: remove this variable since **OBSOLETE**
- *
+ *  - $host_cutdirs   : List of floating semi-axes in the host's reference
+ *    system. Defines all the cutout directions a component should be able to
+ *    manage. This value is needed by the host object layout engine.
+ *  - $comp_cutdirs   : List of floating semi-axes in the component's reference
+ *    system. Defines all the cutout directions a component should be able to
+ *    manage.
  */
 module fl_comp_Context(
   //! component definition:
@@ -72,7 +118,8 @@ module fl_comp_Context(
 
   $comp_engine    = assert(is_string(component[0])) component[0];
   $comp_position  = assert(fl_tt_is3d(component[1]),component[1]) component[1];
-  // $comp_cutdir    = assert(fl_tt_isAxis(component[2])) component[2]; // **OBSOLETE**
+  $comp_cutdirs   = assert(fl_tt_isAxisList(component[2])) component[2];
+  $host_cutdirs   = assert(fl_tt_isAxisList(component[6])) component[6];
   $comp_direction = assert(is_list(component[3])) component[3];
   $comp_director  = assert(fl_tt_isAxis($comp_direction[0])) $comp_direction[0];
   $comp_rotation  = assert(is_num($comp_direction[1])) $comp_direction[1];

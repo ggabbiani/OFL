@@ -111,7 +111,8 @@
   example/reference.
 - [x] implemented new PCB component filtering.
 - [x] fix documentation generation under Ubuntu
-- [ ] fix regression after the generic cutout algorithm implementation
+- [x] fixed regression after the generic cutout algorithm implementation in pcb
+  engine
 
 
 

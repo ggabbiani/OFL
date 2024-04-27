@@ -82,8 +82,32 @@ parent shape
 __Syntax:__
 
 ```text
-fl_Component(engine,position,direction,type,parameters)
+fl_Component(engine,position,direction,cutdirs,type,parameters)
 ```
+
+__Parameters:__
+
+__engine__  
+engine to be triggered during component rendering
+
+__direction__  
+new coordinate system in [[direction], rotation] format
+
+__cutdirs__  
+List of floating semi-axes in the host's reference system. Defines the
+cutout directions that the host object would like the component to
+handle.
+
+
+__parameters__  
+list of optional component properties:
+
+- FL_COMP_SUB - see [variable FL_COMP_SUB](#variable-fl_comp_sub)
+- FL_COMP_DRIFT - see [variable FL_COMP_DRIFT](#variable-fl_comp_drift)
+- FL_COMP_COLOR - see variable FL_COMP_COLOR
+- FL_COMP_OCTANT - see variable FL_COMP_OCTANT
+
+
 
 ---
 
@@ -96,6 +120,29 @@ fl_comp_BBox(spec_list)
 ```
 
 exact calculation of the resulting bounding box out of a list of component specifications
+
+---
+
+### function fl_comp_actualCuts
+
+__Syntax:__
+
+```text
+fl_comp_actualCuts(directions)
+```
+
+Returns the floating semi-axes list in the component's reference system,
+defining all the cutout directions a component is called to manage.
+Concretely filters the requested __host__ cut directions to a subset of the
+__component__ configured ones
+
+
+__Parameters:__
+
+__directions__  
+floating semi-axes list in host's reference system
+
+
 
 ---
 
@@ -134,19 +181,23 @@ __Syntax:__
 
 Component context:
 
- - $comp_engine    : engine to be triggered for component rendering
+ - $comp_engine    : engine to be triggered during component rendering
  - $comp_position  : component position
  - $comp_direction : new coordinate system in [[direction], rotation] format
  - $comp_director  : new coordinate system direction vector
  - $comp_rotation  : new coordinate system rotation value around new direction
  - $comp_type
- - $comp_subtract  : the tolerance to be used during component FL_FOOTPRINT difference from parent shape
+ - $comp_subtract  : the tolerance to be used during component FL_FOOTPRINT
+   difference from parent shape
  - $comp_drift     : additional delta during component FL_CUTOUT
  - $comp_color
  - $comp_octant
- - $comp_cutdir    : cutout direction for the component in the __hosting__ coordinate system
-                     TODO: remove this variable since **OBSOLETE**
-
+ - $host_cutdirs   : List of floating semi-axes in the host's reference
+   system. Defines all the cutout directions a component should be able to
+   manage. This value is needed by the host object layout engine.
+ - $comp_cutdirs   : List of floating semi-axes in the component's reference
+   system. Defines all the cutout directions a component should be able to
+   manage.
 
 
 __Parameters:__

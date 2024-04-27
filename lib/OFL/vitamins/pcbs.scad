@@ -205,17 +205,17 @@ FL_PCB_RPI4 = let(
   ],
   comps = [
     //TODO: engine can be retrieved from type
-    ["POWER IN", fl_Component(FL_USB_NS,  [25.5,11.2,0        ], [+Z,0],  FL_USB_TYPE_C  ,[[FL_COMP_DRIFT,-1.3]]) ],
-    ["HDMI0",    fl_Component(FL_HDMI_NS, [25, 26, 0          ], [+Z,0 ], FL_HDMI_TYPE_D ,[[FL_COMP_DRIFT,-1.26]] )],
-    ["HDMI1",    fl_Component(FL_HDMI_NS, [25, 39.5, 0        ], [+Z,0 ], FL_HDMI_TYPE_D ,[[FL_COMP_DRIFT,-1.26]] )],
-    ["A/V",      fl_Component(FL_JACK_NS, [22, 54, 0          ], [+Z,0 ], FL_JACK_BARREL  )],
-    ["USB2",     fl_Component(FL_USB_NS,  [w/2-9, 79.5, 0     ], [+Z,90], FL_USB_TYPE_Ax2,[[FL_COMP_DRIFT,-3], [FL_COMP_COLOR,fl_grey(30)]] )],
-    ["USB3",     fl_Component(FL_USB_NS,  [w/2-27, 79.5, 0    ], [+Z,90], FL_USB_TYPE_Ax2,[[FL_COMP_DRIFT,-3], [FL_COMP_COLOR,"DodgerBlue"]] )],
-    ["ETHERNET", fl_Component(FL_ETHER_NS,[w/2-45.75, 77.5, 0 ], [+Z,90], FL_ETHER_RJ45  ,[[FL_COMP_DRIFT,-3]] )],
-    ["GPIO",     fl_Component(FL_PHDR_NS, [-w/2+3.5, 32.5, 0  ], [+Z,90], FL_PHDR_GPIOHDR)],
-    ["uSD",      fl_Component(FL_SD_NS,   [0, 2, -pcb_t       ], [-Z,0 ], FL_SD_MOLEX_uSD_SOCKET, [[FL_COMP_OCTANT,+Y+Z],[FL_COMP_DRIFT,2]] )],
-    ["PIM TOP",  fl_Component(FL_HS_NS,   [0, 0, 0            ], [+Z,0 ], FL_HS_PIMORONI_TOP )],
-    ["PIM BOT",  fl_Component(FL_HS_NS,   [0, 0, -pcb_t       ], [+Z,0 ], FL_HS_PIMORONI_BOTTOM )],
+    ["POWER IN", fl_Component(FL_USB_NS,  [25.5,11.2,0        ], [+Z,0] , [+X], FL_USB_TYPE_C  ,[[FL_COMP_DRIFT,-1.3]]) ],
+    ["HDMI0",    fl_Component(FL_HDMI_NS, [25, 26, 0          ], [+Z,0 ], [+X], FL_HDMI_TYPE_D ,[[FL_COMP_DRIFT,-1.26]] )],
+    ["HDMI1",    fl_Component(FL_HDMI_NS, [25, 39.5, 0        ], [+Z,0 ], [+X], FL_HDMI_TYPE_D ,[[FL_COMP_DRIFT,-1.26]] )],
+    ["A/V",      fl_Component(FL_JACK_NS, [22, 54, 0          ], [+Z,0 ], [+X], FL_JACK_BARREL  )],
+    ["USB2",     fl_Component(FL_USB_NS,  [w/2-9, 79.5, 0     ], [+Z,90], [+Y,+Z], FL_USB_TYPE_Ax2,[[FL_COMP_DRIFT,-3], [FL_COMP_COLOR,fl_grey(30)]] )],
+    ["USB3",     fl_Component(FL_USB_NS,  [w/2-27, 79.5, 0    ], [+Z,90], [+Y,+Z], FL_USB_TYPE_Ax2,[[FL_COMP_DRIFT,-3], [FL_COMP_COLOR,"DodgerBlue"]] )],
+    ["ETHERNET", fl_Component(FL_ETHER_NS,[w/2-45.75, 77.5, 0 ], [+Z,90], [+Y,+Z], FL_ETHER_RJ45  ,[[FL_COMP_DRIFT,-3]] )],
+    ["GPIO",     fl_Component(FL_PHDR_NS, [-w/2+3.5, 32.5, 0  ], [+Z,90], [+Z], FL_PHDR_GPIOHDR)],
+    ["uSD",      fl_Component(FL_SD_NS,   [0, 2, -pcb_t       ], [-Z,0 ], [-Y], FL_SD_MOLEX_uSD_SOCKET, [[FL_COMP_OCTANT,+Y+Z],[FL_COMP_DRIFT,2]] )],
+    ["PIM TOP",  fl_Component(FL_HS_NS,   [0, 0, 0            ], [+Z,0 ], [+Z], FL_HS_PIMORONI_TOP )],
+    ["PIM BOT",  fl_Component(FL_HS_NS,   [0, 0, -pcb_t       ], [+Z,0 ], [+Y,-Z], FL_HS_PIMORONI_BOTTOM )],
   ],
   vendors = [["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],
   gpio_c  = fl_comp_connectors(comps[7][1])[0],
@@ -245,8 +245,8 @@ FL_PCB_RPI_uHAT = let(
     fl_Hole([ size.x-3.5,  3.5,        0 ], hole_d, +Z, pcb_t,loct=+Y),
   ],
   comps   = [
-    ["RF IN", fl_Component(FL_JACK_NS, [0,15,0], [+Z,-90  ], FL_JACK_MCXJPHSTEM1)],
-    ["GPIO",  fl_Component(FL_PHDR_NS, [32.5, size.y-3.5, 0], [+Z,0 ], FL_PHDR_GPIOHDR_F_SMT_LOW)],
+    ["RF IN", fl_Component(FL_JACK_NS, [0,15,0], [+Z,-90  ], [-X], FL_JACK_MCXJPHSTEM1)],
+    ["GPIO",  fl_Component(FL_PHDR_NS, [32.5, size.y-3.5, 0], [+Z,0 ], [+Z], FL_PHDR_GPIOHDR_F_SMT_LOW)],
   ],
   vendors = [["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],
   gpio_conn_pos = fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),
@@ -278,12 +278,12 @@ FL_PCB_MH4PU_P = let(
     sz_uA = fl_size(FL_USB_TYPE_uA),
     tol   = 0.5,
     comps = [
-      ["USB3 IN",   fl_Component(FL_USB_NS, [-w/2+13.5,+l/2-6,-(pcb_t+1)], [+Z,90], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,0.5],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"OrangeRed"]])],
-      ["POWER IN",  fl_Component(FL_USB_NS, [+w/2-10,+l/2-sz_uA.x/2+0.5,0], [+Z,90], FL_USB_TYPE_uA_NF, [[FL_COMP_DRIFT,-0.5]])],
-      ["USB3-1",    fl_Component(FL_USB_NS, [+w/2-(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)], [+Z,-90], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
-      ["USB3-2",    fl_Component(FL_USB_NS, [+w/2-(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)], [+Z,-90],       FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
-      ["USB3-3",    fl_Component(FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)], [+Z,-90],       FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
-      ["USB3-4",    fl_Component(FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],       [+Z,-90],       FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
+      ["USB3 IN",   fl_Component(FL_USB_NS, [-w/2+13.5,+l/2-6,-(pcb_t+1)],                  [+Z,90], [+Y], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,0.5],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"OrangeRed"]])],
+      ["POWER IN",  fl_Component(FL_USB_NS, [+w/2-10,+l/2-sz_uA.x/2+0.5,0],                 [+Z,90], [+Y], FL_USB_TYPE_uA_NF,  [[FL_COMP_DRIFT,-0.5]])],
+      ["USB3-1",    fl_Component(FL_USB_NS, [+w/2-(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],      [+Z,-90],[-Y], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
+      ["USB3-2",    fl_Component(FL_USB_NS, [+w/2-(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
+      ["USB3-3",    fl_Component(FL_USB_NS, [-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
+      ["USB3-4",    fl_Component(FL_USB_NS, [-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],      [+Z,-90],[-Y], FL_USB_TYPE_Ax1_NF, [[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],
     ],
     vendors=[["Amazon","https://www.amazon.it/gp/product/B07VQLXCTB"]]
   ) fl_PCB(name,bare,pcb_t,"DarkCyan",1,undef,holes,comps,undef,M3_cap_screw,vendors=vendors);
@@ -295,10 +295,10 @@ FL_PCB_HILETGO_SX1308 = let(
     holes = [for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5]) [x,y,0]],
     1PIN  = fl_PinHeader("1-pin",nop=2p54header,engine="male"),
     comps = [
-      ["TRIMPOT", fl_Component(FL_TRIM_NS, [-5,-sz.y/2+0.5,0], [+Y,0],                 FL_TRIM_POT10,  [[FL_COMP_OCTANT,+X-Y+Z]])],
+      ["TRIMPOT", fl_Component(FL_TRIM_NS, [-5,-sz.y/2+0.5,0], [+Y,0], [+Z], FL_TRIM_POT10,  [[FL_COMP_OCTANT,+X-Y+Z]])],
       // create four component specifications, one for each hole position, labelled as "PIN-0", "PIN-1", "PIN-2", "PIN-3"
       for(i=[0:len(holes)-1]) let(label=str("PIN-",i))
-        [label,fl_Component(FL_PHDR_NS, holes[i],[+Z,0],1PIN)],
+        [label,fl_Component(FL_PHDR_NS, holes[i],[+Z,0],[+Z],1PIN)],
     ]
   ) fl_PCB(
     name  = "HiLetgo SX1308 DC-DC Step up power module",
@@ -342,19 +342,19 @@ FL_PCB_VIM1 = let(
   d     = screw_radius(screw)*2,
   pcb_t = 1,
   comps = [
-    ["USB 2.0 900mA", fl_Component(FL_USB_NS,     [0.63, -47.6, 1.2],[+Z,-90 ],FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]]) ],
-    ["USB-C",         fl_Component(FL_USB_NS,     [19, -48-2.15, 0], [+Z,-90 ],FL_USB_TYPE_C,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]] )],
-    ["HDMI0",         fl_Component(FL_HDMI_NS,    [31,  -45.3-0.2,  1.1],     [+Z,-90 ],  FL_HDMI_TYPE_A ,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]] )],
-    ["uSD",           fl_Component(FL_SD_NS,      [(31+fl_bb_size(FL_HDMI_TYPE_A).y/2-fl_bb_size(FL_SD_MOLEX_uSD_SOCKET).x/2), -44.5, -pcb_t],  [-Z,0   ], FL_SD_MOLEX_uSD_SOCKET, [[FL_COMP_OCTANT,-X-Y+Z],[FL_COMP_DRIFT,0*2]] )],
-    ["ETHERNET",      fl_Component(FL_ETHER_NS,   [48.6+7.2,-44.9-11.1,0],  [+Z,-90 ],  FL_ETHER_RJ45_SM,[[FL_COMP_DRIFT,-2*FL_ETHER_FRAME_T]] )] ,
-    ["USB 2.0 500mA", fl_Component(FL_USB_NS,     [68.23, -47.6, 1.2],        [+Z,-90 ],  FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]] )],
-    ["POWER",         fl_Component(FL_SWT_NS,     [3.02, -9.96, 0],       [+Z,180 ],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
-    ["FUNCTION",      fl_Component(FL_SWT_NS,     [3.02, -19.99, 0],        [+Z,180 ],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
-    ["RESET",         fl_Component(FL_SWT_NS,     [3.02, -30.02, 0],        [+Z,180 ],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
-    ["GPIO",          fl_Component(FL_PHDR_NS,    [31.5,  -3.2, 0],         [+Z,0 ],  FL_PHDR_GPIOHDR)],
-    ["LEDS",          fl_Component(FL_GENERIC_NS, [73.3,  -3.65,  0],     [+Z,0 ],  fl_generic_Vitamin(bbox=[O,[2,3.5,1]],cut_directions=[+Y]))],
-    ["2-CH INFRA",    fl_Component(FL_GENERIC_NS, [65.5, -3.04,     0],     [+Z,0 ],  fl_generic_Vitamin(bbox=[O,[6.8,3,3.5]],cut_directions=[+Y]))],
-    ["HEAT SINK",     fl_Component(FL_HS_NS,      [0.5,   -0.5, 0],         [+Z,0 ],  FL_HS_KHADAS, [[FL_COMP_OCTANT,+X-Y+Z]] )],
+    ["USB 2.0 900mA", fl_Component(FL_USB_NS,     [0.63, -47.6, 1.2],[+Z,-90 ],[-Y],FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]]) ],
+    ["USB-C",         fl_Component(FL_USB_NS,     [19, -48-2.15, 0], [+Z,-90 ],[-Y],FL_USB_TYPE_C,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["HDMI0",         fl_Component(FL_HDMI_NS,    [31,  -45.3-0.2,  1.1],     [+Z,-90 ],[-Y],  FL_HDMI_TYPE_A ,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["uSD",           fl_Component(FL_SD_NS,      [(31+fl_bb_size(FL_HDMI_TYPE_A).y/2-fl_bb_size(FL_SD_MOLEX_uSD_SOCKET).x/2), -44.5, -pcb_t],  [-Z,0   ],[-Y], FL_SD_MOLEX_uSD_SOCKET, [[FL_COMP_OCTANT,-X-Y+Z],[FL_COMP_DRIFT,0*2]] )],
+    ["ETHERNET",      fl_Component(FL_ETHER_NS,   [48.6+7.2,-44.9-11.1,0],  [+Z,-90 ],[-Y],  FL_ETHER_RJ45_SM,[[FL_COMP_DRIFT,-2*FL_ETHER_FRAME_T]] )] ,
+    ["USB 2.0 500mA", fl_Component(FL_USB_NS,     [68.23, -47.6, 1.2],        [+Z,-90 ],[-Y],  FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["POWER",         fl_Component(FL_SWT_NS,     [3.02, -9.96, 0],       [+Z,180 ],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["FUNCTION",      fl_Component(FL_SWT_NS,     [3.02, -19.99, 0],        [+Z,180 ],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["RESET",         fl_Component(FL_SWT_NS,     [3.02, -30.02, 0],        [+Z,180 ],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5, [[FL_COMP_OCTANT,+X+Y+Z]] )],
+    ["GPIO",          fl_Component(FL_PHDR_NS,    [31.5,  -3.2, 0],         [+Z,0 ],[+Z],  FL_PHDR_GPIOHDR)],
+    ["LEDS",          fl_Component(FL_GENERIC_NS, [73.3,  -3.65,  0],     [+Z,0 ],[+Y],  fl_generic_Vitamin(bbox=[O,[2,3.5,1]],cut_directions=[+Y]))],
+    ["2-CH INFRA",    fl_Component(FL_GENERIC_NS, [65.5, -3.04,     0],     [+Z,0 ],[+Y],  fl_generic_Vitamin(bbox=[O,[6.8,3,3.5]],cut_directions=[+Y]))],
+    ["HEAT SINK",     fl_Component(FL_HS_NS,      [0.5,   -0.5, 0],         [+Z,0 ],[+Z],  FL_HS_KHADAS, [[FL_COMP_OCTANT,+X-Y+Z]] )],
   ],
   gpio_c  = fl_comp_connectors(comps[9][1])[0],
   conns   = [
@@ -521,9 +521,9 @@ module fl_pcb(
    */
   components,
   /*!
-   * Component filter list in floating semi-axis list (see also fl_tt_isAxisList()).
+   * Floating semi-axis list in the host's reference system (see also fl_tt_isAxisList()).
    *
-   * this parameter sets a filter used during FL_CUTOUT, causing the trigger of
+   * This parameter sets a filter used during FL_CUTOUT, causing the trigger of
    * all and only the PCB components implementing cut out along at least one of
    * the passed directions
    *
@@ -682,21 +682,7 @@ module fl_pcb(
       module filter(dirs)
         for(c=comps)
           fl_comp_Specs(c)
-            if (dirs) {
-              // filter component whose cut_direction(s) is present in the
-              // component direction list
-              let(
-                // transform component directions into pcb coordinate system
-                dirs  = fl_cutout($comp_type),
-                D     = fl_direction($comp_direction),
-                new   = [for(d=dirs) fl_transform(D,d)]
-              )
-              if (search(new,cut_direction)!=[[]])
-                children();
-            } else {
-              // no direction filtering
-              children();
-            }
+            children();
 
       if (class=="components")
         filter(directions)
@@ -767,13 +753,13 @@ module fl_pcb(
         // echo(str("fl_pcb{} do_cutout{} trigger{",$comp_engine,"} cut_thick=",cut_thick))
 
         if ($comp_engine==FL_USB_NS)
-          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_direction=cut_direction,octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
+          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_direction=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
         else if ($comp_engine==FL_HDMI_NS)
           fl_hdmi(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_JACK_NS)
           fl_jack(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_ETHER_NS)
-          fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,cut_direction=cut_direction,octant=$comp_octant,direction=$comp_direction);
+          fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,cut_direction=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_PHDR_NS) let(
             thick = bbox[1].z+cut_thick
           ) fl_pinHeader(FL_CUTOUT,$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
@@ -787,7 +773,7 @@ module fl_pcb(
           fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_HS_NS)
           // TODO: implement a rationale for heat-sinks cut-out operations
-          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_direction=cut_direction,cut_thick=cut_thick-$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_direction=fl_comp_actualCuts(cut_direction),cut_thick=cut_thick-$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_GENERIC_NS)
           fl_generic_vitamin(FL_CUTOUT,$comp_type,thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else

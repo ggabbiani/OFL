@@ -119,12 +119,12 @@ module sbcBox(mode)
           sbc,
           thick=3*T,
           cut_tolerance=CUT_TOLERANCE,
-          cut_direction=[if (SBC=="rpi4") +X, -X,-Y,+Y]
+          cut_direction=[if (SBC=="rpi4") +X,-Y,+Y]
         );
 
 difference() {
   sbcBox("add");
-  #sbcBox("cut out");
+  sbcBox("cut out");
 }
 if (VIEW_MODE!="PRINT ME!")
   sbcBox("assembly");

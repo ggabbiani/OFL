@@ -12,6 +12,7 @@
 // **** TEST_INCLUDES *********************************************************
 
 include <../../lib/OFL/foundation/core.scad>
+include <../../lib/OFL/foundation/unsafe_defs.scad>
 
 // **** TEST_PROLOGUE *********************************************************
 
@@ -238,3 +239,20 @@ let(
   result  = fl_list_transform(list,M,function(2d) [2d.x,2d.y,0],function(3d) [3d.x,3d.y]),
   expected = [for(item=list) item+t]
 ) assert(result==expected,result);
+
+//**** fl_list_AND() **********************************************************
+
+let(
+  a         = [   +X,+Y,-Y,-Z],
+  b         = [-X      ,-Y,-Z],
+  result    = fl_list_AND(a,b),
+  expected  = [-Y,-Z]
+) assert(result==expected,result);
+
+let(
+  a         = [   +X,+Y,-Y   ,-Z],
+  b         = [-X         ,+Z],
+  result    = fl_list_AND(a,b),
+  expected  = []
+) assert(result==expected,result);
+
