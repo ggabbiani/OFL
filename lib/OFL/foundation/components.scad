@@ -81,7 +81,8 @@ function fl_Component(
  */
 function fl_comp_actualCuts(
   /*!
-   * floating semi-axes list in host's reference system
+   * floating semi-axes list in host's reference system. «undef» stands for 'all
+   * the configured component directions'
    */
   directions
 ) =
