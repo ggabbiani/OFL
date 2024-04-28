@@ -22,10 +22,18 @@ use <mngm-engine.scad>
  *
  * __NOTE:__ this module can be used only by OFL 'objects'.
  *
+ *     // this is the actual object definition as a list of [key,values] items
+ *     object = let(
+ *       ...
+ *     ) [
+ *       fl_native(value=true),
+ *       ...
+ *     ];
+ *
  * A typical use of this high-level management module is the following:
  *
  *     // this engine is called once for every verb passed to module fl_polymorph
- *     module engine(thick) let(
+ *     module engine() let(
  *       ...
  *     ) if ($this_verb==FL_ADD)
  *       ...;
@@ -51,15 +59,7 @@ use <mngm-engine.scad>
  *       else
  *         assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
  *
- *     // this is the actual object definition as a list of [key,values] items
- *     object = let(
- *       ...
- *     ) [
- *       fl_native(value=true),
- *       ...
- *     ];
- *
- *     fl_polymorph(verbs,object,direction=direction,octant=octant)
+ *     fl_polymorph(verbs,object,octant,direction,debug)
  *       engine(thick=T)
  *         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
  *         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
@@ -76,14 +76,14 @@ use <mngm-engine.scad>
  */
 module fl_polymorph(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD,
+  verbs = FL_ADD,
   this,
-  //! see constructor fl_parm_Debug()
-  debug,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
   octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
+  //! see constructor fl_parm_Debug()
+  debug
 ) assert(is_list(verbs)||is_string(verbs),verbs) let(
   bbox  = fl_bb_corners(this),
   size  = fl_bb_size(this),

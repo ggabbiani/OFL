@@ -67,7 +67,7 @@ FL_IEC_YUNPEN                       = fl_IEC(IEC_yunpen);
  */
 FL_IEC_OUTLET                       = fl_IEC(IEC_outlet);
 
-FL_IEC_DICT = [
+FL_IEC_INVENTORY = [
   FL_IEC_FUSED_INLET,
   FL_IEC_FUSED_INLET2,
   FL_IEC_320_C14_SWITCHED_FUSED_INLET,
@@ -98,18 +98,18 @@ function fl_IEC(nop,name,description) = let(
 ];
 
 module fl_iec(
-  // supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_MOUNT
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_MOUNT
   verbs       = FL_ADD,
   this,
   //! thickness for FL_DRILL and FL_CUTOUT
   thick,
-  // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  // when undef native positioning is used
+  //! when undef native positioning is used
   octant
 ) {
 
-  module engine(thick) let(
+  module engine() let(
     nop   = fl_nopSCADlib($this),
     screw = iec_screw(nop)
   ) if ($this_verb==FL_ADD)
@@ -144,7 +144,7 @@ module fl_iec(
     else
       assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
 
-  fl_polymorph(verbs,this,direction=direction,octant=octant)
-    engine(thick)
+  fl_polymorph(verbs,this,octant,direction)
+    engine()
       children();
 }

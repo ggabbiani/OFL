@@ -130,6 +130,6 @@ iec = let(
   fl_engine(value="iec"),
 ];
 
-fl_polymorph(verbs,iec,direction=direction,octant=octant)
+fl_polymorph(verbs,iec,octant,direction)
   engine(thick=T)
     fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
