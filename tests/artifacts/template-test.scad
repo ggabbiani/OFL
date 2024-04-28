@@ -1,10 +1,13 @@
 /*
  * Artifacts test template.
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 include <../../lib/OFL/foundation/core.scad>
 
 $fn         = 50;           // [3:100]
@@ -59,7 +62,7 @@ DIR_R       = 0;        // [0:360]
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
-verbs=[
+verbs = fl_verbList([
   if ($FL_ADD!="OFF")       FL_ADD,
   if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
   if ($FL_AXES!="OFF")      FL_AXES,
@@ -70,5 +73,5 @@ verbs=[
   if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
   if ($FL_MOUNT!="OFF")     FL_MOUNT,
   if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
-];
+]);
 
