@@ -36,14 +36,6 @@ IEC320 C14 switched fused inlet module.
 
 ---
 
-### variable FL_IEC_DICT
-
-__Default:__
-
-    [FL_IEC_FUSED_INLET,FL_IEC_FUSED_INLET2,FL_IEC_320_C14_SWITCHED_FUSED_INLET,FL_IEC_INLET,FL_IEC_INLET_ATX,FL_IEC_INLET_ATX2,FL_IEC_YUNPEN,FL_IEC_OUTLET,]
-
----
-
 ### variable FL_IEC_FUSED_INLET
 
 __Default:__
@@ -109,6 +101,14 @@ IEC die cast inlet for ATX.
 
 ---
 
+### variable FL_IEC_INVENTORY
+
+__Default:__
+
+    [FL_IEC_FUSED_INLET,FL_IEC_FUSED_INLET2,FL_IEC_320_C14_SWITCHED_FUSED_INLET,FL_IEC_INLET,FL_IEC_INLET_ATX,FL_IEC_INLET_ATX2,FL_IEC_YUNPEN,FL_IEC_OUTLET,]
+
+---
+
 ### variable FL_IEC_NS
 
 __Default:__
@@ -169,7 +169,16 @@ __Syntax:__
 
 __Parameters:__
 
+__verbs__  
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_MOUNT
+
 __thick__  
 thickness for FL_DRILL and FL_CUTOUT
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__octant__  
+when undef native positioning is used
 
 

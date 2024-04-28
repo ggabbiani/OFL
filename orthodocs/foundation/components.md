@@ -140,7 +140,8 @@ __component__ configured ones
 __Parameters:__
 
 __directions__  
-floating semi-axes list in host's reference system
+floating semi-axes list in host's reference system. «undef» stands for 'all
+the configured component directions'
 
 
 

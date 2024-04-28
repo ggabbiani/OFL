@@ -18,7 +18,7 @@ graph LR
 
 __Syntax:__
 
-    fl_polymorph(verbs=FL_ADD,this,debug,direction,octant)
+    fl_polymorph(verbs=FL_ADD,this,octant,direction,debug)
 
 This module manages OFL types leveraging children implementation of the
 actual engine while decoupling standard OFL parameters manipulation from
@@ -28,10 +28,18 @@ literals, simplifying the new type module writing.
 
 :memo: __NOTE:__ this module can be used only by OFL 'objects'.
 
+    // this is the actual object definition as a list of [key,values] items
+    object = let(
+      ...
+    ) [
+      fl_native(value=true),
+      ...
+    ];
+
 A typical use of this high-level management module is the following:
 
     // this engine is called once for every verb passed to module fl_polymorph
-    module engine(thick) let(
+    module engine() let(
       ...
     ) if ($this_verb==FL_ADD)
       ...;
@@ -57,15 +65,7 @@ A typical use of this high-level management module is the following:
       else
         assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
 
-    // this is the actual object definition as a list of [key,values] items
-    object = let(
-      ...
-    ) [
-      fl_native(value=true),
-      ...
-    ];
-
-    fl_polymorph(verbs,object,direction=direction,octant=octant)
+    fl_polymorph(verbs,object,octant,direction,debug)
       engine(thick=T)
         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
@@ -86,13 +86,13 @@ __Parameters:__
 __verbs__  
 supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
 
-__debug__  
-see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
+__octant__  
+when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
-__octant__  
-when undef native positioning is used
+__debug__  
+see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 

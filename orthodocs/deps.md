@@ -160,9 +160,11 @@ graph TD
     A50[artifacts/t-profiles] --o|include| A5
     A50 --o|use| A4
     A51[artifacts/template] --o|include| A2
-    A51 --o|use| A4
-    A52[foundation/template] --o|include| A5
-    A53[vitamins/template] --o|use| A4
+    A51 --o|use| A8
+    A52[foundation/template] --o|include| A2
+    A52 --o|use| A8
+    A53[vitamins/template] --o|include| A2
+    A53 --o|use| A8
     A44 --o|include| A2
     A44 --o|use| A5
     A44 --o|use| A3

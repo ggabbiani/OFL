@@ -55,7 +55,6 @@
 - [ ] global: extend the OFL APIs for implementing the newly introduced
   'standard' parameter «debug»
 - [ ] engine parameter standardization:
-
         engine_stub(verbs=FL_ADD,this,...,octant,direction,debug);
 - [x] tests: implement an automatic test generator mechanism able to
   standardize, where possible, the customizer parameters
@@ -71,7 +70,7 @@
   fully programmable FL_CUTOUT implementation. This module has been used for
   implementing proper  component cutout on complex PCBs.
 - [x] test/vitamins/generic.scad: first implementation
-- [ ] include third libraries into the distribution
+- [x] include third libraries into the distribution
 - [x] some package rename adhering the architectural documentation
 - [x] general Makefile implementing documents/pictures/example generation
 - [x] moved library sources into a single top level directory, same for tests
@@ -106,7 +105,7 @@
 - [ ] constructor for fl_layout()
 - [ ] review and apply everywhere the new generalized cutout algorithm. Use
   vitamins/{ethers,heatsink,usbs}.scad as implementation example/reference.
-- [] review and apply everywhere the new polymorph engine for rewriting and
+- [ ] review and apply everywhere the new polymorph engine for rewriting and
   subtyping all the existing modules. Use vitamins/iec.scad as implementation
   example/reference.
 - [x] implemented new PCB component filtering.
