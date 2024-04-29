@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <Round-Anything/polyround.scad>
+include <../../Round-Anything/polyround.scad>
 
 include <../foundation/unsafe_defs.scad>
 use <../foundation/3d-engine.scad>
@@ -164,7 +164,7 @@ module fl_DIN_rail(
     fl_doAxes($this_size,$this_direction);
 
   else if ($this_verb==FL_BBOX)
-    fl_bb_add(corners=$this_bbox+[-NIL*[1,1,1],NIL*[1,1,1]],$FL_ADD=$FL_BBOX);
+    fl_bb_add($this_bbox,auto=true,$FL_ADD=$FL_BBOX);
 
   else if ($this_verb==FL_LAYOUT) {
     // to be implemented ...

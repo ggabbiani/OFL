@@ -808,13 +808,20 @@ module fl_bb_add(
    * see also fl_tt_isBoundingBox()
    */
   corners,
-  2d=false
+  2d=false,
+  auto=false
 ) {
-  fl_trace("$FL_ADD",$FL_ADD);
-  assert(fl_tt_isBoundingBox(corners),corners)
-  translate(corners[0])
-    if (!2d) fl_cube(size=corners[1]-corners[0],octant=O0);
-    else fl_square(size=corners[1]-corners[0],quadrant=QI);
+  assert(fl_tt_isBoundingBox(corners),corners);
+  if (2d)
+    let(
+      bbox = auto ? corners+NIL*[[-1,-1],[1,1]] : corners
+    ) translate(bbox[0])
+      fl_square(size=corners[1]-corners[0],quadrant=QI);
+  else
+    let(
+      bbox = auto ? corners+NIL*[[-1,-1,-1],[1,1,1]] : corners
+    ) translate(bbox[0])
+      fl_cube(size=corners[1]-corners[0],octant=O0);
 }
 
 /*****************************************************************************

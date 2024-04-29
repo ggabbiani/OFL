@@ -233,7 +233,7 @@ module fl_pcbHolder(
     } else if ($verb==FL_PAYLOAD) {
       fl_modifier($modifier)
         multmatrix(pcb_M)
-          fl_bb_add(pcb_bb);;
+          fl_bb_add(pcb_bb);
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));

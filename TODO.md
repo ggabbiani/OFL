@@ -113,6 +113,7 @@
 - [x] fixed regression after the generic cutout algorithm implementation in pcb
   engine
 - [ ] create template tests
+- [ ] complete DIN rails implementing missing verbs
 
 
 
