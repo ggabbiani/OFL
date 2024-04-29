@@ -28,8 +28,10 @@ graph TD
     A10
     A13 --o|include| A10
     A13 --o|use| A3
-    A22[artifacts/din-rails] --o|include| A2
-    A22 --o|use| A4
+    A22[artifacts/din_rails] --o|include| A2
+    A22 --o|use| A5
+    A22 --o|use| A3
+    A22 --o|use| A8
     A23[foundation/drawio] --o|include| A1
     A7
     A24[vitamins/ethers] --o|include| A2

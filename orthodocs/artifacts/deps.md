@@ -4,7 +4,7 @@
 graph TD
     A1[artifacts/box] --o|include| A2[artifacts/spacer]
     A3[artifacts/caddy]
-    A4[artifacts/din-rails]
+    A4[artifacts/din_rails]
     A5[artifacts/pcb_holder] --o|include| A2
     A2
     A6[artifacts/t-nut]
