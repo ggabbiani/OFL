@@ -29,6 +29,7 @@ graph TD
     A13 --o|include| A10
     A13 --o|use| A3
     A22[artifacts/din_rails] --o|include| A2
+    A22 --o|include| A18
     A22 --o|use| A5
     A22 --o|use| A3
     A22 --o|use| A8

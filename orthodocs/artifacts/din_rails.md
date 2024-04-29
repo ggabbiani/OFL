@@ -5,9 +5,10 @@
 ```mermaid
 graph LR
     A1[artifacts/din_rails] --o|include| A2[foundation/unsafe_defs]
-    A1 --o|use| A3[foundation/3d-engine]
-    A1 --o|use| A4[foundation/bbox-engine]
-    A1 --o|use| A5[foundation/polymorphic-engine]
+    A1 --o|include| A3[foundation/util]
+    A1 --o|use| A4[foundation/3d-engine]
+    A1 --o|use| A5[foundation/bbox-engine]
+    A1 --o|use| A6[foundation/polymorphic-engine]
 ```
 
 DIN rails according to EN 60715 and DIN 50045, 50022 and 50035 standards
@@ -157,12 +158,34 @@ internal radii [upper radius,lower radius]
 
 __Syntax:__
 
-    fl_DIN_rail(verbs=FL_ADD,this,octant,direction,debug)
+    fl_DIN_rail(verbs=FL_ADD,this,cut_thick,tolerance=0,cut_drift=0,cut_direction,octant,direction,debug)
 
 __Parameters:__
 
 __verbs__  
-supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, CO_FOOTPRINT, FL_LAYOUT, FL_MOUNT
+
+__cut_thick__  
+thickness for FL_CUTOUT
+
+__tolerance__  
+tolerance used during FL_CUTOUT and FL_FOOTPRINT
+
+__cut_drift__  
+translation applied to cutout (default 0)
+
+__cut_direction__  
+Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist)).
+
+Example:
+
+    cut_direction=[+X,+Z]
+
+in this case the ethernet plug will perform a cutout along +X and +Z.
+
+:memo: **Note:** axes specified must be present in the supported cutout direction
+list (retrievable through [fl_cutout()](../foundation/core.md#function-fl_cutout) getter)
+
 
 __octant__  
 when undef native positioning is used
