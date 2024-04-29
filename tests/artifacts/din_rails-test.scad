@@ -34,6 +34,10 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
+$FL_CUTOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// adds a footprint to scene, usually a simplified FL_ADD
+$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // mount shape through predefined screws
@@ -59,8 +63,15 @@ DIR_R       = 0;        // [-360:360]
 /* [DIN rails] */
 
 SHOW    = "ALL";  // [ALL, TS15, TS35, TS35D]
-LENGTH  = 100;    // [0:100]
+LENGTH  = 50;    // [0:100]
 PUNCHED = true;
+// used during FL_CUTOUT and FL_FOOTPRINT
+TOLERANCE   = 0;  // [0:0.1:5]
+// thickness for FL_CUTOUT
+CO_T  = 2.5;          // [0:0.5:5]
+// translation applied to cutout
+CO_DRIFT = 0; // [-100:0.5:100]
+CO_DIRECTION  = ["+X"];
 
 
 /* [Hidden] */
@@ -73,19 +84,27 @@ fl_status();
 
 // end of automatically generated code
 
-verbs = fl_verbList([
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-  if ($FL_MOUNT!="OFF")     FL_MOUNT,
-]);
+thick         = $FL_CUTOUT!="OFF" ? CO_T       : undef;
+tolerance     = $FL_CUTOUT!="OFF" || $FL_FOOTPRINT!="OFF" ? TOLERANCE  : undef;
+drift         = $FL_CUTOUT!="OFF" ? CO_DRIFT   : undef;
+p_thick       = thick!=undef && drift!=undef ? thick-drift : undef;
+co_direction  = fl_3d_AxisList(CO_DIRECTION);
+
+verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT]);
 
 single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_RP_INVENTORY),FL_DIN_INVENTORY));
 if (single) {
-  fl_DIN_rail(verbs,single(LENGTH,PUNCHED),octant=octant,direction=direction,debug=debug);
+  fl_DIN_rail(
+    verbs,single(LENGTH,PUNCHED),
+    cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
+    octant=octant,direction=direction,debug=debug
+  );
 } else {
   all = [for(constructor=FL_DIN_INVENTORY) constructor(LENGTH,PUNCHED)];
-  fl_layout(axis=+X,gap=3,types=all,$FL_LAYOUT=$FL_ADD)
-    fl_DIN_rail(verbs,all[$i],octant=octant,direction=direction,debug=debug);
+  fl_layout(axis=+X,gap=3,types=all,$FL_LAYOUT="ON")
+    fl_DIN_rail(
+      verbs,all[$i],
+      cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
+      octant=octant,direction=direction,debug=debug
+    );
 }

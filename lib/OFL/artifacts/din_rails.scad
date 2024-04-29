@@ -11,6 +11,8 @@
 include <../../Round-Anything/polyround.scad>
 
 include <../foundation/unsafe_defs.scad>
+include <../foundation/util.scad>
+
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/polymorphic-engine.scad>
@@ -91,7 +93,8 @@ function fl_DIN_Rail(
   fl_bb_corners(value=bbox),
   assert(profile) ["DIN/rail/profile", profile],
   assert(length)  ["DIN/rail/length", length],
-  if (punch) ["DIN/rail/punch", punch]
+  if (punch) ["DIN/rail/punch", punch],
+  fl_cutout(value=[+Z,-Z]),
 ];
 
 // Specs taken from [RS PRO | RS PRO Steel Perforated DIN Rail, Mini Top Hat Compatible, 1m x 15mm x 5.5mm | 467-349 | RS Components](https://in.rsdelivers.com/product/rs-pro/rs-pro-steel-perforated-din-rail-mini-top-hat-1m-x/0467349)
@@ -122,9 +125,28 @@ FL_DIN_INVENTORY = [
 ];
 
 module fl_DIN_rail(
-  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD,
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, CO_FOOTPRINT, FL_LAYOUT, FL_MOUNT
+  verbs = FL_ADD,
   this,
+  //! thickness for FL_CUTOUT
+  cut_thick,
+  //! tolerance used during FL_CUTOUT and FL_FOOTPRINT
+  tolerance=0,
+  //! translation applied to cutout (default 0)
+  cut_drift=0,
+  /*!
+   * Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
+   *
+   * Example:
+   *
+   *     cut_direction=[+X,+Z]
+   *
+   * in this case the ethernet plug will perform a cutout along +X and +Z.
+   *
+   * **Note:** axes specified must be present in the supported cutout direction
+   * list (retrievable through fl_cutout() getter)
+   */
+  cut_direction,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -132,48 +154,70 @@ module fl_DIN_rail(
   //! see constructor fl_parm_Debug()
   debug
 ) {
+  bbox    = fl_bb_corners(this);
+  size    = bbox[1]-bbox[0];
+  profile = fl_property(this,"DIN/rail/profile");
+  points  = fl_property(profile,"DIN/profile/points");
+  thick   = fl_property(profile,"DIN/profile/thick");
+  punch   = fl_optional(this,"DIN/rail/punch");
+  length  = fl_optional(this,"DIN/rail/length");
+
+  module do_footprint(delta=0)
+    linear_extrude(size.z)
+      offset(delta)
+        polygon(polyRound(points,fn=$fn));
 
   // run with an execution context set by fl_polymorph{}
-  module engine() let(
-    size    = $this_bbox[1]-$this_bbox[0],
-    profile = fl_property(this,"DIN/rail/profile"),
-    points  = fl_property(profile,"DIN/profile/points"),
-    thick   = fl_property(profile,"DIN/profile/thick"),
-    punch   = fl_optional(this,"DIN/rail/punch"),
-    length  = fl_optional(this,"DIN/rail/length")
-
-  ) if ($this_verb==FL_ADD) {
-    difference() {
-      linear_extrude(size.z)
-        polygon(polyRound(points,fn=$fn));
-      if (punch) {
-        d     = punch[0];
-        len   = punch[1];
-        step  = punch[2];
-        translate(+Z(step-len)/2)
-          for(z=[0:step:length])
-            translate(+Z(z)-Y(NIL)) hull() {
-              fl_cylinder(h=thick+2xNIL, d=d,direction=[+Y,0]);
-              translate(+Z(len))
+  module engine() {
+    if ($this_verb==FL_ADD) {
+      difference() {
+        do_footprint();
+        if (punch) {
+          d     = punch[0];
+          len   = punch[1];
+          step  = punch[2];
+          translate(+Z(step-len)/2)
+            for(z=[0:step:length])
+              translate(+Z(z)-Y(NIL)) hull() {
                 fl_cylinder(h=thick+2xNIL, d=d,direction=[+Y,0]);
-            }
+                translate(+Z(len))
+                  fl_cylinder(h=thick+2xNIL, d=d,direction=[+Y,0]);
+              }
+        }
       }
-    }
 
-  } else if ($this_verb==FL_AXES)
-    fl_doAxes($this_size,$this_direction);
+    } else if ($this_verb==FL_AXES) {
+      fl_doAxes($this_size,$this_direction);
 
-  else if ($this_verb==FL_BBOX)
-    fl_bb_add($this_bbox,auto=true,$FL_ADD=$FL_BBOX);
+    } else if ($this_verb==FL_BBOX) {
+      fl_bb_add($this_bbox,auto=true,$FL_ADD=$FL_BBOX);
 
-  else if ($this_verb==FL_LAYOUT) {
-    // to be implemented ...
+    } else if ($this_verb==FL_CUTOUT) {
+      for(axis=cut_direction)
+        if (fl_isInAxisList(axis,fl_cutout(this)))
+          let(
+            sys = [axis.x ? -Z : X ,O,axis],
+            t   = ($this_bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
+          )
+          translate(t)
+            fl_cutout(cut_thick,sys.z,sys.x,delta=tolerance)
+              linear_extrude(size.z)
+                polygon(polyRound(points,fn=$fn));
+        else
+          echo(str("***WARN***: Axis ",axis," not supported"));
 
-  } else if ($this_verb==FL_MOUNT) {
-    // to be implemented ...
+    } else if ($this_verb==FL_FOOTPRINT) {
+      do_footprint(tolerance);
 
-  } else
-    assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
+    } else if ($this_verb==FL_LAYOUT) {
+      // to be implemented ...
+
+    } else if ($this_verb==FL_MOUNT) {
+      // to be implemented ...
+
+    } else
+      assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
+  }
 
   // fl_polymorph() manages standard parameters and prepares the execution
   // context for the engine.
