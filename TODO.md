@@ -112,6 +112,7 @@
 - [x] fix documentation generation under Ubuntu
 - [x] fixed regression after the generic cutout algorithm implementation in pcb
   engine
+- [ ] create template tests
 
 
 
