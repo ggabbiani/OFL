@@ -8,18 +8,22 @@
 
 ## Pre-reqs
 
-The following libraries are used and must be installed for using all the OFL features:
+The following libraries are used and distributed internally with OFL:
 
-* [NopSCADlib Release v21.10.1](https://github.com/nophead/NopSCADlib/releases/tag/v21.10.1)
+* [NopSCADlib Release v21.10.0](https://github.com/nophead/NopSCADlib/releases/tag/v21.10.0)
+* [Round-Anything v1.0.4](https://github.com/Irev-Dev/Round-Anything/releases/tag/1.0.4)
 * [scad-utils](https://github.com/openscad/scad-utils)
+
+Each of them can be found in the __lib/__ project directory together with the
+release and LICENSE notes provided originally.
 
 ## Usage
 
 1. download and expand the library
-2. modify the OPENSCADPATH Environment Variable to point lib/ directory of this repo as described in [OpenSCAD Library Folder](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations)
+2. modify the OPENSCADPATH Environment Variable to point the __lib/__ directory of this repo as described in [OpenSCAD Library Folder](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations)
 3. include the needed library file(s) in your OpenSCAD code like in the following example:
 
-    include \<OFL/foundation/2d.scad\>
+    include \<OFL/foundation/core.scad\>
 
 ## Library documentation
 
