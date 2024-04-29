@@ -86,7 +86,7 @@ module fl_polymorph(
   debug
 ) assert(is_list(verbs)||is_string(verbs),verbs) let(
   bbox  = fl_bb_corners(this),
-  size  = fl_bb_size(this),
+  size  = bbox[1]-bbox[0],
   D     = direction ? fl_direction(direction)  : FL_I,
   M     = fl_octant(octant,bbox=bbox)
 ) fl_manage(verbs,M,D)
