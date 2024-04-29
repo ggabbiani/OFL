@@ -688,7 +688,7 @@ creates a group with the resulting bounding box corners of a layout
 
 __Syntax:__
 
-    fl_bb_add(corners,2d=false)
+    fl_bb_add(corners,2d=false,auto=false)
 
 add a bounding box shape to the scene
 
