@@ -164,13 +164,13 @@ FL_DIN_TS15   = function(length,punch)
     punch       = punch,
     length      = length
   );
-FL_DIN_TS35   = function(length,punched=false)
+FL_DIN_TS35   = function(length,punch)
   fl_DIN_Rail(
     profile     = FL_DIN_RP_TS35,
     punch       = punch,
     length      = length
   );
-FL_DIN_TS35D  = function(length,punched=false)
+FL_DIN_TS35D  = function(length,punch)
   fl_DIN_Rail(
     profile     = FL_DIN_RP_TS35D,
     punch       = punch,
