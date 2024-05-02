@@ -707,6 +707,7 @@
 - [fl_sym_direction (module)](foundation/3d-engine.md#module-fl_sym_direction)
 - [fl_sym_hole (module)](foundation/3d-engine.md#module-fl_sym_hole)
 - [fl_sym_plug (module)](foundation/3d-engine.md#module-fl_sym_plug)
+- [fl_sym_point (module)](foundation/3d-engine.md#module-fl_sym_point)
 - [fl_sym_socket (module)](foundation/3d-engine.md#module-fl_sym_socket)
 - [fl_symbol (module)](foundation/3d-engine.md#module-fl_symbol)
 

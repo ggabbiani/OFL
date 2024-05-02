@@ -54,7 +54,7 @@ HOLE_DEPTH  = 2.5;
 SIZE_TYPE       = "default";  // [default,scalar,fl_vector]
 SIZE_SCALAR     = 0.5;
 SIZE_VECTOR     = [1.0,1.0,0.5];
-SYMBOL          = "direction";  // [direction,hole,plug,socket]
+SYMBOL          = "direction";  // [direction,hole,plug,point,socket]
 
 /* [Direction Symbol] */
 
@@ -79,6 +79,8 @@ if (SYMBOL=="hole")
     fl_sym_hole(FL_ADD);
 else if (SYMBOL=="direction")
   fl_sym_direction(FL_ADD,direction=[DIRECTION,ROTATION],size=size);
+else if (SYMBOL=="point")
+  fl_sym_point(FL_ADD,size=SIZE_SCALAR);
 else
   fl_symbol(verbs=verbs,size=size,symbol=SYMBOL)
     fl_label(FL_ADD,"Ciao!",size=$sym_size.y,thick=0.1,direction=$sym_ldir);

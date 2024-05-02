@@ -1332,6 +1332,51 @@ module fl_sym_hole(
 }
 
 /*!
+ * Point symbol.
+ */
+module fl_sym_point(
+  //! supported verbs: FL_ADD
+  verbs = FL_ADD,
+  // point 2d/3d coords
+  point=FL_O,
+  //! synonymous of point diameter
+  size
+) {
+
+  d     = assert(size,size) size;
+  bbox  = let(r=d/2) [[-r,-r,-r],[+r,+r,+r]];
+  size  = bbox[1]-bbox[0];
+  D     = FL_I;
+
+  module do_add() {
+    translate(point){
+      let(l=d*5/2) {
+        fl_color("red")
+          translate(-X(l/2))
+            fl_vector(l*X);
+        fl_color("green")
+          translate(-Y(l/2))
+            fl_vector(l*Y);
+        fl_color("blue")
+          translate(-Z(l/2))
+            fl_vector(l*Z);
+      }
+      fl_color("black")
+        fl_sphere(d=d);
+    }
+  }
+
+  fl_manage(verbs,D=D) {
+    if ($verb==FL_ADD) {
+      fl_modifier($modifier) do_add();
+
+    } else {
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+    }
+  }
+}
+
+/*!
  * display the direction change from a native coordinate system and a new
  * direction specification in [direction,rotation] format.
  *

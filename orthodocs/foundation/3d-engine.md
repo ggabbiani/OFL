@@ -1185,6 +1185,26 @@ __Syntax:__
 
 ---
 
+### module fl_sym_point
+
+__Syntax:__
+
+    fl_sym_point(verbs=FL_ADD,point=FL_O,size)
+
+Point symbol.
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD
+
+__size__  
+synonymous of point diameter
+
+
+---
+
 ### module fl_sym_socket
 
 __Syntax:__

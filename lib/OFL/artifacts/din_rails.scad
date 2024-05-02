@@ -228,12 +228,17 @@ module fl_DIN_rail(
         offset(delta)
           polygon(polyRound(points,fn=$fn));
 
-    if (!footprint && fl_parm_labels(debug))
-      translate(+Z(size.z))
-        for(i=[0:len(points)-1])
-          let(p=points[i])
-            translate([p.x,p.y])
-              fl_label(string=str("P[",i,"]"),size=1);
+    translate(+Z(size.z))
+      if (!footprint) {
+        if (fl_parm_labels(debug))
+            for(i=[0:len(points)-1])
+              let(p=points[i])
+                translate([p.x,p.y])
+                  fl_label(string=str("P[",i,"]"),size=1);
+        if (fl_parm_symbols(debug))
+          for(p=points)
+            fl_sym_point(point=p, size=0.25);
+      }
   }
 
   // run with an execution context set by fl_polymorph{}
