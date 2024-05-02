@@ -71,7 +71,7 @@ TOLERANCE   = 0;  // [0:0.1:5]
 CO_T  = 2.5;          // [0:0.5:5]
 // translation applied to cutout
 CO_DRIFT = 0; // [-100:0.5:100]
-CO_DIRECTION  = ["+X"];
+CO_DIRECTION  = ["±Z"];
 
 
 /* [Hidden] */
@@ -93,7 +93,7 @@ co_direction  = fl_3d_AxisList(CO_DIRECTION);
 
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT]);
 
-single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_RP_INVENTORY),FL_DIN_INVENTORY));
+single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_TS_INVENTORY),FL_DIN_RAIL_INVENTORY));
 if (single) {
   fl_DIN_rail(
     verbs,single(LENGTH,punch),
@@ -101,7 +101,7 @@ if (single) {
     octant=octant,direction=direction,debug=debug
   );
 } else {
-  all = [for(constructor=FL_DIN_INVENTORY) constructor(LENGTH,punch)];
+  all = [for(constructor=FL_DIN_RAIL_INVENTORY) constructor(LENGTH,punch)];
   fl_layout(axis=+X,gap=3,types=all,$FL_LAYOUT="ON")
     fl_DIN_rail(
       verbs,all[$i],

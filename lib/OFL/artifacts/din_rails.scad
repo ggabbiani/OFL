@@ -1,5 +1,16 @@
 /*!
- * DIN rails according to EN 60715 and DIN 50045, 50022 and 50035 standards
+ * A DIN rail is a metal rail of a standard type widely used for mounting
+ * circuit breakers and industrial control equipment inside equipment racks.
+ * These products are typically made from cold rolled carbon steel sheet with a
+ * zinc-plated or chromated bright surface finish. Although metallic, they are
+ * meant only for mechanical support and are not used as a busbar to conduct
+ * electric current, though they may provide a chassis grounding connection.
+ *
+ * The term derives from the original specifications published by Deutsches
+ * Institut für Normung (DIN) in Germany, which have since been adopted as
+ * European (EN) and international (IEC) standards. The original concept was
+ * developed and implemented in Germany in 1928, and was elaborated into the
+ * present standards in the 1950s.
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
  *
@@ -54,8 +65,11 @@ module fl_punch(
 
 //**** profiles ***************************************************************
 
-//! helper for new 'object' definition
-function fl_DIN_RailProfile(
+/*!
+ * Constructor for Top hat section (TH), type O, or type Ω, with hat-shaped
+ * cross section.
+ */
+function fl_DIN_TopHatSection(
   name,
   //! optional description
   description,
@@ -94,22 +108,25 @@ function fl_DIN_RailProfile(
   ["DIN/profile/thick",thick],
 ];
 
-FL_DIN_RP_TS15  = fl_DIN_RailProfile("TS15",size=[[10.5,15],5.5],r=[0.2,0.5]);
-FL_DIN_RP_TS35  = fl_DIN_RailProfile("TS35",size=[[27,35],7.5],r=[.8,.8]);
-FL_DIN_RP_TS35D = fl_DIN_RailProfile("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5);
+FL_DIN_TS15  = fl_DIN_TopHatSection("TS15",size=[[10.5,15],5.5],r=[0.2,0.5]);
+/*!
+ * top hat rail IEC/EN 60715 – 35 × 15
+ */
+FL_DIN_TS35  = fl_DIN_TopHatSection("TS35",size=[[27,35],7.5],r=[.8,.8]);
+FL_DIN_TS35D = fl_DIN_TopHatSection("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5);
 
-//! profile inventory
-FL_DIN_RP_INVENTORY = [
-  FL_DIN_RP_TS15,
-  FL_DIN_RP_TS35,
-  FL_DIN_RP_TS35D
+//! DIN rail section inventory
+FL_DIN_TS_INVENTORY = [
+  FL_DIN_TS15,
+  FL_DIN_TS35,
+  FL_DIN_TS35D
 ];
 
 //**** rails ******************************************************************
 
 //! DIN Rails constructor
 function fl_DIN_Rail(
-  //! one of the supported profiles (see variable FL_DIN_RP_INVENTORY)
+  //! one of the supported profiles (see variable FL_DIN_TS_INVENTORY)
   profile,
   //! overall rail length
   length,
@@ -158,30 +175,30 @@ module fl_DIN_puncher() {
 }
 
 // Specs taken from [RS PRO | RS PRO Steel Perforated DIN Rail, Mini Top Hat Compatible, 1m x 15mm x 5.5mm | 467-349 | RS Components](https://in.rsdelivers.com/product/rs-pro/rs-pro-steel-perforated-din-rail-mini-top-hat-1m-x/0467349)
-FL_DIN_TS15   = function(length,punch)
+FL_DIN_RAIL_TH15   = function(length,punch)
   fl_DIN_Rail(
-    profile     = FL_DIN_RP_TS15,
+    profile     = FL_DIN_TS15,
     punch       = punch,
     length      = length
   );
-FL_DIN_TS35   = function(length,punch)
+FL_DIN_RAIL_TH35   = function(length,punch)
   fl_DIN_Rail(
-    profile     = FL_DIN_RP_TS35,
+    profile     = FL_DIN_TS35,
     punch       = punch,
     length      = length
   );
-FL_DIN_TS35D  = function(length,punch)
+FL_DIN_RAIL_TH35D  = function(length,punch)
   fl_DIN_Rail(
-    profile     = FL_DIN_RP_TS35D,
+    profile     = FL_DIN_TS35D,
     punch       = punch,
     length      = length
   );
 
 //! rail constructor inventory
-FL_DIN_INVENTORY = [
-  FL_DIN_TS15,
-  FL_DIN_TS35,
-  FL_DIN_TS35D
+FL_DIN_RAIL_INVENTORY = [
+  FL_DIN_RAIL_TH15,
+  FL_DIN_RAIL_TH35,
+  FL_DIN_RAIL_TH35D
 ];
 
 module fl_DIN_rail(
@@ -237,7 +254,7 @@ module fl_DIN_rail(
                   fl_label(string=str("P[",i,"]"),size=1);
         if (fl_parm_symbols(debug))
           for(p=points)
-            fl_sym_point(point=p, size=0.25);
+            fl_sym_point(point=[p.x,p.y], size=0.25);
       }
   }
 
