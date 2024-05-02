@@ -4,11 +4,12 @@
 
 ```mermaid
 graph LR
-    A1[artifacts/din_rails] --o|include| A2[foundation/unsafe_defs]
-    A1 --o|include| A3[foundation/util]
-    A1 --o|use| A4[foundation/3d-engine]
-    A1 --o|use| A5[foundation/bbox-engine]
-    A1 --o|use| A6[foundation/polymorphic-engine]
+    A1[artifacts/din_rails] --o|include| A2[foundation/label]
+    A1 --o|include| A3[foundation/unsafe_defs]
+    A1 --o|include| A4[foundation/util]
+    A1 --o|use| A5[foundation/3d-engine]
+    A1 --o|use| A6[foundation/bbox-engine]
+    A1 --o|use| A7[foundation/polymorphic-engine]
 ```
 
 DIN rails according to EN 60715 and DIN 50045, 50022 and 50035 standards
@@ -41,6 +42,22 @@ __Default:__
     "DIN"
 
 prefix used for namespacing
+
+---
+
+### variable FL_DIN_PUNCH_4p2
+
+__Default:__
+
+    concat(fl_Punch(20),[["DIN/rail/punch_d",4.2],["DIN/rail/punch_len",12.2],])
+
+---
+
+### variable FL_DIN_PUNCH_6p2
+
+__Default:__
+
+    concat(fl_Punch(25),[["DIN/rail/punch_d",6.2],["DIN/rail/punch_len",15],])
 
 ---
 
@@ -82,7 +99,7 @@ __Default:__
 
 __Default:__
 
-    function(length,punched=false)fl_DIN_Rail(profile=FL_DIN_RP_TS15,punch=punched?let(d=4.2,len=12.2-d,step=20)[d,len,step]:undef,length=length)
+    function(length,punch)fl_DIN_Rail(profile=FL_DIN_RP_TS15,punch=punch,length=length)
 
 ---
 
@@ -90,7 +107,7 @@ __Default:__
 
 __Default:__
 
-    function(length,punched=false)fl_DIN_Rail(profile=FL_DIN_RP_TS35,punch=punched?let(d=6.2,len=15-d,step=25)[d,len,step]:undef,length=length)
+    function(length,punch)fl_DIN_Rail(profile=FL_DIN_RP_TS35,punch=punch,length=length)
 
 ---
 
@@ -98,7 +115,7 @@ __Default:__
 
 __Default:__
 
-    function(length,punched=false)fl_DIN_Rail(profile=FL_DIN_RP_TS35D,punch=punched?let(d=6.2,len=15-d,step=25)[d,len,step]:undef,length=length)
+    function(length,punch)fl_DIN_Rail(profile=FL_DIN_RP_TS35D,punch=punch,length=length)
 
 ## Functions
 
@@ -123,7 +140,7 @@ __length__
 overall rail length
 
 __punch__  
-in [radius,length,step] format
+optional parameter as returned from [fl_Punch()](#function-fl_punch)
 
 
 ---
@@ -150,7 +167,27 @@ __r__
 internal radii [upper radius,lower radius]
 
 
+---
+
+### function fl_Punch
+
+__Syntax:__
+
+```text
+fl_Punch(step)
+```
+
+Punch constructor
+
 ## Modules
+
+---
+
+### module fl_DIN_puncher
+
+__Syntax:__
+
+    fl_DIN_puncher()
 
 ---
 
@@ -195,5 +232,30 @@ desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 __debug__  
 see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
+
+
+---
+
+### module fl_punch
+
+__Syntax:__
+
+    fl_punch(punch,length,thick)
+
+Performs a punch along the Z axis using children.
+
+Children context:
+
+- $punch: the punch instance containing stepping data
+- $punch_thick: thickness of the performed punch to be used by children
+- $punch_step: punch stepping
+
+TODO: extend to other generic axes, move source into core library
+
+
+__Parameters:__
+
+__punch__  
+as returned by [fl_Punch()](#function-fl_punch)
 
 

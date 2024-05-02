@@ -1621,7 +1621,7 @@ __Syntax:__
 fl_parm_components(debug,label)
 ```
 
-When «debug» is true check if component is marked for debugging
+When «debug» is not undef, checks if component «label» is marked for debugging
 
 ---
 

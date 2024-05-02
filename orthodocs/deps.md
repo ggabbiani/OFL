@@ -28,46 +28,47 @@ graph TD
     A10
     A13 --o|include| A10
     A13 --o|use| A3
-    A22[artifacts/din_rails] --o|include| A2
+    A22[artifacts/din_rails] --o|include| A23[foundation/label]
+    A22 --o|include| A2
     A22 --o|include| A18
     A22 --o|use| A5
     A22 --o|use| A3
     A22 --o|use| A8
-    A23[foundation/drawio] --o|include| A1
+    A24[foundation/drawio] --o|include| A1
     A7
-    A24[vitamins/ethers] --o|include| A2
-    A24 --o|use| A1
-    A24 --o|use| A5
-    A24 --o|use| A3
-    A24 --o|use| A4
-    A24 --o|use| A18
-    A16 --o|include| A5
-    A25[vitamins/generic] --o|include| A10
+    A25[vitamins/ethers] --o|include| A2
     A25 --o|use| A1
     A25 --o|use| A5
     A25 --o|use| A3
-    A25 --o|use| A26[foundation/hole]
     A25 --o|use| A4
-    A27[foundation/grid] --o|include| A5
-    A28[vitamins/hdmi] --o|use| A5
-    A28 --o|use| A3
-    A28 --o|use| A4
-    A28 --o|use| A18
-    A29[vitamins/hds] --o|include| A26
-    A29 --o|include| A30[vitamins/sata]
-    A29 --o|include| A15
+    A25 --o|use| A18
+    A16 --o|include| A5
+    A26[vitamins/generic] --o|include| A10
+    A26 --o|use| A1
+    A26 --o|use| A5
+    A26 --o|use| A3
+    A26 --o|use| A27[foundation/hole]
+    A26 --o|use| A4
+    A28[foundation/grid] --o|include| A5
+    A29[vitamins/hdmi] --o|use| A5
+    A29 --o|use| A3
     A29 --o|use| A4
-    A31[vitamins/heatsinks] --o|include| A10
-    A31 --o|use| A5
-    A31 --o|use| A3
-    A31 --o|use| A4
-    A26 --o|include| A32[foundation/label]
+    A29 --o|use| A18
+    A30[vitamins/hds] --o|include| A27
+    A30 --o|include| A31[vitamins/sata]
+    A30 --o|include| A15
+    A30 --o|use| A4
+    A32[vitamins/heatsinks] --o|include| A10
+    A32 --o|use| A5
+    A32 --o|use| A3
+    A32 --o|use| A4
+    A27 --o|include| A23
     A33[vitamins/iec] --o|include| A8
     A33 --o|include| A2
     A33 --o|include| A15
     A34[vitamins/jacks] --o|include| A5
     A34 --o|include| A21
-    A34 --o|include| A32
+    A34 --o|include| A23
     A34 --o|use| A5
     A34 --o|use| A4
     A34 --o|use| A18
@@ -76,7 +77,7 @@ graph TD
     A14 --o|use| A5
     A14 --o|use| A4
     A14 --o|use| A35[import]
-    A32 --o|include| A5
+    A23 --o|include| A5
     A36[library] --o|include| A5
     A36 --o|include| A37[foundation/limits]
     A37 --o|include| A10
@@ -90,13 +91,13 @@ graph TD
     A39 --o|use| A3
     A39 --o|use| A4
     A40 --o|include| A20
-    A40 --o|include| A27
-    A40 --o|include| A26
-    A40 --o|include| A32
-    A40 --o|include| A24
-    A40 --o|include| A25
     A40 --o|include| A28
-    A40 --o|include| A31
+    A40 --o|include| A27
+    A40 --o|include| A23
+    A40 --o|include| A25
+    A40 --o|include| A26
+    A40 --o|include| A29
+    A40 --o|include| A32
     A40 --o|include| A34
     A40 --o|include| A41[vitamins/pin_headers]
     A40 --o|include| A15
@@ -107,7 +108,7 @@ graph TD
     A40 --o|use| A7
     A40 --o|use| A4
     A41 --o|include| A21
-    A41 --o|include| A32
+    A41 --o|include| A23
     A41 --o|include| A2
     A41 --o|use| A4
     A41 --o|use| A18
@@ -116,30 +117,30 @@ graph TD
     A8 --o|use| A3
     A8 --o|use| A4
     A17 --o|include| A5
-    A46[vitamins/psus] --o|include| A27
-    A46 --o|include| A26
+    A46[vitamins/psus] --o|include| A28
+    A46 --o|include| A27
     A46 --o|include| A2
     A46 --o|include| A15
     A46 --o|use| A4
     A46 --o|use| A18
-    A30 --o|include| A21
-    A30 --o|include| A23
-    A30 --o|use| A7
-    A30 --o|use| A9
-    A30 --o|use| A4
-    A47[vitamins/sata-adapters] --o|include| A30
+    A31 --o|include| A21
+    A31 --o|include| A24
+    A31 --o|use| A7
+    A31 --o|use| A9
+    A31 --o|use| A4
+    A47[vitamins/sata-adapters] --o|include| A31
     A47 --o|use| A4
     A15 --o|include| A2
     A15 --o|use| A5
     A15 --o|use| A3
-    A15 --o|use| A26
+    A15 --o|use| A27
     A15 --o|use| A4
     A42 --o|use| A5
     A42 --o|use| A3
     A42 --o|use| A4
     A42 --o|use| A18
     A12 --o|include| A5
-    A12 --o|include| A26
+    A12 --o|include| A27
     A12 --o|include| A2
     A12 --o|include| A14
     A12 --o|use| A16
@@ -158,7 +159,7 @@ graph TD
     A49 --o|include| A15
     A49 --o|use| A5
     A49 --o|use| A3
-    A49 --o|use| A26
+    A49 --o|use| A27
     A49 --o|use| A4
     A50[artifacts/t-profiles] --o|include| A5
     A50 --o|use| A4
