@@ -114,6 +114,7 @@
   engine
 - [ ] create template tests
 - [ ] complete DIN rails implementing missing verbs
+- [ ] add 'point' symbol
 
 
 
