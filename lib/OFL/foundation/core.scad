@@ -831,7 +831,7 @@ function fl_split(
 //! returns a sub list
 function fl_list_sub(list,from,to) = let(
   to  = is_undef(to) ? len(list)-1 : to
-) [for(i=from;i<to;i=i+1) list[i]];
+) [for(i=from;i<=to;i=i+1) list[i]];
 
 /*!
  * Returns the «list» head according to «n»:
@@ -1400,7 +1400,7 @@ function fl_parm_labels(debug) = is_undef(debug) ? false : assert(is_bool(debug[
 //! When true debug symbols are turned on
 function fl_parm_symbols(debug) = is_undef(debug) ? false : assert(is_bool(debug[1])) debug[1];
 
-//! When «debug» is true check if component is marked for debugging
+//! When «debug» is not undef, checks if component «label» is marked for debugging
 function fl_parm_components(debug,label) =
   is_undef(debug) ?
     false :
