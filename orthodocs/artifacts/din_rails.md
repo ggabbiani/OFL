@@ -12,7 +12,18 @@ graph LR
     A1 --o|use| A7[foundation/polymorphic-engine]
 ```
 
-DIN rails according to EN 60715 and DIN 50045, 50022 and 50035 standards
+A DIN rail is a metal rail of a standard type widely used for mounting
+circuit breakers and industrial control equipment inside equipment racks.
+These products are typically made from cold rolled carbon steel sheet with a
+zinc-plated or chromated bright surface finish. Although metallic, they are
+meant only for mechanical support and are not used as a busbar to conduct
+electric current, though they may provide a chassis grounding connection.
+
+The term derives from the original specifications published by Deutsches
+Institut für Normung (DIN) in Germany, which have since been adopted as
+European (EN) and international (IEC) standards. The original concept was
+developed and implemented in Germany in 1928, and was elaborated into the
+present standards in the 1950s.
 
 This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 
@@ -22,16 +33,6 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 
 ## Variables
-
----
-
-### variable FL_DIN_INVENTORY
-
-__Default:__
-
-    [FL_DIN_TS15,FL_DIN_TS35,FL_DIN_TS35D]
-
-rail constructor inventory
 
 ---
 
@@ -61,37 +62,37 @@ __Default:__
 
 ---
 
-### variable FL_DIN_RP_INVENTORY
+### variable FL_DIN_RAIL_INVENTORY
 
 __Default:__
 
-    [FL_DIN_RP_TS15,FL_DIN_RP_TS35,FL_DIN_RP_TS35D]
+    [FL_DIN_RAIL_TH15,FL_DIN_RAIL_TH35,FL_DIN_RAIL_TH35D]
 
-profile inventory
+rail constructor inventory
 
 ---
 
-### variable FL_DIN_RP_TS15
+### variable FL_DIN_RAIL_TH15
 
 __Default:__
 
-    fl_DIN_RailProfile("TS15",size=[[10.5,15],5.5],r=[0.2,0.5])
+    function(length,punch)fl_DIN_Rail(profile=FL_DIN_TS15,punch=punch,length=length)
 
 ---
 
-### variable FL_DIN_RP_TS35
+### variable FL_DIN_RAIL_TH35
 
 __Default:__
 
-    fl_DIN_RailProfile("TS35",size=[[27,35],7.5],r=[.8,.8])
+    function(length,punch)fl_DIN_Rail(profile=FL_DIN_TS35,punch=punch,length=length)
 
 ---
 
-### variable FL_DIN_RP_TS35D
+### variable FL_DIN_RAIL_TH35D
 
 __Default:__
 
-    fl_DIN_RailProfile("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5)
+    function(length,punch)fl_DIN_Rail(profile=FL_DIN_TS35D,punch=punch,length=length)
 
 ---
 
@@ -99,7 +100,7 @@ __Default:__
 
 __Default:__
 
-    function(length,punch)fl_DIN_Rail(profile=FL_DIN_RP_TS15,punch=punch,length=length)
+    fl_DIN_TopHatSection("TS15",size=[[10.5,15],5.5],r=[0.2,0.5])
 
 ---
 
@@ -107,7 +108,10 @@ __Default:__
 
 __Default:__
 
-    function(length,punch)fl_DIN_Rail(profile=FL_DIN_RP_TS35,punch=punch,length=length)
+    fl_DIN_TopHatSection("TS35",size=[[27,35],7.5],r=[.8,.8])
+
+top hat rail IEC/EN 60715 – 35 × 15
+
 
 ---
 
@@ -115,7 +119,17 @@ __Default:__
 
 __Default:__
 
-    function(length,punch)fl_DIN_Rail(profile=FL_DIN_RP_TS35D,punch=punch,length=length)
+    fl_DIN_TopHatSection("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5)
+
+---
+
+### variable FL_DIN_TS_INVENTORY
+
+__Default:__
+
+    [FL_DIN_TS15,FL_DIN_TS35,FL_DIN_TS35D]
+
+DIN rail section inventory
 
 ## Functions
 
@@ -134,7 +148,7 @@ DIN Rails constructor
 __Parameters:__
 
 __profile__  
-one of the supported profiles (see [variable FL_DIN_RP_INVENTORY](#variable-fl_din_rp_inventory))
+one of the supported profiles (see [variable FL_DIN_TS_INVENTORY](#variable-fl_din_ts_inventory))
 
 __length__  
 overall rail length
@@ -145,15 +159,17 @@ optional parameter as returned from [fl_Punch()](#function-fl_punch)
 
 ---
 
-### function fl_DIN_RailProfile
+### function fl_DIN_TopHatSection
 
 __Syntax:__
 
 ```text
-fl_DIN_RailProfile(name,description,size,r,thick=1)
+fl_DIN_TopHatSection(name,description,size,r,thick=1)
 ```
 
-helper for new 'object' definition
+Constructor for Top hat section (TH), type O, or type Ω, with hat-shaped
+cross section.
+
 
 __Parameters:__
 
