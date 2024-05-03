@@ -202,8 +202,8 @@ module fl_tnut(
         if (screw) { // subtract holes and countersink
           if (knut)
             fl_lay_holes(holes)
-              translate(Y(NIL)) resize([0,fl_bb_size(knut).y+2xNIL],0)
-                fl_knut(FL_DRILL,type=knut,direction=[-$hole_n,0],octant=+Z,$FL_DRILL=$FL_ADD);
+              translate(Y(NIL)) // resize([0,fl_bb_size(knut).y+2xNIL],0)
+                fl_knut(FL_DRILL,dri_thick=[$hole_depth],type=knut,direction=[-$hole_n,0],octant=+Z,$FL_DRILL=$FL_ADD);
           else
             fl_holes(holes,tolerance=hole_t);
           if (countersink)
