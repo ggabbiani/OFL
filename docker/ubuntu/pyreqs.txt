@@ -1,5 +1,5 @@
 numpy==1.26.4
 opencv_python_headless==4.9.0.80
 python-dotenv==1.0.1
-skimage==0.0
 termcolor==2.4.0
+scikit-image==0.23.2
