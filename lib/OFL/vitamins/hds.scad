@@ -126,7 +126,8 @@ module fl_hd(
         linear_extrude(height=size.z) fl_square(size=size,corners=corner_r,quadrant=+Y);
         fl_holes(holes,[-X,+X,-Z]);
       }
-      multmatrix(Mpd) fl_sata(FL_FOOTPRINT,plug);
+      multmatrix(Mpd)
+        fl_sata(FL_FOOTPRINT,plug,$FL_FOOTPRINT=$FL_ADD);
     }
     multmatrix(Mpd) fl_sata(type=plug);
 
