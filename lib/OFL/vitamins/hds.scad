@@ -1,7 +1,10 @@
 /*!
- * Hard disk definition file.
+ * Hard disk definition file. Specs taken from [2.5 inch Hard Drive - Geekworm
+ * Wiki](https://wiki.geekworm.com/2.5_inch_Hard_Drive)
  *
- * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -17,17 +20,13 @@ include <../../NopSCADlib/vitamins/screws.scad>
 FL_HD_NS  = "hd";
 
 FL_HD_EVO860 = let(
-  size  = [70,100,6.7],
-  plug  = FL_SATA_POWERDATAPLUG,
-  cid   = fl_sata_powerDataCID(),
-  screw = M3_cs_cap_screw,
+  size    = [69.85,100,7],
+  plug    = FL_SATA_POWERDATAPLUG,
+  cid     = fl_sata_powerDataCID(),
+  screw   = M3_cs_cap_screw,
   screw_r = screw_radius(screw),
 
-  Mpd   = let(
-    w = size.x,
-    l = fl_size(plug).x,
-    d = 7
-  ) fl_T(fl_X((l-w+2*d)/2)-fl_Z(FL_NIL)) * fl_Rx(90) * fl_octant(+Y-Z,type=plug),
+  Mpd   = T(-X(4.8)-Z(NIL)) * fl_Rx(90) * fl_octant(+Y-Z,type=plug),
 
   conns   = fl_connectors(plug),
   pc      = fl_conn_clone(conns[0],M=Mpd),
@@ -48,14 +47,14 @@ FL_HD_EVO860 = let(
   // each row represents a hole with the following format:
   // [[point],[normal], diameter, thickness]
   fl_holes(value=[
-    fl_Hole([  size.x/2-3.5, 13.5, 0   ], 3, -Z, 2.5+screw_r),
-    fl_Hole([  size.x/2-3.5, 90,   0   ], 3, -Z, 2.5+screw_r),
-    fl_Hole([ -size.x/2+3.5, 13.5, 0   ], 3, -Z, 2.5+screw_r),
-    fl_Hole([ -size.x/2+3.5, 90,   0   ], 3, -Z, 2.5+screw_r),
-    fl_Hole([  size.x/2,     13.5, 2.5 ], 3, +X, 3.5+screw_r),
-    fl_Hole([  size.x/2,     90,   2.5 ], 3, +X, 3.5+screw_r),
-    fl_Hole([ -size.x/2,     13.5, 2.5 ], 3, -X, 3.5+screw_r),
-    fl_Hole([ -size.x/2,     90,   2.5 ], 3, -X, 3.5+screw_r),
+    fl_Hole([  size.x/2-3.5, 14,  0 ], 3, -Z, 3+screw_r),
+    fl_Hole([  size.x/2-3.5, 90.6,0 ], 3, -Z, 3+screw_r),
+    fl_Hole([ -size.x/2+3.5, 14,  0 ], 3, -Z, 3+screw_r),
+    fl_Hole([ -size.x/2+3.5, 90.6,0 ], 3, -Z, 3+screw_r),
+    fl_Hole([  size.x/2,     14,  3 ], 3, +X, 3.5+screw_r),
+    fl_Hole([  size.x/2,     90.6,3 ], 3, +X, 3.5+screw_r),
+    fl_Hole([ -size.x/2,     14,  3 ], 3, -X, 3.5+screw_r),
+    fl_Hole([ -size.x/2,     90.6,3 ], 3, -X, 3.5+screw_r),
     ]),
 
   ["Mpd",        Mpd ],
