@@ -153,11 +153,11 @@ FL_DIN_PUNCH_4p2  = concat(
     ["DIN/rail/punch_len",  12.2],
   ]
 );
-FL_DIN_PUNCH_6p2  = concat(
+FL_DIN_PUNCH_6p3  = concat(
   fl_Punch(25),
   [
-    ["DIN/rail/punch_d",    6.2],
-    ["DIN/rail/punch_len",  15],
+    ["DIN/rail/punch_d",    6.3],
+    ["DIN/rail/punch_len",  18],
   ]
 );
 
@@ -175,22 +175,22 @@ module fl_DIN_puncher() {
 }
 
 // Specs taken from [RS PRO | RS PRO Steel Perforated DIN Rail, Mini Top Hat Compatible, 1m x 15mm x 5.5mm | 467-349 | RS Components](https://in.rsdelivers.com/product/rs-pro/rs-pro-steel-perforated-din-rail-mini-top-hat-1m-x/0467349)
-FL_DIN_RAIL_TH15   = function(length,punch)
+FL_DIN_RAIL_TH15   = function(length,punched=true)
   fl_DIN_Rail(
     profile     = FL_DIN_TS15,
-    punch       = punch,
+    punch       = punched ? FL_DIN_PUNCH_4p2 : undef,
     length      = length
   );
-FL_DIN_RAIL_TH35   = function(length,punch)
+FL_DIN_RAIL_TH35   = function(length,punched=true)
   fl_DIN_Rail(
     profile     = FL_DIN_TS35,
-    punch       = punch,
+    punch       = punched ? FL_DIN_PUNCH_6p3 : undef,
     length      = length
   );
-FL_DIN_RAIL_TH35D  = function(length,punch)
+FL_DIN_RAIL_TH35D  = function(length,punched=true)
   fl_DIN_Rail(
     profile     = FL_DIN_TS35D,
-    punch       = punch,
+    punch       = punched ? FL_DIN_PUNCH_6p3 : undef,
     length      = length
   );
 

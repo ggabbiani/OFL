@@ -63,8 +63,8 @@ DIR_R       = 0;        // [-360:360]
 /* [DIN rails] */
 
 SHOW    = "ALL";  // [ALL, TS15, TS35, TS35D]
-LENGTH  = 50;    // [0:100]
-PUNCH   = "none"; // [none,4p2,6p2]
+LENGTH  = 50;     // [0:100]
+PUNCHED = false;
 // used during FL_CUTOUT and FL_FOOTPRINT
 TOLERANCE   = 0;  // [0:0.1:5]
 // thickness for FL_CUTOUT
@@ -84,7 +84,6 @@ fl_status();
 
 // end of automatically generated code
 
-punch         = PUNCH=="4p2" ? FL_DIN_PUNCH_4p2 : PUNCH=="6p2" ?FL_DIN_PUNCH_6p2 : undef;
 thick         = $FL_CUTOUT!="OFF" ? CO_T       : undef;
 tolerance     = $FL_CUTOUT!="OFF" || $FL_FOOTPRINT!="OFF" ? TOLERANCE  : undef;
 drift         = $FL_CUTOUT!="OFF" ? CO_DRIFT   : undef;
@@ -96,12 +95,12 @@ verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT,FL_LAYOUT,FL_
 single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_TS_INVENTORY),FL_DIN_RAIL_INVENTORY));
 if (single) {
   fl_DIN_rail(
-    verbs,single(LENGTH,punch),
+    verbs,single(LENGTH,PUNCHED),
     cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
     octant=octant,direction=direction,debug=debug
   );
 } else {
-  all = [for(constructor=FL_DIN_RAIL_INVENTORY) constructor(LENGTH,punch)];
+  all = [for(constructor=FL_DIN_RAIL_INVENTORY) constructor(LENGTH,PUNCHED)];
   fl_layout(axis=+X,gap=3,types=all,$FL_LAYOUT="ON")
     fl_DIN_rail(
       verbs,all[$i],
