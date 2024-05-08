@@ -6,17 +6,6 @@
 
 **O**penSCAD **F**oundation **L**ibrary (OFL) is a foundation library for OpenSCAD integrating concepts not included natively in the OpenSCAD language and providing an extendible standardized API base.
 
-## Pre-reqs
-
-The following libraries are used and distributed internally with OFL:
-
-* [NopSCADlib Release v21.10.0](https://github.com/nophead/NopSCADlib/releases/tag/v21.10.0)
-* [Round-Anything v1.0.4](https://github.com/Irev-Dev/Round-Anything/releases/tag/1.0.4)
-* [scad-utils](https://github.com/openscad/scad-utils)
-
-Each of them can be found in the __lib/__ project directory together with the
-release and LICENSE notes provided originally.
-
 ## Usage
 
 1. download and expand the library
@@ -38,3 +27,15 @@ OFL comes with three major components:
 Every library component is accessed through a set of verb-based APIs (Common API Template), even third part libraries eventually used internally.
 
 ![OFL architecture](docs/architecture.png)
+
+## Disclaimer
+
+The following libraries, used and distributed internally this project, are not
+part of OFL:
+
+* [NopSCADlib Release v21.10.0](https://github.com/nophead/NopSCADlib/releases/tag/v21.10.0)
+* [Round-Anything v1.0.4](https://github.com/Irev-Dev/Round-Anything/releases/tag/1.0.4)
+* [scad-utils](https://github.com/openscad/scad-utils)
+
+Each of them can be found in the __lib/__ project directory together with the
+release and LICENSE notes provided originally.
