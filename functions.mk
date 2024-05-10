@@ -54,20 +54,28 @@ define relative-dir
 $(subst $(PRJ_ROOT)/,,$(CURDIR))
 endef
 
-define _win_
+define is-win
 $(findstring Windows_NT,$(OS))
 endef
 
-define _linux_
+define is-linux
 $(findstring Linux,$(shell uname -s))
 endef
 
-define _mac_
+define is-mac
 $(findstring Darwin,$(shell uname -s))
 endef
 
 # returns 'Windows_NT','Linux' or 'Darwin' according to the underlying
 # operating system.
 define os
-$(if $(call _win_),Windows_NT,$(if $(call _linux_),Linux,$(if $(call _mac_),Darwin)))
+$(if $(call is-win),Windows_NT,$(if $(call is-linux),Linux,$(if $(call is-mac),Darwin,$(error unsupported operating system))))
+endef
+
+define which
+$(if $(call is-win),where,which)
+endef
+
+define scad-path
+$(if $(call is-mac),$(shell mdfind "kMDItemCFBundleIdentifier == 'org.openscad.OpenSCAD'"),$(shell $(call which) openscad))
 endef
