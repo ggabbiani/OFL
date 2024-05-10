@@ -24,9 +24,11 @@ export DEPS					:= $(PRJ_ROOT)/bin/deps.sh --silent
 export BIN					:= $(CURDIR)/bin
 export FUNCTIONS			:= $(CURDIR)/functions.mk
 export SHELL				:= /bin/bash
-export SCAD					:= $(BIN)/openscad.py -m make --view axes
 
 include $(FUNCTIONS)
+
+# function dependant variables
+export SCAD					:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(error OpenSCAD missing))
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
