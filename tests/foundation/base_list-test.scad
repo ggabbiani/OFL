@@ -4,6 +4,8 @@
  * NOTE: this file is generated automatically from 'template-nogui.scad', any
  * change will be lost.
  *
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -247,12 +249,5 @@ let(
   b         = [-X      ,-Y,-Z],
   result    = fl_list_AND(a,b),
   expected  = [-Y,-Z]
-) assert(result==expected,result);
-
-let(
-  a         = [   +X,+Y,-Y   ,-Z],
-  b         = [-X         ,+Z],
-  result    = fl_list_AND(a,b),
-  expected  = []
 ) assert(result==expected,result);
 

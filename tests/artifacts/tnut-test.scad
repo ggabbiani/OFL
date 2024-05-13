@@ -4,6 +4,8 @@
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
  *
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -70,7 +72,7 @@ opening               = 6.4;
 in_width              = 10.0; // [0:0.1:20]
 length                = 20; // [0:30]
 screw_name            = "M3_cap_screw"; // [M3_cap_screw,M4_cap_screw,M5_cap_screw,M6_cap_screw]
-wall_thick            = 2.0;  // [0:0.1:10]
+wall_thick            = 2.0;  // [0:0.1:1]
 base_thick            = 1.0;  // [0:0.1:3]
 cone_thick            = 2.0;  // [0:0.1:6]
 nut_tolerance         = 0;    // [-1:0.1:1]
