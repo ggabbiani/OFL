@@ -281,8 +281,8 @@ module fl_spacer(
       translate($spc_director*h)
         children();
     // echo("*** -Z ***")
-      context(-Z)
-        children();
+    context(-Z)
+      children();
   }
 
   module do_footprint() {
