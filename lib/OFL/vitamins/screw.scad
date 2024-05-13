@@ -293,7 +293,7 @@ module fl_screw(
       fl_modifier($modifier) do_assembly();
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier)
-        fl_cylinder(FL_ADD,h=hole_l,r=hole_r,octant=-Z);
+        fl_cylinder(FL_ADD,h=hole_l,r=hole_r,octant=-Z,$FL_ADD=$FL_DRILL);
     } else if ($verb==FL_FOOTPRINT) {
       fl_modifier($modifier) do_footprint();
     } else {
