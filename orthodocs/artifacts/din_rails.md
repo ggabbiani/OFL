@@ -54,11 +54,11 @@ __Default:__
 
 ---
 
-### variable FL_DIN_PUNCH_6p2
+### variable FL_DIN_PUNCH_6p3
 
 __Default:__
 
-    concat(fl_Punch(25),[["DIN/rail/punch_d",6.2],["DIN/rail/punch_len",15],])
+    concat(fl_Punch(25),[["DIN/rail/punch_d",6.3],["DIN/rail/punch_len",18],])
 
 ---
 
@@ -76,7 +76,7 @@ rail constructor inventory
 
 __Default:__
 
-    function(length,punch)fl_DIN_Rail(profile=FL_DIN_TS15,punch=punch,length=length)
+    function(length,punched=true)fl_DIN_Rail(profile=FL_DIN_TS15,punch=punched?FL_DIN_PUNCH_4p2:undef,length=length)
 
 ---
 
@@ -84,7 +84,7 @@ __Default:__
 
 __Default:__
 
-    function(length,punch)fl_DIN_Rail(profile=FL_DIN_TS35,punch=punch,length=length)
+    function(length,punched=true)fl_DIN_Rail(profile=FL_DIN_TS35,punch=punched?FL_DIN_PUNCH_6p3:undef,length=length)
 
 ---
 
@@ -92,7 +92,7 @@ __Default:__
 
 __Default:__
 
-    function(length,punch)fl_DIN_Rail(profile=FL_DIN_TS35D,punch=punch,length=length)
+    function(length,punched=true)fl_DIN_Rail(profile=FL_DIN_TS35D,punch=punched?FL_DIN_PUNCH_6p3:undef,length=length)
 
 ---
 

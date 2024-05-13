@@ -195,7 +195,7 @@
 - [fl_dict_search (function)](foundation/core.md#function-fl_dict_search)
 - [FL_DIN_NS (variable)](artifacts/din_rails.md#variable-fl_din_ns)
 - [FL_DIN_PUNCH_4p2 (variable)](artifacts/din_rails.md#variable-fl_din_punch_4p2)
-- [FL_DIN_PUNCH_6p2 (variable)](artifacts/din_rails.md#variable-fl_din_punch_6p2)
+- [FL_DIN_PUNCH_6p3 (variable)](artifacts/din_rails.md#variable-fl_din_punch_6p3)
 - [fl_DIN_puncher (module)](artifacts/din_rails.md#module-fl_din_puncher)
 - [fl_DIN_Rail (function)](artifacts/din_rails.md#function-fl_din_rail)
 - [fl_DIN_rail (module)](artifacts/din_rails.md#module-fl_din_rail)
@@ -247,6 +247,13 @@
 
 ## F
 
+- [fl_Fan (function)](vitamins/fans.md#function-fl_fan)
+- [fl_fan (module)](vitamins/fans.md#module-fl_fan)
+- [FL_FAN_INVENTORY (variable)](vitamins/fans.md#variable-fl_fan_inventory)
+- [FL_FAN_NAMES (variable)](vitamins/fans.md#variable-fl_fan_names)
+- [FL_FAN_NS (variable)](vitamins/fans.md#variable-fl_fan_ns)
+- [fl_fan_screw (function)](vitamins/fans.md#function-fl_fan_screw)
+- [vitamins/fans (package)](vitamins/fans.md#package-vitaminsfans)
 - [fl_FDMtolerance (variable)](foundation/core.md#variable-fl_fdmtolerance)
 - [fl_filament (function)](foundation/core.md#function-fl_filament)
 - [fl_fillet (module)](foundation/fillet.md#module-fl_fillet)

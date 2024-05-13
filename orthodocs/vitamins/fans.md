@@ -1,0 +1,149 @@
+# package vitamins/fans
+
+## Dependencies
+
+```mermaid
+graph LR
+    A1[vitamins/fans] --o|include| A2[foundation/unsafe_defs]
+    A1 --o|use| A3[foundation/3d-engine]
+    A1 --o|use| A4[foundation/bbox-engine]
+    A1 --o|use| A5[foundation/polymorphic-engine]
+```
+
+Artifact template for OpenSCAD Foundation Library.
+
+This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+
+Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+
+SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
+
+
+## Variables
+
+---
+
+### variable FL_FAN_INVENTORY
+
+__Default:__
+
+    [for(nop=fans)let()fl_Fan(nop)]
+
+package inventory as a list of pre-defined and ready-to-use 'objects'
+
+---
+
+### variable FL_FAN_NAMES
+
+__Default:__
+
+    [for(fan=FL_FAN_INVENTORY)fl_name(fan)]
+
+inventory item names
+
+---
+
+### variable FL_FAN_NS
+
+__Default:__
+
+    "fan"
+
+prefix used for namespacing
+
+## Functions
+
+---
+
+### function fl_Fan
+
+__Syntax:__
+
+```text
+fl_Fan(nop,description)
+```
+
+wraps a nop fan inside the corresponding OFL instance
+
+__Parameters:__
+
+__description__  
+optional description
+
+
+---
+
+### function fl_fan_screw
+
+__Syntax:__
+
+```text
+fl_fan_screw(type)
+```
+
+unwrap nop screw from the OFL fan instance
+
+## Modules
+
+---
+
+### module fl_fan
+
+__Syntax:__
+
+    fl_fan(verbs=FL_ADD,this,thick=0,octant,direction,debug)
+
+OFL fan module.
+
+Children context during FL_LAYOUT:
+
+- $fan_director: direction axis
+- $fan_direction: direction in [$fan_director,0] form
+- $fan_thick: non negative scalar expressing the current child invocation thickness
+- $fan_verb: current child invocation verb
+
+
+
+__Parameters:__
+
+__verbs__  
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+
+__thick__  
+List of Z-axis thickness or a scalar value for FL_DRILL and FL_MOUNT
+operations.
+
+A positive value represents thickness along +Z semi-axis.
+A negative value represents thickness along -Z semi-axis.
+One scalar value will used for both Z semi-axes.
+
+Example 1:
+
+    thick = [+3,-1]
+
+is interpreted as thickness of 3mm along +Z and 1mm along -Z
+
+Example 2:
+
+    thick = [-1]
+
+is interpreted as thickness of 1mm along -Z 0mm along +Z
+
+Example:
+
+    thick = 2
+
+is interpreted as a thickness of 2mm along ±Z
+
+
+
+__octant__  
+when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__debug__  
+see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
+
+

@@ -21,26 +21,32 @@
 <polygon fill="white" stroke="black" stroke-width="2" points="1515.75,-30 1415.75,-30 1415.75,0 1515.75,0 1515.75,-30"/>
 <text text-anchor="middle" x="1465.75" y="-10.33" font-family="Times,serif" font-size="14.00">ethers</text>
 </g>
-<!-- generic -->
+<!-- fans -->
 <g id="node3" class="node">
+<title>fans</title>
+<polygon fill="white" stroke="black" stroke-width="2" points="1515.75,-113.25 1415.75,-113.25 1415.75,-83.25 1515.75,-83.25 1515.75,-113.25"/>
+<text text-anchor="middle" x="1465.75" y="-93.58" font-family="Times,serif" font-size="14.00">fans</text>
+</g>
+<!-- generic -->
+<g id="node4" class="node">
 <title>generic</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1633.75,-30 1533.75,-30 1533.75,0 1633.75,0 1633.75,-30"/>
 <text text-anchor="middle" x="1583.75" y="-10.33" font-family="Times,serif" font-size="14.00">generic</text>
 </g>
 <!-- hdmi -->
-<g id="node4" class="node">
+<g id="node5" class="node">
 <title>hdmi</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1751.75,-30 1651.75,-30 1651.75,0 1751.75,0 1751.75,-30"/>
 <text text-anchor="middle" x="1701.75" y="-10.33" font-family="Times,serif" font-size="14.00">hdmi</text>
 </g>
 <!-- hds -->
-<g id="node5" class="node">
+<g id="node6" class="node">
 <title>hds</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="246.75,-113.25 146.75,-113.25 146.75,-83.25 246.75,-83.25 246.75,-113.25"/>
 <text text-anchor="middle" x="196.75" y="-93.58" font-family="Times,serif" font-size="14.00">hds</text>
 </g>
 <!-- sata -->
-<g id="node15" class="node">
+<g id="node16" class="node">
 <title>sata</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="152.75,-30 52.75,-30 52.75,0 152.75,0 152.75,-30"/>
 <text text-anchor="middle" x="102.75" y="-10.33" font-family="Times,serif" font-size="14.00">sata</text>
@@ -53,7 +59,7 @@
 <text text-anchor="middle" x="182.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- screw -->
-<g id="node16" class="node">
+<g id="node17" class="node">
 <title>screw</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="528.75,-30 428.75,-30 428.75,0 528.75,0 528.75,-30"/>
 <text text-anchor="middle" x="478.75" y="-10.33" font-family="Times,serif" font-size="14.00">screw</text>
@@ -66,13 +72,13 @@
 <text text-anchor="middle" x="299.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- heatsinks -->
-<g id="node6" class="node">
+<g id="node7" class="node">
 <title>heatsinks</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1869.75,-30 1769.75,-30 1769.75,0 1869.75,0 1869.75,-30"/>
 <text text-anchor="middle" x="1819.75" y="-10.33" font-family="Times,serif" font-size="14.00">heatsinks</text>
 </g>
 <!-- iec -->
-<g id="node7" class="node">
+<g id="node8" class="node">
 <title>iec</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="483.75,-113.25 383.75,-113.25 383.75,-83.25 483.75,-83.25 483.75,-113.25"/>
 <text text-anchor="middle" x="433.75" y="-93.58" font-family="Times,serif" font-size="14.00">iec</text>
@@ -85,13 +91,13 @@
 <text text-anchor="middle" x="467.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- jacks -->
-<g id="node8" class="node">
+<g id="node9" class="node">
 <title>jacks</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1987.75,-30 1887.75,-30 1887.75,0 1987.75,0 1987.75,-30"/>
 <text text-anchor="middle" x="1937.75" y="-10.33" font-family="Times,serif" font-size="14.00">jacks</text>
 </g>
 <!-- knurl_nuts -->
-<g id="node9" class="node">
+<g id="node10" class="node">
 <title>knurl_nuts</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="601.75,-113.25 501.75,-113.25 501.75,-83.25 601.75,-83.25 601.75,-113.25"/>
 <text text-anchor="middle" x="551.75" y="-93.58" font-family="Times,serif" font-size="14.00">knurl_nuts</text>
@@ -104,7 +110,7 @@
 <text text-anchor="middle" x="555.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- magnets -->
-<g id="node10" class="node">
+<g id="node11" class="node">
 <title>magnets</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="738.75,-113.25 638.75,-113.25 638.75,-83.25 738.75,-83.25 738.75,-113.25"/>
 <text text-anchor="middle" x="688.75" y="-93.58" font-family="Times,serif" font-size="14.00">magnets</text>
@@ -124,7 +130,7 @@
 <text text-anchor="middle" x="656.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- pcbs -->
-<g id="node11" class="node">
+<g id="node12" class="node">
 <title>pcbs</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1397.75,-113.25 1297.75,-113.25 1297.75,-83.25 1397.75,-83.25 1397.75,-113.25"/>
 <text text-anchor="middle" x="1347.75" y="-93.58" font-family="Times,serif" font-size="14.00">pcbs</text>
@@ -165,7 +171,7 @@
 <text text-anchor="middle" x="1912.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- pin_headers -->
-<g id="node12" class="node">
+<g id="node13" class="node">
 <title>pin_headers</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="925.88,-30 823.62,-30 823.62,0 925.88,0 925.88,-30"/>
 <text text-anchor="middle" x="874.75" y="-10.33" font-family="Times,serif" font-size="14.00">pin_headers</text>
@@ -185,7 +191,7 @@
 <text text-anchor="middle" x="889.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- sd -->
-<g id="node17" class="node">
+<g id="node18" class="node">
 <title>sd</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1043.75,-30 943.75,-30 943.75,0 1043.75,0 1043.75,-30"/>
 <text text-anchor="middle" x="993.75" y="-10.33" font-family="Times,serif" font-size="14.00">sd</text>
@@ -198,7 +204,7 @@
 <text text-anchor="middle" x="1112.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- switch -->
-<g id="node19" class="node">
+<g id="node20" class="node">
 <title>switch</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1161.75,-30 1061.75,-30 1061.75,0 1161.75,0 1161.75,-30"/>
 <text text-anchor="middle" x="1111.75" y="-10.33" font-family="Times,serif" font-size="14.00">switch</text>
@@ -211,7 +217,7 @@
 <text text-anchor="middle" x="1216.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- trimpot -->
-<g id="node21" class="node">
+<g id="node22" class="node">
 <title>trimpot</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1279.75,-30 1179.75,-30 1179.75,0 1279.75,0 1279.75,-30"/>
 <text text-anchor="middle" x="1229.75" y="-10.33" font-family="Times,serif" font-size="14.00">trimpot</text>
@@ -224,7 +230,7 @@
 <text text-anchor="middle" x="1308.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- usbs -->
-<g id="node22" class="node">
+<g id="node23" class="node">
 <title>usbs</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1397.75,-30 1297.75,-30 1297.75,0 1397.75,0 1397.75,-30"/>
 <text text-anchor="middle" x="1347.75" y="-10.33" font-family="Times,serif" font-size="14.00">usbs</text>
@@ -237,7 +243,7 @@
 <text text-anchor="middle" x="1381.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- psus -->
-<g id="node13" class="node">
+<g id="node14" class="node">
 <title>psus</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="365.75,-113.25 265.75,-113.25 265.75,-83.25 365.75,-83.25 365.75,-113.25"/>
 <text text-anchor="middle" x="315.75" y="-93.58" font-family="Times,serif" font-size="14.00">psus</text>
@@ -250,7 +256,7 @@
 <text text-anchor="middle" x="390.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- sata&#45;adapters -->
-<g id="node14" class="node">
+<g id="node15" class="node">
 <title>sata&#45;adapters</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="113.5,-113.25 0,-113.25 0,-83.25 113.5,-83.25 113.5,-113.25"/>
 <text text-anchor="middle" x="56.75" y="-93.58" font-family="Times,serif" font-size="14.00">sata&#45;adapters</text>
@@ -263,16 +269,16 @@
 <text text-anchor="middle" x="91.88" y="-51.95" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- spdts -->
-<g id="node18" class="node">
+<g id="node19" class="node">
 <title>spdts</title>
-<polygon fill="white" stroke="black" stroke-width="2" points="1515.75,-113.25 1415.75,-113.25 1415.75,-83.25 1515.75,-83.25 1515.75,-113.25"/>
-<text text-anchor="middle" x="1465.75" y="-93.58" font-family="Times,serif" font-size="14.00">spdts</text>
+<polygon fill="white" stroke="black" stroke-width="2" points="1633.75,-113.25 1533.75,-113.25 1533.75,-83.25 1633.75,-83.25 1633.75,-113.25"/>
+<text text-anchor="middle" x="1583.75" y="-93.58" font-family="Times,serif" font-size="14.00">spdts</text>
 </g>
 <!-- template -->
-<g id="node20" class="node">
+<g id="node21" class="node">
 <title>template</title>
-<polygon fill="white" stroke="black" stroke-width="2" points="1633.75,-113.25 1533.75,-113.25 1533.75,-83.25 1633.75,-83.25 1633.75,-113.25"/>
-<text text-anchor="middle" x="1583.75" y="-93.58" font-family="Times,serif" font-size="14.00">template</text>
+<polygon fill="white" stroke="black" stroke-width="2" points="1751.75,-113.25 1651.75,-113.25 1651.75,-83.25 1751.75,-83.25 1751.75,-113.25"/>
+<text text-anchor="middle" x="1701.75" y="-93.58" font-family="Times,serif" font-size="14.00">template</text>
 </g>
 </g>
 </svg>
