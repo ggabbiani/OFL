@@ -1,5 +1,8 @@
 /*
- * Artifacts fan test.
+ * NopSCADlib fan wrapper test.
+ *
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
  *
@@ -8,8 +11,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <../../lib/OFL/vitamins/fans.scad>
 include <../../lib/OFL/vitamins/screw.scad>
+
 
 $fn            = 50;           // [3:100]
 // When true, debug statements are turned on
@@ -22,6 +27,7 @@ $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 $FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
+
 
 /* [Supported verbs] */
 
@@ -39,13 +45,14 @@ $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_LAYOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // mount shape through predefined screws
 $FL_MOUNT     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a box representing the payload of the shape
-$FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
+/* [3D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Direction] */
 
@@ -53,7 +60,8 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
+
 
 /* [FACTORY] */
 SHOW  = "ALL";  // [ALL,17x17x8mm fan,25.4x25.4x10mm fan,30x30x10mm fan,40x40x11mm fan,50x50x15mm fan,60x60x15mm fan,60x60x25mm fan,70x70x15mm fan,80x80x25mm fan,80x80x38mm fan,120x120x25mm fan]
@@ -64,11 +72,16 @@ THICK_POSITIVE = 1.6;      // [0:0.1:10]
 // thickness on -Z axis
 THICK_NEGATIVE = 2.5;      // [0:0.1:10]
 
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+
+fl_status();
+
+// end of automatically generated code
 
 verbs = fl_verbList([
   FL_ADD,
@@ -78,7 +91,6 @@ verbs = fl_verbList([
   FL_FOOTPRINT,
   FL_LAYOUT,
   FL_MOUNT,
-  FL_PAYLOAD,
 ]);
 thickness = let(
   t = [
