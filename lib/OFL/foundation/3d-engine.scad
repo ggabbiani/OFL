@@ -1574,7 +1574,7 @@ module fl_torus(
       fl_modifier($modifier) rotate_extrude($fn=$fn) translate(X(R-a)) fl_ellipse(e=e,quadrant=+X,$fn=fn);
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else {

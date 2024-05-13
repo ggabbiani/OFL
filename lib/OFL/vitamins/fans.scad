@@ -99,7 +99,7 @@ module fl_fan(
   thick=0,
   //! when undef native positioning is used
   octant,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction [+Z,0] when undef
   direction,
   //! see constructor fl_parm_Debug()
   debug

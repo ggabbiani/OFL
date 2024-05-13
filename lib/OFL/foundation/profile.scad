@@ -107,7 +107,7 @@ module fl_profile(
       fl_modifier($modifier) fl_color(material) do_add();
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) cube(size=size, center=true);
     } else if ($verb==FL_FOOTPRINT) {
@@ -203,7 +203,7 @@ module fl_bentPlate(
       fl_modifier($modifier) do_add();
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_cube(size=size, octant=O);
     } else if ($verb==FL_FOOTPRINT) {
