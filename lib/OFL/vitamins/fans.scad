@@ -21,10 +21,31 @@ use <../foundation/polymorphic-engine.scad>
 //! prefix used for namespacing
 FL_FAN_NS  = "fan";
 
+FL_FAN_120x25 = fl_Fan(fan120x25);
+FL_FAN_80x38  = fl_Fan(fan80x38);
+FL_FAN_80x25  = fl_Fan(fan80x25);
+FL_FAN_70x15  = fl_Fan(fan70x15);
+FL_FAN_60x25  = fl_Fan(fan60x25);
+FL_FAN_60x15  = fl_Fan(fan60x15);
+FL_FAN_50x15  = fl_Fan(fan50x15);
+FL_FAN_40x11  = fl_Fan(fan40x11);
+FL_FAN_30x10  = fl_Fan(fan30x10);
+FL_FAN_25x10  = fl_Fan(fan25x10);
+FL_FAN_17x8   = fl_Fan(fan17x8 );
+
 //! package inventory as a list of pre-defined and ready-to-use 'objects'
 FL_FAN_INVENTORY = [
-  for(nop=fans) let(
-  ) fl_Fan(nop)
+  FL_FAN_120x25,
+  FL_FAN_80x38,
+  FL_FAN_80x25,
+  FL_FAN_70x15,
+  FL_FAN_60x25,
+  FL_FAN_60x15,
+  FL_FAN_50x15,
+  FL_FAN_40x11,
+  FL_FAN_30x10,
+  FL_FAN_25x10,
+  FL_FAN_17x8 ,
 ];
 
 //! inventory item names
