@@ -35,17 +35,17 @@ FL_FAN_17x8   = fl_Fan(fan17x8 );
 
 //! package inventory as a list of pre-defined and ready-to-use 'objects'
 FL_FAN_INVENTORY = [
-  FL_FAN_120x25,
-  FL_FAN_80x38,
-  FL_FAN_80x25,
-  FL_FAN_70x15,
-  FL_FAN_60x25,
-  FL_FAN_60x15,
-  FL_FAN_50x15,
-  FL_FAN_40x11,
-  FL_FAN_30x10,
-  FL_FAN_25x10,
   FL_FAN_17x8 ,
+  FL_FAN_25x10,
+  FL_FAN_30x10,
+  FL_FAN_40x11,
+  FL_FAN_50x15,
+  FL_FAN_60x15,
+  FL_FAN_60x25,
+  FL_FAN_70x15,
+  FL_FAN_80x25,
+  FL_FAN_80x38,
+  FL_FAN_120x25,
 ];
 
 //! inventory item names
