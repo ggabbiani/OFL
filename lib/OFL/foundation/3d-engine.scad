@@ -811,7 +811,7 @@ module fl_bb_add(
   2d=false,
   auto=false
 ) {
-  assert(fl_tt_isBoundingBox(corners),corners);
+  assert(fl_tt_isBoundingBox(corners,2d),corners);
   if (2d)
     let(
       bbox = auto ? corners+NIL*[[-1,-1],[1,1]] : corners
