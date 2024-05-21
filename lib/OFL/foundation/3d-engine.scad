@@ -816,12 +816,12 @@ module fl_bb_add(
     let(
       bbox = auto ? corners+NIL*[[-1,-1],[1,1]] : corners
     ) translate(bbox[0])
-      fl_square(size=corners[1]-corners[0],quadrant=QI);
+      fl_square(size=bbox[1]-bbox[0],quadrant=QI);
   else
     let(
       bbox = auto ? corners+NIL*[[-1,-1,-1],[1,1,1]] : corners
     ) translate(bbox[0])
-      fl_cube(size=corners[1]-corners[0],octant=O0);
+      fl_cube(size=bbox[1]-bbox[0],octant=O0);
 }
 
 /*****************************************************************************
