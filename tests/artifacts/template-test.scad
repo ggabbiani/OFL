@@ -19,6 +19,8 @@ $FL_RENDER  = false;
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;     // [-2:10]
+SHOW_LABELS     = false;
+SHOW_SYMBOLS    = false;
 
 /* [Supported verbs] */
 
@@ -65,15 +67,15 @@ octant    = PLACE_NATIVE  ? undef : OCTANT;
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 verbs = fl_verbList([
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
-  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-  if ($FL_MOUNT!="OFF")     FL_MOUNT,
-  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
+  FL_ADD,
+  FL_ASSEMBLY,
+  FL_AXES,
+  FL_BBOX,
+  FL_CUTOUT,
+  FL_DRILL,
+  FL_FOOTPRINT,
+  FL_LAYOUT,
+  FL_MOUNT,
+  FL_PAYLOAD,
 ]);
 
