@@ -133,6 +133,43 @@ function fl_transform(
   assert(is_list(v) && len(v)>2,str("Bad vector v(",v,")"))
   fl_3(M * fl_4(v));
 
+//**** CAD control ************************************************************
+
+/*!
+ * Returns the rotation list corresponding to an OpenSCAD projection view.
+ *
+ * Example setting OpenSCAD projection programmatically by changing the variable
+ * $vpn value to the "top" view:
+ *
+ *     $vpr = fl_view("top");
+ *
+ */
+function fl_view(
+  /*!
+   * one of the following esoteric names:
+   *
+   * - "right"
+   * - "top"
+   * - "bottom"
+   * - "left"
+   */
+  name
+) =
+  fl_switch(name,[["right",[90,0,90]],["top",O],["bottom",[180,0,0]],["left",[90,0,270]],],$vpr);
+
+/*!
+ * returns the esoteric name associated to the current OpenSCAD view:
+ *
+ * - "right"
+ * - "top"
+ * - "bottom"
+ * - "left"
+ * - "other"
+ */
+function fl_currentView() =
+  fl_switch($vpr,[[[90,0,90],"right"],[O,"top"],[[180,0,0],"bottom"],[[90,0,270],"left"],],"other");
+
+
 //*****************************************************************************
 // OFL GLOBALS
 
