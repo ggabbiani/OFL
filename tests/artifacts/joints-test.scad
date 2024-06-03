@@ -48,18 +48,22 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
+/* [Dimensions] */
+
+DIM_MODE  = "full"; // [full,label,value,silent]
+
 /* [FACTORY] */
 
-JOINT_TYPE    = "cantilever"; // [cantilever]
+JOINT_TYPE    = "cantilever const"; // [cantilever const,cantilever scaled thickness,cantilever scaled width, cantilever full scaled]
 // fillet radius
 JOINT_FILLET  = "auto";  // [auto,0,1,2,3,4,5,6,7,8,9,10]
 CANTILEVER_ORIENT = "+z"; // [+z,-z]
 // total cantilever length (arm+tooth)
 CANTILEVER_L  = 1;
-// thickness of arm
-CANTILEVER_H  = 1;
-// width of arm
-CANTILEVER_B  = 1;
+// thickness of arm at root
+CANTILEVER_ROOT_H  = 1;
+// width of arm at root
+CANTILEVER_ROOT_B  = 1;
 // undercut
 CANTILEVER_Y  = 1;
 // tooth angle
@@ -83,8 +87,48 @@ verbs = fl_verbList([
 
 orient  = CANTILEVER_ORIENT=="+z" ? +Z : -Z;
 fillet  = JOINT_FILLET!="auto" ? fl_atof(JOINT_FILLET) : JOINT_FILLET;
-joint   = JOINT_TYPE=="cantilever" ?
-  fl_jnt_RectCantilever(alpha=CANTILEVER_ANGLE,orientation=orient, length=CANTILEVER_L,h=CANTILEVER_H,b=CANTILEVER_B,undercut=CANTILEVER_Y,fillet=fillet) :
-  undef;
 
-fl_jnt_joint(verbs, joint, octant=octant, direction=direction, debug=debug);
+echo(JOINT_TYPE=JOINT_TYPE);
+joint   = JOINT_TYPE=="cantilever const" ?
+  fl_jnt_RectCantileverConst(
+    alpha=CANTILEVER_ANGLE,
+    orientation=orient,
+    length=CANTILEVER_L,
+    h=CANTILEVER_ROOT_H,
+    b=CANTILEVER_ROOT_B,
+    undercut=CANTILEVER_Y,
+    fillet=fillet
+  ) :
+  JOINT_TYPE=="cantilever scaled thickness" ?
+    fl_jnt_RectCantileverScaledThickness(
+      alpha=CANTILEVER_ANGLE,
+      orientation=orient,
+      length=CANTILEVER_L,
+      h=CANTILEVER_ROOT_H,
+      b=CANTILEVER_ROOT_B,
+      undercut=CANTILEVER_Y,
+      fillet=fillet
+    ) :
+    JOINT_TYPE=="cantilever scaled width" ?
+      fl_jnt_RectCantileverScaledWidth(
+        alpha=CANTILEVER_ANGLE,
+        orientation=orient,
+        length=CANTILEVER_L,
+        h=CANTILEVER_ROOT_H,
+        b=CANTILEVER_ROOT_B,
+        undercut=CANTILEVER_Y,
+        fillet=fillet
+      ) :
+      JOINT_TYPE=="cantilever full scaled" ?
+        fl_jnt_RectCantileverFullScaled(
+          alpha=CANTILEVER_ANGLE,
+          orientation=orient,
+          length=CANTILEVER_L,
+          h=CANTILEVER_ROOT_H,
+          b=CANTILEVER_ROOT_B,
+          undercut=CANTILEVER_Y,
+          fillet=fillet
+        ) :
+      undef;
+
+fl_jnt_joint(verbs, joint, octant=octant, direction=direction, debug=debug, $DIM_MODE=DIM_MODE);
