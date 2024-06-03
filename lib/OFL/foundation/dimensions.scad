@@ -14,75 +14,89 @@ use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/polymorphic-engine.scad>
 
-$DIM_MODE = "full"; // [full,label,value,silent]
-
-/* [Hidden] */
+//! gap between dimension lines
+$DIM_GAP=1;
 
 //! prefix used for namespacing
-FL_DIM_NS  = "dims";
+FL_DIM_NS  = "dim";
 
 // Dimension lines public properties
 
-function fl_dims_label(type,value)  = fl_property(type,str(FL_DIM_NS,"/label"),value);
-function fl_dims_value(type,value)  = fl_property(type,str(FL_DIM_NS,"/value"),value);
+function fl_dim_label(type,value)  = fl_property(type,str(FL_DIM_NS,"/label"),value);
+function fl_dim_value(type,value)  = fl_property(type,str(FL_DIM_NS,"/value"),value);
 
 //! package inventory as a list of pre-defined and ready-to-use 'objects'
 FL_DIM_INVENTORY = [
 ];
 
-//! helper for new dimension 'object' definition
+/*!
+ * Constructor for dimension lines.
+ *
+ * This geometry is meant to be used on a 'top view' projection, with Z axis as normal.
+ */
 function fl_Dimension(
   //! mandatory value
   value,
   //! mandatory label string
   label,
-  //! The object to which the dimension line is attached.
-  object,
-  /*!
-   * Is the normal to the 2d view looking at the observer and implicitly defines
-   * the orthogonal view to be used.
-   */
-  normal=+Z,
   /*!
    * Spread direction in the orthogonal view of the dimension lines.
    */
   spread=+X,
+  //! dimension line thickness
+  line_width,
+  //! The object to which the dimension line is attached.
+  object,
   /*!
-   * By default the dimension line is centered on the «quadrant» parameter.
+   * one of the following:
+   * - "right"
+   * - "top"
+   * - "bottom"
+   * - "left"
    */
-  align=[0,0,0]
+  view="top"
 )  = let(
-  // constructor specific variables
-  // ...
+  horiz         = spread.y!=0,
+  arrow_body_w  = line_width ? line_width : value/8,
+  arrow_text_w  = arrow_body_w*3,
+  thick         = arrow_body_w*2,
+  bbox          = let(
+    width = arrow_body_w+arrow_text_w,
+    dims  = [value,width,thick]
+  ) horiz ? [-dims/2,+dims/2] : [[-dims.y/2,-dims.x/2,-thick/2],[+dims.y/2,+dims.x/2,+thick/2]]
 ) [
   fl_native(value=true),
-  assert(label)   fl_dims_label(value=label),
-  assert(value)   fl_dims_value(value=value),
-  assert(object)  fl_bb_corners(value=fl_bb_corners(object)),
-  [str(FL_DIM_NS,"/normal"),normal],
-  [str(FL_DIM_NS,"/spread"),spread],
-  [str(FL_DIM_NS,"/align"),align],
+  assert(label)       fl_dim_label(value=label),
+  assert(value)       fl_dim_value(value=value),
+                      fl_bb_corners(value=bbox),
+  assert(object)      [str(FL_DIM_NS,"/embedded object bounding box"),fl_bb_corners(object)],
+  assert(line_width)  [str(FL_DIM_NS,"/line width"),line_width],
+                      [str(FL_DIM_NS,"/spread"),spread],
+                      [str(FL_DIM_NS,"/arrow body thickness"),arrow_body_w],
+                      [str(FL_DIM_NS,"/arrow text thickness"),arrow_text_w],
+                      [str(FL_DIM_NS,"/thick"),arrow_text_w],
+                      [str(FL_DIM_NS,"/view"),view],
 ];
 
 /*!
  * Children context:
  *
- * - $dim_quadrant  : current spread
- * - $dim_width     : current line width
- * - $dim_gap       : initial gap from the object bounding-box and between
- *  subsequent lines in case of stacking
- * - $dim_align     : current alignment
- * - $dim_level     : current dimension line stacking level (always positive)
- * - $dim_normal    : «normal» parameter
+ * - $dim_align   : current alignment
+ * - $dim_label   : current dimension line label
+ * - $dim_spread  : spread vector
+ * - $dim_value   : current value
+ * - $dim_view    : dimension line bounded view
+ * - $dim_width   : current line width
+ * - $dim_level   : current dimension line stacking level (always positive)
  */
 module fl_dimension(
   //! supported verbs: FL_ADD
   verbs       = FL_ADD,
   geometry,
-  //! line width
-  line_width,
-  //! lines gap
-  gap=1,
+  /*!
+   * By default the dimension line is centered on the «spread» parameter.
+   */
+  align=[0,0,0],
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -92,20 +106,22 @@ module fl_dimension(
 ) {
   $dim_level = is_undef($dim_level) ? 1 : $dim_level+1;
 
-  value     = fl_dims_value(geometry);
-  spread    = fl_property(geometry,str(FL_DIM_NS,"/spread"));
-  normal    = fl_property(geometry,str(FL_DIM_NS,"/normal"));
-  align     = fl_property(geometry,str(FL_DIM_NS,"/align"));
-  bbox      = fl_bb_corners(geometry);
-  label     = fl_dims_label(geometry);
+  value         = fl_dim_value(geometry);
+  label         = fl_dim_label(geometry);
+  emb_bbox      = fl_property(geometry, str(FL_DIM_NS,"/embedded object bounding box"));
+  line_width    = fl_property(geometry, str(FL_DIM_NS,"/line width"));
+  spread        = fl_property(geometry, str(FL_DIM_NS,"/spread"));
+  bbox          = fl_bb_corners(geometry);
+  arrow_body_w  = fl_property(geometry, str(FL_DIM_NS,"/arrow body thickness"));
+  arrow_text_w  = fl_property(geometry, str(FL_DIM_NS,"/arrow text thickness"));
+  thick         = fl_property(geometry, str(FL_DIM_NS,"/thick"));
+  view          = fl_property(geometry, str(FL_DIM_NS,"/view"));
 
-  body_w    = assert(line_width) line_width ? line_width : value/8;
-  thick     = line_width*2;
-  font      = "Symbola:style=Regular";
-  quad_sgn  = _sign_(spread);
-  quad_abs  = _abs_(spread);
-  trans     = _offset_(spread, bbox, gap)+_align_(align,value);
-  horiz     = _abs_(spread)==Y;
+  horiz         = _abs_(spread)==Y;
+  font          = "Symbola:style=Regular";
+  quad_sgn      = _sign_(spread);
+  quad_abs      = _abs_(spread);
+  trans         = _offset_(spread, emb_bbox, $DIM_GAP)+_align_(align,value);
 
   function _align_(align,value) = let(delta=value/2) [
     sign(align.x)*delta,
@@ -122,27 +138,27 @@ module fl_dimension(
   function _abs_(axis)  = [for(i=axis) abs(i)];
 
   module context() let(
-    $dim_quadrant = spread,
-    $dim_width    = line_width,
-    $dim_gap      = gap,
-    $dim_align    = align,
-    // $dim_level    = $dim_level+1,
-    $dim_normal   = normal
+    $dim_align  = align,
+    $dim_label  = label,
+    $dim_spread = spread,
+    $dim_value  = value,
+    $dim_view   = assert(view) view,
+    $dim_width  = line_width
   ) children();
 
-  module label(text,horizontal=true)
+  module label(txt)
     rotate(horiz ? 0 : 90,Z)
-      translate([0,+body_w])
-        resize([0,body_w*3,0],auto=[true,true,false])
+      translate([0,+arrow_body_w])
+        resize([0,arrow_body_w*3,0],auto=[true,true,false])
           linear_extrude(thick)
-            text(str(text), valign="bottom", halign="center", font=font);
+            text(str(txt), valign="bottom", halign="center", font=font);
 
-  module darrow(label,value,w,horizontal=true) {
-    head_l    = body_w*8/5;
+  module darrow(label,value,w) {
+    head_l    = arrow_body_w*8/5;
 
     module head(direction) let(
-      head_w  = body_w*8/3
-    ) fl_cylinder(h=head_l, d1=head_w, d2=0, direction=direction);
+      arrow_head_w  = arrow_body_w*8/3
+    ) fl_cylinder(h=head_l, d1=arrow_head_w, d2=0, direction=direction);
 
     rotate(horiz ? 90 : 0,Z)
       linear_extrude(thick)
@@ -150,7 +166,7 @@ module fl_dimension(
           for(i=[-1,+1])
             translate(i*Y(value/2-head_l))
               head([i*Y,0]);
-          fl_cylinder(h=value-2*head_l, d=body_w, octant=O, direction=[+Y,0]);
+          fl_cylinder(h=value-2*head_l, d=arrow_body_w, octant=O, direction=[+Y,0]);
         }
   }
 
@@ -158,7 +174,7 @@ module fl_dimension(
 
     module line() let(
         width   = line_width/2,
-        length  = abs(spread.x ? bbox[(sign(spread.x)+1)/2].x : spread.y ? bbox[(sign(spread.y)+1)/2].y : bbox[(sign(spread.z)+1)/2].z) + $dim_level*gap,
+        length  = abs(spread.x ? emb_bbox[(sign(spread.x)+1)/2].x : spread.y ? emb_bbox[(sign(spread.y)+1)/2].y : emb_bbox[(sign(spread.z)+1)/2].z) + $dim_level*$DIM_GAP,
         size    = spread.x ? [length,width,thick] : spread.y ? [width,length,thick] : [length,thick,width]
       ) fl_cube(size=size, octant=-spread, $FL_ADD="DEBUG");
 
@@ -184,44 +200,26 @@ module fl_dimension(
       context() {
         translate(trans) {
           color("black")
-            fl_direct(direction=[normal,0])
-              translate(-thick/2*normal) {
-                darrow(label=label, value=value, w=line_width, horizontal=horiz, $FL_ADD="ON");
+              translate(-Z(thick/2)) {
+                darrow(label=label, value=value, w=line_width, $FL_ADD="ON");
                 let(
                   label =
                     $DIM_MODE=="full" ? (label ? str(label,"=",value) : value) :
                     $DIM_MODE=="label" ? (label ? label : undef) :
                     $DIM_MODE=="value" ? str(value) : undef
                 ) if (label)
-                  label(label, horizontal=horiz, $FL_ADD="ON");
+                  label(label, $FL_ADD="ON");
               }
           reference_lines();
         }
-        translate(gap*spread)
+        translate($DIM_GAP*spread)
           children();
       }
     } else
       fl_error(true,["unimplemented verb","'",$this_verb,"'"]);
 
-  // fl_polymorph() manages standard parameters and prepares the execution
-  // context for the engine.
-  fl_polymorph(verbs,geometry,octant,direction,debug)
-    engine()
-      children();
+  if (view==fl_currentView())
+    fl_polymorph(verbs,geometry,octant,direction,debug)
+      engine()
+        children();
 }
-
-d         = 4;
-h         = 10;
-cylinder  = fl_cylinder_defaults(h=h,d=d);
-line_w    = 0.1;
-
-dim_radius    = fl_Dimension(value=d/2,  label="radius",   object=cylinder, normal=+Z, spread=-Y, align=+X);
-dim_diameter  = fl_Dimension(value=d,    label="diameter", object=cylinder, normal=+Z, spread=-Y, align=O);
-dim_height    = fl_Dimension(value=h,    label="height",   object=cylinder, normal=+Z, spread=+X, align=+Y);
-
-fl_dimension(geometry=dim_radius,line_width=line_w)
-  fl_dimension(geometry=dim_diameter,line_width=$dim_width);
-fl_dimension(geometry=dim_height, line_width=line_w);
-
-projection()
-  fl_cylinder(h=h,d=d,$fn=100);
