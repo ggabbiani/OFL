@@ -22,27 +22,19 @@ fl_status();
 // end of automatically generated code
 
 let(
-  condition   = false,
-  message     = "message",
-  result      = "test 1"
-) assert(fl_assert(condition,message,result)==result);
+  message   = "error message",
+  attended  = "***OFL ERROR***: error message",
+  result    = fl_error(message)
+) assert(attended==result,result);
 
 let(
-  condition   = [],
-  message     = ["message one","message two","message three"],
-  result      = "test 2"
-) assert(fl_assert(condition,message,result)==result);
+  message   = ["this","is","an","error","message"],
+  attended  = "***OFL ERROR***: this is an error message",
+  result    = fl_error(message)
+) assert(attended==result,result);
 
 let(
-  condition   = [],
-  message     = ["message one","message two","message three"],
-  result      = "test 3",
-  $fl_asserts = true
-) assert(fl_assert(condition,message,result)==result);
-
-let(
-  condition   = [true,true,true],
-  message     = ["message one","message two","message three"],
-  result      = "test 4",
-  $fl_asserts = true
-) assert(fl_assert(condition,message,result)==result);
+  message   = ["this","is","an","error","number",str(3)],
+  attended  = "***OFL ERROR***: this is an error number 3",
+  result    = fl_error(message)
+) assert(attended==result,result);

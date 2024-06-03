@@ -72,14 +72,27 @@ module fl_status() {
 //*****************************************************************************
 // assertions
 
-function fl_error(message) =
-  fl_strcat(concat(["***OFL ERROR***: "],is_list(message) ? message : [message])," ");
+//! compose an error message
+function fl_error(
+  //! string or vector of strings
+  message
+) = fl_strcat(concat(["***OFL ERROR***:"],is_list(message) ? message : [message])," ");
 
-module fl_error(condition,message)
-  assert(condition==false,fl_error(message));
+//! force an error if condition is true
+module fl_error(
+  //! error condition
+  condition,
+  //! string or vector of strings
+  message
+) assert(condition==false,fl_error(message));
 
-module fl_assert(condition,message)
-  assert(condition==true,fl_error(message));
+//! check condition, forcing error when false
+module fl_assert(
+  //! condition to be asserted
+  condition,
+  //! string or vector of strings
+  message
+) assert(condition==true,fl_error(message));
 
 //*****************************************************************************
 // lists
