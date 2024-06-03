@@ -732,16 +732,6 @@ Taken from
 
 ---
 
-### function fl_assert
-
-__Syntax:__
-
-```text
-fl_assert(condition,message,result)
-```
-
----
-
 ### function fl_asserts
 
 __Syntax:__
@@ -750,7 +740,7 @@ __Syntax:__
 fl_asserts()
 ```
 
-When true [fl_assert()](#function-fl_assert) is enabled
+When true fl_assert() is enabled
 
 **TODO**: remove since deprecated.
 
@@ -970,6 +960,24 @@ __Syntax:__
 ```text
 fl_engine(type,value)
 ```
+
+---
+
+### function fl_error
+
+__Syntax:__
+
+```text
+fl_error(message)
+```
+
+compose an error message
+
+__Parameters:__
+
+__message__  
+string or vector of strings
+
 
 ---
 
@@ -2161,6 +2169,17 @@ __Syntax:__
 
     fl_assert(condition,message)
 
+check condition, forcing error when false
+
+__Parameters:__
+
+__condition__  
+condition to be asserted
+
+__message__  
+string or vector of strings
+
+
 ---
 
 ### module fl_axes
@@ -2189,6 +2208,25 @@ modifier is applied to children().
 __Syntax:__
 
     fl_context_dump()
+
+---
+
+### module fl_error
+
+__Syntax:__
+
+    fl_error(condition,message)
+
+force an error if condition is true
+
+__Parameters:__
+
+__condition__  
+error condition
+
+__message__  
+string or vector of strings
+
 
 ---
 

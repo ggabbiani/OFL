@@ -29,7 +29,7 @@
 <text text-anchor="middle" x="866.63" y="-141.58" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
 <!-- mngm&#45;engine -->
-<g id="node14" class="node">
+<g id="node15" class="node">
 <title>mngm&#45;engine</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1075.75,-113.25 962.25,-113.25 962.25,-83.25 1075.75,-83.25 1075.75,-113.25"/>
 <text text-anchor="middle" x="1019" y="-93.58" font-family="Times,serif" font-size="14.00">mngm&#45;engine</text>
@@ -42,7 +42,7 @@
 <text text-anchor="middle" x="1008.63" y="-141.58" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
 <!-- unsafe_defs -->
-<g id="node19" class="node">
+<g id="node20" class="node">
 <title>unsafe_defs</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="944,-113.25 844,-113.25 844,-83.25 944,-83.25 944,-113.25"/>
 <text text-anchor="middle" x="894" y="-93.58" font-family="Times,serif" font-size="14.00">unsafe_defs</text>
@@ -68,7 +68,7 @@
 <text text-anchor="middle" x="749.13" y="-231.2" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- polymorphic&#45;engine -->
-<g id="node15" class="node">
+<g id="node16" class="node">
 <title>polymorphic&#45;engine</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="888.5,-375.75 731.5,-375.75 731.5,-345.75 888.5,-345.75 888.5,-375.75"/>
 <text text-anchor="middle" x="810" y="-356.08" font-family="Times,serif" font-size="14.00">polymorphic&#45;engine</text>
@@ -81,7 +81,7 @@
 <text text-anchor="middle" x="711.63" y="-314.45" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
 <!-- type_trait -->
-<g id="node18" class="node">
+<g id="node19" class="node">
 <title>type_trait</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="560,-161.25 460,-161.25 460,-131.25 560,-131.25 560,-161.25"/>
 <text text-anchor="middle" x="510" y="-141.58" font-family="Times,serif" font-size="14.00">type_trait</text>
@@ -139,7 +139,7 @@
 <text text-anchor="middle" x="286" y="-439.33" font-family="Times,serif" font-size="14.00">connect</text>
 </g>
 <!-- util -->
-<g id="node20" class="node">
+<g id="node21" class="node">
 <title>util</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="336,-375.75 236,-375.75 236,-345.75 336,-345.75 336,-375.75"/>
 <text text-anchor="middle" x="286" y="-356.08" font-family="Times,serif" font-size="14.00">util</text>
@@ -151,8 +151,14 @@
 <polygon fill="black" stroke="black" points="289.5,-387.56 286,-377.56 282.5,-387.56 289.5,-387.56"/>
 <text text-anchor="middle" x="320.13" y="-397.7" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
-<!-- drawio -->
+<!-- dimensions -->
 <g id="node8" class="node">
+<title>dimensions</title>
+<polygon fill="white" stroke="black" stroke-width="2" points="454,-459 354,-459 354,-429 454,-429 454,-459"/>
+<text text-anchor="middle" x="404" y="-439.33" font-family="Times,serif" font-size="14.00">dimensions</text>
+</g>
+<!-- drawio -->
+<g id="node9" class="node">
 <title>drawio</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="938,-292.5 838,-292.5 838,-262.5 938,-262.5 938,-292.5"/>
 <text text-anchor="middle" x="888" y="-272.83" font-family="Times,serif" font-size="14.00">drawio</text>
@@ -165,7 +171,7 @@
 <text text-anchor="middle" x="922.13" y="-231.2" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- fillet -->
-<g id="node9" class="node">
+<g id="node10" class="node">
 <title>fillet</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="572,-375.75 472,-375.75 472,-345.75 572,-345.75 572,-375.75"/>
 <text text-anchor="middle" x="522" y="-356.08" font-family="Times,serif" font-size="14.00">fillet</text>
@@ -178,7 +184,7 @@
 <text text-anchor="middle" x="543.13" y="-314.45" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- grid -->
-<g id="node10" class="node">
+<g id="node11" class="node">
 <title>grid</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="690,-375.75 590,-375.75 590,-345.75 690,-345.75 690,-375.75"/>
 <text text-anchor="middle" x="640" y="-356.08" font-family="Times,serif" font-size="14.00">grid</text>
@@ -191,13 +197,13 @@
 <text text-anchor="middle" x="634.13" y="-314.45" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- hole -->
-<g id="node11" class="node">
+<g id="node12" class="node">
 <title>hole</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="100,-459 0,-459 0,-429 100,-429 100,-459"/>
 <text text-anchor="middle" x="50" y="-439.33" font-family="Times,serif" font-size="14.00">hole</text>
 </g>
 <!-- label -->
-<g id="node12" class="node">
+<g id="node13" class="node">
 <title>label</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="100,-375.75 0,-375.75 0,-345.75 100,-345.75 100,-375.75"/>
 <text text-anchor="middle" x="50" y="-356.08" font-family="Times,serif" font-size="14.00">label</text>
@@ -217,7 +223,7 @@
 <text text-anchor="middle" x="176.13" y="-314.45" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- limits -->
-<g id="node13" class="node">
+<g id="node14" class="node">
 <title>limits</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="706,-113.25 606,-113.25 606,-83.25 706,-83.25 706,-113.25"/>
 <text text-anchor="middle" x="656" y="-93.58" font-family="Times,serif" font-size="14.00">limits</text>
@@ -265,7 +271,7 @@
 <text text-anchor="middle" x="1024.63" y="-231.2" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
 <!-- profile -->
-<g id="node16" class="node">
+<g id="node17" class="node">
 <title>profile</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="218,-375.75 118,-375.75 118,-345.75 218,-345.75 218,-375.75"/>
 <text text-anchor="middle" x="168" y="-356.08" font-family="Times,serif" font-size="14.00">profile</text>
@@ -278,10 +284,10 @@
 <text text-anchor="middle" x="283.13" y="-314.45" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
 <!-- template -->
-<g id="node17" class="node">
+<g id="node18" class="node">
 <title>template</title>
-<polygon fill="white" stroke="black" stroke-width="2" points="454,-459 354,-459 354,-429 454,-429 454,-459"/>
-<text text-anchor="middle" x="404" y="-439.33" font-family="Times,serif" font-size="14.00">template</text>
+<polygon fill="white" stroke="black" stroke-width="2" points="572,-459 472,-459 472,-429 572,-429 572,-459"/>
+<text text-anchor="middle" x="522" y="-439.33" font-family="Times,serif" font-size="14.00">template</text>
 </g>
 <!-- type_trait&#45;&gt;core -->
 <g id="edge17" class="edge">

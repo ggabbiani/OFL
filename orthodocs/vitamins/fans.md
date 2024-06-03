@@ -23,11 +23,99 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
+### variable FL_FAN_120x25
+
+__Default:__
+
+    fl_Fan(fan120x25)
+
+---
+
+### variable FL_FAN_17x8
+
+__Default:__
+
+    fl_Fan(fan17x8)
+
+---
+
+### variable FL_FAN_25x10
+
+__Default:__
+
+    fl_Fan(fan25x10)
+
+---
+
+### variable FL_FAN_30x10
+
+__Default:__
+
+    fl_Fan(fan30x10)
+
+---
+
+### variable FL_FAN_40x11
+
+__Default:__
+
+    fl_Fan(fan40x11)
+
+---
+
+### variable FL_FAN_50x15
+
+__Default:__
+
+    fl_Fan(fan50x15)
+
+---
+
+### variable FL_FAN_60x15
+
+__Default:__
+
+    fl_Fan(fan60x15)
+
+---
+
+### variable FL_FAN_60x25
+
+__Default:__
+
+    fl_Fan(fan60x25)
+
+---
+
+### variable FL_FAN_70x15
+
+__Default:__
+
+    fl_Fan(fan70x15)
+
+---
+
+### variable FL_FAN_80x25
+
+__Default:__
+
+    fl_Fan(fan80x25)
+
+---
+
+### variable FL_FAN_80x38
+
+__Default:__
+
+    fl_Fan(fan80x38)
+
+---
+
 ### variable FL_FAN_INVENTORY
 
 __Default:__
 
-    [for(nop=fans)let()fl_Fan(nop)]
+    [FL_FAN_17x8,FL_FAN_25x10,FL_FAN_30x10,FL_FAN_40x11,FL_FAN_50x15,FL_FAN_60x15,FL_FAN_60x25,FL_FAN_70x15,FL_FAN_80x25,FL_FAN_80x38,FL_FAN_120x25,]
 
 package inventory as a list of pre-defined and ready-to-use 'objects'
 
@@ -141,7 +229,7 @@ __octant__
 when undef native positioning is used
 
 __direction__  
-desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+desired direction [director,rotation], native direction [+Z,0] when undef
 
 __debug__  
 see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)

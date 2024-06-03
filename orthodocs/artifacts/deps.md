@@ -5,10 +5,11 @@ graph TD
     A1[artifacts/box] --o|include| A2[artifacts/spacer]
     A3[artifacts/caddy]
     A4[artifacts/din_rails]
-    A5[artifacts/pcb_holder] --o|include| A2
+    A5[artifacts/joints]
+    A6[artifacts/pcb_holder] --o|include| A2
     A2
-    A6[artifacts/t-nut]
-    A7[artifacts/t-profiles]
-    A8[artifacts/template]
+    A7[artifacts/t-nut]
+    A8[artifacts/t-profiles]
+    A9[artifacts/template]
 ```
 

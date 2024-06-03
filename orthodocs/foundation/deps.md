@@ -13,20 +13,24 @@ graph TD
     A10[foundation/components] --o|include| A3
     A11[foundation/connect] --o|include| A12[foundation/util]
     A9
-    A13[foundation/drawio] --o|include| A1
-    A14[foundation/fillet] --o|include| A5
-    A15[foundation/grid] --o|include| A5
-    A16[foundation/hole] --o|include| A17[foundation/label]
-    A17 --o|include| A5
-    A18[foundation/limits] --o|include| A9
+    A13[foundation/dimensions] --o|include| A2
+    A13 --o|use| A5
+    A13 --o|use| A3
+    A13 --o|use| A7
+    A14[foundation/drawio] --o|include| A1
+    A15[foundation/fillet] --o|include| A5
+    A16[foundation/grid] --o|include| A5
+    A17[foundation/hole] --o|include| A18[foundation/label]
+    A18 --o|include| A5
+    A19[foundation/limits] --o|include| A9
     A4 --o|include| A9
     A7 --o|include| A9
     A7 --o|use| A5
     A7 --o|use| A3
     A7 --o|use| A4
-    A19[foundation/profile] --o|include| A5
-    A20[foundation/template] --o|include| A2
-    A20 --o|use| A7
+    A20[foundation/profile] --o|include| A5
+    A21[foundation/template] --o|include| A2
+    A21 --o|use| A7
     A6 --o|include| A9
     A2 --o|include| A9
     A12 --o|include| A5
