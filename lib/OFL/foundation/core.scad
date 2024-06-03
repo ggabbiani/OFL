@@ -71,22 +71,15 @@ module fl_status() {
 
 //*****************************************************************************
 // assertions
-// TODO: remove this section since DEPRECATED
 
-module fl_assert(condition, message) {
-  // echo($fl_asserts=$fl_asserts,condition=condition,message=message);
-  if (fl_debug())
-    echo("assertions enabled") assert(condition,str("****ASSERT****: ",message));
-  children();
-}
+function fl_error(message) =
+  fl_strcat(concat(["***OFL ERROR***: "],is_list(message) ? message : [message])," ");
 
-function fl_assert(condition,message,result) =
-  // echo($fl_asserts=$fl_asserts,condition=condition,message=message,result=result)
-  fl_debug()
-    ? echo("assertions enabled") is_list(condition)
-      ? assert(is_list(message)) condition ? assert(condition[0],message[0]) fl_assert(fl_pop(condition),message?fl_pop(message):[],result) : result
-      : assert(condition,str("****ASSERT****: ",message)) result
-    : /* echo("assertions disabled") */ result;
+module fl_error(condition,message)
+  assert(condition==false,fl_error(message));
+
+module fl_assert(condition,message)
+  assert(condition==true,fl_error(message));
 
 //*****************************************************************************
 // lists
