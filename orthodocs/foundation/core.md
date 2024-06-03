@@ -828,6 +828,25 @@ returns a vector in which each item is the sum of the previous ones
 
 ---
 
+### function fl_currentView
+
+__Syntax:__
+
+```text
+fl_currentView()
+```
+
+returns the esoteric name associated to the current OpenSCAD view:
+
+- "right"
+- "top"
+- "bottom"
+- "left"
+- "other"
+
+
+---
+
 ### function fl_cutout
 
 __Syntax:__
@@ -2140,6 +2159,37 @@ __Syntax:__
 ```text
 fl_versor(v)
 ```
+
+---
+
+### function fl_view
+
+__Syntax:__
+
+```text
+fl_view(name)
+```
+
+Returns the rotation list corresponding to an OpenSCAD projection view.
+
+Example setting OpenSCAD projection programmatically by changing the variable
+$vpn value to the "top" view:
+
+    $vpr = fl_view("top");
+
+
+
+__Parameters:__
+
+__name__  
+one of the following esoteric names:
+
+- "right"
+- "top"
+- "bottom"
+- "left"
+
+
 
 ---
 

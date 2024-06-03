@@ -23,11 +23,11 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable $DIM_MODE
+### variable $DIM_GAP
 
 __Default:__
 
-    "full"
+    1
 
 ---
 
@@ -45,65 +45,9 @@ package inventory as a list of pre-defined and ready-to-use 'objects'
 
 __Default:__
 
-    "dims"
+    "dim"
 
 prefix used for namespacing
-
----
-
-### variable cylinder
-
-__Default:__
-
-    fl_cylinder_defaults(h=h,d=d)
-
----
-
-### variable d
-
-__Default:__
-
-    4
-
----
-
-### variable dim_diameter
-
-__Default:__
-
-    fl_Dimension(value=d,label="diameter",object=cylinder,spread=-Y,align=O)
-
----
-
-### variable dim_height
-
-__Default:__
-
-    fl_Dimension(value=h,label="height",object=cylinder,spread=+X,align=+Y)
-
----
-
-### variable dim_radius
-
-__Default:__
-
-    fl_Dimension(value=d/2,label="radius",object=cylinder,spread=-Y,align=+X)
-
----
-
-### variable h
-
-__Default:__
-
-    10
-
----
-
-### variable line_w
-
-__Default:__
-
-    0.1
 
 ## Functions
 
@@ -114,7 +58,7 @@ __Default:__
 __Syntax:__
 
 ```text
-fl_Dimension(value,label,object,spread=+X,align=[0,0,0])
+fl_Dimension(value,label,spread=+X,line_width,object,view="top")
 ```
 
 Constructor for dimension lines.
@@ -130,36 +74,43 @@ mandatory value
 __label__  
 mandatory label string
 
-__object__  
-The object to which the dimension line is attached.
-
 __spread__  
 Spread direction in the orthogonal view of the dimension lines.
 
 
-__align__  
-By default the dimension line is centered on the «quadrant» parameter.
+__line_width__  
+dimension line thickness
+
+__object__  
+The object to which the dimension line is attached.
+
+__view__  
+one of the following:
+- "right"
+- "top"
+- "bottom"
+- "left"
 
 
 
 ---
 
-### function fl_dims_label
+### function fl_dim_label
 
 __Syntax:__
 
 ```text
-fl_dims_label(type,value)
+fl_dim_label(type,value)
 ```
 
 ---
 
-### function fl_dims_value
+### function fl_dim_value
 
 __Syntax:__
 
 ```text
-fl_dims_value(type,value)
+fl_dim_value(type,value)
 ```
 
 ## Modules
@@ -170,17 +121,18 @@ fl_dims_value(type,value)
 
 __Syntax:__
 
-    fl_dimension(verbs=FL_ADD,geometry,line_width,gap=1,octant,direction,debug)
+    fl_dimension(verbs=FL_ADD,geometry,align=[0,0,0],octant,direction,debug)
 
 Children context:
 
-- $dim_quadrant  : current spread
-- $dim_width     : current line width
-- $dim_gap       : initial gap from the object bounding-box and between
- subsequent lines in case of stacking
-- $dim_align     : current alignment
-- $dim_level     : current dimension line stacking level (always positive)
-- $dim_normal    : «normal» parameter
+- $dim_align   : current alignment
+- $dim_gap     : gap between dimension lines
+- $dim_label   : current dimension line label
+- $dim_spread  : spread vector
+- $dim_value   : current value
+- $dim_view    : dimension line bounded view
+- $dim_width   : current line width
+- $dim_level   : current dimension line stacking level (always positive)
 
 
 __Parameters:__
@@ -188,11 +140,9 @@ __Parameters:__
 __verbs__  
 supported verbs: FL_ADD
 
-__line_width__  
-line width
+__align__  
+By default the dimension line is centered on the «spread» parameter.
 
-__gap__  
-lines gap
 
 __octant__  
 when undef native positioning is used

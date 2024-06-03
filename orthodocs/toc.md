@@ -2,7 +2,7 @@
 
 ## $
 
-- [$DIM_MODE (variable)](foundation/dimensions.md#variable-$dim_mode)
+- [$DIM_GAP (variable)](foundation/dimensions.md#variable-$dim_gap)
 
 ## 2
 
@@ -180,17 +180,16 @@
 - [FL_CS_UNI_M8 (variable)](vitamins/countersinks.md#variable-fl_cs_uni_m8)
 - [fl_cube (module)](foundation/3d-engine.md#module-fl_cube)
 - [fl_cumulativeSum (function)](foundation/core.md#function-fl_cumulativesum)
+- [fl_currentView (function)](foundation/core.md#function-fl_currentview)
 - [fl_cutout (function)](foundation/core.md#function-fl_cutout)
 - [fl_cutout (module)](foundation/util.md#module-fl_cutout)
 - [$FL_CUTOUT (variable)](foundation/core.md#variable-$fl_cutout)
 - [FL_CUTOUT (variable)](foundation/core.md#variable-fl_cutout)
 - [fl_cylinder (module)](foundation/3d-engine.md#module-fl_cylinder)
-- [cylinder (variable)](foundation/dimensions.md#variable-cylinder)
 - [fl_cylinder_defaults (function)](foundation/3d-engine.md#function-fl_cylinder_defaults)
 
 ## D
 
-- [d (variable)](foundation/dimensions.md#variable-d)
 - [fl_debug (function)](foundation/core.md#function-fl_debug)
 - [fl_deprecated (function)](foundation/core.md#function-fl_deprecated)
 - [FL_DEPRECATED (variable)](foundation/core.md#variable-fl_deprecated)
@@ -198,16 +197,13 @@
 - [fl_dict_names (function)](foundation/core.md#function-fl_dict_names)
 - [fl_dict_organize (function)](foundation/core.md#function-fl_dict_organize)
 - [fl_dict_search (function)](foundation/core.md#function-fl_dict_search)
-- [dim_diameter (variable)](foundation/dimensions.md#variable-dim_diameter)
-- [dim_height (variable)](foundation/dimensions.md#variable-dim_height)
 - [FL_DIM_INVENTORY (variable)](foundation/dimensions.md#variable-fl_dim_inventory)
+- [fl_dim_label (function)](foundation/dimensions.md#function-fl_dim_label)
 - [FL_DIM_NS (variable)](foundation/dimensions.md#variable-fl_dim_ns)
-- [dim_radius (variable)](foundation/dimensions.md#variable-dim_radius)
+- [fl_dim_value (function)](foundation/dimensions.md#function-fl_dim_value)
 - [fl_Dimension (function)](foundation/dimensions.md#function-fl_dimension)
 - [fl_dimension (module)](foundation/dimensions.md#module-fl_dimension)
 - [foundation/dimensions (package)](foundation/dimensions.md#package-foundationdimensions)
-- [fl_dims_label (function)](foundation/dimensions.md#function-fl_dims_label)
-- [fl_dims_value (function)](foundation/dimensions.md#function-fl_dims_value)
 - [FL_DIN_NS (variable)](artifacts/din_rails.md#variable-fl_din_ns)
 - [FL_DIN_PUNCH_4p2 (variable)](artifacts/din_rails.md#variable-fl_din_punch_4p2)
 - [FL_DIN_PUNCH_6p3 (variable)](artifacts/din_rails.md#variable-fl_din_punch_6p3)
@@ -308,7 +304,6 @@
 
 ## H
 
-- [h (variable)](foundation/dimensions.md#variable-h)
 - [fl_has (function)](foundation/core.md#function-fl_has)
 - [fl_hd (module)](vitamins/hds.md#module-fl_hd)
 - [FL_HD_DICT (variable)](vitamins/hds.md#variable-fl_hd_dict)
@@ -477,7 +472,6 @@
 - [FL_LIMIT_TOLERANCE (variable)](foundation/limits.md#variable-fl_limit_tolerance)
 - [FL_LIMIT_UWALLS (variable)](foundation/limits.md#variable-fl_limit_uwalls)
 - [foundation/limits (package)](foundation/limits.md#package-foundationlimits)
-- [line_w (variable)](foundation/dimensions.md#variable-line_w)
 - [fl_linear_extrude (module)](foundation/3d-engine.md#module-fl_linear_extrude)
 - [fl_list_AND (function)](foundation/core.md#function-fl_list_and)
 - [fl_list_filter (function)](foundation/core.md#function-fl_list_filter)
@@ -885,6 +879,7 @@
 - [fl_versor (function)](foundation/core.md#function-fl_versor)
 - [fl_versor (module)](foundation/core.md#module-fl_versor)
 - [fl_vFillet (module)](foundation/fillet.md#module-fl_vfillet)
+- [fl_view (function)](foundation/core.md#function-fl_view)
 
 ## W
 
