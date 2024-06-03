@@ -65,6 +65,7 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 DIR_R       = 0;        // [-360:360]
 
 
+
 /* [ Adapter ] */
 
 NOP  = "PERF80x20"; // [PERF74x51, PERF70x51, PERF70x50, PERF60x40, PERF70x30, PERF80x20, RAMPSEndstop, MT3608, PI_IO, ExtruderPCB, ZC_A0591, RPI0, EnviroPlus, ArduinoUno3, ArduinoLeonardo, WD2002SJ, RPI3, RPI4, BTT_SKR_MINI_E3_V2_0, BTT_SKR_E3_TURBO, BTT_SKR_V1_4_TURBO, DuetE, Duex5]

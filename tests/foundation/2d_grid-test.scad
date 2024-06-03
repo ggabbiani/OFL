@@ -34,6 +34,7 @@ SHOW_SYMBOLS    = false;
 
 
 
+
 /* [TEST] */
 GRID_SIZE   = [100,100];
 GRID_TYPE   = "quad";   // [quad,hex]

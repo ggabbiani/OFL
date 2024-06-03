@@ -41,6 +41,7 @@ BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
 
+
 /* [grid] */
 MODE        = "sheet";  // [sheet,bent,both]
 // folding thickness
