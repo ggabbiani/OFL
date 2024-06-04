@@ -59,11 +59,14 @@ function fl_Dimension(
   horiz         = spread.y!=0,
   arrow_body_w  = line_width ? line_width : value/8,
   arrow_text_w  = arrow_body_w*3,
+  arrow_head_w  = arrow_body_w*8/3,
   thick         = arrow_body_w*2,
   bbox          = let(
-    width = arrow_body_w+arrow_text_w,
-    dims  = [value,width,thick]
-  ) horiz ? [-dims/2,+dims/2] : [[-dims.y/2,-dims.x/2,-thick/2],[+dims.y/2,+dims.x/2,+thick/2]]
+    width = arrow_head_w+arrow_text_w,
+    dims  = [value,width,thick],
+    low   = [-dims.x/2,-arrow_head_w/2,-dims.z/2],
+    high  = low+dims
+  ) horiz ? [low,high] : [[-high.y,-high.x,low.z],[-low.y,-low.x,+high.z]]
 ) [
   fl_native(value=true),
   assert(label)       fl_dim_label(value=label),
@@ -74,6 +77,7 @@ function fl_Dimension(
                       [str(FL_DIM_NS,"/spread"),spread],
                       [str(FL_DIM_NS,"/arrow body thickness"),arrow_body_w],
                       [str(FL_DIM_NS,"/arrow text thickness"),arrow_text_w],
+                      [str(FL_DIM_NS,"/arrow head thickness"),arrow_head_w],
                       [str(FL_DIM_NS,"/thick"),arrow_text_w],
                       [str(FL_DIM_NS,"/view"),view],
 ];
@@ -114,6 +118,7 @@ module fl_dimension(
   bbox          = fl_bb_corners(geometry);
   arrow_body_w  = fl_property(geometry, str(FL_DIM_NS,"/arrow body thickness"));
   arrow_text_w  = fl_property(geometry, str(FL_DIM_NS,"/arrow text thickness"));
+  arrow_head_w  = fl_property(geometry, str(FL_DIM_NS,"/arrow head thickness"));
   thick         = fl_property(geometry, str(FL_DIM_NS,"/thick"));
   view          = fl_property(geometry, str(FL_DIM_NS,"/view"));
 
@@ -156,9 +161,8 @@ module fl_dimension(
   module darrow(label,value,w) {
     head_l    = arrow_body_w*8/5;
 
-    module head(direction) let(
-      arrow_head_w  = arrow_body_w*8/3
-    ) fl_cylinder(h=head_l, d1=arrow_head_w, d2=0, direction=direction);
+    module head(direction)
+      fl_cylinder(h=head_l, d1=arrow_head_w, d2=0, direction=direction);
 
     rotate(horiz ? 90 : 0,Z)
       linear_extrude(thick)
@@ -186,10 +190,6 @@ module fl_dimension(
       for(x=[-value/2,+value/2])
         translate(X(x))
           line();
-    else if (spread.z) // reference line parallel to Z axis
-      for(z=[-value/2,+value/2])
-        translate(Z(z))
-          line();
     else
       fl_error(true,str("spread=",spread));
   }
@@ -215,6 +215,9 @@ module fl_dimension(
         translate($DIM_GAP*spread)
           children();
       }
+    } else if ($this_verb==FL_BBOX) {
+      translate(trans)
+        fl_bb_add(corners=bbox, 2d=true, auto=true,$FL_ADD="DEBUG");
     } else
       fl_error(true,["unimplemented verb","'",$this_verb,"'"]);
 
