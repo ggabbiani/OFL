@@ -16,6 +16,7 @@ ${TAB_PARAMETERS}
 ${TAB_Verbs}
 ${TAB_Placement}
 ${TAB_Direction}
+${TAB_Dimensions}
 ${TAB_TEST}
 
 /* [Hidden] */
