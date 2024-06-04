@@ -29,6 +29,8 @@ __Default:__
 
     1
 
+gap between dimension lines
+
 ---
 
 ### variable FL_DIM_INVENTORY
@@ -126,7 +128,6 @@ __Syntax:__
 Children context:
 
 - $dim_align   : current alignment
-- $dim_gap     : gap between dimension lines
 - $dim_label   : current dimension line label
 - $dim_spread  : spread vector
 - $dim_value   : current value
