@@ -1,5 +1,5 @@
 /*
- *
+ * Dimension lines test
  *
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
@@ -76,14 +76,17 @@ h       = 10;
 cyl     = fl_cylinder_defaults(h=h,d=d);
 line_w  = 0.1;
 
-dim_radius    = fl_Dimension(value=d/2,  label="radius",   object=cyl, spread=-Y, line_width=line_w);
-dim_diameter  = fl_Dimension(value=d,    label="diameter", object=cyl, spread=-Y, line_width=line_w);
-dim_height    = fl_Dimension(value=h,    label="height",   object=cyl, spread=+X, line_width=line_w, view="right");
+dim_radius    = fl_Dimension(value=d/2,  label="r (top)",   object=cyl, spread=-Y, line_width=line_w,   view="top");
+dim_diameter  = fl_Dimension(value=d,    label="d (top)", object=cyl, spread=-Y, line_width=line_w,     view="top");
+
+h_right = fl_Dimension(value=h,    label="h (right)",   object=cyl, spread=+X, line_width=line_w, view="right");
+h_left  = fl_Dimension(value=h,    label="h (right)",   object=cyl, spread=+X, line_width=line_w, view="left");
 
 $vpr = fl_view(VIEW_TYPE);
 
 fl_dimension(verbs,geometry=dim_radius,align=+X)
   fl_dimension(verbs,geometry=dim_diameter);
-fl_dimension(verbs,geometry=dim_height,align=+Y,direction=[+X,90]);
+fl_dimension(verbs,geometry=h_right,align=+Y,direction=[+X,90]);
+fl_dimension(verbs,geometry=h_left,align=+Y,direction=[-X,0]);
 
 fl_cylinder(h=h,d=d,$fn=100);
