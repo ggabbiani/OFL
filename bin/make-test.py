@@ -73,6 +73,7 @@ args = parser.parse_args()
 ofl.verbosity   = args.verbosity
 
 ofl.info("Camera        : % s" %args.camera)
+ofl.info("Projection    : % s" %args.projection)
 ofl.info("Dry run       : % s" %args.dry_run)
 ofl.info("OSCAD         : % s" %ofl.oscad)
 ofl.info("Verbosity     : % s" %args.verbosity)
