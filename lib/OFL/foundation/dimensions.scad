@@ -39,47 +39,10 @@ function fl_Dimension(
   value,
   //! mandatory label string
   label,
-  /*!
-   * Spread direction in the orthogonal view of the dimension lines.
-   */
-  spread=+X,
-  //! dimension line thickness
-  line_width,
-  //! The object to which the dimension line is attached.
-  object,
-  /*!
-   * one of the following:
-   * - "right"
-   * - "top"
-   * - "bottom"
-   * - "left"
-   */
-  view="top"
-)  = let(
-  horiz         = spread.y!=0,
-  arrow_body_w  = line_width ? line_width : value/8,
-  arrow_text_w  = arrow_body_w*3,
-  arrow_head_w  = arrow_body_w*8/3,
-  thick         = arrow_body_w*2,
-  bbox          = let(
-    width = arrow_head_w+arrow_text_w,
-    dims  = [value,width,thick],
-    low   = [-dims.x/2,-arrow_head_w/2,-dims.z/2],
-    high  = low+dims
-  ) horiz ? [low,high] : [[-high.y,-high.x,low.z],[-low.y,-low.x,+high.z]]
-) [
+)  = [
   fl_native(value=true),
   assert(label)       fl_dim_label(value=label),
   assert(value)       fl_dim_value(value=value),
-                      fl_bb_corners(value=bbox),
-  assert(object)      [str(FL_DIM_NS,"/embedded object bounding box"),fl_bb_corners(object)],
-  assert(line_width)  [str(FL_DIM_NS,"/line width"),line_width],
-                      [str(FL_DIM_NS,"/spread"),spread],
-                      [str(FL_DIM_NS,"/arrow body thickness"),arrow_body_w],
-                      [str(FL_DIM_NS,"/arrow text thickness"),arrow_text_w],
-                      [str(FL_DIM_NS,"/arrow head thickness"),arrow_head_w],
-                      [str(FL_DIM_NS,"/thick"),arrow_text_w],
-                      [str(FL_DIM_NS,"/view"),view],
 ];
 
 /*!
@@ -87,6 +50,7 @@ function fl_Dimension(
  *
  * - $dim_align   : current alignment
  * - $dim_label   : current dimension line label
+ * - $dim_object  : bounded object
  * - $dim_spread  : spread vector
  * - $dim_value   : current value
  * - $dim_view    : dimension line bounded view
@@ -98,35 +62,103 @@ module fl_dimension(
   verbs       = FL_ADD,
   geometry,
   /*!
-   * By default the dimension line is centered on the «spread» parameter.
+   * Position of the measure line with respect to its distribute direction:
+   *
+   * - "centered": default value
+   * - "positive": aligned in the positive half of the view plane
+   * - "negative": aligned in the negative half of the view plane
+   * - «scalar signed value»: position of the start of the measurement line on
+   *   the normal to its distribution vector
    */
-  align=[0,0,0],
-  //! when undef native positioning is used
-  octant,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
+  align,
+  /*!
+   * Distribute direction of stacked dimension lines.
+   */
+  spread,
+  gap,
+  //! dimension line thickness
+  line_width,
+  //! The object to which the dimension line is attached.
+  object,
+  /*!
+   * Name of the projection plane view:
+   *
+   * - "right"  ⇒ XZ plane
+   * - "top"    ⇒ XY plane
+   * - "bottom" ⇒ YX plane
+   * - "left"   ⇒ ZY plane
+   */
+  view,
   //! see constructor fl_parm_Debug()
   debug
 ) {
+  assert(view=="right"||view=="top"||view=="bottom"||view=="left",view);
+  assert(align=="centered"||align=="positive"||align=="+"||align=="negative"||align=="-"||is_num(align),align);
+
   $dim_level = is_undef($dim_level) ? 1 : $dim_level+1;
 
   value         = fl_dim_value(geometry);
   label         = fl_dim_label(geometry);
-  emb_bbox      = fl_property(geometry, str(FL_DIM_NS,"/embedded object bounding box"));
-  line_width    = fl_property(geometry, str(FL_DIM_NS,"/line width"));
-  spread        = fl_property(geometry, str(FL_DIM_NS,"/spread"));
-  bbox          = fl_bb_corners(geometry);
-  arrow_body_w  = fl_property(geometry, str(FL_DIM_NS,"/arrow body thickness"));
-  arrow_text_w  = fl_property(geometry, str(FL_DIM_NS,"/arrow text thickness"));
-  arrow_head_w  = fl_property(geometry, str(FL_DIM_NS,"/arrow head thickness"));
-  thick         = fl_property(geometry, str(FL_DIM_NS,"/thick"));
-  view          = fl_property(geometry, str(FL_DIM_NS,"/view"));
 
-  horiz         = _abs_(spread)==Y;
+  // attribute inheritance from stacked dimension lines
+  align         = is_undef(align) ? is_undef($dim_align) ? "centered" : $dim_align : align;
+  spread        = spread  ? spread  : $dim_spread;
+  spread_sgn    = fl_3d_sign(spread);
+  gap           = gap ? gap : $dim_gap;
+  line_width    = line_width ? line_width : $dim_width;
+  object        = object  ? object  : $dim_object;
+  view          = view ? view : $dim_view;
+
+  // plane.x and plane.y represent the X and Y axis in the specific 2d
+  // projection view
+  plane         =
+    view=="right"   ? [+Y,+Z] :
+    view=="top"     ? [+X,+Y] :
+    view=="bottom"  ? [+X,-Y] :
+    /* "left" */      [-Y,+Z] ;
+  plane_n       = cross(plane.x,plane.y);
+  // measure lines are parallel to this vector
+  measure_vec   = fl_3d_abs(cross(plane_n,spread));
+
+  // translation on 'measure_vec'
+  T      = let (
+    t = align=="centered"             ? 0 :
+        align=="positive"||align=="+" ? +value/2 :
+        align=="negative"||align=="-" ? -value/2 :
+        assert(is_num(align)) value/2 + align
+  ) T(t*measure_vec);
+
+  arrow_body_w  = line_width ? line_width : value/8;
+  arrow_text_w  = arrow_body_w*3;
+  arrow_head_w  = arrow_body_w*8/3;
+  thick         = arrow_body_w;
+  bbox          = bbox(fl_bb_corners(object));
+  dims          = bbox[1]-bbox[0];
+  // enrich geometry with bounding box
+  geometry      = concat(geometry,[fl_bb_corners(value=bbox)]);
   font          = "Symbola:style=Regular";
-  quad_sgn      = _sign_(spread);
-  quad_abs      = _abs_(spread);
-  trans         = _offset_(spread, emb_bbox, $DIM_GAP)+_align_(align,value);
+
+  echo(bbox=bbox,T=T);
+
+  // bounding box calculation
+  function bbox(
+    // embedded object bounding box
+    embed
+  ) = let(
+    // gap(s) to add along the distribution vector
+    gaps = $dim_level*gap
+  ) let(
+    length  = spread_sgn*embed[_step_(spread_sgn)][_index_(spread)]+gaps,
+    dims    = spread.y ? [value,length,thick] : [length,value,thick],
+    // translation along distribution vector
+    dist_t  = spread_sgn<0 ? -dims[_index_(spread)] : 0,
+    low     = spread.y ? [-dims.x/2, dist_t, -dims.z/2] : [dist_t, -dims.y/2, -dims.z/2]
+  ) [low,low+dims];
+
+  function alignment() = let(delta=value/2)
+    spread==-Y ?
+      X((1+sign(align.x))*delta) :
+      [O,O];
 
   function _align_(align,value) = let(delta=value/2) [
     sign(align.x)*delta,
@@ -139,54 +171,102 @@ module fl_dimension(
     let(s=sign(quad.z)) (s==0 ? 0 : bbox[(s+1)/2].z) + s*gap,
   ];
 
-  function _sign_(axis) = axis==-X || axis==-Y || axis==-Z ? -1 : +1;
-  function _abs_(axis)  = [for(i=axis) abs(i)];
+  function _index_(axis) = axis.x ? 0 : axis.y ? 1 : 2;
+  function _step_(value) = value<0 ? 0 : 1;
 
   module context() let(
     $dim_align  = align,
+    $dim_gap    = gap,
     $dim_label  = label,
+    $dim_object = object,
     $dim_spread = spread,
     $dim_value  = value,
-    $dim_view   = assert(view) view,
+    $dim_view   = view,
     $dim_width  = line_width
   ) children();
 
-  module label(txt)
-    rotate(horiz ? 0 : 90,Z)
-      translate([0,+arrow_body_w])
-        resize([0,arrow_body_w*3,0],auto=[true,true,false])
-          linear_extrude(thick)
-            text(str(txt), valign="bottom", halign="center", font=font);
-
   module darrow(label,value,w) {
-    head_l    = arrow_body_w*8/5;
 
-    module head(direction)
-      fl_cylinder(h=head_l, d1=arrow_head_w, d2=0, direction=direction);
+    module label(txt)
+      rotate(spread.y ? 0 : 90,Z)
+        translate([0,+arrow_head_w/2])
+          resize([0,arrow_body_w*3,0],auto=[true,true,false])
+            linear_extrude(thick)
+              text(str(txt), valign="bottom", halign="center", font=font);
 
-    rotate(horiz ? 90 : 0,Z)
+    function vertical(head_t,body_t,offset=-value/2) = let(
+      head_l  = body_t*8/5
+    ) [
+      [0,offset+0],
+      [head_t/2,offset+head_l],
+      [body_t/2,offset+head_l],
+      [body_t/2,offset+value-head_l],
+      [head_t/2,offset+value-head_l],
+      [0,offset+value],
+      [-head_t/2,offset+value-head_l],
+      [-body_t/2,offset+value-head_l],
+      [-body_t/2,offset+head_l],
+      [-head_t/2,offset+head_l],
+    ];
+
+    function horizontal(head_t,body_t,offset=-value/2) = let(
+      head_l  = body_t*8/5
+    ) [
+      [offset+0,0],
+      [offset+head_l,head_t/2],
+      [offset+head_l,body_t/2],
+      [offset+value-head_l,body_t/2],
+      [offset+value-head_l,head_t/2],
+      [offset+value,0],
+      [offset+value-head_l,-head_t/2],
+      [offset+value-head_l,-body_t/2],
+      [offset+head_l,-body_t/2],
+      [offset+head_l,-head_t/2],
+    ];
+
+    label =
+      $DIM_MODE=="full"   ? (label ? str(label,"=",value) : value) :
+      $DIM_MODE=="label"  ? (label ? label : undef) :
+      $DIM_MODE=="value"  ? str(value) : undef;
+
+    echo(plane=plane,"current x",let(s="XYZ") s[_index_(plane.x)]);
+    pts = _index_(spread)==0 ?  // horizontal distribution on the view plane
+      vertical(arrow_head_w,arrow_body_w,offset=0) :
+      _index_(spread)==1 ?      // vertical distribution on the view plane
+      horizontal(arrow_head_w,arrow_body_w,offset=0) :
+      assert(false,fl_error(["Bad value for spread:", str(spread)])) [];
+    // arrow positioning according to the bounding box
+    t =
+      spread.y>0 ?      [bbox[0].x, bbox[1].y, bbox[0].z] :
+      spread.x>0 ?      [bbox[1].x, bbox[0].y, bbox[0].z] :
+                        bbox[0] ;
+    T_label =
+      spread.y ? X(value/2) :
+      spread.x ? Y(value/2) :
+      assert(false,fl_error(["Bad value for spread:", str(spread)])) [];
+    echo(t=t,T_label=T_label)
+    translate(t) {
       linear_extrude(thick)
-        projection() {
-          for(i=[-1,+1])
-            translate(i*Y(value/2-head_l))
-              head([i*Y,0]);
-          fl_cylinder(h=value-2*head_l, d=arrow_body_w, octant=O, direction=[+Y,0]);
-        }
+        polygon(pts);
+      if (label)
+        translate(T_label)
+          label(label, $FL_ADD="ON");
+    }
   }
 
   module reference_lines() {
 
     module line() let(
         width   = line_width/2,
-        length  = abs(spread.x ? emb_bbox[(sign(spread.x)+1)/2].x : spread.y ? emb_bbox[(sign(spread.y)+1)/2].y : emb_bbox[(sign(spread.z)+1)/2].z) + $dim_level*$DIM_GAP,
-        size    = spread.x ? [length,width,thick] : spread.y ? [width,length,thick] : [length,thick,width]
-      ) fl_cube(size=size, octant=-spread, $FL_ADD="DEBUG");
+        length  = spread.x ? dims.x : dims.y,
+        size    = spread.x ? [length,width,thick] : [width,length,thick]
+      ) fl_cube(size=size, octant=spread, $FL_ADD="DEBUG");
 
-    if (spread.x) // reference line parallel to X axis
+    if (spread.x) // vertical measure ⇒ horizontal reference
       for(y=[-value/2,+value/2])
         translate(Y(y))
           line();
-    else if (spread.y) // reference line parallel to Y axis
+    else if (spread.y) // horizontal measure ⇒ vertical reference
       for(x=[-value/2,+value/2])
         translate(X(x))
           line();
@@ -198,31 +278,21 @@ module fl_dimension(
   module engine() let(
   ) if ($this_verb==FL_ADD) {
       context() {
-        translate(trans) {
+        multmatrix(T) {
           color("black")
-              translate(-Z(thick/2)) {
-                darrow(label=label, value=value, w=line_width, $FL_ADD="ON");
-                let(
-                  label =
-                    $DIM_MODE=="full" ? (label ? str(label,"=",value) : value) :
-                    $DIM_MODE=="label" ? (label ? label : undef) :
-                    $DIM_MODE=="value" ? str(value) : undef
-                ) if (label)
-                  label(label, $FL_ADD="ON");
-              }
+            darrow(label=label, value=value, w=line_width, $FL_ADD="ON");
           reference_lines();
         }
-        translate($DIM_GAP*spread)
-          children();
+        children();
       }
     } else if ($this_verb==FL_BBOX) {
-      translate(trans)
-        fl_bb_add(corners=bbox, 2d=true, auto=true,$FL_ADD="DEBUG");
+      multmatrix(T)
+        fl_bb_add(corners=bbox,auto=true);
     } else
       fl_error(true,["unimplemented verb","'",$this_verb,"'"]);
 
   if (view==fl_currentView())
-    fl_polymorph(verbs,geometry,octant,direction,debug)
+    fl_polymorph(verbs,geometry,octant)
       engine()
         children();
 }

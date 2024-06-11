@@ -53,11 +53,11 @@ DIR_R       = 0;        // [-360:360]
 
 
 /* [Dimension Lines] */
-$DIM_MODE      = "full"; // [full,label,value,silent]
-$DIM_GAP       = 1;  // [1:.1:10]
-VIEW_TYPE      = "other";  // [other,right,top,bottom,left]
-
-
+VIEW_TYPE     = "other";  // [other,right,top,bottom,left]
+DISTRIBUTION  = "+x"; // [-x,+x,-y,+y,-z,+z]
+ALIGN         = "positive"; // [centered,positive,negative]
+$DIM_MODE     = "full"; // [full,label,value,silent]
+$DIM_GAP      = 1;  // [1:.1:10]
 
 /* [Hidden] */
 
@@ -76,17 +76,46 @@ h       = 10;
 cyl     = fl_cylinder_defaults(h=h,d=d);
 line_w  = 0.1;
 
-dim_radius    = fl_Dimension(value=d/2,  label="r (top)",   object=cyl, spread=-Y, line_width=line_w,   view="top");
-dim_diameter  = fl_Dimension(value=d,    label="d (top)", object=cyl, spread=-Y, line_width=line_w,     view="top");
-
-h_right = fl_Dimension(value=h,    label="h (right)",   object=cyl, spread=+X, line_width=line_w, view="right");
-h_left  = fl_Dimension(value=h,    label="h (right)",   object=cyl, spread=+X, line_width=line_w, view="left");
+dim_r = fl_Dimension(value=d/2,  label="r");
+dim_d = fl_Dimension(value=d,    label="d");
+dim_h = fl_Dimension(value=h,    label="h");
 
 $vpr = fl_view(VIEW_TYPE);
 
-fl_dimension(verbs,geometry=dim_radius,align=+X)
-  fl_dimension(verbs,geometry=dim_diameter);
-fl_dimension(verbs,geometry=h_right,align=+Y,direction=[+X,90]);
-fl_dimension(verbs,geometry=h_left,align=+Y,direction=[-X,0]);
+distribution  = fl_3d_AxisList([DISTRIBUTION])[0];
 
-fl_cylinder(h=h,d=d,$fn=100);
+fl_dimension(verbs,dim_r,
+  view="top",
+  gap=1,
+  align=ALIGN,
+  object=cyl,
+  spread=distribution,
+  line_width=line_w
+) fl_dimension(verbs,geometry=dim_d,align="centered")
+    fl_dimension(verbs,geometry=dim_d,align=-1.5);
+
+fl_dimension(verbs,dim_h,
+  align=ALIGN,
+  spread=distribution,
+  gap=1,
+  line_width=line_w,
+  object=cyl,
+  view="right"
+);
+
+// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align="+",object=cyl,spread=-Y,line_width=line_w,debug=debug)
+//   fl_dimension(verbs,geometry=dim_d,align="centered")
+//     fl_dimension(verbs,geometry=dim_d,align=-1.5);
+
+// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align=-X,object=cyl,spread=+Y,line_width=line_w,debug=debug);
+// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align=+Y,object=cyl,spread=+X,line_width=line_w,debug=debug);
+// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align=-Y,object=cyl,spread=-X,line_width=line_w,debug=debug);
+
+// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align=+X,object=cyl,spread=-Y,line_width=line_w)
+//   fl_dimension(verbs,geometry=dim_d,align=O);
+// fl_dimension(verbs,geometry=dim_h,gap=1,align=+Y,object=cyl,spread=+X,line_width=line_w,view="right");
+// fl_dimension(verbs,geometry=dim_h,gap=1,align=+Y,object=cyl,spread=+X,line_width=line_w,view="left");
+
+fl_cylinder(h=h,d=d,$fn=100,$FL_ADD="DEBUG");
+
+// Cristina Uberti + Ficarelli
