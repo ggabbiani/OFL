@@ -60,7 +60,7 @@ prefix used for namespacing
 __Syntax:__
 
 ```text
-fl_Dimension(value,label,spread=+X,line_width,object,view="top")
+fl_Dimension(value,label)
 ```
 
 Constructor for dimension lines.
@@ -75,24 +75,6 @@ mandatory value
 
 __label__  
 mandatory label string
-
-__spread__  
-Spread direction in the orthogonal view of the dimension lines.
-
-
-__line_width__  
-dimension line thickness
-
-__object__  
-The object to which the dimension line is attached.
-
-__view__  
-one of the following:
-- "right"
-- "top"
-- "bottom"
-- "left"
-
 
 
 ---
@@ -123,12 +105,13 @@ fl_dim_value(type,value)
 
 __Syntax:__
 
-    fl_dimension(verbs=FL_ADD,geometry,align=[0,0,0],octant,direction,debug)
+    fl_dimension(verbs=FL_ADD,geometry,align,spread,gap,line_width,object,view,debug)
 
 Children context:
 
 - $dim_align   : current alignment
 - $dim_label   : current dimension line label
+- $dim_object  : bounded object
 - $dim_spread  : spread vector
 - $dim_value   : current value
 - $dim_view    : dimension line bounded view
@@ -142,14 +125,33 @@ __verbs__
 supported verbs: FL_ADD
 
 __align__  
-By default the dimension line is centered on the «spread» parameter.
+Position of the measure line with respect to its distribute direction:
+
+- "centered": default value
+- "positive": aligned in the positive half of the view plane
+- "negative": aligned in the negative half of the view plane
+- «scalar signed value»: position of the start of the measurement line on
+  the normal to its distribution vector
 
 
-__octant__  
-when undef native positioning is used
+__spread__  
+Distribute direction of stacked dimension lines.
 
-__direction__  
-desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__line_width__  
+dimension line thickness
+
+__object__  
+The object to which the dimension line is attached.
+
+__view__  
+Name of the projection plane view:
+
+- "right"  ⇒ XZ plane
+- "top"    ⇒ XY plane
+- "bottom" ⇒ YX plane
+- "left"   ⇒ ZY plane
+
 
 __debug__  
 see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
