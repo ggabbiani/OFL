@@ -117,5 +117,3 @@ fl_dimension(verbs,dim_h,
 // fl_dimension(verbs,geometry=dim_h,gap=1,align=+Y,object=cyl,spread=+X,line_width=line_w,view="left");
 
 fl_cylinder(h=h,d=d,$fn=100,$FL_ADD="DEBUG");
-
-// Cristina Uberti + Ficarelli
