@@ -1,5 +1,6 @@
-# ODOX		:= orthodocs --verbosity off
-ODOX		:= orthodocs
+# ODOX		:= orthodocs --verbosity debug
+ODOX		:= orthodocs --verbosity off
+# ODOX		:= orthodocs
 DOC_ROOT	:= $(CURDIR)
 
 # .PHONY: pics
