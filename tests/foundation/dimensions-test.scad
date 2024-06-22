@@ -36,13 +36,15 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
+
+
 /* [Dimension Lines] */
 VIEW_TYPE     = "other";    // [other,right,top,bottom,left]
-DISTRIBUTION  = "h+";       // [h+,h-,v+,v-]
-ALIGN         = "positive"; // [centered,positive,negative]
 DIM_MODE      = "full";     // [full,label,value,silent]
 DIM_GAP       = 1;          // [1:.1:10]
 DIM_W         = 0.1;        // [0.1:0.1:1]
+
+
 
 /* [Hidden] */
 
@@ -70,9 +72,9 @@ if (fl_parm_dimensions(debug)) {
   fl_dimension(verbs,dim_r,
     view="top",
     gap=DIM_GAP,
-    align=ALIGN,
+    align="positive",
     object=cyl,
-    distr=DISTRIBUTION,
+    distr="h+",
     line_width=DIM_W,
     mode=DIM_MODE
   ) fl_dimension(verbs,geometry=dim_d,align="centered")
