@@ -94,19 +94,6 @@ module fl_assert(
   message
 ) assert(condition==true,fl_error(message));
 
-//*****************************************************************************
-// lists
-
-//! removes till the i-indexed element from the top of list «l»
-function fl_pop(l,i=0) =
-  // echo(l=l,i=i)
-  let(len=len(l))
-  assert(!is_undef(len) && len>i,str("i=",i," len=",len))
-  i>len-2 ? [] : [for(j=[i+1:len(l)-1]) l[j]];
-
-//! push «item» on tail of list «l»
-function fl_push(list,item) = [each list,item];
-
 //**** base transformations ***************************************************
 
 //! transforms 3D to 2D coords by clipping Z plane
@@ -160,11 +147,13 @@ function fl_view(
 /*!
  * returns the esoteric name associated to the current OpenSCAD view:
  *
- * - "right"
- * - "top"
- * - "bottom"
- * - "left"
- * - "other"
+ * | Returned string  | Projection plane  |
+ * | ---------------- | ----------------- |
+ * | "right"          | YZ                |
+ * | "top"            | XY                |
+ * | "bottom"         | YX                |
+ * | "left"           | ZY                |
+ * | "other"          | -                 |
  */
 function fl_currentView() =
   fl_switch($vpr,[[[90,0,90],"right"],[O,"top"],[[180,0,0],"bottom"],[[90,0,270],"left"],],"other");
@@ -747,10 +736,11 @@ function fl_atof(str) =
  * Returns the numerical form of a string
  *
  * Usage:
- *     echo(fl_atoi("491585"));              // 491585
- *     echo(fl_atoi("-15"));                 // -15
- *     echo(fl_atoi("01110", 2));            // 14
- *     echo(fl_atoi("D5A4", 16));            // 54692
+ *
+ *     echo(fl_atoi("491585"));                 // 491585
+ *     echo(fl_atoi("-15"));                    // -15
+ *     echo(fl_atoi("01110", 2));               // 14
+ *     echo(fl_atoi("D5A4", 16));               // 54692
  *     echo(fl_atoi("-5") + fl_atoi("10") + 5); // 10
  *
  * Original code pasted from TOUL: [The OpenScad Usefull
@@ -765,9 +755,12 @@ function fl_atoi(
   str,
   /*!
    * The base conversion of the number
-   * - 2 for binary
-   * - 10 for decimal (default)
-   * - 16 for hexadecimal
+   *
+   * | Value  | Description           |
+   * | ------ | --------------------- |
+   * | 2      | for binary            |
+   * | 10     | for decimal (default) |
+   * | 16     | for hexadecimal       |
    */
   base=10,
   i=0, nb=0
@@ -818,7 +811,7 @@ function fl_substr(
  *
  * Usage:
  *     v = ["OpenScad", "is", "a", "free", "CAD", "software."];
- *     echo(fl_strcat(v)); // "OpenScadisafreeCADsoftware."
+ *     echo(fl_strcat(v));      // "OpenScadisafreeCADsoftware."
  *     echo(fl_strcat(v, " ")); // "OpenScad is a free CAD software."
  *
  * Original code pasted from TOUL: [The OpenScad Useful
@@ -847,9 +840,9 @@ function fl_strcat(
  * Usage:
  *
  *     str = "OpenScad is a free CAD software.";
- *     echo(fl_split(str)); // ["OpenScad", "is", "a", "free", "CAD", "software."]
- *     echo(fl_split(str)[3]); // "free"
- *     echo(fl_split("foo;bar;baz", ";")); // ["foo", "bar", "baz"]
+ *     echo(fl_split(str));                 // ["OpenScad", "is", "a", "free", "CAD", "software."]
+ *     echo(fl_split(str)[3]);              // "free"
+ *     echo(fl_split("foo;bar;baz", ";"));  // ["foo", "bar", "baz"]
  *
  * Original code pasted from TOUL: [The OpenScad Useful
  * Library](http://www.thingiverse.com/thing:1237203)
@@ -870,6 +863,16 @@ function fl_split(
 	fl_split(str, sep, i+1, str(word, str[i]), v);
 
 //**** lists ******************************************************************
+
+//! removes till the i-indexed element from the top of list «l»
+function fl_pop(l,i=0) =
+  // echo(l=l,i=i)
+  let(len=len(l))
+  assert(!is_undef(len) && len>i,str("i=",i," len=",len))
+  i>len-2 ? [] : [for(j=[i+1:len(l)-1]) l[j]];
+
+//! push «item» on tail of list «l»
+function fl_push(list,item) = [each list,item];
 
 //! returns a sub list
 function fl_list_sub(list,from,to) = let(

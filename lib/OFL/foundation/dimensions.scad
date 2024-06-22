@@ -19,12 +19,10 @@ FL_DIM_NS  = "dim";
 
 // Dimension lines public properties
 
+//! helper dimension line label
 function fl_dim_label(type,value)  = fl_property(type,str(FL_DIM_NS,"/label"),value);
+//! helper dimension line value
 function fl_dim_value(type,value)  = fl_property(type,str(FL_DIM_NS,"/value"),value);
-
-//! package inventory as a list of pre-defined and ready-to-use 'objects'
-FL_DIM_INVENTORY = [
-];
 
 /*!
  * Constructor for dimension lines.
