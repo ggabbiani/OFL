@@ -777,10 +777,11 @@ fl_atoi(str,base=10,i=0,nb=0)
 Returns the numerical form of a string
 
 Usage:
-    echo(fl_atoi("491585"));              // 491585
-    echo(fl_atoi("-15"));                 // -15
-    echo(fl_atoi("01110", 2));            // 14
-    echo(fl_atoi("D5A4", 16));            // 54692
+
+    echo(fl_atoi("491585"));                 // 491585
+    echo(fl_atoi("-15"));                    // -15
+    echo(fl_atoi("01110", 2));               // 14
+    echo(fl_atoi("D5A4", 16));               // 54692
     echo(fl_atoi("-5") + fl_atoi("10") + 5); // 10
 
 Original code pasted from TOUL: [The OpenScad Usefull
@@ -798,9 +799,12 @@ The string to converts (representing a number)
 
 __base__  
 The base conversion of the number
-- 2 for binary
-- 10 for decimal (default)
-- 16 for hexadecimal
+
+| Value  | Description           |
+| ------ | --------------------- |
+| 2      | for binary            |
+| 10     | for decimal (default) |
+| 16     | for hexadecimal       |
 
 
 
@@ -838,11 +842,13 @@ fl_currentView()
 
 returns the esoteric name associated to the current OpenSCAD view:
 
-- "right"
-- "top"
-- "bottom"
-- "left"
-- "other"
+| Returned string  | Projection plane  |
+| ---------------- | ----------------- |
+| "right"          | YZ                |
+| "top"            | XY                |
+| "bottom"         | YX                |
+| "left"           | ZY                |
+| "other"          | -                 |
 
 
 ---
@@ -1557,7 +1563,7 @@ __NOTE__: «axis» and «color» are mutually exclusive.
 __Syntax:__
 
 ```text
-fl_parm_Debug(labels=false,symbols=false,components=[])
+fl_parm_Debug(labels=false,symbols=false,components=[],dimensions=false)
 ```
 
 constructor for debug context parameter
@@ -1574,6 +1580,9 @@ __components__
 a string or a list of strings equals to the component label of which
 direction information will be shown
 
+
+__dimensions__  
+dimension lines
 
 
 ---
@@ -1649,6 +1658,18 @@ fl_parm_components(debug,label)
 ```
 
 When «debug» is not undef, checks if component «label» is marked for debugging
+
+---
+
+### function fl_parm_dimensions
+
+__Syntax:__
+
+```text
+fl_parm_dimensions(debug)
+```
+
+When true dimension lines are turned on
 
 ---
 
@@ -1815,9 +1836,9 @@ See also: [fl_strcat()](#function-fl_strcat), str2vec()
 Usage:
 
     str = "OpenScad is a free CAD software.";
-    echo(fl_split(str)); // ["OpenScad", "is", "a", "free", "CAD", "software."]
-    echo(fl_split(str)[3]); // "free"
-    echo(fl_split("foo;bar;baz", ";")); // ["foo", "bar", "baz"]
+    echo(fl_split(str));                 // ["OpenScad", "is", "a", "free", "CAD", "software."]
+    echo(fl_split(str)[3]);              // "free"
+    echo(fl_split("foo;bar;baz", ";"));  // ["foo", "bar", "baz"]
 
 Original code pasted from TOUL: [The OpenScad Useful
 Library](http://www.thingiverse.com/thing:1237203)
@@ -1893,7 +1914,7 @@ separator `sep` between each. See also: [fl_split()](#function-fl_split).
 
 Usage:
     v = ["OpenScad", "is", "a", "free", "CAD", "software."];
-    echo(fl_strcat(v)); // "OpenScadisafreeCADsoftware."
+    echo(fl_strcat(v));      // "OpenScadisafreeCADsoftware."
     echo(fl_strcat(v, " ")); // "OpenScad is a free CAD software."
 
 Original code pasted from TOUL: [The OpenScad Useful

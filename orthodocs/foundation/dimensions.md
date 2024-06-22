@@ -23,26 +23,6 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable $DIM_GAP
-
-__Default:__
-
-    1
-
-gap between dimension lines
-
----
-
-### variable FL_DIM_INVENTORY
-
-__Default:__
-
-    []
-
-package inventory as a list of pre-defined and ready-to-use 'objects'
-
----
-
 ### variable FL_DIM_NS
 
 __Default:__
@@ -87,6 +67,8 @@ __Syntax:__
 fl_dim_label(type,value)
 ```
 
+helper dimension line label
+
 ---
 
 ### function fl_dim_value
@@ -97,6 +79,8 @@ __Syntax:__
 fl_dim_value(type,value)
 ```
 
+helper dimension line value
+
 ## Modules
 
 ---
@@ -105,18 +89,21 @@ fl_dim_value(type,value)
 
 __Syntax:__
 
-    fl_dimension(verbs=FL_ADD,geometry,align,spread,gap,line_width,object,view,debug)
+    fl_dimension(verbs=FL_ADD,geometry,align,distr,gap,line_width,object,view,mode)
 
 Children context:
 
-- $dim_align   : current alignment
-- $dim_label   : current dimension line label
-- $dim_object  : bounded object
-- $dim_spread  : spread vector
-- $dim_value   : current value
-- $dim_view    : dimension line bounded view
-- $dim_width   : current line width
-- $dim_level   : current dimension line stacking level (always positive)
+| name        | description                                              |
+| ----------  | -------------------------------------------------------- |
+| $dim_align  | current alignment                                        |
+| $dim_label  | current dimension line label                             |
+| $dim_mode   | current mode                                             |
+| $dim_object | bounded object                                           |
+| $dim_spread | spread vector                                            |
+| $dim_value  | current value                                            |
+| $dim_view   | dimension line bounded view                              |
+| $dim_width  | current line width                                       |
+| $dim_level  | current dimension line stacking level (always positive)  |
 
 
 __Parameters:__
@@ -127,15 +114,23 @@ supported verbs: FL_ADD
 __align__  
 Position of the measure line with respect to its distribute direction:
 
-- "centered": default value
-- "positive": aligned in the positive half of the view plane
-- "negative": aligned in the negative half of the view plane
-- «scalar signed value»: position of the start of the measurement line on
-  the normal to its distribution vector
+| value                  | description                                   |
+| ---------------------  | --------------------------------------------- |
+| "centered"             | default value                                 |
+| "positive"             | aligned in the positive half of the view plane|
+| "negative"             | aligned in the negative half of the view plane|
+| «scalar signed value»  | position of the start of the measurement line on the normal to its distribution direction |
 
 
-__spread__  
-Distribute direction of stacked dimension lines.
+__distr__  
+Distribution direction of stacked dimension lines:
+
+| value  | description         |
+| -----  | ------------------- |
+| "h+"   | horizontal positive |
+| "h-"   | horizontal negative |
+| "v+"   | vertical positive   |
+| "v-"   | vertical negative   |
 
 
 __line_width__  
@@ -147,13 +142,24 @@ The object to which the dimension line is attached.
 __view__  
 Name of the projection plane view:
 
-- "right"  ⇒ XZ plane
-- "top"    ⇒ XY plane
-- "bottom" ⇒ YX plane
-- "left"   ⇒ ZY plane
+| value    | projection plane  |
+| -----    | ------------------|
+| "right"  | XZ                |
+| "top"    | XY                |
+| "bottom" | YX                |
+| "left"   | ZY                |
 
 
-__debug__  
-see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
+__mode__  
+Dimension line mode:
+
+| value    | projection plane                                                  |
+| -----    | ----------------------------------------------------------------- |
+| "silent" | no text is shown                                                  |
+| "label"  | dimension label is shown                                          |
+| "value"  | dimension value is shown                                          |
+| "full"   | dimension will show a full text in the format label=value         |
+| undef    | value is inherited from $dim_mode if any, set to "full" otherwise |
+
 
 

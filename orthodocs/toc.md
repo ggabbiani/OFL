@@ -1,9 +1,5 @@
 # Table of Contents
 
-## $
-
-- [$DIM_GAP (variable)](foundation/dimensions.md#variable-$dim_gap)
-
 ## 2
 
 - [fl_2 (function)](foundation/core.md#function-fl_2)
@@ -197,7 +193,6 @@
 - [fl_dict_names (function)](foundation/core.md#function-fl_dict_names)
 - [fl_dict_organize (function)](foundation/core.md#function-fl_dict_organize)
 - [fl_dict_search (function)](foundation/core.md#function-fl_dict_search)
-- [FL_DIM_INVENTORY (variable)](foundation/dimensions.md#variable-fl_dim_inventory)
 - [fl_dim_label (function)](foundation/dimensions.md#function-fl_dim_label)
 - [FL_DIM_NS (variable)](foundation/dimensions.md#variable-fl_dim_ns)
 - [fl_dim_value (function)](foundation/dimensions.md#function-fl_dim_value)
@@ -557,6 +552,7 @@
 - [fl_palette (function)](foundation/core.md#function-fl_palette)
 - [fl_parm_components (function)](foundation/core.md#function-fl_parm_components)
 - [fl_parm_Debug (function)](foundation/core.md#function-fl_parm_debug)
+- [fl_parm_dimensions (function)](foundation/core.md#function-fl_parm_dimensions)
 - [fl_parm_labels (function)](foundation/core.md#function-fl_parm_labels)
 - [fl_parm_Octant (function)](foundation/core.md#function-fl_parm_octant)
 - [fl_parm_Quadrant (function)](foundation/2d-engine.md#function-fl_parm_quadrant)
