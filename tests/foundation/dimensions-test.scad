@@ -36,34 +36,17 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
-/* [3D Placement] */
-
-X_PLACE = "undef";  // [undef,-1,0,+1]
-Y_PLACE = "undef";  // [undef,-1,0,+1]
-Z_PLACE = "undef";  // [undef,-1,0,+1]
-
-
-/* [Direction] */
-
-DIR_NATIVE  = true;
-// ARBITRARY direction vector
-DIR_Z       = [0,0,1];  // [-1:0.1:+1]
-// rotation around
-DIR_R       = 0;        // [-360:360]
-
-
 /* [Dimension Lines] */
-VIEW_TYPE     = "other";  // [other,right,top,bottom,left]
-DISTRIBUTION  = "+x"; // [-x,+x,-y,+y,-z,+z]
+VIEW_TYPE     = "other";    // [other,right,top,bottom,left]
+DISTRIBUTION  = "h+";       // [h+,h-,v+,v-]
 ALIGN         = "positive"; // [centered,positive,negative]
-$DIM_MODE     = "full"; // [full,label,value,silent]
-$DIM_GAP      = 1;  // [1:.1:10]
+DIM_MODE      = "full";     // [full,label,value,silent]
+DIM_GAP       = 1;          // [1:.1:10]
+DIM_W         = 0.1;        // [0.1:0.1:1]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
 
 fl_status();
 
@@ -74,7 +57,6 @@ verbs   = fl_verbList([FL_ADD,FL_BBOX]);
 d       = 4;
 h       = 10;
 cyl     = fl_cylinder_defaults(h=h,d=d);
-line_w  = 0.1;
 
 dim_r = fl_Dimension(value=d/2,  label="r");
 dim_d = fl_Dimension(value=d,    label="d");
@@ -82,38 +64,37 @@ dim_h = fl_Dimension(value=h,    label="h");
 
 $vpr = fl_view(VIEW_TYPE);
 
-distribution  = fl_3d_AxisList([DISTRIBUTION])[0];
+fl_cylinder(h=h,d=d,$fn=100,$FL_ADD="ON");
 
-fl_dimension(verbs,dim_r,
-  view="top",
-  gap=1,
-  align=ALIGN,
-  object=cyl,
-  spread=distribution,
-  line_width=line_w
-) fl_dimension(verbs,geometry=dim_d,align="centered")
-    fl_dimension(verbs,geometry=dim_d,align=-1.5);
+if (fl_parm_dimensions(debug)) {
+  fl_dimension(verbs,dim_r,
+    view="top",
+    gap=DIM_GAP,
+    align=ALIGN,
+    object=cyl,
+    distr=DISTRIBUTION,
+    line_width=DIM_W,
+    mode=DIM_MODE
+  ) fl_dimension(verbs,geometry=dim_d,align="centered")
+      fl_dimension(verbs,geometry=dim_d,align=-1.5);
 
-fl_dimension(verbs,dim_h,
-  align=ALIGN,
-  spread=distribution,
-  gap=1,
-  line_width=line_w,
-  object=cyl,
-  view="right"
-);
+  fl_dimension(verbs,dim_h,
+    view="right",
+    gap=DIM_GAP,
+    align="positive",
+    object=cyl,
+    distr="h+",
+    line_width=DIM_W,
+    mode=DIM_MODE
+  );
 
-// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align="+",object=cyl,spread=-Y,line_width=line_w,debug=debug)
-//   fl_dimension(verbs,geometry=dim_d,align="centered")
-//     fl_dimension(verbs,geometry=dim_d,align=-1.5);
-
-// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align=-X,object=cyl,spread=+Y,line_width=line_w,debug=debug);
-// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align=+Y,object=cyl,spread=+X,line_width=line_w,debug=debug);
-// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align=-Y,object=cyl,spread=-X,line_width=line_w,debug=debug);
-
-// fl_dimension(verbs,view="top",geometry=dim_r,gap=1,align=+X,object=cyl,spread=-Y,line_width=line_w)
-//   fl_dimension(verbs,geometry=dim_d,align=O);
-// fl_dimension(verbs,geometry=dim_h,gap=1,align=+Y,object=cyl,spread=+X,line_width=line_w,view="right");
-// fl_dimension(verbs,geometry=dim_h,gap=1,align=+Y,object=cyl,spread=+X,line_width=line_w,view="left");
-
-fl_cylinder(h=h,d=d,$fn=100,$FL_ADD="DEBUG");
+  fl_dimension(verbs,dim_r,
+    view="right",
+    gap=DIM_GAP,
+    align="positive",
+    object=cyl,
+    distr="v+",
+    line_width=DIM_W,
+    mode=DIM_MODE
+  );
+}

@@ -1434,8 +1434,10 @@ function fl_parm_Debug(
    * a string or a list of strings equals to the component label of which
    * direction information will be shown
    */
-  components = []
-) = [labels,symbols,components];
+  components = [],
+  //! dimension lines
+  dimensions = false
+) = [labels,symbols,components,dimensions];
 
 //! When true debug labels are turned on
 function fl_parm_labels(debug) = is_undef(debug) ? false : assert(is_bool(debug[0])) debug[0];
@@ -1453,6 +1455,9 @@ function fl_parm_components(debug,label) =
       is_string(components) ?
         components==label :
         assert(false,str("debug information must be a string or a list of strings: ", components)) undef;
+
+//! When true dimension lines are turned on
+function fl_parm_dimensions(debug) = is_undef(debug) ? false : assert(is_bool(debug[3])) debug[3];
 
 module fl_context_dump()
   echo(
