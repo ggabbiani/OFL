@@ -25,9 +25,7 @@ function fl_dim_label(type,value)  = fl_property(type,str(FL_DIM_NS,"/label"),va
 function fl_dim_value(type,value)  = fl_property(type,str(FL_DIM_NS,"/value"),value);
 
 /*!
- * Constructor for dimension lines.
- *
- * This geometry is meant to be used on a 'top view' projection, with Z axis as normal.
+ * Constructor for single dimension lines.
  */
 function fl_Dimension(
   //! mandatory value
@@ -41,15 +39,35 @@ function fl_Dimension(
 ];
 
 /*!
+ * Constructor for a strip of dimension lines indexed by their labels. Each
+ * element can be later retrieved by using the standard fl_property() getter on
+ * the strip itself, like in the following code:
+ *
+ *     strip = fl_DimensionPack([
+ *               fl_Dimension(20,"Height"),
+ *               fl_Dimension(10,"Width")],
+ *               ...
+ *             );
+ *     ...
+ *     fl_dimension(fl_property(strip,"Height"),...);
+ *     fl_dimension(fl_property(strip,"Width"),...);
+ */
+function fl_DimensionPack(dimension_list) = [
+  for(dim=dimension_list) [fl_dim_label(dim),dim]
+];
+
+/*!
  * Children context:
  *
  * | name        | description                                              |
  * | ----------  | -------------------------------------------------------- |
  * | $dim_align  | current alignment                                        |
+ * | $dim_distr  | distribution direction, equal to the «distr» parameter   |
+ * | $dim_gap    | gap between stacked dimension lines                      |
  * | $dim_label  | current dimension line label                             |
  * | $dim_mode   | current mode                                             |
  * | $dim_object | bounded object                                           |
- * | $dim_spread | spread vector                                            |
+ * | $dim_spread | distribution direction in 2D space (always X or Y axis)  |
  * | $dim_value  | current value                                            |
  * | $dim_view   | dimension line bounded view                              |
  * | $dim_width  | current line width                                       |
@@ -81,6 +99,7 @@ module fl_dimension(
    * | "v-"   | vertical negative   |
    */
   distr,
+  //! fixed gap between stacked dimension lines
   gap,
   //! dimension line thickness
   line_width,
@@ -106,7 +125,7 @@ module fl_dimension(
    * | "label"  | dimension label is shown                                          |
    * | "value"  | dimension value is shown                                          |
    * | "full"   | dimension will show a full text in the format label=value         |
-   * | undef    | value is inherited from $dim_mode if any, set to "full" otherwise |
+   * |  undef   | value is inherited from $dim_mode if any, set to "full" otherwise |
    */
   mode
 ) {
@@ -118,15 +137,17 @@ module fl_dimension(
   value         = assert(is_list(geometry),geometry) fl_dim_value(geometry);
   label         = fl_dim_label(geometry);
 
-  // attribute inheritance from stacked dimension lines
-  align         = align ? align : is_undef($dim_align) ? "centered" : $dim_align;
-  view          = view ? view : $dim_view;
-  mode          = mode ? mode : is_undef($dim_mode) ? "full" : $dim_mode;
-  xy_spread     = fl_switch(distr,[["h+",+X],["h-",-X],["v+",+Y],["v-",-Y],],is_undef($dim_spread)?undef:fl_versor($dim_spread));
-  xy_sgn    = fl_3d_sign(xy_spread);
-  gap           = gap ? gap : is_undef($dim_gap) ? 1 : $dim_gap;
-  line_width    = line_width ? line_width : $dim_width;
-  object        = object  ? object  : $dim_object;
+  // eventual attribute inheritance from context variables
+  align       = align ? align : is_undef($dim_align) ? "centered" : $dim_align;
+  view        = view ? view : $dim_view;
+  mode        = mode ? mode : is_undef($dim_mode) ? "full" : $dim_mode;
+  distr       = distr ? distr : $dim_distr;
+  object      = object  ? object  : $dim_object;
+  line_width  = line_width ? line_width : $dim_width;
+  gap         = gap ? gap : is_undef($dim_gap) ? 1 : $dim_gap;
+
+  xy_spread   = fl_switch(distr,[["h+",+X],["h-",-X],["v+",+Y],["v-",-Y],],is_undef($dim_spread)?undef:fl_versor($dim_spread));
+  xy_sgn      = fl_3d_sign(xy_spread);
 
   // plane.x and plane.y represent the X and Y axis in the specific 2d
   // projection view
@@ -181,6 +202,7 @@ module fl_dimension(
 
   module context() let(
     $dim_align  = align,
+    $dim_distr  = distr,
     $dim_gap    = gap,
     $dim_label  = label,
     $dim_object = object,
@@ -197,9 +219,8 @@ module fl_dimension(
     module label(txt)
       rotate(xy_spread.y ? 0 : 90,Z)
         translate([0,+arrow_head_w/2])
-          resize([0,arrow_body_w*3,0],auto=[true,true,false])
-            linear_extrude(thick)
-              text(str(txt), valign="bottom", halign="center", font=font);
+          linear_extrude(thick)
+            text(str(txt), valign="bottom", halign="center", font=font, size=arrow_body_w*3);
 
     function vertical(head_t,body_t,offset=-value/2) = let(
       head_l  = body_t*8/5

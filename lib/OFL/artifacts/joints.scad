@@ -10,7 +10,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/unsafe_defs.scad>
+// include <../foundation/unsafe_defs.scad>
+include <../foundation/dimensions.scad>
 include <../../Round-Anything/polyround.scad>
 
 use <../foundation/3d-engine.scad>
@@ -34,6 +35,12 @@ function fl_jnt_RectCantilever(
   description,
   //! total cantilever length (i.e. arm + tooth)
   length,
+  //! arm length
+  arm_l,
+  /*!
+   * tooth length: automatically calculated according to «alpha» angle if undef
+   */
+  tooth_l,
   //! thickness in scalar or [root,end] form. Scalar value means constant thickness.
   h,
   //! width in scalar or [root,end] form. Scalar value means constant width.
@@ -50,32 +57,43 @@ function fl_jnt_RectCantilever(
    * - scalar ⇒ client defined radius value
    */
   fillet=0
-)  = let(
+)  = echo(
+  arm_l=arm_l,
+  tooth_l=tooth_l,
+  length=length
+)
+let(
   namespace = str(FL_JNT_NS,"/cantilever"),
+  inverse   = orientation==-Z,
   h         = is_num(h) ? [h,h] : assert(is_list(h)) h,
   b         = is_num(b) ? [b,b] : assert(is_list(b)) b,
-  tooth_l   = assert(is_num(alpha)) undercut / tan(alpha),
-  l         = assert(length>tooth_l,tooth_l) length - tooth_l,
+  tooth_l   =
+    tooth_l ? tooth_l :
+    length ? assert(arm_l && length>arm_l,str("arm_l=",arm_l,", length=",length)) length-arm_l :
+    assert(is_num(alpha)) undercut / tan(alpha),
+  length    = arm_l+tooth_l,
   r         = undercut/10,
-  m         = R(Z,180)*T(-Z(length/2-tooth_l))*R(Y,-90)*T(X(length/2)-Z(b[1]/2)),
-  inverse   = orientation==-Z,
-  p         = [
-    [0,         inverse ? undercut : 0, inverse ? r : 0   ],
+  m         = (inverse?T(-Z(tooth_l)):I)*R(Z,180)*T(-Z(length/2-tooth_l))*R(Y,-90)*T(X(length/2)-Z(b[1]/2)),
+  angular   = undercut/tan(alpha),
+  // tooth points in 'polyround' format
+  p         = assert(angular<=tooth_l) [
+    [0,         inverse ? undercut : 0, inverse ? r : r ],
+    [inverse ? -(tooth_l-angular) : -angular,  undercut, inverse ? 0 : r/2 ],
     [-tooth_l,  inverse ? 0 : undercut, inverse ? 0 : r/2 ],
     [-tooth_l,  0,                      0                 ],
     [-tooth_l, -h[1],                   0                 ],
     [0,        -h[1],                   r/2               ],
   ],
   arm_points  = [
-    [ -(tooth_l+l), -h[0],  -b[0]/2+b[1]/2 ], // 0
-    [ p[1].x,       p[4].y, 0 ],              // 1
-    [ p[1].x,       0,      0 ],              // 2
-    [ -(tooth_l+l), 0,      -b[0]/2+b[1]/2 ], // 3
+    [ -(tooth_l+arm_l), -h[0],  -b[0]/2+b[1]/2 ], // 0
+    [ p[2].x,       p[4].y, 0 ],              // 1
+    [ p[2].x,       0,      0 ],              // 2
+    [ -(tooth_l+arm_l), 0,      -b[0]/2+b[1]/2 ], // 3
 
-    [ -(tooth_l+l), -h[0],  +b[0]/2+b[1]/2  ],// 4
-    [ p[1].x,       p[4].y, +b[1]  ],         // 5
-    [ p[1].x,       0,      +b[1]  ],         // 6
-    [ -(tooth_l+l), 0,      +b[0]/2+b[1]/2  ],// 7
+    [ -(tooth_l+arm_l), -h[0],  +b[0]/2+b[1]/2  ],// 4
+    [ p[2].x,       p[4].y, +b[1]  ],         // 5
+    [ p[2].x,       0,      +b[1]  ],         // 6
+    [ -(tooth_l+arm_l), 0,      +b[0]/2+b[1]/2  ],// 7
   ],
   arm_faces = [
     [0,1,2,3],  // bottom
@@ -96,12 +114,24 @@ function fl_jnt_RectCantilever(
   [str(namespace,"/b"), b],
   [str(namespace,"/h"), h],
   [str(namespace,"/m"), m],
-  [str(namespace,"/l"), l],
+  [str(namespace,"/l"), arm_l],
   [str(namespace,"/length"), length],
   fl_jnt_points(value=p),
   fl_bb_corners(value=corners),
   [str(namespace,"/arm"), [arm_points,arm_faces]],
   [str(namespace,"/undercut"), undercut],
+  [str(namespace,"/reverse"), inverse],
+  [str(namespace,"/tooth"), tooth_l],
+  [str(namespace,"/dimensions"), fl_DimensionPack([
+    fl_Dimension(length,"length"),
+    fl_Dimension(arm_l,"arm"),
+    fl_Dimension(h[0],"h[0]"),
+    fl_Dimension(h[1],"h[1]"),
+    fl_Dimension(b[0],"b[0]"),
+    fl_Dimension(b[1],"b[1]"),
+    fl_Dimension(undercut,"undercut"),
+    fl_Dimension(tooth_l,"tooth"),
+  ])],
 ];
 
 //! creates a cantilever joint with constant rectangle cross-section
@@ -110,6 +140,7 @@ function fl_jnt_RectCantileverConst(
   description,
   //! total cantilever length (i.e. arm + tooth)
   length,
+  l,
   //! thickness in scalar.
   h,
   //! width in scalar.
@@ -128,7 +159,7 @@ function fl_jnt_RectCantileverConst(
   fillet=0
 )  = let(
 ) assert(is_num(h) && is_num(b) && h && b)
-  fl_jnt_RectCantilever(description,length,h,b,undercut,alpha,orientation,fillet);
+  fl_jnt_RectCantilever(description,length,l,h,b,undercut,alpha,orientation,fillet);
 
 /*!
  * Creates a cantilever joint with a scaled section thickness from «h» to «h»/2
@@ -138,6 +169,7 @@ function fl_jnt_RectCantileverScaledThickness(
   description,
   //! total cantilever length (i.e. arm + tooth)
   length,
+  l,
   //! thickness in scalar.
   h,
   //! width in scalar.
@@ -156,7 +188,7 @@ function fl_jnt_RectCantileverScaledThickness(
   fillet=0
 )  = let(
 ) assert(is_num(h) && is_num(b) && h && b)
-  fl_jnt_RectCantilever(description,length,[h,h/2],b,undercut,alpha,orientation,fillet);
+  fl_jnt_RectCantilever(description,length,l,[h,h/2],b,undercut,alpha,orientation,fillet);
 
 /*!
  * Creates a cantilever joint with a scaled section width from «b» to «b»/4
@@ -166,6 +198,7 @@ function fl_jnt_RectCantileverScaledWidth(
   description,
   //! total cantilever length (i.e. arm + tooth)
   length,
+  l,
   //! thickness in scalar.
   h,
   //! width in scalar.
@@ -184,7 +217,7 @@ function fl_jnt_RectCantileverScaledWidth(
   fillet=0
 )  = let(
 ) assert(is_num(h) && is_num(b) && h && b)
-  fl_jnt_RectCantilever(description,length,h,[b,b/4],undercut,alpha,orientation,fillet);
+  fl_jnt_RectCantilever(description,length,l,h,[b,b/4],undercut,alpha,orientation,fillet);
 
 /*!
  * Creates a cantilever joint with a scaled section thickness from «h» to «h»/2
@@ -195,6 +228,7 @@ function fl_jnt_RectCantileverFullScaled(
   description,
   //! total cantilever length (i.e. arm + tooth)
   length,
+  l,
   //! thickness in scalar.
   h,
   //! width in scalar.
@@ -213,7 +247,7 @@ function fl_jnt_RectCantileverFullScaled(
   fillet=0
 )  = let(
 ) assert(is_num(h) && is_num(b) && h && b)
-  fl_jnt_RectCantilever(description,length,[h,h/2],[b,b/4],undercut,alpha,orientation,fillet);
+  fl_jnt_RectCantilever(description,length,l,[h,h/2],[b,b/4],undercut,alpha,orientation,fillet);
 
 module fl_jnt_joint(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -231,7 +265,7 @@ module fl_jnt_joint(
   //! see constructor fl_parm_Debug()
   debug
 ) {
-  echo(this=this);
+  echo(this=this,debug=debug);
   namespace = str(FL_JNT_NS,"/cantilever");
 
   b         = fl_property(this,str(namespace,"/b"));
@@ -242,6 +276,9 @@ module fl_jnt_joint(
   arm       = fl_property(this,str(namespace,"/arm"));
   undercut  = fl_property(this,str(namespace,"/undercut"));
   pts       = fl_jnt_points(this);
+  dims      = fl_property(this,str(namespace,"/dimensions"));
+  reverse   = fl_property(this,str(namespace,"/reverse"));
+  tooth_l   = fl_property(this,str(namespace,"/tooth"));
 
   // run with an execution context set by fl_polymorph{}
   module engine() let(
@@ -249,9 +286,39 @@ module fl_jnt_joint(
   ) if ($this_verb==FL_ADD || $this_verb==FL_FOOTPRINT) {
       multmatrix(m)
       {
+        // tooth
         linear_extrude(b[1])
           polygon(polyRound(pts, fn=$fn));
+        // arm
         polyhedron(points=arm[0], faces=arm[1]);
+      }
+      if (fl_parm_dimensions(debug)) let(
+          $dim_object = this,
+          $dim_width  = $dim_width ? $dim_width : 0.05
+        ) {
+          let($dim_view="right") {
+            let($dim_distr="h+") translate(-Z(reverse?tooth_l:0)) {
+              fl_dimension(geometry=fl_property(dims,"arm"),        align="negative")
+                fl_dimension(geometry=fl_property(dims,"length"), align=-l);
+              fl_dimension(geometry=fl_property(dims,"tooth"),    align="positive");
+            }
+            let($dim_distr="v-")
+              fl_dimension(geometry=fl_property(dims,"h[0]"),   align="positive");
+            let($dim_distr="v+") {
+              fl_dimension(geometry=fl_property(dims,"h[1]"),     align="positive");
+              fl_dimension(geometry=fl_property(dims,"undercut"), align=-undercut);
+            }
+          }
+          let($dim_view="top") {
+            let($dim_distr="v+")
+              fl_dimension(geometry=fl_property(dims,"b[1]"))
+                fl_dimension(geometry=fl_property(dims,"b[0]"));
+            let($dim_distr="h+") {
+              fl_dimension(geometry=fl_property(dims,"undercut"), align="negative");
+              fl_dimension(geometry=fl_property(dims,"h[1]"),     align="positive")
+                fl_dimension(geometry=fl_property(dims,"h[0]"),  align="positive");
+            }
+          }
       }
 
     } else if ($this_verb==FL_AXES)
