@@ -64,7 +64,7 @@ CANTILEVER_ORIENT = "+z"; // [+z,-z]
 // arm length
 ARM_L = 6;
 // tooth length
-TOOTH_L = "undef";  // [undef,0,1,2,3,4,5,6,7,8,9,10]
+TOOTH_L = "2";  // [undef,0,1,2,3,4,5,6,7,8,9,10]
 // total cantilever length (arm+tooth)
 TOTAL_L  = "undef";  // [undef,0,1,2,3,4,5,6,7,8,9,10]
 // thickness of arm at root
