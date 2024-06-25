@@ -1,0 +1,40 @@
+{
+    "parameterSets": {
+        "fig_joints_right_view": {
+            "$FL_ADD": "ON",
+            "$FL_AXES": "OFF",
+            "$FL_BBOX": "OFF",
+            "$FL_CUTOUT": "OFF",
+            "$FL_FOOTPRINT": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "ARM_L": "6",
+            "CANTILEVER_ANGLE": "30",
+            "CANTILEVER_ORIENT": "+z",
+            "CANTILEVER_ROOT_B": "4",
+            "CANTILEVER_ROOT_H": "2",
+            "CANTILEVER_Y": "1",
+            "DIM_GAP": "1",
+            "DIM_MODE": "full",
+            "DIM_W": "0.05",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
+            "JOINT_FILLET": "auto",
+            "JOINT_TYPE": "full scaled",
+            "OCTANT": "[0, 0, 0]",
+            "PLACE_NATIVE": "true",
+            "SHOW_DIMENSIONS": "true",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "TOOTH_L": "2",
+            "TOTAL_L": "undef",
+            "VIEW_TYPE": "right"
+        }
+    },
+    "fileFormatVersion": "1",
+    "parameterSets": ""
+}
