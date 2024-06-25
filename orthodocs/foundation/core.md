@@ -848,6 +848,8 @@ returns the esoteric name associated to the current OpenSCAD view:
 | "top"            | XY                |
 | "bottom"         | YX                |
 | "left"           | ZY                |
+| "front"          | XZ                |
+| "back"           | ZX                |
 | "other"          | -                 |
 
 
@@ -2209,6 +2211,8 @@ one of the following esoteric names:
 - "top"
 - "bottom"
 - "left"
+- "front"
+- "back"
 
 
 

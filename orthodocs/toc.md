@@ -198,6 +198,7 @@
 - [fl_dim_value (function)](foundation/dimensions.md#function-fl_dim_value)
 - [fl_Dimension (function)](foundation/dimensions.md#function-fl_dimension)
 - [fl_dimension (module)](foundation/dimensions.md#module-fl_dimension)
+- [fl_DimensionPack (function)](foundation/dimensions.md#function-fl_dimensionpack)
 - [foundation/dimensions (package)](foundation/dimensions.md#package-foundationdimensions)
 - [FL_DIN_NS (variable)](artifacts/din_rails.md#variable-fl_din_ns)
 - [FL_DIN_PUNCH_4p2 (variable)](artifacts/din_rails.md#variable-fl_din_punch_4p2)

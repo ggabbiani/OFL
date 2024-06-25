@@ -43,9 +43,7 @@ __Syntax:__
 fl_Dimension(value,label)
 ```
 
-Constructor for dimension lines.
-
-This geometry is meant to be used on a 'top view' projection, with Z axis as normal.
+Constructor for single dimension lines.
 
 
 __Parameters:__
@@ -55,6 +53,30 @@ mandatory value
 
 __label__  
 mandatory label string
+
+
+---
+
+### function fl_DimensionPack
+
+__Syntax:__
+
+```text
+fl_DimensionPack(dimension_list)
+```
+
+Constructor for a strip of dimension lines indexed by their labels. Each
+element can be later retrieved by using the standard [fl_property()](core.md#function-fl_property) getter on
+the strip itself, like in the following code:
+
+    strip = fl_DimensionPack([
+              fl_Dimension(20,"Height"),
+              fl_Dimension(10,"Width")],
+              ...
+            );
+    ...
+    fl_dimension(fl_property(strip,"Height"),...);
+    fl_dimension(fl_property(strip,"Width"),...);
 
 
 ---
@@ -96,10 +118,12 @@ Children context:
 | name        | description                                              |
 | ----------  | -------------------------------------------------------- |
 | $dim_align  | current alignment                                        |
+| $dim_distr  | distribution direction, equal to the «distr» parameter   |
+| $dim_gap    | gap between stacked dimension lines                      |
 | $dim_label  | current dimension line label                             |
 | $dim_mode   | current mode                                             |
 | $dim_object | bounded object                                           |
-| $dim_spread | spread vector                                            |
+| $dim_spread | distribution direction in 2D space (always X or Y axis)  |
 | $dim_value  | current value                                            |
 | $dim_view   | dimension line bounded view                              |
 | $dim_width  | current line width                                       |
@@ -133,6 +157,9 @@ Distribution direction of stacked dimension lines:
 | "v-"   | vertical negative   |
 
 
+__gap__  
+fixed gap between stacked dimension lines
+
 __line_width__  
 dimension line thickness
 
@@ -148,6 +175,8 @@ Name of the projection plane view:
 | "top"    | XY                |
 | "bottom" | YX                |
 | "left"   | ZY                |
+| "front"  | XZ                |
+| "back"   | ZX                |
 
 
 __mode__  
@@ -159,7 +188,7 @@ Dimension line mode:
 | "label"  | dimension label is shown                                          |
 | "value"  | dimension value is shown                                          |
 | "full"   | dimension will show a full text in the format label=value         |
-| undef    | value is inherited from $dim_mode if any, set to "full" otherwise |
+|  undef   | value is inherited from $dim_mode if any, set to "full" otherwise |
 
 
 

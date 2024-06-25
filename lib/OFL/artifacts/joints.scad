@@ -29,7 +29,24 @@ FL_JNT_INVENTORY = [
 //! PolyRound points
 function fl_jnt_points(type,value)  = fl_property(type,str(FL_JNT_NS,"/points"),value);
 
-//! creates a cantilever joint with rectangle cross-section
+/*!
+ * creates a cantilever joint with rectangle cross-section.
+ *
+ * The following pictures show the relations between the passed parameters and
+ * the object geometry:
+ *
+ * __FRONT VIEW__:
+ *
+ * ![Front view](800x600/fig_joints_front_view.png)
+ *
+ * __RIGHT VIEW__:
+ *
+ * ![Right view](800x600/fig_joints_right_view.png)
+ *
+ * __TOP VIEW__
+ *
+ * ![Top view](800x600/fig_joints_top_view.png)
+ */
 function fl_jnt_RectCantilever(
   //! optional description
   description,

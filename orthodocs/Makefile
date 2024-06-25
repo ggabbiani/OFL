@@ -1,4 +1,4 @@
-# ODOX		:= orthodocs --verbosity debug
+# ODOX		:= orthodocs --verbosity error
 ODOX		:= orthodocs --verbosity off
 # ODOX		:= orthodocs
 DOC_ROOT	:= $(CURDIR)

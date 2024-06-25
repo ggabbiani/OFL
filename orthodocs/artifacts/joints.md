@@ -4,7 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[artifacts/joints] --o|include| A2[foundation/unsafe_defs]
+    A1[artifacts/joints] --o|include| A2[foundation/dimensions]
     A1 --o|use| A3[foundation/3d-engine]
     A1 --o|use| A4[foundation/bbox-engine]
     A1 --o|use| A5[foundation/fillet]
@@ -53,10 +53,26 @@ prefix used for namespacing
 __Syntax:__
 
 ```text
-fl_jnt_RectCantilever(description,length,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
+fl_jnt_RectCantilever(description,length,arm_l,tooth_l,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
 ```
 
-creates a cantilever joint with rectangle cross-section
+creates a cantilever joint with rectangle cross-section.
+
+The following pictures show the relations between the passed parameters and
+the object geometry:
+
+__FRONT VIEW__:
+
+![Front view](800x600/fig_joints_front_view.png)
+
+__RIGHT VIEW__:
+
+![Right view](800x600/fig_joints_right_view.png)
+
+__TOP VIEW__
+
+![Top view](800x600/fig_joints_top_view.png)
+
 
 __Parameters:__
 
@@ -65,6 +81,13 @@ optional description
 
 __length__  
 total cantilever length (i.e. arm + tooth)
+
+__arm_l__  
+arm length
+
+__tooth_l__  
+tooth length: automatically calculated according to «alpha» angle if undef
+
 
 __h__  
 thickness in scalar or [root,end] form. Scalar value means constant thickness.
@@ -91,7 +114,7 @@ optional fillet radius.
 __Syntax:__
 
 ```text
-fl_jnt_RectCantileverConst(description,length,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
+fl_jnt_RectCantileverConst(description,length,l,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
 ```
 
 creates a cantilever joint with constant rectangle cross-section
@@ -129,7 +152,7 @@ optional fillet radius.
 __Syntax:__
 
 ```text
-fl_jnt_RectCantileverFullScaled(description,length,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
+fl_jnt_RectCantileverFullScaled(description,length,l,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
 ```
 
 Creates a cantilever joint with a scaled section thickness from «h» to «h»/2
@@ -169,7 +192,7 @@ optional fillet radius.
 __Syntax:__
 
 ```text
-fl_jnt_RectCantileverScaledThickness(description,length,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
+fl_jnt_RectCantileverScaledThickness(description,length,l,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
 ```
 
 Creates a cantilever joint with a scaled section thickness from «h» to «h»/2
@@ -208,7 +231,7 @@ optional fillet radius.
 __Syntax:__
 
 ```text
-fl_jnt_RectCantileverScaledWidth(description,length,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
+fl_jnt_RectCantileverScaledWidth(description,length,l,h,b,undercut,alpha=30,orientation=+Z,fillet=0)
 ```
 
 Creates a cantilever joint with a scaled section width from «b» to «b»/4
