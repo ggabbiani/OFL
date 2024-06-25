@@ -319,6 +319,17 @@ module fl_jnt_joint(
                 fl_dimension(geometry=fl_property(dims,"h[0]"),  align="positive");
             }
           }
+          let($dim_view="front") {
+            let($dim_distr="h+") translate(-Z(reverse?tooth_l:0)) {
+              fl_dimension(geometry=fl_property(dims,"arm"),        align="negative")
+                fl_dimension(geometry=fl_property(dims,"length"), align=-l);
+              fl_dimension(geometry=fl_property(dims,"tooth"),    align="positive");
+            }
+            let($dim_distr="v+")
+              fl_dimension(geometry=fl_property(dims,"b[1]"));
+            let($dim_distr="v-")
+              fl_dimension(geometry=fl_property(dims,"b[0]"));
+          }
       }
 
     } else if ($this_verb==FL_AXES)
