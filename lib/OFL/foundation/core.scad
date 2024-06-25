@@ -139,10 +139,12 @@ function fl_view(
    * - "top"
    * - "bottom"
    * - "left"
+   * - "front"
+   * - "back"
    */
   name
 ) =
-  fl_switch(name,[["right",[90,0,90]],["top",O],["bottom",[180,0,0]],["left",[90,0,270]],],$vpr);
+  fl_switch(name,[["right",[90,0,90]],["top",O],["bottom",[180,0,0]],["left",[90,0,270]],["front",[90,0,0]],["back",[90,0,180]]],$vpr);
 
 /*!
  * returns the esoteric name associated to the current OpenSCAD view:
@@ -153,10 +155,12 @@ function fl_view(
  * | "top"            | XY                |
  * | "bottom"         | YX                |
  * | "left"           | ZY                |
+ * | "front"          | XZ                |
+ * | "back"           | ZX                |
  * | "other"          | -                 |
  */
 function fl_currentView() =
-  fl_switch($vpr,[[[90,0,90],"right"],[O,"top"],[[180,0,0],"bottom"],[[90,0,270],"left"],],"other");
+  fl_switch($vpr,[[[90,0,90],"right"],[O,"top"],[[180,0,0],"bottom"],[[90,0,270],"left"],[[90,0,0],"front"],[[90,0,180],"back"]],"other");
 
 
 //*****************************************************************************

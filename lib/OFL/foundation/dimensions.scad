@@ -114,6 +114,8 @@ module fl_dimension(
    * | "top"    | XY                |
    * | "bottom" | YX                |
    * | "left"   | ZY                |
+   * | "front"  | XZ                |
+   * | "back"   | ZX                |
    */
   view,
   /*!
@@ -129,7 +131,7 @@ module fl_dimension(
    */
   mode
 ) {
-  assert(view=="right"||view=="top"||view=="bottom"||view=="left",view);
+  assert(view=="right"||view=="top"||view=="bottom"||view=="left"||view=="front"||view=="back",view);
   assert(align=="centered"||align=="positive"||align=="+"||align=="negative"||align=="-"||is_num(align),align);
 
   $dim_level = is_undef($dim_level) ? 1 : $dim_level+1;
@@ -155,7 +157,9 @@ module fl_dimension(
     view=="right"   ? [+Y,+Z] :
     view=="top"     ? [+X,+Y] :
     view=="bottom"  ? [+X,-Y] :
-    /* "left" */      [-Y,+Z] ;
+    view=="left"    ? [-Y,+Z] :
+    view=="front"   ? [+X,+Z] :
+    /* "back" */      [-X,+Z] ;
 
   // translation on the 'measure line'
   Txy = let (
