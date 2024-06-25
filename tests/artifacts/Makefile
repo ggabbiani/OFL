@@ -6,17 +6,16 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-T_LIST			= box caddy-blob caddy din_rails pcb_holder spacer tnut tprofiles
+T_LIST			= box caddy-blob caddy din_rails joints pcb_holder spacer tnut tprofiles
 
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
+# $(info SOURCES=$(SOURCES))
+
 include $(FUNCTIONS) $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
-
-top:
-	@$(MAKE) -C $(realpath ../..) tests/artifacts/sources
 
 sources: $(SOURCES)
 

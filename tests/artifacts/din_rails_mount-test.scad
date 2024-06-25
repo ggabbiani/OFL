@@ -4,8 +4,6 @@
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
  *
- * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
- *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -26,7 +24,6 @@ $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 $FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
 
 
 /* [Supported verbs] */
@@ -63,12 +60,11 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 DIR_R       = 0;        // [-360:360]
 
 
-
 /* [DIN rails] */
 
 SHOW    = "ALL";  // [ALL, TS15, TS35, TS35D]
-LENGTH  = 50;    // [0:100]
-PUNCH   = false;
+LENGTH  = 50;     // [0:100]
+PUNCHED = false;
 // used during FL_CUTOUT and FL_FOOTPRINT
 TOLERANCE   = 0;  // [0:0.1:5]
 // thickness for FL_CUTOUT
@@ -82,7 +78,7 @@ CO_DIRECTION  = ["±Z"];
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();
 
@@ -96,15 +92,40 @@ co_direction  = fl_3d_AxisList(CO_DIRECTION);
 
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT]);
 
+module din_mount(rail) {
+  delta = 2;
+  bbox  = fl_bb_corners(rail)+[[-delta,0,-NIL],[+delta,+delta,+NIL]];
+  size  = bbox[1]-bbox[0];
+  thick = fl_thick(rail);
+  echo(thick=thick);
+
+  difference() {
+    translate(-Z(NIL)+Y(0*thick+delta))
+    fl_cube(size=size,octant=-Y+Z,$FL_ADD="ON");
+    fl_DIN_rail(
+      [FL_CUTOUT],rail,
+      cut_direction=[+Z],cut_thick=LENGTH,tolerance=TOLERANCE,cut_drift=-10,
+      octant=-Y+Z,direction=direction,debug=debug,
+      $FL_CUTOUT="ON"
+    );
+  }
+  fl_DIN_rail(
+    verbs,single(LENGTH,PUNCHED),
+    cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
+    octant=-Y+Z,direction=direction,debug=debug
+  );
+}
+
 single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_TS_INVENTORY),FL_DIN_RAIL_INVENTORY));
 if (single) {
-  fl_DIN_rail(
-    verbs,single(LENGTH,PUNCH),
-    cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
-    octant=octant,direction=direction,debug=debug
-  );
+  din_mount(single(LENGTH,PUNCHED));
+  // fl_DIN_rail(
+  //   verbs,single(LENGTH,PUNCHED),
+  //   cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
+  //   octant=octant,direction=direction,debug=debug
+  // );
 } else {
-  all = [for(constructor=FL_DIN_RAIL_INVENTORY) constructor(LENGTH,PUNCH)];
+  all = [for(constructor=FL_DIN_RAIL_INVENTORY) constructor(LENGTH,PUNCHED)];
   fl_layout(axis=+X,gap=3,types=all,$FL_LAYOUT="ON")
     fl_DIN_rail(
       verbs,all[$i],

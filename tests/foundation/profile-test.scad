@@ -28,6 +28,7 @@ $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 $FL_TRACES     = -2;     // [-2:10]
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
+SHOW_DIMENSIONS = false;
 
 
 /* [Supported verbs] */
@@ -75,7 +76,7 @@ SECTION = "L"; // [E, L, T, U]
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
+debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
 
 fl_status();
 

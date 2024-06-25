@@ -39,7 +39,7 @@ $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
 /* [Dimension Lines] */
-VIEW_TYPE     = "other";    // [other,right,top,bottom,left,front,back]
+VIEW_TYPE     = "other";    // [other,right,top,bottom,left]
 DIM_MODE      = "full";     // [full,label,value,silent]
 DIM_GAP       = 1;          // [1:.1:10]
 DIM_W         = 0.1;        // [0.1:0.1:1]
@@ -80,42 +80,23 @@ if (fl_parm_dimensions(debug)) {
   ) fl_dimension(verbs,geometry=dim_d,align="centered")
       fl_dimension(verbs,geometry=dim_d,align=-1.5);
 
-  let($dim_view="right") {
-    fl_dimension(verbs,dim_h,
-      gap=DIM_GAP,
-      align="positive",
-      object=cyl,
-      distr="h+",
-      line_width=DIM_W,
-      mode=DIM_MODE
-    );
+  fl_dimension(verbs,dim_h,
+    view="right",
+    gap=DIM_GAP,
+    align="positive",
+    object=cyl,
+    distr="h+",
+    line_width=DIM_W,
+    mode=DIM_MODE
+  );
 
-    fl_dimension(verbs,dim_r,
-      gap=DIM_GAP,
-      align="positive",
-      object=cyl,
-      distr="v+",
-      line_width=DIM_W,
-      mode=DIM_MODE
-    );
-  }
-  let($dim_view="front") {
-    fl_dimension(verbs,dim_h,
-      gap=DIM_GAP,
-      align="positive",
-      object=cyl,
-      distr="h+",
-      line_width=DIM_W,
-      mode=DIM_MODE
-    );
-
-    fl_dimension(verbs,dim_r,
-      gap=DIM_GAP,
-      align="positive",
-      object=cyl,
-      distr="v+",
-      line_width=DIM_W,
-      mode=DIM_MODE
-    );
-  }
+  fl_dimension(verbs,dim_r,
+    view="right",
+    gap=DIM_GAP,
+    align="positive",
+    object=cyl,
+    distr="v+",
+    line_width=DIM_W,
+    mode=DIM_MODE
+  );
 }

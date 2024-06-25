@@ -1,5 +1,8 @@
 /*
- * Snap-fit joints test.
+ * Snap-fit joints test
+ *
+ * NOTE: this file is generated automatically from 'template-3d.scad', any
+ * change will be lost.
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
  *
@@ -8,7 +11,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 include <../../lib/OFL/artifacts/joints.scad>
+
 
 $fn         = 50;           // [3:100]
 // Debug statements are turned on
@@ -23,6 +28,7 @@ SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
 SHOW_DIMENSIONS = false;
 
+
 /* [Supported verbs] */
 
 // adds shapes to scene.
@@ -36,10 +42,13 @@ $FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-/* [Placement] */
 
-PLACE_NATIVE  = true;
-OCTANT        = [0,0,0];  // [-1:+1]
+/* [3D Placement] */
+
+X_PLACE = "undef";  // [undef,-1,0,+1]
+Y_PLACE = "undef";  // [undef,-1,0,+1]
+Z_PLACE = "undef";  // [undef,-1,0,+1]
+
 
 /* [Direction] */
 
@@ -47,13 +56,15 @@ DIR_NATIVE  = true;
 // ARBITRARY direction vector
 DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
-DIR_R       = 0;        // [0:360]
+DIR_R       = 0;        // [-360:360]
+
 
 /* [Dimension Lines] */
 VIEW_TYPE     = "other";    // [other,right,top,bottom,left,front,back]
 DIM_MODE      = "full";     // [full,label,value,silent]
 DIM_GAP       = 1;          // [1:.1:10]
 DIM_W         = 0.05;       // [0.01:0.01:1]
+
 
 /* [FACTORY] */
 
@@ -76,13 +87,16 @@ CANTILEVER_Y  = 1;  // [0.1:0.1:1]
 // tooth angle
 CANTILEVER_ANGLE  = 30; // [1:89]
 
-/* [TEST] */
 
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = PLACE_NATIVE  ? undef : OCTANT;
+octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+fl_status();
+
+// end of automatically generated code
 
 $vpr      = fl_view(VIEW_TYPE);
 
