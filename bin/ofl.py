@@ -61,7 +61,7 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, quiet=False
     echo_f  = os.path.join(os.path.dirname(scad_f),os.path.splitext(os.path.basename(scad_f))[0]+'.echo')
   cmd = [oscad_cmd] + parms
   if hw:
-    cmd += ["--hardwarnings","-o",echo_f]
+    cmd += ["-o",echo_f]
   cmd += [scad_f]
   if dry_run:
     print(cmd)
@@ -69,15 +69,19 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, quiet=False
   else:
     result = subprocess.run(cmd,stdout=subprocess.DEVNULL if quiet else None,stderr=subprocess.STDOUT if quiet else None)
     debug("result: % s" %result)
-    if result.returncode==0 and hw:
+    if result.returncode!=0:
+      return result.returncode
+    if hw:
       lines = read_lines(echo_f)
       for line in lines:
-        match   = re.findall('^WARNING:',line)
+        # negative lookahead for excluding the useless 'Viewall and autocenter' warn
+        match   = re.findall(r"^WARNING: (?!Viewall and autocenter disabled in favor of \$vp\*)",line)
         if match:
+          print(*match,sep=", ")
           return -1
       return 0
     else:
-      return result.returncode
+      return 0
 
 SILENT  = 0
 ERROR   = 1
