@@ -79,3 +79,16 @@ endef
 define scad-path
 $(if $(call is-mac),$(shell mdfind "kMDItemCFBundleIdentifier == 'org.openscad.OpenSCAD'"),$(shell $(call which) openscad))
 endef
+
+# produce the current target picture from
+# $(1)=target resolution in 'openscad' format i.e. 800x600
+# $(2)=camera view settings
+# $(3)=projection type ('ortho' or 'perspective')
+define make-picture
+$(let \
+	hires,$(shell echo $$(( $(word 1,$(subst x, ,$(1))) * 8 ))$(comma)$$(( $(word 2,$(subst x, ,$(1))) * 8 ))), \
+	$(SCAD) --hardwarnings --imgsize $(hires) -o unscaled-$@ -d $(@:.png=.deps) --p $(<:.scad=.json) --P $(@:.png=) $(if $(2),--camera $(2)) $(if $(3),--projection $(3)) --ofl-script $< \
+	&& convert unscaled-$@ -resize $(1) $@ \
+	&& rm unscaled-$@
+)
+endef
