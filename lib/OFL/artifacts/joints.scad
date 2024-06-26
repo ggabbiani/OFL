@@ -63,6 +63,7 @@ function fl_jnt_RectCantilever(
   //! width in scalar or [root,end] form. Scalar value means constant width.
   b,
   undercut,
+  //! angle of inclination for the tooth
   alpha=30,
   //! move direction: +Z or -Z
   orientation=+Z,

@@ -95,6 +95,9 @@ thickness in scalar or [root,end] form. Scalar value means constant thickness.
 __b__  
 width in scalar or [root,end] form. Scalar value means constant width.
 
+__alpha__  
+angle of inclination for the tooth
+
 __orientation__  
 move direction: +Z or -Z
 
