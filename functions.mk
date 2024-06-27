@@ -84,11 +84,26 @@ endef
 # $(1)=target resolution in 'openscad' format i.e. 800x600
 # $(2)=camera view settings
 # $(3)=projection type ('ortho' or 'perspective')
-define make-picture
+define old-make-picture
 $(let \
-	hires,$(shell echo $$(( $(word 1,$(subst x, ,$(1))) * 8 ))$(comma)$$(( $(word 2,$(subst x, ,$(1))) * 8 ))), \
-	$(SCAD) --hardwarnings --imgsize $(hires) -o unscaled-$@ -d $(@:.png=.deps) --p $(<:.scad=.json) --P $(@:.png=) $(if $(2),--camera $(2)) $(if $(3),--projection $(3)) --ofl-script $< \
+	hires,$(shell echo $$(( $(word 1,$(subst x, ,$(1))) * 8 ))$(COMMA)$$(( $(word 2,$(subst x, ,$(1))) * 8 ))), \
+	$(SCAD) -v 4 --hardwarnings --imgsize $(hires) -o unscaled-$@ -d $(@:.png=.deps) --p $(<:.scad=.json) --P $(@:.png=) $(if $(2),--camera $(2)) $(if $(3),--projection $(3)) --ofl-script $< \
 	&& convert unscaled-$@ -resize $(1) $@ \
 	&& rm unscaled-$@
 )
+endef
+
+# produce the current target picture from
+# $(1)=target resolution in 'openscad' format i.e. 800x600
+# $(2)=camera view settings
+# $(3)=projection type ('ortho' or 'perspective')
+define make-picture
+	$(BIN)/make-picture -v 4 --resolution $(1) $(if $(2),--camera $(2)) $(if $(3),--projection $(3)) --ofl-script $< unscaled-$@ \
+	&& convert unscaled-$@ -resize $(1) $@ \
+	&& rm unscaled-$@
+)
+endef
+
+define make-camera
+	$(1)$(COMMA)$(2)$(COMMA)$(3)$(COMMA)$(4)$(COMMA)$(5)$(COMMA)$(6)$(COMMA)$(7)
 endef
