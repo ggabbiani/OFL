@@ -103,6 +103,11 @@ __Default:__
 
     fl_DIN_TopHatSection("TS15",size=[[10.5,15],5.5],r=[0.2,0.5])
 
+Top hat rail IEC/EN 60715 – 15×5.5
+
+![FL_DIN_TS15](800x600/fig-TS15_section.png)
+
+
 ---
 
 ### variable FL_DIN_TS35
@@ -111,7 +116,9 @@ __Default:__
 
     fl_DIN_TopHatSection("TS35",size=[[27,35],7.5],r=[.8,.8])
 
-top hat rail IEC/EN 60715 – 35 × 15
+Top hat rail IEC/EN 60715 – 35×7.5
+
+![FL_DIN_TS35](800x600/fig-TS35_section.png)
 
 
 ---
@@ -121,6 +128,11 @@ top hat rail IEC/EN 60715 – 35 × 15
 __Default:__
 
     fl_DIN_TopHatSection("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5)
+
+Top hat rail IEC/EN 60715 – 35×15
+
+![FL_DIN_TS35D](800x600/fig-TS35D_section.png)
+
 
 ---
 
