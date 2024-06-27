@@ -71,25 +71,22 @@ ofl.debug("scad : % s" %scad)
 full_target = os.path.normpath(args.picture.removesuffix('.png'))
 target_path = os.path.dirname(full_target)
 target_base = os.path.basename(full_target)
-target_deps = os.path.join(target_path,base+'.deps')
+png         = os.path.join(target_path,'unscaled-'+target_base+'.png')
 
-ofl.debug("target path : % s" %target_path)
-ofl.debug("target base : % s" %target_base)
-ofl.debug("target deps : % s" %target_deps)
+ofl.debug("target path: % s" %target_path)
+ofl.debug("png        : % s" %png)
 
-command = ['--imgsize',hires(args.resolution),'-d',target_deps,'--p',json,'--P',target_base,'-o',args.picture]
+parms = ['--imgsize',hires(args.resolution),'--p',json,'--P',target_base,'-o',png]
 if args.camera:
-  command += ['--camera', args.camera]
+  parms += ['--camera', args.camera]
 if args.projection:
-  command += ['--projection', args.projection]
+  parms += ['--projection', args.projection]
 echo    = os.path.join(args.temp_root,base+'.echo')
-ofl.debug("command : % s" %command)
+ofl.debug("command : % s" %parms)
 ofl.debug("echo : % s" %echo)
 
-rc  = ofl.openscad(scad,parms=command,echo_f=echo,hw=True,dry_run=args.dry_run)
-if rc==0:
-  cprint('✔','green',end='')
-else:
+rc  = ofl.openscad(scad,parms=parms,echo_f=echo,hw=True,dry_run=args.dry_run,quiet=True)
+if rc!=0:
   cprint(f'✝ ({rc})','red')
   cat(echo)
   exit(rc)

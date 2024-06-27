@@ -77,7 +77,6 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, quiet=False
         # negative lookahead for excluding the useless 'Viewall and autocenter' warn
         match   = re.findall(r"^WARNING: (?!Viewall and autocenter disabled in favor of \$vp\*)",line)
         if match:
-          print(*match,sep=", ")
           return -1
       return 0
     else:
