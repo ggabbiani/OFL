@@ -168,4 +168,4 @@ joint   =
     ) :
   undef;
 
-fl_jnt_joint(verbs, joint, octant=octant, direction=direction, debug=debug, $DIM_MODE=DIM_MODE);
+fl_jnt_joint(verbs, joint, octant=octant, direction=direction, debug=debug);
