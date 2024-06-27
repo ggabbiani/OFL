@@ -21,6 +21,7 @@
 
 include <../../Round-Anything/polyround.scad>
 
+include <../foundation/dimensions.scad>
 include <../foundation/label.scad>
 include <../foundation/unsafe_defs.scad>
 include <../foundation/util.scad>
@@ -106,6 +107,12 @@ function fl_DIN_TopHatSection(
   ["DIN/profile/size",size],
   ["DIN/profile/radii",r],
   ["DIN/profile/thick",thick],
+  [str(FL_DIN_NS,"/dimensions"), fl_DimensionPack([
+    fl_Dimension(size[0][0],"Wmin"),
+    fl_Dimension(size[0][1],"Wmax"),
+    fl_Dimension(size[1],"H"),
+    fl_Dimension(thick,"t"),
+  ])],
 ];
 
 FL_DIN_TS15  = fl_DIN_TopHatSection("TS15",size=[[10.5,15],5.5],r=[0.2,0.5]);
@@ -144,6 +151,9 @@ function fl_DIN_Rail(
   assert(length)  ["DIN/rail/length", length],
   if (punch) ["DIN/rail/punch", punch],
   fl_cutout(value=[+Z,-Z]),
+  [str(FL_DIN_NS,"/dimensions"), fl_DimensionPack([
+    fl_Dimension(length,"L"),
+  ])],
 ];
 
 FL_DIN_PUNCH_4p2  = concat(
@@ -237,6 +247,7 @@ module fl_DIN_rail(
   punch   = fl_optional(this,"DIN/rail/punch");
   length  = fl_property(this,"DIN/rail/length");
   profile = fl_property(this,"DIN/rail/profile");
+  dims    = concat(fl_property(profile,str(FL_DIN_NS,"/dimensions")),fl_property(this,str(FL_DIN_NS,"/dimensions")));
   points  = fl_property(profile,"DIN/profile/points");
   thick   = fl_property(profile,"DIN/profile/thick");
 
@@ -268,6 +279,42 @@ module fl_DIN_rail(
         if (punch)
           fl_punch(punch,length,thick)
             fl_DIN_puncher();
+      }
+      if (fl_parm_dimensions(debug)) let(
+          $dim_object = this,
+          $dim_width  = is_undef($dim_width) ? thick/5 : $dim_width,
+          $dim_gap    = is_undef($dim_gap) ? 7*$dim_width : $dim_gap
+        ) {
+          let($dim_view="top") {
+            let($dim_distr="v+") {
+              fl_dimension(geometry=fl_property(dims,"Wmin"))
+                fl_dimension(geometry=fl_property(dims,"Wmax"));
+            }
+            let($dim_distr="h+") {
+              fl_dimension(geometry=fl_property(dims,"H"),align="positive");
+            }
+            let($dim_distr="h-") {
+              fl_dimension(geometry=fl_property(dims,"t"),align=size.y-thick);
+            }
+          }
+          let($dim_view="right") {
+            let($dim_distr="h+") {
+              fl_dimension(geometry=fl_property(dims,"L"),align="positive");
+            }
+            let($dim_distr="v+") {
+              fl_dimension(geometry=fl_property(dims,"t"),align=size.y-thick)
+                fl_dimension(geometry=fl_property(dims,"H"),align="positive");
+            }
+          }
+          let($dim_view="front") {
+            let($dim_distr="v+") {
+              fl_dimension(geometry=fl_property(dims,"Wmin"))
+                fl_dimension(geometry=fl_property(dims,"Wmax"));
+            }
+            let($dim_distr="h+") {
+              fl_dimension(geometry=fl_property(dims,"L"),align="positive");
+            }
+          }
       }
 
     } else if ($this_verb==FL_AXES) {

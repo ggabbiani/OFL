@@ -63,6 +63,10 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 DIR_R       = 0;        // [-360:360]
 
 
+/* [Dimension Lines] */
+VIEW_TYPE     = "other";    // [other,right,top,bottom,left,front,back]
+DIM_MODE      = "full";     // [full,label,value,silent]
+
 
 /* [DIN rails] */
 
@@ -88,6 +92,9 @@ fl_status();
 
 // end of automatically generated code
 
+
+$vpr          = fl_view(VIEW_TYPE);
+$dim_mode     = DIM_MODE;
 thick         = $FL_CUTOUT!="OFF" ? CO_T       : undef;
 tolerance     = $FL_CUTOUT!="OFF" || $FL_FOOTPRINT!="OFF" ? TOLERANCE  : undef;
 drift         = $FL_CUTOUT!="OFF" ? CO_DRIFT   : undef;
