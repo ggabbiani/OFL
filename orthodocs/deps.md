@@ -32,7 +32,8 @@ graph TD
     A22 --o|use| A5
     A22 --o|use| A3
     A22 --o|use| A8
-    A23[artifacts/din_rails] --o|include| A24[foundation/label]
+    A23[artifacts/din_rails] --o|include| A22
+    A23 --o|include| A24[foundation/label]
     A23 --o|include| A2
     A23 --o|include| A18
     A23 --o|use| A5
