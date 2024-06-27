@@ -84,26 +84,33 @@ endef
 # $(1)=target resolution in 'openscad' format i.e. 800x600
 # $(2)=camera view settings
 # $(3)=projection type ('ortho' or 'perspective')
-define old-make-picture
-$(let \
-	hires,$(shell echo $$(( $(word 1,$(subst x, ,$(1))) * 8 ))$(COMMA)$$(( $(word 2,$(subst x, ,$(1))) * 8 ))), \
-	$(SCAD) -v 4 --hardwarnings --imgsize $(hires) -o unscaled-$@ -d $(@:.png=.deps) --p $(<:.scad=.json) --P $(@:.png=) $(if $(2),--camera $(2)) $(if $(3),--projection $(3)) --ofl-script $< \
-	&& convert unscaled-$@ -resize $(1) $@ \
-	&& rm unscaled-$@
-)
-endef
-
-# produce the current target picture from
-# $(1)=target resolution in 'openscad' format i.e. 800x600
-# $(2)=camera view settings
-# $(3)=projection type ('ortho' or 'perspective')
 define make-picture
-	$(BIN)/make-picture -v 4 --resolution $(1) $(if $(2),--camera $(2)) $(if $(3),--projection $(3)) --ofl-script $< unscaled-$@ \
+	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< $@ \
 	&& convert unscaled-$@ -resize $(1) $@ \
 	&& rm unscaled-$@
-)
 endef
 
 define make-camera
-	$(1)$(COMMA)$(2)$(COMMA)$(3)$(COMMA)$(4)$(COMMA)$(5)$(COMMA)$(6)$(COMMA)$(7)
+$(1)$(COMMA)$(2)$(COMMA)$(3)$(COMMA)$(4)$(COMMA)$(5)$(COMMA)$(6)$(COMMA)$(7)
+endef
+
+# creates OpenSCAD camera settings for the front view
+# $(1),$(2),$(3) translations
+# $(4) distance
+define front-view
+$(call make-camera,$(1),$(2),$(3),90,0,0,$(4))
+endef
+
+# creates OpenSCAD camera settings for the front view
+# $(1),$(2),$(3) translations
+# $(4) distance
+define right-view
+$(call make-camera,$(1),$(2),$(3),90,0,90,$(4))
+endef
+
+# creates OpenSCAD camera settings for the front view
+# $(1),$(2),$(3) translations
+# $(4) distance
+define top-view
+$(call make-camera,$(1),$(2),$(3),0,0,0,$(4))
 endef
