@@ -24,6 +24,7 @@ export DEPS					:= $(PRJ_ROOT)/bin/deps.sh --silent
 export BIN					:= $(CURDIR)/bin
 export FUNCTIONS			:= $(CURDIR)/functions.mk
 export SHELL				:= /bin/bash
+export COMMA				:= ,
 
 include $(FUNCTIONS)
 
