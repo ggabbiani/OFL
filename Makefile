@@ -29,7 +29,7 @@ export COMMA				:= ,
 include $(FUNCTIONS)
 
 # function dependant variables
-export SCAD					:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(warning OpenSCAD missing))
+export SCAD					:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(warning WARN: OpenSCAD missing))
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
