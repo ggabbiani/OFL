@@ -1,7 +1,7 @@
 SHELL			:= /bin/bash
 # depending on the installed docker engine (docker vs podman) the image removal
 # command could differ
-DOCKER_RMI		= $(shell file $$(which docker) | (grep ELF >&/dev/null && echo 'docker rmi' || echo 'docker rmi --ignore'))
+DOCKER_RMI		= $(shell file $$(which docker) | (grep ELF >&/dev/null && echo 'docker rmi &>/dev/null' || echo 'docker rmi --ignore'))
 # DOCKER_RUN gets '-it' options only if the current bash has tty attached to
 # stdin
 DOCKER_RUN		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shell tty)),-it) --rm
