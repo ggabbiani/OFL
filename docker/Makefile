@@ -10,7 +10,7 @@ UBUNTU_BUILD	= $(DOCKER_BUILD) -t ofl:ubuntu
 
 clean:
 	$(call aggregate-prologue)
-	podman rmi --ignore ofl:fedora ofl:ubuntu
+	docker rmi --ignore ofl:fedora ofl:ubuntu
 	$(call aggregate-epilogue)
 
 # build docker image: pre-requisite for all fedora targets
