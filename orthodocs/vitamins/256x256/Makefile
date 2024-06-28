@@ -20,16 +20,7 @@ all: $(TARGETS)
 
 fig_FL_IEC_%.png: iecs.scad iecs.json
 	$(call target-prologue)
-	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ --p iecs.json --P $(@:.png=) --ofl-script $<
-	@convert unscaled-$@ -resize $(SIZE) $@
-	@rm unscaled-$@
-	$(call target-epilogue-success)
-
-%.png: %.scad
-	$(call target-prologue)
-	@$(SCAD) --imgsize 9600,9600 -d $(@:.png=.deps) -o unscaled-$@ --ofl-script $<
-	@convert unscaled-$@ -resize $(SIZE) $@
-	@rm unscaled-$@
+	$(call make-picture,$(SIZE),,)
 	$(call target-epilogue-success)
 
 clean:

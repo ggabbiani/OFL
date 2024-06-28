@@ -7,12 +7,6 @@ PICTURES	:= fig_joints_front_view.png fig_joints_right_view.png fig_joints_top_v
 
 include $(FUNCTIONS)
 
-# returns the scad and configuration full path for the provided test type/name
-# $(1) : <artifacts|foundation|vitamins>/<test esoteric name>
-define test-deps
-$(TESTS)/$(1)-test.scad $(TESTS)/$(1)-test.json
-endef
-
 all:	$(PICTURES)
 
 clean:

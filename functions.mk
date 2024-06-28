@@ -86,7 +86,7 @@ endef
 # $(3)=projection type ('ortho' or 'perspective')
 define make-picture
 	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< $@ \
-	&& convert unscaled-$@ -resize $(1) $@ \
+	&& convert unscaled-$@ -resize $(1) $@ &>/dev/null \
 	&& rm unscaled-$@
 endef
 
@@ -113,4 +113,10 @@ endef
 # $(4) distance
 define top-view
 $(call make-camera,$(1),$(2),$(3),0,0,0,$(4))
+endef
+
+# returns the scad and json full path for the provided test type/name
+# $(1) : <artifacts|foundation|vitamins>/<test esoteric name>
+define test-deps
+$(TESTS)/$(1)-test.scad $(TESTS)/$(1)-test.json
 endef
