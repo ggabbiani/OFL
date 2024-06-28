@@ -1,6 +1,6 @@
 # depending on the installed docker engine (docker vs podman) the image removal
 # command could differ
-DOCKER_RMI		= $(shell file $$(which podman) | (grep ELF >&/dev/null && echo docker rmi --ignore || echo docker rmi))
+DOCKER_RMI		= $(shell file $$(which docker) | (grep ELF >&/dev/null && echo docker rmi --ignore || echo docker rmi))
 # DOCKER_RUN gets '-it' options only if the current bash has tty attached to
 # stdin
 DOCKER_RUN		= docker run -v $(PRJ_ROOT):/import:Z $(if $(patsubst not a tty,,$(shell tty)),-it) --rm
@@ -11,7 +11,7 @@ DOCKER_BUILD	= docker build
 FEDORA_BUILD	= $(DOCKER_BUILD) -t ofl:fedora
 UBUNTU_BUILD	= $(DOCKER_BUILD) -t ofl:ubuntu
 
-$(info 'docker rmi: $(DOCKER_RMI)')
+$(info docker rmi $(DOCKER_RMI))
 
 clean:
 	$(call aggregate-prologue)
