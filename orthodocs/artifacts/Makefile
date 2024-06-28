@@ -14,3 +14,4 @@ all: 256x256/all 800x600/all
 clean:
 	@rm -f *.md
 	@$(MAKE) -C 256x256 $@
+	@$(MAKE) -C 800x600 $@
