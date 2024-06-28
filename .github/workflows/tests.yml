@@ -73,6 +73,7 @@ jobs:
       - name: Docker image pull, document and test
         if: steps.docker.outputs.changed=='no'
         run: |
+          docker run -v .:/import:Z --rm ${DOCKER_IMAGE} clean
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE}
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE} tests/runs
 
@@ -131,5 +132,6 @@ jobs:
       - name: Docker image pull, test and push
         if: steps.docker.outputs.changed=='no'
         run: |
+          docker run -v .:/import:Z --rm ${DOCKER_IMAGE} clean
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE}
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE} tests/runs
