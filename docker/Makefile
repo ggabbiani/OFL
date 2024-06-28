@@ -1,3 +1,4 @@
+SHELL			:= /bin/bash
 # depending on the installed docker engine (docker vs podman) the image removal
 # command could differ
 DOCKER_RMI		= $(shell file $$(which docker) | (grep ELF >&/dev/null && echo 'docker rmi' || echo 'docker rmi --ignore'))
@@ -11,7 +12,7 @@ DOCKER_BUILD	= docker build
 FEDORA_BUILD	= $(DOCKER_BUILD) -t ofl:fedora
 UBUNTU_BUILD	= $(DOCKER_BUILD) -t ofl:ubuntu
 
-$(info docker rmi $(DOCKER_RMI))
+$(info docker rmi '$(DOCKER_RMI)')
 
 clean:
 	$(call aggregate-prologue)
