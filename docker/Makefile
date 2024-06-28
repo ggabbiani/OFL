@@ -16,7 +16,7 @@ $(info docker rmi '$(DOCKER_RMI)')
 
 clean:
 	$(call aggregate-prologue)
-	$(DOCKER_RMI) ofl:fedora ofl:ubuntu
+	$(DOCKER_RMI) ofl:fedora ofl:ubuntu || true
 	$(call aggregate-epilogue)
 
 # build docker image: pre-requisite for all fedora targets
