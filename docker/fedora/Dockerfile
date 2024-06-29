@@ -7,7 +7,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-FROM fedora:40
+FROM fedora:39
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 ARG ODOX_VERSION=1.2.1
 ARG ODOX_RELEASE=${ODOX_VERSION}-0.fc36
