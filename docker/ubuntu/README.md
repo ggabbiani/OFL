@@ -6,14 +6,17 @@ Ubuntu.
 ## Build
 
     $ cd <this directory>
-    $ docker build -t ofl:ubuntu .
+    <this directory> $
+    <this directory> $ docker build -t ofl:ubuntu .
 
 ## Project setup and documentation generation
 
     $ cd <OFL root directory>
-    $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu
+    <OFL root directory> $
+    <OFL root directory> $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu
 
 ## Tests execution
 
     $ cd <OFL root directory>
-    $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu tests/runs
+    <OFL root directory> $
+    <OFL root directory> $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu tests/runs

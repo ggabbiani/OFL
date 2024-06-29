@@ -6,14 +6,17 @@ Fedora.
 ## Build
 
     $ cd <this directory>
-    $ docker build -t ofl:fedora .
+    <this directory> $
+    <this directory> $ docker build -t ofl:fedora .
 
 ## Project setup and documentation generation
 
     $ cd <OFL root directory>
-    $ docker run -v ./:/import:Z  -it --rm ofl:fedora
+    <OFL root directory> $
+    <OFL root directory> $ docker run -v ./:/import:Z  -it --rm ofl:fedora
 
 ## Tests execution
 
     $ cd <OFL root directory>
-    $ docker run -v ./:/import:Z  -it --rm ofl:fedora tests/runs
+    <OFL root directory> $
+    <OFL root directory> $ docker run -v ./:/import:Z  -it --rm ofl:fedora tests/runs

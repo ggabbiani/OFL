@@ -1,3 +1,12 @@
+# This Makefile builds locally the Docker image used for run OFL tests.
+#
+# This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+#
+# Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+
 SHELL			:= /bin/bash
 # depending on the installed docker engine (docker vs podman) the image removal
 # command could differ
@@ -11,6 +20,8 @@ UBUNTU_MAKE		= $(DOCKER_RUN) ofl:ubuntu
 DOCKER_BUILD	= docker build
 FEDORA_BUILD	= $(DOCKER_BUILD) -t ofl:fedora
 UBUNTU_BUILD	= $(DOCKER_BUILD) -t ofl:ubuntu
+
+all: fedora ubuntu
 
 clean:
 	$(call aggregate-prologue)
