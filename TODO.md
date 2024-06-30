@@ -114,6 +114,7 @@
   engine
 - [ ] create template tests
 - [ ] complete DIN rails implementing missing verbs
+- [x] added Snap-fit joints
 - [x] added 'point' symbol
 
 
