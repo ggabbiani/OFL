@@ -79,7 +79,7 @@ function fl_jnt_RectCantilever(
   arm_l=arm_l,
   tooth_l=tooth_l,
   length=length
-)
+) assert(undercut)
 let(
   namespace = str(FL_JNT_NS,"/cantilever"),
   inverse   = orientation==-Z,
