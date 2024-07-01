@@ -56,7 +56,10 @@ FL_FAN_NAMES = [
 //! unwrap nop screw from the OFL fan instance
 function fl_fan_screw(type)  = fan_screw(fl_nopSCADlib(type));
 
-//! wraps a nop fan inside the corresponding OFL instance
+/*!
+ * Wraps a nop fan inside the corresponding OFL instance. The fl_nominal() is
+ * equal to its diameter.
+ */
 function fl_Fan(
   nop,
   //! optional description
@@ -72,6 +75,7 @@ function fl_Fan(
   fl_bb_corners(value=bbox),
   fl_name(value=name),
   fl_description(value=description),
+  fl_nominal(value=w),
   assert(nop) fl_nopSCADlib(value=nop)
 ];
 
