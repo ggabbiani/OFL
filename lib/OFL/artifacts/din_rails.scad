@@ -66,6 +66,10 @@ module fl_punch(
 
 //**** profiles ***************************************************************
 
+function fl_DIN_profilePoints(type,value) = fl_property(type,str(FL_DIN_NS,"/profile/radii points"),value);
+function fl_DIN_profileSize(type,value)   = fl_property(type,str(FL_DIN_NS,"/profile/size"),value);
+function fl_DIN_profileThick(type,value)  = fl_property(type,str(FL_DIN_NS,"/profile/thickness"),value);
+
 /*!
  * Constructor for Top hat section (TH), type O, or type Ω, with hat-shaped
  * cross section.
@@ -85,8 +89,7 @@ function fl_DIN_TopHatSection(
   fl_native(value=true),
   assert(name) fl_name(value=name),
   if (description) fl_description(value=description),
-  [
-    "DIN/profile/points",
+  fl_DIN_profilePoints(value=
     [
       [-size.x[1]/2,size.y,0],
       [-(size.x[0]/2-thick),size.y,r[1]+thick],
@@ -103,15 +106,16 @@ function fl_DIN_TopHatSection(
       [-size.x[0]/2,size.y-thick,r[1]],
       [-size.x[1]/2,size.y-thick,0]
     ]
-  ],
-  ["DIN/profile/size",size],
+  ),
+  fl_DIN_profileSize(value=size),
   ["DIN/profile/radii",r],
-  ["DIN/profile/thick",thick],
+  fl_DIN_profileThick(value=thick),
   [str(FL_DIN_NS,"/dimensions"), fl_DimensionPack([
     fl_Dimension(size[0][0],"Wmin"),
     fl_Dimension(size[0][1],"Wmax"),
     fl_Dimension(size[1],"H"),
     fl_Dimension(thick,"t"),
+    fl_Dimension((size[0][1]-size[0][0])/2,"delta"),
   ])],
 ];
 
@@ -143,6 +147,8 @@ FL_DIN_TS_INVENTORY = [
 
 //**** rails ******************************************************************
 
+function fl_DIN_railProfile(type,value)  = fl_property(type,"DIN/rail/profile",value);
+
 //! DIN Rails constructor
 function fl_DIN_Rail(
   //! one of the supported profiles (see variable FL_DIN_TS_INVENTORY)
@@ -153,13 +159,13 @@ function fl_DIN_Rail(
   punch
 ) = let(
   bbox          = let(
-    profile_size  = fl_property(profile,"DIN/profile/size"),
+    profile_size  = fl_DIN_profileSize(profile),
     sz            = assert(length) [profile_size.x[1],profile_size.y,length]
   ) [[-sz.x/2,0,0],[+sz.x/2,+sz.y,sz.z]]
 ) [
   fl_native(value=true),
   fl_bb_corners(value=bbox),
-  assert(profile) ["DIN/rail/profile", profile],
+  assert(profile) fl_DIN_railProfile(value=profile),
   assert(length)  ["DIN/rail/length", length],
   if (punch) ["DIN/rail/punch", punch],
   fl_cutout(value=[+Z,-Z]),
@@ -254,28 +260,29 @@ module fl_DIN_rail(
   //! see constructor fl_parm_Debug()
   debug
 ) {
+  assert($fn,$fn);
   bbox    = fl_bb_corners(this);
   size    = bbox[1]-bbox[0];
   punch   = fl_optional(this,"DIN/rail/punch");
   length  = fl_property(this,"DIN/rail/length");
-  profile = fl_property(this,"DIN/rail/profile");
+  profile = fl_DIN_railProfile(this);
   dims    = concat(fl_property(profile,str(FL_DIN_NS,"/dimensions")),fl_property(this,str(FL_DIN_NS,"/dimensions")));
-  points  = fl_property(profile,"DIN/profile/points");
-  thick   = fl_property(profile,"DIN/profile/thick");
+  points  = fl_DIN_profilePoints(profile);
+  thick   = fl_DIN_profileThick(profile);
 
   module do_shape(delta=0,footprint=false) {
     linear_extrude(size.z)
       let(points=footprint ? concat([points[0]],fl_list_sub(points,5)) : points)
-        offset(delta)
+        offset(delta) echo(points=points)
           polygon(polyRound(points,fn=$fn));
 
     translate(+Z(size.z))
       if (!footprint) {
         if (fl_parm_labels(debug))
-            for(i=[0:len(points)-1])
-              let(p=points[i])
-                translate([p.x,p.y])
-                  fl_label(string=str("P[",i,"]"),size=1);
+          for(i=[0:len(points)-1])
+            let(p=points[i])
+              translate([p.x,p.y])
+                fl_label(string=str("P[",i,"]"),size=1);
         if (fl_parm_symbols(debug))
           for(p=points)
             fl_sym_point(point=[p.x,p.y], size=0.25);
@@ -299,6 +306,10 @@ module fl_DIN_rail(
         ) {
           let($dim_view="top") {
             let($dim_distr="v+") {
+              let(delta=fl_property(dims,"delta")) {
+                fl_dimension(geometry=delta,align=$this_bbox[0].x,mode="value");
+                fl_dimension(geometry=delta,align=$this_bbox[1].x-fl_dim_value(delta),mode="value");
+              }
               fl_dimension(geometry=fl_property(dims,"Wmin"))
                 fl_dimension(geometry=fl_property(dims,"Wmax"));
             }
@@ -320,6 +331,10 @@ module fl_DIN_rail(
           }
           let($dim_view="front") {
             let($dim_distr="v+") {
+              let(delta=fl_property(dims,"delta")) {
+                fl_dimension(geometry=delta,align=$this_bbox[0].x,mode="value");
+                fl_dimension(geometry=delta,align=$this_bbox[1].x-fl_dim_value(delta),mode="value");
+              }
               fl_dimension(geometry=fl_property(dims,"Wmin"))
                 fl_dimension(geometry=fl_property(dims,"Wmax"));
             }
