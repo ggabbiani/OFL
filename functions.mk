@@ -84,8 +84,9 @@ endef
 # $(1)=target resolution in 'openscad' format i.e. 800x600
 # $(2)=camera view settings
 # $(3)=projection type ('ortho' or 'perspective')
+# $(4)=other parameter(s)
 define make-picture
-	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< $@ \
+	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) $(4) --ofl-script $< $@ \
 	&& convert unscaled-$@ -resize $(1) $@ &>/dev/null \
 	&& rm unscaled-$@
 endef
