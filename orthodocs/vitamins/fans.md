@@ -151,7 +151,9 @@ __Syntax:__
 fl_Fan(nop,description)
 ```
 
-wraps a nop fan inside the corresponding OFL instance
+Wraps a nop fan inside the corresponding OFL instance. The [fl_nominal()](../foundation/core.md#function-fl_nominal) is
+equal to its diameter.
+
 
 __Parameters:__
 

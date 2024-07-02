@@ -26,6 +26,22 @@ European (EN) and international (IEC) standards. The original concept was
 developed and implemented in Germany in 1928, and was elaborated into the
 present standards in the 1950s.
 
+## Organization
+
+The package manages three type of objects:
+
+- **punches**: ancillary type, eventually moved elsewhere in the future, defining
+  the punch type to be performed on a rail.
+- **profiles**: representing the different rail sections available. Currently
+  supported types are type Ω top head sections.  DIN profile instances are
+  all prefixed with **TS**. The list of available profiles is contained in
+  [variable FL_DIN_TS_INVENTORY](#variable-fl_din_ts_inventory).
+- **DIN rails**: concrete rail instantiations. DIN rail instances are
+  prefixed with **TH**. The list of available rails is provided in
+  [variable FL_DIN_RAIL_INVENTORY](#variable-fl_din_rail_inventory) .
+
+## Legal
+
 This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 
 Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
@@ -53,6 +69,8 @@ __Default:__
 
     concat(fl_Punch(20),[["DIN/rail/punch_d",4.2],["DIN/rail/punch_len",12.2],])
 
+4.2 mm stepped punch
+
 ---
 
 ### variable FL_DIN_PUNCH_6p3
@@ -60,6 +78,8 @@ __Default:__
 __Default:__
 
     concat(fl_Punch(25),[["DIN/rail/punch_d",6.3],["DIN/rail/punch_len",18],])
+
+6.3 mm stepped punch
 
 ---
 
@@ -69,7 +89,13 @@ __Default:__
 
     [FL_DIN_RAIL_TH15,FL_DIN_RAIL_TH35,FL_DIN_RAIL_TH35D]
 
-rail constructor inventory
+DIN rail constructor inventory.
+
+Every constructor - while instantiating different concrete rail - has the
+same signature:
+
+    Constructor(length,punched=true);
+
 
 ---
 
@@ -79,6 +105,8 @@ __Default:__
 
     function(length,punched=true)fl_DIN_Rail(profile=FL_DIN_TS15,punch=punched?FL_DIN_PUNCH_4p2:undef,length=length)
 
+Constructor for 15mm DIN rail with eventual 4.2mm punch
+
 ---
 
 ### variable FL_DIN_RAIL_TH35
@@ -86,6 +114,8 @@ __Default:__
 __Default:__
 
     function(length,punched=true)fl_DIN_Rail(profile=FL_DIN_TS35,punch=punched?FL_DIN_PUNCH_6p3:undef,length=length)
+
+Constructor for 35mm DIN rail with eventual 6.3mm punch
 
 ---
 
@@ -95,6 +125,8 @@ __Default:__
 
     function(length,punched=true)fl_DIN_Rail(profile=FL_DIN_TS35D,punch=punched?FL_DIN_PUNCH_6p3:undef,length=length)
 
+Constructor for 35mm DIN 'depth' variant rail with eventual 6.3mm punch
+
 ---
 
 ### variable FL_DIN_TS15
@@ -103,7 +135,7 @@ __Default:__
 
     fl_DIN_TopHatSection("TS15",size=[[10.5,15],5.5],r=[0.2,0.5])
 
-Top hat rail IEC/EN 60715 – 15×5.5
+Top hat section profile IEC/EN 60715 – 15×5.5 mm
 
 ![FL_DIN_TS15](800x600/fig-TS15_section.png)
 
@@ -116,7 +148,7 @@ __Default:__
 
     fl_DIN_TopHatSection("TS35",size=[[27,35],7.5],r=[.8,.8])
 
-Top hat rail IEC/EN 60715 – 35×7.5
+Top hat section profile IEC/EN 60715 – 35×7.5 mm
 
 ![FL_DIN_TS35](800x600/fig-TS35_section.png)
 
@@ -129,7 +161,7 @@ __Default:__
 
     fl_DIN_TopHatSection("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5)
 
-Top hat rail IEC/EN 60715 – 35×15
+Top hat section profile IEC/EN 60715 – 35×15 mm
 
 ![FL_DIN_TS35D](800x600/fig-TS35D_section.png)
 
@@ -142,7 +174,7 @@ __Default:__
 
     [FL_DIN_TS15,FL_DIN_TS35,FL_DIN_TS35D]
 
-DIN rail section inventory
+DIN profile inventory
 
 ## Functions
 
@@ -198,6 +230,54 @@ internal radii [upper radius,lower radius]
 
 ---
 
+### function fl_DIN_profilePoints
+
+__Syntax:__
+
+```text
+fl_DIN_profilePoints(type,value)
+```
+
+DIN profile points property
+
+---
+
+### function fl_DIN_profileSize
+
+__Syntax:__
+
+```text
+fl_DIN_profileSize(type,value)
+```
+
+DIN profile size property
+
+---
+
+### function fl_DIN_profileThick
+
+__Syntax:__
+
+```text
+fl_DIN_profileThick(type,value)
+```
+
+DIN profile thickness property
+
+---
+
+### function fl_DIN_railProfile
+
+__Syntax:__
+
+```text
+fl_DIN_railProfile(type,value)
+```
+
+DIN rail profile property
+
+---
+
 ### function fl_Punch
 
 __Syntax:__
@@ -206,7 +286,9 @@ __Syntax:__
 fl_Punch(step)
 ```
 
-Punch constructor
+Punch constructor: it actually defines only the punch step, while the
+concrete punch shape is defined by the children passed to the punch engine.
+
 
 ## Modules
 
@@ -218,6 +300,9 @@ __Syntax:__
 
     fl_DIN_puncher()
 
+This module defines the punch shape stepped by.
+
+
 ---
 
 ### module fl_DIN_rail
@@ -225,6 +310,9 @@ __Syntax:__
 __Syntax:__
 
     fl_DIN_rail(verbs=FL_ADD,this,cut_thick,tolerance=0,cut_drift=0,cut_direction,octant,direction,debug)
+
+DIN rail engine module.
+
 
 __Parameters:__
 
@@ -260,7 +348,13 @@ __direction__
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 __debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
+Debug parameter (see also constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)) currently
+supporting:
+
+- symbols (points)
+- labels (points)
+- dimension lines
+
 
 
 ---

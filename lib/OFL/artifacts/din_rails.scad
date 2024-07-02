@@ -12,6 +12,22 @@
  * developed and implemented in Germany in 1928, and was elaborated into the
  * present standards in the 1950s.
  *
+ * ## Organization
+ *
+ * The package manages three type of objects:
+ *
+ * - **punches**: ancillary type, eventually moved elsewhere in the future, defining
+ *   the punch type to be performed on a rail.
+ * - **profiles**: representing the different rail sections available. Currently
+ *   supported types are type Ω top head sections.  DIN profile instances are
+ *   all prefixed with **TS**. The list of available profiles is contained in
+ *   variable FL_DIN_TS_INVENTORY.
+ * - **DIN rails**: concrete rail instantiations. DIN rail instances are
+ *   prefixed with **TH**. The list of available rails is provided in
+ *   variable FL_DIN_RAIL_INVENTORY .
+ *
+ * ## Legal
+ *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
  *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
@@ -35,7 +51,10 @@ FL_DIN_NS  = "DIN";
 
 //**** punch ******************************************************************
 
-//! Punch constructor
+/*!
+ * Punch constructor: it actually defines only the punch step, while the
+ * concrete punch shape is defined by the children passed to the punch engine.
+ */
 function fl_Punch(step) = [
   ["punch/step",step],
 ];
@@ -64,10 +83,47 @@ module fl_punch(
       translate(+Z(z))
         children();
 
+//! 4.2 mm stepped punch
+FL_DIN_PUNCH_4p2  = concat(
+  fl_Punch(20),
+  [
+    ["DIN/rail/punch_d",    4.2],
+    ["DIN/rail/punch_len",  12.2],
+  ]
+);
+
+//! 6.3 mm stepped punch
+FL_DIN_PUNCH_6p3  = concat(
+  fl_Punch(25),
+  [
+    ["DIN/rail/punch_d",    6.3],
+    ["DIN/rail/punch_len",  18],
+  ]
+);
+
+/*!
+ * This module defines the punch shape stepped by.
+ */
+module fl_DIN_puncher() {
+  d   = fl_property($punch,"DIN/rail/punch_d");
+  len = fl_property($punch,"DIN/rail/punch_len");
+  dir = [+Y,0];
+  translate(+Z($punch_step-len)/2)
+    translate(+Z(d/2)-Y(NIL))
+      hull() {
+        fl_cylinder(h=$punch_thick+2xNIL, d=d, direction=dir);
+        translate(+Z(len-d))
+          fl_cylinder(h=$punch_thick+2xNIL, d=d, direction=dir);
+      }
+}
+
 //**** profiles ***************************************************************
 
+//! DIN profile points property
 function fl_DIN_profilePoints(type,value) = fl_property(type,str(FL_DIN_NS,"/profile/radii points"),value);
+//! DIN profile size property
 function fl_DIN_profileSize(type,value)   = fl_property(type,str(FL_DIN_NS,"/profile/size"),value);
+//! DIN profile thickness property
 function fl_DIN_profileThick(type,value)  = fl_property(type,str(FL_DIN_NS,"/profile/thickness"),value);
 
 /*!
@@ -120,25 +176,25 @@ function fl_DIN_TopHatSection(
 ];
 
 /*!
- * Top hat rail IEC/EN 60715 – 15×5.5
+ * Top hat section profile IEC/EN 60715 – 15×5.5 mm
  *
  * ![FL_DIN_TS15](800x600/fig-TS15_section.png)
  */
 FL_DIN_TS15  = fl_DIN_TopHatSection("TS15",size=[[10.5,15],5.5],r=[0.2,0.5]);
 /*!
- * Top hat rail IEC/EN 60715 – 35×7.5
+ * Top hat section profile IEC/EN 60715 – 35×7.5 mm
  *
  * ![FL_DIN_TS35](800x600/fig-TS35_section.png)
  */
 FL_DIN_TS35  = fl_DIN_TopHatSection("TS35",size=[[27,35],7.5],r=[.8,.8]);
 /*!
- * Top hat rail IEC/EN 60715 – 35×15
+ * Top hat section profile IEC/EN 60715 – 35×15 mm
  *
  * ![FL_DIN_TS35D](800x600/fig-TS35D_section.png)
  */
 FL_DIN_TS35D = fl_DIN_TopHatSection("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5);
 
-//! DIN rail section inventory
+//! DIN profile inventory
 FL_DIN_TS_INVENTORY = [
   FL_DIN_TS15,
   FL_DIN_TS35,
@@ -147,6 +203,7 @@ FL_DIN_TS_INVENTORY = [
 
 //**** rails ******************************************************************
 
+//! DIN rail profile property
 function fl_DIN_railProfile(type,value)  = fl_property(type,"DIN/rail/profile",value);
 
 //! DIN Rails constructor
@@ -174,48 +231,25 @@ function fl_DIN_Rail(
   ])],
 ];
 
-FL_DIN_PUNCH_4p2  = concat(
-  fl_Punch(20),
-  [
-    ["DIN/rail/punch_d",    4.2],
-    ["DIN/rail/punch_len",  12.2],
-  ]
-);
-
-FL_DIN_PUNCH_6p3  = concat(
-  fl_Punch(25),
-  [
-    ["DIN/rail/punch_d",    6.3],
-    ["DIN/rail/punch_len",  18],
-  ]
-);
-
-module fl_DIN_puncher() {
-  d   = fl_property($punch,"DIN/rail/punch_d");
-  len = fl_property($punch,"DIN/rail/punch_len");
-  dir = [+Y,0];
-  translate(+Z($punch_step-len)/2)
-    translate(+Z(d/2)-Y(NIL))
-      hull() {
-        fl_cylinder(h=$punch_thick+2xNIL, d=d, direction=dir);
-        translate(+Z(len-d))
-          fl_cylinder(h=$punch_thick+2xNIL, d=d, direction=dir);
-      }
-}
-
 // Specs taken from [RS PRO | RS PRO Steel Perforated DIN Rail, Mini Top Hat Compatible, 1m x 15mm x 5.5mm | 467-349 | RS Components](https://in.rsdelivers.com/product/rs-pro/rs-pro-steel-perforated-din-rail-mini-top-hat-1m-x/0467349)
+
+//! Constructor for 15mm DIN rail with eventual 4.2mm punch
 FL_DIN_RAIL_TH15   = function(length,punched=true)
   fl_DIN_Rail(
     profile     = FL_DIN_TS15,
     punch       = punched ? FL_DIN_PUNCH_4p2 : undef,
     length      = length
   );
+
+//! Constructor for 35mm DIN rail with eventual 6.3mm punch
 FL_DIN_RAIL_TH35   = function(length,punched=true)
   fl_DIN_Rail(
     profile     = FL_DIN_TS35,
     punch       = punched ? FL_DIN_PUNCH_6p3 : undef,
     length      = length
   );
+
+//! Constructor for 35mm DIN 'depth' variant rail with eventual 6.3mm punch
 FL_DIN_RAIL_TH35D  = function(length,punched=true)
   fl_DIN_Rail(
     profile     = FL_DIN_TS35D,
@@ -223,13 +257,23 @@ FL_DIN_RAIL_TH35D  = function(length,punched=true)
     length      = length
   );
 
-//! rail constructor inventory
+/*!
+ * DIN rail constructor inventory.
+ *
+ * Every constructor - while instantiating different concrete rail - has the
+ * same signature:
+ *
+ *     Constructor(length,punched=true);
+ */
 FL_DIN_RAIL_INVENTORY = [
   FL_DIN_RAIL_TH15,
   FL_DIN_RAIL_TH35,
   FL_DIN_RAIL_TH35D
 ];
 
+/*!
+ * DIN rail engine module.
+ */
 module fl_DIN_rail(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, CO_FOOTPRINT, FL_LAYOUT, FL_MOUNT
   verbs = FL_ADD,
@@ -257,7 +301,14 @@ module fl_DIN_rail(
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
-  //! see constructor fl_parm_Debug()
+  /*!
+   * Debug parameter (see also constructor fl_parm_Debug()) currently
+   * supporting:
+   *
+   * - symbols (points)
+   * - labels (points)
+   * - dimension lines
+   */
   debug
 ) {
   assert($fn,$fn);
