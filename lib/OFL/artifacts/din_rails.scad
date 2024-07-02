@@ -291,12 +291,12 @@ module fl_DIN_rail(
    *
    * Example:
    *
-   *     cut_direction=[+X,+Z]
+   *     cut_direction=[±Z]
    *
-   * in this case the ethernet plug will perform a cutout along +X and +Z.
+   * in this case the rail will perform a cutout along +Z and -Z.
    *
    * **Note:** axes specified must be present in the supported cutout direction
-   * list (retrievable through fl_cutout() getter)
+   * list (retrievable through the standard fl_cutout() getter)
    */
   cut_direction,
   //! when undef native positioning is used
