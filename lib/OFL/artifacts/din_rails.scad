@@ -326,7 +326,7 @@ module fl_DIN_rail(
   module do_shape(delta=0,footprint=false) {
     linear_extrude(size.z)
       let(points=footprint ? concat([points[0]],fl_list_sub(points,5)) : points)
-        offset(delta) echo(points=points)
+        offset(delta)
           polygon(polyRound(points,fn=$fn));
 
     translate(+Z(size.z))
