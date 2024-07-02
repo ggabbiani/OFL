@@ -41,6 +41,8 @@ parser.add_argument("-t", "--temp-root", type=str, help = "Temporary directory p
 parser.add_argument("-v", "--verbosity", type=int, help = "Increase verbosity", choices=[ofl.SILENT,ofl.ERROR,ofl.WARN,ofl.INFO,ofl.DEBUG],default=ofl.ERROR)
 parser.add_argument("--ofl-script", type=str, help="OpenSCAD script",required=True)
 parser.add_argument("-r","--resolution",type=str,help="target resolution in 'openscad' format i.e. 800x600",required=True)
+parser.add_argument("--render", action='store_true', help = "for full geometry evaluation when exporting png")
+parser.add_argument("--viewall", action='store_true', help = "adjust camera to fit object")
 
 parser.add_argument("picture", type=str, help="Full target picture path")
 
@@ -81,6 +83,10 @@ if args.camera:
   parms += ['--camera', args.camera]
 if args.projection:
   parms += ['--projection', args.projection]
+if args.render:
+  parms += ['--render']
+if args.viewall:
+  parms += ['--viewall']
 echo    = os.path.join(args.temp_root,base+'.echo')
 ofl.debug("command : % s" %parms)
 ofl.debug("echo : % s" %echo)
