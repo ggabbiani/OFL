@@ -31,7 +31,7 @@ fig-TS35D_section.png: $(call test-deps,artifacts/din_rails)
 
 fig-din_rails.png: $(call test-deps,artifacts/din_rails)
 	$(call target-prologue)
-	$(call make-picture,$(SIZE),$(call make-camera,38,7.5,25,50.10,0,19.40,173),,--render)
+	$(call make-picture,$(SIZE),$(call make-camera,38,7.5,25,50.10,0,19.40,200),,--render)
 	$(call target-epilogue-success)
 
 ###############################################################################
