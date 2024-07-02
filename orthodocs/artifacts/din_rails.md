@@ -26,6 +26,8 @@ European (EN) and international (IEC) standards. The original concept was
 developed and implemented in Germany in 1928, and was elaborated into the
 present standards in the 1950s.
 
+![DIN rails](800x600/fig-din_rails.png)
+
 ## Organization
 
 The package manages three type of objects:
