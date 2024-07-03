@@ -123,7 +123,7 @@ module fl_DIN_puncher() {
 
 //! DIN profile points property
 function fl_DIN_profilePoints(type,value) = fl_property(type,str(FL_DIN_NS,"/profile/radii points"),value);
-//! DIN profile size property
+//! DIN profile size in [[width-min,width-max],height] format
 function fl_DIN_profileSize(type,value)   = fl_property(type,str(FL_DIN_NS,"/profile/size"),value);
 //! DIN profile thickness property
 function fl_DIN_profileThick(type,value)  = fl_property(type,str(FL_DIN_NS,"/profile/thickness"),value);
