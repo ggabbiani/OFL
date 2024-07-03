@@ -283,7 +283,6 @@ module fl_jnt_joint(
   //! see constructor fl_parm_Debug()
   debug
 ) {
-  echo(this=this,debug=debug);
   namespace = str(FL_JNT_NS,"/cantilever");
 
   b         = fl_property(this,str(namespace,"/b"));
