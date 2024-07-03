@@ -121,7 +121,7 @@ if (one) {
             fl_label(string=["M",fl_nominal(row[0])],fg="black",size=2,octant=O);
         // row horizontal layout
         $cache=$FL_LAYOUT;
-        fl_layout(axis=+X,gap=3,types=row,$FL_LAYOUT=$FL_ADD)
+        fl_layout(axis=+X,gap=3,types=row,$FL_LAYOUT="ON")
           fl_knut(verbs,$item,dri_thick=thickness,octant=octant,direction=direction,$FL_LAYOUT=$cache) {
             if ($knut_verb==FL_ASSEMBLY)    // SCREW ASSEMBLY
               test_screw($knut_obj,$knut_thickness);
