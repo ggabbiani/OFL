@@ -252,7 +252,7 @@ __Syntax:__
 fl_DIN_profileSize(type,value)
 ```
 
-DIN profile size property
+DIN profile size in [[width-min,width-max],height] format
 
 ---
 
