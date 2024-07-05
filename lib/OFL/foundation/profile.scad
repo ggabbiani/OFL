@@ -3,7 +3,10 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
+include <../../Round-Anything/polyround.scad>
 include <3d-engine.scad>
+include <label.scad>
 
 //! engine for generating profiles
 module fl_profile(
@@ -136,10 +139,21 @@ module fl_bentPlate(
   material,
   //! sheet thickness
   thick,
+  //! when undef native positioning (see variable FL_O) is used
+  octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Z])
   direction,
-  //! when undef native positioning (see variable FL_O) is used
-  octant
+  /*!
+   * Debug parameter as returned from fl_parm_Debug(). Currently supported features:
+   *
+   * | feature    | status  |
+   * | ---        | ---     |
+   * | components | -       |
+   * | dimensions | ✔       |
+   * | labels     | ✔       |
+   * | symbols    | ✔       |
+   */
+  debug
 ) {
   assert(size!=undef);
   assert(thick!=undef);
@@ -153,49 +167,44 @@ module fl_bentPlate(
   sz  = is_list(size) ? size : [size,size,size];
   assert(R<=sz.y,str("resulting external radius (",R,") exceeds FL_Y dimension (",sz.y,")!"));
   assert(R<=sz.x,str("resulting external radius (",R,") exceeds FL_X dimension (",sz.x,")!"));
-  fl_trace("R",R);
-  fl_trace("sz",sz);
 
-  module L(sz,footprint) {
-    multmatrix(T(-sz/2+[R,R,0])) {
-      linear_extrude(height = sz.z) {
-        // Y segment or square when footprint
-        let(
-          segment = [thick,sz.y-R],
-          square  = [sz.x,sz.y-R],
-          size    = footprint ? square : segment,
-          trans   = [size.x/2-R, size.y/2]
-        ) translate(trans)
-          square(size=size,center=true);
-        // arc or sector when footprint
-        if (footprint)
-          fl_sector(r=R,angles=[-90,-180]);
-        else
-          fl_arc(r=R,angles=[-90,-180],thick=thick);
-        // X segment or square when footprint
-        let(
-          segment = [sz.x-R,thick],
-          square  = [sz.x-R,sz.y],
-          size    = footprint ? square : segment,
-          trans   = [size.x/2, -size.y/2-(R-size.y)]
-        ) translate(trans)
-          square(size=size,center=true);
-      }
-    }
-  }
+  function L(sz,footprint) = [
+      [bbox[0].x,bbox[1].y,0],                // 0
+      [bbox[0].x,bbox[0].y,R],                // 1
+      [bbox[1].x,bbox[0].y,0*R],              // 2
+      [bbox[1].x,bbox[0].y+thick,0],          // 3
+      [bbox[0].x+thick,bbox[0].y+thick,0],    // 4
+      [bbox[0].x+thick,bbox[1].y,0],          // 5
+    ];
 
-  module U(size,footprint=false) {
-    for(i=[-1,1])
-      translate(-i*fl_X(size.x/4))
-        rotate(-90*i+90,FL_Y)
-          L([size.x/2,size.y,size.z],footprint);
-  }
+  function U(size,footprint=false) = [
+      [bbox[0].x,bbox[1].y,0],                // 0
+      [bbox[0].x,bbox[0].y,R],                // 1
+      [bbox[1].x,bbox[0].y,R],                // 2
+      [bbox[1].x,bbox[1].y,0],                // 3
+      [bbox[1].x-thick,bbox[1].y,0],          // 4
+      [bbox[1].x-thick,bbox[0].y+thick,0],  // 5
+      [bbox[0].x+thick,bbox[0].y+thick,0],    // 6
+      [bbox[0].x+thick,bbox[1].y,0],          // 7
+    ];
 
   module do_add(footprint=false) {
+    radii =
+      (type=="L") ? L(sz,footprint) :
+      (type=="U") ? U(sz,footprint) :
+      assert(false,str("Unsupported bent plate type '",type,"'. Please choose one of the following: L,U")) [];
     fl_color(material)
-      if      (type=="L") L(sz,footprint);
-      else if (type=="U") U(sz,footprint);
-      else assert(false,str("Unsupported bent plate type '",type,"'. Please choose one of the following: L,U"));
+      translate(-Z(sz.z/2))
+        linear_extrude(height = sz.z)
+          polygon(polyRound(radii,fn=$fn));
+
+    if (fl_parm_symbols(debug))
+      for(p=radii)
+        fl_sym_point(point=[p.x,p.y,0], size=1,$FL_ADD="ON");
+    if (fl_parm_labels(debug))
+      for(i=[0:len(radii)-1])
+        let(p=radii[i]) translate([p.x,p.y,0.5])
+          fl_label(string=str("P[",i,"]"),fg="black",size=1,$FL_ADD="ON");
   }
 
   fl_manage(verbs,M,D) {

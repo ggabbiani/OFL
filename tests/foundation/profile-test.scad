@@ -93,4 +93,4 @@ radius  = RADIUS!=0 ? RADIUS : undef;
 if (TYPE=="Profile")
   fl_profile(verbs,type=SECTION,size=SIZE,thick=T,radius=radius,material=$fl_filament,octant=octant,direction=direction);
 else
-  fl_bentPlate(verbs,type=SECTION,size=SIZE,thick=T,radius=radius,material=$fl_filament,octant=octant,direction=direction);
+  fl_bentPlate(verbs,type=SECTION,size=SIZE,thick=T,radius=radius,material=$fl_filament,octant=octant,direction=direction,debug=debug);
