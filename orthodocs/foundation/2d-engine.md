@@ -32,6 +32,41 @@ returns the angle between vector «a» and «b»
 
 ---
 
+### function fl_2d_closest
+
+__Syntax:__
+
+```text
+fl_2d_closest(pts,pre_ordered=false)
+```
+
+Calculate the smallest distance in O(n*Log(n)) time using Divide and Conquer
+strategy.
+
+Usage example:
+
+    pts  = [[x1,y1],[x2,y2],...,[xn,yn]];
+    d    = fl_2d_closest(pts);
+
+
+__Parameters:__
+
+__pts__  
+points in ASCENDING X order
+
+
+---
+
+### function fl_2d_dist
+
+__Syntax:__
+
+```text
+fl_2d_dist(p1,p2)
+```
+
+---
+
 ### function fl_2d_frame_intCorners
 
 __Syntax:__

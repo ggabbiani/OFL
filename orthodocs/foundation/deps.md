@@ -29,6 +29,7 @@ graph TD
     A7 --o|use| A3
     A7 --o|use| A4
     A20[foundation/profile] --o|include| A5
+    A20 --o|include| A18
     A21[foundation/template] --o|include| A2
     A21 --o|use| A7
     A6 --o|include| A9

@@ -1292,6 +1292,19 @@ itself.
 
 ---
 
+### function fl_list_medianIndex
+
+__Syntax:__
+
+```text
+fl_list_medianIndex(l)
+```
+
+calculates the median INDEX of a list
+
+
+---
+
 ### function fl_list_min
 
 __Syntax:__

@@ -131,6 +131,7 @@ graph TD
     A8 --o|use| A3
     A8 --o|use| A4
     A17 --o|include| A5
+    A17 --o|include| A24
     A49[vitamins/psus] --o|include| A30
     A49 --o|include| A29
     A49 --o|include| A2

@@ -180,6 +180,19 @@ Builds a max vector
 
 ---
 
+### function fl_3d_medianValue
+
+__Syntax:__
+
+```text
+fl_3d_medianValue(list,axis,pre_ordered=false)
+```
+
+calculates the median VALUE of a 2d/3d point list
+
+
+---
+
 ### function fl_3d_min
 
 __Syntax:__
