@@ -868,6 +868,13 @@ function fl_split(
 
 //**** lists ******************************************************************
 
+/*!
+ * calculates the median INDEX of a list
+ */
+function fl_list_medianIndex(l) = let(
+  n = len(l)
+) fl_isOdd(n) ? (n+1)/2-1 : n/2-1;
+
 //! removes till the i-indexed element from the top of list «l»
 function fl_pop(l,i=0) =
   // echo(l=l,i=i)

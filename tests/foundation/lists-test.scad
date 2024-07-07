@@ -61,3 +61,19 @@ let(
     ) first-second
   )
 ) assert(result==expected,result);
+
+//**** median index ***********************************************************
+
+// median x-index of an odd unordered 2d/3d point list
+let(
+  list      = [[-2,4],[-6,2],[1,10],[20,4],[15,7]],
+  result    = fl_list_medianIndex(list),
+  expected  = 2
+) echo(expected=expected) assert(result==expected,result);
+
+// median x-index of an even 2d/3d point list
+let(
+  list      = [[-2,4],[-6,2],[20,4],[15,7]],
+  result    = fl_list_medianIndex(list),
+  expected  = 1
+) echo(expected=expected) assert(result==expected,result);
