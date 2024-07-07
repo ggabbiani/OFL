@@ -1273,20 +1273,3 @@ function fl_2d_closest(
           ]
         ) deltas ? min(deltas) : d
   ) min(d,stripClosest2(strip,d));
-
-/*!
- * calculates the median VALUE of a 2d/3d point list
- */
-function fl_3d_medianValue(list,axis,pre_ordered=false) = let(
-  compare =
-    axis.x ?  function(e1,e2) (e1.x-e2.x) :
-    axis.y ?  function(e1,e2) (e1.y-e2.y) :
-              function(e1,e2) (e1.z-e2.z),
-  value =
-    axis.x ?  function(l,i) l[i].x :
-    axis.y ?  function(l,i) l[i].y :
-              function(l,i) l[i].z,
-  // sort points in ascending coordinates along axis
-  o = pre_ordered ? list : fl_list_sort(list,compare),
-  n = len(list)
-) fl_isOdd(n) ? value(o,(n+1)/2-1) : let(i=n/2) (value(o,i-1)+value(o,i))/2;
