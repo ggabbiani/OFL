@@ -216,3 +216,72 @@ let(
   result    = fl_3d_axisIsSet(-Z,list),
   expected  = false
 ) echo(expected=expected) assert(result==expected,result);
+
+//**** list sort **************************************************************
+
+// x-ascending sort of a 2d/3d point list
+let(
+  list      = [[-2,4],[-6,2],[1,10],[20,4],[15,7]],
+  result    = fl_list_sort(list,function(e1,e2) (e1.x-e2.x)),
+  expected  = [[-6,2],[-2,4],[1,10],[15,7],[20,4]]
+) echo(expected=expected) assert(result==expected,result);
+
+// x-descending sort of a 2d/3d point list
+let(
+  list      = [[-2,4],[-6,2],[1,10],[20,4],[15,7]],
+  result    = fl_list_sort(list,function(e1,e2) (e2.x-e1.x)),
+  expected  = [[20,4],[15,7],[1,10],[-2,4],[-6,2]]
+) echo(expected=expected) assert(result==expected,result);
+
+//**** median value along reference axes **************************************
+
+// median x-value of an odd unordered 2d/3d point list
+let(
+  list      = [[-2,4],[-6,2],[1,10],[20,4],[15,7]],
+  result    = fl_3d_medianValue(list,X),
+  expected  = 1
+) echo(expected=expected) assert(result==expected,result);
+
+// median x-value of an even unordered 2d/3d point list
+let(
+  list      = [[-2,4],[-6,2],[20,4],[15,7]],
+  result    = fl_3d_medianValue(list,X),
+  expected  = 6.5
+) echo(expected=expected) assert(result==expected,result);
+
+//**** closest points *********************************************************
+
+// closest points in an empty 2d/3d point list
+let(
+  points    = [],
+  result    = fl_2d_closest(points),
+  expected  = undef
+) echo(expected=expected) assert(result==expected,result);
+
+// closest points in a single 2d/3d point list
+let(
+  points    = [[-2,4]],
+  result    = fl_2d_closest(points),
+  expected  = undef
+) echo(expected=expected) assert(result==expected,result);
+
+// closest points in a odd unordered 2d/3d point list
+let(
+  points    = [[20,0],[-2,0],[-6,0]],
+  result    = fl_2d_closest(points),
+  expected  = 4
+) echo(expected=expected) assert(result==expected,result);
+
+// closest points in a even unordered 2d/3d point list
+let(
+  points    = [[-1,0],[20,0],[-2,0],[6,0]],
+  result    = fl_2d_closest(points),
+  expected  = 1
+) echo(expected=expected) assert(result==expected,result);
+
+// closest points in a even unordered 2d/3d point list
+let(
+  points    = [[2, 3], [12, 30], [40, 50], [5, 1], [12, 10], [3, 4]],
+  result    = round(fl_2d_closest(points)*100000)/100000,
+  expected  = 1.41421
+) echo(expected=expected) assert(result==expected,result);

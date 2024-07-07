@@ -1198,3 +1198,95 @@ module fl_2d_placeIf(
   if (condition) fl_2d_place(type,quadrant,bbox) children();
   else children();
 }
+
+//**** 2d algorithms **********************************************************
+
+function fl_2d_dist(p1,p2) = let(
+  delta = p1-p2
+) sqrt(delta.x*delta.x+delta.y*delta.y);
+
+/*!
+ * Calculate the smallest distance in O(n*Log(n)) time using Divide and Conquer
+ * strategy.
+ *
+ * Usage example:
+ *
+ *     pts  = [[x1,y1],[x2,y2],...,[xn,yn]];
+ *     d    = fl_2d_closest(pts);
+ */
+function fl_2d_closest(
+  //! points in ASCENDING X order
+  pts,
+  pre_ordered=false
+) = let(
+  // list must be in X-ASCENDING order
+  ordered = pre_ordered ? pts : fl_list_sort(pts,function(e1,e2) (e1.x-e2.x)),
+  n       = len(pts)
+) n<=1 ? undef :
+  n==2 ? fl_2d_dist(ordered[1],ordered[0]) :
+  let(
+    // m       = floor(n/2),
+    m       = fl_list_medianIndex(ordered),
+    left    = [for(i=[0:m]) ordered[i]],
+    d_left  = fl_2d_closest(left,pre_ordered=true),
+    right   = [for(i=[m+1:n-1]) ordered[i]],
+    d_right = fl_2d_closest(right,pre_ordered=true),
+    deltas  = [
+      if (!is_undef(d_left))  d_left,
+      if (!is_undef(d_right)) d_right,
+    ],
+    d       = min(deltas),
+    middle  = fl_3d_medianValue(ordered,X,true),
+    // Build a list containing all the points closer than d to the line
+    // equation: x=middle
+    strip   = [for(p=ordered) if (abs(p.x-middle)<d) p],
+    // recursive lambda finding the minimum distance point couple inside a 2d
+    // region described above
+    stripClosest = function(strip,d) let(
+        n = len(strip)
+      ) n<=1 ? d :
+        let(
+          // list must be in Y-DESCENDING order
+          // y_ordered = fl_list_sort(strip,function(e1,e2) (e2.y-e1.y)),
+          y_ordered = strip,
+          deltas    = [
+            for(i=[0:n-1],j=[i+1:1:n-1])
+              if ((y_ordered[j].y-y_ordered[i].y)<d)
+                fl_2d_dist(y_ordered[i],y_ordered[j])
+          ]
+        ) min(deltas),
+    // this is an alternative lambda function to the above. it should be quicker
+    // implementing a shortcut during the minimum distance detection loop
+    stripClosest2 = function(strip,d) let(
+        n = len(strip)
+      ) n<=1 ? d :
+        let(
+          last = function(list,condition,_i_=0,_this_=last) let(n=len(list))
+            n==0 ? -1 :
+              condition(list[0]) ? _this_(fl_list_tail(list,-1),condition,_i_+1) :
+              _i_,
+          // list must be in Y-DESCENDING order
+          y_ordered = fl_list_sort(strip,function(e1,e2) (e2.y-e1.y)),
+          deltas    = [
+            for(i=[0:n-1],j=[i+1:1:last(y_ordered,function(p) ((p.y-y_ordered[i].y)<d))-1])
+              fl_2d_dist(y_ordered[i],y_ordered[j])
+          ]
+        ) deltas ? min(deltas) : d
+  ) min(d,stripClosest2(strip,d));
+
+/*!
+ * calculates the median VALUE of a 2d/3d point list
+ */
+function fl_3d_medianValue(list,axis,pre_ordered=false) = let(
+  compare =
+    axis.x ?  function(e1,e2) (e1.x-e2.x) :
+    axis.y ?  function(e1,e2) (e1.y-e2.y) :
+              function(e1,e2) (e1.z-e2.z),
+  value =
+    axis.x ?  function(l,i) l[i].x :
+    axis.y ?  function(l,i) l[i].y :
+              function(l,i) l[i].z,
+  // sort points in ascending coordinates along axis
+  o = pre_ordered ? list : fl_list_sort(list,compare),
+  n = len(list)
+) fl_isOdd(n) ? value(o,(n+1)/2-1) : let(i=n/2) (value(o,i-1)+value(o,i))/2;
