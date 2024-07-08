@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-04-27T18:55:01.266Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="XDY4X2heeoLYlMyLtzmM" version="24.2.5" type="device" pages="2">
+<mxfile host="Electron" modified="2024-07-08T00:51:14.867Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="yYysMirATE4zqg1IEVYS" version="24.2.5" type="device" pages="2">
   <diagram name="architecture" id="t6KZIiipzILuWYXrJOl4">
     <mxGraphModel dx="1430" dy="826" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -7,9 +7,11 @@
         <mxCell id="28oLbeX4q9AhL4zKUdg--10" value="clients" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;strokeWidth=2;strokeColor=#5C87B2;fillStyle=auto;fillColor=#FFFFFF;" parent="1" vertex="1">
           <mxGeometry x="495" y="110" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="28oLbeX4q9AhL4zKUdg--33" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;NopSCADlib&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#5C87B2;strokeWidth=2;" parent="1" vertex="1">
-          <mxGeometry x="495" y="720" width="120" height="60" as="geometry" />
-        </mxCell>
+        <object label="&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;%name%&lt;/b&gt;&lt;/font&gt;" placeholders="1" name="Round-Anything" version="v1.0.4" id="28oLbeX4q9AhL4zKUdg--33">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#5C87B2;strokeWidth=2;" parent="1" vertex="1">
+            <mxGeometry x="494" y="720" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
         <mxCell id="28oLbeX4q9AhL4zKUdg--36" value="OFL" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;strokeWidth=2;strokeColor=#5C87B2;container=1;collapsible=0;recursiveResize=0;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=bottom;horizontal=0;fontSize=20;arcSize=10;" parent="1" vertex="1">
           <mxGeometry x="260" y="250" width="620" height="420" as="geometry" />
         </mxCell>
@@ -81,6 +83,28 @@
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="601" y="82" as="sourcePoint" />
             <mxPoint x="456" y="362" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <object label="&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;%name%&lt;/b&gt;&lt;/font&gt;" placeholders="1" name="scad-utils" version="-" id="06KQtxVtI7PkoiroSrmJ-3">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#5C87B2;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="644" y="720" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;%name%&lt;/b&gt;&lt;/font&gt;" placeholders="1" name="NopSCADlib" version="v21.10" id="06KQtxVtI7PkoiroSrmJ-4">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#5C87B2;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="344" y="720" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="06KQtxVtI7PkoiroSrmJ-5" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=1;targetPerimeterSpacing=3;strokeColor=#5C87B2;" edge="1" parent="1" source="28oLbeX4q9AhL4zKUdg--35" target="06KQtxVtI7PkoiroSrmJ-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="565" y="600" as="sourcePoint" />
+            <mxPoint x="565" y="727" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="06KQtxVtI7PkoiroSrmJ-6" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=1;targetPerimeterSpacing=3;strokeColor=#5C87B2;" edge="1" parent="1" source="28oLbeX4q9AhL4zKUdg--35" target="06KQtxVtI7PkoiroSrmJ-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="575" y="610" as="sourcePoint" />
+            <mxPoint x="454" y="727" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
