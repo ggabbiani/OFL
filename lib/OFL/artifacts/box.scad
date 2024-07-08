@@ -141,10 +141,10 @@ module fl_box(
                 translate(-Z(thick))
                   linear_extrude(thick)
                     fl_square(quadrant=+X+Y,size=[size.x,size.z],corners=corners);
-            if (fillet)
+            if (fillet) let(h=sz_low.x-2*T_real)
               translate(i*Y(size.y-2*thick))
-                translate([0,thick,thick])
-                  fl_fillet([FL_ADD],r=thick,h=sz_low.x,direction=[+X,90+i*90]);
+                translate([T_real,thick,thick])
+                  fl_fillet([FL_ADD],r=thick,h=h,direction=[+X,90+i*90]);
           }
           fl_cube(size=[size.x,size.y,thick],octant=O0);
         }
@@ -161,13 +161,7 @@ module fl_box(
 
   module upper() {
     translate([0,T_real,T_real])
-      difference() {
-        fl_bentPlate(FL_ADD,type="U",size=[sz_up.x,sz_up.z,sz_up.y],thick=thick,radius=radius,octant=+X-Y+Z,direction=[+Y,0]/* ,material=material_upper */);
-        if (fillet)
-          for(i=[0,+1])
-            translate(i*Y(size.y-2*T_real))
-              fl_fillet([FL_ADD],r=T_real,h=sz_low.x,direction=[+X,90+i*90]);
-      }
+      fl_bentPlate(FL_ADD,type="U",size=[sz_up.x,sz_up.z,sz_up.y],thick=thick,radius=radius,octant=+X-Y+Z,direction=[+Y,0]/* ,material=material_upper */);
       multmatrix(Mback_knut)
         back_spacer();
       multmatrix(Mfront_knut) {
