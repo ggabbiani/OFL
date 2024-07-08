@@ -1225,8 +1225,8 @@ function fl_2d_closest(
 ) n<=1 ? undef :
   n==2 ? fl_2d_dist(ordered[1],ordered[0]) :
   let(
-    // m       = floor(n/2),
-    m       = fl_list_medianIndex(ordered),
+    m       = floor(n/2),
+    // m       = fl_list_medianIndex(ordered),
     left    = [for(i=[0:m]) ordered[i]],
     d_left  = fl_2d_closest(left,pre_ordered=true),
     right   = [for(i=[m+1:n-1]) ordered[i]],
@@ -1254,7 +1254,7 @@ function fl_2d_closest(
               if ((y_ordered[j].y-y_ordered[i].y)<d)
                 fl_2d_dist(y_ordered[i],y_ordered[j])
           ]
-        ) min(deltas),
+        ) deltas ? min(deltas) : d,
     // this is an alternative lambda function to the above. it should be quicker
     // implementing a shortcut during the minimum distance detection loop
     stripClosest2 = function(strip,d) let(
