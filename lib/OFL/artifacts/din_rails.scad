@@ -123,8 +123,6 @@ module fl_DIN_puncher() {
 
 //! DIN profile points property
 function fl_DIN_profilePoints(type,value) = fl_property(type,str(FL_DIN_NS,"/profile/radii points"),value);
-//! DIN profile size in [[width-min,width-max],height] format
-function fl_DIN_profileSize(type,value)   = fl_property(type,str(FL_DIN_NS,"/profile/size"),value);
 //! DIN profile thickness property
 function fl_DIN_profileThick(type,value)  = fl_property(type,str(FL_DIN_NS,"/profile/thickness"),value);
 
@@ -142,30 +140,29 @@ function fl_DIN_TopHatSection(
   r,
   thick=1
 )  = let(
-  sz  = [size.x[1],size.y]
+  sz  = [size.x[1],size.y],
+  pts = [
+    [-size.x[1]/2,0,0],
+    [-(size.x[0]/2-thick),0,r[1]+thick],
+    [-(size.x[0]/2-thick),thick-size.y,r[0]],
+
+    [+(size.x[0]/2-thick),thick-size.y,r[0]],
+    [+(size.x[0]/2-thick),0,r[1]+thick],
+    [+size.x[1]/2,0,0],
+    [+size.x[1]/2,-thick,0],
+    [+size.x[0]/2,-thick,r[1]],
+    [+size.x[0]/2,-size.y,r[0]+thick],
+
+    [-size.x[0]/2,-size.y,r[0]+thick],
+    [-size.x[0]/2,-thick,r[1]],
+    [-size.x[1]/2,-thick,0]
+  ]
 ) [
   fl_native(value=true),
   assert(name) fl_name(value=name),
   if (description) fl_description(value=description),
-  fl_DIN_profilePoints(value=
-    [
-      [-size.x[1]/2,size.y,0],
-      [-(size.x[0]/2-thick),size.y,r[1]+thick],
-      [-(size.x[0]/2-thick),thick,r[0]],
-
-      [+(size.x[0]/2-thick),thick,r[0]],
-      [+(size.x[0]/2-thick),size.y,r[1]+thick],
-      [+size.x[1]/2,size.y,0],
-      [+size.x[1]/2,size.y-thick,0],
-      [+size.x[0]/2,size.y-thick,r[1]],
-      [+size.x[0]/2,0,r[0]+thick],
-
-      [-size.x[0]/2,0,r[0]+thick],
-      [-size.x[0]/2,size.y-thick,r[1]],
-      [-size.x[1]/2,size.y-thick,0]
-    ]
-  ),
-  fl_DIN_profileSize(value=size),
+  fl_DIN_profilePoints(value=pts),
+  fl_bb_corners(value=fl_bb_polygon(pts)),
   ["DIN/profile/radii",r],
   fl_DIN_profileThick(value=thick),
   [str(FL_DIN_NS,"/dimensions"), fl_DimensionPack([
@@ -218,9 +215,8 @@ function fl_DIN_Rail(
   punch
 ) = let(
   bbox          = let(
-    profile_size  = fl_DIN_profileSize(profile),
-    sz            = assert(length) [profile_size.x[1],profile_size.y,length]
-  ) [[-sz.x/2,0,0],[+sz.x/2,+sz.y,sz.z]]
+    2d  = fl_bb_corners(profile)
+  ) [[2d[0].x,2d[0].y,0],[2d[1].x,2d[1].y,length]]
 ) [
   fl_native(value=true),
   fl_bb_corners(value=bbox),
@@ -367,10 +363,10 @@ module fl_DIN_rail(
                 fl_dimension(geometry=fl_property(dims,"Wmax"));
             }
             let($dim_distr="h+") {
-              fl_dimension(geometry=fl_property(dims,"H"),align="positive");
+              fl_dimension(geometry=fl_property(dims,"H"),align="negative");
             }
             let($dim_distr="h-") {
-              fl_dimension(geometry=fl_property(dims,"t"),align=size.y-thick);
+              fl_dimension(geometry=fl_property(dims,"t"),align="negative");
             }
           }
           let($dim_view="right") {
@@ -378,8 +374,8 @@ module fl_DIN_rail(
               fl_dimension(geometry=fl_property(dims,"L"),align="positive");
             }
             let($dim_distr="v+") {
-              fl_dimension(geometry=fl_property(dims,"t"),align=size.y-thick)
-                fl_dimension(geometry=fl_property(dims,"H"),align="positive");
+              fl_dimension(geometry=fl_property(dims,"t"),align="negative")
+                fl_dimension(geometry=fl_property(dims,"H"));
             }
           }
           let($dim_view="front") {
