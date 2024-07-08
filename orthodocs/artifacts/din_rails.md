@@ -244,18 +244,6 @@ DIN profile points property
 
 ---
 
-### function fl_DIN_profileSize
-
-__Syntax:__
-
-```text
-fl_DIN_profileSize(type,value)
-```
-
-DIN profile size in [[width-min,width-max],height] format
-
----
-
 ### function fl_DIN_profileThick
 
 __Syntax:__

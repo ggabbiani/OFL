@@ -5,6 +5,7 @@
 ```mermaid
 graph LR
     A1[foundation/profile] --o|include| A2[foundation/3d-engine]
+    A1 --o|include| A3[foundation/label]
 ```
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -20,7 +21,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Syntax:__
 
-    fl_bentPlate(verbs=FL_ADD,type,radius,size,material,thick,direction,octant)
+    fl_bentPlate(verbs=FL_ADD,type,radius,size,material,thick,octant,direction,debug)
 
 engine for generating bent plates.
 
@@ -28,6 +29,9 @@ See also https://metalfabricationsvcs.com/products/bent-plate/
 
 
 __Parameters:__
+
+__verbs__  
+supported verbs : FL_ADD,FL_AXES,FL_BBOX]
 
 __type__  
 "L" or "U"
@@ -44,11 +48,22 @@ actually a color
 __thick__  
 sheet thickness
 
+__octant__  
+when undef native positioning (see [variable FL_O](core.md#variable-fl_o)) is used
+
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Z])
 
-__octant__  
-when undef native positioning (see [variable FL_O](core.md#variable-fl_o)) is used
+__debug__  
+Debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug). Currently supported features:
+
+| feature    | status  |
+| ---        | ---     |
+| components | -       |
+| dimensions | -       |
+| labels     | ✔       |
+| symbols    | ✔       |
+
 
 
 ---
@@ -62,6 +77,9 @@ __Syntax:__
 engine for generating profiles
 
 __Parameters:__
+
+__verbs__  
+supported verbs : FL_ADD,FL_AXES,FL_BBOX]
 
 __type__  
 "E","L","T" and "U"
