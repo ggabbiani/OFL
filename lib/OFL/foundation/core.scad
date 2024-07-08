@@ -432,7 +432,7 @@ function fl_deprecated(bad,value,replacement) = let(
  *
  * example:
  *
- *     verbs         = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES])
+ *     verbs         = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES]);
  *
  * is functionally equivalent to the following:
  *
@@ -440,7 +440,7 @@ function fl_deprecated(bad,value,replacement) = let(
  *       if ($FL_ADD!="OFF")      FL_ADD,
  *       if ($FL_ASSEMBLY!="OFF") FL_ASSEMBLY,
  *       if ($FL_BBOX!="OFF")     FL_BBOX,
- *     ]
+ *     ];
  *
  * if elsewhere the attribute variables as been set like this:
  *
