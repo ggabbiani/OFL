@@ -123,6 +123,8 @@ module fl_DIN_puncher() {
 
 //! DIN profile points property
 function fl_DIN_profilePoints(type,value) = fl_property(type,str(FL_DIN_NS,"/profile/radii points"),value);
+//! DIN profile size in [[width-min,width-max],height] format
+function fl_DIN_profileSize(type,value)   = fl_property(type,str(FL_DIN_NS,"/profile/size"),value);
 //! DIN profile thickness property
 function fl_DIN_profileThick(type,value)  = fl_property(type,str(FL_DIN_NS,"/profile/thickness"),value);
 
@@ -165,6 +167,7 @@ function fl_DIN_TopHatSection(
   fl_bb_corners(value=fl_bb_polygon(pts)),
   ["DIN/profile/radii",r],
   fl_DIN_profileThick(value=thick),
+  fl_DIN_profileSize(value=size),
   [str(FL_DIN_NS,"/dimensions"), fl_DimensionPack([
     fl_Dimension(size[0][0],"Wmin"),
     fl_Dimension(size[0][1],"Wmax"),
@@ -315,6 +318,7 @@ module fl_DIN_rail(
   punch   = fl_optional(this,"DIN/rail/punch");
   length  = fl_property(this,"DIN/rail/length");
   profile = fl_DIN_railProfile(this);
+  pr_sz   = fl_DIN_profileSize(profile);
   dims    = concat(fl_property(profile,str(FL_DIN_NS,"/dimensions")),fl_property(this,str(FL_DIN_NS,"/dimensions")));
   points  = fl_DIN_profilePoints(profile);
   thick   = fl_DIN_profileThick(profile);
@@ -342,11 +346,12 @@ module fl_DIN_rail(
   module engine() {
 
     if ($this_verb==FL_ADD) {
-      difference() {
+      render() difference() {
         do_shape();
         if (punch)
-          fl_punch(punch,length,thick)
-            fl_DIN_puncher();
+          translate(-Y(pr_sz.y))
+            fl_punch(punch,length,thick)
+              fl_DIN_puncher();
       }
       if (fl_parm_dimensions(debug)) let(
           $dim_object = this,
