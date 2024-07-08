@@ -39,8 +39,6 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-// adds a footprint to scene, usually a simplified FL_ADD
-$FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
 
 /* [3D Placement] */
@@ -82,12 +80,7 @@ fl_status();
 
 // end of automatically generated code
 
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
-];
+verbs   = fl_verbList([FL_ADD,FL_AXES,FL_BBOX]);
 radius  = RADIUS!=0 ? RADIUS : undef;
 
 if (TYPE=="Profile")
