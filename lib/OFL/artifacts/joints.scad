@@ -140,7 +140,7 @@ let(
   [str(namespace,"/undercut"), undercut],
   [str(namespace,"/reverse"), inverse],
   [str(namespace,"/tooth"), tooth_l],
-  [str(namespace,"/dimensions"), fl_DimensionPack([
+  fl_dimensions(value=fl_DimensionPack([
     fl_Dimension(length,"length"),
     fl_Dimension(arm_l,"arm"),
     fl_Dimension(h[0],"h[0]"),
@@ -149,7 +149,7 @@ let(
     fl_Dimension(b[1],"b[1]"),
     fl_Dimension(undercut,"undercut"),
     fl_Dimension(tooth_l,"tooth"),
-  ])],
+  ])),
 ];
 
 //! creates a cantilever joint with constant rectangle cross-section
@@ -293,7 +293,7 @@ module fl_jnt_joint(
   arm       = fl_property(this,str(namespace,"/arm"));
   undercut  = fl_property(this,str(namespace,"/undercut"));
   pts       = fl_jnt_points(this);
-  dims      = fl_property(this,str(namespace,"/dimensions"));
+  dims      = fl_dimensions(this);
   reverse   = fl_property(this,str(namespace,"/reverse"));
   tooth_l   = fl_property(this,str(namespace,"/tooth"));
 

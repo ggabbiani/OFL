@@ -168,13 +168,13 @@ function fl_DIN_TopHatSection(
   ["DIN/profile/radii",r],
   fl_DIN_profileThick(value=thick),
   fl_DIN_profileSize(value=size),
-  [str(FL_DIN_NS,"/dimensions"), fl_DimensionPack([
+  fl_dimensions(value= fl_DimensionPack([
     fl_Dimension(size[0][0],"Wmin"),
     fl_Dimension(size[0][1],"Wmax"),
     fl_Dimension(size[1],"H"),
     fl_Dimension(thick,"t"),
     fl_Dimension((size[0][1]-size[0][0])/2,"delta"),
-  ])],
+  ])),
 ];
 
 /*!
@@ -227,9 +227,9 @@ function fl_DIN_Rail(
   assert(length)  ["DIN/rail/length", length],
   if (punch) ["DIN/rail/punch", punch],
   fl_cutout(value=[+Z,-Z]),
-  [str(FL_DIN_NS,"/dimensions"), fl_DimensionPack([
+  fl_dimensions(value=fl_DimensionPack([
     fl_Dimension(length,"L"),
-  ])],
+  ])),
 ];
 
 // Specs taken from [RS PRO | RS PRO Steel Perforated DIN Rail, Mini Top Hat Compatible, 1m x 15mm x 5.5mm | 467-349 | RS Components](https://in.rsdelivers.com/product/rs-pro/rs-pro-steel-perforated-din-rail-mini-top-hat-1m-x/0467349)
@@ -319,16 +319,16 @@ module fl_DIN_rail(
   length  = fl_property(this,"DIN/rail/length");
   profile = fl_DIN_railProfile(this);
   pr_sz   = fl_DIN_profileSize(profile);
-  dims    = concat(fl_property(profile,str(FL_DIN_NS,"/dimensions")),fl_property(this,str(FL_DIN_NS,"/dimensions")));
+  dims    = concat(fl_dimensions(profile),fl_dimensions(this));
   points  = fl_DIN_profilePoints(profile);
   thick   = fl_DIN_profileThick(profile);
 
   module do_shape(delta=0,footprint=false) {
-    linear_extrude(size.z)
+    fl_extrude_if(!fl_parm_debug(debug), size.z)
       let(points=footprint ? concat([points[0]],fl_list_sub(points,5)) : points)
         offset(delta)
           polygon(polyRound(points,fn=$fn));
-
+    // debug parameters management
     translate(+Z(size.z))
       if (!footprint) {
         if (fl_parm_labels(debug))
@@ -346,13 +346,14 @@ module fl_DIN_rail(
   module engine() {
 
     if ($this_verb==FL_ADD) {
-      render() difference() {
-        do_shape();
-        if (punch)
-          translate(-Y(pr_sz.y))
-            fl_punch(punch,length,thick)
-              fl_DIN_puncher();
-      }
+      fl_render_if(punch)
+        difference() {
+          do_shape();
+          if (punch)
+            translate(-Y(pr_sz.y))
+              fl_punch(punch,length,thick)
+                fl_DIN_puncher();
+        }
       if (fl_parm_dimensions(debug)) let(
           $dim_object = this,
           $dim_width  = is_undef($dim_width) ? thick/5 : $dim_width,

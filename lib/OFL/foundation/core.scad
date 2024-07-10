@@ -13,6 +13,20 @@ use     <../../scad-utils/spline.scad>  // scad-utils : Utility libraries for Op
 
 //**** language extension *****************************************************
 
+module fl_extrude_if(condition, height)
+  if (condition)
+    linear_extrude(height)
+      children();
+  else
+    children();
+
+module fl_render_if(condition)
+  if (condition)
+    render()
+      children();
+  else
+    children();
+
 /*!
  * implementation of switch statement as a function: when «value» matches a case,
  * corresponding value is returned, undef otherwise.
@@ -516,7 +530,7 @@ function fl_screw(type,value)       = fl_property(type,"screw",value);
 function fl_stl(type,value)         = fl_property(type,"STL geometry file",value);
 function fl_tolerance(type,value)   = fl_property(type,"tolerance",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
-/*
+/*!
  * cut-out directions in floating semi-axis list form as described in
  * fl_tt_isAxisList().
  *
@@ -526,6 +540,8 @@ function fl_vendor(type,value)      = fl_property(type,"vendor",value);
  * TODO: rename as plural
  */
 function fl_cutout(type,value)      = fl_property(type,"cut-out direction list",value);
+function fl_dimensions(type,value)  = fl_property(type,"dimension line pack",value);
+
 //*****************************************************************************
 // Derived getters
 function fl_size(type)    = fl_bb_size(type);
@@ -1472,6 +1488,12 @@ function fl_parm_components(debug,label) =
 
 //! When true dimension lines are turned on
 function fl_parm_dimensions(debug) = is_undef(debug) ? false : assert(is_bool(debug[3])) debug[3];
+
+//! return true if any of the debug flag is turned on, false otherwise
+function fl_parm_debug(debug) =
+  is_undef(debug) ?
+    false :
+    fl_parm_labels(debug) || fl_parm_symbols(debug) || debug[2] || fl_parm_dimensions(debug);
 
 module fl_context_dump()
   echo(
