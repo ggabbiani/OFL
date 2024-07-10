@@ -202,9 +202,11 @@
 - [fl_Dimension (function)](foundation/dimensions.md#function-fl_dimension)
 - [fl_dimension (module)](foundation/dimensions.md#module-fl_dimension)
 - [fl_DimensionPack (function)](foundation/dimensions.md#function-fl_dimensionpack)
+- [fl_dimensions (function)](foundation/core.md#function-fl_dimensions)
 - [foundation/dimensions (package)](foundation/dimensions.md#package-foundationdimensions)
 - [FL_DIN_NS (variable)](artifacts/din_rails.md#variable-fl_din_ns)
 - [fl_DIN_profilePoints (function)](artifacts/din_rails.md#function-fl_din_profilepoints)
+- [fl_DIN_profileSize (function)](artifacts/din_rails.md#function-fl_din_profilesize)
 - [fl_DIN_profileThick (function)](artifacts/din_rails.md#function-fl_din_profilethick)
 - [FL_DIN_PUNCH_4p2 (variable)](artifacts/din_rails.md#variable-fl_din_punch_4p2)
 - [FL_DIN_PUNCH_6p3 (variable)](artifacts/din_rails.md#variable-fl_din_punch_6p3)
@@ -259,6 +261,7 @@
 - [FL_ETHER_Z_OFFSET (variable)](vitamins/ethers.md#variable-fl_ether_z_offset)
 - [fl_ether_Zoffset (function)](vitamins/ethers.md#function-fl_ether_zoffset)
 - [vitamins/ethers (package)](vitamins/ethers.md#package-vitaminsethers)
+- [fl_extrude_if (module)](foundation/core.md#module-fl_extrude_if)
 
 ## F
 
@@ -560,6 +563,7 @@
 - [fl_palette (function)](foundation/core.md#function-fl_palette)
 - [fl_parm_components (function)](foundation/core.md#function-fl_parm_components)
 - [fl_parm_Debug (function)](foundation/core.md#function-fl_parm_debug)
+- [fl_parm_debug (function)](foundation/core.md#function-fl_parm_debug)
 - [fl_parm_dimensions (function)](foundation/core.md#function-fl_parm_dimensions)
 - [fl_parm_labels (function)](foundation/core.md#function-fl_parm_labels)
 - [fl_parm_Octant (function)](foundation/core.md#function-fl_parm_octant)
@@ -662,6 +666,7 @@
 - [fl_R (function)](foundation/core.md#function-fl_r)
 - [fl_rail (module)](foundation/util.md#module-fl_rail)
 - [$FL_RENDER (variable)](foundation/core.md#variable-$fl_render)
+- [fl_render_if (module)](foundation/core.md#module-fl_render_if)
 - [fl_repos (function)](foundation/label.md#function-fl_repos)
 - [fl_resize (function)](foundation/label.md#function-fl_resize)
 - [Rx (function)](foundation/unsafe_defs.md#function-rx)

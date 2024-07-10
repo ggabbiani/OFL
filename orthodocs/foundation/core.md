@@ -863,6 +863,15 @@ __Syntax:__
 fl_cutout(type,value)
 ```
 
+cut-out directions in floating semi-axis list form as described in
+[fl_tt_isAxisList()](type_trait.md#function-fl_tt_isaxislist).
+
+This property represents the list of cut-out directions supported by the
+passed type.
+
+TODO: rename as plural
+
+
 ---
 
 ### function fl_debug
@@ -966,6 +975,16 @@ __Syntax:__
 
 ```text
 fl_dict_search(dictionary,name)
+```
+
+---
+
+### function fl_dimensions
+
+__Syntax:__
+
+```text
+fl_dimensions(type,value)
 ```
 
 ---
@@ -1676,6 +1695,18 @@ When «debug» is not undef, checks if component «label» is marked for debuggi
 
 ---
 
+### function fl_parm_debug
+
+__Syntax:__
+
+```text
+fl_parm_debug(debug)
+```
+
+return true if any of the debug flag is turned on, false otherwise
+
+---
+
 ### function fl_parm_dimensions
 
 __Syntax:__
@@ -2318,6 +2349,14 @@ string or vector of strings
 
 ---
 
+### module fl_extrude_if
+
+__Syntax:__
+
+    fl_extrude_if(condition,height)
+
+---
+
 ### module fl_modifier
 
 __Syntax:__
@@ -2342,6 +2381,14 @@ __Syntax:__
     fl_overlap(u1,u2,position)
 
 Aligns children from u1 to u2 and move to position
+
+---
+
+### module fl_render_if
+
+__Syntax:__
+
+    fl_render_if(condition)
 
 ---
 

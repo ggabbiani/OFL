@@ -16,22 +16,22 @@ clean:
 # DIN rails sections
 fig-TS15_section.png: $(call test-deps,artifacts/din_rails)
 	$(call target-prologue)
-	$(call make-picture,$(SIZE),$(call top-view,-0.28,4.55,24.95,40),ortho)
+	$(call make-picture,$(SIZE),$(call top-view,-0.28,-0.95,0,40),ortho)
 	$(call target-epilogue-success)
 
 fig-TS35_section.png: $(call test-deps,artifacts/din_rails)
 	$(call target-prologue)
-	$(call make-picture,$(SIZE),$(call top-view,-0.28,4.55,24.95,80),ortho)
+	$(call make-picture,$(SIZE),$(call top-view,-0.28,-1.95,0,80),ortho)
 	$(call target-epilogue-success)
 
 fig-TS35D_section.png: $(call test-deps,artifacts/din_rails)
 	$(call target-prologue)
-	$(call make-picture,$(SIZE),$(call top-view,-0.28,9.40,24.95,80),ortho)
+	$(call make-picture,$(SIZE),$(call top-view,-0.44,-4.8,0,80),ortho)
 	$(call target-epilogue-success)
 
 fig-din_rails.png: $(call test-deps,artifacts/din_rails)
 	$(call target-prologue)
-	$(call make-picture,$(SIZE),$(call make-camera,38,7.5,25,50.10,0,19.40,200),,--render)
+	$(call make-picture,$(SIZE),$(call make-camera,38,-7.5,25,55,0,25,200),,--render)
 	$(call target-epilogue-success)
 
 ###############################################################################
