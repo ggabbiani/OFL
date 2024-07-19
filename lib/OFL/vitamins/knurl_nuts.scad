@@ -538,7 +538,7 @@ module fl_knut(
 
     } else if ($verb==FL_ASSEMBLY) {
       fl_modifier($modifier)
-        context()
+        context(+Z)
           translate(+Z(dri_thick[1]))
             children();
 

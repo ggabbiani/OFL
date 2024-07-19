@@ -15,7 +15,7 @@ include <core.scad>
  */
 function fl_bb_corners(type,value)  = fl_property(type,"bb/bounding corners",value);
 
-//! computes size from the bounding corners.
+//! computes size from the bounding corners retrieved from «type».
 function fl_bb_size(type)       = assert(type,type) let(c=fl_bb_corners(type)) c[1]-c[0];
 
 //! constructor for a new type with bounding box corners set as property
