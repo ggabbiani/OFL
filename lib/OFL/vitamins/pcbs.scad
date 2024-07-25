@@ -481,6 +481,7 @@ function fl_pcb_compFilter(pcb,rules) = let(
  * - complete hole context (see also fl_hole_Context{})
  * - $pcb_radius  - pcb radius
  * - $pcb_thick   - pcb thickness
+ * - $pcb_verb    - pcb invoked verb
  */
 module fl_pcb(
   //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
@@ -600,7 +601,7 @@ module fl_pcb(
         rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
       ) [cols,rows];
 
-      t               = size.z;
+      t               = pcb_t;
       plating         = 0.1;
       fr4             = material != "sienna";
       plating_color  = is_undef(grid[4]) ? ((material == "green" || material == "#2140BE") ? silver : material == "sienna" ? copper : gold) : grid[4];
@@ -674,6 +675,7 @@ module fl_pcb(
     module context() {
       $pcb_radius = radius;
       $pcb_thick  = pcb_t;
+      $pcb_verb   = $verb;
       children();
     }
 
