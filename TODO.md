@@ -116,6 +116,10 @@
 - [ ] complete DIN rails implementing missing verbs
 - [x] added Snap-fit joints
 - [x] added 'point' symbol
+- [x] added fl_2d_closest() algorithm
+- [ ] apply fl_2d_closest() algorithm during symbol and label debugging (see fl_bentPlate{})
+- [x] added dimension line management
+- [ ] add dimension lines to relevant tests (see artifacts/joints.scad)
 
 
 
