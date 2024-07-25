@@ -98,7 +98,7 @@ __Syntax:__
 fl_bb_size(type)
 ```
 
-computes size from the bounding corners.
+computes size from the bounding corners retrieved from «type».
 
 ---
 

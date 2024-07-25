@@ -468,6 +468,7 @@ __children context:__
 - complete hole context (see also [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context))
 - $pcb_radius  - pcb radius
 - $pcb_thick   - pcb thickness
+- $pcb_verb    - pcb invoked verb
 
 
 __Parameters:__

@@ -51,7 +51,7 @@ __h_min__
 height along Z axis: knurl nut length constraints may override.
 This parameter is mandatory if no knurl nut is passed.
 
-When knurl nut is required, this parameter ignored if shorter than the
+When a knurl nut is required, this parameter is ignored if shorter than the
 minimum knurl nut length + 1mm.
 
 
@@ -59,8 +59,8 @@ __d_min__
 External diameter: knurl nut constraints may override.
 This parameter is mandatory if no knurl nut or screw nominal size is passed.
 
-Knurl nuts required a bigger hole to host screws (namely the knurl nut
-physical dimension plus a minimum wall thick around). When knurl nut is
+Knurl nuts requires a bigger hole to host screws (namely the knurl nut
+physical dimension plus a minimum wall thick around). When a knurl nut is
 required, this parameter is ignored if too small.
 
 
