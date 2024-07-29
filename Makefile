@@ -42,9 +42,9 @@ clean: docs/clean orthodocs/clean tests/clean docker/clean
 
 check:
 ifdef IMVER
-	$(info ImageMagick command: $(IMCMD))
+	$(call msg-info,ImageMagick command found '$(IMCMD)')
 else
-	$(error ImageMagick not found: please install)
+	$(call msg-error,ImageMagick not found, please install)
 endif
 
 orthodocs/%: $(LIB_SOURCES)

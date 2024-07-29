@@ -6,8 +6,25 @@ endef
 
 COLOR_BOLD_WHITE=\e[1;37m
 COLOR_YELLOW	=\e[0;33m
+COLOR_RED		=\e[1;31m
 COLOR_GREEN		=\e[1;32m
 COLOR_RESET		=\e[0m
+
+define color
+$(shell printf "$(1)")
+endef
+
+define msg-info
+$(info $(call color,$(COLOR_GREEN))[*INF*] $(1)$(call color,$(COLOR_RESET)))
+endef
+
+define msg-warn
+$(warn $(call color,$(COLOR_YELLOW))[*WRN*]$(1)$(call color,$(COLOR_RESET)))
+endef
+
+define msg-error
+$(error $(call color,$(COLOR_RED))[*ERR*]$(1)$(call color,$(COLOR_RESET)))
+endef
 
 define section-prologue
 printf ">>>>$(COLOR_BOLD_WHITE)$(if $(1),$(1),$(CURDIR))$(COLOR_RESET) start...\n"
