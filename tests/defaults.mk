@@ -11,7 +11,7 @@ warn%-test.echo : warn%-test.scad
 
 %.echo : %.scad
 	$(call target-prologue)
-	. $(realpath $*.conf) && $(BIN)/make-test.py $$CAMERA $*
+	@. $(realpath $*.conf) && $(BIN)/make-test.py $$CAMERA $*
 	$(call target-epilogue)
 
 # source creation
