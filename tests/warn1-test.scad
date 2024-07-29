@@ -1,8 +1,10 @@
 /*
- * This test generates a warn that --hardwarnings option should turn in error
+ * This test generates a warn
  *
  * NOTE: this file is generated automatically from 'template-nogui.scad', any
  * change will be lost.
+ *
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
  *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
@@ -17,4 +19,4 @@ fl_status();
 
 // end of automatically generated code
 
-this_is_a_warn=3+undefined_variable;
+variable=not_existent;

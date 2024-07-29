@@ -13,7 +13,7 @@ DEF_RULES		:= $(CURDIR)/defaults.mk
 DEF_CONFS		:= $(CURDIR)/defaults.conf
 
 # 'Lazy Set'
-T_LIST			= bb octant quadrant
+T_LIST			= bb error1 octant quadrant warn1
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
@@ -22,9 +22,6 @@ export TEMPLATE_DIR TEMPLATES DEF_RULES DEF_CONFS
 include $(FUNCTIONS) $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
-
-top:
-	$(MAKE) -C $(realpath ..) tests/sources
 
 sources: $(SOURCES) artifacts/sources foundation/sources vitamins/sources
 
