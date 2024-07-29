@@ -31,7 +31,8 @@ include $(FUNCTIONS)
 # function dependant variables
 export SCAD					:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(warning WARN: OpenSCAD missing))
 export WHICH 				:= $(if $(call is-win),where,which)
-export IMAGEMAGICK 			:= $(shell $(WHICH) convert 2>/dev/null)
+export IMVER 				:= $(shell convert --version 2>&1)
+export IMCMD 				:= $(if $(findstring deprecated,$(IMVER)),$(shell $(WHICH) magick 2>/dev/null) convert,$(shell $(WHICH) convert 2>/dev/null))
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
@@ -40,10 +41,10 @@ all: check tests/sources docs/all orthodocs/all
 clean: docs/clean orthodocs/clean tests/clean docker/clean
 
 check:
-ifdef IMAGEMAGICK
-	$(info ImageMagick found: $(IMAGEMAGICK).)
+ifdef IMVER
+	$(info ImageMagick command: $(IMCMD))
 else
-	$(error Command 'convert' not found: please install ImageMagick)
+	$(error ImageMagick not found: please install)
 endif
 
 orthodocs/%: $(LIB_SOURCES)
