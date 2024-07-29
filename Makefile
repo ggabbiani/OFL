@@ -32,7 +32,7 @@ include $(FUNCTIONS)
 export SCAD					:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(warning WARN: OpenSCAD missing))
 export WHICH 				:= $(if $(call is-win),where,which)
 export IMVER 				:= $(shell convert --version 2>&1)
-export IMCMD 				:= $(if $(findstring deprecated,$(IMVER)),$(shell $(WHICH) magick 2>/dev/null) convert,$(shell $(WHICH) convert 2>/dev/null))
+export IMCMD 				:= $(if $(findstring deprecated,$(IMVER)),$(shell $(WHICH) magick 2>/dev/null),$(shell $(WHICH) convert 2>/dev/null))
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
