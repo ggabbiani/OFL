@@ -34,6 +34,32 @@
             "OCTANT": "[0, 0, 0]",
             "PLACE_NATIVE": "true",
             "SHOW": "All"
+        },
+        "TEST_CASE_LINEAR": {
+            "$FL_ADD": "ON",
+            "$FL_ASSEMBLY": "OFF",
+            "$FL_AXES": "OFF",
+            "$FL_BBOX": "OFF",
+            "$FL_DRILL": "OFF",
+            "$FL_LAYOUT": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "DIR_NATIVE": "true",
+            "DIR_R": "0",
+            "DIR_Z": "[0, 0, 1]",
+            "SHOW": "ALL",
+            "SHOW_DIMENSIONS": "false",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "THICK_NEGATIVE": "2.5",
+            "THICK_POSITIVE": "1.6",
+            "THREAD_TYPE": "linear",
+            "X_PLACE": "undef",
+            "Y_PLACE": "undef",
+            "Z_PLACE": "undef"
         }
     },
     "fileFormatVersion": "1"
