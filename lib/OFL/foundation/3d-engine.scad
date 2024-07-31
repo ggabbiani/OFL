@@ -1657,3 +1657,14 @@ function fl_3d_medianValue(list,axis,pre_ordered=false) = let(
   o = pre_ordered ? list : fl_list_sort(list,compare),
   n = len(list)
 ) fl_isOdd(n) ? value(o,(n+1)/2-1) : let(i=n/2) (value(o,i-1)+value(o,i))/2;
+
+module fl_3d_polyhedronSymbols(poly, size)
+  for(p=poly)
+    fl_sym_point(point=[p.x,p.y,p.z], size=size);
+
+module fl_3d_polyhedronLabels(poly,size,label="P")
+  for(i=[0:len(poly)-1])
+    let(p=poly[i])
+      translate([p.x,p.y,p.z])
+        fl_lookAtMe()
+          fl_label(string=str(label,"[",i,"]"),fg="black",size=size);
