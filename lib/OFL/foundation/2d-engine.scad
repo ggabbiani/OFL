@@ -1199,6 +1199,19 @@ module fl_2d_placeIf(
   else children();
 }
 
+module fl_2d_polygonSymbols(poly, size) let(
+  size  = is_undef(size)?fl_2d_closest(poly)/3:size
+) for(p=poly)
+    fl_sym_point(point=[p.x,p.y,0], size=size);
+
+module fl_2d_polygonLabels(poly,size,label="P") let(
+  size  = is_undef(size)?fl_2d_closest(poly)/3:size
+) for(i=[0:len(poly)-1])
+    let(p=poly[i])
+      translate([p.x+size/3,p.y+size/3,0])
+        rotate($vpr ? $vpr : [70, 0, 315])
+          fl_label(string=str(label,"[",i,"]"),fg="black",size=size);
+
 //**** 2d algorithms **********************************************************
 
 function fl_2d_dist(p1,p2) = let(
