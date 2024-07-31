@@ -120,6 +120,7 @@
 - [ ] apply fl_2d_closest() algorithm during symbol and label debugging (see fl_bentPlate{})
 - [x] added dimension line management
 - [ ] add dimension lines to relevant tests (see artifacts/joints.scad)
+- [ ] fix bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
 
 
 
