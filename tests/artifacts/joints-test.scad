@@ -68,7 +68,8 @@ DIM_W         = 0.05;       // [0.01:0.01:1]
 
 /* [FACTORY] */
 
-JOINT_TYPE    = "full scaled"; // [const,scaled thickness,scaled width,full scaled]
+JOINT_SHAPE   = "rect";         // [rect,ring]
+JOINT_TYPE    = "full scaled";  // [const,scaled thickness,scaled width,full scaled]
 // fillet radius
 JOINT_FILLET  = "auto";  // [auto,0,1,2,3,4,5,6,7,8,9,10]
 CANTILEVER_ORIENT = "+z"; // [+z,-z]
@@ -86,7 +87,15 @@ CANTILEVER_ROOT_B  = 4;
 CANTILEVER_Y  = 1;  // [0.1:0.1:1]
 // tooth angle
 CANTILEVER_ANGLE  = 30; // [1:89]
+// ring joint arc angle
+ARM_THETA         = 10; // [1:360]
+// ring joint external radius
+ARM_R             = 4;
 
+/* [CONTEXT] */
+
+THICKNESS = 2.5;
+TOLERANCE = 0.1;
 
 /* [Hidden] */
 
@@ -110,62 +119,106 @@ verbs = fl_verbList([
 
 orient  = CANTILEVER_ORIENT=="+z" ? +Z : -Z;
 fillet  = JOINT_FILLET!="auto" ? fl_atof(JOINT_FILLET) : JOINT_FILLET;
-tooth = TOOTH_L=="undef" ? undef : fl_atof(TOOTH_L);
-total = TOTAL_L=="undef" ? undef : fl_atof(TOTAL_L);
+tooth   = TOOTH_L=="undef" ? undef : fl_atof(TOOTH_L);
+total   = TOTAL_L=="undef" ? undef : fl_atof(TOTAL_L);
 
 echo(JOINT_TYPE=JOINT_TYPE);
 $dim_mode   = DIM_MODE;
 $dim_width  = DIM_W;
 
 joint   =
-  JOINT_TYPE=="const" ?
-    fl_jnt_RectCantilever(
-      alpha=CANTILEVER_ANGLE,
-      orientation=orient,
-      length=total,
-      arm_l=ARM_L,
-      tooth_l = tooth,
-      h=CANTILEVER_ROOT_H,
-      b=CANTILEVER_ROOT_B,
-      undercut=CANTILEVER_Y,
-      fillet=fillet
+  JOINT_SHAPE=="rect" ? (
+    JOINT_TYPE=="const" ?
+      fl_jnt_RectCantilever(
+        alpha=CANTILEVER_ANGLE,
+        orientation=orient,
+        length=total,
+        arm_l=ARM_L,
+        tooth_l = tooth,
+        h=CANTILEVER_ROOT_H,
+        b=CANTILEVER_ROOT_B,
+        undercut=CANTILEVER_Y,
+        fillet=fillet
+      ) :
+    JOINT_TYPE=="scaled thickness" ?
+      fl_jnt_RectCantilever(
+        alpha=CANTILEVER_ANGLE,
+        orientation=orient,
+        length=total,
+        arm_l=ARM_L,
+        tooth_l = tooth,
+        h=[CANTILEVER_ROOT_H,CANTILEVER_ROOT_H/2],
+        b=CANTILEVER_ROOT_B,
+        undercut=CANTILEVER_Y,
+        fillet=fillet
+      ) :
+    JOINT_TYPE=="scaled width" ?
+      fl_jnt_RectCantilever(
+        alpha=CANTILEVER_ANGLE,
+        orientation=orient,
+        length=total,
+        arm_l=ARM_L,
+        tooth_l = tooth,
+        h=CANTILEVER_ROOT_H,
+        b=[CANTILEVER_ROOT_B,CANTILEVER_ROOT_B/4],
+        undercut=CANTILEVER_Y,
+        fillet=fillet
+      ) :
+    JOINT_TYPE=="full scaled" ?
+      fl_jnt_RectCantilever(
+        alpha=CANTILEVER_ANGLE,
+        orientation=orient,
+        length=total,
+        arm_l=ARM_L,
+        tooth_l = tooth,
+        h=[CANTILEVER_ROOT_H,CANTILEVER_ROOT_H/2],
+        b=[CANTILEVER_ROOT_B,CANTILEVER_ROOT_B/4],
+        undercut=CANTILEVER_Y,
+        fillet=fillet
+      ) : undef
     ) :
-  JOINT_TYPE=="scaled thickness" ?
-    fl_jnt_RectCantilever(
-      alpha=CANTILEVER_ANGLE,
-      orientation=orient,
-      length=total,
-      arm_l=ARM_L,
-      tooth_l = tooth,
-      h=[CANTILEVER_ROOT_H,CANTILEVER_ROOT_H/2],
-      b=CANTILEVER_ROOT_B,
-      undercut=CANTILEVER_Y,
-      fillet=fillet
+  JOINT_SHAPE=="ring" ? (
+    JOINT_TYPE=="const" ?
+      fl_jnt_RingCantileverConst(
+        length=total,
+        arm_l=ARM_L,
+        tooth_l=tooth,
+        h=CANTILEVER_ROOT_H,
+        b=CANTILEVER_ROOT_B,
+        undercut=CANTILEVER_Y,
+        alpha = CANTILEVER_ANGLE,
+        orientation = orient,
+        theta = ARM_THETA,
+        r = ARM_R) :
+    JOINT_TYPE=="full scaled" ?
+      fl_jnt_RingCantileverFullScaled(
+        length=total,
+        arm_l=ARM_L,
+        tooth_l=tooth,
+        h=CANTILEVER_ROOT_H,
+        b=CANTILEVER_ROOT_B,
+        undercut=CANTILEVER_Y,
+        alpha = CANTILEVER_ANGLE,
+        orientation = orient,
+        theta = ARM_THETA,
+        r = ARM_R) :
+      fl_jnt_RingCantilever(
+        alpha=CANTILEVER_ANGLE,
+        orientation=orient,
+        length=total,
+        arm_l=ARM_L,
+        tooth_l=tooth,
+        h=CANTILEVER_ROOT_H,
+        b=CANTILEVER_ROOT_B,
+        undercut=CANTILEVER_Y,
+        theta=ARM_THETA,
+        r=ARM_R
+      )
     ) :
-  JOINT_TYPE=="scaled width" ?
-    fl_jnt_RectCantilever(
-      alpha=CANTILEVER_ANGLE,
-      orientation=orient,
-      length=total,
-      arm_l=ARM_L,
-      tooth_l = tooth,
-      h=CANTILEVER_ROOT_H,
-      b=[CANTILEVER_ROOT_B,CANTILEVER_ROOT_B/4],
-      undercut=CANTILEVER_Y,
-      fillet=fillet
-    ) :
-  JOINT_TYPE=="full scaled" ?
-    fl_jnt_RectCantilever(
-      alpha=CANTILEVER_ANGLE,
-      orientation=orient,
-      length=total,
-      arm_l=ARM_L,
-      tooth_l = tooth,
-      h=[CANTILEVER_ROOT_H,CANTILEVER_ROOT_H/2],
-      b=[CANTILEVER_ROOT_B,CANTILEVER_ROOT_B/4],
-      undercut=CANTILEVER_Y,
-      fillet=fillet
-    ) :
-  undef;
+    undef;
 
-fl_jnt_joint(verbs, joint, octant=octant, direction=direction, debug=debug);
+echo(joint=joint);
+fl_jnt_joint(verbs, joint, octant=octant, direction=direction, debug=debug,
+  $fl_tolerance=TOLERANCE,
+  $fl_thickness=THICKNESS
+);
