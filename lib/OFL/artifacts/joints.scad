@@ -35,12 +35,12 @@ function fl_jnt_sectPoints(type,value)  = fl_property(type,str(FL_JNT_NS,"/point
 function fl_jnt_rectPoints(type,value)  = fl_property(type,str(FL_JNT_NS,"/rect/points"),value);
 
 function fl_jnt_LongitudinalSection(
-  //! total cantilever length (i.e. arm + tooth)
+  //! total cantilever length (i.e. arm + tooth). This parameter is mandatory.
   length,
-  //! arm length
+  //! arm length. This parameter is mandatory.
   arm_l,
   /*!
-   * tooth length: automatically calculated according to «alpha» angle if undef
+   * tooth length (mandatory parameter)
    */
   tooth_l,
   //! thickness in scalar or [root,end] form. Scalar value means constant thickness.
@@ -55,11 +55,7 @@ function fl_jnt_LongitudinalSection(
   this_ns = str(FL_JNT_NS,"/longitudinal section"),
   inverse   = orientation==-Z,
   h         = is_num(h) ? [h,h] : assert(is_list(h)) h,
-  tooth_l   =
-    tooth_l ? tooth_l :
-    length ? assert(arm_l && length>arm_l,str("arm_l=",arm_l,", length=",length)) length-arm_l :
-    assert(is_num(alpha)) undercut / tan(alpha),
-  length    = arm_l+tooth_l,
+  length    = assert(arm_l) assert(tooth_l) arm_l+tooth_l,
   r         = undercut/10,
   angular   = undercut/tan(alpha),
   // points in 'polyround' format [x,y,degree]
@@ -96,15 +92,16 @@ function fl_jnt_RingCantilever(
   tooth_l,
   //! thickness in scalar or [root,end] form. Scalar value means constant thickness.
   h,
-  //! width in scalar or [root,end] form. Scalar value means constant width.
-  b,
+  /*!
+   * angular width in scalar or [root,end] form. Scalar value means constant
+   * angular width.
+   */
+  theta,
   undercut,
   //! angle of inclination for the tooth
   alpha=30,
   //! move direction: +Z or -Z
   orientation=+Z,
-  //! angle of arc
-  theta,
   //! outer radius
   r,
   /*!
@@ -119,6 +116,10 @@ function fl_jnt_RingCantilever(
   fillet=0
 ) = let(
   h         = is_list(h) ? h : [h,h],
+  tooth_l   =
+    tooth_l ? tooth_l :
+    length ? assert(arm_l && length>arm_l,str("arm_l=",arm_l,", length=",length)) length-arm_l :
+    assert(is_num(alpha)) undercut / tan(alpha),
   cantilever_ns = str(FL_JNT_NS,"/cantilever"),
   this_ns = str(cantilever_ns,"/ring"),
   section   = fl_jnt_LongitudinalSection(length,arm_l,tooth_l,h,undercut,alpha,orientation),
@@ -132,7 +133,6 @@ function fl_jnt_RingCantilever(
     if (description) fl_description(value=description),
     fl_engine(value=this_ns),
     fl_bb_corners(value=3d_bb),
-    assert(b)     [str(cantilever_ns,"/b"),  b     ],
     assert(theta) [str(this_ns,"/theta"),         theta ],
     assert(r)     [str(this_ns,"/r2"),            r     ],
   ]
@@ -151,15 +151,16 @@ function fl_jnt_RingCantileverConst(
   tooth_l,
   //! thickness in scalar.
   h,
-  //! width in scalar.
-  b,
+  /*!
+   * angular width in scalar or [root,end] form. Scalar value means constant
+   * angular width.
+   */
+  theta,
   undercut,
   //! angle of inclination for the tooth
   alpha=30,
   //! move direction: +Z or -Z
   orientation=+Z,
-  //! angle of arc
-  theta,
   //! outer radius
   r,
   /*!
@@ -172,7 +173,7 @@ function fl_jnt_RingCantileverConst(
    * __NOTE__: currently not (yet) implemented
    */
   fillet=0
-) = fl_jnt_RingCantilever(description,length,arm_l,tooth_l,h,b,undercut,alpha,orientation,theta,r);
+) = fl_jnt_RingCantilever(description,length,arm_l,tooth_l,h,theta,undercut,alpha,orientation,r);
 
 function fl_jnt_RingCantileverFullScaled(
   //! optional description
@@ -187,15 +188,16 @@ function fl_jnt_RingCantileverFullScaled(
   tooth_l,
   //! root thickness in scalar.
   h,
-  //! root width in scalar.
-  b,
+  /*!
+   * angular width in scalar or [root,end] form. Scalar value means constant
+   * angular width.
+   */
+  theta,
   undercut,
   //! angle of inclination for the tooth
   alpha=30,
   //! move direction: +Z or -Z
   orientation=+Z,
-  //! angle of arc
-  theta,
   //! outer radius
   r,
   /*!
@@ -214,11 +216,10 @@ function fl_jnt_RingCantileverFullScaled(
   arm_l,
   tooth_l,
   [h,h/2],
-  [b,b/4],
+  theta,
   undercut,
   alpha,
   orientation,
-  theta,
   r
 );
 
@@ -412,7 +413,7 @@ function fl_jnt_RectCantilever(
     [-b[1]/2,  +h[1],     +sec_p[6].y],  // 14
     [+b[1]/2,  +h[1],     +sec_p[6].y],  // 15
   ],
-  // polyhedron faces
+  // faces (polyhedron part)
   faces     = [
     [0,1,2,3],
     [5,6,2,1],
@@ -433,7 +434,7 @@ function fl_jnt_RectCantilever(
     if (description) fl_description(value=description),
     fl_engine(value=this_ns),
     fl_bb_corners(value=fl_bb_polyhedron(pts)),
-    assert(b)     [str(cant_ns,"/b"),  b     ],
+    assert(b)     [str(this_ns,"/b"),  b     ],
     fl_jnt_rectPoints(value=pts),
     [str(this_ns,"/faces"),  faces ],
     fl_dimensions(value=fl_DimensionPack([
@@ -589,7 +590,6 @@ module fl_jnt_joint(
 ) {
   cantilever_ns = str(FL_JNT_NS,"/cantilever");
   engine        = fl_engine(this);
-  b             = fl_property(this,str(cantilever_ns,"/b"));
   debug_enabled = fl_parm_symbols(debug) || fl_parm_labels(debug);
   debug_sz      = debug_enabled ? 0.1 /* fl_2d_closest(pts)/3 */ : undef;
   sec_ns        = str(FL_JNT_NS,"/longitudinal section");
@@ -628,6 +628,7 @@ module fl_jnt_joint(
     post  = Rz(+90-theta/2)
 
   ) if ($this_verb==FL_ADD) {
+    echo(r2=r2);
 
     if (fl_parm_symbols(debug))
       // multmatrix(pre)
@@ -683,6 +684,7 @@ module fl_jnt_joint(
   module rect_engine() let(
     rect_ns   = str(cantilever_ns,"/rect"),
     h         = fl_property(this,str(sec_ns,"/h")),
+    b         = fl_property(this,str(rect_ns,"/b")),
     l         = fl_property(this,str(sec_ns,"/l")),
     length    = fl_property(this,str(sec_ns,"/length")),
     undercut  = fl_property(this,str(sec_ns,"/undercut")),

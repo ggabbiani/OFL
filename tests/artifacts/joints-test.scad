@@ -184,11 +184,10 @@ joint   =
         arm_l=ARM_L,
         tooth_l=tooth,
         h=CANTILEVER_ROOT_H,
-        b=CANTILEVER_ROOT_B,
+        theta = ARM_THETA,
         undercut=CANTILEVER_Y,
         alpha = CANTILEVER_ANGLE,
         orientation = orient,
-        theta = ARM_THETA,
         r = ARM_R) :
     JOINT_TYPE=="full scaled" ?
       fl_jnt_RingCantileverFullScaled(
@@ -196,11 +195,10 @@ joint   =
         arm_l=ARM_L,
         tooth_l=tooth,
         h=CANTILEVER_ROOT_H,
-        b=CANTILEVER_ROOT_B,
+        theta = ARM_THETA,
         undercut=CANTILEVER_Y,
         alpha = CANTILEVER_ANGLE,
         orientation = orient,
-        theta = ARM_THETA,
         r = ARM_R) :
       fl_jnt_RingCantilever(
         alpha=CANTILEVER_ANGLE,
@@ -209,15 +207,13 @@ joint   =
         arm_l=ARM_L,
         tooth_l=tooth,
         h=CANTILEVER_ROOT_H,
-        b=CANTILEVER_ROOT_B,
+        theta = ARM_THETA,
         undercut=CANTILEVER_Y,
-        theta=ARM_THETA,
         r=ARM_R
       )
     ) :
     undef;
 
-echo(joint=joint);
 fl_jnt_joint(verbs, joint, octant=octant, direction=direction, debug=debug,
   $fl_tolerance=TOLERANCE,
   $fl_thickness=THICKNESS
