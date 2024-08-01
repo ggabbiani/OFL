@@ -87,9 +87,9 @@ function fl_tt_isBoundingBox(
   && (l1==2 || l1==3)
   && (l2==2 || l2==3)
   && (l1==l2)
-  && bbox[0].x<=bbox[1].x
-  && bbox[0].y<=bbox[1].y
-  &&  (l1==2 ? 2d : bbox[0].z<=bbox[1].z)
+  && (!is_undef(bbox[0].x) && !is_undef(bbox[1].x) && bbox[0].x<=bbox[1].x)
+  && (!is_undef(bbox[0].y) && !is_undef(bbox[1].y) && bbox[0].y<=bbox[1].y)
+  &&  (l1==2 ? 2d : (!is_undef(bbox[0].z) && !is_undef(bbox[1].z) && bbox[0].z<=bbox[1].z))
 );
 
 /*!

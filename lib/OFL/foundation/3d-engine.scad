@@ -449,7 +449,7 @@ function fl_octant(
   default=FL_I
 ) = octant ? let(
     corner  = bbox ? bbox : fl_bb_corners(type),
-    half    = (corner[1] - corner[0]) / 2,
+    half    = assert(fl_tt_isBoundingBox(corner),corner) (corner[1] - corner[0]) / 2,
     delta   = [
       is_undef(octant.x) ? undef : sign(octant.x) * half.x,
       is_undef(octant.y) ? undef : sign(octant.y) * half.y,
