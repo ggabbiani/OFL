@@ -102,25 +102,34 @@ assert(is_num(diameter),str("diameter=",diameter))
 ];
 
 //! Double spiral thread knurled nut M2x4mm
-FL_KNUT_SPIRAL_M2x4     = fl_knut_Spiral(2,4,3.6,"vitamins/ruthex/rx-m2x4.stl");
+FL_KNUT_SPIRAL_M2x4p0     = fl_knut_Spiral(2,4.0,3.6,"vitamins/ruthex/m2x4p0.stl");
 //! Double spiral thread knurled nut M2.5x5.7mm
-FL_KNUT_SPIRAL_M2p5x5p7 = fl_knut_Spiral(2.5,5.7,4.6,"vitamins/ruthex/rx-m2p5x5p7.stl");
+FL_KNUT_SPIRAL_M2p5x5p7 = fl_knut_Spiral(2.5,5.7,4.6,"vitamins/ruthex/m2p5x5p7.stl");
+//! Double spiral thread knurled nut M3x4mm
+FL_KNUT_SPIRAL_M3x4p0   = fl_knut_Spiral(3,4.0,4.6,"vitamins/ruthex/m3x4p0.stl");
 //! Double spiral thread knurled nut M3x5.7mm
-FL_KNUT_SPIRAL_M3x5p7   = fl_knut_Spiral(3,5.7,4.6,"vitamins/ruthex/rx-m3x5p7.stl");
+FL_KNUT_SPIRAL_M3x5p7   = fl_knut_Spiral(3,5.7,4.6,"vitamins/ruthex/m3x5p7.stl");
+//! Double spiral thread knurled nut M4x4mm
+FL_KNUT_SPIRAL_M4x4p0   = fl_knut_Spiral(4,4.0,6.3,"vitamins/ruthex/m4x4p0.stl");
 //! Double spiral thread knurled nut M4x8.1mm
-FL_KNUT_SPIRAL_M4x8p1   = fl_knut_Spiral(4,8.1,6.3,"vitamins/ruthex/rx-m4x8p1.stl");
+FL_KNUT_SPIRAL_M4x8p1   = fl_knut_Spiral(4,8.1,6.3,"vitamins/ruthex/m4x8p1.stl");
+//! Double spiral thread knurled nut M5x5.8mm
+FL_KNUT_SPIRAL_M5x5p8   = fl_knut_Spiral(5,5.8,8.5,"vitamins/ruthex/m5x5p8.stl");
 //! Double spiral thread knurled nut M5x9.5mm
-FL_KNUT_SPIRAL_M5x9p5   = fl_knut_Spiral(5,9.5,8.5,"vitamins/ruthex/rx-m5x9p5.stl");
+FL_KNUT_SPIRAL_M5x9p5   = fl_knut_Spiral(5,9.5,8.5,"vitamins/ruthex/m5x9p5.stl");
 //! Double spiral thread knurled nut M6x12.7mm
-FL_KNUT_SPIRAL_M6x12p7  = fl_knut_Spiral(6,12.7,8.7,"vitamins/ruthex/rx-m6x12p7.stl");
+FL_KNUT_SPIRAL_M6x12p7  = fl_knut_Spiral(6,12.7,8.7,"vitamins/ruthex/m6x12p7.stl");
 //! Double spiral thread knurled nut M8x12.7mm
-FL_KNUT_SPIRAL_M8x12p7  = fl_knut_Spiral(8,12.7,10.1,"vitamins/ruthex/rx-m8x12p7.stl");
+FL_KNUT_SPIRAL_M8x12p7  = fl_knut_Spiral(8,12.7,10.1,"vitamins/ruthex/m8x12p7.stl");
 
 function fl_knut_spiralDict() = [
-  FL_KNUT_SPIRAL_M2x4,
+  FL_KNUT_SPIRAL_M2x4p0,
   FL_KNUT_SPIRAL_M2p5x5p7,
+  FL_KNUT_SPIRAL_M3x4p0,
   FL_KNUT_SPIRAL_M3x5p7,
+  FL_KNUT_SPIRAL_M4x4p0,
   FL_KNUT_SPIRAL_M4x8p1,
+  FL_KNUT_SPIRAL_M5x5p8,
   FL_KNUT_SPIRAL_M5x9p5,
   FL_KNUT_SPIRAL_M6x12p7,
   FL_KNUT_SPIRAL_M8x12p7

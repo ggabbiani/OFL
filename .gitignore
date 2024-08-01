@@ -8,3 +8,4 @@ orthodocs/api-docs
 *.deps
 __pycache__
 .venv
+lib/OFL/vitamins/ruthex/*.stl

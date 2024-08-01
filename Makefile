@@ -29,10 +29,13 @@ export COMMA				:= ,
 include $(FUNCTIONS)
 
 # function dependant variables
-export SCAD					:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(warning WARN: OpenSCAD missing))
-export WHICH 				:= $(if $(call is-win),where,which)
-export IMVER 				:= $(shell convert --version 2>&1)
-export IMCMD 				:= $(if $(findstring deprecated,$(IMVER)),$(shell $(WHICH) magick 2>/dev/null),$(shell $(WHICH) convert 2>/dev/null))
+export SCAD		:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(warning WARN: OpenSCAD missing))
+export WHICH 	:= $(if $(call is-win),where,which)
+export IMVER 	:= $(shell convert --version 2>&1)
+export IMCMD 	:= $(if $(findstring deprecated,$(IMVER)),$(shell $(WHICH) magick 2>/dev/null),$(shell $(WHICH) convert 2>/dev/null))
+export WGET		:= $(shell $(call which) $(if $(call is-mac), curl,wget))
+
+.PHONY: lib
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
@@ -58,6 +61,9 @@ tests/%:
 
 docker/%: ALWAYS
 	$(call make_sub)
+
+lib: ALWAYS
+	make -C lib/OFL/vitamins/ruthex
 
 # fake target forcing pattern rules that cannot be '.PHONY'
 ALWAYS:
