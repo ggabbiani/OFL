@@ -138,3 +138,7 @@ endef
 define test-deps
 $(TESTS)/$(1)-test.scad $(TESTS)/$(1)-test.json
 endef
+
+define wget
+$(shell $(call which) $(if $(call is-mac),curl,wget)) $(if $(call is-mac),$(1) -o $(2),-O $(2) $(1)) &>/dev/null
+endef

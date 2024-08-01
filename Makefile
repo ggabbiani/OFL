@@ -39,7 +39,7 @@ export WGET		:= $(shell $(call which) $(if $(call is-mac), curl,wget))
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
-all: check tests/sources docs/all orthodocs/all
+all: check lib tests/sources docs/all orthodocs/all
 
 clean: docs/clean orthodocs/clean tests/clean docker/clean
 
