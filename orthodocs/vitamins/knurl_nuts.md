@@ -269,19 +269,29 @@ in a list of knurl nuts find out the __shortest__ one
 
 __Default:__
 
-    fl_knut_Spiral(2.5,5.7,4.6,"vitamins/ruthex/rx-m2p5x5p7.stl")
+    fl_knut_Spiral(2.5,5.7,4.6,"vitamins/ruthex/m2p5x5p7.stl")
 
 Double spiral thread knurled nut M2.5x5.7mm
 
 ---
 
-### variable FL_KNUT_SPIRAL_M2x4
+### variable FL_KNUT_SPIRAL_M2x4p0
 
 __Default:__
 
-    fl_knut_Spiral(2,4,3.6,"vitamins/ruthex/rx-m2x4.stl")
+    fl_knut_Spiral(2,4.0,3.6,"vitamins/ruthex/m2x4p0.stl")
 
 Double spiral thread knurled nut M2x4mm
+
+---
+
+### variable FL_KNUT_SPIRAL_M3x4p0
+
+__Default:__
+
+    fl_knut_Spiral(3,4.0,4.6,"vitamins/ruthex/m3x4p0.stl")
+
+Double spiral thread knurled nut M3x4mm
 
 ---
 
@@ -289,9 +299,19 @@ Double spiral thread knurled nut M2x4mm
 
 __Default:__
 
-    fl_knut_Spiral(3,5.7,4.6,"vitamins/ruthex/rx-m3x5p7.stl")
+    fl_knut_Spiral(3,5.7,4.6,"vitamins/ruthex/m3x5p7.stl")
 
 Double spiral thread knurled nut M3x5.7mm
+
+---
+
+### variable FL_KNUT_SPIRAL_M4x4p0
+
+__Default:__
+
+    fl_knut_Spiral(4,4.0,6.3,"vitamins/ruthex/m4x4p0.stl")
+
+Double spiral thread knurled nut M4x4mm
 
 ---
 
@@ -299,9 +319,19 @@ Double spiral thread knurled nut M3x5.7mm
 
 __Default:__
 
-    fl_knut_Spiral(4,8.1,6.3,"vitamins/ruthex/rx-m4x8p1.stl")
+    fl_knut_Spiral(4,8.1,6.3,"vitamins/ruthex/m4x8p1.stl")
 
 Double spiral thread knurled nut M4x8.1mm
+
+---
+
+### variable FL_KNUT_SPIRAL_M5x5p8
+
+__Default:__
+
+    fl_knut_Spiral(5,5.8,7.1,"vitamins/ruthex/m5x5p8.stl")
+
+Double spiral thread knurled nut M5x5.8mm
 
 ---
 
@@ -309,7 +339,7 @@ Double spiral thread knurled nut M4x8.1mm
 
 __Default:__
 
-    fl_knut_Spiral(5,9.5,8.5,"vitamins/ruthex/rx-m5x9p5.stl")
+    fl_knut_Spiral(5,9.5,7.1,"vitamins/ruthex/m5x9p5.stl")
 
 Double spiral thread knurled nut M5x9.5mm
 
@@ -319,7 +349,7 @@ Double spiral thread knurled nut M5x9.5mm
 
 __Default:__
 
-    fl_knut_Spiral(6,12.7,8.7,"vitamins/ruthex/rx-m6x12p7.stl")
+    fl_knut_Spiral(6,12.7,8.7,"vitamins/ruthex/m6x12p7.stl")
 
 Double spiral thread knurled nut M6x12.7mm
 
@@ -329,7 +359,7 @@ Double spiral thread knurled nut M6x12.7mm
 
 __Default:__
 
-    fl_knut_Spiral(8,12.7,10.1,"vitamins/ruthex/rx-m8x12p7.stl")
+    fl_knut_Spiral(8,12.7,10.1,"vitamins/ruthex/m8x12p7.stl")
 
 Double spiral thread knurled nut M8x12.7mm
 

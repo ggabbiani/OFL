@@ -708,6 +708,22 @@ bounding box corners
 
 ---
 
+### module fl_2d_polygonLabels
+
+__Syntax:__
+
+    fl_2d_polygonLabels(poly,size,label="P")
+
+---
+
+### module fl_2d_polygonSymbols
+
+__Syntax:__
+
+    fl_2d_polygonSymbols(poly,size)
+
+---
+
 ### module fl_annulus
 
 __Syntax:__

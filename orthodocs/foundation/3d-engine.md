@@ -697,6 +697,22 @@ creates a group with the resulting bounding box corners of a layout
 
 ---
 
+### module fl_3d_polyhedronLabels
+
+__Syntax:__
+
+    fl_3d_polyhedronLabels(poly,size,label="P")
+
+---
+
+### module fl_3d_polyhedronSymbols
+
+__Syntax:__
+
+    fl_3d_polyhedronSymbols(poly,size)
+
+---
+
 ### module fl_bb_add
 
 __Syntax:__

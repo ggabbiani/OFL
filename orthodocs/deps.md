@@ -82,6 +82,7 @@ graph TD
     A36 --o|use| A4
     A36 --o|use| A18
     A37[artifacts/joints] --o|include| A22
+    A37 --o|include| A24
     A37 --o|use| A5
     A37 --o|use| A3
     A37 --o|use| A16
