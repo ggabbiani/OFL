@@ -38,7 +38,6 @@ module fl_manage(
   // parse verbs and trigger children with predefined context
   module parse(verbs) {
     assert(is_list(verbs)||is_string(verbs),verbs);
-    fl_trace("verbs",verbs);
     for($verb=verbs) {
       tokens  = fl_split($verb);
       fl_trace("tokens[0]",tokens[0]);

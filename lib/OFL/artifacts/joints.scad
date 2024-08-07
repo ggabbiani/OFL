@@ -524,7 +524,6 @@ module fl_jnt_joint(
     post  = Rz(+90-theta/2)
 
   ) if ($this_verb==FL_ADD) {
-    echo(r2=r2);
 
     if (fl_parm_symbols(debug))
       // multmatrix(pre)
@@ -632,7 +631,6 @@ module fl_jnt_joint(
       else
         polyhedron(points=pts, faces=faces);
 
-      echo(debug=debug);
       if (fl_parm_dimensions(debug)) let(
           $dim_object = this,
           $dim_width  = $dim_width ? $dim_width : 0.05

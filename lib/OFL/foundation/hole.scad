@@ -1,6 +1,8 @@
 /*!
  * Hole engine implementation.
  *
+ * TODO: rename as 'hole-engine'
+ *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
