@@ -82,7 +82,7 @@ module fl_label(
     if ($verb==FL_ADD)
       fl_modifier($modifier) do_add();
     else if ($verb==FL_AXES)
-      fl_modifier($FL_AXES)
+      fl_modifier($modifier)
         fl_doAxes(size,direction);
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
