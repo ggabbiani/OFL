@@ -2317,7 +2317,8 @@ __Syntax:__
 
 Set current color and alpha channel, using variable $fl_filament when «color» is
 undef. When variable $fl_debug is true, color information is ignored and debug
-modifier is applied to children().
+modifier is applied to children(). If «color» is equal to "ignore" no color
+is applied to children.
 
 
 ---

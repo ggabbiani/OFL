@@ -15,8 +15,8 @@
 - [fl_2d_placeIf (module)](foundation/2d-engine.md#module-fl_2d_placeif)
 - [fl_2d_polygonLabels (module)](foundation/2d-engine.md#module-fl_2d_polygonlabels)
 - [fl_2d_polygonSymbols (module)](foundation/2d-engine.md#module-fl_2d_polygonsymbols)
-- [FL_2xNIL (variable)](foundation/core.md#variable-fl_2xnil)
 - [2xNIL (variable)](foundation/unsafe_defs.md#variable-2xnil)
+- [FL_2xNIL (variable)](foundation/core.md#variable-fl_2xnil)
 
 ## 3
 
@@ -168,7 +168,6 @@
 - [FL_CS_ISO_M6 (variable)](vitamins/countersinks.md#variable-fl_cs_iso_m6)
 - [FL_CS_ISO_M8 (variable)](vitamins/countersinks.md#variable-fl_cs_iso_m8)
 - [fl_cs_k (function)](vitamins/countersinks.md#function-fl_cs_k)
-- [fl_cs_nominal (function)](vitamins/countersinks.md#function-fl_cs_nominal)
 - [FL_CS_NS (variable)](vitamins/countersinks.md#variable-fl_cs_ns)
 - [fl_cs_search (function)](vitamins/countersinks.md#function-fl_cs_search)
 - [FL_CS_UNI_DICT (variable)](vitamins/countersinks.md#variable-fl_cs_uni_dict)
@@ -355,8 +354,8 @@
 
 ## I
 
-- [FL_I (variable)](foundation/core.md#variable-fl_i)
 - [I (variable)](foundation/unsafe_defs.md#variable-i)
+- [FL_I (variable)](foundation/core.md#variable-fl_i)
 - [fl_IEC (function)](vitamins/iec.md#function-fl_iec)
 - [fl_iec (module)](vitamins/iec.md#module-fl_iec)
 - [vitamins/iec (package)](vitamins/iec.md#package-vitaminsiec)
@@ -537,32 +536,32 @@
 
 - [fl_name (function)](foundation/core.md#function-fl_name)
 - [fl_native (function)](foundation/core.md#function-fl_native)
-- [FL_NIL (variable)](foundation/core.md#variable-fl_nil)
 - [NIL (variable)](foundation/unsafe_defs.md#variable-nil)
+- [FL_NIL (variable)](foundation/core.md#variable-fl_nil)
 - [fl_nominal (function)](foundation/core.md#function-fl_nominal)
 - [fl_nopSCADlib (function)](foundation/core.md#function-fl_nopscadlib)
 - [FL_NS_CAD (variable)](artifacts/caddy.md#variable-fl_ns_cad)
 
 ## O
 
-- [FL_O (variable)](foundation/core.md#variable-fl_o)
 - [O (variable)](foundation/unsafe_defs.md#variable-o)
-- [FL_O0 (variable)](foundation/core.md#variable-fl_o0)
+- [FL_O (variable)](foundation/core.md#variable-fl_o)
 - [O0 (variable)](foundation/unsafe_defs.md#variable-o0)
-- [FL_O1 (variable)](foundation/core.md#variable-fl_o1)
+- [FL_O0 (variable)](foundation/core.md#variable-fl_o0)
 - [O1 (variable)](foundation/unsafe_defs.md#variable-o1)
-- [FL_O2 (variable)](foundation/core.md#variable-fl_o2)
+- [FL_O1 (variable)](foundation/core.md#variable-fl_o1)
 - [O2 (variable)](foundation/unsafe_defs.md#variable-o2)
-- [FL_O3 (variable)](foundation/core.md#variable-fl_o3)
+- [FL_O2 (variable)](foundation/core.md#variable-fl_o2)
 - [O3 (variable)](foundation/unsafe_defs.md#variable-o3)
-- [FL_O4 (variable)](foundation/core.md#variable-fl_o4)
+- [FL_O3 (variable)](foundation/core.md#variable-fl_o3)
 - [O4 (variable)](foundation/unsafe_defs.md#variable-o4)
-- [FL_O5 (variable)](foundation/core.md#variable-fl_o5)
+- [FL_O4 (variable)](foundation/core.md#variable-fl_o4)
 - [O5 (variable)](foundation/unsafe_defs.md#variable-o5)
-- [FL_O6 (variable)](foundation/core.md#variable-fl_o6)
+- [FL_O5 (variable)](foundation/core.md#variable-fl_o5)
 - [O6 (variable)](foundation/unsafe_defs.md#variable-o6)
-- [FL_O7 (variable)](foundation/core.md#variable-fl_o7)
+- [FL_O6 (variable)](foundation/core.md#variable-fl_o6)
 - [O7 (variable)](foundation/unsafe_defs.md#variable-o7)
+- [FL_O7 (variable)](foundation/core.md#variable-fl_o7)
 - [FL_OBSOLETE (variable)](foundation/core.md#variable-fl_obsolete)
 - [fl_octant (function)](foundation/3d-engine.md#function-fl_octant)
 - [fl_OFL (function)](foundation/core.md#function-fl_ofl)
@@ -662,38 +661,38 @@
 
 ## Q
 
-- [FL_QI (variable)](foundation/core.md#variable-fl_qi)
 - [QI (variable)](foundation/unsafe_defs.md#variable-qi)
-- [FL_QII (variable)](foundation/core.md#variable-fl_qii)
+- [FL_QI (variable)](foundation/core.md#variable-fl_qi)
 - [QII (variable)](foundation/unsafe_defs.md#variable-qii)
-- [FL_QIII (variable)](foundation/core.md#variable-fl_qiii)
+- [FL_QII (variable)](foundation/core.md#variable-fl_qii)
 - [QIII (variable)](foundation/unsafe_defs.md#variable-qiii)
-- [FL_QIV (variable)](foundation/core.md#variable-fl_qiv)
+- [FL_QIII (variable)](foundation/core.md#variable-fl_qiii)
 - [QIV (variable)](foundation/unsafe_defs.md#variable-qiv)
+- [FL_QIV (variable)](foundation/core.md#variable-fl_qiv)
 - [fl_quadrant (function)](foundation/2d-engine.md#function-fl_quadrant)
 
 ## R
 
-- [fl_R (function)](foundation/core.md#function-fl_r)
 - [R (function)](foundation/unsafe_defs.md#function-r)
+- [fl_R (function)](foundation/core.md#function-fl_r)
 - [fl_rail (module)](foundation/util.md#module-fl_rail)
 - [$FL_RENDER (variable)](foundation/core.md#variable-$fl_render)
 - [fl_render_if (module)](foundation/core.md#module-fl_render_if)
 - [fl_repos (function)](foundation/label.md#function-fl_repos)
 - [fl_resize (function)](foundation/label.md#function-fl_resize)
-- [fl_Rx (function)](foundation/core.md#function-fl_rx)
 - [Rx (function)](foundation/unsafe_defs.md#function-rx)
-- [fl_Rxyz (function)](foundation/core.md#function-fl_rxyz)
+- [fl_Rx (function)](foundation/core.md#function-fl_rx)
 - [Rxyz (function)](foundation/unsafe_defs.md#function-rxyz)
-- [fl_Ry (function)](foundation/core.md#function-fl_ry)
+- [fl_Rxyz (function)](foundation/core.md#function-fl_rxyz)
 - [Ry (function)](foundation/unsafe_defs.md#function-ry)
-- [fl_Rz (function)](foundation/core.md#function-fl_rz)
+- [fl_Ry (function)](foundation/core.md#function-fl_ry)
 - [Rz (function)](foundation/unsafe_defs.md#function-rz)
+- [fl_Rz (function)](foundation/core.md#function-fl_rz)
 
 ## S
 
-- [fl_S (function)](foundation/core.md#function-fl_s)
 - [S (function)](foundation/unsafe_defs.md#function-s)
+- [fl_S (function)](foundation/core.md#function-fl_s)
 - [FL_SADP_DICT (variable)](vitamins/sata-adapters.md#variable-fl_sadp_dict)
 - [FL_SADP_ELUTENG (variable)](vitamins/sata-adapters.md#variable-fl_sadp_eluteng)
 - [FL_SADP_NS (variable)](vitamins/sata-adapters.md#variable-fl_sadp_ns)
@@ -775,8 +774,8 @@
 
 ## T
 
-- [fl_T (function)](foundation/core.md#function-fl_t)
 - [T (function)](foundation/unsafe_defs.md#function-t)
+- [fl_T (function)](foundation/core.md#function-fl_t)
 - [artifacts/t-nut (package)](artifacts/t-nut.md#package-artifactst-nut)
 - [artifacts/t-profiles (package)](artifacts/t-profiles.md#package-artifactst-profiles)
 - [fl_tag (function)](foundation/core.md#function-fl_tag)
@@ -908,23 +907,23 @@
 
 ## X
 
-- [fl_X (function)](foundation/core.md#function-fl_x)
 - [X (function)](foundation/unsafe_defs.md#function-x)
-- [FL_X (variable)](foundation/core.md#variable-fl_x)
+- [fl_X (function)](foundation/core.md#function-fl_x)
 - [X (variable)](foundation/unsafe_defs.md#variable-x)
+- [FL_X (variable)](foundation/core.md#variable-fl_x)
 - [fl_XOR (function)](foundation/core.md#function-fl_xor)
 - [FL_XTR_DICT (variable)](artifacts/t-profiles.md#variable-fl_xtr_dict)
 
 ## Y
 
-- [fl_Y (function)](foundation/core.md#function-fl_y)
 - [Y (function)](foundation/unsafe_defs.md#function-y)
-- [FL_Y (variable)](foundation/core.md#variable-fl_y)
+- [fl_Y (function)](foundation/core.md#function-fl_y)
 - [Y (variable)](foundation/unsafe_defs.md#variable-y)
+- [FL_Y (variable)](foundation/core.md#variable-fl_y)
 
 ## Z
 
-- [fl_Z (function)](foundation/core.md#function-fl_z)
 - [Z (function)](foundation/unsafe_defs.md#function-z)
-- [FL_Z (variable)](foundation/core.md#variable-fl_z)
+- [fl_Z (function)](foundation/core.md#function-fl_z)
 - [Z (variable)](foundation/unsafe_defs.md#variable-z)
+- [FL_Z (variable)](foundation/core.md#variable-fl_z)

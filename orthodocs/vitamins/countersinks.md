@@ -280,16 +280,6 @@ fl_cs_k(type,value)
 
 ---
 
-### function fl_cs_nominal
-
-__Syntax:__
-
-```text
-fl_cs_nominal(type,value)
-```
-
----
-
 ### function fl_cs_search
 
 __Syntax:__
@@ -316,15 +306,19 @@ nominal diameter
 
 __Syntax:__
 
-    fl_countersink(verbs=FL_ADD,type,tolerance=0,direction,octant)
+    fl_countersink(verbs=FL_ADD,type,direction,octant)
+
+Runtime context:
+
+- $fl_thickness: used by FL_FOOTPRINT, can be verb-dependant
+- $fl_tolerance: tolerance added to countersink's dimensions during FL_ADD,
+  FL_BBOX and FL_FOOTPRINT. Can be verb-dependant.
+
 
 __Parameters:__
 
 __verbs__  
-supported verbs: FL_ADD, FL_AXES, FL_BBOX.
-
-__tolerance__  
-tolerance added to countersink's dimensions
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT.
 
 __direction__  
 desired direction [director,rotation], native direction when undef
