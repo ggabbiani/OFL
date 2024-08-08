@@ -21,7 +21,6 @@ FL_CS_NS  = "cs";
 function fl_cs_k(type,value)        = fl_property(type,"cs/head height",value);
 function fl_cs_dk(type,value)       = fl_property(type,"cs/head ⌀",value);
 function fl_cs_angle(type,value)    = fl_property(type,"cs/angle",value);
-function fl_cs_nominal(type,value)  = fl_property(type,"cs/nominal ⌀",value);
 
 //*****************************************************************************
 // getters
@@ -56,7 +55,7 @@ function fl_Countersink(
     fl_cs_dk(value=dk),
     fl_cs_angle(value=alpha),
     fl_bb_corners(value=[[-rk,-rk,-k],[rk,rk,0]]),
-    fl_cs_nominal(value=nominal),
+    fl_nominal(value=nominal),
     fl_cs_k(value=k),
   ];
 
@@ -123,16 +122,21 @@ function fl_cs_search(
   for(cs=dictionary)
     if (
           (is_undef(name) || fl_name(cs)==name    )
-      &&  (is_undef(d)    || fl_cs_nominal(cs)==d )
+      &&  (is_undef(d)    || fl_nominal(cs)==d )
     ) cs
 ];
 
+/*!
+ * Runtime context:
+ *
+ * - $fl_thickness: used by FL_FOOTPRINT, can be verb-dependant
+ * - $fl_tolerance: tolerance added to countersink's dimensions during FL_ADD,
+ *   FL_BBOX and FL_FOOTPRINT. Can be verb-dependant.
+ */
 module fl_countersink(
-  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX.
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT.
   verbs=FL_ADD,
   type,
-  //! tolerance added to countersink's dimensions
-  tolerance=0,
   //! desired direction [director,rotation], native direction when undef
   direction,
   //! when undef native positioning is used (+Z)
@@ -140,34 +144,44 @@ module fl_countersink(
 ) {
   assert(verbs!=undef);
   assert(type,type);
-  assert(tolerance>=0,tolerance);
 
-  bbox    = assert(type,type) fl_bb_corners(type);
-  size    =  fl_bb_size(type);
-  nominal = fl_cs_nominal(type);
-  dk      = fl_cs_dk(type);
-  k       = fl_cs_k(type);
-  angle   = fl_cs_angle(type);
-  dx      = nominal/10*tan(angle/2);
-  D       = direction ? fl_direction(direction) : I;
-  M       = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
+  bbox          = assert(type,type) fl_bb_corners(type);
+  size          =  fl_bb_size(type);
+  nominal       = fl_nominal(type);
+  dk            = fl_cs_dk(type);
+  k             = fl_cs_k(type);
+  angle         = fl_cs_angle(type);
+  dx            = nominal/10*tan(angle/2);
+
+  assert($fl_tolerance>=0,$fl_tolerance);
+
+  D             = direction ? fl_direction(direction) : I;
+  M             = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
 
   module tolerant()
-    if (tolerance)
-      resize(size+[2*tolerance,2*tolerance,tolerance])
+    if ($fl_tolerance)
+      resize(size+$fl_tolerance*[2,2,1])
         children();
     else
       children();
 
-  fl_manage(verbs,M,D) {
+  module doAdd() let(
+    edge  = nominal/10
+  ) intersection() {
+      fl_cylinder(d1=nominal,d2=dk+2*dx,h=k,octant=-Z);
+      fl_cylinder(d=dk,h=k,octant=-Z);
+    }
+
+  fl_manage(verbs,M,D) let(
+    // verb-dependent runtime environment
+    $fl_tolerance = is_undef($fl_tolerance) ? 0 : fl_optProperty($fl_tolerance, $verb, default=$fl_tolerance ),
+    $fl_thickness = is_undef($fl_thickness) ? 0 : fl_optProperty($fl_thickness, $verb, default=$fl_thickness )
+  ) {
 
     if ($verb==FL_ADD)
-      fl_modifier($modifier) let(edge=nominal/10)
+      fl_modifier($modifier)
         tolerant()
-          intersection() {
-            fl_cylinder(d1=nominal,d2=dk+2*dx,h=k,octant=-Z);
-            fl_cylinder(d=dk,h=k,octant=-Z);
-          }
+          doAdd();
 
     else if ($verb==FL_AXES)
       fl_modifier($FL_AXES)
@@ -176,7 +190,15 @@ module fl_countersink(
     else if ($verb==FL_BBOX)
       fl_modifier($modifier)
         tolerant()
-          fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
+          fl_bb_add(bbox,auto=false,$FL_ADD=$FL_BBOX);
+
+    else if ($verb==FL_FOOTPRINT)
+      fl_modifier($modifier) {
+        tolerant()
+          doAdd($FL_ADD=$FL_FOOTPRINT);
+        if ($fl_thickness)
+          fl_cylinder(d=dk+2*$fl_tolerance,h=$fl_thickness+$fl_tolerance,octant=+Z);
+      }
 
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
