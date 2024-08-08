@@ -44,6 +44,7 @@ $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+
 /* [3D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
@@ -89,9 +90,9 @@ module label(str, scale = 0.25, valign = "baseline", halign = "left")
         scale(scale)
           text(str, valign = valign, halign = halign, font="Symbola:style=Regular");
 
-dictionary = TYPE=="ISO"?FL_CS_ISO_DICT:FL_CS_UNI_DICT;
-verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_FOOTPRINT]);
-gap   = 5;
+dictionary  = TYPE=="ISO"?FL_CS_ISO_DICT:FL_CS_UNI_DICT;
+verbs       = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_FOOTPRINT]);
+gap         = 5;
 
 if (SIZE!="ALL") {
   cs = fl_cs_search(dictionary=dictionary,d=fl_atof(SIZE))[0];

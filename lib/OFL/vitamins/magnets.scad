@@ -193,7 +193,7 @@ module fl_magnet(
           fl_cylinder(d=d, h=h, octant=+Z);
 
         if (cs)
-          translate(+Z(h+NIL)) fl_countersink(FL_ADD,type=cs,tolerance=0.1);
+          translate(+Z(h+NIL)) fl_countersink(FL_ADD,type=cs,$fl_tolerance=0.1);
 
         if (screw)
           do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL,$FL_DRILL=$FL_ADD);

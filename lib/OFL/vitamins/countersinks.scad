@@ -153,8 +153,6 @@ module fl_countersink(
   angle         = fl_cs_angle(type);
   dx            = nominal/10*tan(angle/2);
 
-  assert($fl_tolerance>=0,$fl_tolerance);
-
   D             = direction ? fl_direction(direction) : I;
   M             = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
 
@@ -176,7 +174,7 @@ module fl_countersink(
     // verb-dependent runtime environment
     $fl_tolerance = is_undef($fl_tolerance) ? 0 : fl_optProperty($fl_tolerance, $verb, default=$fl_tolerance ),
     $fl_thickness = is_undef($fl_thickness) ? 0 : fl_optProperty($fl_thickness, $verb, default=$fl_thickness )
-  ) {
+  ) assert($fl_tolerance>=0,$fl_tolerance) {
 
     if ($verb==FL_ADD)
       fl_modifier($modifier)
@@ -197,7 +195,7 @@ module fl_countersink(
         tolerant()
           doAdd($FL_ADD=$FL_FOOTPRINT);
         if ($fl_thickness)
-          fl_cylinder(d=dk+2*$fl_tolerance,h=$fl_thickness+$fl_tolerance,octant=+Z);
+          fl_cylinder(d=dk+2*$fl_tolerance,h=$fl_thickness+$fl_tolerance,octant=+Z,$FL_ADD=$FL_FOOTPRINT);
       }
 
     else
