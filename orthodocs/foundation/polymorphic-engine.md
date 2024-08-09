@@ -80,6 +80,9 @@ Children context:
 - $this_octant     : positioning octant
 - $this_debug      : debug parameters
 
+TODO: this module should handle all the OFL runtime variables, particularly
+the verb-dependent ones (like $fl_tolerance)
+
 
 __Parameters:__
 

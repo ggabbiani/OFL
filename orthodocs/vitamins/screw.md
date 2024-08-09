@@ -250,12 +250,16 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_screw_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,type="clearance",tolerance=0,countersunk=false)
+    fl_screw_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],depth=0,screw,type="clearance",tolerance=0,countersunk=false)
 
 Screw driven hole execution. The main difference between this module and
 [fl_lay_holes{}](../foundation/hole.md#module-fl_lay_holes) is that the FL_DRILL verb is delegated to screws.
 
 See [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context) for context variables passed to children().
+
+Runtime environment:
+
+- $fl_thickness: added to the hole depth
 
 :memo: **NOTE:** supported normals are x,y or z semi-axis ONLY
 
@@ -269,8 +273,8 @@ list of hole specs
 __enable__  
 enabled normals in floating semi-axis list form
 
-__thick__  
-pass-through thickness
+__depth__  
+pass-through hole depth
 
 __screw__  
 fallback screw
