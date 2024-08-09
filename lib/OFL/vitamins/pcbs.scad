@@ -1255,7 +1255,7 @@ module fl_pcb_frame(
 
   module do_drill() {
     translate(-Z(depth))
-    fl_screw_holes(holes,thick=thick,enable=lay_direction);
+    fl_screw_holes(holes,depth=thick,enable=lay_direction);
   }
 
   module do_footprint() {

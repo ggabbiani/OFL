@@ -308,6 +308,10 @@ module fl_screw(
  *
  * See fl_hole_Context{} for context variables passed to children().
  *
+ * Runtime environment:
+ *
+ * - $fl_thickness: added to the hole depth
+ *
  * **NOTE:** supported normals are x,y or z semi-axis ONLY
  *
  */
@@ -316,8 +320,8 @@ module fl_screw_holes(
   holes,
   //! enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
-  //! pass-through thickness
-  thick=0,
+  //! pass-through hole depth
+  depth=0,
   //! fallback screw
   screw,
   //! drill type ("clearance" or "tap")
@@ -326,9 +330,10 @@ module fl_screw_holes(
   tolerance=0,
   countersunk=false
 ) {
-  fl_lay_holes(holes,enable,thick) let(
+  $fl_thickness = is_undef($fl_thickness) ? 0 : fl_optProperty($fl_thickness, $this_verb, default=$fl_thickness );
+  fl_lay_holes(holes,enable,depth) let(
     screw = $hole_screw ? $hole_screw : screw,
-    len   = $hole_depth ? $hole_depth : thick,
+    len   = ($hole_depth ? $hole_depth : depth)+$fl_thickness,
     d     = screw_head_radius(screw)*2
   ) assert(screw) {
     translate(+Z(NIL))
