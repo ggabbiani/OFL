@@ -73,6 +73,9 @@ use <mngm-engine.scad>
  * - $this_direction  : orientation in [director,rotation] format
  * - $this_octant     : positioning octant
  * - $this_debug      : debug parameters
+ *
+ * TODO: this module should handle all the OFL runtime variables, particularly
+ * the verb-dependent ones (like $fl_tolerance)
  */
 module fl_polymorph(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
