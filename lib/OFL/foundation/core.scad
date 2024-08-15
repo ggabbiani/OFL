@@ -1495,36 +1495,36 @@ function fl_parm_debug(debug) =
     fl_parm_labels(debug) || fl_parm_symbols(debug) || debug[2] || fl_parm_dimensions(debug);
 
 /*!
- * Multi valued verb-dependent tolerance parameter.
+ * Constructor for multi verb parameter.
  *
- * OFL engines generally parse input parameters just once before processing the
- * passed verb list. This implies that for each parameter the corresponding
- * value will never change upon verb invocation. Even if generally sensible,
- * this approach has some drawbacks when the parameter is asked to change its
- * value between different verbs (for example a «tolerance» could be different
- * during an FL_DRILL or FL_FOOTPRINT verb invocations). To avoid the split of a
- * verb-list engine invocation in as many different invocation as the desired
- * parameter requires, the parameter can assume a verb-dependent value like
- * in the following code example:
+ * OFL engines act in a two steps sequence:
  *
- *     tolerance=[
+ * 1. builds of a number of metrics from the input parameters that will be
+ *    shared among the different verb invocations
+ * 2. invoke verbs one by one in the exact order in which they are passed from
+ *    client
+ *
+ * Even if generally sensible, this approach has some drawbacks when the
+ * parameter value must be different according to the verb being actually
+ * invoked (for example the «tolerance» used during an FL_DRILL could be
+ * different by the one used during FL_FOOTPRINT). To avoid the split of a
+ * engine invocation as many times as the desired parameter value requires, the
+ * parameter can be passed in a verb-dependant form like in the following code
+ * example:
+ *
+ *     tolerance  = fl_parm_MultiVerb([
  *       [FL_DRILL,     0.1],
  *       [FL_FOOTPRINT, 0.2]
- *     ]
+ *     ]);
  *     ...
  *     fl_engine(verbs=[FL_DRILL,FL_FOOTPRINT],tolerance=tolerance,...);
  *
- * Inside the engine the tolerance value for the currently executed verb can be
- * retrieved by the following code:
+ * Inside the engine the tolerance value __for the currently executed verb__ can
+ * be retrieved by the following code:
  *
  *     tolerance = fl_parm_tolerance(default=0.05);
  *
- * functionally equivalent to:
- *
- *     tolerance = is_undef($fl_tolerance) ? 0 : fl_optProperty($fl_tolerance, $verb,
- *     default=$fl_tolerance);
- *
- * and will result in:
+ * with the following resulting values:
  *
  * | verb             | value |
  * | ----             | ----  |
@@ -1532,16 +1532,37 @@ function fl_parm_debug(debug) =
  * | FL_FOOTPRINT     | 0.2   |
  * | all other cases  | 0.05  |
  */
-function fl_parm_tolerance(verb=is_undef($verb)?$this_verb:$verb, default=0) =
-  is_undef($fl_tolerance) ? default : fl_optProperty($fl_tolerance, verb, default=$fl_tolerance );
+function fl_parm_MultiVerb(value) =
+  is_list(value) ?
+    concat(["MULTI-VERB"],value) :
+    value;
+
+/*!
+ * Multi valued verb-dependent tolerance parameter.
+ *
+ * See fl_parm_multiverb() for details.
+ */
+function fl_parm_multiverb(value, default) = let(
+  verb=is_undef($verb) ? $this_verb : $verb
+) is_list(value) ?
+    assert(value[0]=="MULTI-VERB",value) fl_optProperty(value, verb, default=default)
+    : value;
+
+/*!
+ * Multi valued verb-dependent tolerance parameter.
+ *
+ * See fl_parm_multiverb() for details.
+ */
+function fl_parm_tolerance(default=0) =
+  fl_parm_multiverb(is_undef($fl_tolerance)?default:$fl_tolerance,default);
 
 /*!
  * Multi valued verb-dependent thickness parameter.
  *
- * See fl_parm_tolerance() for details.
+ * See fl_parm_multiverb() for details.
  */
-function fl_parm_thickness(verb=is_undef($verb)?$this_verb:$verb, default=0) =
-  is_undef($fl_thickness) ? default : fl_optProperty($fl_thickness, verb, default=$fl_thickness );
+function fl_parm_thickness(default=0) =
+  fl_parm_multiverb(is_undef($fl_thickness)?default:$fl_thickness,default);
 
 //**** Common parameter helpers ***********************************************
 
