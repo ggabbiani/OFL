@@ -100,5 +100,8 @@ module fl_polymorph(
       $this_bbox      = bbox,
       $this_direction = direction,
       $this_octant    = octant,
-      $this_debug     = debug
+      $this_debug     = debug,
+
+      $fl_tolerance   = fl_parm_tolerance(),
+      $fl_thickness   = fl_parm_thickness()
     ) children();
