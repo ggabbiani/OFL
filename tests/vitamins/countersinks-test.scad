@@ -41,6 +41,7 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
@@ -64,12 +65,11 @@ DIR_R       = 0;        // [-360:360]
 
 /* [Countersink] */
 
-TOLERANCE = 0;  // [0:0.1:1]
-// thickness
-T         = 0;  // [0:0.1:5]
-TYPE      = "ISO";  // [ISO,UNI]
-// 'ALL' for complete dictionary, nominal size for single display
-SIZE      = "ALL";
+$fl_tolerance = 0;  // [0:0.1:1]
+$fl_thickness = 0;  // [0:0.1:5]
+TYPE          = "ISO";  // [ISO,UNI]
+// 'ALL' or nominal size for single display
+SIZE          = "ALL";
 
 
 /* [Hidden] */
@@ -91,31 +91,17 @@ module label(str, scale = 0.25, valign = "baseline", halign = "left")
           text(str, valign = valign, halign = halign, font="Symbola:style=Regular");
 
 dictionary  = TYPE=="ISO"?FL_CS_ISO_DICT:FL_CS_UNI_DICT;
-verbs       = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_FOOTPRINT]);
+verbs       = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_DRILL,FL_FOOTPRINT]);
 gap         = 5;
 
 if (SIZE!="ALL") {
   cs = fl_cs_search(dictionary=dictionary,d=fl_atof(SIZE))[0];
   assert(cs,str("No M",SIZE," ",TYPE," countersink found."))
-    fl_countersink(
-      verbs,
-      cs,
-      octant=octant,
-      direction=direction,
-      $fl_tolerance=TOLERANCE,
-      $fl_thickness=T
-    );
+    fl_countersink(verbs,cs,octant=octant,direction=direction);
 } else
   fl_layout(axis=X,gap=gap,types=dictionary) {
     let(delta=fl_bb_size($item).y/2+2)
       translate(-Y(delta))
         label(str("M",fl_nominal($item)),halign="center");
-    fl_countersink(
-      verbs,
-      $item,
-      octant=octant,
-      direction=direction,
-      $fl_tolerance=TOLERANCE,
-      $fl_thickness=T
-    );
+    fl_countersink(verbs,$item,octant=octant,direction=direction);
   }

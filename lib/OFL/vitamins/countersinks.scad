@@ -12,6 +12,7 @@ include <../../NopSCADlib/vitamins/screws.scad>
 include <../foundation/core.scad>
 
 use <../foundation/bbox-engine.scad>
+use <../foundation/polymorphic-engine.scad>
 
 //! countersinks namespace
 FL_CS_NS  = "cs";
@@ -129,12 +130,13 @@ function fl_cs_search(
 /*!
  * Runtime context:
  *
- * - $fl_thickness: used by FL_FOOTPRINT, can be verb-dependant
+ * - $fl_thickness: used by FL_FOOTPRINT, Can be verb-dependant (see
+ *   fl_parm_thickness()).
  * - $fl_tolerance: tolerance added to countersink's dimensions during FL_ADD,
- *   FL_BBOX and FL_FOOTPRINT. Can be verb-dependant.
+ *   FL_BBOX and FL_FOOTPRINT. Can be verb-dependant (see fl_parm_tolerance()).
  */
 module fl_countersink(
-  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT.
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_DRILL, FL_FOOTPRINT.
   verbs=FL_ADD,
   type,
   //! desired direction [director,rotation], native direction when undef
@@ -146,19 +148,16 @@ module fl_countersink(
   assert(type,type);
 
   bbox          = assert(type,type) fl_bb_corners(type);
-  size          =  fl_bb_size(type);
+  size          = fl_bb_size(type);
   nominal       = fl_nominal(type);
   dk            = fl_cs_dk(type);
   k             = fl_cs_k(type);
   angle         = fl_cs_angle(type);
   dx            = nominal/10*tan(angle/2);
 
-  D             = direction ? fl_direction(direction) : I;
-  M             = octant    ? fl_octant(octant=octant,bbox=bbox) : I;
-
   module tolerant()
     if ($fl_tolerance)
-      resize(size+$fl_tolerance*[2,2,1])
+      resize(size+2*$fl_tolerance*[1,1,1])
         children();
     else
       children();
@@ -166,39 +165,39 @@ module fl_countersink(
   module doAdd() let(
     edge  = nominal/10
   ) intersection() {
-      fl_cylinder(d1=nominal,d2=dk+2*dx,h=k,octant=-Z);
-      fl_cylinder(d=dk,h=k,octant=-Z);
-    }
+    fl_cylinder(d=dk,h=k,octant=-Z);
+    fl_cylinder(d1=nominal,d2=dk+2*dx,h=k,octant=-Z);
+  }
 
-  fl_manage(verbs,M,D) let(
-    // verb-dependent runtime environment
-    $fl_tolerance = is_undef($fl_tolerance) ? 0 : fl_optProperty($fl_tolerance, $verb, default=$fl_tolerance ),
-    $fl_thickness = is_undef($fl_thickness) ? 0 : fl_optProperty($fl_thickness, $verb, default=$fl_thickness )
-  ) assert($fl_tolerance>=0,$fl_tolerance) {
+  module engine()
+    assert($fl_tolerance>=0,$fl_tolerance)
 
-    if ($verb==FL_ADD)
+    if ($this_verb==FL_ADD)
       fl_modifier($modifier)
-        tolerant()
-          doAdd();
+        doAdd();
 
-    else if ($verb==FL_AXES)
+    else if ($this_verb==FL_AXES)
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction,debug);
 
-    else if ($verb==FL_BBOX)
+    else if ($this_verb==FL_BBOX)
+      fl_modifier($modifier)
+        fl_bb_add(bbox,auto=true,$FL_ADD=$FL_BBOX);
+
+    else if ($this_verb==FL_DRILL) {
+      fl_modifier($modifier)
+        if ($fl_thickness)
+          fl_cylinder(d=dk+2*$fl_tolerance,h=$fl_thickness+$fl_tolerance,octant=+Z,$FL_ADD=$FL_DRILL);
+
+    } else if ($this_verb==FL_FOOTPRINT)
       fl_modifier($modifier)
         tolerant()
-          fl_bb_add(bbox,auto=false,$FL_ADD=$FL_BBOX);
-
-    else if ($verb==FL_FOOTPRINT)
-      fl_modifier($modifier) {
-        tolerant()
           doAdd($FL_ADD=$FL_FOOTPRINT);
-        if ($fl_thickness)
-          fl_cylinder(d=dk+2*$fl_tolerance,h=$fl_thickness+$fl_tolerance,octant=+Z,$FL_ADD=$FL_FOOTPRINT);
-      }
 
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-  }
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$this_verb));
+
+  fl_polymorph(verbs,type,octant,direction,debug)
+    engine()
+      children();
 }
