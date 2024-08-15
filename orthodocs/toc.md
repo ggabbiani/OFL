@@ -581,6 +581,8 @@
 - [fl_parm_Quadrant (function)](foundation/2d-engine.md#function-fl_parm_quadrant)
 - [fl_parm_SignedPair (function)](foundation/core.md#function-fl_parm_signedpair)
 - [fl_parm_symbols (function)](foundation/core.md#function-fl_parm_symbols)
+- [fl_parm_thickness (function)](foundation/core.md#function-fl_parm_thickness)
+- [fl_parm_tolerance (function)](foundation/core.md#function-fl_parm_tolerance)
 - [fl_parse_diameter (function)](foundation/core.md#function-fl_parse_diameter)
 - [fl_parse_l (function)](foundation/core.md#function-fl_parse_l)
 - [fl_parse_radius (function)](foundation/core.md#function-fl_parse_radius)
