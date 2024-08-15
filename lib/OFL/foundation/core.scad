@@ -1494,6 +1494,57 @@ function fl_parm_debug(debug) =
     false :
     fl_parm_labels(debug) || fl_parm_symbols(debug) || debug[2] || fl_parm_dimensions(debug);
 
+/*!
+ * Multi valued verb-dependent tolerance parameter.
+ *
+ * OFL engines generally parse input parameters just once before processing the
+ * passed verb list. This implies that for each parameter the corresponding
+ * value will never change upon verb invocation. Even if generally sensible,
+ * this approach has some drawbacks when the parameter is asked to change its
+ * value between different verbs (for example a «tolerance» could be different
+ * during an FL_DRILL or FL_FOOTPRINT verb invocations). To avoid the split of a
+ * verb-list engine invocation in as many different invocation as the desired
+ * parameter requires, the parameter can assume a verb-dependent value like
+ * in the following code example:
+ *
+ *     tolerance=[
+ *       [FL_DRILL,     0.1],
+ *       [FL_FOOTPRINT, 0.2]
+ *     ]
+ *     ...
+ *     fl_engine(verbs=[FL_DRILL,FL_FOOTPRINT],tolerance=tolerance,...);
+ *
+ * Inside the engine the tolerance value for the currently executed verb can be
+ * retrieved by the following code:
+ *
+ *     tolerance = fl_parm_tolerance(default=0.05);
+ *
+ * functionally equivalent to:
+ *
+ *     tolerance = is_undef($fl_tolerance) ? 0 : fl_optProperty($fl_tolerance, $verb,
+ *     default=$fl_tolerance);
+ *
+ * and will result in:
+ *
+ * | verb             | value |
+ * | ----             | ----  |
+ * | FL_DRILL         | 0.1   |
+ * | FL_FOOTPRINT     | 0.2   |
+ * | all other cases  | 0.05  |
+ */
+function fl_parm_tolerance(verb=is_undef($verb)?$this_verb:$verb, default=0) =
+  is_undef($fl_tolerance) ? default : fl_optProperty($fl_tolerance, verb, default=$fl_tolerance );
+
+/*!
+ * Multi valued verb-dependent thickness parameter.
+ *
+ * See fl_parm_tolerance() for details.
+ */
+function fl_parm_thickness(verb=is_undef($verb)?$this_verb:$verb, default=0) =
+  is_undef($fl_thickness) ? default : fl_optProperty($fl_thickness, verb, default=$fl_thickness );
+
+//**** Common parameter helpers ***********************************************
+
 module fl_context_dump()
   echo(
   $FL_ADD        = $FL_ADD       ,
