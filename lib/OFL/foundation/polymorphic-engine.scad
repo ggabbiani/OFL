@@ -73,6 +73,8 @@ use <mngm-engine.scad>
  * - $this_direction  : orientation in [director,rotation] format
  * - $this_octant     : positioning octant
  * - $this_debug      : debug parameters
+ * - $fl_thickness    : multi-verb parameter (see fl_parm_thickness())
+ * - $fl_tolerance    : multi-verb parameter (see fl_parm_tolerance())
  *
  * TODO: this module should handle all the OFL runtime variables, particularly
  * the verb-dependent ones (like $fl_tolerance)
