@@ -9,7 +9,7 @@
 T_LIST			= 2d 2d-ellipse 2d_grid 3d 3d_funcs algo assertions base_geo \
 base_list base_string bend bend2 connect core-comparison core-symbols \
 dimensions fillet frame hole label layout limits lists polymorphic profile \
-square torus trace tube type_trait util
+square torus trace tube type_trait util vdp
 
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
