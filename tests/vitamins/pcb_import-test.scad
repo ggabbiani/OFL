@@ -36,7 +36,7 @@ SHOW_DIMENSIONS = false;
 /* [Supported verbs] */
 
 // Draw base shape (no components nor screws)
-$FL_ADD       = "DEBUG";        // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_ADD       = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // Draw predefined component shape(s)
 $FL_ASSEMBLY  = "ON";           // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds local reference axes
