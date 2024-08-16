@@ -476,6 +476,10 @@ function fl_pcb_compFilter(pcb,rules) = let(
 /*!
  * PCB engine.
  *
+ * __Runtime context__
+ *
+ * - $fl_tolerance  - used during FL_CUTOUT operations
+ *
  * __children context:__
  *
  * - complete hole context (see also fl_hole_Context{})
@@ -487,8 +491,6 @@ module fl_pcb(
   //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
   verbs=FL_ADD,
   type,
-  //! FL_CUTOUT tolerance
-  cut_tolerance=0,
   /*!
    * List of labels defining the components used during FL_ASSEMBLY and
    * FL_CUTOUT. The possible value are all the component labels defined by the
@@ -573,10 +575,6 @@ module fl_pcb(
     comps     = components ?
       fl_pcb_compFilter(type,components) :
       fl_pcb_components(type);
-    // echo(verbs=verbs, comps=[for(c=comps) c[0]]);
-
-    M         = fl_octant(octant,bbox=bbox);
-    D         = direction ? fl_direction(direction)  : I;
 
     function fl_pcb_NopHoles(nop) = let(
       pcb_t     = pcb_thickness(nop),
@@ -593,13 +591,13 @@ module fl_pcb(
     ) holes;
 
     module grid_plating() {
-    /*!
-    * Return the grid size in [cols,rows] format
-    */
-    function fl_grid_geometry(grid,size) = let(
-        cols  = is_undef(grid[2]) ? round((size.x - 2 * grid.x) / inch(0.1))  : grid[2] - 1,
-        rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
-      ) [cols,rows];
+      /*!
+      * Return the grid size in [cols,rows] format
+      */
+      function fl_grid_geometry(grid,size) = let(
+          cols  = is_undef(grid[2]) ? round((size.x - 2 * grid.x) / inch(0.1))  : grid[2] - 1,
+          rows  = is_undef(grid[3]) ? round((size.y - 2 * grid.y) / inch(0.1))  : grid[3] - 1
+        ) [cols,rows];
 
       t               = pcb_t;
       plating         = 0.1;
@@ -653,8 +651,15 @@ module fl_pcb(
           }
           do_layout("components")
             if ($comp_subtract!=undef) {
-              // TODO: either extend to all the engines once sure FL_FOOTPRINT is implemented for all of them or eliminate it and use dxf
-              if ($comp_engine==FL_USB_NS) fl_USB(verbs=FL_FOOTPRINT,type=$comp_type,direction=$comp_direction,tolerance=$comp_subtract);
+              /*
+               * TODO: either extend to all the engines once sure FL_FOOTPRINT
+               * is implemented for all of them or eliminate it and use dxf
+               */
+              /*
+               * FIXME: fl_USB{} doesn't have a «tolerance» parameter
+               */
+              if ($comp_engine==FL_USB_NS)
+                fl_USB(verbs=FL_FOOTPRINT,type=$comp_type,direction=$comp_direction/* ,tolerance=$comp_subtract */);
             }
         if (holes)
           fl_holes(holes,[-X,+X,-Y,+Y,-Z,+Z],pcb_t);
@@ -675,7 +680,7 @@ module fl_pcb(
     module context() {
       $pcb_radius = radius;
       $pcb_thick  = pcb_t;
-      $pcb_verb   = $verb;
+      $pcb_verb   = $this_verb;
       children();
     }
 
@@ -755,29 +760,29 @@ module fl_pcb(
         // echo(str("fl_pcb{} do_cutout{} trigger{",$comp_engine,"} cut_thick=",cut_thick))
 
         if ($comp_engine==FL_USB_NS)
-          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_direction=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
+          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_direction=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
         else if ($comp_engine==FL_HDMI_NS)
-          fl_hdmi(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_hdmi(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_JACK_NS)
-          fl_jack(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_jack(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_ETHER_NS)
-          fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,cut_direction=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction);
+          fl_ether(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,cut_direction=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_PHDR_NS) let(
             thick = bbox[1].z+cut_thick
-          ) fl_pinHeader(FL_CUTOUT,$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
+          ) fl_pinHeader(FL_CUTOUT,$comp_type,cut_thick=thick,cut_tolerance=$fl_tolerance,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_TRIM_NS) let(
             sz    = fl_bb_size($comp_type),
             thick = bbox[1].z-sz.y+cut_thick
-          ) fl_trimpot(FL_CUTOUT,type=$comp_type,cut_thick=thick,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,direction=$comp_direction,octant=$comp_octant);
+          ) fl_trimpot(FL_CUTOUT,type=$comp_type,cut_thick=thick,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,direction=$comp_direction,octant=$comp_octant);
         else if ($comp_engine==FL_SD_NS)
-          fl_sd_usocket(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick+2,cut_tolerance=cut_tolerance,octant=$comp_octant,direction=$comp_direction);
+          fl_sd_usocket(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick+2,cut_tolerance=$fl_tolerance,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_SWT_NS)
-          fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_HS_NS)
           // TODO: implement a rationale for heat-sinks cut-out operations
           fl_heatsink(FL_CUTOUT,type=$comp_type,cut_direction=fl_comp_actualCuts(cut_direction),cut_thick=cut_thick-$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_GENERIC_NS)
-          fl_generic_vitamin(FL_CUTOUT,$comp_type,thick=cut_thick-$comp_drift,cut_tolerance=cut_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_generic_vitamin(FL_CUTOUT,$comp_type,thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else
           assert(false,str("Unknown engine ",$comp_engine));
       }
@@ -800,60 +805,62 @@ module fl_pcb(
       }
     }
 
+    // FIXME: currently $fl_tolerance in dxf based pcbs is applied only on
+    // Z-axis
     module do_fprint() {
-      translate(-Z(pcb_t)) linear_extrude(pcb_t)
-        if (dxf)
-          fl_importDxf(file=dxf,layer="0");
-        else
-          translate(bbox[0])
-            fl_square(corners=radius,size=[size.x,size.y],quadrant=+X+Y,$FL_ADD=$FL_FOOTPRINT);
+      translate(-Z(pcb_t+$fl_tolerance))
+        linear_extrude(pcb_t+2*$fl_tolerance)
+          if (dxf)
+            fl_importDxf(file=dxf,layer="0");
+          else
+            translate(bbox[0]-$fl_tolerance*[1,1])
+              fl_square(corners=radius,size=[size.x,size.y]+2*$fl_tolerance*[1,1],quadrant=+X+Y,$FL_ADD=$FL_FOOTPRINT);
     }
 
-    fl_manage(verbs,M,D) {
-      if ($verb==FL_ADD) {
-        do_symbols(debug,conns,holes);
-        fl_modifier($modifier) do_add();
+    if ($verb==FL_ADD) {
+      do_symbols(debug,conns,holes);
+      do_add();
 
-      } else if ($verb==FL_ASSEMBLY) {
-        fl_modifier($modifier) do_assembly();
+    } else if ($verb==FL_ASSEMBLY)
+      do_assembly();
 
-      } else if ($verb==FL_AXES) {
-        fl_modifier($FL_AXES)
-          fl_doAxes(size,direction,debug);
+    else if ($verb==FL_AXES)
+      fl_doAxes(size,direction,debug);
 
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($modifier) fl_bb_add(bbox);
+    else if ($verb==FL_BBOX)
+      fl_bb_add(bbox);
 
-      } else if ($verb==FL_CUTOUT) {
-        fl_modifier($modifier) do_cutout();
+    else if ($verb==FL_CUTOUT)
+      do_cutout();
 
-      } else if ($verb==FL_DRILL) {
-        fl_modifier($modifier) do_drill();
+    else if ($verb==FL_DRILL)
+      do_drill();
 
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($modifier) do_fprint();
+    else if ($verb==FL_FOOTPRINT)
+      do_fprint();
 
-      } else if ($verb==FL_LAYOUT) {
-        fl_modifier($modifier) do_layout("holes")
-          children();
+    else if ($verb==FL_LAYOUT)
+      do_layout("holes")
+        children();
 
-      } else if ($verb==FL_MOUNT) {
-        fl_modifier($modifier) do_mount();
+    else if ($verb==FL_MOUNT)
+      do_mount();
 
-      } else if ($verb==FL_PAYLOAD) {
-        fl_modifier($modifier) do_payload();
+    else if ($verb==FL_PAYLOAD)
+      do_payload();
 
-      } else
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    }
+    else
+      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
   }
 
   if (fl_optProperty(type,fl_engine()[0])==FL_PCB_ENGINE_FRAME)
-    fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=cut_tolerance,components=components,cut_direction=cut_direction,debug=debug,direction=direction,octant=octant)
+    fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=$fl_tolerance,components=components,cut_direction=cut_direction,debug=debug,direction=direction,octant=octant)
       children();
-  else {
-    native() children();
-  }
+  else
+    fl_polymorph(verbs,type,octant,direction,debug)
+      native()
+        children();
+
 }
 
 /*!
@@ -1250,7 +1257,7 @@ module fl_pcb_frame(
   }
 
   module do_cutout() {
-    fl_pcb(FL_CUTOUT,pcb,cut_tolerance=cut_tolerance,components=components,cut_direction=cut_direction,thick=thick,debug=debug, direction=direction, octant=octant);
+    fl_pcb(FL_CUTOUT,pcb,$fl_tolerance=cut_tolerance,components=components,cut_direction=cut_direction,thick=thick,debug=debug, direction=direction, octant=octant);
   }
 
   module do_drill() {
