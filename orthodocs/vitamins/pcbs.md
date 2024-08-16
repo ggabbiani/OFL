@@ -459,9 +459,13 @@ fl_pcb_thick(type,value)
 
 __Syntax:__
 
-    fl_pcb(verbs=FL_ADD,type,cut_tolerance=0,components,cut_direction,thick=0,lay_direction=[+Z],octant,direction,debug)
+    fl_pcb(verbs=FL_ADD,type,components,cut_direction,thick=0,lay_direction=[+Z],octant,direction,debug)
 
 PCB engine.
+
+__Runtime context__
+
+- $fl_tolerance  - used during FL_CUTOUT operations
 
 __children context:__
 
@@ -475,9 +479,6 @@ __Parameters:__
 
 __verbs__  
 FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
-
-__cut_tolerance__  
-FL_CUTOUT tolerance
 
 __components__  
 List of labels defining the components used during FL_ASSEMBLY and

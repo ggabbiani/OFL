@@ -28,6 +28,7 @@ graph TD
     A10
     A13 --o|include| A10
     A13 --o|use| A3
+    A13 --o|use| A8
     A22[foundation/dimensions] --o|include| A2
     A22 --o|use| A5
     A22 --o|use| A3

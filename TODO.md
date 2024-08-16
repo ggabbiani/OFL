@@ -121,6 +121,8 @@
 - [x] added dimension line management
 - [ ] add dimension lines to relevant tests (see artifacts/joints.scad)
 - [ ] fix bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
+- [ ] implement everywhere the multi-verb global parameters (ex.
+  fl_parm_tolerance() and fl_parm_thickness())
 
 
 

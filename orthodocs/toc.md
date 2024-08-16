@@ -577,6 +577,8 @@
 - [fl_parm_debug (function)](foundation/core.md#function-fl_parm_debug)
 - [fl_parm_dimensions (function)](foundation/core.md#function-fl_parm_dimensions)
 - [fl_parm_labels (function)](foundation/core.md#function-fl_parm_labels)
+- [fl_parm_MultiVerb (function)](foundation/core.md#function-fl_parm_multiverb)
+- [fl_parm_multiverb (function)](foundation/core.md#function-fl_parm_multiverb)
 - [fl_parm_Octant (function)](foundation/core.md#function-fl_parm_octant)
 - [fl_parm_Quadrant (function)](foundation/2d-engine.md#function-fl_parm_quadrant)
 - [fl_parm_SignedPair (function)](foundation/core.md#function-fl_parm_signedpair)
