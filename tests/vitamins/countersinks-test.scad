@@ -41,6 +41,7 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
@@ -67,9 +68,9 @@ DIR_R       = 0;        // [-360:360]
 
 $fl_tolerance = 0;  // [0:0.1:1]
 $fl_thickness = 0;  // [0:0.1:5]
-TYPE          = "ISO";  // [ISO,UNI]
+TYPE           = "ISO";  // [ISO,UNI]
 // 'ALL' or nominal size for single display
-SIZE          = "ALL";
+SIZE           = "ALL";
 
 
 /* [Hidden] */
