@@ -267,8 +267,10 @@ module fl_USB(
             //   wrap();
 
     } else if ($verb==FL_FOOTPRINT) {
-      assert(tolerance!=undef,tolerance);
-      fl_modifier($modifier) fl_bb_add(bbox+tolerance*[[-1,-1,-1],[1,1,1]]);
+      // FIXME: re-implement «tolerance» parameter by $fl_tolerance special
+      // variable
+      // assert(tolerance!=undef,tolerance);
+      fl_modifier($modifier) fl_bb_add(bbox/* +tolerance*[[-1,-1,-1],[1,1,1]] */);
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
