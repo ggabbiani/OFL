@@ -127,7 +127,7 @@ fl_trace("faces",faces);
 
 module medium() {
   if (medium==FL_PCB_RPI4)
-    fl_pcb($cad_verbs,medium,thick=$cad_thick+T_NIL,cut_direction=faces,cut_tolerance=CUT_TOLERANCE)
+    fl_pcb($cad_verbs,medium,thick=$cad_thick+T_NIL,cut_direction=faces,$fl_tolerance=CUT_TOLERANCE)
       children();
   else if (medium==FL_HD_EVO860)
     fl_hd($cad_verbs,medium,thick=$cad_thick+T_NIL,lay_direction=faces,dri_tolerance=$cad_tolerance)
