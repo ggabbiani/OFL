@@ -53,13 +53,6 @@ let(
 
 let(
   $this_verb    = FL_ADD,
-  $fl_tolerance = 0.2,
-  attended      = 0.2,
-  result        = fl_parm_tolerance(-1)
-) assert(result==attended,result);
-
-let(
-  $this_verb    = FL_ADD,
   $fl_tolerance = fl_parm_MultiVerb(0.2),
   attended      = 0.2,
   result        = fl_parm_tolerance(-1)
@@ -89,6 +82,33 @@ let(
 let(
   $this_verb    = FL_DRILL,
   $fl_tolerance = undef,
+  attended      = 0,
+  result        = fl_parm_tolerance(0)
+) assert(result==attended,result);
+
+// **** default values order **************************************************
+
+let(
+  $this_verb    = FL_DRILL,
+  $fl_tolerance = fl_parm_MultiVerb([
+    [FL_ADD,        .1],
+    [FL_FOOTPRINT,  .2],
+    ["*",           .3]
+  ]),
+  attended      = 0.3,
+  result        = fl_parm_tolerance()
+) assert(result==attended,result);
+
+let(
+  $this_verb    = FL_DRILL,
+  // $fl_tolerance = undef,
+  attended      = 0.4,
+  result        = fl_parm_tolerance(.4)
+) assert(result==attended,result);
+
+let(
+  $this_verb    = FL_DRILL,
+  // $fl_tolerance = undef,
   attended      = 0,
   result        = fl_parm_tolerance()
 ) assert(result==attended,result);

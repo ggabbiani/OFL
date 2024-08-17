@@ -1532,8 +1532,26 @@ function fl_parm_debug(debug) =
  * | FL_FOOTPRINT     | 0.2   |
  * | all other cases  | 0.05  |
  *
- * TODO: implement a default mechanism at CONSTRUCTOR level, overriding the
- * client one.
+ * NOTE: a special key "*" can be used in the constructor to define a default
+ * value for non matched verbs. This defaults will override the «default»
+ * parameter passed to client function (like fl_parm_tolerance() or
+ * fl_parm_thickness()). If the previous example is modified in this way:
+ *
+ *     tolerance  = fl_parm_MultiVerb([
+ *       [FL_DRILL,     0.1 ],
+ *       [FL_FOOTPRINT, 0.2 ],
+ *       ["*",          0.01]
+ *     ]);
+ *     ...
+ *     fl_engine(verbs=[FL_DRILL,FL_FOOTPRINT],tolerance=tolerance,...);
+ *
+ * the resulting values will be:
+ *
+ * | verb             | value |
+ * | ----             | ----  |
+ * | FL_DRILL         | 0.1   |
+ * | FL_FOOTPRINT     | 0.2   |
+ * | all other cases  | 0.01  |
  */
 function fl_parm_MultiVerb(value) =
   is_list(value) ?
@@ -1544,12 +1562,27 @@ function fl_parm_MultiVerb(value) =
  * Multi valued verb-dependent parameter.
  *
  * See fl_parm_MultiVerb() for details.
+ *
+ * __NOTE__: this function asserts «value» must well formed
  */
-function fl_parm_multiverb(value, default) = let(
-  verb=is_undef($verb) ? $this_verb : $verb
-) is_list(value) ?
-    assert(value[0]=="MULTI-VERB",value) fl_optProperty(value, verb, default=default)
-    : value;
+function fl_parm_multiverb(
+  //! parameter value
+  value,
+  //! default value eventually overridden by default key/value ("*",default value)
+  default) = let(
+  verb    = is_undef($verb) ? $this_verb : $verb,
+  value   =
+    is_undef(value) ?
+      undef :
+      is_list(value) ?
+        assert(value[0]=="MULTI-VERB",value) [for(i=[1:len(value)-1]) value[i]] :
+        value,
+  default = is_undef(value) ? default :  fl_optProperty(value, "*", default=default)
+) is_undef(value) ?
+    default :
+    is_list(value) ?
+      assert(verb) fl_optProperty(value, verb, default=default) :
+      value;
 
 /*!
  * Multi valued verb-dependent tolerance parameter.
@@ -1557,7 +1590,7 @@ function fl_parm_multiverb(value, default) = let(
  * See fl_parm_multiverb() for details.
  */
 function fl_parm_tolerance(default=0) =
-  fl_parm_multiverb(is_undef($fl_tolerance)?default:$fl_tolerance,default);
+  fl_parm_multiverb(is_undef($fl_tolerance)?undef:$fl_tolerance,default);
 
 /*!
  * Multi valued verb-dependent thickness parameter.
@@ -1565,7 +1598,7 @@ function fl_parm_tolerance(default=0) =
  * See fl_parm_multiverb() for details.
  */
 function fl_parm_thickness(default=0) =
-  fl_parm_multiverb(is_undef($fl_thickness)?default:$fl_thickness,default);
+  fl_parm_multiverb(is_undef($fl_thickness)?undef:$fl_thickness,default);
 
 //**** Common parameter helpers ***********************************************
 
