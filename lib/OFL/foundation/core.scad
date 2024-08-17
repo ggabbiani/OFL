@@ -1531,6 +1531,9 @@ function fl_parm_debug(debug) =
  * | FL_DRILL         | 0.1   |
  * | FL_FOOTPRINT     | 0.2   |
  * | all other cases  | 0.05  |
+ *
+ * TODO: implement a default mechanism at CONSTRUCTOR level, overriding the
+ * client one.
  */
 function fl_parm_MultiVerb(value) =
   is_list(value) ?
@@ -1538,9 +1541,9 @@ function fl_parm_MultiVerb(value) =
     value;
 
 /*!
- * Multi valued verb-dependent tolerance parameter.
+ * Multi valued verb-dependent parameter.
  *
- * See fl_parm_multiverb() for details.
+ * See fl_parm_MultiVerb() for details.
  */
 function fl_parm_multiverb(value, default) = let(
   verb=is_undef($verb) ? $this_verb : $verb
