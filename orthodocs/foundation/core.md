@@ -1666,6 +1666,27 @@ with the following resulting values:
 | FL_FOOTPRINT     | 0.2   |
 | all other cases  | 0.05  |
 
+NOTE: a special key "*" can be used in the constructor to define a default
+value for non matched verbs. This defaults will override the «default»
+parameter passed to client function (like [fl_parm_tolerance()](#function-fl_parm_tolerance) or
+[fl_parm_thickness()](#function-fl_parm_thickness)). If the previous example is modified in this way:
+
+    tolerance  = fl_parm_MultiVerb([
+      [FL_DRILL,     0.1 ],
+      [FL_FOOTPRINT, 0.2 ],
+      ["*",          0.01]
+    ]);
+    ...
+    fl_engine(verbs=[FL_DRILL,FL_FOOTPRINT],tolerance=tolerance,...);
+
+the resulting values will be:
+
+| verb             | value |
+| ----             | ----  |
+| FL_DRILL         | 0.1   |
+| FL_FOOTPRINT     | 0.2   |
+| all other cases  | 0.01  |
+
 
 ---
 
@@ -1787,9 +1808,20 @@ __Syntax:__
 fl_parm_multiverb(value,default)
 ```
 
-Multi valued verb-dependent tolerance parameter.
+Multi valued verb-dependent parameter.
 
-See [fl_parm_multiverb()](#function-fl_parm_multiverb) for details.
+See [fl_parm_MultiVerb()](#function-fl_parm_multiverb) for details.
+
+__NOTE__: this function asserts «value» must well formed
+
+
+__Parameters:__
+
+__value__  
+parameter value
+
+__default__  
+default value eventually overridden by default key/value ("*",default value)
 
 
 ---
