@@ -152,7 +152,6 @@ module fl_magnet(
   bbox          = fl_bb_corners(type);
   name          = fl_name(type);
   Mscrew        = T(+Z(h));
-  screw_thick   = h + $fl_thickness;
 
   module do_add() {
     module cyl_engine() {
@@ -212,7 +211,7 @@ module fl_magnet(
   }
 
   module engine() let(
-
+    screw_thick   = h+$fl_thickness
   ) if ($verb==FL_ADD) {
         fl_modifier($modifier) do_add();
 
@@ -242,7 +241,7 @@ module fl_magnet(
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
 
-  fl_polymorph(verbs,type,octant,direction)
+  fl_polymorph(verbs,type,octant,direction) echo($fl_thickness=$fl_thickness)
     engine()
       children();
 }
