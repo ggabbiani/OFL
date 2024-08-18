@@ -118,15 +118,17 @@ FL_MAG_DICT = [
   FL_MAG_RECT_10x5x2,
 ];
 
+/*!
+ * Runtime environment:
+ *
+ * - $fl_tolerance: modify the object size during FL_FOOTPRINT
+ * - $fl_thickness: thickness for screws during FL_DRILL and FL_MOUNT
+ */
 module fl_magnet(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   //! magnet object
   type,
-  //! quantity to add to the footprint dimensions
-  fp_gross    = 0,
-  //! thickness for screws
-  thick       = 0,
   //! nominal screw overloading
   screw,
   //! desired direction [director,rotation], native direction when undef
@@ -148,28 +150,19 @@ module fl_magnet(
   cs_offset     = h_cs!=undef   ? h-h_cs : undef;
   screw_offset  = screw!=undef  ? h-(h_cs-screw_socket_af(screw)) : undef;
   bbox          = fl_bb_corners(type);
-  size          = bbox[1]-bbox[0];
   name          = fl_name(type);
-  D             = direction!=undef ? fl_direction(direction) : I;
-  M             = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
   Mscrew        = T(+Z(h));
-  screw_thick   = h + thick;
-
-  fl_trace("direction:",direction);
-  fl_trace("D:",D);
-  fl_trace("Bounding Box:",bbox);
+  screw_thick   = h + $fl_thickness;
 
   module do_add() {
     module cyl_engine() {
       d = fl_mag_d(type);
 
       module mag_M4_cs_d32x6() {
-        // d=32;
-        fl_trace("size",size);
-        shell_r=size.z/2;
-        cyl_h=size.z/2;
-        shell_t=2;
-        little=0.2;
+        shell_r = $this_size.z/2;
+        cyl_h   = $this_size.z/2;
+        shell_t = 2;
+        little  = 0.2;
         difference() {
           union() {
             translate([0,0,shell_r])
@@ -184,8 +177,6 @@ module fl_magnet(
         translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d-2*shell_t-2*little);
       }
 
-      fl_trace("FL_ADD",$FL_ADD);
-      fl_trace("name",name);
       fl_color(color) difference() {
         if (name=="mag_M4_cs_d32x6")
           mag_M4_cs_d32x6();
@@ -193,7 +184,7 @@ module fl_magnet(
           fl_cylinder(d=d, h=h, octant=+Z);
 
         if (cs)
-          translate(+Z(h+NIL)) fl_countersink(FL_ADD,type=cs,$fl_tolerance=0.1);
+          translate(+Z(h+NIL)) fl_countersink(FL_FOOTPRINT,type=cs,$fl_tolerance=0.1,$FL_FOOTPRINT=$FL_ADD);
 
         if (screw)
           do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL,$FL_DRILL=$FL_ADD);
@@ -201,7 +192,7 @@ module fl_magnet(
     }
 
     module quad_engine() {
-      fl_color("silver") fl_cube(size=size,octant=+Z);
+      fl_color("silver") fl_cube(size=$this_size,octant=+Z);
     }
 
     if (engine=="cyl") cyl_engine();
@@ -210,9 +201,9 @@ module fl_magnet(
   }
 
   module do_footprint() {
-    translate(-Z(fp_gross))
-      if (engine=="cyl") let(d = fl_mag_d(type)) fl_cylinder(d=d+2*fp_gross, h=h+2*fp_gross,octant=+Z);
-      else if (engine=="quad") fl_cube(size=size+fp_gross*[2,2,2],octant=+Z);
+    translate(-Z($fl_tolerance)) let($FL_ADD=$FL_FOOTPRINT)
+      if (engine=="cyl") let(d = fl_mag_d(type)) fl_cylinder(d=d+2*($fl_tolerance+NIL), h=h+2*($fl_tolerance+NIL),octant=+Z);
+      else if (engine=="quad") fl_cube(size=$this_size+$fl_tolerance*[2,2,2],octant=+Z);
   }
 
   module do_layout() {
@@ -220,16 +211,17 @@ module fl_magnet(
       multmatrix(Mscrew) children();
   }
 
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+  module engine() let(
+
+  ) if ($verb==FL_ADD) {
+        fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
+        fl_doAxes($this_size,direction);
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) translate(-Z(NIL)) fl_cube(size=size+Z(2*NIL),octant=+Z);
+      fl_modifier($modifier) fl_bb_add($this_bbox, auto=true);
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier)
@@ -249,5 +241,8 @@ module fl_magnet(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
-  }
+
+  fl_polymorph(verbs,type,octant,direction)
+    engine()
+      children();
 }

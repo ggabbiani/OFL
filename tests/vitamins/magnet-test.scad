@@ -71,7 +71,7 @@ DIR_R       = 0;        // [-360:360]
 // -1 for all, the ordinal dictionary member otherwise
 SHOW      = -1;   // [-1:1:5]
 // extra dimension to be added when FOOTPRINT verb is called
-FP_EXTRA  = 0;    // [0:0.1:3]
+TOLERANCE = 0;    // [0:0.1:3]
 T         = 2.5;  // [0:20]
 
 
@@ -97,7 +97,7 @@ verbs=fl_verbList([
 
 module do_test(magnet) {
   screw = fl_screw(magnet);
-  fl_magnet(verbs,magnet,fp_gross=FP_EXTRA,thick=T,octant=octant,direction=direction)
+  fl_magnet(verbs,magnet,octant=octant,direction=direction,$fl_tolerance=TOLERANCE,$fl_thickness=T)
       if (screw!=undef) fl_color("green") fl_cylinder(h=fl_thick(magnet),r=screw_radius(screw),octant=-Z);
 }
 
