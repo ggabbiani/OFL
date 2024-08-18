@@ -70,7 +70,7 @@ DIR_R       = 0;        // [-360:360]
 
 // -1 for all, the ordinal dictionary member otherwise
 SHOW      = -1;   // [-1:1:5]
-// extra dimension to be added when FOOTPRINT verb is called
+// extra dimension added when FOOTPRINT verb is called
 TOLERANCE = 0;    // [0:0.1:3]
 T         = 2.5;  // [0:20]
 
