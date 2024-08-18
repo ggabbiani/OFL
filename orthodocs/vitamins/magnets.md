@@ -147,7 +147,13 @@ fl_mag_engine(type,value)
 
 __Syntax:__
 
-    fl_magnet(verbs=FL_ADD,type,fp_gross=0,thick=0,screw,direction,octant)
+    fl_magnet(verbs=FL_ADD,type,screw,direction,octant)
+
+Runtime environment:
+
+- $fl_tolerance: modify the object size during FL_FOOTPRINT
+- $fl_thickness: thickness for screws during FL_DRILL and FL_MOUNT
+
 
 __Parameters:__
 
@@ -156,12 +162,6 @@ supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
 
 __type__  
 magnet object
-
-__fp_gross__  
-quantity to add to the footprint dimensions
-
-__thick__  
-thickness for screws
 
 __screw__  
 nominal screw overloading
