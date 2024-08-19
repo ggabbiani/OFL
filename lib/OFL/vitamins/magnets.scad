@@ -153,66 +153,70 @@ module fl_magnet(
   name          = fl_name(type);
   Mscrew        = T(+Z(h));
 
-  module do_add() {
-    module cyl_engine() {
-      d = fl_mag_d(type);
+  module engine() {
 
-      module mag_M4_cs_d32x6() {
-        shell_r = $this_size.z/2;
-        cyl_h   = $this_size.z/2;
-        shell_t = 2;
-        little  = 0.2;
-        difference() {
-          union() {
-            translate([0,0,shell_r])
-              rotate_extrude(convexity = 10)
-                translate([d/2-shell_r, 0, 0])
-                  circle(r = shell_r);
-            translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d);
-            fl_cylinder(h=cyl_h,d=d-2*shell_r);
+    module do_add() {
+      module cyl_engine() {
+        d = fl_mag_d(type);
+
+        module mag_M4_cs_d32x6() {
+          shell_r = $this_size.z/2;
+          cyl_h   = $this_size.z/2;
+          shell_t = 2;
+          little  = 0.2;
+          difference() {
+            union() {
+              translate([0,0,shell_r])
+                rotate_extrude(convexity = 10)
+                  translate([d/2-shell_r, 0, 0])
+                    circle(r = shell_r);
+              translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d);
+              fl_cylinder(h=cyl_h,d=d-2*shell_r);
+            }
+            translate(+Z(cyl_h+NIL)) fl_cylinder(h=cyl_h,d=d-2*shell_t);
           }
-          translate(+Z(cyl_h+NIL)) fl_cylinder(h=cyl_h,d=d-2*shell_t);
+          translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d-2*shell_t-2*little);
         }
-        translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d-2*shell_t-2*little);
+
+        fl_color(color) difference() {
+          if (name=="mag_M4_cs_d32x6")
+            mag_M4_cs_d32x6();
+          else
+            fl_cylinder(d=d, h=h, octant=+Z);
+
+          if (cs)
+            translate(+Z(h+NIL)) fl_countersink(FL_FOOTPRINT,type=cs,$fl_tolerance=0.1,$FL_FOOTPRINT=$FL_ADD);
+
+          if (screw)
+            do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL,$FL_DRILL=$FL_ADD);
+        }
       }
 
-      fl_color(color) difference() {
-        if (name=="mag_M4_cs_d32x6")
-          mag_M4_cs_d32x6();
-        else
-          fl_cylinder(d=d, h=h, octant=+Z);
-
-        if (cs)
-          translate(+Z(h+NIL)) fl_countersink(FL_FOOTPRINT,type=cs,$fl_tolerance=0.1,$FL_FOOTPRINT=$FL_ADD);
-
-        if (screw)
-          do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL,$FL_DRILL=$FL_ADD);
+      module quad_engine() {
+        fl_color("silver") fl_cube(size=$this_size,octant=+Z);
       }
+
+      if (engine=="cyl") cyl_engine();
+      else if (engine=="quad") quad_engine();
+      else assert(false,str("Unknown engine '",engine,"'."));
     }
 
-    module quad_engine() {
-      fl_color("silver") fl_cube(size=$this_size,octant=+Z);
+    module do_footprint() {
+      translate(-Z(tolerance_z)) let($FL_ADD=$FL_FOOTPRINT)
+        if      (engine=="cyl"  ) let(d = fl_mag_d(type)) fl_cylinder(d=d+2*(tolerance_xy+NIL), h=h+2*(tolerance_z+NIL),octant=+Z);
+        else if (engine=="quad" ) fl_cube(size=$this_size+[tolerance_xy,tolerance_xy,2*tolerance_z],octant=+Z);
     }
 
-    if (engine=="cyl") cyl_engine();
-    else if (engine=="quad") quad_engine();
-    else assert(false,str("Unknown engine '",engine,"'."));
-  }
+    module do_layout() {
+      if (screw!=undef)
+        multmatrix(Mscrew) children();
+    }
 
-  module do_footprint() {
-    translate(-Z($fl_tolerance)) let($FL_ADD=$FL_FOOTPRINT)
-      if (engine=="cyl") let(d = fl_mag_d(type)) fl_cylinder(d=d+2*($fl_tolerance+NIL), h=h+2*($fl_tolerance+NIL),octant=+Z);
-      else if (engine=="quad") fl_cube(size=$this_size+$fl_tolerance*[2,2,2],octant=+Z);
-  }
+    screw_thick   = h+$fl_thickness;
+    tolerance_xy  = is_list($fl_tolerance) ? $fl_tolerance[0] : $fl_tolerance;
+    tolerance_z   = is_list($fl_tolerance) ? $fl_tolerance[1] : $fl_tolerance;
 
-  module do_layout() {
-    if (screw!=undef)
-      multmatrix(Mscrew) children();
-  }
-
-  module engine() let(
-    screw_thick   = h+$fl_thickness
-  ) if ($verb==FL_ADD) {
+    if ($verb==FL_ADD) {
         fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_AXES) {
@@ -240,8 +244,9 @@ module fl_magnet(
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
+  }
 
-  fl_polymorph(verbs,type,octant,direction) echo($fl_thickness=$fl_thickness)
+  fl_polymorph(verbs,type,octant,direction)
     engine()
       children();
 }
