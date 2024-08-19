@@ -1572,16 +1572,14 @@ function fl_parm_multiverb(
   default
 ) = let(
   verb    = is_undef($verb) ? $this_verb : $verb,
-  value   =
-    is_undef(value) ?
-      undef :
-      is_list(value) ?
-        assert(value[0]=="MULTI-VERB",value) [for(i=[1:len(value)-1]) value[i]] :
-        value,
-  default = is_undef(value) ? default :  fl_optProperty(value, "*", default=default)
+  default = is_undef(value) ?
+    default :
+    is_list(value) && value[0]=="MULTI-VERB" ?
+      fl_optProperty([for(i=[1:len(value)-1]) value[i]], "*", default=default) :
+      default
 ) is_undef(value) ?
     default :
-    is_list(value) ?
+    is_list(value) && value[0]=="MULTI-VERB" ?
       assert(verb) fl_optProperty(value, verb, default=default) :
       value;
 
