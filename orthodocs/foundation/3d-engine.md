@@ -823,6 +823,25 @@ desired direction in axis-angle representation [axis,rotation about]
 
 ---
 
+### module fl_direction_extrude
+
+__Syntax:__
+
+    fl_direction_extrude(direction,length,convexity=10)
+
+Arbitrary axis extrusion with rotation along extrusion axis
+
+FIXME: currently rotation along X-axis extrusion is broken
+
+
+__Parameters:__
+
+__direction__  
+direction in [axis,angle] representation
+
+
+---
+
 ### module fl_doAxes
 
 __Syntax:__
@@ -987,7 +1006,7 @@ __Syntax:__
 
     fl_linear_extrude(direction,length,convexity=10)
 
-Extrusion along arbitrary axis with eventual rotation
+Z-Axis extrusion is oriented along arbitrary axis/rotation
 
 
 __Parameters:__

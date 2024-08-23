@@ -33,7 +33,7 @@ __Default:__
 
 __Default:__
 
-    [FL_MAG_M3_CS_D10x2,FL_MAG_D10x5,FL_MAG_M3_CS_D10x5,FL_MAG_M4_CS_D32x6,FL_MAG_RECT_10x5x1,FL_MAG_RECT_10x5x2,]
+    [FL_MAG_M3_CS_D10x2,FL_MAG_D10x5,FL_MAG_M3_CS_D10x5,FL_MAG_M4_CS_D10x5,FL_MAG_M4_CS_D32x6,FL_MAG_RECT_10x5x1,FL_MAG_RECT_10x5x2,]
 
 ---
 
@@ -50,6 +50,14 @@ __Default:__
 __Default:__
 
     fl_Magnet(name="mag_M3_cs_d10x5",description="M3 countersink magnet d10x5mm 2.0kg",d=10,thick=5,cs=FL_CS_UNI_M3,csh=3,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B001TOJESK/"],])
+
+---
+
+### variable FL_MAG_M4_CS_D10x5
+
+__Default:__
+
+    fl_Magnet(name="mag_M4_cs_d10x5",description="M4 countersink magnet d10x5mm",d=10,thick=5,cs=FL_CS_UNI_M4,csh=3,screw=M4_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B09QQJNYVN"],])
 
 ---
 
@@ -153,6 +161,10 @@ Runtime environment:
 
 - $fl_tolerance: modify the object size during FL_FOOTPRINT
 - $fl_thickness: thickness for screws during FL_DRILL and FL_MOUNT
+
+Children environment:
+
+- $mag_h: magnet height
 
 
 __Parameters:__
