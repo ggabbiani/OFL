@@ -570,8 +570,9 @@ function fl_align(from,to) =
   assert(norm(to)>0)
 
   let(u1 = fl_versor(from),u2 = fl_versor(to))
-  u1==u2 ? FL_I :
-  u1==-u2 ? fl_S(-1) : // in this case the algorithm would fails, so we use a simpler way
+  u1==u2  ? FL_I :
+  // TODO: why this seems to fix previous problem with fl_S(-1)?!
+  u1==-u2 ? fl_S([-1,-1,1]) : // in this case the algorithm would fails, so we use a simpler way
   let(
     axis  = cross( u1, u2 ), // cross product == prodotto vettoriale: normale al piano [u1,u2]
     cosA  = u1 * u2, // dot product == prodotto scalare: Σa[i]*b[i] nullo se u1 e u2 sono ortogonali
