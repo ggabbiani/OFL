@@ -20,77 +20,77 @@ all:	$(PICTURES)
 clean:
 	@rm -f *.png *.deps
 
-pic-0.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json
+pic-0.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json $(LIB_ROOT)/vitamins/magnets.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-1.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json
+pic-1.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json $(LIB_ROOT)/vitamins/magnets.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-2.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json
+pic-2.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json $(LIB_ROOT)/vitamins/magnets.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-3.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json
+pic-3.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json $(LIB_ROOT)/vitamins/magnets.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-4.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json
+pic-4.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json $(LIB_ROOT)/vitamins/magnets.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-5.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json
+pic-5.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json $(LIB_ROOT)/vitamins/magnets.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-6.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json
+pic-6.png: $(TESTS)/vitamins/magnet-test.scad $(TESTS)/vitamins/magnet-test.json $(LIB_ROOT)/vitamins/magnets.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-7.png: $(TESTS)/vitamins/spdt-test.scad $(TESTS)/vitamins/spdt-test.json
+pic-7.png: $(TESTS)/vitamins/spdt-test.scad $(TESTS)/vitamins/spdt-test.json $(LIB_ROOT)/vitamins/spdts.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-8.png: $(TESTS)/vitamins/spdt-test.scad $(TESTS)/vitamins/spdt-test.json
+pic-8.png: $(TESTS)/vitamins/spdt-test.scad $(TESTS)/vitamins/spdt-test.json $(LIB_ROOT)/vitamins/spdts.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-pic-9.png: $(TESTS)/vitamins/spdt-test.scad $(TESTS)/vitamins/spdt-test.json
+pic-9.png: $(TESTS)/vitamins/spdt-test.scad $(TESTS)/vitamins/spdt-test.json $(LIB_ROOT)/vitamins/spdts.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-torus.png: $(TESTS)/foundation/torus-test.scad $(TESTS)/foundation/torus-test.json
+torus.png: $(LIB_ROOT)/vitamins/spdts.scad $(TESTS)/foundation/torus-test.scad $(TESTS)/foundation/torus-test.json
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@
