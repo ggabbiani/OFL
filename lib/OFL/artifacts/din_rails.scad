@@ -2,7 +2,7 @@
  * A DIN rail is a metal rail of a standard type widely used for mounting
  * circuit breakers and industrial control equipment inside equipment racks.
  * These products are typically made from cold rolled carbon steel sheet with a
- * zinc-plated or chromated bright surface finish. Although metallic, they are
+ * zinc-plated or chromed bright surface finish. Although metallic, they are
  * meant only for mechanical support and are not used as a busbar to conduct
  * electric current, though they may provide a chassis grounding connection.
  *
@@ -331,12 +331,12 @@ module fl_DIN_rail(
     // debug parameters management
     translate(+Z(size.z))
       if (!footprint) {
-        if (fl_parm_labels(debug))
+        if ($dbg_Labels)
           for(i=[0:len(points)-1])
             let(p=points[i])
               translate([p.x,p.y])
                 fl_label(string=str("P[",i,"]"),size=1);
-        if (fl_parm_symbols(debug))
+        if ($dbg_Symbols)
           for(p=points)
             fl_sym_point(point=[p.x,p.y], size=0.25);
       }
@@ -354,7 +354,7 @@ module fl_DIN_rail(
               fl_punch(punch,length,thick)
                 fl_DIN_puncher();
         }
-      if (fl_parm_dimensions(debug)) let(
+      if ($dbg_Dimensions) let(
           $dim_object = this,
           $dim_width  = is_undef($dim_width) ? thick/5 : $dim_width,
           $dim_gap    = is_undef($dim_gap) ? 7*$dim_width : $dim_gap

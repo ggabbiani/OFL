@@ -102,7 +102,11 @@ module fl_polymorph(
       $this_bbox      = bbox,
       $this_direction = direction,
       $this_octant    = octant,
+
       $this_debug     = debug,
+      $dbg_Dimensions = fl_parm_dimensions(debug),
+      $dbg_Symbols    = fl_parm_symbols(debug),
+      $dbg_Labels     = fl_parm_labels(debug),
 
       $fl_tolerance   = fl_parm_tolerance(),
       $fl_thickness   = fl_parm_thickness()
