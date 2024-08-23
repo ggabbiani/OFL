@@ -1,5 +1,5 @@
 /*
- *
+ * OFL linear vs directional extrusion tests
  *
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
@@ -12,10 +12,9 @@
  */
 
 
-include <../../lib/OFL/foundation/unsafe_defs.scad>
+include <../../lib/OFL/foundation/core.scad>
 
 use <../../lib/OFL/foundation/3d-engine.scad>
-
 
 
 $fn            = 50;           // [3:100]
@@ -33,11 +32,15 @@ SHOW_DIMENSIONS = false;
 
 
 
+
+
+
 /* [EXTRUSION] */
 
 EXTRUSION_TYPE  = "linear"; // [none,linear,directional]
 XTR_AXIS        = [0,0,1];  // [-1:0.1:+1]
 XTR_ROT         = 0;        // [-360:+360]
+
 
 /* [Hidden] */
 
