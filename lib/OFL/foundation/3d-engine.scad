@@ -12,6 +12,7 @@ include <2d-engine.scad>
 include <type_trait.scad>
 
 use <polymorphic-engine.scad>
+use <../../NopSCADlib/utils/maths.scad>
 
 module fl_doAxes(
   size,
@@ -1056,7 +1057,7 @@ function fl_3d_axisIsSet(
         fl_isInAxisList(axis,fl_list_tail(list,-1));
 
 /*!
- * Extrusion along arbitrary axis with eventual rotation
+ * Z-Axis extrusion is oriented along arbitrary axis/rotation
  */
 module fl_linear_extrude(
   //! direction in [axis,angle] representation
@@ -1068,6 +1069,26 @@ module fl_linear_extrude(
   multmatrix(D)
     linear_extrude(height=length,convexity=convexity)
       children();
+}
+
+/*!
+ * Arbitrary axis extrusion with rotation along extrusion axis
+ *
+ * FIXME: currently rotation along X-axis extrusion is broken
+ */
+module fl_direction_extrude(
+  //! direction in [axis,angle] representation
+  direction,
+  length,
+  convexity = 10,
+) {
+  D = direction ? fl_direction(direction) : I;
+  E = direction ? invert(fl_direction([direction[0],0])) : I;
+  multmatrix(D)
+    linear_extrude(height=length,convexity=convexity)
+      projection()
+        multmatrix(E)
+          children();
 }
 
 /*!
