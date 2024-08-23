@@ -69,7 +69,7 @@ DIR_R       = 0;        // [-360:360]
 /* [Magnet] */
 
 // -1 for all, the ordinal dictionary member otherwise
-SHOW      = -1;   // [-1:1:5]
+SHOW      = -1;   // [-1:1:6]
 // extra dimension added when FOOTPRINT verb is called
 TOLERANCE_XY  = 0;    // [0:0.1:3]
 TOLERANCE_Z   = 0;    // [0:0.1:3]

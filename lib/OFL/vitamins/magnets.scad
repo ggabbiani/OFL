@@ -79,6 +79,17 @@ FL_MAG_M3_CS_D10x5 = fl_Magnet(
     ]
 );
 
+FL_MAG_M4_CS_D10x5 = fl_Magnet(
+  name        = "mag_M4_cs_d10x5",
+  description = "M4 countersink magnet d10x5mm",
+  d           = 10, thick = 5,
+  cs          = FL_CS_UNI_M4, csh = 3,
+  screw       = M4_cs_cap_screw,
+  vendors     = [
+      ["Amazon", "https://www.amazon.it/gp/product/B09QQJNYVN"],
+    ]
+);
+
 FL_MAG_M4_CS_D32x6  = fl_Magnet(
   name        = "mag_M4_cs_d32x6",
   description = "M4 countersink magnet d32x6mm 29.0kg",
@@ -113,6 +124,7 @@ FL_MAG_DICT = [
   FL_MAG_M3_CS_D10x2,
   FL_MAG_D10x5,
   FL_MAG_M3_CS_D10x5,
+  FL_MAG_M4_CS_D10x5,
   FL_MAG_M4_CS_D32x6,
   FL_MAG_RECT_10x5x1,
   FL_MAG_RECT_10x5x2,
@@ -123,6 +135,10 @@ FL_MAG_DICT = [
  *
  * - $fl_tolerance: modify the object size during FL_FOOTPRINT
  * - $fl_thickness: thickness for screws during FL_DRILL and FL_MOUNT
+ *
+ * Children environment:
+ *
+ * - $mag_h: magnet height
  */
 module fl_magnet(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -207,10 +223,10 @@ module fl_magnet(
         else if (engine=="quad" ) fl_cube(size=$this_size+[tolerance_xy,tolerance_xy,2*tolerance_z],octant=+Z);
     }
 
-    module do_layout() {
+    module do_layout() let($mag_h=h)
       if (screw!=undef)
         multmatrix(Mscrew) children();
-    }
+
 
     screw_thick   = h+$fl_thickness;
     tolerance_xy  = is_list($fl_tolerance) ? $fl_tolerance[0] : $fl_tolerance;
