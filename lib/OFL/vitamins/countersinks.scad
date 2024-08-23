@@ -197,7 +197,7 @@ module fl_countersink(
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$this_verb));
 
-  fl_polymorph(verbs,type,octant,direction,debug)
+  fl_polymorph(verbs,type,octant,direction)
     engine()
       children();
 }
