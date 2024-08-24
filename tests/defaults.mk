@@ -6,7 +6,7 @@ error%-test.echo : error%-test.scad
 
 warn%-test.echo : warn%-test.scad
 	$(call target-prologue)
-	@. $(realpath $(@:.echo=.conf)) && $(BIN)/assert.py fail $(BIN)/make-test.py --verbosity 4 $$CAMERA $(<:.scad=)
+	@. $(realpath $(@:.echo=.conf)) && $(BIN)/assert.py fail $(BIN)/make-test.py $$CAMERA $(<:.scad=)
 	$(call target-epilogue)
 
 %.echo : %.scad
