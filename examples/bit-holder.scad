@@ -175,7 +175,7 @@ module holder(verbs,item) {
         bit(gross=true);
     // magnet
     multmatrix(Mmagnet) {
-      fl_magnet(FL_FOOTPRINT,magnet,fp_gross=TOLERANCE,octant=+X,direction=[-Y,90]);
+      fl_magnet(FL_FOOTPRINT,magnet,$fl_tolerance=TOLERANCE,octant=+X,direction=[-Y,90]);
     }
   }
 

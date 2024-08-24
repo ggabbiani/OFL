@@ -118,7 +118,7 @@ module sbcBox(mode)
           FL_CUTOUT,
           sbc,
           thick=3*T,
-          cut_tolerance=CUT_TOLERANCE,
+          $fl_tolerance=CUT_TOLERANCE,
           cut_direction=[if (SBC=="rpi4") +X,-Y,+Y]
         );
 

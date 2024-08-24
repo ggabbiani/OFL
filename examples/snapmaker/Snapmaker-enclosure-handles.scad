@@ -104,7 +104,7 @@ difference() {
   }
 
   translate(M_magnet)
-    fl_magnet([FL_FOOTPRINT,FL_LAYOUT],type=magnet,fp_gross=clearance,thick=emi_d/2,octant=-Z,direction=[-X,90])
+    fl_magnet([FL_FOOTPRINT,FL_LAYOUT],type=magnet,$fl_tolerance=clearance,$fl_thickness=emi_d/2,octant=-Z,direction=[-X,90])
       translate(-Z(mag_sz.z+clearance-NIL))
         fl_knut(FL_DRILL,type=knut,dri_thick=T+emi_d/2+tube_h-mag_sz.z-clearance-fl_knut_thick(knut)+NIL,$FL_DRILL="ON");
 }
