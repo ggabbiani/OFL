@@ -16,7 +16,7 @@ graph LR
 A DIN rail is a metal rail of a standard type widely used for mounting
 circuit breakers and industrial control equipment inside equipment racks.
 These products are typically made from cold rolled carbon steel sheet with a
-zinc-plated or chromated bright surface finish. Although metallic, they are
+zinc-plated or chromed bright surface finish. Although metallic, they are
 meant only for mechanical support and are not used as a busbar to conduct
 electric current, though they may provide a chassis grounding connection.
 
