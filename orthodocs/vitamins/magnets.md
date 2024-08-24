@@ -159,12 +159,17 @@ __Syntax:__
 
 Runtime environment:
 
-- $fl_tolerance: modify the object size during FL_FOOTPRINT
-- $fl_thickness: thickness for screws during FL_DRILL and FL_MOUNT
+| variable       | description                                       |
+| ----           | ---                                               |
+| $fl_tolerance  | modify the object size during FL_FOOTPRINT        |
+| $fl_thickness  | thickness for screws during FL_DRILL and FL_MOUNT |
 
 Children environment:
 
-- $mag_h: magnet height
+| variable | description   |
+| ----     | ---           |
+| $mag_h   | magnet height |
+
 
 
 __Parameters:__
