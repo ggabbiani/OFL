@@ -133,12 +133,17 @@ FL_MAG_DICT = [
 /*!
  * Runtime environment:
  *
- * - $fl_tolerance: modify the object size during FL_FOOTPRINT
- * - $fl_thickness: thickness for screws during FL_DRILL and FL_MOUNT
+ * | variable       | description                                       |
+ * | ----           | ---                                               |
+ * | $fl_tolerance  | modify the object size during FL_FOOTPRINT        |
+ * | $fl_thickness  | thickness for screws during FL_DRILL and FL_MOUNT |
  *
  * Children environment:
  *
- * - $mag_h: magnet height
+ * | variable | description   |
+ * | ----     | ---           |
+ * | $mag_h   | magnet height |
+ *
  */
 module fl_magnet(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
