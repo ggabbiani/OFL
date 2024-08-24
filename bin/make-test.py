@@ -124,6 +124,6 @@ for i, cmd in enumerate(cmds):
     cprint(f'{case if case else "✔"}', 'green',end=" ")
   else:
     cprint(f'{case if case else "✝"}', 'red',  end=" ")
-    if args.verbosity>ofl.ERROR:
-      cat(echo(o_dir,o_base))
+    # if args.verbosity>ofl.ERROR:
+    cat(echo(o_dir,o_base))
     exit(rc)
