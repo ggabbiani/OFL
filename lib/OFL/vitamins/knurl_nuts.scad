@@ -20,7 +20,8 @@ use <../foundation/mngm-engine.scad>
 FL_KNUT_NS  = "knut";
 
 /*!
- * table with nominal size and suggested corresponding drill diameter taken from https://www.ruthex.de/cdn/shop/files/Tabelle_DE_600x.jpg
+ * table with nominal size and the corresponding suggested drill hole diameter,
+ * length and wall (taken from https://www.ruthex.de/cdn/shop/files/Tabelle_DE_600x.jpg)
  *
  * | Metric ISO Thread | Inch UNC thread | hole ⌀ | min. hole length | min. hole wall |
  * | ----------------- | --------------- | ------ | ---------------- | -------------- |
