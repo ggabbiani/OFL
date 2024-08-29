@@ -1572,7 +1572,7 @@ function fl_parm_multiverb(
   //! default value eventually overridden by default key/value ("*",default value)
   default
 ) = let(
-  verb    = is_undef($verb) ? $this_verb : $verb,
+  verb    = is_undef($verb) ? is_undef($this_verb) ? undef : $this_verb : $verb,
   default = is_undef(value) ?
     default :
     is_list(value) && value[0]=="MULTI-VERB" ?
