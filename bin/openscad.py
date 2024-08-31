@@ -38,4 +38,5 @@ ofl.info("Dry run   : % s" %args.dry_run)
 ofl.info("hw        : % s" %args.hardwarnings)
 ofl.info("quiet     : % s" %args.debug)
 
-exit(ofl.openscad(args.ofl_script,quiet=not args.debug,parms=parms,hw=args.hardwarnings,dry_run=args.dry_run))
+result  = ofl.openscad(args.ofl_script,quiet=not args.debug,parms=parms,hw=args.hardwarnings,dry_run=args.dry_run)
+exit(result.returncode)
