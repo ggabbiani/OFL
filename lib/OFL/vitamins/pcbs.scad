@@ -929,7 +929,7 @@ module fl_pcb_adapter(
   radius    = pcb_radius(type);
   grid      = pcb_grid(type);
 
-  D         = direction ? fl_direction(proto=type,direction=direction,default=[+Z,+X])  : I;
+  D         = direction ? fl_direction(direction)  : I;
   M         = fl_octant(octant,bbox=bbox);
 
   fl_trace("screw",screw);

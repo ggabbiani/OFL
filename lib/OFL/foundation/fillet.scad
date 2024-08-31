@@ -149,7 +149,7 @@ module fl_90DegFillet(
   // bbox    = [__3d__(child_bbox[0])-[r,r,0],__3d__(child_bbox[1])+[r,r,r]];
   bbox    = fl_bb_90DegFillet(r,n,child_bbox);
   size    = bbox[1]-bbox[0];
-  D       = direction ? fl_direction(direction=direction,default=default) : I;
+  D       = direction ? fl_direction(direction) : I;
   M       = fl_octant(octant,bbox=bbox);
 
   module do_add() {

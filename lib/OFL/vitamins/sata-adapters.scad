@@ -51,7 +51,7 @@ module sata_adapter(
   size        = fl_size(type);
   Mpd         = fl_get(type,"Mpd");
   connectors  = fl_connectors(type);
-  D           = direction ? fl_direction(type,direction=direction)  : FL_I;
+  D           = direction ? fl_direction(direction)  : FL_I;
   M           = fl_octant(octant,type=type);
 
   module sata_handle() {

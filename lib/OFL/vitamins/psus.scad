@@ -185,7 +185,7 @@ module fl_psu(
 
   pcb_size    = [cbox_sz.x-2*grid_t,cbox_sz.y-grid_t,pcb_t];
 
-  D           = direction ? fl_direction(type,direction=direction): I;
+  D           = direction ? fl_direction(direction): I;
   M           = fl_octant(octant,bbox=bbox);
 
   fl_trace("grid shift",grid_shift);

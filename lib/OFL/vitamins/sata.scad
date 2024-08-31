@@ -354,7 +354,7 @@ module fl_sata(
     conns       = fl_connectors(type);
     Mdata       = __fl_sata_Mdata__(type);
     Mpower      = __fl_sata_Mpower__(type);
-    D           = direction ? fl_direction(type,direction=direction)  : I;
+    D           = direction ? fl_direction(direction)  : I;
     M           = fl_octant(octant,type=type);
 
     module side_plug() {
@@ -401,7 +401,7 @@ module fl_sata(
       translate(fl_Z((size.z-block_sz.z)/2)) fl_cube(size=size,octant=O);
     }
 
-    fl_manage(verbs) {
+    fl_manage(verbs,M,D) {
       if ($verb==FL_ADD) {
         fl_modifier($modifier) do_add();
       } else if ($verb==FL_AXES) {

@@ -104,7 +104,7 @@ module fl_hd(
   plug        = fl_sata_plug(type);
   Mpd         = fl_get(type,"Mpd");
   holes       = fl_holes(type);
-  D           = direction ? fl_direction(type,direction=direction): I;
+  D           = direction ? fl_direction(direction): I;
   M           = fl_octant(octant,type=type);
 
   module context() {
