@@ -1,12 +1,12 @@
 # test execution
 error%-test.echo : error%-test.scad
 	$(call target-prologue)
-	@. $(realpath $(@:.echo=.conf)) && $(BIN)/assert.py fail $(BIN)/make-test.py $$CAMERA $(<:.scad=)
+	@. $(realpath $(@:.echo=.conf)) && $(BIN)/make-test.py --must-fail --verbosity 4 $$CAMERA $(<:.scad=)
 	$(call target-epilogue)
 
 warn%-test.echo : warn%-test.scad
 	$(call target-prologue)
-	@. $(realpath $(@:.echo=.conf)) && $(BIN)/assert.py fail $(BIN)/make-test.py $$CAMERA $(<:.scad=)
+	@. $(realpath $(@:.echo=.conf)) && $(BIN)/make-test.py --must-fail --verbosity 4 $$CAMERA $(<:.scad=)
 	$(call target-epilogue)
 
 %.echo : %.scad

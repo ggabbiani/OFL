@@ -15,8 +15,6 @@
 
 // **** TEST_PROLOGUE *********************************************************
 
-fl_status();
-
 // end of automatically generated code
 
 variable=not_existent;

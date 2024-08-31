@@ -60,6 +60,7 @@ def echo(path,base):
   return os.path.join(path,base+'.echo')
 
 parser = argparse.ArgumentParser()
+parser.add_argument(      "--must-fail", action='store_true', help = "asserts command failure")
 parser.add_argument("-c", "--camera", help = "OpenSCAD camera position")
 parser.add_argument("-d", "--dry-run", action='store_true', help = "On screen dump only of the generated dot file")
 parser.add_argument("-p", "--projection", help = "(o)rtho or (p)erspective when exporting png")
@@ -77,6 +78,7 @@ ofl.info("Projection    : % s" %args.projection)
 ofl.info("Dry run       : % s" %args.dry_run)
 ofl.info("OSCAD         : % s" %ofl.oscad)
 ofl.info("Verbosity     : % s" %args.verbosity)
+ofl.info("Failure       : % s" %args.must_fail)
 
 full    = os.path.normpath(args.test)
 path    = os.path.dirname(full)
@@ -119,11 +121,13 @@ for i, cmd in enumerate(cmds):
     o_dir   = path
 
   o_file  = echo(o_dir,o_base)
-  rc      = ofl.openscad(scad,parms=cmd,echo_f=o_file,hw=True,dry_run=args.dry_run)
-  if rc==0:
+  result  = ofl.openscad(scad,parms=cmd,echo_f=o_file,hw=True,dry_run=args.dry_run,must_fail=args.must_fail)
+  if result.returncode==0:
     cprint(f'{case if case else "✔"}', 'green',end=" ")
   else:
     cprint(f'{case if case else "✝"}', 'red',  end=" ")
-    if args.verbosity>ofl.ERROR:
-      cat(echo(o_dir,o_base))
-    exit(rc)
+
+  if not args.must_fail and result.returncode!=0:
+    print("\n")
+    cat(echo(o_dir,o_base))
+    exit(1)
