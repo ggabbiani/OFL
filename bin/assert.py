@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 #
-# fails if the command execution succeeds
+# Fails if the command execution succeeds.
+#
+# NOTE: After the implementation of the --must-fail option in the OpenSCAD
+# wrapper this command is useless.
 #
 # This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 #
@@ -37,4 +40,4 @@ if args.dry_run:
 
 result = subprocess.run(exec,stdout=subprocess.DEVNULL if args.quiet else None,stderr=subprocess.STDOUT if args.quiet else None) if not args.dry_run else 0
 
-exit(0 if (args.command=="success" and result.returncode==0) or (args.command=="fail" and result.returncode!=0)else 1)
+exit(0 if (args.command=="success" and result.returncode==0) or (args.command=="fail" and result.returncode!=0) else 1)
