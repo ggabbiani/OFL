@@ -97,17 +97,25 @@ function fl_IEC(nop,name,description) = let(
   fl_engine(value=FL_IEC_NS),
 ];
 
+/*!
+ * Runtime environment:
+ *
+ * | variable       | description                               |
+ * | ---            | ---                                       |
+ * | $fl_thickness  | used in FL_CUTOUT, FL_DRILL and FL_MOUNT  |
+ */
 module fl_iec(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_MOUNT
   verbs       = FL_ADD,
   this,
-  //! thickness for FL_DRILL and FL_CUTOUT
-  thick,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
   octant
 ) {
+
+  module nop()
+    children();
 
   module engine() let(
     nop   = fl_nopSCADlib($this),
@@ -122,15 +130,15 @@ module fl_iec(
       fl_bb_add(corners=$this_bbox,$FL_ADD=$FL_BBOX);
 
     else if ($this_verb==FL_CUTOUT) {
-      assert(is_num(thick))
-      if (thick>=0)
-        iec_holes(nop, h=thick+iec_flange_t(nop));
+      assert(is_num($fl_thickness))
+      if ($fl_thickness>=0)
+        iec_holes(nop, h=$fl_thickness+iec_flange_t(nop));
 
     } else if ($this_verb==FL_DRILL) {
-      assert(is_num(thick))
-      if (thick)
+      assert(is_num($fl_thickness))
+      if ($fl_thickness)
         iec_screw_positions(nop)
-          fl_screw(FL_DRILL,screw,thick=thick);
+          fl_screw(FL_DRILL,screw,thick=$fl_thickness);
 
     } else if ($this_verb==FL_LAYOUT) {
       translate(+Z(iec_flange_t(nop)))
@@ -139,8 +147,12 @@ module fl_iec(
         ) children();
 
     } else if ($this_verb==FL_MOUNT)
-      assert(is_num(thick)&&thick>=0)
-      iec_assembly(nop, thick);
+      assert(is_num($fl_thickness)&&$fl_thickness>=0)
+      iec_assembly(nop, $fl_thickness);
+
+    else if ($this_verb==FL_PAYLOAD)
+      nop()
+        children();
     else
       assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
 
