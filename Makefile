@@ -29,7 +29,9 @@ export COMMA				:= ,
 include $(FUNCTIONS)
 
 # function dependant variables
+$(info SCAD path: $(call scad-path))
 export SCAD		:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(warning WARN: OpenSCAD missing))
+$(info SCAD command: $(SCAD))
 export WHICH 	:= $(if $(call is-win),where,which)
 export IMVER 	:= $(shell convert --version 2>&1)
 export IMCMD 	:= $(if $(findstring deprecated,$(IMVER)),$(shell $(WHICH) magick 2>/dev/null),$(shell $(WHICH) convert 2>/dev/null))
