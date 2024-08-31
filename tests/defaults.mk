@@ -1,17 +1,17 @@
 # test execution
 error%-test.echo : error%-test.scad
 	$(call target-prologue)
-	@. $(realpath $(@:.echo=.conf)) && $(BIN)/make-test.py --must-fail --verbosity 4 $$CAMERA $(<:.scad=)
+	@. $(realpath $(@:.echo=.conf)) && $(BIN)/make-test.py --must-fail $$CAMERA $(<:.scad=)
 	$(call target-epilogue)
 
 warn%-test.echo : warn%-test.scad
 	$(call target-prologue)
-	@. $(realpath $(@:.echo=.conf)) && $(BIN)/make-test.py --must-fail --verbosity 4 $$CAMERA $(<:.scad=)
+	@. $(realpath $(@:.echo=.conf)) && $(BIN)/make-test.py --must-fail $$CAMERA $(<:.scad=)
 	$(call target-epilogue)
 
 %.echo : %.scad
 	$(call target-prologue)
-	@. $(realpath $*.conf) && $(BIN)/make-test.py --verbosity 4 $$CAMERA $*
+	@. $(realpath $*.conf) && $(BIN)/make-test.py $$CAMERA $*
 	$(call target-epilogue)
 
 # source creation
