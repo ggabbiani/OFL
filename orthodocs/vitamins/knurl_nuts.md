@@ -228,7 +228,8 @@ __Default:__
 
     [[2,[3.2,5.0,1.3]],[2.5,[4.0,6.7,1.6]],[3,[4.0,6.7,1.6]],[4,[5.6,9.1,2.1]],[5,[6.4,10.5,2.6]],[6,[8.0,13.7,3.3]],[8,[9.6,13.7,4.5]]]
 
-table with nominal size and suggested corresponding drill diameter taken from https://www.ruthex.de/cdn/shop/files/Tabelle_DE_600x.jpg
+table with nominal size and the corresponding suggested drill hole diameter,
+length and wall (taken from https://www.ruthex.de/cdn/shop/files/Tabelle_DE_600x.jpg)
 
 | Metric ISO Thread | Inch UNC thread | hole ⌀ | min. hole length | min. hole wall |
 | ----------------- | --------------- | ------ | ---------------- | -------------- |

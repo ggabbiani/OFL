@@ -165,15 +165,19 @@ NopSCADlib object.
 
 __Syntax:__
 
-    fl_iec(verbs=FL_ADD,this,thick,direction,octant)
+    fl_iec(verbs=FL_ADD,this,direction,octant)
+
+Runtime environment:
+
+| variable       | description                               |
+| ---            | ---                                       |
+| $fl_thickness  | used in FL_CUTOUT, FL_DRILL and FL_MOUNT  |
+
 
 __Parameters:__
 
 __verbs__  
 supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_MOUNT
-
-__thick__  
-thickness for FL_DRILL and FL_CUTOUT
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
