@@ -319,6 +319,16 @@ bounding box corners
 
 ---
 
+### function fl_bb_cube
+
+__Syntax:__
+
+```text
+fl_bb_cube(size=[1,1,1])
+```
+
+---
+
 ### function fl_bb_cylinder
 
 __Syntax:__
@@ -387,6 +397,16 @@ __Syntax:__
 
 ```text
 fl_bb_pyramid(points)
+```
+
+---
+
+### function fl_bb_sphere
+
+__Syntax:__
+
+```text
+fl_bb_sphere(r=[1,1,1],d)
 ```
 
 ---

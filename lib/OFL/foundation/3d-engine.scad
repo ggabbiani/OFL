@@ -75,6 +75,10 @@ module fl_frame(
   }
 }
 
+function fl_bb_cube(size = [1,1,1]) = let(
+  size = is_list(size) ? size : [size,size,size]
+) [-size/2,+size/2];
+
 /*!
  * cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
  */
@@ -89,9 +93,7 @@ module fl_cube(
   //! desired direction [director,rotation] or native direction if undef
   direction
 ) {
-  size  = is_list(size) ? size : [size,size,size];
-  bbox  = [-size/2,+size/2];
-
+  bbox  = fl_bb_cube(size=size);
   D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
 
@@ -101,12 +103,16 @@ module fl_cube(
     } else if ($verb==FL_AXES) {
       fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) cube(size,true);
+      fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
   }
 }
+
+function fl_bb_sphere(r=[1,1,1], d) = let(
+  r = is_undef(d) ? (is_list(r) ? r : [r,r,r]) : (is_list(d) ? d : [d,d,d])/2
+) [-r,+r];
 
 /*!
  * sphere defaults for positioning (fl_bb_cornersKV).
@@ -114,10 +120,8 @@ module fl_cube(
 function fl_sphere_defaults(
   r = [1,1,1],
   d,
-) = let(
-  r  = is_undef(d) ? (is_list(r) ? r : [r,r,r]) : (is_list(d) ? d : [d,d,d])/2
-) [
-  fl_bb_corners(value=[-r,+r]),  // symmetric bounding box ⇒ octant==O
+) = [
+  fl_bb_corners(value=fl_bb_sphere(r,d)),
 ];
 
 /*!
@@ -137,10 +141,10 @@ module fl_sphere(
 ) {
   defs  = fl_sphere_defaults(r,d);
 
-  bbox  = fl_bb_corners(defs);
-  size  = fl_bb_size(defs); // bbox[1] - bbox[0];
+  bbox  = fl_bb_sphere(r,d);
+  size  = bbox[1] - bbox[0];
   D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,type=defs);
+  M     = fl_octant(octant,bbox=bbox);
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
@@ -148,34 +152,12 @@ module fl_sphere(
     } else if ($verb==FL_AXES) {
       fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) cube(size,true);
+      fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
   }
 }
-
-/*!
- * cylinder defaults for positioning (fl_bb_cornersKV).
- */
-function fl_cylinder_defaults(
-  //! height of the cylinder or cone
-  h,
-  //! radius of cylinder. r1 = r2 = r.
-  r,
-  //! radius, bottom of cone.
-  r1,
-  //! radius, top of cone.
-  r2,
-  //! diameter of cylinder. r1 = r2 = d / 2.
-  d,
-  //! diameter, bottom of cone. r1 = d1 / 2.
-  d1,
-  //! diameter, top of cone. r2 = d2 / 2.
-  d2
-) = [
-  fl_bb_corners(value=fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
-];
 
 function fl_bb_cylinder(
   //! height of the cylinder or cone
@@ -207,6 +189,28 @@ let(
 ) [[min(x),min(y),min(z)],[max(x),max(y),max(z)]];
 
 /*!
+ * cylinder defaults for positioning (fl_bb_cornersKV).
+ */
+function fl_cylinder_defaults(
+  //! height of the cylinder or cone
+  h,
+  //! radius of cylinder. r1 = r2 = r.
+  r,
+  //! radius, bottom of cone.
+  r1,
+  //! radius, top of cone.
+  r2,
+  //! diameter of cylinder. r1 = r2 = d / 2.
+  d,
+  //! diameter, bottom of cone. r1 = d1 / 2.
+  d1,
+  //! diameter, top of cone. r2 = d2 / 2.
+  d2
+) = [
+  fl_bb_corners(value=fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
+];
+
+/*!
  * cylinder replacement
  */
 module fl_cylinder(
@@ -235,15 +239,12 @@ module fl_cylinder(
 ) {
   r_bot = fl_parse_radius(r,r1,d,d1);
   r_top = fl_parse_radius(r,r2,d,d2);
-  defs  = fl_cylinder_defaults(h,r,r1,r2,d,d1,d2);
-  size  = fl_bb_size(defs);
+  bbox  = fl_bb_cylinder(h,r,r1,r2,d,d1,d2);
+  size  = bbox[1]-bbox[0];
   step  = 360/$fn;
   R     = max(r_bot,r_top);
   D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,type=defs);
-  Mbbox = fl_T(-[size.x/2,size.y/2,0]);
-  fl_trace("octant",octant);
-  fl_trace("size",size);
+  M     = fl_octant(octant,bbox=bbox);
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
@@ -251,7 +252,7 @@ module fl_cylinder(
     } else if ($verb==FL_AXES) {
       fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) multmatrix(Mbbox) cube(size=size); // center=default=false ⇒ +X+Y+Z
+      fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
@@ -329,20 +330,16 @@ module fl_prism(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) {
-  defs  = fl_prism_defaults(n,l,l1,l2,h);
+  bbox  = fl_bb_prism(n,l,l1,l2,h);
   step  = 360/n;
   l_bot = fl_parse_l(l,l1);
   l_top = fl_parse_l(l,l2);
   Rbase = l_bot / (2 * sin(step/2));
   Rtop  = l_top / (2 * sin(step/2));
   R     = max(Rbase,Rtop);
-  size  = fl_bb_size(defs);
+  size  = bbox[1]-bbox[0];
   D     = direction ? fl_direction(direction): FL_I;
-  M     = fl_octant(octant,type=defs);
-  Mbbox = fl_T([-size.x+R,-size.y/2,0]);
-  fl_trace("octant",octant);
-  fl_trace("direction",direction);
-  fl_trace("size",size);
+  M     = fl_octant(octant,bbox=bbox);
 
   fl_manage(verbs,M,D)  {
     if ($verb==FL_ADD) {
@@ -350,7 +347,7 @@ module fl_prism(
     } else if ($verb==FL_AXES) {
       fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) multmatrix(Mbbox) cube(size=size);     // center=default=false ⇒ +X+Y+Z
+      fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
