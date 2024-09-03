@@ -541,6 +541,8 @@ function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 function fl_cutout(type,value)      = fl_property(type,"cut-out direction list",value);
 function fl_dimensions(type,value)  = fl_property(type,"dimension line pack",value);
 
+function fl_radius(type,value)      = fl_property(type,"radius for circle or sphere",value);
+
 //*****************************************************************************
 // Derived getters
 function fl_size(type)    = fl_bb_size(type);
@@ -705,9 +707,9 @@ module fl_color(color,alpha=1) {
       children();
 }
 
-function fl_parse_l(l,l1,def)              = (l!=undef ? l : (l1!=undef ? l1 : undef));
-function fl_parse_radius(r,r1,d,d1,def)    = (r!=undef ? r : (r1!=undef ? r1 : (d!=undef ? d/2 : (d1!=undef ? d1/2:undef))));
-function fl_parse_diameter(r,r1,d,d1,def)  = (d!=undef ? d : (d1!=undef ? d1 : (r!=undef ? 2*r : (r1!=undef ? 2*r1:undef))));
+function fl_parse_l(l,l1,def)              = (!is_undef(l) ? l   : (!is_undef(l1) ? l1    : def));
+function fl_parse_radius(r,r1,d,d1,def)    = (!is_undef(r) ? r   : (!is_undef(r1) ? r1    : (!is_undef(d) ? d/2 : (!is_undef(d1) ? d1/2 : def))));
+function fl_parse_diameter(r,r1,d,d1,def)  = (!is_undef(r) ? 2*r : (!is_undef(r1) ? 2*r1  : (!is_undef(d) ? d : (!is_undef(d1) ? d1 : def))));
 
 //! true when n is multiple of m
 function fl_isMultiple(n,m) = (n % m == 0);
