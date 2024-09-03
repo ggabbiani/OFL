@@ -275,6 +275,107 @@ cartesian axis ([-1,0,0]==[1,0,0]==X)
 
 ---
 
+### function fl_Cube
+
+__Syntax:__
+
+```text
+fl_Cube(size=[1,1,1])
+```
+
+---
+
+### function fl_Cylinder
+
+__Syntax:__
+
+```text
+fl_Cylinder(h,r,r1,r2,d,d1,d2)
+```
+
+__Parameters:__
+
+__h__  
+height of the cylinder or cone
+
+__r__  
+radius of cylinder. r1 = r2 = r.
+
+__r1__  
+radius, bottom of cone.
+
+__r2__  
+radius, top of cone.
+
+__d__  
+diameter of cylinder. r1 = r2 = d / 2.
+
+__d1__  
+diameter, bottom of cone. r1 = d1 / 2.
+
+__d2__  
+diameter, top of cone. r2 = d2 / 2.
+
+
+---
+
+### function fl_Prism
+
+__Syntax:__
+
+```text
+fl_Prism(n,l,l1,l2,h)
+```
+
+__Parameters:__
+
+__n__  
+edge number
+
+__l__  
+edge length
+
+__l1__  
+edge length, bottom
+
+__l2__  
+edge length, top
+
+__h__  
+height of the prism
+
+
+---
+
+### function fl_Pyramid
+
+__Syntax:__
+
+```text
+fl_Pyramid(base,apex)
+```
+
+__Parameters:__
+
+__base__  
+2d point list defining the polygonal base on plane XY
+
+__apex__  
+3d point defining the apex
+
+
+---
+
+### function fl_Sphere
+
+__Syntax:__
+
+```text
+fl_Sphere(r=[1,1,1],d)
+```
+
+---
+
 ### function fl_bb_accum
 
 __Syntax:__
@@ -396,7 +497,7 @@ height of the prism
 __Syntax:__
 
 ```text
-fl_bb_pyramid(points)
+fl_bb_pyramid(base,apex)
 ```
 
 ---
@@ -453,6 +554,46 @@ __Parameters:__
 __pts__  
 Point list defining a polygon/polyhedron with each element p | p∈ℝ^n^
 
+
+---
+
+### function fl_cube_size
+
+__Syntax:__
+
+```text
+fl_cube_size(type,value)
+```
+
+---
+
+### function fl_cyl_botRadius
+
+__Syntax:__
+
+```text
+fl_cyl_botRadius(type,value)
+```
+
+---
+
+### function fl_cyl_h
+
+__Syntax:__
+
+```text
+fl_cyl_h(type,value)
+```
+
+---
+
+### function fl_cyl_topRadius
+
+__Syntax:__
+
+```text
+fl_cyl_topRadius(type,value)
+```
 
 ---
 
@@ -634,18 +775,63 @@ height of the prism
 
 ---
 
-### function fl_pyramid
+### function fl_prsm_botEdgeL
 
 __Syntax:__
 
 ```text
-fl_pyramid(base,apex)
+fl_prsm_botEdgeL(type,value)
 ```
 
-return pyramid
+---
 
-- native positioning: +Z
+### function fl_prsm_h
 
+__Syntax:__
+
+```text
+fl_prsm_h(type,value)
+```
+
+---
+
+### function fl_prsm_n
+
+__Syntax:__
+
+```text
+fl_prsm_n(type,value)
+```
+
+---
+
+### function fl_prsm_topEdgeL
+
+__Syntax:__
+
+```text
+fl_prsm_topEdgeL(type,value)
+```
+
+---
+
+### function fl_pyr_apex
+
+__Syntax:__
+
+```text
+fl_pyr_apex(type,value)
+```
+
+---
+
+### function fl_pyr_base
+
+__Syntax:__
+
+```text
+fl_pyr_base(type,value)
+```
 
 ---
 
@@ -756,7 +942,7 @@ see also [fl_tt_isBoundingBox()](type_trait.md#function-fl_tt_isboundingbox)
 
 __Syntax:__
 
-    fl_cube(verbs=FL_ADD,size=[1,1,1],debug,octant,direction)
+    fl_cube(verbs=FL_ADD,type,size,octant,direction,debug)
 
 cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
 
@@ -766,14 +952,14 @@ __Parameters:__
 __verbs__  
 FL_ADD,FL_AXES,FL_BBOX
 
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
-
 __octant__  
 when undef, native positioning is used with cube midpoint centered at origin O
 
 __direction__  
 desired direction [director,rotation] or native direction if undef
+
+__debug__  
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---
@@ -782,7 +968,7 @@ desired direction [director,rotation] or native direction if undef
 
 __Syntax:__
 
-    fl_cylinder(verbs=FL_ADD,h,r,r1,r2,d,d1,d2,debug,octant,direction)
+    fl_cylinder(verbs=FL_ADD,type,h,r,r1,r2,d,d1,d2,octant,direction,debug)
 
 cylinder replacement
 
@@ -813,14 +999,14 @@ diameter, bottom of cone. r1 = d1 / 2.
 __d2__  
 diameter, top of cone. r2 = d2 / 2.
 
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
-
 __octant__  
 when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__debug__  
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---
@@ -1102,7 +1288,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_prism(verbs=FL_ADD,n,l,l1,l2,h,debug,octant,direction)
+    fl_prism(verbs=FL_ADD,type,n,l,l1,l2,h,debug,octant,direction)
 
 prism
 
@@ -1145,7 +1331,7 @@ desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 __Syntax:__
 
-    fl_pyramid(verbs=FL_ADD,base,apex,debug,octant,direction)
+    fl_pyramid(verbs=FL_ADD,type,base,apex,octant,direction,debug)
 
 pyramid
 
@@ -1157,14 +1343,14 @@ __Parameters:__
 __verbs__  
 FL_ADD,FL_AXES,FL_BBOX
 
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
-
 __octant__  
 when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+
+__debug__  
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---
@@ -1173,7 +1359,7 @@ desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 __Syntax:__
 
-    fl_sphere(verbs=FL_ADD,r=[1,1,1],d,debug,octant,direction)
+    fl_sphere(verbs=FL_ADD,type,r,d,octant,direction,debug)
 
 sphere replacement.
 
@@ -1183,14 +1369,14 @@ __Parameters:__
 __verbs__  
 FL_ADD,FL_AXES,FL_BBOX
 
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
-
 __octant__  
 when undef default positioning is used
 
 __direction__  
 desired direction [director,rotation], default direction if undef
+
+__debug__  
+debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---

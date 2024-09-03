@@ -1973,6 +1973,16 @@ push «item» on tail of list «l»
 
 ---
 
+### function fl_radius
+
+__Syntax:__
+
+```text
+fl_radius(type,value)
+```
+
+---
+
 ### function fl_screw
 
 __Syntax:__
