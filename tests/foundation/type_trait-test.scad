@@ -22,8 +22,6 @@ fl_status();
 
 // end of automatically generated code
 
-fl_status();
-
 assert(fl_tt_isInDictionary("inexistent",["key1","key2","key3"])==false);
 assert(fl_tt_isInDictionary("key2",["key1","key2","key3"]));
 
@@ -134,7 +132,11 @@ let(
 
 let(
   bbox = [[0, 0], [100, 100]]
-) assert(fl_tt_isBoundingBox(bbox),bbox);
+) assert(!fl_tt_isBoundingBox(bbox),bbox);
+
+let(
+  bbox = [[0, 0], [100, 100]]
+) assert(fl_tt_isBoundingBox(bbox,2d=true),bbox);
 
 let(
   p = [1]
