@@ -81,8 +81,6 @@ fl_status();
 
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX]);
 
-fl_trace("octant",octant);
-
 if      (SHAPE == "cube"    )  fl_cube(verbs,size=SIZE,octant=octant,direction=direction,debug=debug);
 else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,octant=octant,direction=direction,debug=debug);
 else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,octant=octant,direction=direction,debug=debug);
