@@ -100,7 +100,7 @@ if os.path.isfile(json):
   if cases:
     ofl.debug(str(len(cases))+" TEST CONFIG(s) found")
     for case in cases:
-      cmds.append(command+['-P',case])
+      cmds.append(command+['-p',json]+['-P',case])
   else:
     ofl.debug("NO TEST CONFIG(s) found")
     cmds.append(command)
@@ -129,5 +129,6 @@ for i, cmd in enumerate(cmds):
 
   if not args.must_fail and result.returncode!=0:
     print("\n")
+    cprint(f'{result}', 'red')
     cat(echo(o_dir,o_base))
     exit(1)
