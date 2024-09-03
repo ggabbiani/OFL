@@ -95,4 +95,4 @@ iec   = fl_switch(IEC, [
   ]);
 
 fl_iec(verbs,iec,direction=direction,octant=octant,$fl_thickness=thick)
-  fl_cylinder(verbs=[FL_ADD,FL_AXES],h=10,r=screw_radius($iec_screw),octant=-Z,$FL_ADD=$FL_LAYOUT,$FL_AXES="ON");
+  fl_cylinder([FL_ADD,FL_AXES],h=10,r=screw_radius($iec_screw),octant=-Z,$FL_ADD=$FL_LAYOUT,$FL_AXES="ON");

@@ -79,20 +79,33 @@ function fl_bb_cube(size = [1,1,1]) = let(
   size = is_list(size) ? size : [size,size,size]
 ) [-size/2,+size/2];
 
+function fl_cube_size(type,value) = let(
+  size = is_undef(value) ? undef : is_list(value) ? value : assert(is_num(value)) [value,value,value]
+) fl_property(type,"3d engine/cube/size [x,y,z]",size);
+
+function fl_Cube(size = [1,1,1]) = [
+  fl_native(value=true),
+  fl_bb_corners(value=fl_bb_cube(size)),
+  fl_engine(value="3d engine/cube"),
+  fl_cube_size(value=size),
+];
+
 /*!
  * cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
  */
 module fl_cube(
   //! FL_ADD,FL_AXES,FL_BBOX
   verbs     = FL_ADD,
-  size      = [1,1,1],
-  //! debug parameter as returned from fl_parm_Debug()
-  debug,
+  type,
+  size,
   //! when undef, native positioning is used with cube midpoint centered at origin O
   octant,
   //! desired direction [director,rotation] or native direction if undef
-  direction
+  direction,
+  //! debug parameter as returned from fl_parm_Debug()
+  debug
 ) {
+  size  = size ? (is_list(size) ? size : assert(is_num(size)) [size,size,size]) : type ? fl_cube_size(type) : [1,1,1];
   bbox  = fl_bb_cube(size=size);
   D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
@@ -124,24 +137,36 @@ function fl_sphere_defaults(
   fl_bb_corners(value=fl_bb_sphere(r,d)),
 ];
 
+function fl_Sphere(
+  r = [1,1,1],
+  d
+) = let(
+  r = let(r=fl_parse_radius(r=r,d=d)) is_list(r) ? r : [r,r,r]
+) [
+  fl_native(value=true),
+  fl_engine(value="3d engine/sphere"),
+  assert(r) fl_radius(value=r),
+  fl_bb_corners(value=fl_bb_sphere(r=r, d=d)),
+];
+
 /*!
  * sphere replacement.
  */
 module fl_sphere(
   //! FL_ADD,FL_AXES,FL_BBOX
   verbs   = FL_ADD,
-  r       = [1,1,1],
+  type,
+  r,
   d,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug,
   //! when undef default positioning is used
   octant,
   //! desired direction [director,rotation], default direction if undef
-  direction
+  direction,
+  //! debug parameter as returned from fl_parm_Debug()
+  debug
 ) {
-  defs  = fl_sphere_defaults(r,d);
-
-  bbox  = fl_bb_sphere(r,d);
+  r     = fl_parse_radius(r,d=d,def=type?fl_radius(type):undef);
+  bbox  = assert(r) fl_bb_sphere(r);
   size  = bbox[1] - bbox[0];
   D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
@@ -175,7 +200,8 @@ function fl_bb_cylinder(
   //! diameter, top of cone. r2 = d2 / 2.
   d2
 ) =
-assert(h && h>=0,h)
+assert(h,h)
+// echo(h=h,r=r,r1=r1,r2=r2,d=d,d1=d1,d2=d2)
 let(
   step    = 360/$fn,
   Rbase   = fl_parse_radius(r,r1,d,d1),
@@ -210,12 +236,44 @@ function fl_cylinder_defaults(
   fl_bb_corners(value=fl_bb_cylinder(h,r,r1,r2,d,d1,d2)),  // +Z
 ];
 
+function fl_cyl_topRadius(type,value) = fl_property(type,"3d engine/cylinder/top radius",value);
+function fl_cyl_botRadius(type,value) = fl_property(type,"3d engine/cylinder/bottom radius",value);
+function fl_cyl_h(type,value)         = fl_property(type,"3d engine/cylinder/height along Z-axis",value);
+
+function fl_Cylinder(
+  //! height of the cylinder or cone
+  h,
+  //! radius of cylinder. r1 = r2 = r.
+  r,
+  //! radius, bottom of cone.
+  r1,
+  //! radius, top of cone.
+  r2,
+  //! diameter of cylinder. r1 = r2 = d / 2.
+  d,
+  //! diameter, bottom of cone. r1 = d1 / 2.
+  d1,
+  //! diameter, top of cone. r2 = d2 / 2.
+  d2
+) = let(
+  r_bot = fl_parse_radius(r,r1,d,d1),
+  r_top = fl_parse_radius(r,r2,d,d2)
+) [
+  fl_native(value=true),
+  fl_engine(value="3d engine/cylinder"),
+  assert(r_bot) fl_cyl_botRadius(value=r_bot),
+  assert(r_top) fl_cyl_topRadius(value=r_top),
+  assert(h) fl_cyl_h(value=h),
+  fl_bb_corners(value=fl_bb_cylinder(h=h,r1=r_bot,r2=r_top)),
+];
+
 /*!
  * cylinder replacement
  */
 module fl_cylinder(
   //! FL_ADD,FL_AXES,FL_BBOX
   verbs  = FL_ADD,
+  type,
   //! height of the cylinder or cone
   h,
   //! radius of cylinder. r1 = r2 = r.
@@ -230,16 +288,17 @@ module fl_cylinder(
   d1,
   //! diameter, top of cone. r2 = d2 / 2.
   d2,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction
+  direction,
+  //! debug parameter as returned from fl_parm_Debug()
+  debug
 ) {
-  r_bot = fl_parse_radius(r,r1,d,d1);
-  r_top = fl_parse_radius(r,r2,d,d2);
-  bbox  = fl_bb_cylinder(h,r,r1,r2,d,d1,d2);
+  r_bot = fl_parse_radius(r,r1,d,d1,type ? fl_cyl_botRadius(type) : undef);
+  r_top = fl_parse_radius(r,r2,d,d2,type ? fl_cyl_topRadius(type) : undef);
+  h     = h ? assert(is_num(h)) h : assert(type) fl_cyl_h(type);
+  bbox  = echo(h=h,r_bot=r_bot,r_top=r_top) fl_bb_cylinder(h,r1=r_bot,r2=r_top);
   size  = bbox[1]-bbox[0];
   step  = 360/$fn;
   R     = max(r_bot,r_top);
@@ -289,7 +348,7 @@ function fl_bb_prism(
   //! height of the prism
   h
 ) =
-assert(h>=0)
+assert(h,h)
 assert(n>2)
 let(
   l_bot = fl_parse_l(l,l1),
@@ -305,6 +364,35 @@ let(
   z       = [for(p=points) p.z]
 ) [[min(x),min(y),min(z)],[max(x),max(y),max(z)]];
 
+function fl_prsm_botEdgeL(type,value) = fl_property(type,"3d engine/prism/bottom edge length",value);
+function fl_prsm_topEdgeL(type,value) = fl_property(type,"3d engine/prism/top edge length",value);
+function fl_prsm_h(type,value)        = fl_property(type,"3d engine/prism/height along Z-axis",value);
+function fl_prsm_n(type,value)        = fl_property(type,"3d engine/prism/number of edges",value);
+
+function fl_Prism(
+  //! edge number
+  n,
+  //! edge length
+  l,
+  //! edge length, bottom
+  l1,
+  //! edge length, top
+  l2,
+  //! height of the prism
+  h
+) = let(
+  l_bot = fl_parse_l(l,l1),
+  l_top = fl_parse_l(l,l2)
+) [
+  fl_native(value=true),
+  fl_engine(value="3d engine/prism"),
+  assert(l_bot) fl_prsm_botEdgeL(value=l_bot),
+  assert(l_top) fl_prsm_topEdgeL(value=l_top),
+  assert(is_num(h)) fl_prsm_h(value=h),
+  assert(is_num(n)) fl_prsm_n(value=n),
+  fl_bb_corners(value=fl_bb_prism(n,l1=l_bot,l2=l_top,h=h)),
+];
+
 /*!
  * prism
  *
@@ -313,6 +401,7 @@ let(
 module fl_prism(
   //! FL_ADD,FL_AXES,FL_BBOX
   verbs  = FL_ADD,
+  type,
   //! edge number
   n,
   //! edge length
@@ -330,12 +419,14 @@ module fl_prism(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) {
-  bbox  = fl_bb_prism(n,l,l1,l2,h);
+  l_bot = fl_parse_l(l,l1,type ? fl_prsm_botEdgeL(type) : undef);
+  l_top = fl_parse_l(l,l2,type ? fl_prsm_topEdgeL(type) : undef);
+  n     = n ? n : assert(type) fl_prsm_n(type);
+  h     = h ? h : assert(type) fl_prsm_h(type);
   step  = 360/n;
-  l_bot = fl_parse_l(l,l1);
-  l_top = fl_parse_l(l,l2);
-  Rbase = l_bot / (2 * sin(step/2));
-  Rtop  = l_top / (2 * sin(step/2));
+  bbox  = assert(n>=3,n) assert(h) fl_bb_prism(n,l1=l_bot,l2=l_top,h=h);
+  Rbase = assert(l_bot) l_bot / (2 * sin(step/2));
+  Rtop  = assert(l_top) l_top / (2 * sin(step/2));
   R     = max(Rbase,Rtop);
   size  = bbox[1]-bbox[0];
   D     = direction ? fl_direction(direction): FL_I;
@@ -354,17 +445,24 @@ module fl_prism(
   }
 }
 
-function fl_bb_pyramid(points) = fl_bb_polyhedron(points);
+function fl_bb_pyramid(base,apex) = fl_bb_polyhedron(concat([apex],[for(p=base) [p.x,p.y,0]]));
 
-/*!
- * return pyramid
- *
- * - native positioning: +Z
- */
-function fl_pyramid(
+function fl_pyr_apex(type,value)  = fl_property(type,"3d engine/pyramid/apex",value);
+function fl_pyr_base(type,value)  = fl_property(type,"3d engine/pyramid/base points",value);
+
+function fl_Pyramid(
+  //! 2d point list defining the polygonal base on plane XY
   base,
+  //! 3d point defining the apex
   apex
-) = concat([apex],[for(p=base) [p.x,p.y,0]]);
+) = let(
+) [
+  fl_native(value=true),
+  fl_engine(value="3d engine/pyramid"),
+  assert(base) fl_pyr_base(value=base),
+  assert(apex) fl_pyr_apex(value=apex),
+  fl_bb_corners(value=fl_bb_pyramid(base,apex)),
+];
 
 /*!
  * pyramid
@@ -374,18 +472,21 @@ function fl_pyramid(
 module fl_pyramid(
   //! FL_ADD,FL_AXES,FL_BBOX
   verbs  = FL_ADD,
+  type,
   base,
   apex,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction
+  direction,
+  //! debug parameter as returned from fl_parm_Debug()
+  debug
 ) {
-  points  = fl_pyramid(base, apex);
-  bbox    = fl_bb_pyramid(points);
+  base    = base ? base : assert(type) fl_pyr_base(type);
+  apex    = apex ? apex : assert(type) fl_pyr_apex(type);
+  points  = concat([apex],[for(p=base) [p.x,p.y,0]]);
   faces   = [[0,2,1],[0,3,2],[0,4,3],[0,1,4],[1,2,3,4]];
+  bbox    = fl_bb_pyramid(base,apex);
   size    = bbox[1]-bbox[0];
   D       = direction ? fl_direction(direction): I;
   M       = fl_octant(octant,bbox=bbox);
@@ -397,7 +498,7 @@ module fl_pyramid(
     } else if ($verb==FL_AXES) {
       fl_modifier($modifier) fl_doAxes(size,direction,debug);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox,auto=true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }
