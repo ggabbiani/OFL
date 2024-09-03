@@ -55,11 +55,14 @@ def read_lines(fname):
   with open(fname) as file:
     return file.readlines()
 
-def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, quiet=False, must_fail=False):
+def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, must_fail=False):
   scad_f  = os.path.normpath(scad_f)
   if echo_f is None:
     echo_f  = os.path.join(os.path.dirname(scad_f),os.path.splitext(os.path.basename(scad_f))[0]+'.echo')
+  debug("echo_f: % s" %echo_f)
   cmd = [oscad_cmd] + parms
+  # NOTE: we cannot use the --hardwarnings parameter because of the useless
+  # 'Viewall and autocenter' warn
   if hw:
     cmd += ["-o",echo_f]
   cmd += [scad_f]
@@ -72,7 +75,7 @@ def openscad(scad_f, parms=[], echo_f=None, hw=False, dry_run=False, quiet=False
       lines = read_lines(echo_f)
       for line in lines:
         # negative lookahead for excluding the useless 'Viewall and autocenter' warn
-        match   = re.findall(r"^WARNING: (?!Viewall and autocenter disabled in favor of \$vp\*)",line)
+        match   = re.findall(r"^(WARNING|ERROR): (?!Viewall and autocenter disabled in favor of \$vp\*)",line)
         if match:
           result.returncode = 1
     return result
