@@ -1,0 +1,49 @@
+{
+    "parameterSets": {
+        "TEST_CASE-circle": {
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "PRIMITIVE": "fl_circle vs circle",
+            "SHOW_DIMENSIONS": "false",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false"
+        },
+        "TEST_CASE-square": {
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "PRIMITIVE": "fl_square vs square",
+            "SHOW_DIMENSIONS": "false",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false"
+        },
+        "TEST_CASE-cube": {
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "PRIMITIVE": "fl_cube vs cube",
+            "SHOW_DIMENSIONS": "false",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false"
+        },
+        "TEST_CASE-sphere": {
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "PRIMITIVE": "fl_sphere vs sphere",
+            "SHOW_DIMENSIONS": "false",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false"
+        }
+    },
+    "fileFormatVersion": "1"
+}
