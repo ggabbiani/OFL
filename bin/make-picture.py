@@ -91,7 +91,7 @@ echo    = os.path.join(args.temp_root,base+'.echo')
 ofl.debug("command : % s" %parms)
 ofl.debug("echo : % s" %echo)
 
-result  = ofl.openscad(scad,parms=parms,echo_f=echo,hw=True,dry_run=args.dry_run,quiet=True)
+result  = ofl.openscad(scad,parms=parms,echo_f=echo,hw=True,dry_run=args.dry_run)
 if result.returncode!=0:
   cprint(f'✝ ({result.returncode})','red')
   cat(echo)
