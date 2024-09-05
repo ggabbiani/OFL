@@ -71,6 +71,7 @@ IEC = "INLET";  // [FUSED_INLET,FUSED_INLET2,320_C14_SWITCHED_FUSED_INLET,INLET,
 THICK   = 2.5;      // [0:0.5:5]
 TOLERANCE = 0.2;  // [0:0.1:1]
 
+
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
