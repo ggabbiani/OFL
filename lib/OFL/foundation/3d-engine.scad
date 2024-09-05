@@ -298,7 +298,7 @@ module fl_cylinder(
   r_bot = fl_parse_radius(r,r1,d,d1,type ? fl_cyl_botRadius(type) : undef);
   r_top = fl_parse_radius(r,r2,d,d2,type ? fl_cyl_topRadius(type) : undef);
   h     = h ? assert(is_num(h)) h : assert(type) fl_cyl_h(type);
-  bbox  = echo(h=h,r_bot=r_bot,r_top=r_top) fl_bb_cylinder(h,r1=r_bot,r2=r_top);
+  bbox  = fl_bb_cylinder(h,r1=r_bot,r2=r_top);
   size  = bbox[1]-bbox[0];
   step  = 360/$fn;
   R     = max(r_bot,r_top);
@@ -1170,9 +1170,12 @@ module fl_linear_extrude(
 }
 
 /*!
- * Arbitrary axis extrusion with rotation along extrusion axis
+ * Arbitrary axis extrusion with rotation along extrusion axis.
  *
- * FIXME: currently rotation along X-axis extrusion is broken
+ * Children are projected on the plane orthogonal to «direction» then extruded
+ * by «length» along «direction».
+ *
+ *
  */
 module fl_direction_extrude(
   //! direction in [axis,angle] representation

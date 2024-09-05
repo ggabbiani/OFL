@@ -1222,14 +1222,23 @@ function fl_2d_dist(p1,p2) = let(
  * Calculate the smallest distance in O(n*Log(n)) time using Divide and Conquer
  * strategy.
  *
+ * See also:
+ *
+ * [Closest Pair of Points using Divide and Conquer algorithm - GeeksforGeeks](https://www.geeksforgeeks.org/closest-pair-of-points-using-divide-and-conquer-algorithm/)
+ *
+ * [Closest Pair of Points | O(nlogn) Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/closest-pair-of-points-onlogn-implementation/?source=post_page-----49ba679ce3c7--------------------------------)
+ *
+ * [Algorithms StudyNote-4: Divide and Conquer — Closest Pair | by Fiona Wu | Medium](https://itzsyboo.medium.com/algorithms-studynote-4-divide-and-conquer-closest-pair-49ba679ce3c7)
+ *
  * Usage example:
  *
  *     pts  = [[x1,y1],[x2,y2],...,[xn,yn]];
  *     d    = fl_2d_closest(pts);
  */
 function fl_2d_closest(
-  //! points in ASCENDING X order
+  //! list of 2d points
   pts,
+  //! when true «points» are in ASCENDING X order
   pre_ordered=false
 ) = let(
   // list must be in X-ASCENDING order

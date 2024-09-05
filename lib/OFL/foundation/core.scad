@@ -513,6 +513,7 @@ function fl_name(type,value)        = fl_property(type,"name",value);
  */
 function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,type!=undef?false:undef);
 function fl_nominal(type,value)     = fl_property(type,"Nominal property for «type»",value);
+//! Verbatim NopSCADlib definition
 function fl_nopSCADlib(type,value,default)
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
 /*!
