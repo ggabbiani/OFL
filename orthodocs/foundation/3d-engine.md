@@ -1035,9 +1035,12 @@ __Syntax:__
 
     fl_direction_extrude(direction,length,convexity=10)
 
-Arbitrary axis extrusion with rotation along extrusion axis
+Arbitrary axis extrusion with rotation along extrusion axis.
 
-FIXME: currently rotation along X-axis extrusion is broken
+Children are projected on the plane orthogonal to «direction» then extruded
+by «length» along «direction».
+
+
 
 
 __Parameters:__

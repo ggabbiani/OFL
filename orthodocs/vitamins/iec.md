@@ -172,6 +172,7 @@ Runtime environment:
 | variable       | description                               |
 | ---            | ---                                       |
 | $fl_thickness  | used in FL_CUTOUT, FL_DRILL and FL_MOUNT  |
+| $fl_tolerance  | used in FL_CUTOUT                         |
 
 
 __Parameters:__

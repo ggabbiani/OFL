@@ -1520,6 +1520,8 @@ __Syntax:__
 fl_nopSCADlib(type,value,default)
 ```
 
+Verbatim NopSCADlib definition
+
 ---
 
 ### function fl_optProperty
