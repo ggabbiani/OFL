@@ -103,6 +103,7 @@ function fl_IEC(nop,name,description) = let(
  * | variable       | description                               |
  * | ---            | ---                                       |
  * | $fl_thickness  | used in FL_CUTOUT, FL_DRILL and FL_MOUNT  |
+ * | $fl_tolerance  | used in FL_CUTOUT                         |
  */
 module fl_iec(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_MOUNT
@@ -114,9 +115,6 @@ module fl_iec(
   octant
 ) {
 
-  module nop()
-    children();
-
   module engine() let(
     nop   = fl_nopSCADlib($this),
     screw = iec_screw(nop)
@@ -127,15 +125,13 @@ module fl_iec(
       fl_doAxes($this_size,$this_direction);
 
     else if ($this_verb==FL_BBOX)
-      fl_bb_add(corners=$this_bbox,$FL_ADD=$FL_BBOX);
+      fl_bb_add(corners=$this_bbox, auto=true, $FL_ADD=$FL_BBOX);
 
-    else if ($this_verb==FL_CUTOUT) {
-      assert(is_num($fl_thickness))
-      if ($fl_thickness>=0)
-        iec_holes(nop, h=$fl_thickness+iec_flange_t(nop));
+    else if ($this_verb==FL_CUTOUT) assert($fl_thickness>=0) assert($fl_tolerance>=0)
+      fl_linear_extrude(direction=[-Z,0], length=iec_depth(nop)+$fl_thickness+NIL)
+        fl_square(size=[iec_body_w(nop)+2*$fl_tolerance,iec_body_h(nop)+2*$fl_tolerance], corners=iec_body_r(nop)+$fl_tolerance, $FL_ADD=$FL_CUTOUT);
 
-    } else if ($this_verb==FL_DRILL) {
-      assert(is_num($fl_thickness))
+    else if ($this_verb==FL_DRILL) assert(is_num($fl_thickness)) {
       if ($fl_thickness)
         iec_screw_positions(nop)
           fl_screw(FL_DRILL,screw,thick=$fl_thickness);
@@ -146,13 +142,11 @@ module fl_iec(
           $iec_screw = screw
         ) children();
 
-    } else if ($this_verb==FL_MOUNT)
-      assert(is_num($fl_thickness)&&$fl_thickness>=0)
+    } else if ($this_verb==FL_MOUNT) assert($fl_thickness>=0)
       iec_assembly(nop, $fl_thickness);
 
-    else if ($this_verb==FL_PAYLOAD)
-      nop()
-        children();
+    // else if ($this_verb==FL_PAYLOAD)
+    //   ;
     else
       assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
 
