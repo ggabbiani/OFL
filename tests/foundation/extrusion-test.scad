@@ -38,6 +38,7 @@ SHOW_DIMENSIONS = false;
 /* [EXTRUSION] */
 
 EXTRUSION_TYPE  = "linear"; // [none,linear,directional]
+LENGTH          = 1;        // [0.1:0.1:5]
 XTR_AXIS        = [0,0,1];  // [-1:0.1:+1]
 XTR_ROT         = 0;        // [-360:+360]
 
@@ -83,5 +84,5 @@ module extrude(direction,length,convexity = 10) {
   children();
 }
 
-extrude(xtr_direction,1)
+extrude(xtr_direction,LENGTH)
   example002();
