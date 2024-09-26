@@ -10,7 +10,7 @@
 FROM ubuntu:24.04
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 ARG ODOX_VERSION=1.2.2
-ARG ODOX_RELEASE=0${ODOX_VERSION}19
+ARG ODOX_RELEASE=0ubuntu19
 ###############################################################################
 # system pre requisites
 RUN apt update \
@@ -27,8 +27,7 @@ RUN apt update \
         xvfb \
     && apt clean
 # orthodocs must be downloaded
-#        https://github.com/ggabbiani/orthodocs/releases/download/v1.2.2/orthodocs_1.2.2-0ubuntu19_amd64.deb
-RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSION}/orthodocs_${ODOX_RELEASE}_amd64.deb \
+RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSION}/orthodocs_${ODOX_VERSION}-${ODOX_RELEASE}_amd64.deb \
     && apt install -y ./orthodocs_${ODOX_VERSION}_amd64.deb
 COPY pyreqs.txt .
 RUN python3 -m venv .venv \
