@@ -1,5 +1,6 @@
 /*!
- * Artifact template for OpenSCAD Foundation Library.
+ * NopSCADlib fan wrapper library. This library wraps NopSCADlib fan instances
+ * into the OFL APIs.
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
  *
@@ -141,8 +142,6 @@ module fl_fan(
       square(fan_bore(type), center = true);
       circle(d = fan_aperture(type));
     }
-
-  function fl_vector_sign(v)  = [sign(v.x),sign(v.y),sign(v.z)];
 
   //! check for full X axis equality
   function fl_is_X(axis) = let(

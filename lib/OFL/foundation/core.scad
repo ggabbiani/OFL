@@ -13,14 +13,14 @@ use     <../../scad-utils/spline.scad>  // scad-utils : Utility libraries for Op
 
 //**** language extension *****************************************************
 
-module fl_extrude_if(condition, height)
+module fl_extrude_if(condition, height, convexity)
   if (condition)
-    linear_extrude(height)
+    linear_extrude(height,convexity=convexity)
       children();
   else
     children();
 
-module fl_render_if(condition)
+module fl_render_if(condition=$FL_RENDER?true:false)
   if (condition)
     render()
       children();
@@ -792,6 +792,14 @@ function fl_atoi(
 	i == 0 && str[0] == "-" ? fl_atoi(str, base, 1) :
 	fl_atoi(str, base, i + 1,
 		nb + search(str[i], "0123456789ABCDEF")[0] * pow(base, len(str) - i - 1));
+
+//**** vector *****************************************************************
+
+/*!
+ * Defines the vector signum function as a function ℝⁿ → ℝⁿ returning
+ * [sign(x₁), sign(x₂), …, sign(xₙ)] when v is [x₁, x₂, …, xₙ].
+ */
+function fl_vector_sign(v) = [for(x=v) sign(x)];
 
 //**** strings ****************************************************************
 

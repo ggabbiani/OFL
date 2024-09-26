@@ -13,7 +13,7 @@ DEF_RULES		:= $(CURDIR)/defaults.mk
 DEF_CONFS		:= $(CURDIR)/defaults.conf
 
 # 'Lazy Set'
-T_LIST			= bb error1 octant quadrant warn1
+T_LIST			= bb error1 octant quadrant sgn warn1
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 
