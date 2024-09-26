@@ -324,7 +324,7 @@ module fl_DIN_rail(
   thick   = fl_DIN_profileThick(profile);
 
   module do_shape(delta=0,footprint=false) {
-    fl_extrude_if(!fl_parm_debug(debug), size.z)
+    fl_extrude_if(!fl_parm_debug(debug), size.z, 3)
       let(points=footprint ? concat([points[0]],fl_list_sub(points,5)) : points)
         offset(delta)
           polygon(polyRound(points,fn=$fn));
@@ -346,7 +346,7 @@ module fl_DIN_rail(
   module engine() {
 
     if ($this_verb==FL_ADD) {
-      fl_render_if(punch)
+      fl_render_if()
         difference() {
           do_shape();
           if (punch)
