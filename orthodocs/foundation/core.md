@@ -2269,6 +2269,20 @@ fl_vector (in homogeneous or 3d format)
 
 ---
 
+### function fl_vector_sign
+
+__Syntax:__
+
+```text
+fl_vector_sign(v)
+```
+
+Defines the vector signum function as a function ℝⁿ → ℝⁿ returning
+[sign(x₁), sign(x₂), …, sign(xₙ)] when v is [x₁, x₂, …, xₙ].
+
+
+---
+
 ### function fl_vendor
 
 __Syntax:__
@@ -2491,7 +2505,7 @@ string or vector of strings
 
 __Syntax:__
 
-    fl_extrude_if(condition,height)
+    fl_extrude_if(condition,height,convexity)
 
 ---
 
@@ -2526,7 +2540,7 @@ Aligns children from u1 to u2 and move to position
 
 __Syntax:__
 
-    fl_render_if(condition)
+    fl_render_if(condition=$FL_RENDER?true:false)
 
 ---
 

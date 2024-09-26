@@ -914,6 +914,7 @@
 ## V
 
 - [fl_vector (module)](foundation/core.md#module-fl_vector)
+- [fl_vector_sign (function)](foundation/core.md#function-fl_vector_sign)
 - [fl_vendor (function)](foundation/core.md#function-fl_vendor)
 - [fl_verb2modifier (function)](foundation/core.md#function-fl_verb2modifier)
 - [fl_verbList (function)](foundation/core.md#function-fl_verblist)

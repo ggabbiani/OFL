@@ -10,7 +10,8 @@ graph LR
     A1 --o|use| A5[foundation/polymorphic-engine]
 ```
 
-Artifact template for OpenSCAD Foundation Library.
+NopSCADlib fan wrapper library. This library wraps NopSCADlib fan instances
+into the OFL APIs.
 
 This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 
