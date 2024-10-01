@@ -143,25 +143,26 @@ module fl_hd(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
-    } else if ($verb==FL_ASSEMBLY) {  // intentionally a no-op
+    } else if ($verb==FL_ASSEMBLY) {
+      // intentionally a no-op
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
 
     } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier) do_layout()
+      fl_modifier($modifier) do_layout($FL_ADD=$FL_MOUNT)
         fl_screw(type=screw,len=$hd_screw_len,direction=$hole_direction);
 
     } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
+      fl_modifier($modifier) do_layout($FL_ADD=$FL_LAYOUT)
         children();
 
     } else if ($verb==FL_DRILL) {
       assert(thick)
       fl_modifier($modifier) do_layout()
         fl_rail(fl_3d_axisValue($hole_n,dri_rails))
-          fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction);
+          fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction,$FL_FOOTPRINT=$FL_DRILL);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) do_bbox();
