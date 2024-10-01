@@ -139,9 +139,25 @@ module fl_fan(
 
   module aperture()
     intersection() {
-      square(fan_bore(type), center = true);
-      circle(d = fan_aperture(type));
+      square(fan_bore(nop), center=true);
+      circle(d=fan_aperture(nop));
     }
+
+  module bore(thick)
+    linear_extrude(thick)
+      aperture();
+
+  module body() {
+
+    module section()
+      intersection() {
+        square(fan_width(nop), center=true);
+        circle(d=fan_outer_diameter(nop));
+      }
+
+    linear_extrude(depth)
+      section();
+  }
 
   //! check for full X axis equality
   function fl_is_X(axis) = let(
@@ -172,22 +188,17 @@ module fl_fan(
 
   module do_layout() {
     fan_hole_positions(nop,0) {
+
       context(+Z)
         translate(+Z(thick[1]))
           children();
+
       context(-Z)
         translate(+Z(thick[0]))
           translate($fan_director*depth)
             children();
     }
   }
-
-  module bore(thick)
-    linear_extrude(thick)
-      intersection() {
-        square(fan_bore(nop), center=true);
-        circle(d=fan_aperture(nop));
-      }
 
   // run with an execution context set by fl_polymorph{}
   module engine() let(
@@ -202,15 +213,15 @@ module fl_fan(
       fl_bb_add(corners=$this_bbox,$FL_ADD=$FL_BBOX);
 
     } else if ($this_verb==FL_DRILL) {
-      // fan_holes(nop, poly=false, screws=true, h = 100);
       do_layout()
         fl_screw(FL_DRILL, screw, thick=$fan_thick, direction=[$fan_director,0]);
-      translate(-Z(fan_t))
-        bore(thick[1]+fan_t);
-      let(h=-thick[0]+fan_t)
-      translate(-Z(-thick[0]+depth))
-        bore(h);
-
+      bore(thick[1]);
+      let(h=-thick[0])
+        translate(-Z(-thick[0]+depth))
+          bore(h);
+      translate(-Z(depth))
+        resize([fan_width(nop)+2xNIL,0,0],auto=[true,true,false])
+          body();
 
     } else if ($this_verb==FL_FOOTPRINT) {
       fl_linear_extrude([-Z,0],fan_depth(nop))
