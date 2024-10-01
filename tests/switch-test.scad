@@ -1,4 +1,25 @@
+/*
+ * fl_switch() language extension tests
+ *
+ * NOTE: this file is generated automatically from 'template-nogui.scad', any
+ * change will be lost.
+ *
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+// **** TEST_INCLUDES *********************************************************
+
 include <../lib/OFL/foundation/core.scad>
+
+// **** TEST_PROLOGUE *********************************************************
+
+fl_status();
+
+// end of automatically generated code
 
 let(
   value  = 2.5,
@@ -45,4 +66,3 @@ let(
   ),
   expected = "default"
 ) echo(result=result) assert(result==expected,result);
-
