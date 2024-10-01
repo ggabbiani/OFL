@@ -20,6 +20,7 @@ module fl_extrude_if(condition, height, convexity)
   else
     children();
 
+//! when «condition» is true children are render()ed, fast CSG is used otherwise
 module fl_render_if(condition=$FL_RENDER?true:false)
   if (condition)
     render()
@@ -29,11 +30,11 @@ module fl_render_if(condition=$FL_RENDER?true:false)
 
 /*!
  * implementation of switch statement as a function: when «value» matches a case,
- * corresponding value is returned, undef otherwise.
+ * the corresponding value is returned, undef otherwise.
  *
  * example:
  *
- *     value = 2.5;
+ *     value  = 2.5;
  *     result = fl_switch(value,[
  *         [2,  3.2],
  *         [2.5,4.0],
@@ -44,7 +45,19 @@ module fl_render_if(condition=$FL_RENDER?true:false)
  *       ]
  *     );
  *
- * result will be set to 4.0.
+ * result will be 4.0.
+ *
+ * 'case' list elements can be function literal like in the following example:
+ *
+ *     value  = 2.5;
+ *     result = fl_switch(value,[
+ *         [function(e) (e<0),  "negative"],
+ *         [0,                  "null"    ],
+ *         [function(e) (e>0),  "positive"]
+ *       ]
+ *     );
+ *
+ * result will be "positive".
  */
 function fl_switch(
   //! the value to be checked
@@ -53,9 +66,15 @@ function fl_switch(
   cases,
   //! value returned in case of no match or when «value» is undef
   otherwise
-) = let(
-  match = is_undef(value) ? [] : [for(case=cases) if (value==case[0]) case[1]]
-) match ? match[0] : otherwise;
+) = cases ?
+      let(
+        case    = assert(is_list(cases))  cases[0],
+        label   = assert(is_list(case))   case[0],
+        success = is_function(label) ? label(value) : value==label
+      ) success ?
+        case[1] :
+        fl_switch(value,[for(i=[1:1:len(cases)-1]) cases[i]],otherwise) :
+    otherwise;
 
 //*****************************************************************************
 // versioning
