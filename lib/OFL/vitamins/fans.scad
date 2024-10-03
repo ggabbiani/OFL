@@ -215,10 +215,10 @@ module fl_fan(
     } else if ($this_verb==FL_DRILL) {
       do_layout()
         fl_screw(FL_DRILL, screw, thick=$fan_thick, direction=[$fan_director,0]);
-      bore(thick[1]);
-      let(h=-thick[0])
-        translate(-Z(-thick[0]+depth))
-          bore(h);
+      // bore(thick[1]);
+      // let(h=-thick[0])
+      //   translate(-Z(-thick[0]+depth))
+      //     bore(h);
       translate(-Z(depth))
         resize([fan_width(nop)+2xNIL,0,0],auto=[true,true,false])
           body();
