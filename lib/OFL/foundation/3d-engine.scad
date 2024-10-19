@@ -91,7 +91,9 @@ function fl_Cube(size = [1,1,1]) = [
 ];
 
 /*!
- * cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
+ * Cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
+ *
+ * ![default positioning](256x256/fig_3d_cube_defaults.png)
  */
 module fl_cube(
   //! FL_ADD,FL_AXES,FL_BBOX
@@ -150,7 +152,9 @@ function fl_Sphere(
 ];
 
 /*!
- * sphere replacement.
+ * Sphere replacement.
+ *
+ * ![default positioning](256x256/fig_3d_sphere_defaults.png)
  */
 module fl_sphere(
   //! FL_ADD,FL_AXES,FL_BBOX
@@ -268,11 +272,19 @@ function fl_Cylinder(
 ];
 
 /*!
- * cylinder replacement
+ * Cylinder replacement.
+ *
+ * ![default positioning](256x256/fig_3d_cylinder_defaults.png)
  */
 module fl_cylinder(
   //! FL_ADD,FL_AXES,FL_BBOX
   verbs  = FL_ADD,
+  /*!
+   * optional type as returned by fl_Cylinder().
+   *
+   * __NOTE__: «type» attributes are always overridden by the following
+   * parameters (if any).
+   */
   type,
   //! height of the cylinder or cone
   h,
@@ -394,9 +406,9 @@ function fl_Prism(
 ];
 
 /*!
- * prism
+ * Right prism.
  *
- *    native positioning : +Z
+ * ![default positioning](256x256/fig_3d_prism_defaults.png)
  */
 module fl_prism(
   //! FL_ADD,FL_AXES,FL_BBOX
@@ -465,9 +477,9 @@ function fl_Pyramid(
 ];
 
 /*!
- * pyramid
+ * Right pyramid.
  *
- * - native positioning: +Z
+ * ![default positioning](256x256/fig_3d_pyramid_defaults.png)
  */
 module fl_pyramid(
   //! FL_ADD,FL_AXES,FL_BBOX

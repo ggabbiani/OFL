@@ -691,6 +691,8 @@
 - [QIV (variable)](foundation/unsafe_defs.md#variable-qiv)
 - [FL_QIV (variable)](foundation/core.md#variable-fl_qiv)
 - [fl_quadrant (function)](foundation/2d-engine.md#function-fl_quadrant)
+- [fl_Quaternion (function)](foundation/quaternions.md#function-fl_quaternion)
+- [foundation/quaternions (package)](foundation/quaternions.md#package-foundationquaternions)
 
 ## R
 

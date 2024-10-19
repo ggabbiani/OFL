@@ -43,6 +43,8 @@ parser.add_argument("--ofl-script", type=str, help="OpenSCAD script",required=Tr
 parser.add_argument("-r","--resolution",type=str,help="target resolution in 'openscad' format i.e. 800x600",required=True)
 parser.add_argument("--render", action='store_true', help = "for full geometry evaluation when exporting png")
 parser.add_argument("--viewall", action='store_true', help = "adjust camera to fit object")
+parser.add_argument("--view", choices=['axes', 'crosshairs', 'edges', 'scales', 'wireframe'], help = "view options")
+parser.add_argument("--make-deps", type=str, help = "make dependency file creation")
 
 parser.add_argument("picture", type=str, help="Full target picture path")
 
@@ -56,6 +58,7 @@ ofl.info("Dry run       : % s" %args.dry_run)
 ofl.info("OSCAD         : % s" %ofl.oscad)
 ofl.info("Verbosity     : % s" %args.verbosity)
 ofl.info("Resolution    : % s" %args.resolution)
+ofl.info("View          : % s" %args.view)
 
 full    = os.path.normpath(args.ofl_script.removesuffix('.scad'))
 path    = os.path.dirname(full)
@@ -78,7 +81,9 @@ png         = os.path.join(target_path,'unscaled-'+target_base+'.png')
 ofl.debug("target path: % s" %target_path)
 ofl.debug("png        : % s" %png)
 
-parms = ['--imgsize',hires(args.resolution),'--p',json,'--P',target_base,'-o',png]
+parms = ['--imgsize',hires(args.resolution),'-o',png]
+if os.path.isfile(json):
+  parms += ['--p',json,'--P',target_base]
 if args.camera:
   parms += ['--camera', args.camera]
 if args.projection:
@@ -87,6 +92,10 @@ if args.render:
   parms += ['--render']
 if args.viewall:
   parms += ['--viewall']
+if args.view:
+  parms += ['--view', args.view]
+if args.make_deps:
+  parms += ['--m', 'make', '--d', args.make_deps]
 echo    = os.path.join(args.temp_root,base+'.echo')
 ofl.debug("command : % s" %parms)
 ofl.debug("echo : % s" %echo)

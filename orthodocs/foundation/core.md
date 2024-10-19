@@ -2168,11 +2168,11 @@ fl_switch(value,cases,otherwise)
 ```
 
 implementation of switch statement as a function: when «value» matches a case,
-corresponding value is returned, undef otherwise.
+the corresponding value is returned, undef otherwise.
 
 example:
 
-    value = 2.5;
+    value  = 2.5;
     result = fl_switch(value,[
         [2,  3.2],
         [2.5,4.0],
@@ -2183,7 +2183,19 @@ example:
       ]
     );
 
-result will be set to 4.0.
+result will be 4.0.
+
+'case' list elements can be function literal like in the following example:
+
+    value  = 2.5;
+    result = fl_switch(value,[
+        [function(e) (e<0),  "negative"],
+        [0,                  "null"    ],
+        [function(e) (e>0),  "positive"]
+      ]
+    );
+
+result will be "positive".
 
 
 __Parameters:__
@@ -2541,6 +2553,8 @@ Aligns children from u1 to u2 and move to position
 __Syntax:__
 
     fl_render_if(condition=$FL_RENDER?true:false)
+
+when «condition» is true children are render()ed, fast CSG is used otherwise
 
 ---
 

@@ -1,4 +1,5 @@
-# include *.deps
+# explicit wildcard expansion suppresses errors when no files are found
+include $(wildcard *.deps)
 
 SIZE		:= $(notdir $(CURDIR))
 CURR_BASE	:= $(notdir $(CURDIR:/$(SIZE)=))

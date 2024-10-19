@@ -42,7 +42,7 @@
 <text text-anchor="middle" x="1082.63" y="-141.58" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
 <!-- unsafe_defs -->
-<g id="node20" class="node">
+<g id="node21" class="node">
 <title>unsafe_defs</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="1018,-113.25 918,-113.25 918,-83.25 1018,-83.25 1018,-113.25"/>
 <text text-anchor="middle" x="968" y="-93.58" font-family="Times,serif" font-size="14.00">unsafe_defs</text>
@@ -81,7 +81,7 @@
 <text text-anchor="middle" x="785.63" y="-314.45" font-family="Times,serif" font-size="14.00">«use»</text>
 </g>
 <!-- type_trait -->
-<g id="node19" class="node">
+<g id="node20" class="node">
 <title>type_trait</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="634,-161.25 534,-161.25 534,-131.25 634,-131.25 634,-161.25"/>
 <text text-anchor="middle" x="584" y="-141.58" font-family="Times,serif" font-size="14.00">type_trait</text>
@@ -139,7 +139,7 @@
 <text text-anchor="middle" x="360" y="-439.33" font-family="Times,serif" font-size="14.00">connect</text>
 </g>
 <!-- util -->
-<g id="node21" class="node">
+<g id="node22" class="node">
 <title>util</title>
 <polygon fill="white" stroke="black" stroke-width="2" points="410,-375.75 310,-375.75 310,-345.75 410,-345.75 410,-375.75"/>
 <text text-anchor="middle" x="360" y="-356.08" font-family="Times,serif" font-size="14.00">util</text>
@@ -290,11 +290,17 @@
 <polygon fill="black" stroke="black" points="138.99,-387.72 135.7,-377.65 131.99,-387.57 138.99,-387.72"/>
 <text text-anchor="middle" x="176.13" y="-397.7" font-family="Times,serif" font-size="14.00">«include»</text>
 </g>
-<!-- template -->
+<!-- quaternions -->
 <g id="node18" class="node">
+<title>quaternions</title>
+<polygon fill="white" stroke="black" stroke-width="2" points="647.75,-459 546.25,-459 546.25,-429 647.75,-429 647.75,-459"/>
+<text text-anchor="middle" x="597" y="-439.33" font-family="Times,serif" font-size="14.00">quaternions</text>
+</g>
+<!-- template -->
+<g id="node19" class="node">
 <title>template</title>
-<polygon fill="white" stroke="black" stroke-width="2" points="646,-459 546,-459 546,-429 646,-429 646,-459"/>
-<text text-anchor="middle" x="596" y="-439.33" font-family="Times,serif" font-size="14.00">template</text>
+<polygon fill="white" stroke="black" stroke-width="2" points="766,-459 666,-459 666,-429 766,-429 766,-459"/>
+<text text-anchor="middle" x="716" y="-439.33" font-family="Times,serif" font-size="14.00">template</text>
 </g>
 <!-- type_trait&#45;&gt;core -->
 <g id="edge18" class="edge">

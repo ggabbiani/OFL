@@ -54,7 +54,11 @@ FL_FAN_NAMES = [
   for(fan=FL_FAN_INVENTORY) fl_name(fan)
 ];
 
-//! unwrap nop screw from the OFL fan instance
+/*!
+ * Unwraps the nop screw from the OFL fan instance.
+ *
+ * __NOTE__: the returned value is a **NopSCADlib** list.
+ */
 function fl_fan_screw(type)  = fan_screw(fl_nopSCADlib(type));
 
 /*!

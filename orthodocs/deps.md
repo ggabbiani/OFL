@@ -140,13 +140,14 @@ graph TD
     A49 --o|include| A15
     A49 --o|use| A4
     A49 --o|use| A18
+    A50[foundation/quaternions]
     A33 --o|include| A21
     A33 --o|include| A25
     A33 --o|use| A7
     A33 --o|use| A9
     A33 --o|use| A4
-    A50[vitamins/sata-adapters] --o|include| A33
-    A50 --o|use| A4
+    A51[vitamins/sata-adapters] --o|include| A33
+    A51 --o|use| A4
     A15 --o|include| A2
     A15 --o|use| A5
     A15 --o|use| A3
@@ -162,30 +163,30 @@ graph TD
     A12 --o|include| A14
     A12 --o|use| A16
     A12 --o|use| A4
-    A51[vitamins/spdts] --o|include| A10
-    A51 --o|use| A5
-    A51 --o|use| A3
-    A51 --o|use| A4
+    A52[vitamins/spdts] --o|include| A10
+    A52 --o|use| A5
+    A52 --o|use| A3
+    A52 --o|use| A4
     A46 --o|include| A2
     A46 --o|use| A1
     A46 --o|use| A5
     A46 --o|use| A3
     A46 --o|use| A4
-    A52[artifacts/t-nut] --o|include| A2
-    A52 --o|include| A13
-    A52 --o|include| A15
-    A52 --o|use| A5
-    A52 --o|use| A3
-    A52 --o|use| A29
-    A52 --o|use| A4
-    A53[artifacts/t-profiles] --o|include| A5
+    A53[artifacts/t-nut] --o|include| A2
+    A53 --o|include| A13
+    A53 --o|include| A15
+    A53 --o|use| A5
+    A53 --o|use| A3
+    A53 --o|use| A29
     A53 --o|use| A4
-    A54[artifacts/template] --o|include| A2
-    A54 --o|use| A8
-    A55[foundation/template] --o|include| A2
+    A54[artifacts/t-profiles] --o|include| A5
+    A54 --o|use| A4
+    A55[artifacts/template] --o|include| A2
     A55 --o|use| A8
-    A56[vitamins/template] --o|include| A2
+    A56[foundation/template] --o|include| A2
     A56 --o|use| A8
+    A57[vitamins/template] --o|include| A2
+    A57 --o|use| A8
     A47 --o|include| A2
     A47 --o|use| A5
     A47 --o|use| A3

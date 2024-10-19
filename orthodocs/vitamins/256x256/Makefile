@@ -20,7 +20,7 @@ all: $(TARGETS)
 
 fig_FL_IEC_%.png: iecs.scad iecs.json
 	$(call target-prologue)
-	$(call make-picture,$(SIZE),,)
+	$(call make-picture,$(SIZE))
 	$(call target-epilogue-success)
 
 clean:

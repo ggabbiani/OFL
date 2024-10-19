@@ -944,7 +944,9 @@ __Syntax:__
 
     fl_cube(verbs=FL_ADD,type,size,octant,direction,debug)
 
-cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
+Cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
+
+![default positioning](256x256/fig_3d_cube_defaults.png)
 
 
 __Parameters:__
@@ -970,13 +972,22 @@ __Syntax:__
 
     fl_cylinder(verbs=FL_ADD,type,h,r,r1,r2,d,d1,d2,octant,direction,debug)
 
-cylinder replacement
+Cylinder replacement.
+
+![default positioning](256x256/fig_3d_cylinder_defaults.png)
 
 
 __Parameters:__
 
 __verbs__  
 FL_ADD,FL_AXES,FL_BBOX
+
+__type__  
+optional type as returned by [fl_Cylinder()](#function-fl_cylinder).
+
+__NOTE__: «type» attributes are always overridden by the following
+parameters (if any).
+
 
 __h__  
 height of the cylinder or cone
@@ -1293,9 +1304,9 @@ __Syntax:__
 
     fl_prism(verbs=FL_ADD,type,n,l,l1,l2,h,debug,octant,direction)
 
-prism
+Right prism.
 
-   native positioning : +Z
+![default positioning](256x256/fig_3d_prism_defaults.png)
 
 
 __Parameters:__
@@ -1336,9 +1347,9 @@ __Syntax:__
 
     fl_pyramid(verbs=FL_ADD,type,base,apex,octant,direction,debug)
 
-pyramid
+Right pyramid.
 
-- native positioning: +Z
+![default positioning](256x256/fig_3d_pyramid_defaults.png)
 
 
 __Parameters:__
@@ -1364,7 +1375,9 @@ __Syntax:__
 
     fl_sphere(verbs=FL_ADD,type,r,d,octant,direction,debug)
 
-sphere replacement.
+Sphere replacement.
+
+![default positioning](256x256/fig_3d_sphere_defaults.png)
 
 
 __Parameters:__

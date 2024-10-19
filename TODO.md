@@ -123,9 +123,10 @@
 - [ ] fix bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
 - [ ] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
-
-
-
+- add fl_circular_layout{} and cyl_layout{} (from 'super-pipe' project);
+- add fan_guard component to fans;
+- add fl_Object() constructor helper (from 'super-pipe' project);
+- finalize quaternions support;
 
 ## Changed file names
 

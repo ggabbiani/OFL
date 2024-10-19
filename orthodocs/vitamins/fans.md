@@ -172,7 +172,10 @@ __Syntax:__
 fl_fan_screw(type)
 ```
 
-unwrap nop screw from the OFL fan instance
+Unwraps the nop screw from the OFL fan instance.
+
+__NOTE__: the returned value is a **NopSCADlib** list.
+
 
 ## Modules
 

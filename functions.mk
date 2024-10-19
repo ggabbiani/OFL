@@ -97,15 +97,23 @@ define scad-path
 $(if $(call is-mac),$(shell mdfind "kMDItemCFBundleIdentifier == 'org.openscad.OpenSCAD'"),$(shell $(call which) openscad))
 endef
 
+# when passing openscad multiple '-o' parameters, the dependency file is
+# targeted to the last of them that could be a temporary. This macro changes the
+# target to $@
+define fix-target-dependencies
+sed '1s|.*:|$@:|' --in-place $@.deps
+endef
+
 # produce the current target picture from
 # $(1)=target resolution in 'openscad' format i.e. 800x600
 # $(2)=camera view settings
 # $(3)=projection type ('ortho' or 'perspective')
 # $(4)=other parameter(s)
 define make-picture
-	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) $(4) --ofl-script $< $@ \
-	&& convert unscaled-$@ -resize $(1) $@ &>/dev/null \
-	&& rm unscaled-$@
+$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@ \
+&& $(IMCMD) unscaled-$@ -resize $(1) $@ &>/dev/null \
+&& rm unscaled-$@ \
+&& $(call fix-target-dependencies)
 endef
 
 define make-camera
@@ -133,7 +141,7 @@ define top-view
 $(call make-camera,$(1),$(2),$(3),0,0,0,$(4))
 endef
 
-# returns the scad and json full path for the provided test type/name
+# returns the scad, conf and json full path for the provided test type/name
 # $(1) : <artifacts|foundation|vitamins>/<test esoteric name>
 define test-deps
 $(TESTS)/$(1)-test.scad $(TESTS)/$(1)-test.json
