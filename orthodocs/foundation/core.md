@@ -1719,22 +1719,18 @@ __Syntax:__
 fl_parm_SignedPair(list)
 ```
 
-This format uses the real numbers sign to distinguish couple of values passed
-in a list.
-
 The function takes an unordered pair of two opposite signed values and
 returns an ordered list with the negative value at position 0 and the
 positive at position 1.
 
-When the input is in scalar form, both the negative/positive will be set to
-it with sign flag set accordingly.
+When the input is a scalar, its absolute value will be used for both
+negative/positive values with sign flag set accordingly.
 
-This type can be used for storing semi-axis related values like - for
-example - thickness values. While providing a free and compact input
-representation, the transformed value is still compatible with the input (so
-can be forwarded to other signed-value parameters), while simplifying the
-fetch of its components being the transformed positions 'normalized' in
-fixed-form with negative/positive parts at index 0/1 respectively.
+This type is used for storing semi-axis related values like - for example -
+thickness values. The transformed value is still compatible with the passed
+input, so can be safely forwarded to other signed-value parameters. Otoh, it
+simplifies the fetch of its components once 'normalized' in fixed-form with
+negative/positive parts at index 0/1 respectively.
 
 Example 1:
 

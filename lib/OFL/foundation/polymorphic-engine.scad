@@ -85,7 +85,7 @@ module fl_polymorph(
   this,
   //! when undef native positioning is used
   octant,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  //! desired direction [director,rotation], native direction when undef
   direction,
   //! see constructor fl_parm_Debug()
   debug

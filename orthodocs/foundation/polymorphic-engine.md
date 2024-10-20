@@ -95,7 +95,7 @@ __octant__
 when undef native positioning is used
 
 __direction__  
-desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+desired direction [director,rotation], native direction when undef
 
 __debug__  
 see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
