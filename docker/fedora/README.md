@@ -1,36 +1,50 @@
 # README
 
-This directory contains the Dockerfile for locally building and run an OFL test
-environment for Fedora and Ubuntu.
+This directory contains the Dockerfile for building an image usable to test the OFL
+development environment under **Fedora**. In particular with this image is possible to check:
 
-The local build is not mandatory and it is possible to use the public Docker
-images available ones on DockerHub.
+- project setup;
+- documentation generation;
+- functional tests execution.
 
-The following examples leverage the Fedora test environment, for Ubuntu test
-environment just change the image tag from **fedora** to **ubuntu**.
+The image is also maintained and publicly available on DockerHub as
+**ggabbiani/ofl:fedora**, so it is  always possible to check the same things
+without the need of a local build.
 
-## Locally built image test
+## Local image
 
-### Build
+### Local image build
 
     $ cd <this directory>
-    <this directory> $
-    <this directory> $ docker build -t ofl:fedora .
+    $
+    $ docker build -t ofl:fedora .
 
-### Project setup and documentation generation
-
-    $ cd <OFL root directory>
-    <OFL root directory> $
-    <OFL root directory> $ docker run -v ./:/import:Z  -it --rm ofl:fedora
-
-### Tests execution
+### Project setup and documentation generation (with local image)
 
     $ cd <OFL root directory>
-    <OFL root directory> $
-    <OFL root directory> $ docker run -v ./:/import:Z  -it --rm ofl:fedora tests/runs
+    $
+    $ make -s orthodocs/clean
+    $
+    $ docker run -v ./:/import:Z  -it --rm ofl:fedora
 
-## Public available image test
+### Functional tests execution (with local image)
 
     $ cd <OFL root directory>
-    <OFL root directory> $
-    <OFL root directory> $ docker run -v ./:/import:Z  -it --rm ggabbiani/ofl:fedora tests/runs
+    $
+    $ docker run -v ./:/import:Z  -it --rm ofl:fedora tests/runs
+
+## Public image
+
+### Project setup and documentation generation (with public image)
+
+    $ cd <OFL root directory>
+    $
+    $ make -s orthodocs/clean
+    $
+    $ docker run -v ./:/import:Z  -it --rm ggabbiani/ofl:fedora
+
+### Functional tests execution (with public image)
+
+    $ cd <OFL root directory>
+    $
+    $ docker run -v ./:/import:Z  -it --rm ggabbiani/ofl:fedora tests/runs

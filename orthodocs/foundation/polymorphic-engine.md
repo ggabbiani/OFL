@@ -65,7 +65,7 @@ A typical use of this high-level management module is the following:
       else
         assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
 
-    fl_polymorph(verbs,object,octant,direction,debug)
+    fl_polymorph(verbs,object,octant=octant,direction=direction,debug=debug)
       engine(thick=T)
         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
