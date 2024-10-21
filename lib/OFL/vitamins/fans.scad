@@ -245,7 +245,7 @@ module fl_fan(
 
   // fl_polymorph() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant,direction,debug)
+  fl_polymorph(verbs,this,octant=octant,direction=direction,debug=debug)
     engine()
       children();
 }

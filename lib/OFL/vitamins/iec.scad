@@ -150,7 +150,7 @@ module fl_iec(
     else
       assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
 
-  fl_polymorph(verbs,this,octant,direction)
+  fl_polymorph(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

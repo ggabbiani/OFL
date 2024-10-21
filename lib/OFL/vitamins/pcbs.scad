@@ -857,7 +857,7 @@ module fl_pcb(
     fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=$fl_tolerance,components=components,cut_direction=cut_direction,debug=debug,direction=direction,octant=octant)
       children();
   else
-    fl_polymorph(verbs,type,octant,direction,debug)
+    fl_polymorph(verbs,type,octant=octant,direction=direction,debug=debug)
       native()
         children();
 

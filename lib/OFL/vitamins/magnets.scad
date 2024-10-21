@@ -267,7 +267,7 @@ module fl_magnet(
     }
   }
 
-  fl_polymorph(verbs,type,octant,direction)
+  fl_polymorph(verbs,type,octant=octant,direction=direction)
     engine()
       children();
 }
