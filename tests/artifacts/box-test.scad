@@ -18,17 +18,22 @@ use <../../lib/OFL/foundation/2d-engine.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -106,9 +111,17 @@ FAST_NOMINAL = 3;  // [2,3,4,5,6,8]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+
+direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
@@ -142,3 +155,4 @@ fl_box(verbs,
   octant=octant,direction=direction
 )
   fl_sphere(FL_AXES,r=10,$FL_AXES="ON");
+

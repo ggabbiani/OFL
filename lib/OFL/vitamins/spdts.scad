@@ -52,9 +52,7 @@ module fl_spdt(
   //! desired direction [director,rotation], native direction when undef ([+Z,0])
   direction,
   //! when undef native positioning is used
-  octant,
-  //! see constructor fl_parm_Debug()
-  debug
+  octant
 ) {
   assert(verbs!=undef);
 
@@ -65,14 +63,6 @@ module fl_spdt(
   d       = fl_spdt_d(type);
   D       = direction ? fl_direction(direction)  : FL_I;
   M       = fl_octant(octant,bbox=bbox);
-
-  fl_trace("D",D);
-  fl_trace("M",M);
-  fl_trace("bbox",bbox);
-  fl_trace("$FL_ADD",$FL_ADD);
-  fl_trace("$FL_AXES",$FL_AXES);
-  fl_trace("$FL_BBOX",$FL_BBOX);
-  fl_trace("$FL_DRILL",$FL_DRILL);
 
   module head() {
     difference() {
@@ -108,7 +98,7 @@ module fl_spdt(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) cube(size=size,center=false);

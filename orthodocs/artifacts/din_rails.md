@@ -311,7 +311,7 @@ This module defines the punch shape stepped by.
 
 __Syntax:__
 
-    fl_DIN_rail(verbs=FL_ADD,this,cut_thick,tolerance=0,cut_drift=0,cut_direction,octant,direction,debug)
+    fl_DIN_rail(verbs=FL_ADD,this,cut_thick,tolerance=0,cut_drift=0,cut_direction,octant,direction)
 
 DIN rail engine module.
 
@@ -348,15 +348,6 @@ when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-
-__debug__  
-Debug parameter (see also constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)) currently
-supporting:
-
-- symbols (points)
-- labels (points)
-- dimension lines
-
 
 
 ---

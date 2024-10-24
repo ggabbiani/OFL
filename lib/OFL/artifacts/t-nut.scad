@@ -159,8 +159,6 @@ module fl_tnut(
   countersink=false,
   //! scalar thickness for FL_DRILL
   dri_thick,
-  //! see constructor fl_parm_Debug()
-  debug,
   //! desired direction [director,rotation], native direction when undef ([+Z,0])
   direction,
   //! when undef native positioning is used
@@ -254,21 +252,16 @@ module fl_tnut(
   }
 
   module do_symbols(
-    debug,
     // connectors,
     holes
   ) {
-    if (debug) {
-      // if (connectors)
-      //   fl_conn_debug(connectors,debug=debug);
-      if (holes)
-        fl_hole_debug(holes,debug=debug);
-    }
+    if (fl_dbg_symbols() && holes)
+      fl_hole_debug(holes);
   }
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
-      do_symbols(debug,holes);
+      do_symbols(holes);
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
@@ -276,7 +269,7 @@ module fl_tnut(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       // echo($modifier=$modifier);

@@ -1,0 +1,45 @@
+{
+    "parameterSets": {
+        "TEST_CASE-RIGHT_VIEW": {
+            "$FL_ADD": "ON",
+            "$FL_BBOX": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "ASSERTIONS": "false",
+            "COMPONENTS": "[\"none\"]",
+            "DIMENSIONS": "true",
+            "DIM_GAP": "1",
+            "DIM_MODE": "full",
+            "DIM_W": "0.1",
+            "LABELS": "false",
+            "SYMBOLS": "false",
+            "VIEW_TYPE": "right",
+            "d": "4",
+            "h": "10"
+        },
+        "TEST_CASE-TOP_VIEW": {
+            "$FL_ADD": "ON",
+            "$FL_BBOX": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_debug": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fn": "50",
+            "ASSERTIONS": "false",
+            "COMPONENTS": "[\"none\"]",
+            "DIMENSIONS": "true",
+            "DIM_GAP": "1",
+            "DIM_MODE": "full",
+            "DIM_W": "0.1",
+            "LABELS": "false",
+            "SYMBOLS": "false",
+            "VIEW_TYPE": "top",
+            "d": "4",
+            "h": "10"
+        }
+    },
+    "fileFormatVersion": "1"
+}

@@ -108,7 +108,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_heatsink(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,direction,octant,debug)
+    fl_heatsink(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,direction,octant)
 
 common wrapper for different heat sink model engines.
 

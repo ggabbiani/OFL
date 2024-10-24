@@ -85,7 +85,7 @@ fl_spdt_l(type)
 
 __Syntax:__
 
-    fl_spdt(verbs=FL_ADD,type,direction,octant,debug)
+    fl_spdt(verbs=FL_ADD,type,direction,octant)
 
 __Parameters:__
 
@@ -100,8 +100,5 @@ desired direction [director,rotation], native direction when undef ([+Z,0])
 
 __octant__  
 when undef native positioning is used
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 

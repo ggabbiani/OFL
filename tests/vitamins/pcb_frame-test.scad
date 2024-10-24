@@ -16,17 +16,22 @@ include <../../lib/OFL/vitamins/pcbs.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -99,9 +104,17 @@ CUT_DIRECTION  = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+
+direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
@@ -124,6 +137,7 @@ cut_direction = CUT_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]
 pcb   = fl_pcb_select(PCB);
 frame = fl_pcb_Frame(pcb,d=D,faces=FACE_T,wall=WALL,overlap=[WIDE_OVER,THIN_OVER],inclusion=INCLUSION,countersink=COUNTERSINK,layout=LAYOUT);
 
-fl_pcb_frame(verbs,frame,frame_parts=[LEFT,RIGHT],frame_tolerance=TOLERANCE,thick=T,cut_direction=cut_direction,debug=debug,octant=octant,direction=direction)
+fl_pcb_frame(verbs,frame,frame_parts=[LEFT,RIGHT],frame_tolerance=TOLERANCE,thick=T,cut_direction=cut_direction,octant=octant,direction=direction)
   translate(-Z($hole_depth))
     fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);
+

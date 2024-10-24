@@ -942,7 +942,7 @@ see also [fl_tt_isBoundingBox()](type_trait.md#function-fl_tt_isboundingbox)
 
 __Syntax:__
 
-    fl_cube(verbs=FL_ADD,type,size,octant,direction,debug)
+    fl_cube(verbs=FL_ADD,type,size,octant,direction)
 
 Cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
 
@@ -960,9 +960,6 @@ when undef, native positioning is used with cube midpoint centered at origin O
 __direction__  
 desired direction [director,rotation] or native direction if undef
 
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
-
 
 ---
 
@@ -970,7 +967,7 @@ debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debu
 
 __Syntax:__
 
-    fl_cylinder(verbs=FL_ADD,type,h,r,r1,r2,d,d1,d2,octant,direction,debug)
+    fl_cylinder(verbs=FL_ADD,type,h,r,r1,r2,d,d1,d2,octant,direction)
 
 Cylinder replacement.
 
@@ -1015,9 +1012,6 @@ when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---
@@ -1066,7 +1060,7 @@ direction in [axis,angle] representation
 
 __Syntax:__
 
-    fl_doAxes(size,direction,debug)
+    fl_doAxes(size,direction)
 
 ---
 
@@ -1106,7 +1100,7 @@ top radius
 
 __Syntax:__
 
-    fl_frame(verbs=FL_ADD,size=[1,1,1],corners=[0,0,0,0],thick,debug,octant,direction)
+    fl_frame(verbs=FL_ADD,size=[1,1,1],corners=[0,0,0,0],thick,octant,direction)
 
 3d extension of [fl_2d_frame{}](2d-engine.md#module-fl_2d_frame).
 
@@ -1128,9 +1122,6 @@ One scalar value R means corners=[R,R,R,R]
 
 __thick__  
 subtracted to size defines the internal size
-
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 __octant__  
 when undef, native positioning is used with cube midpoint centered at origin O
@@ -1302,7 +1293,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_prism(verbs=FL_ADD,type,n,l,l1,l2,h,debug,octant,direction)
+    fl_prism(verbs=FL_ADD,type,n,l,l1,l2,h,octant,direction)
 
 Right prism.
 
@@ -1329,9 +1320,6 @@ edge length, top
 __h__  
 height
 
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
-
 __octant__  
 when undef native positioning is used
 
@@ -1345,7 +1333,7 @@ desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 __Syntax:__
 
-    fl_pyramid(verbs=FL_ADD,type,base,apex,octant,direction,debug)
+    fl_pyramid(verbs=FL_ADD,type,base,apex,octant,direction)
 
 Right pyramid.
 
@@ -1363,9 +1351,6 @@ when undef native positioning is used
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
-
 
 ---
 
@@ -1373,7 +1358,7 @@ debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debu
 
 __Syntax:__
 
-    fl_sphere(verbs=FL_ADD,type,r,d,octant,direction,debug)
+    fl_sphere(verbs=FL_ADD,type,r,d,octant,direction)
 
 Sphere replacement.
 
@@ -1390,9 +1375,6 @@ when undef default positioning is used
 
 __direction__  
 desired direction [director,rotation], default direction if undef
-
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---

@@ -151,8 +151,6 @@ module fl_pcbHolder(
    * __NOTE__: only Z semi-axes are used
    */
   lay_direction=[+Z,-Z],
-  //! see constructor fl_parm_Debug()
-  debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -207,7 +205,7 @@ module fl_pcbHolder(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier)

@@ -15,18 +15,23 @@
 include <../../lib/OFL/artifacts/joints.scad>
 
 
-$fn         = 50;           // [3:100]
-// Debug statements are turned on
-$fl_debug   = false;
+$fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
-$FL_RENDER  = false;
+$FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
-$fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+$fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -100,9 +105,17 @@ TOLERANCE = 0.1;
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+
+direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
@@ -215,7 +228,8 @@ joint   =
     ) :
     undef;
 
-fl_jnt_joint(verbs, joint, octant=octant, direction=direction, debug=debug,
+fl_jnt_joint(verbs, joint, octant=octant, direction=direction,
   $fl_tolerance=TOLERANCE,
   $fl_thickness=THICKNESS
 );
+

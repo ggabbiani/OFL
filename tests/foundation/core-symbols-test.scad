@@ -20,17 +20,22 @@ use <../../lib/OFL/foundation/label.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -88,4 +93,5 @@ else if (SYMBOL=="point")
 else
   fl_symbol(verbs=verbs,size=size,symbol=SYMBOL)
     fl_label(FL_ADD,"Ciao!",size=$sym_size.y,thick=0.1,direction=$sym_ldir);
+
 

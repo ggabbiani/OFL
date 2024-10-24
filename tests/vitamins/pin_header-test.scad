@@ -16,17 +16,22 @@ include <../../lib/OFL/vitamins/pin_headers.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -64,7 +69,7 @@ DIR_R       = 0;        // [-360:360]
 
 SHOW          = "all"; // [all,custom,FL_PHDR_GPIOHDR,FL_PHDR_GPIOHDR_F,FL_PHDR_GPIOHDR_FL,FL_PHDR_GPIOHDR_F_SMT_LOW]
 // ... guess what
-COLOR         = "base";   // [base,red]
+PIN_COLOR     = "base";   // [base,red]
 // tolerance used during FL_CUTOUT
 CO_TOLERANCE  = 0.5;      // [0:0.1:5]
 // thickness for FL_CUTOUT
@@ -79,9 +84,17 @@ GEOMETRY          = [10,1]; // [1:20]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+
+direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
@@ -89,12 +102,12 @@ fl_status();
 
 thick     = $FL_CUTOUT!="OFF"||$FL_DRILL!="OFF" ? CO_T : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
-color     = COLOR=="base"?grey(20):COLOR;
+color     = PIN_COLOR=="base"?grey(20):PIN_COLOR;
 type      = fl_dict_search(FL_PHDR_DICT,SHOW)[0];
 verbs     = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL]);
 
 module wrapIt(type) {
-  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,debug=debug,octant=octant,direction=direction);
+  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,octant=octant,direction=direction);
 }
 
 // one predefined
@@ -112,3 +125,4 @@ else
   let(
     type  = fl_PinHeader("test header",nop=2p54header,geometry=GEOMETRY,engine=TYPE)
   )   wrapIt(type);
+

@@ -1,3 +1,14 @@
+#
+# 800x600 documentation pictures.
+# TODO: use $(call make-picture-)
+#
+# This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+#
+# Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 # explicit wildcard expansion suppresses errors when no files are found
 # include $(wildcard *.deps)
 
@@ -90,7 +101,7 @@ pic-9.png: $(TESTS)/vitamins/spdt-test.scad $(TESTS)/vitamins/spdt-test.json $(L
 	@rm unscaled-$@
 	$(call target-epilogue-success)
 
-torus.png: $(LIB_ROOT)/vitamins/spdts.scad $(TESTS)/foundation/torus-test.scad $(TESTS)/foundation/torus-test.json
+torus.png: $(TESTS)/foundation/torus-test.scad $(TESTS)/foundation/torus-test.json $(LIB_ROOT)/foundation/3d-engine.scad
 	$(call target-prologue)
 	@$(SCAD) --imgsize 3200,2400 -d $(patsubst %.png,%.deps,$@) --p $(word 2,$^) --P $(patsubst %.png,%,$@) -o unscaled-$@ --ofl-script $<
 	@$(IMCMD) unscaled-$@ -resize $(SIZE) $@

@@ -21,9 +21,9 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Syntax:__
 
-    fl_bentPlate(verbs=FL_ADD,type,radius,size,material,thick,octant,direction,debug)
+    fl_bentPlate(verbs=FL_ADD,type,radius,size,material,thick,octant,direction)
 
-engine for generating bent plates.
+Engine for generating bent plates.
 
 See also https://metalfabricationsvcs.com/products/bent-plate/
 
@@ -53,17 +53,6 @@ when undef native positioning (see [variable FL_O](core.md#variable-fl_o)) is us
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Z])
-
-__debug__  
-Debug parameter as returned from [fl_parm_Debug()](core.md#function-fl_parm_debug). Currently supported features:
-
-| feature    | status  |
-| ---        | ---     |
-| components | -       |
-| dimensions | -       |
-| labels     | ✔       |
-| symbols    | ✔       |
-
 
 
 ---

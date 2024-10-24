@@ -59,7 +59,7 @@ use <mngm-engine.scad>
  *       else
  *         assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
  *
- *     fl_polymorph(verbs,object,octant=octant,direction=direction,debug=debug)
+ *     fl_polymorph(verbs,object,octant=octant,direction=direction)
  *       engine(thick=T)
  *         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
  *         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
@@ -72,12 +72,9 @@ use <mngm-engine.scad>
  * - $this_bbox       : bounding box corners in [low,high] format
  * - $this_direction  : orientation in [director,rotation] format
  * - $this_octant     : positioning octant
- * - $this_debug      : debug parameters
  * - $fl_thickness    : multi-verb parameter (see fl_parm_thickness())
  * - $fl_tolerance    : multi-verb parameter (see fl_parm_tolerance())
  *
- * TODO: this module should handle all the OFL runtime variables, particularly
- * the verb-dependent ones (like $fl_tolerance)
  */
 module fl_polymorph(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -86,9 +83,7 @@ module fl_polymorph(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef
-  direction,
-  //! see constructor fl_parm_Debug()
-  debug
+  direction
 ) assert(is_list(verbs)||is_string(verbs),verbs) let(
   bbox  = fl_bb_corners(this),
   size  = bbox[1]-bbox[0],
@@ -102,11 +97,6 @@ module fl_polymorph(
       $this_bbox      = bbox,
       $this_direction = direction,
       $this_octant    = octant,
-
-      $this_debug     = debug,
-      $dbg_Dimensions = fl_parm_dimensions(debug),
-      $dbg_Symbols    = fl_parm_symbols(debug),
-      $dbg_Labels     = fl_parm_labels(debug),
 
       $fl_tolerance   = fl_parm_tolerance(),
       $fl_thickness   = fl_parm_thickness()

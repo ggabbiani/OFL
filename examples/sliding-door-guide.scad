@@ -45,8 +45,6 @@ TOLERANCE   = 0;  // [0:0.1:2]
 
 /* [Hidden] */
 
-debug = fl_parm_Debug(symbols=SHOW_SYMBOLS);
-
 screw = No6_cs_screw;
 scr_nominal = fl_screw_nominal(screw);
 

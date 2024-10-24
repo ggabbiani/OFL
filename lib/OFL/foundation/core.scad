@@ -118,14 +118,6 @@ module fl_error(
   message
 ) assert(condition==false,fl_error(message));
 
-//! check condition, forcing error when false
-module fl_assert(
-  //! condition to be asserted
-  condition,
-  //! string or vector of strings
-  message
-) assert(condition==true,fl_error(message));
-
 //**** base transformations ***************************************************
 
 //! transforms 3D to 2D coords by clipping Z plane
@@ -693,19 +685,22 @@ function fl_grey(n) = [0.01, 0.01, 0.01] * n;
 function fl_palette(color,axis) = assert(
   (color!=undef && axis==undef)||color==undef && axis!=undef,str("color=",color,",axis=",axis)
 ) let(
-  versor = axis
-  ? assert(!fl_debug() || fl_tt_isAxis(axis),axis) fl_versor(axis)
-  : assert(!fl_debug() || fl_tt_isColor(color),color) undef
-) versor ? (  (versor==FL_X||versor==-FL_X) ? "red"
-            : (versor==FL_Y||versor==-FL_Y) ? "green"
-            : (versor==FL_Z||versor==-FL_Z) ? "blue"
-            : assert(false, axis) undef)
-          : (
-              color=="bronze"        ? "#CD7F32"
-            : color=="copper red"    ? "#CB6D51"
-            : color=="copper penny"  ? "#AD6F69"
-            : color=="pale copper"   ? "#DA8A67"
-            : color);
+  versor = axis ?
+    assert(!fl_dbg_assert() || fl_tt_isAxis(axis),axis) fl_versor(axis) :
+    undef
+) versor ? (
+      (versor==FL_X||versor==-FL_X) ? "red" : (versor==FL_Y||versor==-FL_Y) ? "green" : (versor==FL_Z||versor==-FL_Z) ? "blue" : assert(false, axis) undef
+    ) : (
+      color=="bronze" ?
+        "#CD7F32" :
+      color=="copper red"    ?
+        "#CB6D51" :
+      color=="copper penny"  ?
+        "#AD6F69" :
+      color=="pale copper"   ?
+        "#DA8A67" :
+      assert(!fl_dbg_assert() || is_string(color) || fl_tt_isColor(color),color) color
+    );
 
 /*!
  * Set current color and alpha channel, using variable $fl_filament when «color» is
@@ -715,15 +710,15 @@ function fl_palette(color,axis) = assert(
  */
 module fl_color(color,alpha=1) {
   color = color ? color : fl_filament();
-  if (fl_debug())
+  if (fl_dbg_color())
     #children();
   else let(
     c = fl_palette(color=color)
-  ) if (c!="ignore") {
+  ) if (c=="ignore")
+      children();
+    else
       color(c,alpha)
         children();
-    } else
-      children();
 }
 
 function fl_parse_l(l,l1,def)              = (!is_undef(l) ? l   : (!is_undef(l1) ? l1    : def));
@@ -1404,22 +1399,6 @@ function fl_list_has(list,item) = len(fl_list_filter(list,function(curr) curr==i
 
 //**** Global getters *********************************************************
 
-/*!
- * When true fl_assert() is enabled
- *
- * **TODO**: remove since deprecated.
- */
-function fl_asserts() =
-  is_undef($fl_asserts) ?
-    false :
-    assert(is_bool($fl_asserts)) $fl_asserts;
-
-//! When true debug statements are turned on
-function fl_debug() =
-  is_undef($fl_debug) ?
-    false :
-    assert(is_bool($fl_debug),$fl_debug) $fl_debug;
-
 //! Default color for printable items (i.e. artifacts)
 function fl_filament() =
   is_undef($fl_filament) ?
@@ -1483,47 +1462,6 @@ function fl_parm_Octant(x,y,z) = let(
   o_y = y=="undef" ? undef : is_num(y) ? y : fl_atoi(y),
   o_z = z=="undef" ? undef : is_num(z) ? z : fl_atoi(z)
 ) [o_x,o_y,o_z];
-
-//! constructor for debug context parameter
-function fl_parm_Debug(
-  //! when true, labels to symbols are assigned and displayed
-  labels  = false,
-  //! when true symbols are displayed
-  symbols = false,
-  /*!
-   * a string or a list of strings equals to the component label of which
-   * direction information will be shown
-   */
-  components = [],
-  //! dimension lines
-  dimensions = false
-) = [labels,symbols,components,dimensions];
-
-//! When true debug labels are turned on
-function fl_parm_labels(debug) = is_undef(debug) ? false : assert(is_bool(debug[0])) debug[0];
-
-//! When true debug symbols are turned on
-function fl_parm_symbols(debug) = is_undef(debug) ? false : assert(is_bool(debug[1])) debug[1];
-
-//! When «debug» is not undef, checks if component «label» is marked for debugging
-function fl_parm_components(debug,label) =
-  is_undef(debug) ?
-    false :
-    let(components = debug[2])
-    is_list(components) ?
-      search([label],components)!=[[]] :
-      is_string(components) ?
-        components==label :
-        assert(false,str("debug information must be a string or a list of strings: ", components)) undef;
-
-//! When true dimension lines are turned on
-function fl_parm_dimensions(debug) = is_undef(debug) ? false : assert(is_bool(debug[3])) debug[3];
-
-//! return true if any of the debug flag is turned on, false otherwise
-function fl_parm_debug(debug) =
-  is_undef(debug) ?
-    false :
-    fl_parm_labels(debug) || fl_parm_symbols(debug) || debug[2] || fl_parm_dimensions(debug);
 
 /*!
  * Constructor for multi verb parameter.
@@ -1590,7 +1528,7 @@ function fl_parm_MultiVerb(value) =
     value;
 
 /*!
- * Multi valued verb-dependent parameter.
+ * Multi valued verb-dependent parameter getter.
  *
  * See fl_parm_MultiVerb() for details.
  *
@@ -1615,7 +1553,7 @@ function fl_parm_multiverb(
       value;
 
 /*!
- * Multi valued verb-dependent tolerance parameter.
+ * Multi valued verb-dependent tolerance parameter getter.
  *
  * See fl_parm_multiverb() for details.
  */
@@ -1623,14 +1561,14 @@ function fl_parm_tolerance(default=0) =
   fl_parm_multiverb(is_undef($fl_tolerance)?undef:$fl_tolerance,default);
 
 /*!
- * Multi valued verb-dependent thickness parameter.
+ * Multi valued verb-dependent thickness parameter getter.
  *
  * See fl_parm_multiverb() for details.
  */
 function fl_parm_thickness(default=0) =
   fl_parm_multiverb(is_undef($fl_thickness)?undef:$fl_thickness,default);
 
-//**** Common parameter helpers ***********************************************
+//**** Execution context helpers **********************************************
 
 module fl_context_dump()
   echo(
@@ -1646,3 +1584,87 @@ module fl_context_dump()
   $FL_MOUNT      = $FL_MOUNT     ,
   $FL_PAYLOAD    = $FL_PAYLOAD
   ) children();
+
+/*!
+ * Debug context constructor module.
+ *
+ * The debug context is constituted by the following special variables:
+ *
+ * | Name             | Description                                            |
+ * | ---              | ---                                                    |
+ * | $dbg_Assert      | (bool) when true, debug assertions are executed        |
+ * | $dbg_Color       | (bool) when true, fl_color{} will be set to debug      |
+ * | $dbg_Components  | (string\|string list) string or list of strings equals to the component label of which debug information will be shown |
+ * | $dbg_Dimensions  | (bool) when true, labels to symbols are assigned and displayed |
+ * | $dbg_Labels      | (bool) when true, symbol labels are shown              |
+ * | $dbg_Symbols     | (bool) when true symbols are shown                     |
+ */
+module fl_DebugContext(
+  //! when true, symbol labels are shown
+  labels  = false,
+  //! when true symbols are shown
+  symbols = false,
+  /*!
+   * a string or a list of strings equals to the component label of which
+   * direction information will be shown
+   */
+  components,
+  //! dimension lines
+  dimensions = false,
+  //! enable or disable assertions
+  assertions = false,
+  color = true
+) let(
+  $dbg_Dimensions = dimensions,
+  $dbg_Color      = color,
+  $dbg_Symbols    = symbols,
+  $dbg_Labels     = labels,
+  $dbg_Components = components[0]=="none" ? undef : components,
+  $dbg_Assert     = assertions
+) children(); // [labels,symbols,components,dimensions,asserts];
+
+//! When true debug asserts are turned on
+function fl_dbg_assert() =
+  is_undef($dbg_Assert) ? false : assert(is_bool($dbg_Assert)) $dbg_Assert;
+
+//! When true OFL color debug is enabled
+function fl_dbg_color() =
+  is_undef($dbg_Color) ? false : assert(is_bool($dbg_Color)) $dbg_Color;
+
+//! checks if component «label» is marked for debugging
+function fl_dbg_components(label) =
+  is_undef($dbg_Components) ?
+    false :
+    let(components = $dbg_Components)
+    is_list(components) ?
+      search([label],components)!=[[]] :
+      assert(is_string(components),str("debug information must be a string or a list of strings: ", components)) components==label;
+
+//! When true dimension lines are turned on
+function fl_dbg_dimensions() =
+  is_undef($dbg_Dimensions) ?
+    false :
+    assert(is_bool($dbg_Dimensions),$dbg_Dimensions) $dbg_Dimensions;
+
+//! When true debug labels are turned on
+function fl_dbg_labels() =
+  is_undef($dbg_Labels) ?
+    false :
+    assert(is_bool($dbg_Labels),$dbg_Labels) $dbg_Labels;
+
+//! When true debug symbols are turned on
+function fl_dbg_symbols() =
+  is_undef($dbg_Symbols) ?
+    false :
+    assert(is_bool($dbg_Symbols),$dbg_Symbols) $dbg_Symbols;
+
+/*!
+ * return true if any of the debug flag is turned on, false otherwise
+ */
+//! When true debug statements are turned on
+function fl_debug() = fl_dbg_dimensions()
+  || fl_dbg_color()
+  || fl_dbg_symbols()
+  || fl_dbg_labels()
+  || (is_undef($dbg_Components) ? false : len($dbg_Components)>0 && $dbg_Components[0]!="none")
+  || fl_dbg_assert();

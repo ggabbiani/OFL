@@ -61,7 +61,7 @@ __Default:__
 
 __Syntax:__
 
-    fl_jack(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,debug,direction,octant)
+    fl_jack(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
 
 Jack engine.
 
@@ -80,9 +80,6 @@ tolerance used during FL_CUTOUT
 __cut_drift__  
 translation applied to cutout
 
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
-
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
@@ -96,7 +93,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_jack_barrelEngine(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,debug,direction,octant)
+    fl_jack_barrelEngine(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
 
 Barrel jack engine.
 
@@ -115,9 +112,6 @@ tolerance used during FL_CUTOUT
 __cut_drift__  
 translation applied to cutout
 
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
-
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
@@ -131,7 +125,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_jack_mcxjphstem1Engine(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,debug,direction,octant)
+    fl_jack_mcxjphstem1Engine(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
 
 Engine for RF MCX edge mount jack pcb connector
 specs taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
@@ -150,9 +144,6 @@ tolerance used during FL_CUTOUT
 
 __cut_drift__  
 translation applied to cutout
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

@@ -17,17 +17,22 @@ use <../../lib/OFL/foundation/algo-engine.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 
@@ -51,7 +56,6 @@ ALIGN       = [0,0,0];  // [-1:+1]
 /* [Hidden] */
 
 octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();
 
@@ -69,3 +73,4 @@ fl_algo_pattern(10,pattern,data,deployment=DEPLOYMENT,octant=octant,align=ALIGN)
 
 if (FL_PLANES)
   fl_planes(size=200);
+

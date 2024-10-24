@@ -5,10 +5,6 @@
 - [x] implement module fl_frame() for 3d frames;
 - [x] remove fl_director() and fl_rotor() properties. In place of them use
   default native coordinate system [+Z,+X];
-- [ ] transform some of the special global constants into special module
-  parameters manageable through common API:
-
-    \$FL\_DEBUG ⇒ function fl_parm_DEBUG() = is_undef($debug) ? false : $debug;
 
 ## v4.0.0 TODOs
 
@@ -52,10 +48,10 @@
   fl_countersink()
 - [x] global: added proper property fl_cutout() settings to all the types
   actually implementing the FL_CUTOUT verb
-- [ ] global: extend the OFL APIs for implementing the newly introduced
-  'standard' parameter «debug»
-- [ ] engine parameter standardization:
-        engine_stub(verbs=FL_ADD,this,...,octant,direction,debug);
+- [x] global: implemented a 'debug context' based on a set of special variables
+  with the target of modify the API verb implementation;
+- [x] engine parameter standardization:
+        engine_stub(verbs=FL_ADD,this,...,octant,direction);
 - [x] tests: implement an automatic test generator mechanism able to
   standardize, where possible, the customizer parameters
 - [x] tests: tests executions now under GNU Make (removed old bin/test.sh,
@@ -64,7 +60,7 @@
   root
 - [x] documentation: 'make' driven documentation and picture generation, now
   independent from root
-- [ ] tests: make them available on all supported platform
+- [x] tests: make them available on all supported platform
 - [x] global: implement an automatic documentation picture generator mechanism
 - [x] vitamins/generic.scad: new generic vitamins with no-op FL_ADD semantic but
   fully programmable FL_CUTOUT implementation. This module has been used for
@@ -82,7 +78,7 @@
   'undef' dimensional translations
 - [x] all OFL base shapes but fl_cube() are centered to the origin: now
   fl_cube() is centered by default as well
-- [ ] standardize the common api parameter syntax
+- [x] standardize the common api parameter syntax
 - [ ] modify FL_DRILL verb implementation according to the type of drill to be
   performed: TAP drill vs CLEARANCE drill.
 - [ ] differentiate documentation by release
@@ -123,27 +119,7 @@
 - [ ] fix bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
 - [ ] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
-- add fl_circular_layout{} and cyl_layout{} (from 'super-pipe' project);
-- add fan_guard component to fans;
-- add fl_Object() constructor helper (from 'super-pipe' project);
-- finalize quaternions support;
-
-## Changed file names
-
-| old                               | new                               |
-| --------                          | --------                          |
-| foundation/2d.scad                | foundation/2d-engine.scad         |
-| foundation/3d.scad                | foundation/3d-engine.scad         |
-| foundation/base_geo.scad          | foundation/core.scad              |
-| foundation/base_kv.scad           | foundation/core.scad              |
-| foundation/base_parameters.scad   | foundation/core.scad              |
-| foundation/base_string.scad       | foundation/core.scad              |
-| foundation/base_trace.scad        | foundation/core.scad              |
-| foundation/bbox.scad              | foundation/bbox-engine.scad       |
-| foundation/defs.scad              | foundation/core.scad              |
-| foundation/mngm.scad              | foundation/mngm-engine.scad       |
-| foundation/symbol.scad            | -                                 |
-| tests/vitamins/knu_nut-test.conf  | tests/vitamins/knu_nuts-test.conf |
-| tests/vitamins/knu_nut-test.json  | tests/vitamins/knu_nuts-test.json |
-| tests/vitamins/knu_nut-test.scad  | tests/vitamins/knu_nuts-test.scad |
-
+- [ ] add fl_circular_layout{} and cyl_layout{} (from 'super-pipe' project);
+- [ ] add fan_guard component to fans;
+- [ ] add fl_Object() constructor helper (from 'super-pipe' project);
+- [ ] finalize quaternions support;

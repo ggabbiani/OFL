@@ -20,17 +20,22 @@ use <../../lib/OFL/foundation/mngm-engine.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -93,9 +98,17 @@ BLOB_BBOX  = [[0,0,0],[30,20,10]];
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+
+direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
@@ -195,3 +208,4 @@ fl_caddy(verbs,blob,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,dire
   // $cad_verbs ⇒ list of verbs to be executed
   // $cad_thick ⇒ thickness list for DRILL and CUTOUT
   blob($cad_verbs,blob,thick=$cad_thick+T_NIL,$FL_DRILL="ON",$FL_CUTOUT="ON",$FL_ADD="ON",$FL_ASSEMBLY="ON");
+

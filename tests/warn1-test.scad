@@ -13,6 +13,19 @@
 
 // **** TEST_INCLUDES *********************************************************
 
+// **** TAB_Debug *************************************************************
+
+/* [Debug] */
+
+// -2⇒none, -1⇒all, [0..)⇒max depth allowed
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
+
 // **** TEST_PROLOGUE *********************************************************
 
 // end of automatically generated code

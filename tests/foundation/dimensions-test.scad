@@ -16,17 +16,22 @@ include <../../lib/OFL/foundation/dimensions.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -48,7 +53,14 @@ DIM_W         = 0.1;        // [0.1:0.1:1]
 
 /* [Hidden] */
 
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
 
 fl_status();
 
@@ -68,7 +80,7 @@ $vpr = fl_view(VIEW_TYPE);
 
 fl_cylinder(h=h,d=d,$fn=100,$FL_ADD="ON");
 
-if (fl_parm_dimensions(debug)) {
+if (fl_dbg_dimensions()) {
   fl_dimension(verbs,dim_r,
     view="top",
     gap=DIM_GAP,
@@ -100,3 +112,4 @@ if (fl_parm_dimensions(debug)) {
     mode=DIM_MODE
   );
 }
+

@@ -253,7 +253,7 @@ Adds proper connection symbol (plug or socket) to the scene
 
 __Syntax:__
 
-    fl_conn_debug(conns,debug)
+    fl_conn_debug(conns)
 
 Layouts connector symbols.
 
@@ -262,9 +262,6 @@ __Parameters:__
 
 __conns__  
 list of connectors
-
-__debug__  
-see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---

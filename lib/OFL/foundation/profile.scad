@@ -108,7 +108,7 @@ module fl_profile(
 }
 
 /*!
- * engine for generating bent plates.
+ * Engine for generating bent plates.
  *
  * See also https://metalfabricationsvcs.com/products/bent-plate/
  */
@@ -128,18 +128,7 @@ module fl_bentPlate(
   //! when undef native positioning (see variable FL_O) is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Z])
-  direction,
-  /*!
-   * Debug parameter as returned from fl_parm_Debug(). Currently supported features:
-   *
-   * | feature    | status  |
-   * | ---        | ---     |
-   * | components | -       |
-   * | dimensions | -       |
-   * | labels     | ✔       |
-   * | symbols    | ✔       |
-   */
-  debug
+  direction
 ) {
   bbox  = assert(size) [-size/2,+size/2];
   D     = direction ? fl_direction(direction) : I;
@@ -169,7 +158,7 @@ module fl_bentPlate(
   assert(R<=sz.x,str("resulting external radius (",R,") exceeds FL_X dimension (",sz.x,")!"));
 
   module do_add() {
-    debug_enabled = fl_parm_symbols(debug) || fl_parm_labels(debug);
+    debug_enabled = fl_dbg_symbols() || fl_dbg_labels();
     debug_sz      = debug_enabled ? fl_2d_closest(radii)/3 : undef;
 
     if (debug_enabled)
@@ -180,11 +169,11 @@ module fl_bentPlate(
           linear_extrude(height=sz.z)
             polygon(polyRound(radii,fn=$fn));
 
-    if (fl_parm_symbols(debug))
+    if (fl_dbg_symbols())
       for(p=radii)
         fl_sym_point(point=[p.x,p.y,0], size=debug_sz,$FL_ADD="ON");
 
-    if (fl_parm_labels(debug))
+    if (fl_dbg_labels())
       for(i=[0:len(radii)-1])
         let(p=radii[i]) translate([p.x,p.y,0.5])
           fl_label(string=str("P[",i,"]"),fg="black",size=debug_sz,$FL_ADD="ON");

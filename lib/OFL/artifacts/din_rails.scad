@@ -301,16 +301,7 @@ module fl_DIN_rail(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
-  /*!
-   * Debug parameter (see also constructor fl_parm_Debug()) currently
-   * supporting:
-   *
-   * - symbols (points)
-   * - labels (points)
-   * - dimension lines
-   */
-  debug
+  direction
 ) {
   assert($fn,$fn);
   bbox    = fl_bb_corners(this);
@@ -324,21 +315,21 @@ module fl_DIN_rail(
   thick   = fl_DIN_profileThick(profile);
 
   module do_shape(delta=0,footprint=false) {
-    fl_extrude_if(!fl_parm_debug(debug), size.z, 3)
+    fl_extrude_if(!fl_dbg_labels() && !fl_dbg_symbols(), size.z, 3)
       let(points=footprint ? concat([points[0]],fl_list_sub(points,5)) : points)
         offset(delta)
           polygon(polyRound(points,fn=$fn));
     // debug parameters management
-    translate(+Z(size.z))
+    translate(+Z(size.z+0*0.5))
       if (!footprint) {
-        if ($dbg_Labels)
+        if (fl_dbg_labels())
           for(i=[0:len(points)-1])
             let(p=points[i])
               translate([p.x,p.y])
-                fl_label(string=str("P[",i,"]"),size=1);
-        if ($dbg_Symbols)
+                fl_label(string=str("P[",i,"]"),size=1,$FL_ADD="ON");
+        if (fl_dbg_symbols())
           for(p=points)
-            fl_sym_point(point=[p.x,p.y], size=0.25);
+            fl_sym_point(point=[p.x,p.y], size=0.25, $FL_ADD="ON");
       }
   }
 
@@ -354,7 +345,7 @@ module fl_DIN_rail(
               fl_punch(punch,length,thick)
                 fl_DIN_puncher();
         }
-      if ($dbg_Dimensions) let(
+      if (fl_dbg_dimensions()) let(
           $dim_object = this,
           $dim_width  = is_undef($dim_width) ? thick/5 : $dim_width,
           $dim_gap    = is_undef($dim_gap) ? 7*$dim_width : $dim_gap
@@ -434,7 +425,7 @@ module fl_DIN_rail(
 
   // fl_polymorph() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant=octant,direction=direction,debug=debug)
+  fl_polymorph(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

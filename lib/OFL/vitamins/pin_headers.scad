@@ -122,9 +122,7 @@ module fl_pinHeader(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef
-  direction,
-  //! see constructor fl_parm_Debug()
-  debug
+  direction
 ) {
   assert(type);
   assert(is_list(verbs)||is_string(verbs),verbs);
@@ -172,7 +170,7 @@ module fl_pinHeader(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

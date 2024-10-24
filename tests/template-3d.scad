@@ -13,6 +13,7 @@
 
 ${TEST_INCLUDES}
 ${TAB_PARAMETERS}
+${TAB_Debug}
 ${TAB_Verbs}
 ${TAB_Placement}
 ${TAB_Direction}

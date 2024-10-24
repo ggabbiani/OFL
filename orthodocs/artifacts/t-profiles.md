@@ -339,7 +339,7 @@ width
 
 __Syntax:__
 
-    fl_tProfile(verbs=FL_ADD,type,lay_surface,debug,direction,octant)
+    fl_tProfile(verbs=FL_ADD,type,lay_surface,direction,octant)
 
 TODO: document context variables
 
@@ -354,9 +354,6 @@ floating semi-axis list (es. [+X,-Y]) for FL_LAYOUT
 
 NOTE: ±Z is excluded
 
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

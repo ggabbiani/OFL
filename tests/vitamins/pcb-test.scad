@@ -16,17 +16,22 @@ include <../../lib/OFL/vitamins/pcbs.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -86,31 +91,39 @@ CO_DIRECTION  = [0,0,0];  // [-1:+1]
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+
+direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
 // end of automatically generated code
 
 co_direction  = CO_DIRECTION==[0,0,0]  ? undef : let(axes=[X,Y,Z]) [for(i=[0:2]) if (CO_DIRECTION[i]) CO_DIRECTION[i]*axes[i]];
-comps      = COMPS=="undef" ? undef : COMPS;
+comps         = COMPS=="undef" ? undef : COMPS;
 filament      = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 verbs         = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT,FL_PAYLOAD]);
-
-single  = fl_pcb_select(TYPE);
+single        = fl_pcb_select(TYPE);
 
 module test() {
   module pcb(type) {
     fl_pcb(verbs,type,
-      direction=direction,octant=octant,thick=T,$fl_tolerance=TOLERANCE,components=comps,cut_direction=co_direction,debug=debug)
+      direction=direction,octant=octant,thick=T,$fl_tolerance=TOLERANCE,components=comps,cut_direction=co_direction)
       children();
   }
 
   if (single)
-    pcb(single)
-      children();
+    echo(components=[for(component=fl_pcb_components(single)) component[0]])
+      pcb(single)
+        children();
   else // TODO: replace with fl_layout
     layout([for(pcb=FL_PCB_DICT) fl_width(pcb)], 10)
       pcb(FL_PCB_DICT[$i])
@@ -121,3 +134,4 @@ test()
   fl_color(filament)
     translate(-Z($hole_depth))
       fl_cylinder(d=$hole_d+2,h=T,octant=-$hole_n);
+

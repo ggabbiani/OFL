@@ -85,8 +85,6 @@ module fl_generic_vitamin(
    * (see  fl_tt_isAxisVList())
    */
   cut_drift=0,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef
@@ -174,7 +172,7 @@ module fl_generic_vitamin(
           fl_holes(holes);
     }
     if (holes)
-      fl_hole_debug(holes=holes, debug=debug);
+      fl_hole_debug(holes=holes);
   }
 
   module do_drill(enable=[+X,-X,+Y,-Y,+Z,-Z]) {
@@ -193,7 +191,7 @@ module fl_generic_vitamin(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);

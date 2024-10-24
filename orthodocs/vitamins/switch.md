@@ -47,7 +47,7 @@ __Default:__
 
 __Syntax:__
 
-    fl_switch(verbs=FL_ADD,type,cut_thick,cut_tolerance,cut_drift,direction,octant,debug)
+    fl_switch(verbs=FL_ADD,type,cut_thick,cut_tolerance,cut_drift,direction,octant)
 
 __Parameters:__
 

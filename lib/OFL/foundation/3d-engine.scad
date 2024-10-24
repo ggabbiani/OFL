@@ -16,12 +16,11 @@ use <../../NopSCADlib/utils/maths.scad>
 
 module fl_doAxes(
   size,
-  direction,
-  debug
+  direction
 ) {
   sz = 1.2*size;
   fl_axes(sz);
-  if (debug && direction && fl_parm_symbols(debug))
+  if (fl_dbg_symbols() && direction)
     fl_sym_direction(direction=direction,size=sz);
 }
 
@@ -42,8 +41,6 @@ module fl_frame(
   corners = [0,0,0,0],
   //! subtracted to size defines the internal size
   thick,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug,
   //! when undef, native positioning is used with cube midpoint centered at origin O
   octant,
   //! desired direction [director,rotation] or native direction if undef
@@ -63,7 +60,7 @@ module fl_frame(
           fl_2d_frame(size=[size.x,size.y], corners=corners, thick=thick);
 
     else if ($verb==FL_AXES)
-      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+      fl_modifier($modifier) fl_doAxes(size,direction);
 
     else if ($verb==FL_BBOX)
       fl_modifier($modifier)
@@ -103,9 +100,7 @@ module fl_cube(
   //! when undef, native positioning is used with cube midpoint centered at origin O
   octant,
   //! desired direction [director,rotation] or native direction if undef
-  direction,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug
+  direction
 ) {
   size  = size ? (is_list(size) ? size : assert(is_num(size)) [size,size,size]) : type ? fl_cube_size(type) : [1,1,1];
   bbox  = fl_bb_cube(size=size);
@@ -116,7 +111,7 @@ module fl_cube(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cube(size,true);
     } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
@@ -165,9 +160,7 @@ module fl_sphere(
   //! when undef default positioning is used
   octant,
   //! desired direction [director,rotation], default direction if undef
-  direction,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug
+  direction
 ) {
   r     = fl_parse_radius(r,d=d,def=type?fl_radius(type):undef);
   bbox  = assert(r) fl_bb_sphere(r);
@@ -179,7 +172,7 @@ module fl_sphere(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) resize(size) sphere();
     } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
@@ -303,9 +296,7 @@ module fl_cylinder(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug
+  direction
 ) {
   r_bot = fl_parse_radius(r,r1,d,d1,type ? fl_cyl_botRadius(type) : undef);
   r_top = fl_parse_radius(r,r2,d,d2,type ? fl_cyl_topRadius(type) : undef);
@@ -321,7 +312,7 @@ module fl_cylinder(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
     } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
@@ -424,8 +415,6 @@ module fl_prism(
   l2,
   //! height
   h,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -448,7 +437,7 @@ module fl_prism(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
     } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
@@ -490,9 +479,7 @@ module fl_pyramid(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
-  //! debug parameter as returned from fl_parm_Debug()
-  debug
+  direction
 ) {
   base    = base ? base : assert(type) fl_pyr_base(type);
   apex    = apex ? apex : assert(type) fl_pyr_apex(type);
@@ -508,7 +495,7 @@ module fl_pyramid(
       fl_modifier($modifier)
         polyhedron(points, faces);
     } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox,auto=true);
     } else {
@@ -1373,7 +1360,7 @@ module fl_symbol(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        ; // fl_doAxes(size,direction);
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout() children();

@@ -60,8 +60,6 @@
 - [fl_arc (module)](foundation/2d-engine.md#module-fl_arc)
 - [$FL_ASSEMBLY (variable)](foundation/core.md#variable-$fl_assembly)
 - [FL_ASSEMBLY (variable)](foundation/core.md#variable-fl_assembly)
-- [fl_assert (module)](foundation/core.md#module-fl_assert)
-- [fl_asserts (function)](foundation/core.md#function-fl_asserts)
 - [fl_atof (function)](foundation/core.md#function-fl_atof)
 - [fl_atoi (function)](foundation/core.md#function-fl_atoi)
 - [fl_axes (module)](foundation/core.md#module-fl_axes)
@@ -200,7 +198,14 @@
 
 ## D
 
+- [fl_dbg_assert (function)](foundation/core.md#function-fl_dbg_assert)
+- [fl_dbg_color (function)](foundation/core.md#function-fl_dbg_color)
+- [fl_dbg_components (function)](foundation/core.md#function-fl_dbg_components)
+- [fl_dbg_dimensions (function)](foundation/core.md#function-fl_dbg_dimensions)
+- [fl_dbg_labels (function)](foundation/core.md#function-fl_dbg_labels)
+- [fl_dbg_symbols (function)](foundation/core.md#function-fl_dbg_symbols)
 - [fl_debug (function)](foundation/core.md#function-fl_debug)
+- [fl_DebugContext (module)](foundation/core.md#module-fl_debugcontext)
 - [fl_deprecated (function)](foundation/core.md#function-fl_deprecated)
 - [FL_DEPRECATED (variable)](foundation/core.md#variable-fl_deprecated)
 - [fl_description (function)](foundation/core.md#function-fl_description)
@@ -582,17 +587,11 @@
 ## P
 
 - [fl_palette (function)](foundation/core.md#function-fl_palette)
-- [fl_parm_components (function)](foundation/core.md#function-fl_parm_components)
-- [fl_parm_Debug (function)](foundation/core.md#function-fl_parm_debug)
-- [fl_parm_debug (function)](foundation/core.md#function-fl_parm_debug)
-- [fl_parm_dimensions (function)](foundation/core.md#function-fl_parm_dimensions)
-- [fl_parm_labels (function)](foundation/core.md#function-fl_parm_labels)
 - [fl_parm_MultiVerb (function)](foundation/core.md#function-fl_parm_multiverb)
 - [fl_parm_multiverb (function)](foundation/core.md#function-fl_parm_multiverb)
 - [fl_parm_Octant (function)](foundation/core.md#function-fl_parm_octant)
 - [fl_parm_Quadrant (function)](foundation/2d-engine.md#function-fl_parm_quadrant)
 - [fl_parm_SignedPair (function)](foundation/core.md#function-fl_parm_signedpair)
-- [fl_parm_symbols (function)](foundation/core.md#function-fl_parm_symbols)
 - [fl_parm_thickness (function)](foundation/core.md#function-fl_parm_thickness)
 - [fl_parm_tolerance (function)](foundation/core.md#function-fl_parm_tolerance)
 - [fl_parse_diameter (function)](foundation/core.md#function-fl_parse_diameter)

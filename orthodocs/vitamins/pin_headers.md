@@ -184,7 +184,7 @@ __engine__
 
 __Syntax:__
 
-    fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,octant,direction,debug)
+    fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,octant,direction)
 
 Pin headers engine.
 
@@ -205,8 +205,5 @@ when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 

@@ -39,9 +39,7 @@ module fl_switch(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
-  octant,
-  // see constructor fl_parm_Debug()
-  debug
+  octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
@@ -84,7 +82,7 @@ module fl_switch(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

@@ -732,21 +732,6 @@ Taken from
 
 ---
 
-### function fl_asserts
-
-__Syntax:__
-
-```text
-fl_asserts()
-```
-
-When true fl_assert() is enabled
-
-**TODO**: remove since deprecated.
-
-
----
-
 ### function fl_atof
 
 __Syntax:__
@@ -871,6 +856,78 @@ passed type.
 
 TODO: rename as plural
 
+
+---
+
+### function fl_dbg_assert
+
+__Syntax:__
+
+```text
+fl_dbg_assert()
+```
+
+When true debug asserts are turned on
+
+---
+
+### function fl_dbg_color
+
+__Syntax:__
+
+```text
+fl_dbg_color()
+```
+
+When true OFL color debug is enabled
+
+---
+
+### function fl_dbg_components
+
+__Syntax:__
+
+```text
+fl_dbg_components(label)
+```
+
+checks if component «label» is marked for debugging
+
+---
+
+### function fl_dbg_dimensions
+
+__Syntax:__
+
+```text
+fl_dbg_dimensions()
+```
+
+When true dimension lines are turned on
+
+---
+
+### function fl_dbg_labels
+
+__Syntax:__
+
+```text
+fl_dbg_labels()
+```
+
+When true debug labels are turned on
+
+---
+
+### function fl_dbg_symbols
+
+__Syntax:__
+
+```text
+fl_dbg_symbols()
+```
+
+When true debug symbols are turned on
 
 ---
 
@@ -1594,35 +1651,6 @@ __NOTE__: «axis» and «color» are mutually exclusive.
 
 ---
 
-### function fl_parm_Debug
-
-__Syntax:__
-
-```text
-fl_parm_Debug(labels=false,symbols=false,components=[],dimensions=false)
-```
-
-constructor for debug context parameter
-
-__Parameters:__
-
-__labels__  
-when true, labels to symbols are assigned and displayed
-
-__symbols__  
-when true symbols are displayed
-
-__components__  
-a string or a list of strings equals to the component label of which
-direction information will be shown
-
-
-__dimensions__  
-dimension lines
-
-
----
-
 ### function fl_parm_MultiVerb
 
 __Syntax:__
@@ -1750,54 +1778,6 @@ axis.
 
 ---
 
-### function fl_parm_components
-
-__Syntax:__
-
-```text
-fl_parm_components(debug,label)
-```
-
-When «debug» is not undef, checks if component «label» is marked for debugging
-
----
-
-### function fl_parm_debug
-
-__Syntax:__
-
-```text
-fl_parm_debug(debug)
-```
-
-return true if any of the debug flag is turned on, false otherwise
-
----
-
-### function fl_parm_dimensions
-
-__Syntax:__
-
-```text
-fl_parm_dimensions(debug)
-```
-
-When true dimension lines are turned on
-
----
-
-### function fl_parm_labels
-
-__Syntax:__
-
-```text
-fl_parm_labels(debug)
-```
-
-When true debug labels are turned on
-
----
-
 ### function fl_parm_multiverb
 
 __Syntax:__
@@ -1806,7 +1786,7 @@ __Syntax:__
 fl_parm_multiverb(value,default)
 ```
 
-Multi valued verb-dependent parameter.
+Multi valued verb-dependent parameter getter.
 
 See [fl_parm_MultiVerb()](#function-fl_parm_multiverb) for details.
 
@@ -1824,18 +1804,6 @@ default value eventually overridden by default key/value ("*",default value)
 
 ---
 
-### function fl_parm_symbols
-
-__Syntax:__
-
-```text
-fl_parm_symbols(debug)
-```
-
-When true debug symbols are turned on
-
----
-
 ### function fl_parm_thickness
 
 __Syntax:__
@@ -1844,7 +1812,7 @@ __Syntax:__
 fl_parm_thickness(default=0)
 ```
 
-Multi valued verb-dependent thickness parameter.
+Multi valued verb-dependent thickness parameter getter.
 
 See [fl_parm_multiverb()](#function-fl_parm_multiverb) for details.
 
@@ -1859,7 +1827,7 @@ __Syntax:__
 fl_parm_tolerance(default=0)
 ```
 
-Multi valued verb-dependent tolerance parameter.
+Multi valued verb-dependent tolerance parameter getter.
 
 See [fl_parm_multiverb()](#function-fl_parm_multiverb) for details.
 
@@ -2433,30 +2401,53 @@ fl_width(type)
 
 ---
 
+### module fl_DebugContext
+
+__Syntax:__
+
+    fl_DebugContext(labels=false,symbols=false,components,dimensions=false,assertions=false,color=true)
+
+Debug context constructor module.
+
+The debug context is constituted by the following special variables:
+
+| Name             | Description                                            |
+| ---              | ---                                                    |
+| $dbg_Assert      | (bool) when true, debug assertions are executed        |
+| $dbg_Color       | (bool) when true, [fl_color{}](#module-fl_color) will be set to debug      |
+| $dbg_Components  | (string\|string list) string or list of strings equals to the component label of which debug information will be shown |
+| $dbg_Dimensions  | (bool) when true, labels to symbols are assigned and displayed |
+| $dbg_Labels      | (bool) when true, symbol labels are shown              |
+| $dbg_Symbols     | (bool) when true symbols are shown                     |
+
+
+__Parameters:__
+
+__labels__  
+when true, symbol labels are shown
+
+__symbols__  
+when true symbols are shown
+
+__components__  
+a string or a list of strings equals to the component label of which
+direction information will be shown
+
+
+__dimensions__  
+dimension lines
+
+__assertions__  
+enable or disable assertions
+
+
+---
+
 ### module fl_align
 
 __Syntax:__
 
     fl_align(from,to)
-
----
-
-### module fl_assert
-
-__Syntax:__
-
-    fl_assert(condition,message)
-
-check condition, forcing error when false
-
-__Parameters:__
-
-__condition__  
-condition to be asserted
-
-__message__  
-string or vector of strings
-
 
 ---
 

@@ -18,7 +18,7 @@ graph LR
 
 __Syntax:__
 
-    fl_polymorph(verbs=FL_ADD,this,octant,direction,debug)
+    fl_polymorph(verbs=FL_ADD,this,octant,direction)
 
 This module manages OFL types leveraging children implementation of the
 actual engine while decoupling standard OFL parameters manipulation from
@@ -65,7 +65,7 @@ A typical use of this high-level management module is the following:
       else
         assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
 
-    fl_polymorph(verbs,object,octant=octant,direction=direction,debug=debug)
+    fl_polymorph(verbs,object,octant=octant,direction=direction)
       engine(thick=T)
         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
@@ -78,12 +78,9 @@ Children context:
 - $this_bbox       : bounding box corners in [low,high] format
 - $this_direction  : orientation in [director,rotation] format
 - $this_octant     : positioning octant
-- $this_debug      : debug parameters
 - $fl_thickness    : multi-verb parameter (see [fl_parm_thickness()](core.md#function-fl_parm_thickness))
 - $fl_tolerance    : multi-verb parameter (see fl_parm_tolerance())
 
-TODO: this module should handle all the OFL runtime variables, particularly
-the verb-dependent ones (like $fl_tolerance)
 
 
 __Parameters:__
@@ -96,8 +93,5 @@ when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef
-
-__debug__  
-see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 

@@ -55,7 +55,7 @@ sd namespace
 
 __Syntax:__
 
-    fl_sd_usocket(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,direction,octant,debug)
+    fl_sd_usocket(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,direction,octant)
 
 micro SD socket
 

@@ -121,7 +121,7 @@ fl_USB_flange(type,value)
 
 __Syntax:__
 
-    fl_USB(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,tongue="white",direction,octant,debug)
+    fl_USB(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,tongue="white",direction,octant)
 
 __Parameters:__
 

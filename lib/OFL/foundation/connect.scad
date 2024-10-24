@@ -241,16 +241,14 @@ module fl_lay_connectors(
  */
 module fl_conn_debug(
   //! list of connectors
-  conns,
-  //! see constructor fl_parm_Debug()
-  debug
+  conns
 ) {
   fl_lay_connectors(conns) union() {
-    if (fl_parm_symbols(debug))
-      fl_symbol(FL_ADD,size=$conn_size,symbol=$conn_type,$FL_ADD="ON",$fl_debug=false);
-    if (fl_parm_labels(debug))
-      // echo($conn_label=$conn_label,$conn_loct=$conn_loct,$conn_ldir=$conn_ldir)
+    if (fl_dbg_symbols())
+      fl_symbol(FL_ADD,size=$conn_size,symbol=$conn_type,$FL_ADD="ON");
+    if (fl_dbg_labels())
+      echo($conn_label=$conn_label,$conn_loct=$conn_loct,$conn_ldir=$conn_ldir)
       // multmatrix(T(0.6*$conn_size*[sign($conn_loct.x),sign($conn_loct.y),sign($conn_loct.z)]))
-        fl_label(FL_ADD,$conn_label,size=0.6*$conn_size,thick=0.1,octant=$conn_loct,direction=$conn_ldir,extra=$conn_size,$FL_ADD="ON",$FL_AXES="ON",$fl_debug=false);
+        fl_label(FL_ADD,$conn_label,size=0.6*$conn_size,thick=0.1,octant=$conn_loct,direction=$conn_ldir,extra=$conn_size,$FL_ADD="ON",$FL_AXES="ON");
   }
 }

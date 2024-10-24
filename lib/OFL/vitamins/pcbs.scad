@@ -98,7 +98,7 @@ function fl_PCB(
     director=+Z,
     rotor=+X
   ) =
-    assert(!fl_debug() || fl_tt_isBoundingBox(bare),"«bare» must be a bounding box in low-high format")
+    assert(!fl_dbg_assert() || fl_tt_isBoundingBox(bare),"«bare» must be a bounding box in low-high format")
   let(
     comp_bbox = components ? fl_comp_BBox(components) : undef,
     pload     = payload ? payload : comp_bbox,
@@ -478,14 +478,19 @@ function fl_pcb_compFilter(pcb,rules) = let(
  *
  * __Runtime context__
  *
- * - $fl_tolerance  - used during FL_CUTOUT operations
+ * | Name           | Description                         |
+ * | ---            | ---                                 |
+ * | $fl_tolerance  | used during FL_CUTOUT operations    |
+ * | Debug context  | see fl_DebugContext{} for details  |
  *
- * __children context:__
+ * __Children context:__
  *
- * - complete hole context (see also fl_hole_Context{})
- * - $pcb_radius  - pcb radius
- * - $pcb_thick   - pcb thickness
- * - $pcb_verb    - pcb invoked verb
+ * | Name           | Description                         |
+ * | ---            | ---                                 |
+ * | Hole context   | see fl_hole_Context{} for details   |
+ * | $pcb_radius    | pcb radius                          |
+ * | $pcb_thick     | pcb thickness                       |
+ * | $pcb_verb      | pcb invoked verb                    |
  */
 module fl_pcb(
   //! FL_ADD, FL_ASSEMBLY, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_PAYLOAD
@@ -546,11 +551,9 @@ module fl_pcb(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef
-  direction,
-  //! see constructor fl_parm_Debug()
-  debug
+  direction
 ) {
-  assert(!fl_debug() || is_list(verbs)||is_string(verbs),verbs);
+  assert(!fl_dbg_assert() || is_list(verbs)||is_string(verbs),verbs);
 
   module native() {
 
@@ -562,7 +565,7 @@ module fl_pcb(
     screw     = fl_has(type,fl_screw()[0]) ? fl_screw(type) : undef;
     screw_r   = screw ? screw_radius(screw) : 0;
     thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
-              : assert(!fl_debug() || fl_tt_isAxisVList(thick)) thick;
+              : assert(!fl_dbg_assert() || fl_tt_isAxisVList(thick)) thick;
     neg_delta = -pcb_t-bbox[0].z;
     dr_thick  = pcb_t+neg_delta+thick.z[0]; // thickness along -Z
     cut_thick = thick;
@@ -704,36 +707,34 @@ module fl_pcb(
     }
 
     module do_assembly() {
-      function verbs() = [
-        FL_ADD,
-        if (fl_parm_components(debug,$comp_label)) FL_AXES
-      ];
-      function render() =
-        fl_parm_components(debug,$comp_label) ?
-          "DEBUG" :
-          $FL_ADD;
-
-      do_layout("components")
-        if ($comp_engine==FL_USB_NS)          // USB
-          fl_USB(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,tongue=$comp_color,debug=debug,$FL_ADD=render());
+      do_layout("components") let(
+        selected  = fl_dbg_components($comp_label),
+        verbs     = [
+          FL_ADD,
+          if (selected) FL_AXES
+        ],
+        $FL_ADD   = selected ? "DEBUG" : $FL_ADD,
+        $FL_AXES  = selected ? "ON"    : "OFF"
+      ) if ($comp_engine==FL_USB_NS)          // USB
+          fl_USB(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction,tongue=$comp_color);
         else if ($comp_engine==FL_HDMI_NS)    // HDMI
-          fl_hdmi(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+          fl_hdmi(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_JACK_NS)    // JACK
-          fl_jack(verbs(),type=$comp_type,direction=$comp_direction,octant=$comp_octant,debug=debug,$FL_ADD=render());
+          fl_jack(verbs,type=$comp_type,direction=$comp_direction,octant=$comp_octant);
         else if ($comp_engine==FL_ETHER_NS)   // ETHERNET
-          fl_ether(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+          fl_ether(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_PHDR_NS)    // PIN HEADER
-          fl_pinHeader(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+          fl_pinHeader(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_TRIM_NS)    // TRIM POT
-          fl_trimpot(verbs(),type=$comp_type,direction=$comp_direction,octant=$comp_octant,$FL_ADD=render());
+          fl_trimpot(verbs,type=$comp_type,direction=$comp_direction,octant=$comp_octant);
         else if ($comp_engine==FL_SD_NS)      // SECURE DIGITAL
-          fl_sd_usocket(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+          fl_sd_usocket(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_SWT_NS) {   // SWITCH
-          fl_switch(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+          fl_switch(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
         } else if ($comp_engine==FL_HS_NS)    // HEAT SINK
-          fl_heatsink(verbs(),type=$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+          fl_heatsink(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_GENERIC_NS) // GENERIC VITAMIN
-          fl_generic_vitamin(verbs(),$comp_type,octant=$comp_octant,direction=$comp_direction,debug=debug,$FL_ADD=render());
+          fl_generic_vitamin(verbs,$comp_type,octant=$comp_octant,direction=$comp_direction);
         else
           assert(false,str("Unknown engine ",$comp_engine));
     }
@@ -796,12 +797,12 @@ module fl_pcb(
         fl_bb_add(pload,$FL_ADD=$FL_PAYLOAD);
     }
 
-    module do_symbols(debug,connectors,holes) {
-      if (debug) {
+    module do_symbols(connectors,holes) {
+      if (fl_dbg_symbols()) {
         if (connectors)
-          fl_conn_debug(connectors,debug=debug);
+          fl_conn_debug(connectors);
         if (holes)
-          fl_hole_debug(holes,debug=debug);
+          fl_hole_debug(holes);
       }
     }
 
@@ -818,14 +819,14 @@ module fl_pcb(
     }
 
     if ($verb==FL_ADD) {
-      do_symbols(debug,conns,holes);
+      do_symbols(conns,holes);
       do_add();
 
     } else if ($verb==FL_ASSEMBLY)
       do_assembly();
 
     else if ($verb==FL_AXES)
-      fl_doAxes(size,direction,debug);
+      fl_doAxes(size,direction);
 
     else if ($verb==FL_BBOX)
       fl_bb_add(bbox);
@@ -854,10 +855,10 @@ module fl_pcb(
   }
 
   if (fl_optProperty(type,fl_engine()[0])==FL_PCB_ENGINE_FRAME)
-    fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=$fl_tolerance,components=components,cut_direction=cut_direction,debug=debug,direction=direction,octant=octant)
+    fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=$fl_tolerance,components=components,cut_direction=cut_direction,direction=direction,octant=octant)
       children();
   else
-    fl_polymorph(verbs,type,octant=octant,direction=direction,debug=debug)
+    fl_polymorph(verbs,type,octant=octant,direction=direction)
       native()
         children();
 
@@ -904,14 +905,9 @@ module fl_pcb_adapter(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef
-  direction,
-  /*!
-   * As returned from constructor fl_parm_Debug(). This parameter is currently
-   * unused.
-   */
-  debug
+  direction
 ) {
-  assert(!fl_debug() || is_list(verbs)||is_string(verbs),verbs);
+  assert(!fl_dbg_assert() || is_list(verbs)||is_string(verbs),verbs);
 
   fl_trace("thick",thick);
 
@@ -923,7 +919,7 @@ module fl_pcb_adapter(
   screw     = pcb_screw(type);
   screw_r   = screw ? screw_radius(screw) : 0;
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
-            : assert(!fl_debug() || fl_tt_isAxisVList(thick)) thick;
+            : assert(!fl_dbg_assert() || fl_tt_isAxisVList(thick)) thick;
   dr_thick  = thick.z[0]; // thickness along -Z
   material  = fl_material(type,default="green");
   radius    = pcb_radius(type);
@@ -976,7 +972,7 @@ module fl_pcb_adapter(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
@@ -1189,8 +1185,6 @@ module fl_pcb_frame(
    * Setting this parameter as a single boolean extends its value to both the parts.
    */
   frame_parts=true,
-  //! see constructor fl_parm_Debug()
-  debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -1214,7 +1208,7 @@ module fl_pcb_frame(
   faces       = fl_property(this,"pcbf/[bottom,top] face thickness");
   depth       = abs(faces[0])+faces[1]+pcb_t;
   thick       = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
-              : assert(!fl_debug() || fl_tt_isAxisVList(thick)) thick;
+              : assert(!fl_dbg_assert() || fl_tt_isAxisVList(thick)) thick;
   dr_thick    = depth+thick.z[0]; // thickness along -Z
   holes       = fl_holes(this);
   wall        = fl_property(this,"pcbf/wall");
@@ -1225,11 +1219,9 @@ module fl_pcb_frame(
   left        = (is_bool(frame_parts) ? frame_parts : frame_parts[0]) ? fl_property(this,"pcbf/left side points") : undef;
   right       = (is_bool(frame_parts) ? frame_parts : frame_parts[1]) ? fl_property(this,"pcbf/right side points") : undef;
 
-  module do_symbols(debug,holes) {
-    if (debug) {
-      if (holes)
-        fl_hole_debug(holes,debug=debug);
-    }
+  module do_symbols(holes) {
+    if (holes)
+      fl_hole_debug(holes);
   }
 
   module do_add() {
@@ -1257,7 +1249,7 @@ module fl_pcb_frame(
   }
 
   module do_cutout() {
-    fl_pcb(FL_CUTOUT,pcb,$fl_tolerance=cut_tolerance,components=components,cut_direction=cut_direction,thick=thick,debug=debug, direction=direction, octant=octant);
+    fl_pcb(FL_CUTOUT,pcb,$fl_tolerance=cut_tolerance,components=components,cut_direction=cut_direction,thick=thick, direction=direction, octant=octant);
   }
 
   module do_drill() {
@@ -1287,7 +1279,7 @@ module fl_pcb_frame(
 
   fl_manage(verbs,M,D) {
     if ($verb==FL_ADD) {
-      do_symbols(debug,holes=holes);
+      do_symbols(holes=holes);
       fl_modifier($modifier) do_add();
 
     } else if ($verb==FL_ASSEMBLY) {
@@ -1295,7 +1287,7 @@ module fl_pcb_frame(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($modifier)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
@@ -1319,7 +1311,7 @@ module fl_pcb_frame(
 
     } else if ($verb==FL_PAYLOAD) {
       fl_modifier($modifier)
-        fl_pcb($verb,pcb,debug=debug);
+        fl_pcb($verb,pcb);
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));

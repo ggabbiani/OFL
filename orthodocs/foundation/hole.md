@@ -213,7 +213,7 @@ fallback screw
 
 __Syntax:__
 
-    fl_hole_debug(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,debug)
+    fl_hole_debug(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw)
 
 Layouts of hole symbols
 
@@ -233,9 +233,6 @@ pass-through thickness
 
 __screw__  
 fallback screw
-
-__debug__  
-see constructor [fl_parm_Debug()](core.md#function-fl_parm_debug)
 
 
 ---

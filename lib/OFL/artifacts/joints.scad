@@ -480,13 +480,11 @@ module fl_jnt_joint(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
-  //! see constructor fl_parm_Debug()
-  debug
+  direction
 ) {
   cantilever_ns = str(FL_JNT_NS,"/cantilever");
   engine        = fl_engine(this);
-  debug_enabled = fl_parm_symbols(debug) || fl_parm_labels(debug);
+  debug_enabled = fl_dbg_symbols() || fl_dbg_labels();
   debug_sz      = debug_enabled ? 0.1 /* fl_2d_closest(pts)/3 */ : undef;
   sec_ns        = str(FL_JNT_NS,"/longitudinal section");
 
@@ -525,11 +523,11 @@ module fl_jnt_joint(
 
   ) if ($this_verb==FL_ADD) {
 
-    if (fl_parm_symbols(debug))
+    if (fl_dbg_symbols())
       // multmatrix(pre)
         fl_2d_polygonSymbols(pts, 0.1);
 
-    if (fl_parm_labels(debug))
+    if (fl_dbg_labels())
       // multmatrix(pre)
         fl_2d_polygonLabels(pts, 0.1);
 
@@ -593,9 +591,9 @@ module fl_jnt_joint(
       // multmatrix(m)
       // {
         // tooth
-        // if (fl_parm_symbols(debug))
+        // if (fl_dbg_symbols())
         //   fl_2d_polygonSymbols(pts, 0.1);
-        // if (fl_parm_labels(debug))
+        // if (fl_dbg_labels())
         //   fl_2d_polygonLabels(pts, 0.1, "T");
         // if (debug_enabled)
         //   #polygon(polyRound(pts, fn=$fn));
@@ -603,9 +601,9 @@ module fl_jnt_joint(
         //   linear_extrude(b[1])
         //     polygon(polyRound(pts, fn=$fn));
         // // arm
-        // if (fl_parm_symbols(debug))
+        // if (fl_dbg_symbols())
         //   fl_3d_polyhedronSymbols(arm[0], 0.1);
-        // if (fl_parm_labels(debug))
+        // if (fl_dbg_labels())
         //   fl_3d_polyhedronLabels(arm[0], 0.1, "A");
         // if (debug_enabled)
         //   #polyhedron(points=arm[0], faces=arm[1]);
@@ -622,16 +620,16 @@ module fl_jnt_joint(
           linear_extrude(b[1])
             polygon(polyRound(tooth, fn=$fn));
 
-      if (fl_parm_symbols(debug))
+      if (fl_dbg_symbols())
         fl_3d_polyhedronSymbols(pts, 0.1);
-      if (fl_parm_labels(debug))
+      if (fl_dbg_labels())
         fl_3d_polyhedronLabels(pts, 0.1);
       if (debug_enabled)
         #polyhedron(points=pts,faces=faces);
       else
         polyhedron(points=pts, faces=faces);
 
-      if (fl_parm_dimensions(debug)) let(
+      if (fl_dbg_dimensions()) let(
           $dim_object = this,
           $dim_width  = $dim_width ? $dim_width : 0.05
         ) {
@@ -683,7 +681,7 @@ module fl_jnt_joint(
 
   // fl_polymorph() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant=octant,direction=direction,debug=debug)
+  fl_polymorph(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

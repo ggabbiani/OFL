@@ -105,7 +105,7 @@ fl_ether_Zoffset(type,value)
 
 __Syntax:__
 
-    fl_ether(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,debug,direction,octant,debug)
+    fl_ether(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,direction,octant)
 
 __Parameters:__
 
@@ -133,9 +133,6 @@ in this case the ethernet plug will perform a cutout along +X and +Z.
 :memo: **Note:** axes specified must be present in the supported cutout direction
 list (retrievable through [fl_cutout()](../foundation/core.md#function-fl_cutout) getter)
 
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

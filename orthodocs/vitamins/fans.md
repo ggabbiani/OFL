@@ -185,7 +185,7 @@ __NOTE__: the returned value is a **NopSCADlib** list.
 
 __Syntax:__
 
-    fl_fan(verbs=FL_ADD,this,thick=0,octant,direction,debug)
+    fl_fan(verbs=FL_ADD,this,thick=0,octant,direction)
 
 OFL fan module.
 
@@ -236,8 +236,5 @@ when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction [+Z,0] when undef
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 

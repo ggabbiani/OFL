@@ -74,7 +74,7 @@ fl_pcbh_spacers(type,value)
 
 __Syntax:__
 
-    fl_pcbHolder(verbs,this,fillet=0,asm_all=false,thick,lay_direction=[+Z,-Z],debug,direction,octant)
+    fl_pcbHolder(verbs,this,fillet=0,asm_all=false,thick,lay_direction=[+Z,-Z],direction,octant)
 
 PCB holder engine.
 
@@ -132,9 +132,6 @@ FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
 
 __NOTE__: only Z semi-axes are used
 
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

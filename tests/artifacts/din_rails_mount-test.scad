@@ -1,8 +1,8 @@
 /*
- * din_rails test
+ * din_rails mount test
  *
- * NOTE: this file is generated automatically from 'template-3d.scad', any
- * change will be lost.
+ * NOTE: this file is incomplete and not inserted in the devops. It needs to be
+ * concretely developed.
  *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
  *
@@ -78,7 +78,6 @@ CO_DIRECTION  = ["±Z"];
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS);
 
 fl_status();
 
@@ -105,14 +104,14 @@ module din_mount(rail) {
     fl_DIN_rail(
       [FL_CUTOUT],rail,
       cut_direction=[+Z],cut_thick=LENGTH,tolerance=TOLERANCE,cut_drift=-10,
-      octant=-Y+Z,direction=direction,debug=debug,
+      octant=-Y+Z,direction=direction,
       $FL_CUTOUT="ON"
     );
   }
   fl_DIN_rail(
     verbs,single(LENGTH,PUNCHED),
     cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
-    octant=-Y+Z,direction=direction,debug=debug
+    octant=-Y+Z,direction=direction
   );
 }
 
@@ -122,7 +121,7 @@ if (single) {
   // fl_DIN_rail(
   //   verbs,single(LENGTH,PUNCHED),
   //   cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
-  //   octant=octant,direction=direction,debug=debug
+  //   octant=octant,direction=direction
   // );
 } else {
   all = [for(constructor=FL_DIN_RAIL_INVENTORY) constructor(LENGTH,PUNCHED)];
@@ -130,6 +129,6 @@ if (single) {
     fl_DIN_rail(
       verbs,all[$i],
       cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
-      octant=octant,direction=direction,debug=debug
+      octant=octant,direction=direction
     );
 }

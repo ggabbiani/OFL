@@ -51,7 +51,7 @@ module dio_polyCoords(
       fl_modifier($modifier) polygon(points);
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction,debug);
+        ; // fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=bbsize, center=false);
     } else {

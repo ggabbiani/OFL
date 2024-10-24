@@ -197,7 +197,7 @@ fl_tnut_thickness(type,value)
 
 __Syntax:__
 
-    fl_tnut(verbs=FL_ADD,type,tolerance=0,countersink=false,dri_thick,debug,direction,octant)
+    fl_tnut(verbs=FL_ADD,type,tolerance=0,countersink=false,dri_thick,direction,octant)
 
 T-slot nut engine.
 
@@ -219,9 +219,6 @@ tolerance=x means [x,x,x]
 
 __dri_thick__  
 scalar thickness for FL_DRILL
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+Z,0])

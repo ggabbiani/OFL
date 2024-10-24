@@ -18,17 +18,22 @@ include <../../lib/OFL/vitamins/magnets.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+
+
+/* [Debug] */
+
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES     = -2;     // [-2:10]
-SHOW_LABELS     = false;
-SHOW_SYMBOLS    = false;
-SHOW_DIMENSIONS = false;
+$FL_TRACES  = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
 
 
 /* [Supported verbs] */
@@ -69,17 +74,25 @@ DIR_R       = 0;        // [-360:360]
 /* [Magnet] */
 
 // -1 for all, the ordinal dictionary member otherwise
-SHOW      = -1;   // [-1:1:6]
+SHOW      = -1;   // [-1:1:5]
 // extra dimension added when FOOTPRINT verb is called
-TOLERANCE_XY  = 0;    // [0:0.1:3]
-TOLERANCE_Z   = 0;    // [0:0.1:3]
-T             = 2.5;  // [0:20]
+TOLERANCE = 0;    // [0:0.1:3]
+T         = 2.5;  // [0:20]
+
 
 /* [Hidden] */
 
-direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
-octant    = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
-debug     = fl_parm_Debug(SHOW_LABELS,SHOW_SYMBOLS,dimensions=SHOW_DIMENSIONS);
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+
+direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
+octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
@@ -95,11 +108,9 @@ verbs=fl_verbList([
   FL_MOUNT
 ]);
 
-tolerance = [TOLERANCE_XY,TOLERANCE_Z];
-
 module do_test(magnet) {
   screw = fl_screw(magnet);
-  fl_magnet(verbs,magnet,octant=octant,direction=direction,$fl_tolerance=tolerance,$fl_thickness=T)
+  fl_magnet(verbs,magnet,octant=octant,direction=direction,$fl_tolerance=TOLERANCE,$fl_thickness=T)
       if (screw!=undef) fl_color("green") fl_cylinder(h=fl_thick(magnet),r=screw_radius(screw),octant=-Z);
 }
 
@@ -108,3 +119,4 @@ if (SHOW>-1)
 else
   layout([for(magnet=FL_MAG_DICT) fl_bb_size(magnet).x], 10)
     do_test(FL_MAG_DICT[$i]);
+

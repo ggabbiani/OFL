@@ -180,8 +180,6 @@ module fl_tProfile(
    * NOTE: ±Z is excluded
    */
   lay_surface,
-  //! see constructor fl_parm_Debug()
-  debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -221,7 +219,7 @@ module fl_tProfile(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier)

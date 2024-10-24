@@ -169,9 +169,7 @@ module fl_heatsink(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
-  octant,
-  // see constructor fl_parm_Debug()
-  debug
+  octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 

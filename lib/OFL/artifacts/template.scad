@@ -42,9 +42,7 @@ module __fl_template(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
-  //! see constructor fl_parm_Debug()
-  debug
+  direction
 ) {
   // run with an execution context set by fl_polymorph{}
   module engine() let(
@@ -78,7 +76,7 @@ module __fl_template(
 
   // fl_polymorph() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant=octant,direction=direction,debug=debug)
+  fl_polymorph(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

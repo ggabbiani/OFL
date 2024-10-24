@@ -79,7 +79,7 @@ fl_generic_ghost(type,value)
 
 __Syntax:__
 
-    fl_generic_vitamin(verbs=FL_ADD,this,thick=0,cut_tolerance=0,cut_drift=0,debug,octant,direction)
+    fl_generic_vitamin(verbs=FL_ADD,this,thick=0,cut_tolerance=0,cut_drift=0,octant,direction)
 
 Generic vitamin engine, usable when a cut out, drill or layout operation is
 needed for a component not yet available as vitamin.
@@ -108,9 +108,6 @@ __cut_drift__
 Scalar or full semi axis value list for translation applied to cutout
 (see  [fl_tt_isAxisVList()](../foundation/type_trait.md#function-fl_tt_isaxisvlist))
 
-
-__debug__  
-debug parameter as returned from [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __octant__  
 when undef native positioning is used

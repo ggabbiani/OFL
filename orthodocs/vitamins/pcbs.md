@@ -459,20 +459,25 @@ fl_pcb_thick(type,value)
 
 __Syntax:__
 
-    fl_pcb(verbs=FL_ADD,type,components,cut_direction,thick=0,lay_direction=[+Z],octant,direction,debug)
+    fl_pcb(verbs=FL_ADD,type,components,cut_direction,thick=0,lay_direction=[+Z],octant,direction)
 
 PCB engine.
 
 __Runtime context__
 
-- $fl_tolerance  - used during FL_CUTOUT operations
+| Name           | Description                         |
+| ---            | ---                                 |
+| $fl_tolerance  | used during FL_CUTOUT operations    |
+| Debug context  | see [fl_DebugContext{}](../foundation/core.md#module-fl_debugcontext) for details  |
 
-__children context:__
+__Children context:__
 
-- complete hole context (see also [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context))
-- $pcb_radius  - pcb radius
-- $pcb_thick   - pcb thickness
-- $pcb_verb    - pcb invoked verb
+| Name           | Description                         |
+| ---            | ---                                 |
+| Hole context   | see [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context) for details   |
+| $pcb_radius    | pcb radius                          |
+| $pcb_thick     | pcb thickness                       |
+| $pcb_verb      | pcb invoked verb                    |
 
 
 __Parameters:__
@@ -539,9 +544,6 @@ when undef native positioning is used
 __direction__  
 desired direction [director,rotation], native direction when undef
 
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
-
 
 ---
 
@@ -549,7 +551,7 @@ see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __Syntax:__
 
-    fl_pcb_adapter(verbs=FL_ADD,type,thick=0,payload,octant,direction,debug)
+    fl_pcb_adapter(verbs=FL_ADD,type,thick=0,payload,octant,direction)
 
 PCB adapter for NopSCADlib.
 
@@ -598,11 +600,6 @@ when undef native positioning is used
 __direction__  
 desired direction [director,rotation], native direction when undef
 
-__debug__  
-As returned from constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug). This parameter is currently
-unused.
-
-
 
 ---
 
@@ -610,7 +607,7 @@ unused.
 
 __Syntax:__
 
-    fl_pcb_frame(verbs=FL_ADD,this,cut_tolerance=0,components,cut_direction,thick=0,lay_direction=[+Z],frame_tolerance=0.2,frame_parts=true,debug,direction,octant)
+    fl_pcb_frame(verbs=FL_ADD,this,cut_tolerance=0,components,cut_direction,thick=0,lay_direction=[+Z],frame_tolerance=0.2,frame_parts=true,direction,octant)
 
 __Parameters:__
 
@@ -640,9 +637,6 @@ item is a boolean managing the visibility of the corresponding part.
 
 Setting this parameter as a single boolean extends its value to both the parts.
 
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

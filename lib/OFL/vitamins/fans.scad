@@ -130,9 +130,7 @@ module fl_fan(
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction [+Z,0] when undef
-  direction,
-  //! see constructor fl_parm_Debug()
-  debug
+  direction
 ) {
   bbox  = fl_bb_corners(this);
   nop   = fl_nopSCADlib(this);
@@ -245,7 +243,7 @@ module fl_fan(
 
   // fl_polymorph() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant=octant,direction=direction,debug=debug)
+  fl_polymorph(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

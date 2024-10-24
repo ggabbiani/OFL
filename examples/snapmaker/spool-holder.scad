@@ -25,8 +25,6 @@ SHOW_SYMBOLS    = false;
 
 /* [Hidden] */
 
-debug = fl_parm_Debug(labels=SHOW_LABELS,symbols=SHOW_SYMBOLS);
-
 PLEXI_SZ  = [463,605,2.5];
 
 // custom cross-section in NopSCADlib format
@@ -129,7 +127,7 @@ module central(verb="show") {
       translate(NIL*$hole_n)
         fl_cylinder(h=scr_head_h,d=scr_head_d+tolerance,direction=[-$hole_n,0]);
   } else if (verb=="debug") {
-    fl_hole_debug(holes,debug=debug);
+    fl_hole_debug(holes);
   } else {
     assert(false,verb);
   }
@@ -177,7 +175,7 @@ module side(verb="show",normal) {
         fl_cylinder(h=2*SIDE_T,d=knut_hole_d,direction=[-$hole_n,0]);
     }
   } else if (verb=="debug") {
-    fl_hole_debug(holes, screw=screw, debug=debug);
+    fl_hole_debug(holes, screw=screw);
   } else {
     assert(false,verb);
   }

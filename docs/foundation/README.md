@@ -64,7 +64,7 @@ Relations between draw and bounding box verbs:
 | FL_ASSEMBLY | FL_PAYLOAD |
 | FL_DRAW     | FL_BBOX    |
 
-All *engine* and *primitive* API signatures are standardized in order to respond to the same verbs with the same behaviour/semantic.
+All *engine* and *primitive* API signatures are standardized in order to respond to the same verbs with the same behavior/semantic.
 
 Every *engine* or *primitive* is implemented to respond to single or multiple *Verbs* in whatever order, reducing the problem of 'perfect' argument forwarding in case of multiple calls.
 
@@ -116,7 +116,7 @@ When a verb is passed as a single value the verb will be trivially executed.
     |
     +---> engine
 
-so that same invokation of the same primitive will actually perform the following actions:
+so that same invocation of the same primitive will actually perform the following actions:
 
  1. add of a magnet shape to the scene (FL_ADD);
  2. mount shape through predefined screws (FL_MOUNT);
@@ -128,33 +128,6 @@ so that same invokation of the same primitive will actually perform the followin
 ### Verbs rendering
 
 Engine's behavior when rendering verbs can be modified injecting well-known values into runtime variables with the same name of the verb. For modifying the FL_ADD rendering, the runtime variable to be used is $FL_ADD, for FL_PAYLOAD is $FL_PAYLOAD and so on.. .
-
-The list of modifier variables with their corresponding defaults are listed below:
-
-| Name          | Modified verb | Default       |
-| ------------- | ------------- | ------------- |
-| $FL_ADD       | FL_ADD        | "ON"          |
-| $FL_ASSEMBLY  | FL_ASSEMBLY   | "ON"          |
-| $FL_AXES      | FL_AXES       | "ON"          |
-| $FL_BBOX      | FL_BBOX       | "TRANSPARENT" |
-| $FL_CUTOUT    | FL_CUTOUT     | "ON"          |
-| $FL_DRILL     | FL_DRILL      | "ON"          |
-| $FL_FOOTPRINT | FL_FOOTPRINT  | "ON"          |
-| $FL_LAYOUT    | FL_LAYOUT     | "ON"          |
-| $FL_MOUNT     | FL_MOUNT      | "ON"          |
-| $FL_PAYLOAD   | FL_PAYLOAD    | "DEBUG"       |
-| $FL_SYMBOLS   | FL_SYMBOLS    | "ON"          |
-
-The possible values for these special variables are the following:
-
-| Value       | Description                             |
-| ----------- | --------------------------------------- |
-| undef       | default value used                      |
-| ON          | shape is added without modifications    |
-| OFF         | shape is discarded                      |
-| ONLY        | OpenSCAD root modifier is applied       |
-| DEBUG       | OpenSCAD debug modifier is applied      |
-| TRANSPARENT | OpenSCAD background modifier is applied |
 
 In the previous example we can modify the rendering of the FL_AXES verb
 
@@ -177,6 +150,33 @@ In the previous example we can modify the rendering of the FL_AXES verb
 obtaining the reference axes rendering in 'debug' mode
 
 ![Modified verb invocation](800x600/pic-2.png)
+
+## Execution Contexts
+
+OpenSCAD modules have the possibility to manipulate the rendering of children
+modules realizing complex 2d/3d pipelines. Unfortunately the pipelines built
+through modules are static, as are the actual parameters passed to children.
+
+The only way by means a parent module can pass dynamic data to children, is by
+sharing one - or more - special variables. OFL calls every set of documented
+special variables setup by a parent module for its children as an **execution
+context**.
+
+In particular OFL uses static actual parameters for defining the action a module
+is asked to perform, and the execution contexts for dynamically controlling its
+behavior.
+
+Execution contexts have usually a **constructor module** providing special
+variable initialization and - where needed - supporting internal correlations.
+
+### Types of execution contexts
+
+OFL has many execution contexts, below a partial list:
+
+| Name                      | Description                               |
+| ---                       | ---                                       |
+| [Root](root-context.md)   | controls the behavior of each OFL verb    |
+| [Debug](../../orthodocs/foundation/core.md#module-fl_debugcontext) | controls the global debug flags           |
 
 ## 3D positioning and orientation
 

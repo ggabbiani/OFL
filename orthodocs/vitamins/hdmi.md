@@ -89,7 +89,7 @@ fl_hdmi_new(nop_type)
 
 __Syntax:__
 
-    fl_hdmi(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant,debug)
+    fl_hdmi(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
 
 __Parameters:__
 

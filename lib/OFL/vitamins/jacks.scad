@@ -77,8 +77,6 @@ module fl_jack(
   cut_tolerance=0,
   //! translation applied to cutout
   cut_drift=0,
-  //! see constructor fl_parm_Debug()
-  debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -88,9 +86,9 @@ module fl_jack(
   assert(type!=undef);
   engine  = fl_engine(type);
   if (engine=="fl_jack_barrelEngine")
-    fl_jack_barrelEngine(verbs,type,cut_thick,cut_tolerance,cut_drift,debug,direction,octant);
+    fl_jack_barrelEngine(verbs,type,cut_thick,cut_tolerance,cut_drift,direction,octant);
   else if (engine=="fl_jack_mcxjphstem1Engine")
-    fl_jack_mcxjphstem1Engine(verbs,type,cut_thick,cut_tolerance,cut_drift,debug,direction,octant);
+    fl_jack_mcxjphstem1Engine(verbs,type,cut_thick,cut_tolerance,cut_drift,direction,octant);
   else
     assert(false,str("Engine '",engine,"' unknown."));
 }
@@ -108,8 +106,6 @@ module fl_jack_barrelEngine(
   cut_tolerance=0,
   //! translation applied to cutout
   cut_drift=0,
-  //! see constructor fl_parm_Debug()
-  debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -129,7 +125,7 @@ module fl_jack_barrelEngine(
         jack();
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_CUTOUT) {
@@ -159,8 +155,6 @@ module fl_jack_mcxjphstem1Engine(
   cut_tolerance=0,
   //! translation applied to cutout
   cut_drift=0,
-  //! see constructor fl_parm_Debug()
-  debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -237,7 +231,7 @@ module fl_jack_mcxjphstem1Engine(
 
     } else if ($verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction,debug);
+        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

@@ -83,14 +83,10 @@ module fl_ether(
    * list (retrievable through fl_cutout() getter)
    */
   cut_direction,
-  //! see constructor fl_parm_Debug()
-  debug,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
-  octant,
-  // see constructor fl_parm_Debug()
-  debug
+  octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
@@ -159,7 +155,7 @@ module fl_ether(
         else do_add();
 
     } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction,debug);
+      fl_modifier($modifier) fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

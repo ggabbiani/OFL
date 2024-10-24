@@ -497,7 +497,7 @@ PolyRound points
 
 __Syntax:__
 
-    fl_jnt_joint(verbs=FL_ADD,this,parameter,octant,direction,debug)
+    fl_jnt_joint(verbs=FL_ADD,this,parameter,octant,direction)
 
 Children context:
 
@@ -516,8 +516,5 @@ when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-
-__debug__  
-see constructor [fl_parm_Debug()](../foundation/core.md#function-fl_parm_debug)
 
 
