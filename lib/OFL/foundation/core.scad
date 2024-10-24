@@ -1586,7 +1586,14 @@ module fl_context_dump()
   ) children();
 
 /*!
- * Debug context constructor module.
+ * Debug context constructor module. This constructor setup its context special
+ * variable according to its parameters, then executes a children() call. The
+ * typical usage is the following:
+ *
+ *     fl_dbg_Context(...) {
+ *       // here the children modules invocations
+ *       ...
+ *     }
  *
  * The debug context is constituted by the following special variables:
  *
@@ -1598,8 +1605,21 @@ module fl_context_dump()
  * | $dbg_Dimensions  | (bool) when true, labels to symbols are assigned and displayed |
  * | $dbg_Labels      | (bool) when true, symbol labels are shown              |
  * | $dbg_Symbols     | (bool) when true symbols are shown                     |
+ *
+ * OFL provides also a list of getters for all the special variables used:
+ *
+ * | Name             | Getter              |
+ * | ---              | ---                 |
+ * | $dbg_Assert      | fl_dbg_assert()     |
+ * | $dbg_Color       | fl_dbg_color()      |
+ * | $dbg_Components  | fl_dbg_components() |
+ * | $dbg_Dimensions  | fl_dbg_dimensions() |
+ * | $dbg_Labels      | fl_dbg_labels()     |
+ * | $dbg_Symbols     | fl_dbg_symbols()    |
+ *
+ * See also: fl_dbg_dump{}.
  */
-module fl_DebugContext(
+module fl_dbg_Context(
   //! when true, symbol labels are shown
   labels  = false,
   //! when true symbols are shown
@@ -1621,7 +1641,18 @@ module fl_DebugContext(
   $dbg_Labels     = labels,
   $dbg_Components = components[0]=="none" ? undef : components,
   $dbg_Assert     = assertions
-) children(); // [labels,symbols,components,dimensions,asserts];
+) children();
+
+//! Debug context dump and children() execution.
+module fl_dbg_dump()
+  echo(
+    $dbg_Dimensions = $dbg_Dimensions,
+    $dbg_Color      = $dbg_Color     ,
+    $dbg_Symbols    = $dbg_Symbols   ,
+    $dbg_Labels     = $dbg_Labels    ,
+    $dbg_Components = $dbg_Components,
+    $dbg_Assert     = $dbg_Assert
+  ) children();
 
 //! When true debug asserts are turned on
 function fl_dbg_assert() =

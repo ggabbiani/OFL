@@ -2401,48 +2401,6 @@ fl_width(type)
 
 ---
 
-### module fl_DebugContext
-
-__Syntax:__
-
-    fl_DebugContext(labels=false,symbols=false,components,dimensions=false,assertions=false,color=true)
-
-Debug context constructor module.
-
-The debug context is constituted by the following special variables:
-
-| Name             | Description                                            |
-| ---              | ---                                                    |
-| $dbg_Assert      | (bool) when true, debug assertions are executed        |
-| $dbg_Color       | (bool) when true, [fl_color{}](#module-fl_color) will be set to debug      |
-| $dbg_Components  | (string\|string list) string or list of strings equals to the component label of which debug information will be shown |
-| $dbg_Dimensions  | (bool) when true, labels to symbols are assigned and displayed |
-| $dbg_Labels      | (bool) when true, symbol labels are shown              |
-| $dbg_Symbols     | (bool) when true symbols are shown                     |
-
-
-__Parameters:__
-
-__labels__  
-when true, symbol labels are shown
-
-__symbols__  
-when true symbols are shown
-
-__components__  
-a string or a list of strings equals to the component label of which
-direction information will be shown
-
-
-__dimensions__  
-dimension lines
-
-__assertions__  
-enable or disable assertions
-
-
----
-
 ### module fl_align
 
 __Syntax:__
@@ -2478,6 +2436,78 @@ is applied to children.
 __Syntax:__
 
     fl_context_dump()
+
+---
+
+### module fl_dbg_Context
+
+__Syntax:__
+
+    fl_dbg_Context(labels=false,symbols=false,components,dimensions=false,assertions=false,color=true)
+
+Debug context constructor module. This constructor setup its context special
+variable according to its parameters, then executes a children() call. The
+typical usage is the following:
+
+    fl_dbg_Context(...) {
+      // here the children modules invocations
+      ...
+    }
+
+The debug context is constituted by the following special variables:
+
+| Name             | Description                                            |
+| ---              | ---                                                    |
+| $dbg_Assert      | (bool) when true, debug assertions are executed        |
+| $dbg_Color       | (bool) when true, [fl_color{}](#module-fl_color) will be set to debug      |
+| $dbg_Components  | (string\|string list) string or list of strings equals to the component label of which debug information will be shown |
+| $dbg_Dimensions  | (bool) when true, labels to symbols are assigned and displayed |
+| $dbg_Labels      | (bool) when true, symbol labels are shown              |
+| $dbg_Symbols     | (bool) when true symbols are shown                     |
+
+OFL provides also a list of getters for all the special variables used:
+
+| Name             | Getter              |
+| ---              | ---                 |
+| $dbg_Assert      | [fl_dbg_assert()](#function-fl_dbg_assert)     |
+| $dbg_Color       | fl_dbg_color()      |
+| $dbg_Components  | fl_dbg_components() |
+| $dbg_Dimensions  | fl_dbg_dimensions() |
+| $dbg_Labels      | [fl_dbg_labels()](#function-fl_dbg_labels)     |
+| $dbg_Symbols     | fl_dbg_symbols()    |
+
+See also: [fl_dbg_dump{}](#module-fl_dbg_dump).
+
+
+__Parameters:__
+
+__labels__  
+when true, symbol labels are shown
+
+__symbols__  
+when true symbols are shown
+
+__components__  
+a string or a list of strings equals to the component label of which
+direction information will be shown
+
+
+__dimensions__  
+dimension lines
+
+__assertions__  
+enable or disable assertions
+
+
+---
+
+### module fl_dbg_dump
+
+__Syntax:__
+
+    fl_dbg_dump()
+
+Debug context dump and children() execution.
 
 ---
 

@@ -468,7 +468,7 @@ __Runtime context__
 | Name           | Description                         |
 | ---            | ---                                 |
 | $fl_tolerance  | used during FL_CUTOUT operations    |
-| Debug context  | see [fl_DebugContext{}](../foundation/core.md#module-fl_debugcontext) for details  |
+| Debug context  | see [fl_dbg_Context{}](../foundation/core.md#module-fl_dbg_context) for details  |
 
 __Children context:__
 

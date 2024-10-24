@@ -176,7 +176,7 @@ OFL has many execution contexts, below a partial list:
 | Name                      | Description                               |
 | ---                       | ---                                       |
 | [Root](root-context.md)   | controls the behavior of each OFL verb    |
-| [Debug](../../orthodocs/foundation/core.md#module-fl_debugcontext) | controls the global debug flags           |
+| [Debug](../../orthodocs/foundation/core.md#module-fl_dbg_context) | controls the global debug flags           |
 
 ## 3D positioning and orientation
 

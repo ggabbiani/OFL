@@ -481,7 +481,7 @@ function fl_pcb_compFilter(pcb,rules) = let(
  * | Name           | Description                         |
  * | ---            | ---                                 |
  * | $fl_tolerance  | used during FL_CUTOUT operations    |
- * | Debug context  | see fl_DebugContext{} for details  |
+ * | Debug context  | see fl_dbg_Context{} for details  |
  *
  * __Children context:__
  *
