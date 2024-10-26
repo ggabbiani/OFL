@@ -140,8 +140,8 @@ function fl_transform(
   //! fl_vector (in homogeneous or 3d format)
   v
 ) =
-  assert(len(M)==4 && len(M[0])==4,str("Bad matrix M(",M,")"))
-  assert(is_list(v) && len(v)>2,str("Bad vector v(",v,")"))
+  assert(len(M)==4 && len(M[0])==4, M)
+  assert(is_list(v) && len(v)>2,    v)
   fl_3(M * fl_4(v));
 
 //**** CAD control ************************************************************
@@ -549,10 +549,10 @@ function fl_vendor(type,value)      = fl_property(type,"vendor",value);
  *
  * TODO: rename as plural
  */
-function fl_cutout(type,value)      = fl_property(type,"cut-out direction list",value);
-function fl_dimensions(type,value)  = fl_property(type,"dimension line pack",value);
+function fl_cutout(type,value,default)  = fl_property(type,"cut-out direction list",value,default);
+function fl_dimensions(type,value)      = fl_property(type,"dimension line pack",value);
 
-function fl_radius(type,value)      = fl_property(type,"radius for circle or sphere",value);
+function fl_radius(type,value)          = fl_property(type,"radius for circle or sphere",value);
 
 //*****************************************************************************
 // Derived getters
@@ -703,10 +703,10 @@ function fl_palette(color,axis) = assert(
     );
 
 /*!
- * Set current color and alpha channel, using variable $fl_filament when «color» is
- * undef. When variable $fl_debug is true, color information is ignored and debug
- * modifier is applied to children(). If «color» is equal to "ignore" no color
- * is applied to children.
+ * Set current color and alpha channel, using variable $fl_filament when «color»
+ * is undef. When fl_dbg_color()==true, «color» information is ignored and the
+ * debug modifier is applied to children(). If «color» is equal to "ignore" no
+ * color is applied to children.
  */
 module fl_color(color,alpha=1) {
   color = color ? color : fl_filament();
@@ -1570,19 +1570,19 @@ function fl_parm_thickness(default=0) =
 
 //**** Execution context helpers **********************************************
 
-module fl_context_dump()
+module fl_root_dump()
   echo(
-  $FL_ADD        = $FL_ADD       ,
-  $FL_ASSEMBLY   = $FL_ASSEMBLY  ,
-  $FL_AXES       = $FL_AXES      ,
-  $FL_BBOX       = $FL_BBOX      ,
-  $FL_CUTOUT     = $FL_CUTOUT    ,
-  $FL_DRILL      = $FL_DRILL     ,
-  $FL_FOOTPRINT  = $FL_FOOTPRINT ,
-  $FL_HOLDERS    = $FL_HOLDERS   ,
-  $FL_LAYOUT     = $FL_LAYOUT    ,
-  $FL_MOUNT      = $FL_MOUNT     ,
-  $FL_PAYLOAD    = $FL_PAYLOAD
+    $FL_ADD        = $FL_ADD       ,
+    $FL_ASSEMBLY   = $FL_ASSEMBLY  ,
+    $FL_AXES       = $FL_AXES      ,
+    $FL_BBOX       = $FL_BBOX      ,
+    $FL_CUTOUT     = $FL_CUTOUT    ,
+    $FL_DRILL      = $FL_DRILL     ,
+    $FL_FOOTPRINT  = $FL_FOOTPRINT ,
+    $FL_HOLDERS    = $FL_HOLDERS   ,
+    $FL_LAYOUT     = $FL_LAYOUT    ,
+    $FL_MOUNT      = $FL_MOUNT     ,
+    $FL_PAYLOAD    = $FL_PAYLOAD
   ) children();
 
 /*!

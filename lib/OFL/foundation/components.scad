@@ -61,7 +61,7 @@ function fl_Component(
   parameters
 ) = let(
   // transform component directions into host coordinate system
-  comp_dirs       = fl_cutout(type),
+  comp_dirs       = fl_cutout(type,default=[]),
   D               = fl_direction(direction),
   // host-coordinate-system component direction
   host_dirs       = [for(d=comp_dirs) fl_transform(D,d)],
@@ -119,7 +119,7 @@ module fl_comp_Context(
 
   $comp_engine    = assert(is_string(component[0])) component[0];
   $comp_position  = assert(fl_tt_is3d(component[1]),component[1]) component[1];
-  $comp_cutdirs   = assert(fl_tt_isAxisList(component[2])) component[2];
+  $comp_cutdirs   = assert(fl_tt_isAxisList(component[2]),component[2]) component[2];
   $host_cutdirs   = assert(fl_tt_isAxisList(component[6])) component[6];
   $comp_direction = assert(is_list(component[3])) component[3];
   $comp_director  = assert(fl_tt_isAxis($comp_direction[0])) $comp_direction[0];

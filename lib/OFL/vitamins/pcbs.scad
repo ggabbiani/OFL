@@ -785,7 +785,7 @@ module fl_pcb(
         else if ($comp_engine==FL_GENERIC_NS)
           fl_generic_vitamin(FL_CUTOUT,$comp_type,thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else
-          assert(false,str("Unknown engine ",$comp_engine));
+          fl_error(message=["Unknown engine: '",$comp_engine,"'"]);
       }
 
       do_layout(class="components", directions=cut_direction)
@@ -829,7 +829,7 @@ module fl_pcb(
       fl_doAxes(size,direction);
 
     else if ($verb==FL_BBOX)
-      fl_bb_add(bbox);
+      fl_bb_add(bbox,auto=true);
 
     else if ($verb==FL_CUTOUT)
       do_cutout();

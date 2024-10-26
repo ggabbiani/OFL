@@ -12,6 +12,7 @@ include <2d-engine.scad>
 include <type_trait.scad>
 
 use <polymorphic-engine.scad>
+use <type-engine.scad>
 use <../../NopSCADlib/utils/maths.scad>
 
 module fl_doAxes(
@@ -72,6 +73,8 @@ module fl_frame(
   }
 }
 
+//**** cube primitive *********************************************************
+
 function fl_bb_cube(size = [1,1,1]) = let(
   size = is_list(size) ? size : [size,size,size]
 ) [-size/2,+size/2];
@@ -80,12 +83,15 @@ function fl_cube_size(type,value) = let(
   size = is_undef(value) ? undef : is_list(value) ? value : assert(is_num(value)) [value,value,value]
 ) fl_property(type,"3d engine/cube/size [x,y,z]",size);
 
-function fl_Cube(size = [1,1,1]) = [
-  fl_native(value=true),
-  fl_bb_corners(value=fl_bb_cube(size)),
-  fl_engine(value="3d engine/cube"),
-  fl_cube_size(value=size),
-];
+function fl_Cube(size = [1,1,1]) = let(
+  bbox = fl_bb_cube(size)
+) fl_Object(
+  bbox  = fl_bb_cube(size),
+  engine="3d engine/cube",
+  others = [
+    fl_cube_size(value=size)
+  ]
+);
 
 /*!
  * Cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O
@@ -906,7 +912,9 @@ module fl_bb_add(
    * see also fl_tt_isBoundingBox()
    */
   corners,
+  //! 2d switch
   2d=false,
+  //! when true, z-fight correction is applied
   auto=false
 ) {
   assert(fl_tt_isBoundingBox(corners,2d),corners);
@@ -1753,7 +1761,7 @@ module fl_tube(
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_modifier($modifier) fl_bb_add(bbox,auto=true);
     } else if ($verb==FL_FOOTPRINT) {
       fl_modifier($modifier) do_fprint();
     } else {

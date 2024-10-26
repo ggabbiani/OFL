@@ -8,6 +8,7 @@ graph LR
     A1 --o|include| A3[foundation/type_trait]
     A1 --o|use| A4[dxf]
     A1 --o|use| A5[foundation/polymorphic-engine]
+    A1 --o|use| A6[foundation/type-engine]
 ```
 
 3d primitives
@@ -934,6 +935,12 @@ __corners__
 Bounding box corners in [Low,High] format.
 see also [fl_tt_isBoundingBox()](type_trait.md#function-fl_tt_isboundingbox)
 
+
+__2d__  
+2d switch
+
+__auto__  
+when true, z-fight correction is applied
 
 
 ---

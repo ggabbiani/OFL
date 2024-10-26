@@ -845,7 +845,7 @@ returns the esoteric name associated to the current OpenSCAD view:
 __Syntax:__
 
 ```text
-fl_cutout(type,value)
+fl_cutout(type,value,default)
 ```
 
 cut-out directions in floating semi-axis list form as described in
@@ -2423,19 +2423,11 @@ __Syntax:__
 
     fl_color(color,alpha=1)
 
-Set current color and alpha channel, using variable $fl_filament when «color» is
-undef. When variable $fl_debug is true, color information is ignored and debug
-modifier is applied to children(). If «color» is equal to "ignore" no color
-is applied to children.
+Set current color and alpha channel, using variable $fl_filament when «color»
+is undef. When [fl_dbg_color()](#function-fl_dbg_color)==true, «color» information is ignored and the
+debug modifier is applied to children(). If «color» is equal to "ignore" no
+color is applied to children.
 
-
----
-
-### module fl_context_dump
-
-__Syntax:__
-
-    fl_context_dump()
 
 ---
 
@@ -2572,6 +2564,14 @@ __Syntax:__
     fl_render_if(condition=$FL_RENDER?true:false)
 
 when «condition» is true children are render()ed, fast CSG is used otherwise
+
+---
+
+### module fl_root_dump
+
+__Syntax:__
+
+    fl_root_dump()
 
 ---
 

@@ -146,7 +146,6 @@
 - [fl_connect (module)](foundation/connect.md#module-fl_connect)
 - [foundation/connect (package)](foundation/connect.md#package-foundationconnect)
 - [fl_connectors (function)](foundation/core.md#function-fl_connectors)
-- [fl_context_dump (module)](foundation/core.md#module-fl_context_dump)
 - [foundation/core (package)](foundation/core.md#package-foundationcore)
 - [fl_Countersink (function)](vitamins/countersinks.md#function-fl_countersink)
 - [fl_countersink (module)](vitamins/countersinks.md#module-fl_countersink)
@@ -578,6 +577,7 @@
 - [FL_O6 (variable)](foundation/core.md#variable-fl_o6)
 - [O7 (variable)](foundation/unsafe_defs.md#variable-o7)
 - [FL_O7 (variable)](foundation/core.md#variable-fl_o7)
+- [fl_Object (function)](foundation/type-engine.md#function-fl_object)
 - [FL_OBSOLETE (variable)](foundation/core.md#variable-fl_obsolete)
 - [fl_octant (function)](foundation/3d-engine.md#function-fl_octant)
 - [fl_OFL (function)](foundation/core.md#function-fl_ofl)
@@ -704,6 +704,7 @@
 - [fl_render_if (module)](foundation/core.md#module-fl_render_if)
 - [fl_repos (function)](foundation/label.md#function-fl_repos)
 - [fl_resize (function)](foundation/label.md#function-fl_resize)
+- [fl_root_dump (module)](foundation/core.md#module-fl_root_dump)
 - [Rx (function)](foundation/unsafe_defs.md#function-rx)
 - [fl_Rx (function)](foundation/core.md#function-fl_rx)
 - [Rxyz (function)](foundation/unsafe_defs.md#function-rxyz)
@@ -886,6 +887,7 @@
 - [fl_tt_isPosition (function)](foundation/type_trait.md#function-fl_tt_isposition)
 - [fl_tt_isVerbList (function)](foundation/type_trait.md#function-fl_tt_isverblist)
 - [fl_tube (module)](foundation/3d-engine.md#module-fl_tube)
+- [foundation/type-engine (package)](foundation/type-engine.md#package-foundationtype-engine)
 - [foundation/type_trait (package)](foundation/type_trait.md#package-foundationtype_trait)
 
 ## U

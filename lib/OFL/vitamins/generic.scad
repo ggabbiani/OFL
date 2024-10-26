@@ -45,8 +45,7 @@ function fl_generic_Vitamin(
   engine="Generic",
   specs=[]
 ) =
-
-assert(cut_directions && (!fl_debug() || fl_tt_isAxisList(cut_directions)))
+assert(!cut_directions || (!fl_debug() || fl_tt_isAxisList(cut_directions)))
 assert(is_undef(holes) || (!fl_debug() || fl_tt_isHoleList(holes)))
   concat(
     [
@@ -93,7 +92,7 @@ module fl_generic_vitamin(
   assert(!fl_debug() || (is_num(thick) || fl_tt_isAxisVList(thick)));
   thick           = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
   cut_drift       = is_num(cut_drift) ? [[cut_drift,cut_drift],[cut_drift,cut_drift],[cut_drift,cut_drift]] : cut_drift;
-  cut_directions  = fl_cutout(this);
+  cut_directions  = fl_cutout(this,default=[]);
   ghost           = fl_generic_ghost(this);
   holes           = fl_optional(this,key=fl_holes()[0]);
   // layouts         = fl_optional(this,key=fl_layouts()[0]);
