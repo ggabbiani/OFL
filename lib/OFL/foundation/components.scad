@@ -24,7 +24,7 @@ FL_COMP_SUB = str(FL_COMP_NS,"/sub");
  */
 FL_COMP_DRIFT = str(FL_COMP_NS,"/drift");
 /*!
- * [OPTIONAL] color attribute passed to component.
+ * [OPTIONAL string] color attribute passed to component.
  *
  * __NOTE__: the semantic is component specific.
  */
@@ -33,6 +33,10 @@ FL_COMP_COLOR = str(FL_COMP_NS,"/color");
  * [OPTIONAL] component octant
  */
 FL_COMP_OCTANT = str(FL_COMP_NS,"/octant");
+/*!
+ * [OPTIONAL boolean] external components don't contribute to payload calculations
+ */
+FL_COMP_EXTERNAL = str(FL_COMP_NS,"/octant");
 
 /*
  * Component constructor
@@ -166,19 +170,23 @@ function fl_comp_BBox(spec_list) =
         type        = component[4],
         properties  = component[5],
         octant      = fl_optional(properties,FL_COMP_OCTANT),
-        // component bounding box
-        bbox        = fl_bb_corners(type),
-        // component direction matrix
-        D           = fl_direction(direction),
-        // translation by component position
-        T           = T(position),
-        // eventual component placement
-        M           = fl_octant(octant,bbox=bbox),
-        // transformed bounding box points
-        points      = [for(corner=bbox) fl_transform(T*D*M,corner)],
-        // build transformed bounding box from points
-        Tbbox       = fl_bb_polyhedron(points=points)
-      ) Tbbox
+        external    = fl_optional(properties,FL_COMP_EXTERNAL),
+        points      = external ?
+          // no point list for external components
+          undef :
+          let(
+            // component bounding box
+            bbox = fl_bb_corners(type),
+            // component direction matrix
+            D    = fl_direction(direction),
+            // translation by component position
+            T    = T(position),
+            // eventual component placement
+            M    = fl_octant(octant,bbox=bbox)
+          ) [for(corner=bbox) fl_transform(T*D*M,corner)], // transformed bounding box points
+        // build transformed bounding box from point list
+        Tbbox = points ? fl_bb_polyhedron(points=points) : undef
+      ) if (Tbbox) Tbbox
     ]
   ) fl_bb_calc(bboxes);
 
