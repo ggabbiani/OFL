@@ -8,7 +8,6 @@
 
 
 include <../foundation/connect.scad>
-include <../foundation/drawio.scad>
 
 use <../dxf.scad>
 use <../foundation/algo-engine.scad>
@@ -59,7 +58,7 @@ function fl_sata_powerDataCID()  = "sata/power-data Connector ID (CID)";
 
 FL_SATA_POWERDATASOCKET = let(
   side_prism_h  = 1.5,
-  side_blk_sz   = [2,2,4], // in OpenSCAD orientation i.e. with y,z inverted compared to Draw.io
+  side_blk_sz   = [2,2,4],
   side_sz       = side_blk_sz + [0,0,side_prism_h],
   blk_sz        = [36.5,3.5,5],
 
@@ -69,7 +68,6 @@ FL_SATA_POWERDATASOCKET = let(
 
   size          = blk_sz + [2*side_sz.x,0,side_blk_sz.z/8+side_prism_h],
   cid           = fl_sata_powerDataCID(),
-  dio_pts       = [[1,0],[1,1],[0,0.5],[0,0]],
   Mpoly         = fl_Ry(90) * fl_T(-fl_X(side_blk_sz.x/2)-fl_Z(side_blk_sz.y/2)),
   Mprism        = fl_Ry(45) * fl_T(fl_Y(side_prism_h/2)) * fl_Rx(-90),
 
@@ -83,7 +81,7 @@ FL_SATA_POWERDATASOCKET = let(
   fl_connectors(value=[pc,dc]),
   fl_bb_corners(value=[-blk_sz/2,+blk_sz/2]),
   fl_engine(value="sata/power+data socket"),
-  ["points",      dio_polyCoords(dio_pts,[side_blk_sz.x,side_blk_sz.z,side_blk_sz.y])],
+  ["points",          [[2, 0], [2, -4], [0, -2], [0, 0]]],
   ["block size",      blk_sz],
   ["side block size", side_blk_sz],
   ["prism l1,l2,h",   [side_blk_sz.x,0.5,side_prism_h]],
