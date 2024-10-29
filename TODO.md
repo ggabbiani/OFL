@@ -71,7 +71,7 @@
 - [x] general Makefile implementing documents/pictures/example generation
 - [x] moved library sources into a single top level directory, same for tests
   and examples
-- [ ] remove obsolete drawio library
+- [x] removed obsolete drawio library
 - [x] rewrite sata library with dxf
 - [x] fixed .dxf file warnings during OpenSCAD loading
 - [x] improved object positioning by fl_octant() extension now managing also
