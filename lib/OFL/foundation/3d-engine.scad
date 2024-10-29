@@ -1177,26 +1177,43 @@ module fl_linear_extrude(
 }
 
 /*!
- * Arbitrary axis extrusion with rotation along extrusion axis.
+ * Extrusion along arbitrary direction.
  *
  * Children are projected on the plane orthogonal to «direction» then extruded
  * by «length» along «direction».
  *
- *
+ * See also the corresponding test: tests/foundation/extrusion-test.scad
  */
 module fl_direction_extrude(
   //! direction in [axis,angle] representation
   direction,
   length,
   convexity = 10,
+  //! offset() radius
+  r,
+  //! offset() delta (ignored when r!=0)
+  delta,
+  //! offset() chamfer (ignored when r!=0)
+  chamfer
 ) {
+  module offset_if()
+    if (r)
+      offset(r)
+        children();
+    else if (delta)
+      offset(delta=delta,chamfer=chamfer)
+        children();
+    else
+      children();
+
   D = direction ? fl_direction(direction) : I;
   E = direction ? invert(fl_direction([direction[0],0])) : I;
   multmatrix(D)
     linear_extrude(height=length,convexity=convexity)
-      projection()
-        multmatrix(E)
-          children();
+      offset_if()
+        projection()
+          multmatrix(E)
+            children();
 }
 
 /*!

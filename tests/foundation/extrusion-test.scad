@@ -46,6 +46,13 @@ EXTRUSION_TYPE  = "linear"; // [none,linear,directional]
 XTR_AXIS        = [0,0,1];  // [-1:0.1:+1]
 XTR_ROT         = 0;        // [-360:+360]
 
+/* [DIRECTIONAL] */
+OFFSET_TYPE     = "radial"; // [radial,delta]
+// offset() is bypassed when '0'
+OFFSET_VALUE    = 0;
+// valid only for "delta" offset()
+OFFSET_CHAMFER  = false;
+
 
 /* [Hidden] */
 
@@ -83,8 +90,14 @@ module extrude(direction,length,convexity = 10) {
           projection(cut = false)
             children();
       else
-        fl_direction_extrude(xtr_direction, length, convexity)
-          children();
+        fl_direction_extrude(
+          xtr_direction,
+          length,
+          convexity,
+          r       = OFFSET_TYPE=="radial" ? OFFSET_VALUE : undef,
+          delta   = OFFSET_TYPE=="delta"  ? OFFSET_VALUE : undef,
+          chamfer = OFFSET_CHAMFER
+        ) children();
   children();
 }
 
