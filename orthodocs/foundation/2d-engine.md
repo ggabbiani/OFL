@@ -972,7 +972,7 @@ square size as 2d list or scalar
 __corners__  
 List of four radiuses, one for each quadrant's corners.
 Each zero means that the corresponding corner is squared.
-Defaults to a 'perfect' rectangle with four squared corners.
+Defaults to a 'right' rectangle with four squared corners.
 Scalar value R for «corners» means corners=[R,R,R,R]
 
 See also function [fl_square()](#function-fl_square) for more complete examples.

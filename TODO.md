@@ -121,5 +121,13 @@
   fl_parm_tolerance() and fl_parm_thickness())
 - [ ] add fl_circular_layout{} and cyl_layout{} (from 'super-pipe' project);
 - [ ] add fan_guard component to fans;
-- [ ] add fl_Object() constructor helper (from 'super-pipe' project);
+- [x] added fl_Object() constructor helper in new package 'type-engine;
 - [ ] finalize quaternions support;
+
+## future TODOs
+
+- [ ] modify library tree moving NopSCADlib, Round-Anything and scad-utils into lib/external/;
+- [ ] add Parameter execution context (for tolerance and thickness);
+- [ ] insert 2d shape hierarchy into the official documentation;
+- [ ] write an application customizer template similar to the one existing for tests;
+- [ ] add package with customizer helpers

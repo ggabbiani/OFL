@@ -1045,20 +1045,29 @@ desired direction in axis-angle representation [axis,rotation about]
 
 __Syntax:__
 
-    fl_direction_extrude(direction,length,convexity=10)
+    fl_direction_extrude(direction,length,convexity=10,r,delta,chamfer)
 
-Arbitrary axis extrusion with rotation along extrusion axis.
+Extrusion along arbitrary direction.
 
 Children are projected on the plane orthogonal to «direction» then extruded
 by «length» along «direction».
 
-
+See also the corresponding test: tests/foundation/extrusion-test.scad
 
 
 __Parameters:__
 
 __direction__  
 direction in [axis,angle] representation
+
+__r__  
+offset() radius
+
+__delta__  
+offset() delta (ignored when r!=0)
+
+__chamfer__  
+offset() chamfer (ignored when r!=0)
 
 
 ---

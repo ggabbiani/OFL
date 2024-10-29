@@ -120,6 +120,7 @@
 - [fl_comp_connectors (function)](foundation/components.md#function-fl_comp_connectors)
 - [fl_comp_Context (module)](foundation/components.md#module-fl_comp_context)
 - [FL_COMP_DRIFT (variable)](foundation/components.md#variable-fl_comp_drift)
+- [FL_COMP_EXTERNAL (variable)](foundation/components.md#variable-fl_comp_external)
 - [FL_COMP_NS (variable)](foundation/components.md#variable-fl_comp_ns)
 - [FL_COMP_OCTANT (variable)](foundation/components.md#variable-fl_comp_octant)
 - [fl_comp_search (function)](foundation/components.md#function-fl_comp_search)

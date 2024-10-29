@@ -24,7 +24,7 @@ __Default:__
 
     str(FL_COMP_NS,"/color")
 
-[OPTIONAL] color attribute passed to component.
+[OPTIONAL string] color attribute passed to component.
 
 __NOTE__: the semantic is component specific.
 
@@ -38,6 +38,17 @@ __Default:__
     str(FL_COMP_NS,"/drift")
 
 [OPTIONAL] additional delta during component FL_CUTOUT
+
+
+---
+
+### variable FL_COMP_EXTERNAL
+
+__Default:__
+
+    str(FL_COMP_NS,"/octant")
+
+[OPTIONAL boolean] external components don't contribute to payload calculations
 
 
 ---
