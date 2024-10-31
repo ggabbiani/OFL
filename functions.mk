@@ -104,16 +104,45 @@ define fix-target-dependencies
 sed '1s|.*:|$@:|' --in-place $@.deps
 endef
 
-# produce the current target picture from
+# if $(1) contains 'similarity' executes $(2), otherwise executes 'true'
+# define if-similarity
+# 	$(if $(findstring similarity,$(1)),$(2),$(3))
+# endef
+
+# rename target if exists
+# define backup-target
+# 	test ! -e $@ || mv -f $@ $@.orig
+# endef
+
+# makes target and check for exact structural similarity to the git committed
+# one.
+# if similar keeps the original otherwise keeps new and rise an error
+# $(1)=target resolution in 'openscad' format i.e. 800x600
+# $(2)=camera view settings
+# $(3)=projection type ('ortho' or 'perspective')
+# $(4)=other parameter(s)
+define check-picture
+	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
+	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
+	rm unscaled-$@
+	git checkout -- $@
+	($(IMG_DIFF) $@ new-$@ && rm new-$@) || (mv new-$@ $@ && false)
+	$(call fix-target-dependencies)
+endef
+
+# makes target and check for exact structural similarity to the git committed one
+# if similar keeps the original otherwise keeps the new
 # $(1)=target resolution in 'openscad' format i.e. 800x600
 # $(2)=camera view settings
 # $(3)=projection type ('ortho' or 'perspective')
 # $(4)=other parameter(s)
 define make-picture
-$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@ \
-&& $(IMCMD) unscaled-$@ -resize $(1) $@ &>/dev/null \
-&& rm unscaled-$@ \
-&& $(call fix-target-dependencies)
+	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
+	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
+	rm -f unscaled-$@
+	git checkout -- $@
+	($(IMG_DIFF) -v 0 $@ new-$@ && rm new-$@) || mv new-$@ $@
+	$(call fix-target-dependencies)
 endef
 
 define make-camera

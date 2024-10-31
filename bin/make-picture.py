@@ -30,7 +30,7 @@ def prologue(title,case=None):
     print((colored(title+": ", 'yellow')),end="",flush=True)
 
 def hires(lowres):
-  res = [int(num)*8 for num in lowres.split('x')]
+  res = [int(num)*4 for num in lowres.split('x')]
   return str(res[0])+','+str(res[1])
 
 parser = argparse.ArgumentParser()
@@ -104,4 +104,4 @@ result  = ofl.openscad(scad,parms=parms,echo_f=echo,hw=True,dry_run=args.dry_run
 if result.returncode!=0:
   cprint(f'✝ ({result.returncode})','red')
   cat(echo)
-  exit(rc)
+  exit(result.returncode)

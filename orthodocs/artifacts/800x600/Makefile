@@ -1,12 +1,9 @@
 # explicit wildcard expansion suppresses errors when no files are found
-include $(wildcard *.deps)
-
+include $(wildcard *.deps) $(FUNCTIONS)
 SIZE		:= $(notdir $(CURDIR))
 CURR_BASE	:= $(notdir $(CURDIR:/$(SIZE)=))
 PICTURES	:= fig_joints_front_view.png fig_joints_right_view.png fig_joints_top_view.png \
 	fig-TS15_section.png fig-TS35_section.png fig-TS35D_section.png fig-din_rails.png
-
-include $(FUNCTIONS)
 
 all:	$(PICTURES)
 

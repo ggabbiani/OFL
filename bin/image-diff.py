@@ -11,32 +11,44 @@
 
 import argparse
 import cv2
-import numpy as np
+import datetime
+import subprocess
+
 from skimage.metrics import structural_similarity,mean_squared_error
+from termcolor import colored, cprint
 
 import ofl,os
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-t", "--threshold", type=int, help="threshold to fulfill for a successful exit code", default=4)
+parser.add_argument("-t", "--threshold", type=int, help = "minimum threshold proving image similarity", default=100)
 parser.add_argument("-v", "--verbosity", type=int, help = "Increase verbosity", choices=[ofl.SILENT,ofl.ERROR,ofl.WARN,ofl.INFO,ofl.DEBUG],default=ofl.ERROR)
-parser.add_argument("image1", help="First image to test")
-parser.add_argument("image2", help="Second image to test")
+parser.add_argument("images", help="Images to test", nargs=2)
 
 args = parser.parse_args()
 
-ofl.verbosity   = args.verbosity
+ofl.verbosity = args.verbosity
 
-img1    = cv2.imread(args.image1)
-img2    = cv2.imread(args.image2)
+num_images  = len(args.images)
+if num_images>2:
+  ofl.error("max two images are allowed")
+  exit(1)
+
+first   = args.images[0]
+second  = args.images[1]
+ofl.info(f"comparing '{first}' with '{second}'")
+
+img1    = cv2.imread(first)
+img2    = cv2.imread(second)
 
 img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
 img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 
 # Compute SSIM between two images
 score = round(structural_similarity(img1_gray, img2_gray)*100)
-# print("Image similarity", score)
-if score!=100:
-  ofl.warn(f"{args.image1} differs from {args.image2} (similarity is only {score}%)")
+if score<args.threshold:
+  cprint(f'{score}%','red',end=" ")
+  # ofl.error(f"insufficient {score}% similarity")
   exit(1)
 else:
-  ofl.info(f"{args.image1} is a copy of {args.image2}")
+  cprint(f'{score}%','green',end=" ")
+  # ofl.info(f"{first} looks {score}% like {second}")
