@@ -36,6 +36,7 @@ RUN python3 -m venv .venv \
     && pip install --upgrade pip \
     && pip install -r pyreqs.txt
 COPY make-import.sh /usr/local/sbin/
+RUN git config --global --add safe.directory /import
 ###############################################################################
 # entrypoint
 ENTRYPOINT [ "/usr/local/sbin/make-import.sh" ]
