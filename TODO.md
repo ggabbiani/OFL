@@ -131,4 +131,5 @@
 - [ ] add Parameter execution context (for tolerance and thickness);
 - [ ] insert 2d shape hierarchy into the official documentation;
 - [ ] write an application customizer template similar to the one existing for tests;
-- [ ] add package with customizer helpers
+- [ ] add package with customizer helpers;
+- [ ] document Docker build process and more generally developer information;
