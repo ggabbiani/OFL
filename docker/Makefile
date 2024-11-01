@@ -25,13 +25,13 @@ all: fedora ubuntu
 
 clean:
 	$(call aggregate-prologue)
-	@$(DOCKER_RMI) ofl:fedora ofl:ubuntu || true
+	$(DOCKER_RMI) ofl:fedora ofl:ubuntu || true
 	$(call aggregate-epilogue)
 
 # build docker image: pre-requisite for all fedora targets
 fedora-build:
 	$(call target-prologue)
-	@cd $(word 1,$(subst -, ,$@)) && $(FEDORA_BUILD) .
+	cd $(word 1,$(subst -, ,$@)) && $(FEDORA_BUILD) .
 	$(call target-epilogue-success)
 
 # Fedora make "all"
@@ -41,7 +41,7 @@ fedora: fedora-build
 # Fedora make "tests/runs"
 fedora-tests: fedora-build
 	$(call section-prologue,$@)
-	@$(FEDORA_MAKE) tests/runs
+	$(FEDORA_MAKE) tests/runs
 	$(call section-epilogue,$@)
 
 # build docker image: pre-requisite for all ubuntu targets
@@ -57,5 +57,5 @@ ubuntu: ubuntu-build
 # Ubuntu make "tests/runs"
 ubuntu-tests: ubuntu-build
 	$(call section-prologue,$@)
-	@$(UBUNTU_MAKE) tests/runs
+	$(UBUNTU_MAKE) tests/runs
 	$(call section-epilogue,$@)
