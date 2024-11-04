@@ -181,7 +181,8 @@ module fl_dimension(
   thick         = arrow_body_w;
   bbox          = top_bbox(fl_bb_corners(object));
   dims          = bbox[1]-bbox[0];
-  font          = "Symbola:style=Regular";
+  // TODO: make a global getter for font usage
+  font          = "Symbola";
 
   // bounding box calculation in the "top" view
   function top_bbox(
@@ -224,7 +225,7 @@ module fl_dimension(
       rotate(xy_spread.y ? 0 : 90,Z)
         translate([0,+arrow_head_w/2])
           linear_extrude(thick)
-            text(str(txt), valign="bottom", halign="center", font=font, size=arrow_body_w*3);
+            text(str(txt), valign="bottom", halign="center", size=arrow_body_w*3);
 
     function vertical(head_t,body_t,offset=-value/2) = let(
       head_l  = body_t*8/5
