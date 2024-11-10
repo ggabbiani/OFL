@@ -37,7 +37,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../Round-Anything/polyround.scad>
+include <../../ext/Round-Anything/polyround.scad>
 
 include <../foundation/dimensions.scad>
 include <../foundation/label.scad>

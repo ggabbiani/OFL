@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../lib/NopSCADlib/core.scad>
-include <../../lib/NopSCADlib/vitamins/screws.scad>
+include <../../lib/ext/NopSCADlib/core.scad>
+include <../../lib/ext/NopSCADlib/vitamins/screws.scad>
 
 include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/foundation/limits.scad>
@@ -20,8 +20,8 @@ use <../../lib/OFL/foundation/2d-engine.scad>
 use <../../lib/OFL/foundation/3d-engine.scad>
 use <../../lib/OFL/foundation/hole.scad>
 
-include <../../lib/NopSCADlib/utils/core/core.scad>
-use <../../lib/NopSCADlib/utils/thread.scad>
+include <../../lib/ext/NopSCADlib/utils/core/core.scad>
+use <../../lib/ext/NopSCADlib/utils/thread.scad>
 
 $fl_print_tech   = "Selective Laser sintering"; // [Selective Laser sintering,Fused deposition modeling,Stereo lithography,Material jetting,Binder jetting,Direct metal Laser sintering]
 $fn         = 50;           // [3:100]

@@ -5,8 +5,8 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../../NopSCADlib/core.scad>
-include <../../NopSCADlib/vitamins/screws.scad>
+include <../../ext/NopSCADlib/core.scad>
+include <../../ext/NopSCADlib/vitamins/screws.scad>
 
 include <../foundation/unsafe_defs.scad>
 

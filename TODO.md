@@ -126,10 +126,10 @@
 - [ ] finalize quaternions support;
 - [X] applied Makefile function make-picture and check-picture in all picture related targets;
 - [ ] get rid of the last occurrences of the obsolete $fl_debug;
+- [X] modified library tree moving NopSCADlib, Round-Anything and scad-utils into lib/ext/;
 
 ## future TODOs
 
-- [ ] modify library tree moving NopSCADlib, Round-Anything and scad-utils into lib/external/;
 - [ ] add Parameter execution context (for tolerance and thickness);
 - [ ] insert 2d shape hierarchy into the official documentation;
 - [ ] write an application customizer template similar to the one existing for tests;

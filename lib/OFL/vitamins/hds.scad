@@ -14,8 +14,8 @@ use <../foundation/mngm-engine.scad>
 include <sata.scad>
 include <screw.scad>
 
-include <../../NopSCADlib/core.scad>
-include <../../NopSCADlib/vitamins/screws.scad>
+include <../../ext/NopSCADlib/core.scad>
+include <../../ext/NopSCADlib/vitamins/screws.scad>
 
 FL_HD_NS  = "hd";
 

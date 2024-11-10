@@ -12,7 +12,7 @@ use <../foundation/mngm-engine.scad>
 include <countersinks.scad>
 include <screw.scad>
 
-include <../../NopSCADlib/core.scad>
+include <../../ext/NopSCADlib/core.scad>
 
 //! namespace for pin headers engine
 FL_MAG_NS  = "mag";

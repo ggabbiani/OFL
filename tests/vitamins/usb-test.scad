@@ -14,8 +14,8 @@
 
 include <../../lib/OFL/vitamins/usbs.scad>
 
-include <../../lib/NopSCADlib/global_defs.scad>
-use     <../../lib/NopSCADlib/utils/layout.scad>
+include <../../lib/ext/NopSCADlib/global_defs.scad>
+use     <../../lib/ext/NopSCADlib/utils/layout.scad>
 
 
 $fn            = 50;           // [3:100]

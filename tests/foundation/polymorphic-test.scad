@@ -12,8 +12,8 @@
  */
 
 
-include <../../lib/NopSCADlib/core.scad>
-include <../../lib/NopSCADlib/vitamins/iecs.scad>
+include <../../lib/ext/NopSCADlib/core.scad>
+include <../../lib/ext/NopSCADlib/vitamins/iecs.scad>
 
 include <../../lib/OFL/vitamins/screw.scad>
 

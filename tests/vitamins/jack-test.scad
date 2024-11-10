@@ -12,8 +12,8 @@
  */
 
 
-include <../../lib/NopSCADlib/global_defs.scad>
-use     <../../lib/NopSCADlib/utils/layout.scad>
+include <../../lib/ext/NopSCADlib/global_defs.scad>
+use     <../../lib/ext/NopSCADlib/utils/layout.scad>
 
 include <../../lib/OFL/vitamins/jacks.scad>
 

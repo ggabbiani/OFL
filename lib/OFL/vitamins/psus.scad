@@ -13,7 +13,7 @@ use <../foundation/util.scad>
 include <../foundation/unsafe_defs.scad>
 
 include <screw.scad>
-include <../../NopSCADlib/lib.scad>
+include <../../ext/NopSCADlib/lib.scad>
 
 //! namespace for PSU engine
 FL_PSU_NS  = "psu";

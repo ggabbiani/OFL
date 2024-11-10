@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../NopSCADlib/vitamins/extrusions.scad>
+include <../../ext/NopSCADlib/vitamins/extrusions.scad>
 include <../foundation/3d-engine.scad>
 
 use <../foundation/mngm-engine.scad>
