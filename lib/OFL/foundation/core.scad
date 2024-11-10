@@ -20,7 +20,7 @@ module fl_extrude_if(condition, height, convexity)
     children();
 
 //! when «condition» is true children are render()ed, fast CSG is used otherwise
-module fl_render_if(condition=$FL_RENDER?true:false)
+module fl_render_if(condition)
   if (condition)
     render()
       children();

@@ -337,7 +337,7 @@ module fl_DIN_rail(
   module engine() {
 
     if ($this_verb==FL_ADD) {
-      fl_render_if()
+      // fl_render_if()
         difference() {
           do_shape();
           if (punch)
