@@ -125,7 +125,7 @@ __Syntax:__
 fl_spc_nominalScrew(type,value)
 ```
 
-nominal screw size optional property
+nominal screw size optional property. TODO: shall this be substituted by [fl_nominal()](../foundation/core.md#function-fl_nominal)?
 
 ## Modules
 

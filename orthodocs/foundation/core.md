@@ -2561,7 +2561,7 @@ Aligns children from u1 to u2 and move to position
 
 __Syntax:__
 
-    fl_render_if(condition=$FL_RENDER?true:false)
+    fl_render_if(condition)
 
 when «condition» is true children are render()ed, fast CSG is used otherwise
 
