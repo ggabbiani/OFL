@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-use     <../../scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
+use     <../../ext/scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
 
 //**** language extension *****************************************************
 
@@ -372,7 +372,9 @@ FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
  * See also variable FL_ADD and variable FL_ASSEMBLY
  */
 FL_DRAW       = [FL_ADD,FL_ASSEMBLY];
-//! layout of predefined drill shapes (like holes with predefined screw diameter)
+/*!
+ * layout of predefined drill shapes (like holes with predefined screw diameter)
+ */
 FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter)";
 //! adds a footprint to scene, usually a simplified ADD operation (see variable FL_ADD)
 FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD";
