@@ -7,7 +7,7 @@
  */
 
 include <../../ext/NopSCADlib/utils/core/core.scad>
-use <../../NopSCADlib/utils/annotation.scad>
+use <../../ext/NopSCADlib/utils/annotation.scad>
 
 include <../foundation/core.scad>
 include <screw.scad>

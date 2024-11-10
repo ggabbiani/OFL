@@ -13,7 +13,7 @@ include <type_trait.scad>
 
 use <polymorphic-engine.scad>
 use <type-engine.scad>
-use <../../NopSCADlib/utils/maths.scad>
+use <../../ext/NopSCADlib/utils/maths.scad>
 
 module fl_doAxes(
   size,
