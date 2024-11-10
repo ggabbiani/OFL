@@ -1,7 +1,7 @@
 /*
  * din_rails mount test
  *
- * NOTE: this file is incomplete and not inserted in the devops. It needs to be
+ * TODO: this file is incomplete and not inserted in the devops. It needs to be
  * concretely developed.
  *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>

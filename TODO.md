@@ -109,7 +109,8 @@
 - [X] fixed regression after the generic cutout algorithm implementation in pcb
   engine
 - [ ] create template tests
-- [ ] complete DIN rails implementing missing verbs
+- [ ] setup a 3rdy part application template;
+- [ ] complete DIN rails implementing missing verbs (like FL_MOUNT)
 - [X] added Snap-fit joints
 - [X] added 'point' symbol
 - [X] added fl_2d_closest() algorithm
@@ -124,6 +125,7 @@
 - [X] added fl_Object() constructor helper in new package 'type-engine;
 - [ ] finalize quaternions support;
 - [X] applied Makefile function make-picture and check-picture in all picture related targets;
+- [ ] get rid of the last occurrences of the obsolete $fl_debug;
 
 ## future TODOs
 
