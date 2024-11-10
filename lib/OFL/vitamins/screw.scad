@@ -69,7 +69,11 @@ FL_SCREW_DICT = [
  *
  * This can be used by function fl_list_filter().
  */
-function fl_screw_byNominal(diameter) = function(nop_screw) fl_screw_nominal(nop_screw)==diameter;
+function fl_screw_byNominal(diameter) =
+  function(nop_screw)
+    // nop_screw as returned by the nopSCADLib's lists can be '0', we test
+    // thereby if the current screw is a valid one
+    (nop_screw && fl_screw_nominal(nop_screw)==diameter);
 
 /*!
  * Return a list of screws from dictionary, matching the passed properties.
