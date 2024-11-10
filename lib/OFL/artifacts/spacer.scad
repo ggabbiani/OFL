@@ -23,7 +23,7 @@ FL_SPC_NS  = "spc";
 function fl_spc_d(type,value)  = fl_property(type,"spc/external ⌀",value);
 //! height along Z axis property
 function fl_spc_h(type,value)  = fl_property(type,"spc/height along Z axis",value);
-//! nominal screw size optional property
+//! nominal screw size optional property. TODO: shall this be substituted by fl_nominal()?
 function fl_spc_nominalScrew(type,value)  = fl_optProperty(type,"spc/nominal screw size",value);
 //! knurl nut optional property
 function fl_spc_knut(type,value)  = fl_optProperty(type,"spc/knurl nut",value);
@@ -69,7 +69,7 @@ function fl_Spacer(
   d     = max(knut ? fl_knut_drillD(knut)+2*wall : 0,d_min),
   kn_h  = knut ? fl_knut_thick(knut)+1 : 0,
   h     = max(h_min,kn_h)
-) assert(d && h,"***OFL ERROR***: missing «h» and «d» parameters or «knut» and «screw_size» constrains")
+) assert(d && h,"***OFL ERROR***: missing «h» or «d» parameters or «knut» and «screw_size» constrains")
   assert(!screw_size||d>screw_size,"***OFL ERROR***: minimum external ⌀ must be greater than screw size")
   [
   fl_OFL(value=true),
@@ -294,7 +294,9 @@ module fl_spacer(
       knut(FL_DRILL);
     else if (scr_size)
       do_layout()
-        if ($spc_thick) fl_cylinder(h=$spc_thick,r=hole_r,octant=$spc_director);
+        if ($spc_thick)
+          translate(-$spc_h*$spc_director)
+            fl_cylinder(h=$spc_thick+$spc_h,r=hole_r,octant=$spc_director);
 
   module context(
     director
