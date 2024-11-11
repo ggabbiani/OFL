@@ -219,7 +219,7 @@ let(
  * Context parameters:
  *
  * | name           | Description   |
- * | ============== | ============  |
+ * | -------------- | ------------  |
  * | $fl_thickness  |  material thickness to be drilled, see also fl_parm_thickness() |
  */
 module fl_screw(

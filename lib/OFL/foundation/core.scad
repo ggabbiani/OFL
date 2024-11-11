@@ -387,7 +387,7 @@ FL_DRAW       = [FL_ADD,FL_ASSEMBLY];
  * Context parameters used:
  *
  * | Name           | Description                     |
- * | =============  | =============================== |
+ * | -------------  | ------------------------------- |
  * | $fl_thickness  | material thickness to be drilled, see also fl_parm_thickness() |
  */
 FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter)";

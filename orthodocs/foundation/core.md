@@ -240,7 +240,7 @@ Drills can be of two types:
 Context parameters used:
 
 | Name           | Description                     |
-| =============  | =============================== |
+| -------------  | ------------------------------- |
 | $fl_thickness  | material thickness to be drilled, see also [fl_parm_thickness()](#function-fl_parm_thickness) |
 
 

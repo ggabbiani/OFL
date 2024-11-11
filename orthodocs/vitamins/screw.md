@@ -216,7 +216,7 @@ __Syntax:__
 Context parameters:
 
 | name           | Description   |
-| ============== | ============  |
+| -------------- | ------------  |
 | $fl_thickness  |  material thickness to be drilled, see also [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness) |
 
 
