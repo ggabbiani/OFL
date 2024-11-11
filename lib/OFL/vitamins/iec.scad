@@ -148,7 +148,7 @@ module fl_iec(
     // else if ($this_verb==FL_PAYLOAD)
     //   ;
     else
-      assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
+      fl_error(true,["unimplemented verb",$this_verb]);
 
   fl_polymorph(verbs,this,octant=octant,direction=direction)
     engine()
