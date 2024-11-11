@@ -79,6 +79,12 @@
 - [X] all OFL base shapes but fl_cube() are centered to the origin: now
   fl_cube() is centered by default as well
 - [X] standardize the common api parameter syntax
+- [X] removed the obsolete $fl_debug;
+- [ ] review and apply everywhere the new polymorph engine for rewriting and
+  subtyping all the existing modules. Use vitamins/iec.scad as implementation
+  example/reference.
+- [ ] implement everywhere the multi-verb global parameters (ex.
+  fl_parm_tolerance() and fl_parm_thickness())
 - [ ] modify FL_DRILL verb implementation according to the type of drill to be
   performed: TAP drill vs CLEARANCE drill.
 - [ ] differentiate documentation by release
@@ -101,9 +107,6 @@
 - [ ] constructor for fl_layout()
 - [ ] review and apply everywhere the new generalized cutout algorithm. Use
   vitamins/{ethers,heatsink,usbs}.scad as implementation example/reference.
-- [ ] review and apply everywhere the new polymorph engine for rewriting and
-  subtyping all the existing modules. Use vitamins/iec.scad as implementation
-  example/reference.
 - [X] implemented new PCB component filtering.
 - [X] fix documentation generation under Ubuntu
 - [X] fixed regression after the generic cutout algorithm implementation in pcb
@@ -118,14 +121,11 @@
 - [X] added dimension line management
 - [ ] add dimension lines to relevant tests (see artifacts/joints.scad)
 - [ ] fix bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
-- [ ] implement everywhere the multi-verb global parameters (ex.
-  fl_parm_tolerance() and fl_parm_thickness())
 - [ ] add fl_circular_layout{} and cyl_layout{} (from 'super-pipe' project);
 - [ ] add fan_guard component to fans;
 - [X] added fl_Object() constructor helper in new package 'type-engine;
 - [ ] finalize quaternions support;
 - [X] applied Makefile function make-picture and check-picture in all picture related targets;
-- [ ] get rid of the last occurrences of the obsolete $fl_debug;
 - [X] modified library tree moving NopSCADlib, Round-Anything and scad-utils into lib/ext/;
 
 ## future TODOs
