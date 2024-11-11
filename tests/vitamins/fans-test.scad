@@ -119,10 +119,10 @@ fan = fl_switch(SHOW,fl_list_pack(FL_FAN_NAMES,FL_FAN_INVENTORY));
 if (fan) {
   screw = fl_fan_screw(fan);
   fl_fan(verbs,fan,thick=thickness,octant=octant,direction=direction)
-    fl_screw(type=screw,thick=$fan_thick,direction=$fan_direction);
+    fl_screw(type=screw,$fl_thickness=$fan_thick,direction=$fan_direction);
 } else {
   fl_layout(axis=+X, gap=3, types=FL_FAN_INVENTORY,$FL_LAYOUT="ON") let(
     screw = fl_fan_screw($item)
   ) fl_fan(verbs,$item,thick=thickness,octant=octant,direction=direction)
-    fl_screw(type=screw,thick=$fan_thick,direction=$fan_direction);
+    fl_screw(type=screw,$fl_thickness=$fan_thick,direction=$fan_direction);
 }

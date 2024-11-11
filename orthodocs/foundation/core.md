@@ -226,7 +226,23 @@ __Default:__
 
     "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter)"
 
-layout of predefined drill shapes (like holes with predefined screw diameter)
+Layout of predefined drill shapes.
+
+Drills can be of two types:
+
+- tap drill: compared to its screw, it has a smaller diameter to allow
+  threading. According to a commonly used formula, the tap drill diameter
+  usually can be calculated from the __nominal diameter minus the thread
+  pitch__;
+- clearance drill: it has a larger diameter to allow the screw to pass
+  through. Usually equals to __nominal diameter plus clearance value__;
+
+Context parameters used:
+
+| Name           | Description                     |
+| =============  | =============================== |
+| $fl_thickness  | material thickness to be drilled, see also [fl_parm_thickness()](#function-fl_parm_thickness) |
+
 
 ---
 
@@ -2554,6 +2570,16 @@ __Syntax:__
     fl_overlap(u1,u2,position)
 
 Aligns children from u1 to u2 and move to position
+
+---
+
+### module fl_parm_dump
+
+__Syntax:__
+
+    fl_parm_dump()
+
+Parameter context dump (mainly used for debug)
 
 ---
 

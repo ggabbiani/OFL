@@ -195,10 +195,10 @@ module fl_box(
       if (parts=="all" || parts=="lower") {
         multmatrix(Mback_knut)
           back_spacer(FL_MOUNT)
-            fl_screw(FL_DRAW,screw,thick=$spc_thickness,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
+            fl_screw(FL_DRAW,screw,$fl_thickness=$spc_thickness,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
         multmatrix(Mfront_knut)
           front_spacer(FL_MOUNT)
-            fl_screw(FL_DRAW,screw,thick=$spc_thickness,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
+            fl_screw(FL_DRAW,screw,$fl_thickness=$spc_thickness,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
       }
     }
   }

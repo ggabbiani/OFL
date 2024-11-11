@@ -373,7 +373,22 @@ FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
  */
 FL_DRAW       = [FL_ADD,FL_ASSEMBLY];
 /*!
- * layout of predefined drill shapes (like holes with predefined screw diameter)
+ * Layout of predefined drill shapes.
+ *
+ * Drills can be of two types:
+ *
+ * - tap drill: compared to its screw, it has a smaller diameter to allow
+ *   threading. According to a commonly used formula, the tap drill diameter
+ *   usually can be calculated from the __nominal diameter minus the thread
+ *   pitch__;
+ * - clearance drill: it has a larger diameter to allow the screw to pass
+ *   through. Usually equals to __nominal diameter plus clearance value__;
+ *
+ * Context parameters used:
+ *
+ * | Name           | Description                     |
+ * | =============  | =============================== |
+ * | $fl_thickness  | material thickness to be drilled, see also fl_parm_thickness() |
  */
 FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter)";
 //! adds a footprint to scene, usually a simplified ADD operation (see variable FL_ADD)
@@ -1409,8 +1424,6 @@ function fl_filament() =
 
 //**** Common parameter helpers ***********************************************
 
-// function fl_parm_triState(value) = value=="undef" ? undef : is_num(value) ? x : fl_atoi(value);
-
 /*!
  * The function takes an unordered pair of two opposite signed values and
  * returns an ordered list with the negative value at position 0 and the
@@ -1553,6 +1566,15 @@ function fl_parm_multiverb(
     is_list(value) && value[0]=="MULTI-VERB" ?
       assert(verb) fl_optProperty(value, verb, default=default) :
       value;
+
+//**** Parameter context ******************************************************
+
+//! Parameter context dump (mainly used for debug)
+module fl_parm_dump()
+  echo(
+    $fl_thickness = $fl_thickness,
+    $fl_tolerance = $fl_tolerance
+  ) children();
 
 /*!
  * Multi valued verb-dependent tolerance parameter getter.

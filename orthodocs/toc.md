@@ -586,6 +586,7 @@
 ## P
 
 - [fl_palette (function)](foundation/core.md#function-fl_palette)
+- [fl_parm_dump (module)](foundation/core.md#module-fl_parm_dump)
 - [fl_parm_MultiVerb (function)](foundation/core.md#function-fl_parm_multiverb)
 - [fl_parm_multiverb (function)](foundation/core.md#function-fl_parm_multiverb)
 - [fl_parm_Octant (function)](foundation/core.md#function-fl_parm_octant)

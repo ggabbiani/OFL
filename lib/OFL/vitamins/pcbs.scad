@@ -744,7 +744,7 @@ module fl_pcb(
       if (holes)
         fl_lay_holes(holes,lay_direction)
           let(scr = is_undef($hole_screw) ? screw : $hole_screw)
-            if (scr) fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,thick=dr_thick);
+            if (scr) fl_screw([FL_ADD,FL_ASSEMBLY],type=scr,$fl_thickness=dr_thick);
     }
 
     module do_drill() {
@@ -948,7 +948,7 @@ module fl_pcb_adapter(
   module do_assembly() {
     if (holes)
       fl_lay_holes(holes,[+Z])
-        fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",thick=dr_thick+pcb_t,nwasher=true);
+        fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",$fl_thickness=dr_thick+pcb_t,nwasher=true);
   }
 
   module do_drill() {
@@ -1270,7 +1270,7 @@ module fl_pcb_frame(
 
   module do_mount() {
     fl_lay_holes(holes,lay_direction)
-      fl_screw([FL_ADD,FL_ASSEMBLY],type=$hole_screw,thick=dr_thick);
+      fl_screw([FL_ADD,FL_ASSEMBLY],type=$hole_screw,$fl_thickness=dr_thick);
   }
 
   module do_pload() {

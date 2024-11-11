@@ -76,10 +76,13 @@ This can be used by function [fl_list_filter()](../foundation/core.md#function-f
 __Syntax:__
 
 ```text
-fl_screw_l(type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false)
+fl_screw_l(type,len,washer="no",nut="no",xwasher="no",nwasher=false)
 ```
 
-return the overall length of a screw (according to parameters)
+Returns the overall length of a screw (according to parameters).
+
+Context parameters: see [fl_screw{}](#module-fl_screw).
+
 
 __Parameters:__
 
@@ -103,7 +106,7 @@ nut washer
 __Syntax:__
 
 ```text
-fl_screw_lens(type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false)
+fl_screw_lens(type,len,washer="no",nut="no",xwasher="no",nwasher=false)
 ```
 
 return a list with layered thickness (according to parameters):
@@ -116,6 +119,8 @@ return a list with layered thickness (according to parameters):
 5. nut thickness
 
 :memo: **Note:** if one layer is "off", the corresponding thickness will be 0
+
+Context parameters: see [fl_screw{}](#module-fl_screw).
 
 
 __Parameters:__
@@ -206,7 +211,14 @@ return the [x,y,z] size of the screw
 
 __Syntax:__
 
-    fl_screw(verbs=FL_ADD,type,len,thick=0,washer="no",nut="no",xwasher="no",nwasher=false,dri_type="clearance",direction,octant)
+    fl_screw(verbs=FL_ADD,type,len,washer="no",nut="no",xwasher="no",nwasher=false,dri_type="clearance",direction,octant)
+
+Context parameters:
+
+| name           | Description   |
+| ============== | ============  |
+| $fl_thickness  |  material thickness to be drilled, see also [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness) |
+
 
 __Parameters:__
 
@@ -218,9 +230,6 @@ NopSCADlib screw type
 
 __len__  
 when passed a fixed len will be used instead of [fl_screw_l()](#function-fl_screw_l)
-
-__thick__  
-thickness part passed to [fl_screw_l()](#function-fl_screw_l) during length calculation
 
 __washer__  
 screw washer : "no","default","penny","nylon"

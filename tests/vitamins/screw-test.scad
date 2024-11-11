@@ -102,7 +102,7 @@ fl_status();
 // end of automatically generated code
 
 module screw_proxy(screw) {
-  fl_screw(verbs,screw,thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=nut_washer,len=FIXED_LEN?FIXED_LEN:undef,dri_type=DRILL_TYPE,octant=octant,direction=direction)
+  fl_screw(verbs,screw,$fl_thickness=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=nut_washer,len=FIXED_LEN?FIXED_LEN:undef,dri_type=DRILL_TYPE,octant=octant,direction=direction)
     children();
 }
 
@@ -180,7 +180,7 @@ else {
 }
 
 function Wrapper(nop) = let(
-  length  = FIXED_LEN ? FIXED_LEN : fl_screw_l(nop,len=FIXED_LEN?FIXED_LEN:undef,thick=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=nut_washer)
+  length  = FIXED_LEN ? FIXED_LEN : fl_screw_l(nop,len=FIXED_LEN?FIXED_LEN:undef,$fl_thickness=T,washer=WASHER,nut=NUT,xwasher=XWASHER,nwasher=nut_washer)
 ) [
   fl_screw(value=nop),
   fl_bb_corners(value=fl_bb_screw(nop,length)),

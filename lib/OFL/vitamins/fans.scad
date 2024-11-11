@@ -216,7 +216,7 @@ module fl_fan(
 
     } else if ($this_verb==FL_DRILL) {
       do_layout()
-        fl_screw(FL_DRILL, screw, thick=$fan_thick, direction=[$fan_director,0]);
+        fl_screw(FL_DRILL, screw, $fl_thickness=$fan_thick, direction=[$fan_director,0]);
       // bore(thick[1]);
       // let(h=-thick[0])
       //   translate(-Z(-thick[0]+depth))

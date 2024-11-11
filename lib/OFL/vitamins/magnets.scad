@@ -209,7 +209,7 @@ module fl_magnet(
             translate(+Z(h+NIL)) fl_countersink(FL_FOOTPRINT,type=cs,$fl_tolerance=0.1,$FL_FOOTPRINT=$FL_ADD);
 
           if (screw)
-            do_layout() fl_screw(FL_DRILL,screw,thick=h+NIL,$FL_DRILL=$FL_ADD);
+            do_layout() fl_screw(FL_DRILL,screw,$fl_thickness=h+NIL,$FL_DRILL=$FL_ADD);
         }
       }
 
@@ -256,11 +256,11 @@ module fl_magnet(
 
     } else if ($verb==FL_MOUNT) {
       fl_modifier($modifier)
-        do_layout() fl_screw(type=screw,thick=screw_thick);
+        do_layout() fl_screw(type=screw,$fl_thickness=screw_thick);
 
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier)
-        do_layout() fl_screw(FL_DRILL,screw,thick=screw_thick);
+        do_layout() fl_screw(FL_DRILL,screw,$fl_thickness=screw_thick);
 
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
