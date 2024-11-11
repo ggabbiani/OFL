@@ -31,8 +31,6 @@ $FL_RENDER  = false;
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;     // [-2:10]
-// Debug statements are turned on
-$fl_debug   = false;
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
 

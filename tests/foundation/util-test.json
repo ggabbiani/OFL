@@ -4,7 +4,6 @@
         "TEST_CASE-plane-align": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fn": "50",
             "ADD": "true",
             "ASSEMBLY": "false",
@@ -26,7 +25,6 @@
         "TEST_CASE-cutout": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "ADD": "true",
@@ -51,7 +49,6 @@
         "TEST_CASE-rail": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "ADD": "true",

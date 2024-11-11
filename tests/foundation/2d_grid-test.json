@@ -4,7 +4,6 @@
         "New set 1": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "BORDER": "[1, 1]",
@@ -24,7 +23,6 @@
         "TEST_CASE-QUAD": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "BORDER": "[1, 1]",
@@ -44,7 +42,6 @@
         "TEST_CASE-HEX": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "BORDER": "[1, 1]",

@@ -4,7 +4,6 @@
         "fig-FL_TSP_E1515": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -21,7 +20,6 @@
         "fig-FL_TSP_E2020": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -38,7 +36,6 @@
         "fig-FL_TSP_E2020t": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -55,7 +52,6 @@
         "fig-FL_TSP_E2040": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -72,7 +68,6 @@
         "fig-FL_TSP_E2060": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -89,7 +84,6 @@
         "fig-FL_TSP_E2080": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -106,7 +100,6 @@
         "fig-FL_TSP_E3030": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -123,7 +116,6 @@
         "fig-FL_TSP_E3060": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -140,7 +132,6 @@
         "fig-FL_TSP_E4040": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -157,7 +148,6 @@
         "fig-FL_TSP_E4040t": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "DIR_NATIVE": "true",
@@ -178,7 +168,6 @@
             "$FL_FOOTPRINT": "OFF",
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "CORNER_HOLE": "true",
@@ -200,7 +189,6 @@
             "$FL_FOOTPRINT": "OFF",
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "CORNER_HOLE": "false",

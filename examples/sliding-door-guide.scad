@@ -17,8 +17,6 @@ use <../lib/OFL/foundation/profile.scad>
 use <../lib/OFL/foundation/util.scad>
 
 $fn            = 50;           // [3:100]
-// When true, debug statements are turned on
-$fl_debug      = false;
 // When true, disables PREVIEW corrections like FL_NIL
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)

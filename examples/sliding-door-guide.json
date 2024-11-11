@@ -3,7 +3,6 @@
         "Snapmaster A250T": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "SteelBlue",
             "$fn": "100",
             "COUNTERSUNK": "true",
@@ -21,7 +20,6 @@
         "V2": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "SteelBlue",
             "$fn": "100",
             "COUNTERSUNK": "true",
@@ -39,7 +37,6 @@
         "V3": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "SteelBlue",
             "$fn": "100",
             "COUNTERSUNK": "true",
@@ -57,7 +54,6 @@
         "V4": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "SteelBlue",
             "$fn": "100",
             "COUNTERSUNK": "true",
@@ -75,7 +71,6 @@
         "v5": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "SteelBlue",
             "$fn": "100",
             "COUNTERSUNK": "true",
@@ -93,7 +88,6 @@
         "v6-rail": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "SteelBlue",
             "$fn": "100",
             "COUNTERSUNK": "true",
@@ -111,7 +105,6 @@
         "v7": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "SteelBlue",
             "$fn": "100",
             "COUNTERSUNK": "true",

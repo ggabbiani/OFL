@@ -151,7 +151,6 @@
             "$FL_MOUNT": "ON",
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "100",
             "DIR_NATIVE": "true",

@@ -19,7 +19,6 @@ SIDE_T  = 5;
 FILAMENT_CENTRAL  = "DodgerBlue"; // [ignore,DodgerBlue,Blue,OrangeRed,SteelBlue]
 FILAMENT_SIDE  = "SteelBlue";     // [ignore,DodgerBlue,Blue,OrangeRed,SteelBlue]
 
-$fl_debug       = false;
 SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
 

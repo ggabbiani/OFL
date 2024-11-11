@@ -4,7 +4,6 @@
         "final": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "FILAMENT_LOWER": "SteelBlue",
@@ -18,7 +17,6 @@
         "cover": {
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "100",
             "BOX_TOLERANCE": "0.20000000000000001",

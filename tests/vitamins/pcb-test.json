@@ -13,7 +13,6 @@
             "$FL_PAYLOAD": "OFF",
             "$FL_RENDER": "false",
             "$FL_TRACES": "-2",
-            "$fl_debug": "false",
             "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "COMPS": "undef",
