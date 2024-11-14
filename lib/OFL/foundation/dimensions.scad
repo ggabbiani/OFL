@@ -304,7 +304,7 @@ module fl_dimension(
         translate(X(x))
           line();
     else
-      fl_error(true,str("spread=",xy_spread));
+      fl_error(str("spread=",xy_spread));
   }
 
   // run with an execution context set by fl_polymorph{}
@@ -322,7 +322,7 @@ module fl_dimension(
       multmatrix(V)
         fl_bb_add(corners=bbox,auto=true);
     } else
-      fl_error(true,["unimplemented verb","'",$this_verb,"'"]);
+      fl_error(["unimplemented verb","'",$this_verb,"'"]);
 
   if (view==fl_currentView())
     fl_polymorph(verbs,[fl_bb_corners(value=bbox)])

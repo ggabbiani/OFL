@@ -503,7 +503,7 @@ module fl_jnt_joint(
         ring_engine()
           children();
       else
-        fl_error(true,["unimplemented engine",engine]);
+        fl_error(["unimplemented engine",engine]);
 
   module ring_engine() let(
     h         = fl_property(this,str(sec_ns,"/h")),
@@ -572,7 +572,7 @@ module fl_jnt_joint(
             polygon(polyRound(pts, fn=$fn));
 
   } else
-    fl_error(true,["unimplemented verb",$this_verb]);
+    fl_error(["unimplemented verb",$this_verb]);
 
   module rect_engine() let(
     rect_ns   = str(cantilever_ns,"/rect"),
@@ -677,7 +677,7 @@ module fl_jnt_joint(
       fl_bb_add(corners=$this_bbox,auto=true,$FL_ADD=$FL_BBOX);
 
     else
-      fl_error(true,["unimplemented verb",$this_verb]);
+      fl_error(["unimplemented verb",$this_verb]);
 
   // fl_polymorph() manages standard parameters and prepares the execution
   // context for the engine.

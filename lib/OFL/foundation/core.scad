@@ -112,11 +112,11 @@ function fl_error(
 
 //! force an error if condition is true
 module fl_error(
-  //! error condition
-  condition,
   //! string or vector of strings
-  message
-) assert(condition==false,fl_error(message));
+  message,
+  //! error if false or undef
+  condition,
+) assert(condition,fl_error(message));
 
 //**** base transformations ***************************************************
 
