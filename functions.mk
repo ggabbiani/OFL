@@ -126,7 +126,7 @@ define check-picture
 	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
 	rm unscaled-$@
 	git checkout -- $@
-	($(IMG_DIFF) $@ new-$@ && rm new-$@) || (mv new-$@ $@ && false)
+	($(IMG_DIFF) $@ new-$@ && rm new-$@ && touch $@) || (mv new-$@ $@ && false)
 	$(call fix-target-dependencies)
 endef
 
@@ -141,7 +141,7 @@ define make-picture
 	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
 	rm -f unscaled-$@
 	git checkout -- $@
-	($(IMG_DIFF) -v 0 $@ new-$@ && rm new-$@) || mv new-$@ $@
+	($(IMG_DIFF) -v 0 $@ new-$@ && rm new-$@ && touch $@) || mv new-$@ $@
 	$(call fix-target-dependencies)
 endef
 
