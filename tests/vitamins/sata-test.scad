@@ -70,6 +70,7 @@ DIR_R       = 0;        // [-360:360]
 PART        = "data plug"; // [data plug,power plug,power data plug,power data socket]
 CONNECT     = false;
 
+
 /* [Hidden] */
 
 
@@ -102,3 +103,4 @@ fl_sata(verbs,type,octant=octant,direction=direction);
 if (counter_type && CONNECT)
   fl_connect(son=[counter_type,0], parent=[type,0])
     fl_sata(verbs,$con_child,$FL_ADD="DEBUG");
+
