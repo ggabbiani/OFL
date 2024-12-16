@@ -14,14 +14,15 @@ ARG ODOX_RELEASE=${ODOX_VERSION}-19.fc39
 ###############################################################################
 # system pre requisites
 RUN dnf install -y \
-    openscad \
     git \
-    which \
+    graphviz \
+    ImageMagick \
     make \
+    openscad \
     python3 \
-    xorg-x11-server-Xvfb \
     wget \
-    ImageMagick
+    which \
+    xorg-x11-server-Xvfb
 # orthodocs must be downloaded
 # https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1/orthodocs-1.2.1-0.fc36.x86_64.rpm
 RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSION}/orthodocs-${ODOX_RELEASE}.$(uname -m).rpm \
