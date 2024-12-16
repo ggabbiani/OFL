@@ -81,8 +81,8 @@
 - [X] standardize the common api parameter syntax
 - [X] removed the obsolete $fl_debug;
 - [X] modified fl_error{} signature;
+- [X] fixed z-offset on sata connector symbols;
 - [X] fixed regression in hds while showing sata debug symbols;
-- [ ] fix debug symbols in sata-adapter(s),
 - [X] modify sata and hd signatures for debug symbol handling in place of show
   connectors parameter;
 - [ ] implement FL_CUTOUT in hds;

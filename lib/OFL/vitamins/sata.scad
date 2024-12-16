@@ -109,7 +109,7 @@ FL_SATA_DATAPLUG  = let(
   c_h     = __dxf_dim__(file=dxf, name="c_height",  layer="sizes")
 ) [
   fl_dxf(value = dxf),
-  fl_connectors(value=[conn_Plug(cid,+X,+Y,[0,0,0.5])]),
+  fl_connectors(value=[conn_Plug(cid,+X,+Y,[0,0,0])]),
   fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
   fl_engine(value="sata/single plug"),
   ["contact sizes", [
@@ -131,7 +131,7 @@ FL_SATA_POWERPLUG = let(
   c_h     = __dxf_dim__(file=dxf, name="c_height",  layer="sizes")
 ) [
   fl_dxf(value = dxf),
-  fl_connectors(value=[conn_Plug(cid,+X,+Y,[size.x,0,0.5])]),
+  fl_connectors(value=[conn_Plug(cid,+X,+Y,[size.x,0,0])]),
   fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
   fl_engine(value="sata/single plug"),
   ["contact sizes", [
@@ -232,7 +232,7 @@ module fl_sata(
           __dxf__(dxf,layer="long");
       }
       if (fl_dbg_symbols())
-        fl_conn_add(connection,size=2);
+        fl_conn_add(connection,size=2,$FL_ADD="ON");
     }
 
     fl_polymorph(verbs,type,octant=octant,direction=direction)
@@ -297,7 +297,7 @@ module fl_sata(
       // cloned connectors
       if (fl_dbg_symbols())
         for(c=conns)
-          fl_conn_add(c,size=2);
+          fl_conn_add(c,size=2,$FL_ADD="ON");
     }
 
     fl_polymorph(verbs,type,octant=octant,direction=direction)
@@ -382,7 +382,8 @@ module fl_sata(
         multmatrix(Mdata)   data_hole();
       }
       if (connectors) // adds connectors
-        for(c=conns) fl_conn_add(c,size=2);
+        for(c=conns)
+          fl_conn_add(c,size=2,$FL_ADD="ON");
     }
 
     module do_footprint()

@@ -25,7 +25,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    let(dxf="vitamins/sata-data-plug.dxf",w=__dxf_dim__(file=dxf,name="width",layer="sizes"),h=__dxf_dim__(file=dxf,name="height",layer="sizes"),d=__dxf_dim__(file=dxf,name="plug",layer="extrusions"),size=[w,h,d],cid=fl_sata_dataCID(),d_short=__dxf_dim__(file=dxf,name="short",layer="extrusions"),d_long=__dxf_dim__(file=dxf,name="long",layer="extrusions"),c_w=__dxf_dim__(file=dxf,name="c_width",layer="sizes"),c_h=__dxf_dim__(file=dxf,name="c_height",layer="sizes"))[fl_dxf(value=dxf),fl_connectors(value=[conn_Plug(cid,+X,+Y,[0,0,0.5])]),fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),fl_engine(value="sata/single plug"),["contact sizes",[["short",[c_w,c_h,d_short]],["long",[c_w,c_h,d_long]]]]]
+    let(dxf="vitamins/sata-data-plug.dxf",w=__dxf_dim__(file=dxf,name="width",layer="sizes"),h=__dxf_dim__(file=dxf,name="height",layer="sizes"),d=__dxf_dim__(file=dxf,name="plug",layer="extrusions"),size=[w,h,d],cid=fl_sata_dataCID(),d_short=__dxf_dim__(file=dxf,name="short",layer="extrusions"),d_long=__dxf_dim__(file=dxf,name="long",layer="extrusions"),c_w=__dxf_dim__(file=dxf,name="c_width",layer="sizes"),c_h=__dxf_dim__(file=dxf,name="c_height",layer="sizes"))[fl_dxf(value=dxf),fl_connectors(value=[conn_Plug(cid,+X,+Y,[0,0,0])]),fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),fl_engine(value="sata/single plug"),["contact sizes",[["short",[c_w,c_h,d_short]],["long",[c_w,c_h,d_long]]]]]
 
 ---
 
@@ -65,7 +65,7 @@ __Default:__
 
 __Default:__
 
-    let(dxf="vitamins/sata-power-plug.dxf",w=__dxf_dim__(file=dxf,name="width",layer="sizes"),h=__dxf_dim__(file=dxf,name="height",layer="sizes"),d=__dxf_dim__(file=dxf,name="plug",layer="extrusions"),size=[w,h,d],cid=fl_sata_powerCID(),d_short=__dxf_dim__(file=dxf,name="short",layer="extrusions"),d_long=__dxf_dim__(file=dxf,name="long",layer="extrusions"),c_w=__dxf_dim__(file=dxf,name="c_width",layer="sizes"),c_h=__dxf_dim__(file=dxf,name="c_height",layer="sizes"))[fl_dxf(value=dxf),fl_connectors(value=[conn_Plug(cid,+X,+Y,[size.x,0,0.5])]),fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),fl_engine(value="sata/single plug"),["contact sizes",[["short",[c_w,c_h,d_short]],["long",[c_w,c_h,d_long]]]]]
+    let(dxf="vitamins/sata-power-plug.dxf",w=__dxf_dim__(file=dxf,name="width",layer="sizes"),h=__dxf_dim__(file=dxf,name="height",layer="sizes"),d=__dxf_dim__(file=dxf,name="plug",layer="extrusions"),size=[w,h,d],cid=fl_sata_powerCID(),d_short=__dxf_dim__(file=dxf,name="short",layer="extrusions"),d_long=__dxf_dim__(file=dxf,name="long",layer="extrusions"),c_w=__dxf_dim__(file=dxf,name="c_width",layer="sizes"),c_h=__dxf_dim__(file=dxf,name="c_height",layer="sizes"))[fl_dxf(value=dxf),fl_connectors(value=[conn_Plug(cid,+X,+Y,[size.x,0,0])]),fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),fl_engine(value="sata/single plug"),["contact sizes",[["short",[c_w,c_h,d_short]],["long",[c_w,c_h,d_long]]]]]
 
 ## Functions
 
