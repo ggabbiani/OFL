@@ -1,6 +1,6 @@
+envsubst>=0.1.5
 numpy>=1.26.4
 opencv_python_headless>=4.9.0.80
 python-dotenv>=1.0.1
-termcolor>=2.4.0
 scikit-image>=0.23.2
-envsubst>=0.1.5
+termcolor>=2.4.0
