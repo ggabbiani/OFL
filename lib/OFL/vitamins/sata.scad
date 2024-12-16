@@ -164,15 +164,14 @@ FL_SATA_POWERDATAPLUG = let(
         ? __dxf_cross__(file=dxf, layer="data translation")
         : [6.28516, 1.15039]
   ) T([p2d.x,p2d.y,thick]),
-  dc      = fl_conn_clone(fl_connectors(data)[0],M=Mdata),
-  pc      = fl_conn_clone(fl_connectors(power)[0],M=Mpower)
+  dc      = fl_conn_clone(fl_connectors(data)[0], M=Mdata *T(-Z(size.z/2))),
+  pc      = fl_conn_clone(fl_connectors(power)[0],M=Mpower*T(-Z(size.z/2)))
 ) [
   fl_dxf(value = dxf),
   fl_connectors(value=[pc,dc]),
   fl_bb_corners(value=[-size/2,+size/2]),
   fl_engine(value="sata/composite plug"),
   ["power plug",  power],
-  ["data plug",   data],
   ["data plug",   data],
   ["shell thick", thick],
   __fl_sata_Mpower__(value=Mpower),
@@ -186,11 +185,19 @@ FL_SATA_DICT = [
   FL_SATA_POWERDATAPLUG,
 ];
 
+/*!
+ * SATA plug and socket module.
+ *
+ * Implemented debug context:
+ *
+ * | Name         | Description                            |
+ * | ------------ | -------------------------------------- |
+ * | $dbg_Symbols | when true connector symbols are shown  |
+ */
 module fl_sata(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   type,
-  connectors  = false,
   // TODO: remove it!
   shell       =true,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -198,20 +205,18 @@ module fl_sata(
   //! when undef native positioning is used
   octant
 ) {
-
   module plugEngine(
     //! FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
     verbs       = FL_ADD,
     type,
-    connectors  = false,
     //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
     direction,
     //! when undef native positioning is used
     octant
   ) {
     assert(type!=undef);
-    fl_trace("verbs",verbs);
 
+    connectors  = fl_dbg_symbols();
     dxf         = fl_dxf(type);
     size        = fl_size(type);
     connection  = fl_connectors(type)[0];
@@ -219,8 +224,6 @@ module fl_sata(
     bbox        = fl_bb_corners(type);
     D           = direction ? fl_direction(direction) : I;
     M           = fl_octant(octant,type=type);
-
-    fl_trace("type",type);
 
     module do_footprint() {
       linear_extrude(size.z)
@@ -259,7 +262,6 @@ module fl_sata(
   module compositeEngine(
     verbs       = FL_ADD,
     type,
-    connectors  =false,
     //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
     direction,
     //! when undef native positioning is used
@@ -267,6 +269,7 @@ module fl_sata(
   ) {
     assert(type!=undef);
 
+    connectors  = fl_dbg_symbols();
     dxf         = fl_dxf(type);
     power_plug  = fl_get(type,"power plug");
     data_plug   = fl_get(type,"data plug");
@@ -292,11 +295,11 @@ module fl_sata(
     module do_add() {
       translate(-Z(size.z/2)) {
         multmatrix(Md)
-          plugEngine(type=data_plug);
+          // cloned connectors are added later, so we pass $dbg_Symbols=false
+          plugEngine(type=data_plug,$dbg_Symbols=false);
         multmatrix(Mp)
-          plugEngine(type=power_plug);
-        if (connectors)
-          for(c=conns) fl_conn_add(c,size=2);
+          // cloned connectors are added later, so we pass $dbg_Symbols=false
+          plugEngine(type=power_plug,$dbg_Symbols=false);
         fl_color("DarkSlateGray") {
           linear_extrude(shell_thick)
             __dxf__(dxf,layer="0");
@@ -305,6 +308,9 @@ module fl_sata(
               __dxf__(dxf,layer="1");
         }
       }
+      // cloned connectors
+      if (connectors)
+        for(c=conns) fl_conn_add(c,size=2);
     }
 
     fl_manage(verbs,M,D) {
@@ -330,12 +336,12 @@ module fl_sata(
   module socketEngine(
     verbs     = FL_ADD,
     type,
-    connectors = false,
     direction,
     octant
   ) {
     assert(type!=undef);
 
+    connectors  = fl_dbg_symbols();
     size        = fl_size(type);
     points      = fl_get(type,"points");
     prism       = fl_get(type,"prism l1,l2,h");
@@ -416,8 +422,8 @@ module fl_sata(
   }
 
   engine  = fl_engine(type);
-  if (engine=="sata/power+data socket")   socketEngine(verbs,type,connectors,direction,octant);
-  else if (engine=="sata/single plug")    plugEngine(verbs,type,connectors,direction,octant);
-  else if (engine=="sata/composite plug") compositeEngine(verbs,type,connectors,direction,octant);
+  if (engine=="sata/power+data socket")   socketEngine(verbs,type,direction,octant);
+  else if (engine=="sata/single plug")    plugEngine(verbs,type,direction,octant);
+  else if (engine=="sata/composite plug") compositeEngine(verbs,type,direction,octant);
   else assert(false,str("engine '",engine,"' not implemented"));
 }

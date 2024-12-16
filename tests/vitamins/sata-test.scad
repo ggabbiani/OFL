@@ -67,7 +67,6 @@ DIR_R       = 0;        // [-360:360]
 
 
 /* [Sata] */
-CONNECTORS  = false;
 PART        = "data plug"; // [data plug,power plug,power data plug,power data socket]
 
 
@@ -95,5 +94,5 @@ type  = PART=="data plug"       ? FL_SATA_DATAPLUG
       : PART=="power data plug" ? FL_SATA_POWERDATAPLUG
       : FL_SATA_POWERDATASOCKET;
 
-fl_sata(verbs,type,connectors=CONNECTORS,octant=octant,direction=direction);
+fl_sata(verbs,type,octant=octant,direction=direction);
 

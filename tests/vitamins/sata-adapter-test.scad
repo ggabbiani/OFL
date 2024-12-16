@@ -61,11 +61,6 @@ DIR_R       = 0;        // [-360:360]
 
 
 
-/* [SATA Adapter] */
-
-CONNECTORS  = false;
-
-
 /* [Hidden] */
 
 
@@ -86,5 +81,5 @@ fl_status();
 
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX]);
 
-sata_adapter(verbs,FL_SADP_ELUTENG,locators=CONNECTORS,octant=octant,direction=direction);
+sata_adapter(verbs,FL_SADP_ELUTENG,octant=octant,direction=direction);
 

@@ -26,7 +26,7 @@ FL_HD_EVO860 = let(
   screw   = M3_cs_cap_screw,
   screw_r = screw_radius(screw),
 
-  Mpd   = T(-X(4.8)-Z(NIL)) * fl_Rx(90) * fl_octant(+Y-Z,type=plug),
+  Mpd     = T(-X(4.8)-Z(NIL)) * fl_direction([-Y,0]) * fl_octant(+Y-Z,type=plug),
 
   conns   = fl_connectors(plug),
   pc      = fl_conn_clone(conns[0],M=Mpd),
@@ -84,8 +84,6 @@ module fl_hd(
   dri_tolerance   = fl_JNgauge,
   //! rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
   dri_rails=[[0,0],[0,0],[0,0]],
-  //! FL_ADD connectors
-  add_connectors  = false,
   //! desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -93,7 +91,6 @@ module fl_hd(
   ) {
   assert(verbs!=undef);
   assert(type!=undef);
-  assert(is_bool(add_connectors));
 
   thick       = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
   screw       = fl_screw(type);
@@ -128,10 +125,12 @@ module fl_hd(
       multmatrix(Mpd)
         fl_sata(FL_FOOTPRINT,plug,$FL_FOOTPRINT=$FL_ADD);
     }
-    multmatrix(Mpd) fl_sata(type=plug);
+    multmatrix(Mpd)
+      fl_sata(type=plug,$dbg_Symbols=false);
 
-    if (add_connectors)
-      for(c=conns) fl_conn_add(c,2);
+    if (fl_dbg_symbols())
+      for(c=conns)
+        fl_conn_add(c,2);
   }
 
   module do_bbox() {
