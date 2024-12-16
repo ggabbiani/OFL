@@ -17,11 +17,11 @@ ARG ODOX_PACKAGE=orthodocs_${ODOX_VERSION}-${ODOX_RELEASE}_amd64.deb
 RUN apt update \
     && apt upgrade -y \
     && apt install -y apt-utils \
-        openscad \
         git \
         graphviz \
         imagemagick \
         make \
+        openscad \
         python3-venv \
         wget \
         which \
