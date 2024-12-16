@@ -80,7 +80,7 @@ FL_SATA_POWERDATASOCKET = let(
   fl_conn_id(value=cid),
   fl_connectors(value=[pc,dc]),
   fl_bb_corners(value=[-blk_sz/2,+blk_sz/2]),
-  fl_engine(value="sata/power+data socket"),
+  fl_engine(value="sata/composite socket"),
   ["points",          [[2, 0], [2, -4], [0, -2], [0, 0]]],
   ["block size",      blk_sz],
   ["side block size", side_blk_sz],
@@ -188,42 +188,34 @@ FL_SATA_DICT = [
 /*!
  * SATA plug and socket module.
  *
- * Implemented debug context:
+ * Context variables:
  *
- * | Name         | Description                            |
- * | ------------ | -------------------------------------- |
- * | $dbg_Symbols | when true connector symbols are shown  |
+ * | Name         | Context | Description                            |
+ * | ------------ | -----   | -------------------------------------- |
+ * | $dbg_Symbols | Debug   | when true connector symbols are shown  |
  */
 module fl_sata(
-  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
   verbs       = FL_ADD,
   type,
-  // TODO: remove it!
-  shell       =true,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
-  octant
+  octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
-  module plugEngine(
-    //! FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+  module singlePlug(
     verbs       = FL_ADD,
     type,
-    //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
     direction,
-    //! when undef native positioning is used
     octant
   ) {
     assert(type!=undef);
 
-    connectors  = fl_dbg_symbols();
     dxf         = fl_dxf(type);
     size        = fl_size(type);
     connection  = fl_connectors(type)[0];
     cont_sz     = fl_get(type,"contact sizes");
     bbox        = fl_bb_corners(type);
-    D           = direction ? fl_direction(direction) : I;
-    M           = fl_octant(octant,type=type);
 
     module do_footprint() {
       linear_extrude(size.z)
@@ -239,37 +231,35 @@ module fl_sata(
         linear_extrude(fl_get(cont_sz,"long").z)
           __dxf__(dxf,layer="long");
       }
-      if (connectors)
+      if (fl_dbg_symbols())
         fl_conn_add(connection,size=2);
     }
 
-    fl_manage(verbs,M,D) {
-      if ($verb==FL_ADD) {
-        fl_modifier($modifier) do_add();
-      } else if ($verb==FL_AXES) {
+    fl_polymorph(verbs,type,octant=octant,direction=direction)
+      if ($this_verb==FL_ADD)
+        fl_modifier($modifier)
+          do_add();
+      else if ($this_verb==FL_AXES)
         fl_modifier($FL_AXES)
           fl_doAxes(size,direction);
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($modifier) fl_bb_add(bbox);
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($modifier) do_footprint();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
-    }
+      else if ($this_verb==FL_BBOX)
+        fl_modifier($modifier)
+          fl_bb_add(bbox,auto=true);
+      else if ($this_verb==FL_FOOTPRINT)
+        fl_modifier($modifier)
+          do_footprint();
+      else
+        fl_error(["unimplemented verb",$this_verb]);
   }
 
-  module compositeEngine(
+  module compositePlug(
     verbs       = FL_ADD,
     type,
-    //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
     direction,
-    //! when undef native positioning is used
     octant
   ) {
     assert(type!=undef);
 
-    connectors  = fl_dbg_symbols();
     dxf         = fl_dxf(type);
     power_plug  = fl_get(type,"power plug");
     data_plug   = fl_get(type,"data plug");
@@ -281,10 +271,6 @@ module fl_sata(
     bbox        = fl_bb_corners(type);
     Md          = __fl_sata_Mdata__(type);
     Mp          = __fl_sata_Mpower__(type);
-    D           = direction ? fl_direction(direction)  : I;
-    M           = fl_octant(octant,type=type);
-
-    fl_trace("type",type);
 
     module do_footprint() {
       translate(-Z(size.z/2))
@@ -296,10 +282,10 @@ module fl_sata(
       translate(-Z(size.z/2)) {
         multmatrix(Md)
           // cloned connectors are added later, so we pass $dbg_Symbols=false
-          plugEngine(type=data_plug,$dbg_Symbols=false);
+          singlePlug(type=data_plug,$dbg_Symbols=false);
         multmatrix(Mp)
           // cloned connectors are added later, so we pass $dbg_Symbols=false
-          plugEngine(type=power_plug,$dbg_Symbols=false);
+          singlePlug(type=power_plug,$dbg_Symbols=false);
         fl_color("DarkSlateGray") {
           linear_extrude(shell_thick)
             __dxf__(dxf,layer="0");
@@ -309,31 +295,29 @@ module fl_sata(
         }
       }
       // cloned connectors
-      if (connectors)
-        for(c=conns) fl_conn_add(c,size=2);
+      if (fl_dbg_symbols())
+        for(c=conns)
+          fl_conn_add(c,size=2);
     }
 
-    fl_manage(verbs,M,D) {
-      if ($verb==FL_ADD) {
-        fl_modifier($modifier) do_add();
-
-      } else if ($verb==FL_AXES) {
+    fl_polymorph(verbs,type,octant=octant,direction=direction)
+      if ($this_verb==FL_ADD)
+        fl_modifier($modifier)
+          do_add();
+      else if ($this_verb==FL_AXES)
         fl_modifier($FL_AXES)
           fl_doAxes(size,direction);
-
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($modifier) fl_bb_add(bbox);
-
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($modifier) do_footprint();
-
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
-    }
+      else if ($this_verb==FL_BBOX)
+        fl_modifier($modifier)
+          fl_bb_add(bbox,auto=true);
+      else if ($this_verb==FL_FOOTPRINT)
+        fl_modifier($modifier)
+          do_footprint();
+      else
+        fl_error(["unimplemented verb",$this_verb]);
   }
 
-  module socketEngine(
+  module compositeSocket(
     verbs     = FL_ADD,
     type,
     direction,
@@ -389,10 +373,10 @@ module fl_sata(
           fl_cube(size=block_sz,octant=FL_O);
           for (i=[-1,1])
             translate(i*fl_X((block_sz.x+sideblk_sz.x)/2)+fl_Z(sideblk_sz.z*3/4))
-            rotate(-90,FL_X)
-              rotate(fl_Y(i*3*90))
-              rotate(180,FL_X)
-                side_plug();
+              rotate(-90,FL_X)
+                rotate(fl_Y(i*3*90))
+                  rotate(180,FL_X)
+                    side_plug();
         }
         multmatrix(Mpower)  power_hole();
         multmatrix(Mdata)   data_hole();
@@ -401,29 +385,30 @@ module fl_sata(
         for(c=conns) fl_conn_add(c,size=2);
     }
 
-    module do_footprint() {
-      translate(fl_Z((size.z-block_sz.z)/2)) fl_cube(size=size,octant=O);
-    }
+    module do_footprint()
+      translate(fl_Z((size.z-block_sz.z)/2))
+        fl_cube(size=size,octant=O);
 
-    fl_manage(verbs,M,D) {
-      if ($verb==FL_ADD) {
-        fl_modifier($modifier) do_add();
-      } else if ($verb==FL_AXES) {
+    fl_polymorph(verbs,type,octant=octant,direction=direction)
+      if ($this_verb==FL_ADD)
+        fl_modifier($modifier)
+          do_add();
+      else if ($this_verb==FL_AXES)
         fl_modifier($FL_AXES)
           fl_doAxes(size,direction);
-      } else if ($verb==FL_BBOX) {
-        fl_modifier($modifier) do_footprint();
-      } else if ($verb==FL_FOOTPRINT) {
-        fl_modifier($modifier) do_footprint();
-      } else {
-        assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-      }
-    }
+      else if ($this_verb==FL_BBOX)
+        fl_modifier($modifier)
+          fl_bb_add(bbox,auto=true);
+      else if ($this_verb==FL_FOOTPRINT)
+        fl_modifier($modifier)
+          do_footprint();
+      else
+        fl_error(["unimplemented verb",$this_verb]);
   }
 
   engine  = fl_engine(type);
-  if (engine=="sata/power+data socket")   socketEngine(verbs,type,direction,octant);
-  else if (engine=="sata/single plug")    plugEngine(verbs,type,direction,octant);
-  else if (engine=="sata/composite plug") compositeEngine(verbs,type,direction,octant);
-  else assert(false,str("engine '",engine,"' not implemented"));
+  if      (engine=="sata/composite socket") compositeSocket (verbs,type,direction,octant);
+  else if (engine=="sata/single plug"     ) singlePlug      (verbs,type,direction,octant);
+  else if (engine=="sata/composite plug"  ) compositePlug   (verbs,type,direction,octant);
+  else fl_error(["engine",engine,"not implemented"]);
 }
