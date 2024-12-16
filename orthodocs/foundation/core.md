@@ -2454,7 +2454,7 @@ __Syntax:__
     fl_dbg_Context(labels=false,symbols=false,components,dimensions=false,assertions=false,color=true)
 
 Debug context constructor module. This constructor setup its context special
-variable according to its parameters, then executes a children() call. The
+variables according to its parameters, then executes a children() call. The
 typical usage is the following:
 
     fl_dbg_Context(...) {
@@ -2523,17 +2523,17 @@ Debug context dump and children() execution.
 
 __Syntax:__
 
-    fl_error(condition,message)
+    fl_error(message,condition)
 
 force an error if condition is true
 
 __Parameters:__
 
-__condition__  
-error condition
-
 __message__  
 string or vector of strings
+
+__condition__  
+error if false or undef
 
 
 ---

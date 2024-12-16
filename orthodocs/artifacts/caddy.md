@@ -8,6 +8,7 @@ graph LR
     A1 --o|use| A3[foundation/bbox-engine]
     A1 --o|use| A4[foundation/fillet]
     A1 --o|use| A5[foundation/mngm-engine]
+    A1 --o|use| A6[foundation/polymorphic-engine]
 ```
 
 Generic caddy artifact.

@@ -24,6 +24,7 @@ graph TD
     A20 --o|use| A3
     A20 --o|use| A17
     A20 --o|use| A4
+    A20 --o|use| A8
     A21[foundation/components] --o|include| A3
     A22[foundation/connect] --o|include| A19
     A11

@@ -20,6 +20,9 @@ __Syntax:__
 fl_Object(bbox,pload,name,description,engine,others=[])
 ```
 
+Base constructor for OFL pseudo-objects.
+
+
 __Parameters:__
 
 __bbox__  
@@ -38,6 +41,6 @@ __engine__
 optional engine
 
 __others__  
-optional other key/value list
+optional other key/value list to be concatenated.
 
 
