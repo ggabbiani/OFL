@@ -63,19 +63,16 @@ FL_HD_EVO860 = let(
 FL_HD_DICT  = [ FL_HD_EVO860 ];
 
 /*!
- * Children context during FL_LAYOUT (in addition to fl_hole_Context{}):
+ * Hard-drive engine.
  *
- * | Name           | Description                            |
- * | -------------- | -------------------------------------- |
- * | $hd_thick      | scalar thickness along hole normal     |
- * | $hd_screw_len  | screw length along hole normal comprehensive of hole depth and tolerance |
+ * Used context:
  *
- * Implemented debug context:
- *
- * | Name         | Description                            |
- * | ------------ | -------------------------------------- |
- * | $dbg_Symbols | when true connector symbols are shown  |
- *
+ * | Name           | Context   | Description                           |
+ * | ------------   | -------   | ------------------------------------- |
+ * | $hd_thick      | Children  | scalar thickness along hole normal    |
+ * | $hd_screw_len  | Children  | screw length along hole normal comprehensive of hole depth and tolerance |
+ * | $hole_*        | Children  | see fl_hole_Context{}                 |
+ * | $dbg_Symbols   | Debug     | When true connector symbols are shown |
  */
 module fl_hd(
   verbs,
