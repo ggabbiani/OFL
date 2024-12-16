@@ -157,7 +157,7 @@ module fl_countersink(
 
   module tolerant()
     if ($fl_tolerance)
-      resize(size+2*$fl_tolerance*[1,1,1])
+      resize(size+$fl_tolerance*[2,2,1])
         children();
     else
       children();

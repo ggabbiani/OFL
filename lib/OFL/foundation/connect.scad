@@ -87,16 +87,16 @@ function fl_conn_clone(
   assert(oy==undef  || len(oy)==3)
   assert(pos==undef || len(pos)==3)
   let(
-    type      = type==undef   ? fl_conn_type(original) : type,
-    id        = id==undef ? fl_conn_id(original) : id,
+    type      = type  ? type  : fl_conn_type(original),
+    id        = id    ? id    : fl_conn_id(original),
     orig_ox_3 = fl_conn_ox(original),
     orig_oy_3 = fl_conn_oy(original),
     tran_ox_4 = fl_transform(M,orig_ox_3),
     tran_oy_4 = fl_transform(M,orig_oy_3),
     trans_O_4 = fl_transform(M,O),
 
-    size      = size ? size : fl_conn_size(original),
-    octant    = octant ? octant : fl_conn_loct(original),
+    size      = size      ? size      : fl_conn_size(original),
+    octant    = octant    ? octant    : fl_conn_loct(original),
     direction = direction ? direction : fl_conn_ldir(original),
 
     x_3   = ox!=undef     ? ox  :  fl_3(tran_ox_4) - fl_3(trans_O_4),

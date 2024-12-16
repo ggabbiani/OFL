@@ -1611,7 +1611,7 @@ module fl_root_dump()
 
 /*!
  * Debug context constructor module. This constructor setup its context special
- * variable according to its parameters, then executes a children() call. The
+ * variables according to its parameters, then executes a children() call. The
  * typical usage is the following:
  *
  *     fl_dbg_Context(...) {

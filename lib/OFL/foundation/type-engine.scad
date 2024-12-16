@@ -12,6 +12,9 @@ include <core.scad>
 
 use <bbox-engine.scad>
 
+/*!
+ * Base constructor for OFL pseudo-objects.
+ */
 function fl_Object(
   //! mandatory bounding-box
   bbox,
@@ -23,7 +26,7 @@ function fl_Object(
   description,
   //! optional engine
   engine,
-  //! optional other key/value list
+  //! optional other key/value list to be concatenated.
   others=[]
 ) = concat( [
                     fl_native(value=true),
