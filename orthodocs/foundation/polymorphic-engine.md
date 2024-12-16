@@ -10,6 +10,15 @@ graph LR
     A1 --o|use| A5[foundation/mngm-engine]
 ```
 
+High-level management engine for OFL types.
+
+This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+
+Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+
+SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
+
+
 ## Modules
 
 ---
@@ -28,7 +37,7 @@ literals, simplifying the new type module writing.
 
 :memo: __NOTE:__ this module can be used only by OFL 'objects'.
 
-    // this is the actual object definition as a list of [key,values] items
+    // An OFL object is a list of [key,values] items
     object = let(
       ...
     ) [
@@ -63,7 +72,7 @@ A typical use of this high-level management module is the following:
       ...;
 
       else
-        assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
+        fl_error(["unimplemented verb",$this_verb]);
 
     fl_polymorph(verbs,object,octant=octant,direction=direction)
       engine(thick=T)

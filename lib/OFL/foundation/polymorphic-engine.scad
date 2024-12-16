@@ -1,4 +1,4 @@
-/*
+/*!
  * High-level management engine for OFL types.
  *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
@@ -22,7 +22,7 @@ use <mngm-engine.scad>
  *
  * __NOTE:__ this module can be used only by OFL 'objects'.
  *
- *     // this is the actual object definition as a list of [key,values] items
+ *     // An OFL object is a list of [key,values] items
  *     object = let(
  *       ...
  *     ) [
@@ -57,7 +57,7 @@ use <mngm-engine.scad>
  *       ...;
  *
  *       else
- *         assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
+ *         fl_error(["unimplemented verb",$this_verb]);
  *
  *     fl_polymorph(verbs,object,octant=octant,direction=direction)
  *       engine(thick=T)
