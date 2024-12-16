@@ -11,6 +11,7 @@ include <../foundation/core.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/fillet.scad>
 use <../foundation/mngm-engine.scad>
+use <../foundation/polymorphic-engine.scad>
 
 //! Caddy's namespace
 FL_NS_CAD = "cad";
@@ -62,7 +63,7 @@ module fl_caddy(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
-  octant,
+  octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(thick);
@@ -91,22 +92,14 @@ module fl_caddy(
                     [fl_isSet(+FL_X,faces)?thick.x[1]:0, fl_isSet(+FL_Y,faces)?thick.y[1]:0, fl_isSet(+FL_Z,faces)?thick.z[1]:0]
                   ]) [pload[0]-delta[0],pload[1]+delta[1]];
   size      = bbox[1]-bbox[0];
-  D         = direction ? fl_direction(direction) : FL_I;
-  M         = fl_octant(octant,bbox=bbox);
 
-  fl_trace("thick",thick);
-  fl_trace("bbox",bbox);
-  fl_trace("size",size);
-
-  module context(verbs=[]) {
-    $cad_thick      = thick+t_deltas;
-    $cad_tolerance  = tolerance;
-    $cad_verbs      = verbs;
-    children();
-  }
+  module context(verbs=[]) let(
+    $cad_thick      = thick+t_deltas,
+    $cad_tolerance  = tolerance,
+    $cad_verbs      = verbs
+  ) children();
 
   module do_add() {
-    fl_trace("faces",faces);
     difference() {
       translate(bbox[0]) {
         for(f=faces)
@@ -146,43 +139,35 @@ module fl_caddy(
     }
   }
 
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
+  module engine()
+    if ($verb==FL_ADD)
       fl_modifier($modifier)
         fl_color()
           do_add() children();
-
-    } else if ($verb==FL_ASSEMBLY) {
+    else if ($verb==FL_ASSEMBLY)
       fl_modifier($modifier) context(FL_DRAW) children();
-
-    } else if ($verb==FL_AXES) {
+    else if ($verb==FL_AXES)
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
-
-    } else if ($verb==FL_BBOX) {
+    else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
-
-    } else if ($verb==FL_CUTOUT) {
+    else if ($verb==FL_CUTOUT)
       fl_modifier($modifier) context([FL_CUTOUT]) children();
-
-    } else if ($verb==FL_DRILL) {
+    else if ($verb==FL_DRILL)
       fl_modifier($modifier) context([FL_DRILL]) children();
-
-    } else if ($verb==FL_FOOTPRINT) {
+    else if ($verb==FL_FOOTPRINT)
       fl_modifier($modifier) context(lay_verbs) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
-
-    } else if ($verb==FL_LAYOUT) {
+    else if ($verb==FL_LAYOUT)
       fl_modifier($modifier) context(lay_verbs) children();
-
-    } else if ($verb==FL_MOUNT) {
+    else if ($verb==FL_MOUNT)
       fl_modifier($modifier) context([FL_MOUNT]) children();
-
-    } else if ($verb==FL_PAYLOAD) {
+    else if ($verb==FL_PAYLOAD)
       fl_modifier($modifier) fl_bb_add(pload);
+    else
+      fl_error(["unimplemented verb: ",$verb]);
 
+  fl_polymorph(verbs,type,octant=octant,direction=direction)
+    engine()
+      children();
 
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    }
-  }
 }
