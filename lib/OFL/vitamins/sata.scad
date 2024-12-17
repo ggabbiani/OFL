@@ -76,11 +76,12 @@ FL_SATA_POWERDATASOCKET = let(
   dc            = conn_Socket(fl_sata_dataCID(),-FL_X,+FL_Y,Mdata*[0,0,data_sz.z,1]),
   Mpower        = fl_T(fl_X((data_sz.x-power_sz.x)/2)) * fl_T([inter_d/2,power_sz.y/2,-power_sz.z/2]),
   pc            = conn_Socket(fl_sata_powerCID(),-FL_X,+FL_Y,Mpower * [0,0,power_sz.z,1])
-) [
+) fl_Object(
+  bbox    = [-blk_sz/2,+blk_sz/2],
+  engine  = "sata/composite socket",
+  others  = [
   fl_conn_id(value=cid),
   fl_connectors(value=[pc,dc]),
-  fl_bb_corners(value=[-blk_sz/2,+blk_sz/2]),
-  fl_engine(value="sata/composite socket"),
   ["points",          [[2, 0], [2, -4], [0, -2], [0, 0]]],
   ["block size",      blk_sz],
   ["side block size", side_blk_sz],
@@ -94,7 +95,7 @@ FL_SATA_POWERDATASOCKET = let(
   ["plug inter distance",    inter_d],
   __fl_sata_Mdata__(value=Mdata),
   __fl_sata_Mpower__(value=Mpower),
-];
+]);
 
 FL_SATA_DATAPLUG  = let(
   dxf     = "vitamins/sata-data-plug.dxf",
@@ -107,16 +108,17 @@ FL_SATA_DATAPLUG  = let(
   d_long  = __dxf_dim__(file=dxf, name="long",  layer="extrusions"),
   c_w     = __dxf_dim__(file=dxf, name="c_width",  layer="sizes"),
   c_h     = __dxf_dim__(file=dxf, name="c_height",  layer="sizes")
-) [
+) fl_Object(
+  bbox    = [[0,-size.y,0],[size.x,0,size.z]],
+  engine  = "sata/single plug",
+  others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[conn_Plug(cid,+X,+Y,[0,0,0])]),
-  fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
-  fl_engine(value="sata/single plug"),
   ["contact sizes", [
     ["short", [c_w,c_h,d_short]],
     ["long",  [c_w,c_h,d_long]]
   ]]
-];
+]);
 
 FL_SATA_POWERPLUG = let(
   dxf     = "vitamins/sata-power-plug.dxf",
@@ -129,16 +131,17 @@ FL_SATA_POWERPLUG = let(
   d_long  = __dxf_dim__(file=dxf, name="long",  layer="extrusions"),
   c_w     = __dxf_dim__(file=dxf, name="c_width",  layer="sizes"),
   c_h     = __dxf_dim__(file=dxf, name="c_height",  layer="sizes")
-) [
+) fl_Object(
+  bbox    = [[0,-size.y,0],[size.x,0,size.z]],
+  engine  = "sata/single plug",
+  others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[conn_Plug(cid,+X,+Y,[size.x,0,0])]),
-  fl_bb_corners(value=[[0,-size.y,0],[size.x,0,size.z]]),
-  fl_engine(value="sata/single plug"),
   ["contact sizes", [
     ["short", [c_w,c_h,d_short]],
     ["long",  [c_w,c_h,d_long]]
   ]]
-];
+]);
 
 FL_SATA_POWERDATAPLUG = let(
   power   = FL_SATA_POWERPLUG,
@@ -166,17 +169,18 @@ FL_SATA_POWERDATAPLUG = let(
   ) T([p2d.x,p2d.y,thick]),
   dc      = fl_conn_clone(fl_connectors(data)[0], M=Mdata *T(-Z(size.z/2))),
   pc      = fl_conn_clone(fl_connectors(power)[0],M=Mpower*T(-Z(size.z/2)))
-) [
+) fl_Object(
+  bbox    = [-size/2,+size/2],
+  engine  = "sata/composite plug",
+  others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[pc,dc]),
-  fl_bb_corners(value=[-size/2,+size/2]),
-  fl_engine(value="sata/composite plug"),
   ["power plug",  power],
   ["data plug",   data],
   ["shell thick", thick],
   __fl_sata_Mpower__(value=Mpower),
   __fl_sata_Mdata__(value=Mdata),
-];
+]);
 
 FL_SATA_DICT = [
   FL_SATA_POWERPLUG,
