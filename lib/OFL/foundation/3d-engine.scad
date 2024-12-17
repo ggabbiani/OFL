@@ -620,7 +620,7 @@ function fl_direction(
   //! desired direction in axis-angle representation [axis,rotation about]
   direction
 ) =
-  assert(!fl_debug() || fl_tt_isDirectionRotation(direction),direction)
+  assert(!fl_dbg_assert() || fl_tt_isDirectionRotation(direction),direction)
   let(
     alpha   = direction[1],
     Z_new = fl_versor(direction[0]),
@@ -672,7 +672,7 @@ function fl_planeAlign(ax,ay,bx,by,a,b) =
           [az.x, az.y,  az.z,  0 ],
           [0,    0,     0,     1 ],
         ]
-      : assert(!fl_debug() || det(A)!=0,A) matrix_invert(A), // otherwise full calculations
+      : assert(!fl_dbg_assert() || det(A)!=0,A) matrix_invert(A), // otherwise full calculations
     bz=cross(bx,by),
     B=[
       [bx.x, by.x,  bz.x,  0 ],
@@ -1542,7 +1542,7 @@ module fl_sym_direction(
   //! default size given as a scalar
   size    = 0.5
 ) {
-  assert(!fl_debug() || fl_tt_isDirectionRotation(direction));
+  assert(!fl_dbg_assert() || fl_tt_isDirectionRotation(direction));
 
   // returns the angle between vector «a» and «b»
   function angle(a,b) = let(
@@ -1580,7 +1580,7 @@ module fl_sym_direction(
   old_rotor     = fl_3(m * fl_4(curr_rotor));
   // old_axis      = cross(old_director,old_rotor);
 
-  // assert(!fl_debug() || (old_director*old_rotor<=FL_NIL),old_director*old_rotor);
+  // assert(!fl_dbg_assert() || (old_director*old_rotor<=FL_NIL),old_director*old_rotor);
 
   // Native Coordinate System DIRECTOR
   color(dir_color) rotate(-angle,curr_director) {

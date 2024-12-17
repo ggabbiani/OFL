@@ -45,8 +45,8 @@ function fl_generic_Vitamin(
   engine="Generic",
   specs=[]
 ) =
-assert(!cut_directions || (!fl_debug() || fl_tt_isAxisList(cut_directions)))
-assert(is_undef(holes) || (!fl_debug() || fl_tt_isHoleList(holes)))
+assert(!cut_directions || !fl_dbg_assert() || fl_tt_isAxisList(cut_directions) )
+assert(is_undef(holes) || !fl_dbg_assert() || fl_tt_isHoleList(holes)          )
   concat(
     [
       fl_name(value=name?name:str("Generic vitamin ",bbox[1]-bbox[0])),
@@ -89,7 +89,7 @@ module fl_generic_vitamin(
   //! desired direction [director,rotation], native direction when undef
   direction
 ) {
-  assert(!fl_debug() || (is_num(thick) || fl_tt_isAxisVList(thick)));
+  assert(!fl_dbg_assert() || is_num(thick) || fl_tt_isAxisVList(thick));
   thick           = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
   cut_drift       = is_num(cut_drift) ? [[cut_drift,cut_drift],[cut_drift,cut_drift],[cut_drift,cut_drift]] : cut_drift;
   cut_directions  = fl_cutout(this,default=[]);

@@ -24,7 +24,7 @@ module fl_manage(
   //! orientation matrix
   D
 ) {
-  assert(!fl_debug() || D);
+  assert(!fl_dbg_assert() || D);
 
   module context(verb_list) {
     assert(is_list(verb_list)||is_string(verb_list),verb_list);

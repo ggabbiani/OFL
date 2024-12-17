@@ -119,7 +119,7 @@ module fl_comp_Context(
   //! component definition:
   component
   ) {
-  assert(!fl_debug() || fl_tt_isComponent(component),component);
+  assert(!fl_dbg_assert() || fl_tt_isComponent(component),component);
 
   $comp_engine    = assert(is_string(component[0])) component[0];
   $comp_position  = assert(fl_tt_is3d(component[1]),component[1]) component[1];
@@ -159,7 +159,7 @@ module fl_comp_Specs(
 
 //! exact calculation of the resulting bounding box out of a list of component specifications
 function fl_comp_BBox(spec_list) =
-  assert(!fl_debug() || fl_tt_isCompSpecList(spec_list),spec_list)
+  assert(!fl_dbg_assert() || fl_tt_isCompSpecList(spec_list),spec_list)
   let(
     // list of component bounding boxes translated by their position
     bboxes = [for(specs=spec_list)
@@ -196,9 +196,9 @@ function fl_comp_BBox(spec_list) =
  * **NOTE:** error when label is not unique
  */
 function fl_comp_search(type,label,comps) = let(
-  components  = comps ? comps : assert(!fl_debug() || type) fl_pcb_components(type),
+  components  = comps ? comps : assert(!fl_dbg_assert() || type) fl_pcb_components(type),
   result      = [for(specs=components) if (label==specs[0]) specs[1]]
-) assert(!fl_debug() || len(result)==1,result) result[0];
+) assert(!fl_dbg_assert() || len(result)==1,result) result[0];
 
 /*
  * returns all the «component» connectors transformed according to component
