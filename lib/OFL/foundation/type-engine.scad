@@ -24,7 +24,7 @@ function fl_Object(
   name,
   //! optional description
   description,
-  //! optional engine
+  //! optional engine string
   engine,
   //! optional other key/value list to be concatenated.
   others=[]
