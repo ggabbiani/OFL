@@ -104,4 +104,3 @@ fl_sata(verbs,type,octant=octant,direction=direction);
 if (counter_type && CONNECT)
   fl_connect(son=[counter_type,0], parent=[type,0], octant=octant,direction=direction)
     fl_sata(verbs,$con_child);
-
