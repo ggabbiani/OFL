@@ -12,6 +12,7 @@
  */
 
 
+include <../../lib/OFL/vitamins/hds.scad>
 include <../../lib/OFL/vitamins/sata.scad>
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 
@@ -69,7 +70,7 @@ DIR_R       = 0;        // [-360:360]
 /* [Sata] */
 PART        = "data plug"; // [data plug,power plug,power data plug,power data socket]
 // connect composite plug or socket
-CONNECT     = false;
+CONNECT     = "none"; // [none, counter type, hd]
 
 
 /* [Hidden] */
@@ -99,8 +100,15 @@ counter_type =
   PART=="power data plug"   ? FL_SATA_POWERDATASOCKET :
   PART=="power data socket" ? FL_SATA_POWERDATAPLUG   :
   undef;
+connected_device  =
+  CONNECT=="counter type" ? counter_type :
+  CONNECT=="hd" && PART=="power data socket" ? FL_HD_EVO860 :
+  undef;
 
 fl_sata(verbs,type,octant=octant,direction=direction);
-if (counter_type && CONNECT)
-  fl_connect(son=[counter_type,0], parent=[type,0], octant=octant,direction=direction)
-    fl_sata(verbs,$con_child);
+if (connected_device)
+  fl_connect(son=[connected_device,0], parent=[type,0], octant=octant, direction=direction)
+    if (fl_engine($con_child)==FL_HD_NS)
+      fl_hd(type=$con_child,$FL_ADD="ON");
+    else
+      fl_sata(type=$con_child,$FL_ADD="ON");
