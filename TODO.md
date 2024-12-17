@@ -86,7 +86,10 @@
 - [X] modify sata and hd signatures for debug symbol handling in place of show
   connectors parameter;
 - [X] fixed fl_connect() to manage parent «octant» and «direction» parameters;
-- [ ] use function fl_dbg_assert() in place of fl_debug();
+- [X] function fl_dbg_assert() used in place of fl_debug();
+- [ ] rename type_trait.scad as traits-engine.scad, modify accordingly the
+  inclusion from 3d-engine;
+- [ ] move profile.scad to the artifacts directory;
 - [ ] implement FL_CUTOUT in hds;
 - [ ] review and apply everywhere the new polymorph engine for rewriting and
   subtyping all the existing modules. Use vitamins/iec.scad as implementation

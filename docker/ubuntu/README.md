@@ -39,7 +39,7 @@ without the need of a local build.
 
     $ cd <OFL root directory>
     $
-    $ make -s orthodocs/clean
+    $ make -s clean
     $
     $ docker run -v ./:/import:Z  -it --rm ggabbiani/ofl:ubuntu
 

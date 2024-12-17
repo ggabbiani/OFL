@@ -4,8 +4,7 @@
 
 ```mermaid
 graph LR
-    A1[foundation/profile] --o|include| A2[foundation/3d-engine]
-    A1 --o|include| A3[foundation/label]
+    A1[foundation/profile] --o|include| A2[foundation/label]
 ```
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
