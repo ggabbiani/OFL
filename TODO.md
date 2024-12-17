@@ -85,6 +85,8 @@
 - [X] fixed regression in hds while showing sata debug symbols;
 - [X] modify sata and hd signatures for debug symbol handling in place of show
   connectors parameter;
+- [X] fixed fl_connect() to manage parent «octant» and «direction» parameters;
+- [ ] use function fl_dbg_assert() in place of fl_debug();
 - [ ] implement FL_CUTOUT in hds;
 - [ ] review and apply everywhere the new polymorph engine for rewriting and
   subtyping all the existing modules. Use vitamins/iec.scad as implementation

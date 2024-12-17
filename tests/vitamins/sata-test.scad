@@ -68,6 +68,7 @@ DIR_R       = 0;        // [-360:360]
 
 /* [Sata] */
 PART        = "data plug"; // [data plug,power plug,power data plug,power data socket]
+// connect composite plug or socket
 CONNECT     = false;
 
 
@@ -101,6 +102,6 @@ counter_type =
 
 fl_sata(verbs,type,octant=octant,direction=direction);
 if (counter_type && CONNECT)
-  fl_connect(son=[counter_type,0], parent=[type,0])
-    fl_sata(verbs,$con_child,$FL_ADD="DEBUG");
+  fl_connect(son=[counter_type,0], parent=[type,0], octant=octant,direction=direction)
+    fl_sata(verbs,$con_child);
 

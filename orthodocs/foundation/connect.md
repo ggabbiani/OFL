@@ -180,7 +180,7 @@ fl_conn_type(type,value)
 __Syntax:__
 
 ```text
-fl_connect(son,parent)
+fl_connect(son,parent,octant,direction)
 ```
 
 Returns the transformation matrix moving child shape to its parent
@@ -206,6 +206,12 @@ child to be moved, either a connector or a list [child object,connector number]
 
 __parent__  
 fixed parent, either a connector or a list [parent object,connector number]
+
+__octant__  
+parent octant
+
+__direction__  
+parent direction
 
 
 ## Modules
@@ -270,14 +276,16 @@ list of connectors
 
 __Syntax:__
 
-    fl_connect(son,parent)
+    fl_connect(son,parent,octant,direction)
 
 See function [fl_connect()](#function-fl_connect) for docs.
 
-Children context:
+Context variables:
 
-- $con_child : OPTIONAL child object (undef when direct connector is passed)
-- $con_parent: OPTIONAL parent object (undef when direct connector is passed)
+| Name         | Context   | Description |
+| ---          | ---       | ---         |
+| $con_child   | Children  | OPTIONAL child object (undef when direct connector is passed)   |
+| $con_parent  | Children  | OPTIONAL parent object (undef when direct connector is passed)  |
 
 
 __Parameters:__
@@ -287,6 +295,12 @@ child to be moved, can be either a connector or a list [object,connector number]
 
 __parent__  
 fixed parent, can be either a connector or a list [object,connector number]
+
+__octant__  
+parent octant
+
+__direction__  
+parent direction
 
 
 ---

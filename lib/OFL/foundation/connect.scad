@@ -137,7 +137,11 @@ function fl_connect(
   //! child to be moved, either a connector or a list [child object,connector number]
   son,
   //! fixed parent, either a connector or a list [parent object,connector number]
-  parent
+  parent,
+  //! parent octant
+  octant,
+  //! parent direction
+  direction
   ) = let(
     son_c = len(son)==2     ? fl_connectors(son[0])[son[1]]       : son,
     par_c = len(parent)==2  ? fl_connectors(parent[0])[parent[1]] : parent,
@@ -148,22 +152,33 @@ function fl_connect(
 
     par_ox        = fl_conn_ox(par_c),
     par_oy        = fl_conn_oy(par_c),
-    par_pos       = fl_conn_pos(par_c)
-  ) T(+par_pos) * fl_planeAlign(son_ox,son_oy,par_ox,par_oy) * T(-son_pos);
+    par_pos       = fl_conn_pos(par_c),
+
+    M_dir         = direction ? fl_direction(direction) : I,
+    T_oct         = let(
+      M_oct = len(parent)==2 && octant ? fl_octant(octant,parent[0]) : I
+    ) T([M_oct.x[3],M_oct.y[3],M_oct.z[3]])
+  ) M_dir * T_oct * T(+par_pos) * fl_planeAlign(son_ox,son_oy,par_ox,par_oy) * T(-son_pos);
 
 /*!
  * See function fl_connect() for docs.
  *
- * Children context:
+ * Context variables:
  *
- * - $con_child : OPTIONAL child object (undef when direct connector is passed)
- * - $con_parent: OPTIONAL parent object (undef when direct connector is passed)
+ * | Name         | Context   | Description |
+ * | ---          | ---       | ---         |
+ * | $con_child   | Children  | OPTIONAL child object (undef when direct connector is passed)   |
+ * | $con_parent  | Children  | OPTIONAL parent object (undef when direct connector is passed)  |
  */
 module fl_connect(
   //! child to be moved, can be either a connector or a list [object,connector number]
   son,
   //! fixed parent, can be either a connector or a list [object,connector number]
-  parent
+  parent,
+  //! parent octant
+  octant,
+  //! parent direction
+  direction
   ) {
   son_c       = len(son)==2 ? fl_connectors(son[0])[son[1]] : son;
   par_c       = len(parent)==2 ? fl_connectors(parent[0])[parent[1]] : parent;
@@ -174,7 +189,7 @@ module fl_connect(
   par_type    = fl_conn_type(par_c);
   par_fprint  = fl_conn_id(par_c);
 
-  M           = fl_connect(son,parent);
+  M           = fl_connect(son,parent,octant,direction);
 
   assert(son_type!=par_type,str("son:",son_type,",parent:",par_type));
   assert(son_fprint==par_fprint,str("Trying to connect '",son_fprint,"'' with '",par_fprint,"'."));
