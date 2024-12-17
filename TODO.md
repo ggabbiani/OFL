@@ -97,7 +97,7 @@
   performed: TAP drill vs CLEARANCE drill.
 - [ ] differentiate documentation by release
 - [ ] fully wrap the NopSCADlib screw library
-- [X] rename knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}
+- [X] renamed knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}
 - [ ] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name
   space»_find/select() (see fl_pcb_select{}). Eliminate fl_«name
   space»_search(). Involved libraries (not exhaustive list):
