@@ -865,7 +865,7 @@ fl_cutout(type,value,default)
 ```
 
 cut-out directions in floating semi-axis list form as described in
-[fl_tt_isAxisList()](type_trait.md#function-fl_tt_isaxislist).
+[fl_tt_isAxisList()](traits-engine.md#function-fl_tt_isaxislist).
 
 This property represents the list of cut-out directions supported by the
 passed type.

@@ -5,7 +5,7 @@
  */
 
 include <../../ext/Round-Anything/polyround.scad>
-include <label.scad>
+include <../foundation/label.scad>
 
 //! engine for generating profiles
 module fl_profile(

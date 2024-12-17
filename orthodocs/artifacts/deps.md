@@ -3,13 +3,15 @@
 ```mermaid
 graph TD
     A1[artifacts/box] --o|include| A2[artifacts/spacer]
-    A3[artifacts/caddy]
-    A4[artifacts/din_rails]
-    A5[artifacts/joints]
-    A6[artifacts/pcb_holder] --o|include| A2
+    A1 --o|use| A3[artifacts/profiles-engine]
+    A4[artifacts/caddy]
+    A5[artifacts/din_rails]
+    A6[artifacts/joints]
+    A7[artifacts/pcb_holder] --o|include| A2
+    A3
     A2
-    A7[artifacts/t-nut]
-    A8[artifacts/t-profiles]
-    A9[artifacts/template]
+    A8[artifacts/t-nut]
+    A9[artifacts/t-profiles]
+    A10[artifacts/template]
 ```
 

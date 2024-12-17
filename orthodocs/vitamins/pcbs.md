@@ -184,7 +184,7 @@ optional name for the constructed type
 __bare__  
 bare (i.e. no payload) pcb's bounding box in the format `[[x,y,z],[X,Y,Z]]`
 
-See also [fl_tt_isBoundingBox()](../foundation/type_trait.md#function-fl_tt_isboundingbox) for its definition.
+See also [fl_tt_isBoundingBox()](../foundation/traits-engine.md#function-fl_tt_isboundingbox) for its definition.
 
 
 __thick__  
@@ -518,7 +518,7 @@ Example:
 
 
 __cut_direction__  
-Floating semi-axis list in the host's reference system (see also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist)).
+Floating semi-axis list in the host's reference system (see also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
 
 This parameter sets a filter used during FL_CUTOUT, causing the trigger of
 all and only the PCB components implementing cut out along at least one of

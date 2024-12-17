@@ -1,10 +1,10 @@
-# package foundation/profile
+# package artifacts/profiles-engine
 
 ## Dependencies
 
 ```mermaid
 graph LR
-    A1[foundation/profile] --o|include| A2[foundation/label]
+    A1[artifacts/profiles-engine] --o|include| A2[foundation/label]
 ```
 
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
@@ -48,7 +48,7 @@ __thick__
 sheet thickness
 
 __octant__  
-when undef native positioning (see [variable FL_O](core.md#variable-fl_o)) is used
+when undef native positioning (see [variable FL_O](../foundation/core.md#variable-fl_o)) is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Z])
@@ -82,6 +82,6 @@ __direction__
 desired direction [director,rotation], native direction when undef ([+X+Z])
 
 __octant__  
-when undef native positioning (see [variable FL_O](core.md#variable-fl_o)) is used
+when undef native positioning (see [variable FL_O](../foundation/core.md#variable-fl_o)) is used
 
 

@@ -1,10 +1,10 @@
-# package foundation/type_trait
+# package foundation/traits-engine
 
 ## Dependencies
 
 ```mermaid
 graph LR
-    A1[foundation/type_trait] --o|include| A2[foundation/core]
+    A1[foundation/traits-engine] --o|include| A2[foundation/core]
 ```
 
 Type traits implementation file.

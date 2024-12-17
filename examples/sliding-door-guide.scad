@@ -13,7 +13,7 @@ include <../lib/OFL/vitamins/screw.scad>
 include <../lib/OFL/foundation/hole.scad>
 
 use <../lib/OFL/foundation/fillet.scad>
-use <../lib/OFL/foundation/profile.scad>
+use <../lib/OFL/artifacts/profiles-engine.scad>
 use <../lib/OFL/foundation/util.scad>
 
 $fn            = 50;           // [3:100]

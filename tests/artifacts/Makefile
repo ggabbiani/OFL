@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-T_LIST			= box caddy-blob caddy din_rails joints pcb_holder spacer tnut tprofiles
+T_LIST			= box caddy-blob caddy din_rails joints pcb_holder profiles-engine spacer tnut tprofiles
 
 SOURCES			= $(foreach t,$(T_LIST),$(t)-test.scad)
 RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)

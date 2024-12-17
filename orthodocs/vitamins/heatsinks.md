@@ -128,7 +128,7 @@ __cut_drift__
 translation applied to cutout (default 0)
 
 __cut_direction__  
-Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist)).
+Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
 
 Example:
 

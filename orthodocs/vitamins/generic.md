@@ -57,7 +57,7 @@ when true FL_ADD is a no-op.
 __cut_directions__  
 cut directions in floating semi-axis list format.
 
-See also [fl_tt_isAxisList()](../foundation/type_trait.md#function-fl_tt_isaxislist) and [fl_3d_AxisList()](../foundation/3d-engine.md#function-fl_3d_axislist)
+See also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist) and [fl_3d_AxisList()](../foundation/3d-engine.md#function-fl_3d_axislist)
 
 
 
@@ -95,7 +95,7 @@ supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL
 
 __thick__  
 Scalar or full semi axis value list for FL_CUTOUT, FL_DRILL and FL_LAYOUT
-thickness (see [fl_tt_isAxisVList()](../foundation/type_trait.md#function-fl_tt_isaxisvlist)).
+thickness (see [fl_tt_isAxisVList()](../foundation/traits-engine.md#function-fl_tt_isaxisvlist)).
 
 This parameter represents the surface thickness along semi-axes to be
 drilled and/or cut out.
@@ -106,7 +106,7 @@ tolerance used during FL_CUTOUT
 
 __cut_drift__  
 Scalar or full semi axis value list for translation applied to cutout
-(see  [fl_tt_isAxisVList()](../foundation/type_trait.md#function-fl_tt_isaxisvlist))
+(see  [fl_tt_isAxisVList()](../foundation/traits-engine.md#function-fl_tt_isaxisvlist))
 
 
 __octant__  

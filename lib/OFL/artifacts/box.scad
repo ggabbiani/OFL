@@ -13,7 +13,7 @@ include <../vitamins/screw.scad>
 
 use <../foundation/fillet.scad>
 use <../foundation/mngm-engine.scad>
-use <../foundation/profile.scad>
+use <../artifacts/profiles-engine.scad>
 use <../foundation/util.scad>
 
 /*!

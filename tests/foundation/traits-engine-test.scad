@@ -13,7 +13,7 @@
 
 // **** TEST_INCLUDES *********************************************************
 
-include <../../lib/OFL/foundation/type_trait.scad>
+include <../../lib/OFL/foundation/traits-engine.scad>
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 
 // **** TAB_Debug *************************************************************

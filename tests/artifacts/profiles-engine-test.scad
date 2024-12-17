@@ -14,7 +14,7 @@
 
 include <../../lib/OFL/foundation/core.scad>
 
-use <../../lib/OFL/foundation/profile.scad>
+use <../../lib/OFL/artifacts/profiles-engine.scad>
 
 
 $fn            = 50;           // [3:100]

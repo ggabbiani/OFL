@@ -5,7 +5,7 @@
 ```mermaid
 graph LR
     A1[foundation/3d-engine] --o|include| A2[foundation/2d-engine]
-    A1 --o|include| A3[foundation/type_trait]
+    A1 --o|include| A3[foundation/traits-engine]
     A1 --o|use| A4[dxf]
     A1 --o|use| A5[foundation/polymorphic-engine]
     A1 --o|use| A6[foundation/type-engine]
@@ -73,7 +73,7 @@ strings
 | kvs       | full semi-axis value list initialized from the passed axis/value pair list |
 | values    | full boolean semi-axis value list from semi-axis literal                   |
 
-See also function [fl_tt_isAxisVList()](type_trait.md#function-fl_tt_isaxisvlist)
+See also function [fl_tt_isAxisVList()](traits-engine.md#function-fl_tt_isaxisvlist)
 
 example 1:
 
@@ -163,7 +163,7 @@ __axis__
 axis to retrieve corresponding value
 
 __values__  
-full semi-axis value list (see also function [fl_tt_isAxisVList()](type_trait.md#function-fl_tt_isaxisvlist))
+full semi-axis value list (see also function [fl_tt_isAxisVList()](traits-engine.md#function-fl_tt_isaxisvlist))
 
 
 ---
@@ -933,7 +933,7 @@ __Parameters:__
 
 __corners__  
 Bounding box corners in [Low,High] format.
-see also [fl_tt_isBoundingBox()](type_trait.md#function-fl_tt_isboundingbox)
+see also [fl_tt_isBoundingBox()](traits-engine.md#function-fl_tt_isboundingbox)
 
 
 __2d__  

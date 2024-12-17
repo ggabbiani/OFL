@@ -9,7 +9,7 @@
 use <../dxf.scad>
 
 include <2d-engine.scad>
-include <type_trait.scad>
+include <traits-engine.scad>
 
 use <polymorphic-engine.scad>
 use <type-engine.scad>

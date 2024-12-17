@@ -6,7 +6,7 @@ graph TD
     A1 --o|use| A3[foundation/bbox-engine]
     A1 --o|use| A4[foundation/mngm-engine]
     A5[foundation/3d-engine] --o|include| A1
-    A5 --o|include| A6[foundation/type_trait]
+    A5 --o|include| A6[foundation/traits-engine]
     A5 --o|use| A7[dxf]
     A5 --o|use| A8[foundation/polymorphic-engine]
     A5 --o|use| A9[foundation/type-engine]
@@ -16,13 +16,13 @@ graph TD
     A12 --o|include| A14[vitamins/countersinks]
     A12 --o|include| A15[vitamins/knurl_nuts]
     A12 --o|include| A16[vitamins/screw]
-    A12 --o|use| A17[foundation/fillet]
+    A12 --o|use| A17[artifacts/profiles-engine]
+    A12 --o|use| A18[foundation/fillet]
     A12 --o|use| A4
-    A12 --o|use| A18[foundation/profile]
     A12 --o|use| A19[foundation/util]
     A20[artifacts/caddy] --o|include| A11
     A20 --o|use| A3
-    A20 --o|use| A17
+    A20 --o|use| A18
     A20 --o|use| A4
     A20 --o|use| A8
     A21[foundation/components] --o|include| A3
@@ -53,7 +53,7 @@ graph TD
     A27 --o|use| A5
     A27 --o|use| A3
     A27 --o|use| A8
-    A17 --o|include| A5
+    A18 --o|include| A5
     A28[vitamins/generic] --o|include| A11
     A28 --o|use| A1
     A28 --o|use| A5
@@ -87,7 +87,7 @@ graph TD
     A37 --o|include| A25
     A37 --o|use| A5
     A37 --o|use| A3
-    A37 --o|use| A17
+    A37 --o|use| A18
     A37 --o|use| A8
     A15 --o|include| A11
     A15 --o|include| A16
@@ -133,7 +133,7 @@ graph TD
     A8 --o|use| A5
     A8 --o|use| A3
     A8 --o|use| A4
-    A18 --o|include| A25
+    A17 --o|include| A25
     A49[vitamins/psus] --o|include| A30
     A49 --o|include| A29
     A49 --o|include| A2
@@ -160,7 +160,7 @@ graph TD
     A13 --o|include| A29
     A13 --o|include| A2
     A13 --o|include| A15
-    A13 --o|use| A17
+    A13 --o|use| A18
     A13 --o|use| A4
     A52[vitamins/spdts] --o|include| A11
     A52 --o|use| A5
@@ -186,6 +186,7 @@ graph TD
     A56 --o|use| A8
     A57[vitamins/template] --o|include| A2
     A57 --o|use| A8
+    A6 --o|include| A11
     A47 --o|include| A2
     A47 --o|use| A5
     A47 --o|use| A3
@@ -193,7 +194,6 @@ graph TD
     A47 --o|use| A19
     A9 --o|include| A11
     A9 --o|use| A3
-    A6 --o|include| A11
     A2 --o|include| A11
     A48 --o|include| A2
     A48 --o|use| A1
