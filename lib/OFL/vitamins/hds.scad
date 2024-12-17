@@ -31,34 +31,36 @@ FL_HD_EVO860 = let(
   conns   = fl_connectors(plug),
   pc      = fl_conn_clone(conns[0],M=Mpd),
   dc      = fl_conn_clone(conns[1],M=Mpd)
-) [
-  fl_name(value="Samsung V-NAND SSD 860 EVO"),
-  fl_engine(value=FL_HD_NS),
-  fl_bb_corners(value=[
+) fl_Object(
+  name    = "Samsung V-NAND SSD 860 EVO",
+  engine  = FL_HD_NS,
+  bbox    = [
     [-size.x/2, 0,      0       ],  // negative corner
     [+size.x/2, +size.y,+size.z ],  // positive corner
-  ]),
-  ["offset",            [0,-size.y/2,-size.z/2]],
-  ["corner radius",     3],
-  fl_screw(value=screw),
-  fl_sata_plug(value=plug),
-  fl_connectors(value=[pc,dc]),
+  ],
+  others  = [
+    ["offset",            [0,-size.y/2,-size.z/2]],
+    ["corner radius",     3],
+    fl_screw(value=screw),
+    fl_sata_plug(value=plug),
+    fl_connectors(value=[pc,dc]),
 
-  // each row represents a hole with the following format:
-  // [[point],[normal], diameter, thickness]
-  fl_holes(value=[
-    fl_Hole([  size.x/2-3.5, 14,  0 ], 3, -Z, 3+screw_r),
-    fl_Hole([  size.x/2-3.5, 90.6,0 ], 3, -Z, 3+screw_r),
-    fl_Hole([ -size.x/2+3.5, 14,  0 ], 3, -Z, 3+screw_r),
-    fl_Hole([ -size.x/2+3.5, 90.6,0 ], 3, -Z, 3+screw_r),
-    fl_Hole([  size.x/2,     14,  3 ], 3, +X, 3.5+screw_r),
-    fl_Hole([  size.x/2,     90.6,3 ], 3, +X, 3.5+screw_r),
-    fl_Hole([ -size.x/2,     14,  3 ], 3, -X, 3.5+screw_r),
-    fl_Hole([ -size.x/2,     90.6,3 ], 3, -X, 3.5+screw_r),
-    ]),
+    // each row represents a hole with the following format:
+    // [[point],[normal], diameter, thickness]
+    fl_holes(value=[
+      fl_Hole([  size.x/2-3.5, 14,  0 ], 3, -Z, 3+screw_r),
+      fl_Hole([  size.x/2-3.5, 90.6,0 ], 3, -Z, 3+screw_r),
+      fl_Hole([ -size.x/2+3.5, 14,  0 ], 3, -Z, 3+screw_r),
+      fl_Hole([ -size.x/2+3.5, 90.6,0 ], 3, -Z, 3+screw_r),
+      fl_Hole([  size.x/2,     14,  3 ], 3, +X, 3.5+screw_r),
+      fl_Hole([  size.x/2,     90.6,3 ], 3, +X, 3.5+screw_r),
+      fl_Hole([ -size.x/2,     14,  3 ], 3, -X, 3.5+screw_r),
+      fl_Hole([ -size.x/2,     90.6,3 ], 3, -X, 3.5+screw_r),
+      ]),
 
-  ["Mpd",        Mpd ],
-];
+    ["Mpd",        Mpd ],
+  ]
+);
 
 FL_HD_DICT  = [ FL_HD_EVO860 ];
 
@@ -75,7 +77,7 @@ FL_HD_DICT  = [ FL_HD_EVO860 ];
  * | $dbg_Symbols   | Debug     | When true connector symbols are shown |
  */
 module fl_hd(
-  verbs,
+  verbs=FL_ADD,
   type,
   /*!
    * thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
