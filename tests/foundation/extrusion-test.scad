@@ -45,6 +45,7 @@ DEBUG_SYMBOLS     = false;
 EXTRUSION_TYPE  = "linear"; // [none,linear,directional]
 XTR_AXIS        = [0,0,1];  // [-1:0.1:+1]
 XTR_ROT         = 0;        // [-360:+360]
+DISTANCE        = 30;       // [0:60]
 
 /* [DIRECTIONAL] */
 OFFSET_TYPE     = "radial"; // [radial,delta]
@@ -84,7 +85,7 @@ module example002() {
 
 module extrude(direction,length,convexity = 10) {
   #if (direction)
-    translate(30*direction[0])
+    translate(DISTANCE*direction[0])
       if (EXTRUSION_TYPE=="linear")
         fl_linear_extrude(direction, length, convexity)
           projection(cut = false)
