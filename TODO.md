@@ -87,8 +87,8 @@
   connectors parameter;
 - [X] fixed fl_connect() to manage parent «octant» and «direction» parameters;
 - [X] function fl_dbg_assert() used in place of fl_debug();
-- [ ] rename type_trait.scad as traits-engine.scad, modify accordingly the
-  inclusion from 3d-engine;
+- [X] renamed foundation/profile.scad into artifacts/profiles-engine.scad;
+- [X] renamed foundation/type_trait.scad into foundation/traits-engine.scad;
 - [ ] move profile.scad to the artifacts directory;
 - [ ] implement FL_CUTOUT in hds;
 - [ ] review and apply everywhere the new polymorph engine for rewriting and
