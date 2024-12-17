@@ -38,7 +38,7 @@ __description__
 optional description
 
 __engine__  
-optional engine
+optional engine string
 
 __others__  
 optional other key/value list to be concatenated.
