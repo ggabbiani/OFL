@@ -91,12 +91,7 @@ fl_status();
 
 // end of automatically generated code
 
-verbs=[
-  if ($FL_AXES!="OFF")    FL_AXES,
-  if ($FL_BBOX!="OFF")    FL_BBOX,
-  if ($FL_LAYOUT!="OFF")  FL_LAYOUT,
-];
-
+verbs   = fl_verbList([FL_AXES,FL_BBOX,FL_LAYOUT]);
 types   = [FL_PCB_RPI4,FL_HD_EVO860,FL_HD_EVO860,FL_PSU_MeanWell_RS_25_5];
 axis    = fl_3d_AxisList([AXIS])[0];
 overbs  = [
@@ -121,7 +116,6 @@ module object(object) {
     assert(false,str("Engine ",engine," UNKNOWN."));
 }
 
-fl_trace("verbs",verbs);
 fl_layout(verbs,axis,GAP,types,align=ALIGN,octant=octant,direction=direction)
   object($item);
 
