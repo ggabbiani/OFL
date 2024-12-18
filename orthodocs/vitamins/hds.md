@@ -36,7 +36,7 @@ __Default:__
 
 __Default:__
 
-    let(size=[69.85,100,7],plug=FL_SATA_POWERDATAPLUG,cid=fl_sata_powerDataCID(),screw=M3_cs_cap_screw,screw_r=screw_radius(screw),Mpd=T(-X(4.8)-Z(NIL))*fl_direction([-Y,0])*fl_octant(+Y-Z,type=plug),conns=fl_connectors(plug),pc=fl_conn_clone(conns[0],M=Mpd),dc=fl_conn_clone(conns[1],M=Mpd))fl_Object(name="Samsung V-NAND SSD 860 EVO",engine=FL_HD_NS,bbox=[[-size.x/2,0,0],[+size.x/2,+size.y,+size.z],],others=[["offset",[0,-size.y/2,-size.z/2]],["corner radius",3],fl_screw(value=screw),fl_sata_plug(value=plug),fl_connectors(value=[pc,dc]),fl_holes(value=[fl_Hole([size.x/2-3.5,14,0],3,-Z,3+screw_r),fl_Hole([size.x/2-3.5,90.6,0],3,-Z,3+screw_r),fl_Hole([-size.x/2+3.5,14,0],3,-Z,3+screw_r),fl_Hole([-size.x/2+3.5,90.6,0],3,-Z,3+screw_r),fl_Hole([size.x/2,14,3],3,+X,3.5+screw_r),fl_Hole([size.x/2,90.6,3],3,+X,3.5+screw_r),fl_Hole([-size.x/2,14,3],3,-X,3.5+screw_r),fl_Hole([-size.x/2,90.6,3],3,-X,3.5+screw_r),]),["Mpd",Mpd],])
+    let(size=[69.85,100,7],plug=FL_SATA_POWERDATAPLUG,cid=fl_sata_powerDataCID(),screw=M3_cs_cap_screw,screw_r=screw_radius(screw),Mpd=T(-X(4.8)-Z(NIL))*fl_direction([-Y,0])*fl_octant(+Y-Z,type=plug),conns=fl_connectors(plug),pc=fl_conn_clone(conns[0],M=Mpd),dc=fl_conn_clone(conns[1],M=Mpd))fl_Object(name="Samsung V-NAND SSD 860 EVO",engine=FL_HD_NS,bbox=[[-size.x/2,0,0],[+size.x/2,+size.y,+size.z],],others=[["offset",[0,-size.y/2,-size.z/2]],["corner radius",3],fl_screw(value=screw),fl_sata_plug(value=plug),fl_connectors(value=[pc,dc]),fl_holes(value=[fl_Hole([size.x/2-3.5,14,0],3,-Z,3+screw_r),fl_Hole([size.x/2-3.5,90.6,0],3,-Z,3+screw_r),fl_Hole([-size.x/2+3.5,14,0],3,-Z,3+screw_r),fl_Hole([-size.x/2+3.5,90.6,0],3,-Z,3+screw_r),fl_Hole([size.x/2,14,3],3,+X,3.5+screw_r),fl_Hole([size.x/2,90.6,3],3,+X,3.5+screw_r),fl_Hole([-size.x/2,14,3],3,-X,3.5+screw_r),fl_Hole([-size.x/2,90.6,3],3,-X,3.5+screw_r),]),["Mpd",Mpd],fl_cutout(value=[-Y]),])
 
 ---
 
@@ -54,7 +54,7 @@ __Default:__
 
 __Syntax:__
 
-    fl_hd(verbs=FL_ADD,type,thick,lay_direction=[-X,+X,-Z],dri_tolerance=fl_JNgauge,dri_rails=[[0,0],[0,0],[0,0]],direction,octant)
+    fl_hd(verbs=FL_ADD,type,lay_direction=[-X,+X,-Z],dri_rails=[[0,0],[0,0],[0,0]],drift=0,octant,direction)
 
 Hard-drive engine.
 
@@ -65,30 +65,29 @@ Used context:
 | $hd_thick      | Children  | scalar thickness along hole normal    |
 | $hd_screw_len  | Children  | screw length along hole normal comprehensive of hole depth and tolerance |
 | $hole_*        | Children  | see [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context)                 |
-| $dbg_Symbols   | Debug     | When true connector symbols are shown |
+| $dbg_Symbols   | Execution | When true connector symbols are shown |
+| $fl_thickness  | Parameter | thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]]  |
+| $fl_tolerance  | Parameter | Used during FL_CUTOUT and FL_DRILL    |
 
 
 __Parameters:__
 
-__thick__  
-thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
-
-scalar «t» means `[[t,t],[t,t],[t,t]]`
-
+__verbs__  
+FL_ASSEMBLY, FL_AXES, FL_MOUNT, FL_LAYOUT, FL_DRILL, FL_BBOX, FL_FOOTPRINT, FL_CUTOUT
 
 __lay_direction__  
 FL_LAYOUT directions in floating semi-axis list form
 
-__dri_tolerance__  
-tolerance for FL_DRILL
-
 __dri_rails__  
 rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
 
-__direction__  
-desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
+__drift__  
+FL_CUTOUT scalar drift
 
 __octant__  
 when undef native positioning is used
+
+__direction__  
+desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
 
 

@@ -76,9 +76,9 @@ FL_HD_DICT  = [ FL_HD_EVO860 ];
  * | $hd_thick      | Children  | scalar thickness along hole normal    |
  * | $hd_screw_len  | Children  | screw length along hole normal comprehensive of hole depth and tolerance |
  * | $hole_*        | Children  | see fl_hole_Context{}                 |
- * | $dbg_Symbols   | Debug     | When true connector symbols are shown |
- * | $fl_thickness  | Exec      | thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]]  |
- * | $fl_tolerance  | Exec      | Used during FL_CUTOUT and FL_DRILL    |
+ * | $dbg_Symbols   | Execution | When true connector symbols are shown |
+ * | $fl_thickness  | Parameter | thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]]  |
+ * | $fl_tolerance  | Parameter | Used during FL_CUTOUT and FL_DRILL    |
  */
 module fl_hd(
   //! FL_ASSEMBLY, FL_AXES, FL_MOUNT, FL_LAYOUT, FL_DRILL, FL_BBOX, FL_FOOTPRINT, FL_CUTOUT

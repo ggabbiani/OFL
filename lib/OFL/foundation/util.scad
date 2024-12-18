@@ -27,6 +27,12 @@ module fl_rail(
       children(0);
 }
 
+/*!
+ * cutout implementation.
+ *
+ * **TODO**: the interface is ugly, a different implementation based on
+ * the cutout direction as done in fl_direction_extrude() is preferable.
+ */
 module fl_cutout(
   //! cutout length
   len,

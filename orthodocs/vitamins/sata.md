@@ -127,21 +127,26 @@ fl_sata_sock(type,value)
 
 __Syntax:__
 
-    fl_sata(verbs=FL_ADD,type,octant,direction)
+    fl_sata(verbs=FL_ADD,type,drift=0,octant,direction)
 
 SATA plug and socket module.
 
 Context variables:
 
-| Name         | Context | Description                            |
-| ------------ | -----   | -------------------------------------- |
-| $dbg_Symbols | Debug   | when true connector symbols are shown  |
+| Name           | Context   | Description                           |
+| ------------   | -----     | ------------------------------------- |
+| $dbg_Symbols   | Execution | when true connector symbols are shown |
+| $fl_thickness  | Parameter | Used during FL_CUTOUT                 |
+| $fl_tolerance  | Parameter | Used during FL_CUTOUT                 |
 
 
 __Parameters:__
 
 __verbs__  
-supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_FOOTPRINT
+
+__drift__  
+FL_CUTOUT scalar drift
 
 __octant__  
 when undef native positioning is used

@@ -49,7 +49,7 @@ Children must implement the following verbs:
 - FL_DRILL,FL_CUTOUT (used during FL_ADD)
 - FL_ADD,FL_ASSEMBLY (used during FL_ASSEMBLY)
 
-Context passed to children:
+Context variables:
 
 - $cad_thick     : see «thick» parameter
 - $cad_tolerance : see tolerance

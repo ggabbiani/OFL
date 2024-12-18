@@ -7,7 +7,11 @@ graph LR
     A1[foundation/util] --o|include| A2[foundation/3d-engine]
 ```
 
-Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
+Miscellaneous utilities.
+
+This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+
+Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
 
 SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
 
@@ -118,6 +122,12 @@ when undef native positioning is used
 __Syntax:__
 
     fl_cutout(len,z=Z,x=X,trim=[0,0,0],cut=false,debug=false,delta=0)
+
+cutout implementation.
+
+**TODO**: the interface is ugly, a different implementation based on
+the cutout direction as done in fl_direction_extrude() is preferable.
+
 
 __Parameters:__
 
