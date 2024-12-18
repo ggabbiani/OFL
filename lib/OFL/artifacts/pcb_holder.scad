@@ -99,12 +99,14 @@ function fl_PCBHolder(
 /*!
  * PCB holder engine.
  *
- * Children context:
+ * Context variables:
  *
- *   - inherits fl_pcb{} context
- *   - inherits fl_spacer{} context
- *   - $pcbh_spacer   : current processed spacer
- *   - $pcbh_verb     : current triggering verb
+ * | Name         | Context   | Description                     |
+ * | ------------ | --------- | ------------------------------- |
+ * | $pcb_*       | Children  | fl_pcb{} context                |
+ * | $spc_*       | Children  | fl_spacer{} context             |
+ * | $pcbh_spacer | Children  | current processed spacer        |
+ * | $pcbh_verb   | Children  | current triggering verb         |
  */
 module fl_pcbHolder(
   /*!
@@ -158,11 +160,6 @@ module fl_pcbHolder(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  bbox  = fl_bb_corners(this);
-  size  = fl_bb_size(this);
-  D     = direction ? fl_direction(direction)     : I;
-  M     = octant    ? fl_octant(octant,bbox=bbox) : I;
-
   // resulting spacers' height
   spc_height  = fl_spc_h(this);
   pcb         = fl_pcb(this);
@@ -177,7 +174,7 @@ module fl_pcbHolder(
 
   module contextualLayout() {
     let(
-      $pcbh_verb  = $verb
+      $pcbh_verb  = $this_verb
     ) fl_pcb(FL_LAYOUT,pcb)
         let(
           $pcbh_spacer= spcs[$hole_i],
@@ -193,48 +190,48 @@ module fl_pcbHolder(
         fl_pcb(FL_DRAW,pcb);
   }
 
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
+  fl_polymorph(verbs, this, octant, direction) {
+    if ($this_verb==FL_ADD) {
       fl_modifier($modifier)
         contextualLayout($FL_LAYOUT=$FL_ADD)
           fl_spacer(spacer=$pcbh_spacer,fillet=fillet,anchor=[-Z]);
 
-    } else if ($verb==FL_ASSEMBLY) {
+    } else if ($this_verb==FL_ASSEMBLY) {
       fl_modifier($modifier)
         do_assembly();
 
-    } else if ($verb==FL_AXES) {
+    } else if ($this_verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
+        fl_doAxes($this_size,direction);
 
-    } else if ($verb==FL_BBOX) {
+    } else if ($this_verb==FL_BBOX) {
       fl_modifier($modifier)
-        fl_bb_add(bbox);
+        fl_bb_add($this_bbox);
 
-    } else if ($verb==FL_DRILL) {
+    } else if ($this_verb==FL_DRILL) {
       fl_modifier($modifier)
         contextualLayout($FL_LAYOUT=$FL_DRILL)
           fl_spacer(FL_DRILL,$pcbh_spacer,thick=thick);
 
-    } else if ($verb==FL_LAYOUT) {
+    } else if ($this_verb==FL_LAYOUT) {
       fl_modifier($modifier)
         contextualLayout()
           fl_spacer(FL_LAYOUT,$pcbh_spacer,thick=thick)
             children();
 
-    } else if ($verb==FL_MOUNT) {
+    } else if ($this_verb==FL_MOUNT) {
       fl_modifier($modifier)
         contextualLayout($FL_LAYOUT=$FL_MOUNT)
             fl_spacer(FL_MOUNT,$pcbh_spacer,thick=thick)
               children();
 
-    } else if ($verb==FL_PAYLOAD) {
+    } else if ($this_verb==FL_PAYLOAD) {
       fl_modifier($modifier)
         multmatrix(pcb_M)
           fl_bb_add(pcb_bb);
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["Unimplemented verb: ",$this_verb]);
     }
   }
 }
