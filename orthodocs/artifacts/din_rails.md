@@ -360,11 +360,13 @@ __Syntax:__
 
 Performs a punch along the Z axis using children.
 
-Children context:
+Context variables:
 
-- $punch: the punch instance containing stepping data
-- $punch_thick: thickness of the performed punch to be used by children
-- $punch_step: punch stepping
+| Name         | Context   | Description                                 |
+| ------------ | --------- | ------------------------------------------- |
+| $punch       | Children  | the punch instance containing stepping data |
+| $punch_step  | Children  | punch stepping                              |
+| $punch_thick | Children  | thickness of the performed punch to be used by children |
 
 TODO: extend to other generic axes, move source into core library
 

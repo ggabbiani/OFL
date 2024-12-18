@@ -79,16 +79,18 @@ A typical use of this high-level management module is the following:
         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
 
-Children context:
+Context variables:
 
-- $this            : 3d object
-- $this_verb       : currently processed verb
-- $this_size       : object 3d dimensions
-- $this_bbox       : bounding box corners in [low,high] format
-- $this_direction  : orientation in [director,rotation] format
-- $this_octant     : positioning octant
-- $fl_thickness    : multi-verb parameter (see [fl_parm_thickness()](core.md#function-fl_parm_thickness))
-- $fl_tolerance    : multi-verb parameter (see fl_parm_tolerance())
+| Name             | Context   | Description                                     |
+| ---------------- | --------- | ----------------------------------------------- |
+| $this            | Children  | 3d object                                       |
+| $this_verb       | Children  | currently processed verb                        |
+| $this_size       | Children  | object 3d dimensions                            |
+| $this_bbox       | Children  | bounding box corners in [low,high] format       |
+| $this_direction  | Children  | orientation in [director,rotation] format       |
+| $this_octant     | Children  | positioning octant                              |
+| $fl_thickness    | Children  | multi-verb parameter (see [fl_parm_thickness()](core.md#function-fl_parm_thickness))  |
+| $fl_tolerance    | Children  | multi-verb parameter (see fl_parm_tolerance())  |
 
 
 

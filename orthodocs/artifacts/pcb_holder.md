@@ -78,12 +78,14 @@ __Syntax:__
 
 PCB holder engine.
 
-Children context:
+Context variables:
 
-  - inherits [fl_pcb{}](../vitamins/pcbs.md#module-fl_pcb) context
-  - inherits [fl_spacer{}](spacer.md#module-fl_spacer) context
-  - $pcbh_spacer   : current processed spacer
-  - $pcbh_verb     : current triggering verb
+| Name         | Context   | Description                     |
+| ------------ | --------- | ------------------------------- |
+| $pcb_*       | Children  | [fl_pcb{}](../vitamins/pcbs.md#module-fl_pcb) context                |
+| $spc_*       | Children  | [fl_spacer{}](spacer.md#module-fl_spacer) context             |
+| $pcbh_spacer | Children  | current processed spacer        |
+| $pcbh_verb   | Children  | current triggering verb         |
 
 
 __Parameters:__
