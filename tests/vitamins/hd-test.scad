@@ -44,6 +44,8 @@ $FL_ASSEMBLY  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
+$FL_CUTOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
@@ -91,11 +93,12 @@ Rail_z   = [0,0];  // [0:0.1:10]
 
 /* [ Hard Disk ] */
 
-// FL_DRILL tolerance (fl_JNgauge=0.15mm)
-DRI_TOLERANCE   = 0.15;
+// FL_DRILL and FL_CUTOUT tolerance (fl_JNgauge=0.15mm)
+TOLERANCE   = 0.15; // [-2:.05:2]
 // faces to be used during children layout
 LAY_DIRECTION     = ["-X","+X","-Z"];
-
+// FL_CUTOUT drift
+DRIFT=0;  // [0:0.5:2]
 
 /* [Hidden] */
 
@@ -115,7 +118,7 @@ fl_status();
 
 // end of automatically generated code
 
-verbs   = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT]);
+verbs   = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT]);
 hd      = FL_HD_EVO860;
 // thickness matrix built from customizer values
 T       = [T_x,T_y,T_z];
@@ -129,6 +132,5 @@ hd_ctor = fl_connectors(hd)[0];
 lay_dir = fl_3d_AxisList(LAY_DIRECTION);
 fl_trace("lay_dir",lay_dir);
 
-fl_hd(verbs,hd,dri_tolerance=DRI_TOLERANCE,thick=T,lay_direction=lay_dir,dri_rails=rail,direction=direction,octant=octant)
+fl_hd(verbs,hd,drift=DRIFT,$fl_tolerance=TOLERANCE,$fl_thickness=T,lay_direction=lay_dir,dri_rails=rail,direction=direction,octant=octant)
   fl_cylinder(h=$hd_screw_len,d=$hole_d,direction=$hole_direction,octant=-Z);
-

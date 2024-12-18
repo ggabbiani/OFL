@@ -71,7 +71,12 @@ DIR_R       = 0;        // [-360:360]
 PART        = "data plug"; // [data plug,power plug,power data plug,power data socket]
 // connect composite plug or socket
 CONNECT     = "none"; // [none, counter type, hd]
-
+// FL_CUTOUT thickness
+T           = 2.5;  // [0:0.5:10]
+// FL_CUTOUT tolerance
+TOLERANCE   = 0;  // [-2:.1:2]
+// FL_CUTOUT drift
+DRIFT=0;  // [0:0.5:2]
 
 /* [Hidden] */
 
@@ -91,7 +96,7 @@ fl_status();
 
 // end of automatically generated code
 
-verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_FOOTPRINT]);
+verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT]);
 type  = PART=="data plug"       ? FL_SATA_DATAPLUG
       : PART=="power plug"      ? FL_SATA_POWERPLUG
       : PART=="power data plug" ? FL_SATA_POWERDATAPLUG
@@ -105,7 +110,7 @@ connected_device  =
   CONNECT=="hd" && PART=="power data socket" ? FL_HD_EVO860 :
   undef;
 
-fl_sata(verbs,type,octant=octant,direction=direction);
+fl_sata(verbs,type,drift=DRIFT,octant=octant,direction=direction,$fl_tolerance=TOLERANCE,$fl_thickness=T);
 if (connected_device)
   fl_connect(son=[connected_device,0], parent=[type,0], octant=octant, direction=direction)
     if (fl_engine($con_child)==FL_HD_NS)

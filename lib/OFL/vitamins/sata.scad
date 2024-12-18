@@ -194,19 +194,28 @@ FL_SATA_DICT = [
  *
  * Context variables:
  *
- * | Name         | Context | Description                            |
- * | ------------ | -----   | -------------------------------------- |
- * | $dbg_Symbols | Debug   | when true connector symbols are shown  |
+ * | Name           | Context   | Description                           |
+ * | ------------   | -----     | ------------------------------------- |
+ * | $dbg_Symbols   | Execution | when true connector symbols are shown |
+ * | $fl_thickness  | Parameter | Used during FL_CUTOUT                 |
+ * | $fl_tolerance  | Parameter | Used during FL_CUTOUT                 |
  */
 module fl_sata(
-  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT
+  //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_FOOTPRINT
   verbs       = FL_ADD,
   type,
+  //! FL_CUTOUT scalar drift
+  drift=0,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) {
+  thick       =
+    is_undef($fl_thickness)       ? 0 :
+    is_num($fl_thickness)         ? $fl_thickness :
+    assert(is_list($fl_thickness))  $fl_thickness.z[1];
+
   module singlePlug(
     verbs       = FL_ADD,
     type,
@@ -221,10 +230,9 @@ module fl_sata(
     cont_sz     = fl_get(type,"contact sizes");
     bbox        = fl_bb_corners(type);
 
-    module do_footprint() {
+    module do_footprint()
       linear_extrude(size.z)
         __dxf__(dxf,layer="0");
-    }
 
     module do_add() {
       fl_color("DarkSlateGray")
@@ -239,6 +247,11 @@ module fl_sata(
         fl_conn_add(connection,size=2,$FL_ADD="ON");
     }
 
+    module do_cutout()
+      translate(+Z($this_bbox[1].z+drift+NIL))
+        fl_cutout(thick,delta=$fl_tolerance)
+          do_footprint();
+
     fl_polymorph(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
         fl_modifier($modifier)
@@ -249,6 +262,9 @@ module fl_sata(
       else if ($this_verb==FL_BBOX)
         fl_modifier($modifier)
           fl_bb_add(bbox,auto=true);
+      else if ($this_verb==FL_CUTOUT)
+        fl_modifier($modifier)
+          do_cutout();
       else if ($this_verb==FL_FOOTPRINT)
         fl_modifier($modifier)
           do_footprint();
@@ -304,6 +320,11 @@ module fl_sata(
           fl_conn_add(c,size=2,$FL_ADD="ON");
     }
 
+    module do_cutout()
+      translate(+Z($this_bbox[1].z+drift+NIL))
+        fl_cutout(thick,delta=$fl_tolerance)
+          do_footprint();
+
     fl_polymorph(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
         fl_modifier($modifier)
@@ -314,6 +335,9 @@ module fl_sata(
       else if ($this_verb==FL_BBOX)
         fl_modifier($modifier)
           fl_bb_add(bbox,auto=true);
+      else if ($this_verb==FL_CUTOUT)
+        fl_modifier($modifier)
+          do_cutout();
       else if ($this_verb==FL_FOOTPRINT)
         fl_modifier($modifier)
           do_footprint();
@@ -394,6 +418,11 @@ module fl_sata(
       translate(fl_Z((size.z-block_sz.z)/2))
         fl_cube(size=size,octant=O);
 
+    module do_cutout()
+      translate(+Z($this_bbox[1].z+drift+NIL))
+        fl_cutout(thick,delta=$fl_tolerance)
+          do_footprint();
+
     fl_polymorph(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
         fl_modifier($modifier)
@@ -404,6 +433,9 @@ module fl_sata(
       else if ($this_verb==FL_BBOX)
         fl_modifier($modifier)
           fl_bb_add(bbox,auto=true);
+      else if ($this_verb==FL_CUTOUT)
+        fl_modifier($modifier)
+          do_cutout();
       else if ($this_verb==FL_FOOTPRINT)
         fl_modifier($modifier)
           do_footprint();

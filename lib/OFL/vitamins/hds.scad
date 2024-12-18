@@ -59,6 +59,8 @@ FL_HD_EVO860 = let(
       ]),
 
     ["Mpd",        Mpd ],
+
+    fl_cutout(value=[-Y]),
   ]
 );
 
@@ -75,31 +77,32 @@ FL_HD_DICT  = [ FL_HD_EVO860 ];
  * | $hd_screw_len  | Children  | screw length along hole normal comprehensive of hole depth and tolerance |
  * | $hole_*        | Children  | see fl_hole_Context{}                 |
  * | $dbg_Symbols   | Debug     | When true connector symbols are shown |
+ * | $fl_thickness  | Exec      | thickness in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]]  |
+ * | $fl_tolerance  | Exec      | Used during FL_CUTOUT and FL_DRILL    |
  */
 module fl_hd(
+  //! FL_ASSEMBLY, FL_AXES, FL_MOUNT, FL_LAYOUT, FL_DRILL, FL_BBOX, FL_FOOTPRINT, FL_CUTOUT
   verbs=FL_ADD,
   type,
-  /*!
-   * thickness matrix for FL_DRILL, FL_CUTOUT in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
-   *
-   * scalar «t» means `[[t,t],[t,t],[t,t]]`
-   */
-  thick,
   //! FL_LAYOUT directions in floating semi-axis list form
   lay_direction   = [-X,+X,-Z],
-  //! tolerance for FL_DRILL
-  dri_tolerance   = fl_JNgauge,
   //! rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
   dri_rails=[[0,0],[0,0],[0,0]],
-  //! desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
-  direction,
+  //! FL_CUTOUT scalar drift
+  drift=0,
   //! when undef native positioning is used
-  octant
+  octant,
+  //! desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
+  direction
   ) {
   assert(verbs!=undef);
   assert(type!=undef);
 
-  thick       = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
+  thick       =
+    is_undef($fl_thickness) ? 0 :
+    is_num($fl_thickness) ?
+      [[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness]] :
+      assert(is_list($fl_thickness)) $fl_thickness;
   screw       = fl_screw(type);
   screw_r     = screw_radius(screw);
   corner_r    = fl_get(type,"corner radius");
@@ -108,18 +111,16 @@ module fl_hd(
   plug        = fl_sata_plug(type);
   Mpd         = fl_get(type,"Mpd");
   holes       = fl_holes(type);
-  D           = direction ? fl_direction(direction): I;
-  M           = fl_octant(octant,type=type);
 
   module context() {
-    $hd_thick     = $hole_n ? fl_3d_axisValue($hole_n,thick) : undef;
-    $hd_screw_len = ($hd_thick!=undef && $hole_depth!=undef) ? $hd_thick+$hole_depth+dri_tolerance : undef;
+    $fl_thickness = $hole_n ? fl_3d_axisValue($hole_n,thick) : undef;
+    $hd_screw_len = ($fl_thickness!=undef && $hole_depth!=undef) ? $fl_thickness+$hole_depth+$fl_tolerance : undef;
     children();
   }
 
   module do_layout() {
     fl_lay_holes(holes,lay_direction)
-      context() translate(($hd_thick+dri_tolerance)*$hole_n)
+      context() translate(($fl_thickness+$fl_tolerance)*$hole_n)
         children();
   }
 
@@ -140,12 +141,14 @@ module fl_hd(
         fl_conn_add(c,2);
   }
 
-  module do_bbox() {
-    translate([0,size.y/2,size.z/2])
-      cube(size,true);
-  }
+  // see fl_USB{} for a complete cutout implementation
+  module do_cutout()
+    multmatrix(Mpd) let(
+      // the only cutout axis is +Z so we use just the related scalar
+      $fl_thickness = fl_3d_axisValue(-Y, values=thick)
+    ) fl_sata(FL_CUTOUT,plug,$dbg_Symbols=false,drift=drift);
 
-  fl_manage(verbs,M,D) {
+  fl_polymorph(verbs,type,octant=octant,direction=direction)
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
@@ -171,16 +174,18 @@ module fl_hd(
           fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction,$FL_FOOTPRINT=$FL_DRILL);
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) do_bbox();
+      fl_modifier($modifier)
+        fl_bb_add($this_bbox, auto=true);
 
     } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) do_bbox();
+      fl_modifier($modifier)
+        fl_bb_add($this_bbox, auto=true);
 
     } else if ($verb==FL_CUTOUT) {
-      // intentionally a no-op
+      fl_modifier($modifier)
+        do_cutout();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
-  }
 }

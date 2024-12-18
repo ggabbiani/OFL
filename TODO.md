@@ -89,8 +89,7 @@
 - [X] function fl_dbg_assert() used in place of fl_debug();
 - [X] renamed foundation/profile.scad into artifacts/profiles-engine.scad;
 - [X] renamed foundation/type_trait.scad into foundation/traits-engine.scad;
-- [ ] move profile.scad to the artifacts directory;
-- [ ] implement FL_CUTOUT in hds;
+- [X] implemented FL_CUTOUT in hds and sata packages;
 - [ ] review and apply everywhere the new polymorph engine for rewriting and
   subtyping all the existing modules. Use vitamins/iec.scad as implementation
   example/reference.
