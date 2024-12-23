@@ -180,61 +180,57 @@ module fl_tProfile(
    * NOTE: ±Z is excluded
    */
   lay_surface,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
   octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(is_undef(lay_surface) || fl_tt_isAxisList(lay_surface),lay_surface);
 
-  // nop   = fl_nopSCADlib(fl_tsp_xsection(type));
   nop   = fl_nopSCADlib(type);
-  bbox  = fl_bb_corners(type);
-  size  = bbox[1]-bbox[0];
-  D     = direction ? fl_direction(direction) : I;
-  M     = fl_octant(octant,bbox=bbox);
 
   module do_fprint() {
-    translate(-Z(size.z/2))
-      linear_extrude(size.z)
-        fl_square(size=[size.x,size.y],corners=extrusion_fillet(nop));
+    translate(-Z($this_size.z/2))
+      linear_extrude($this_size.z)
+        fl_square($this_size=[$this_size.x,$this_size.y],corners=extrusion_fillet(nop));
   }
 
   module do_layout() {
     assert(lay_surface);
     // children context
     let(
-      $tsp_size = size,
+      $tsp_size = $this_size,
       $tsp_tabT = fl_tsp_tabT(type)
     ) for($tsp_surface=lay_surface)
-        translate(abs(size/2*$tsp_surface)*$tsp_surface)
+        translate(abs($this_size/2*$tsp_surface)*$tsp_surface)
           children();
   }
 
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier)
-        extrusion(nop, size.z,center=true, cornerHole=false);
 
-    } else if ($verb==FL_AXES) {
+  fl_polymorph(verbs, type, octant=octant, direction=direction) {
+    if ($this_verb==FL_ADD) {
+      fl_modifier($modifier)
+        extrusion(nop, $this_size.z,center=true, cornerHole=false);
+
+    } else if ($this_verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
+        fl_doAxes($this_size,direction);
 
-    } else if ($verb==FL_BBOX) {
+    } else if ($this_verb==FL_BBOX) {
       fl_modifier($modifier)
-        fl_bb_add(bbox);
+        fl_bb_add($this_bbox);
 
-    } else if ($verb==FL_FOOTPRINT) {
+    } else if ($this_verb==FL_FOOTPRINT) {
       fl_modifier($modifier)
         do_fprint();
 
-    } else if ($verb==FL_LAYOUT) {
+    } else if ($this_verb==FL_LAYOUT) {
       fl_modifier($modifier)
         do_layout() children();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
