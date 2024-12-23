@@ -48,6 +48,7 @@ graph TD
     A26 --o|use| A5
     A26 --o|use| A3
     A26 --o|use| A4
+    A26 --o|use| A8
     A26 --o|use| A19
     A27[vitamins/fans] --o|include| A2
     A27 --o|use| A5

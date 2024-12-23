@@ -9,7 +9,8 @@ graph LR
     A1 --o|use| A4[foundation/3d-engine]
     A1 --o|use| A5[foundation/bbox-engine]
     A1 --o|use| A6[foundation/mngm-engine]
-    A1 --o|use| A7[foundation/util]
+    A1 --o|use| A7[foundation/polymorphic-engine]
+    A1 --o|use| A8[foundation/util]
 ```
 
 Ethernet.
@@ -105,7 +106,7 @@ fl_ether_Zoffset(type,value)
 
 __Syntax:__
 
-    fl_ether(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,direction,octant)
+    fl_ether(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,octant,direction)
 
 __Parameters:__
 
@@ -134,10 +135,10 @@ in this case the ethernet plug will perform a cutout along +X and +Z.
 list (retrievable through [fl_cutout()](../foundation/core.md#function-fl_cutout) getter)
 
 
-__direction__  
-desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-
 __octant__  
 when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 

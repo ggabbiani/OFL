@@ -65,7 +65,7 @@ The folding object is then created with the overall sheet bounding box.
 
 __Syntax:__
 
-    fl_bend(verbs=FL_ADD,type,flat=false,direction,octant)
+    fl_bend(verbs=FL_ADD,type,flat=false,octant,direction,octant)
 
 3d surface bending on rectangular cuboid faces.
 
@@ -107,6 +107,9 @@ bend type as constructed from function [fl_folding()](#function-fl_folding)
 
 __flat__  
 when true children 3d surface is not bent
+
+__octant__  
+when undef native positioning is used
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
