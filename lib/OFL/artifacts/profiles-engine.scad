@@ -19,10 +19,10 @@ module fl_profile(
   //! actually a color
   material,
   thick,
-  //! desired direction [director,rotation], native direction when undef ([+X+Z])
-  direction,
   //! when undef native positioning (see variable FL_O) is used
-  octant
+  octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Z])
+  direction
 ) {
   assert(thick!=undef);
   assert((radius == undef) || (2*radius<thick));
