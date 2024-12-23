@@ -156,6 +156,8 @@ module fl_bend(
   type,
   //! when true children 3d surface is not bent
   flat=false,
+  //! when undef native positioning is used
+  octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -216,7 +218,6 @@ module fl_bend(
   }
 
   module do_bend() {
-    fl_trace("***START***");
     // -X
     let(id=0,f=fcs[id]) if (f.x && f.y)
       if (flat)
@@ -281,10 +282,11 @@ module fl_bend(
         fl_doAxes(size,direction);
 
     else if ($verb==FL_BBOX)
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_modifier($modifier)
+        fl_bb_add(bbox,auto=true);
 
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 
 }
