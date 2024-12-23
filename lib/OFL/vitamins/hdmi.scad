@@ -12,6 +12,7 @@ use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/util.scad>
 use <../foundation/mngm-engine.scad>
+use <../foundation/polymorphic-engine.scad>
 
 
 FL_HDMI_NS = "hdmi";
@@ -53,44 +54,44 @@ FL_HDMI_DICT = [
 // keys
 function fl_hdmi_nameKV(value)         = fl_kv("name",value);
 
+/*!
+ * Context variables:
+ *
+ * | Name | Type  | Description |
+ * | ---  | ---   | ---         |
+ * | $fl_thickness  | Parameter | thickness for FL_CUTOUT (see variable FL_CUTOUT)          |
+ * | $fl_tolerance  | Parameter | tolerance used during FL_CUTOUT (see variable FL_CUTOUT)  |
+ */
 module fl_hdmi(
   //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   verbs       = FL_ADD,
   type,
-  //! thickness for FL_CUTOUT (see variable FL_CUTOUT)
-  cut_thick,
-  //! tolerance used during FL_CUTOUT (see variable FL_CUTOUT)
-  cut_tolerance=0,
   //! translation applied to cutout
   cut_drift=0,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
-  octant
+  octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(type!=undef);
+  assert(type);
 
-  bbox      = fl_bb_corners(type);
-  size      = fl_bb_size(type);
-  D         = direction ? fl_direction(direction)  : FL_I;
-  M         = fl_octant(octant,bbox=bbox);
-  nop       = fl_nopSCADlib(type);
+  nop = fl_nopSCADlib(type);
 
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
+  fl_polymorph(verbs, type, octant=octant, direction=direction) {
+    if ($this_verb==FL_ADD) {
       fl_modifier($modifier) hdmi(nop,false);
-    } else if ($verb==FL_AXES) {
+    } else if ($this_verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
-    } else if ($verb==FL_CUTOUT) {
-      assert(cut_thick!=undef);
+        fl_doAxes($this_size,direction);
+    } else if ($this_verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add($this_bbox,auto=true);
+    } else if ($this_verb==FL_CUTOUT) {
+      assert($fl_thickness!=undef);
       fl_modifier($modifier)
-        translate(X(size.x/2+cut_drift)) fl_cutout(len=cut_thick,z=FL_X,x=-FL_Z,delta=cut_tolerance) hdmi(nop,false);
+        translate(X($this_size.x/2+cut_drift)) fl_cutout(len=$fl_thickness,z=FL_X,x=-FL_Z,delta=$fl_tolerance) hdmi(nop,false);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

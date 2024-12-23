@@ -15,6 +15,7 @@ use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/hole.scad>
 use <../foundation/mngm-engine.scad>
+use <../foundation/polymorphic-engine.scad>
 
 FL_GENERIC_NS = "GENERIC";
 
@@ -62,23 +63,19 @@ assert(is_undef(holes) || !fl_dbg_assert() || fl_tt_isHoleList(holes)          )
  * Generic vitamin engine, usable when a cut out, drill or layout operation is
  * needed for a component not yet available as vitamin.
  *
- * Children context: the whole hole context is passed during FL_LAYOUT (see also
- * fl_hole_Context()).
+ * Context variables:
+ *
+ * | Name           | Type      | Description |
+ * | -------------- | --------- | ----------- |
+ * | $hole_*        | Children  | the whole hole context is passed during FL_LAYOUT (see also fl_hole_Context()). |
+ * | $fl_tolerance  | Parameter | used during FL_CUTOUT |
+ * | $fl_thickness  | Parameter | Scalar or full semi axis value list for FL_CUTOUT, FL_DRILL and FL_LAYOUT thickness (see fl_tt_isAxisVList()). This parameter represents the surface thickness along semi-axes to be drilled and/or cut out.  |
+ *
  */
 module fl_generic_vitamin(
   //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL
   verbs       = FL_ADD,
   this,
-  /*!
-   * Scalar or full semi axis value list for FL_CUTOUT, FL_DRILL and FL_LAYOUT
-   * thickness (see fl_tt_isAxisVList()).
-   *
-   * This parameter represents the surface thickness along semi-axes to be
-   * drilled and/or cut out.
-   */
-  thick=0,
-  //! tolerance used during FL_CUTOUT
-  cut_tolerance=0,
   /*!
    * Scalar or full semi axis value list for translation applied to cutout
    * (see  fl_tt_isAxisVList())
@@ -89,75 +86,68 @@ module fl_generic_vitamin(
   //! desired direction [director,rotation], native direction when undef
   direction
 ) {
-  assert(!fl_dbg_assert() || is_num(thick) || fl_tt_isAxisVList(thick));
-  thick           = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
+  assert(!fl_dbg_assert() || is_num($fl_thickness) || fl_tt_isAxisVList($fl_thickness));
+  $fl_thickness           = is_num($fl_thickness) ? [[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness]] : $fl_thickness;
   cut_drift       = is_num(cut_drift) ? [[cut_drift,cut_drift],[cut_drift,cut_drift],[cut_drift,cut_drift]] : cut_drift;
   cut_directions  = fl_cutout(this,default=[]);
   ghost           = fl_generic_ghost(this);
   holes           = fl_optional(this,key=fl_holes()[0]);
-  // layouts         = fl_optional(this,key=fl_layouts()[0]);
-  // echo(holes=holes,layouts=layouts);
-
-  bbox  = fl_bb_corners(this);
-  size  = fl_bb_size(this);
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
 
   module do_cutout() {
-    2tol_2d = 2*[cut_tolerance,cut_tolerance];
-    if (thick.x[0] && fl_3d_axisIsSet(-X,cut_directions)) { // cut-out along -X semi axis
-      T     = thick.x[0];
+    2tol_2d = 2*[$fl_tolerance,$fl_tolerance];
+    if ($fl_thickness.x[0] && fl_3d_axisIsSet(-X,cut_directions)) { // cut-out along -X semi axis
+      T     = $fl_thickness.x[0];
       drift = cut_drift.x[0];
-      sz    = [size.y,size.z]+2tol_2d;
-      translate([bbox[0].x,bbox[0].y,bbox[0].z]+[-T-drift,-cut_tolerance,-cut_tolerance])
+      sz    = [$this_size.y,$this_size.z]+2tol_2d;
+      translate([$this_bbox[0].x,$this_bbox[0].y,$this_bbox[0].z]+[-T-drift,-$fl_tolerance,-$fl_tolerance])
       rotate(90,FL_Z)
         rotate(90,FL_X)
           linear_extrude(height = T)
-            fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
+            fl_square(size=sz,corners=$fl_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (thick.x[1] && fl_3d_axisIsSet(+X,cut_directions)) { // cut-out along +X semi axis
-      T     = thick.x[1];
+    if ($fl_thickness.x[1] && fl_3d_axisIsSet(+X,cut_directions)) { // cut-out along +X semi axis
+      T     = $fl_thickness.x[1];
       drift = cut_drift.x[1];
-      sz    = [size.y,size.z]+2tol_2d;
-      translate([bbox[1].x,bbox[0].y,bbox[0].z]+[drift,-cut_tolerance,-cut_tolerance])
+      sz    = [$this_size.y,$this_size.z]+2tol_2d;
+      translate([$this_bbox[1].x,$this_bbox[0].y,$this_bbox[0].z]+[drift,-$fl_tolerance,-$fl_tolerance])
       rotate(90,FL_Z)
         rotate(90,FL_X)
           linear_extrude(height = T)
-            fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
+            fl_square(size=sz,corners=$fl_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (thick.y[0] && fl_3d_axisIsSet(-Y,cut_directions)) { // cut-out along -Y semi axis
-      T     = thick.y[0];
+    if ($fl_thickness.y[0] && fl_3d_axisIsSet(-Y,cut_directions)) { // cut-out along -Y semi axis
+      T     = $fl_thickness.y[0];
       drift = cut_drift.y[0];
-      sz    = [size.x,size.z]+2tol_2d;
-      translate([bbox[0].x,bbox[0].y,bbox[0].z]+[-cut_tolerance,-drift,-cut_tolerance])
+      sz    = [$this_size.x,$this_size.z]+2tol_2d;
+      translate([$this_bbox[0].x,$this_bbox[0].y,$this_bbox[0].z]+[-$fl_tolerance,-drift,-$fl_tolerance])
         rotate(90,FL_X)
           linear_extrude(height = T)
-            fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
+            fl_square(size=sz,corners=$fl_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (thick.y[1] && fl_3d_axisIsSet(+Y,cut_directions)) { // cut-out along +Y semi axis
-      T     = thick.y[1];
+    if ($fl_thickness.y[1] && fl_3d_axisIsSet(+Y,cut_directions)) { // cut-out along +Y semi axis
+      T     = $fl_thickness.y[1];
       drift = cut_drift.y[1];
-      sz    = [size.x,size.z]+2tol_2d;
-      translate([bbox[0].x,bbox[1].y,bbox[0].z]+[-cut_tolerance,T+drift,-cut_tolerance])
+      sz    = [$this_size.x,$this_size.z]+2tol_2d;
+      translate([$this_bbox[0].x,$this_bbox[1].y,$this_bbox[0].z]+[-$fl_tolerance,T+drift,-$fl_tolerance])
         rotate(90,FL_X)
           linear_extrude(height = T)
-            fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
+            fl_square(size=sz,corners=$fl_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (thick.z[0] && fl_3d_axisIsSet(-Z,cut_directions)) { // cut-out along -Z semi axis
-      T     = thick.z[0];
+    if ($fl_thickness.z[0] && fl_3d_axisIsSet(-Z,cut_directions)) { // cut-out along -Z semi axis
+      T     = $fl_thickness.z[0];
       drift = cut_drift.z[0];
-      sz    = [size.x,size.y]+2tol_2d;
-      translate(bbox[0]-[cut_tolerance,cut_tolerance,T+drift])
+      sz    = [$this_size.x,$this_size.y]+2tol_2d;
+      translate($this_bbox[0]-[$fl_tolerance,$fl_tolerance,T+drift])
         linear_extrude(height = T)
-          fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
+          fl_square(size=sz,corners=$fl_tolerance,quadrant=+FL_X+FL_Y);
     }
-    if (thick.z[1] && fl_3d_axisIsSet(+Z,cut_directions)) { // cut-out along +Z semi axis
-      T     = thick.z[1];
+    if ($fl_thickness.z[1] && fl_3d_axisIsSet(+Z,cut_directions)) { // cut-out along +Z semi axis
+      T     = $fl_thickness.z[1];
       drift = cut_drift.z[1];
-      sz    = [size.x,size.y]+2tol_2d;;
-      translate([bbox[0].x-cut_tolerance,bbox[0].y-cut_tolerance,bbox[1].z+drift])
+      sz    = [$this_size.x,$this_size.y]+2tol_2d;;
+      translate([$this_bbox[0].x-$fl_tolerance,$this_bbox[0].y-$fl_tolerance,$this_bbox[1].z+drift])
         linear_extrude(height = T)
-          fl_square(size=sz,corners=cut_tolerance,quadrant=+FL_X+FL_Y);
+          fl_square(size=sz,corners=$fl_tolerance,quadrant=+FL_X+FL_Y);
     }
 
   }
@@ -165,8 +155,8 @@ module fl_generic_vitamin(
   module do_add() {
     if (!ghost)
       difference() {
-        translate(bbox[0])
-          fl_cube(size=size,octant=O0);
+        translate($this_bbox[0])
+          fl_cube(size=$this_size,octant=O0);
         if (holes)
           fl_holes(holes);
     }
@@ -183,29 +173,29 @@ module fl_generic_vitamin(
       children();
   }
 
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
+  fl_polymorph(verbs, this, octant=octant, direction=direction) {
+    if ($this_verb==FL_ADD) {
       fl_modifier($modifier)
         do_add();
 
-    } else if ($verb==FL_AXES) {
+    } else if ($this_verb==FL_AXES) {
       fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
+        fl_doAxes($this_size,direction);
 
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
+    } else if ($this_verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add($this_bbox,auto=true,$FL_ADD=$FL_BBOX);
 
-    } else if ($verb==FL_CUTOUT) {
+    } else if ($this_verb==FL_CUTOUT) {
       fl_modifier($modifier) do_cutout();
 
-    } else if ($verb==FL_DRILL) {
+    } else if ($this_verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();
 
-    } else if ($verb==FL_LAYOUT) {
+    } else if ($this_verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout() children();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

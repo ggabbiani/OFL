@@ -131,8 +131,8 @@ drift = CUT_DRIFT_X[0] || CUT_DRIFT_X[1] || CUT_DRIFT_Y[0] || CUT_DRIFT_Y[1] || 
 thick = THICK_X[0] || THICK_X[1] || THICK_Y[0] || THICK_Y[1] || THICK_Z[0] || THICK_Z[1] ? [THICK_X,THICK_Y,THICK_Z] : 0;
 
 fl_generic_vitamin(verbs,type,
-  cut_tolerance=CUT_TOLERANCE,
-  thick=thick,
+  $fl_tolerance=CUT_TOLERANCE,
+  $fl_thickness=thick,
   cut_drift=drift,
   direction=direction,octant=octant
 ) fl_cylinder(h=$hole_depth,d=$hole_d,direction=$hole_direction,$FL_ADD=$FL_LAYOUT);
