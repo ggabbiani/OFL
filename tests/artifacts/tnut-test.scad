@@ -71,7 +71,9 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
-
+/* [Dimension Lines] */
+VIEW_TYPE     = "other";    // [other,right,top,bottom,left,front,back]
+DIM_MODE      = "full";     // [full,label,value,silent]
 
 /* [T-slot nut] */
 
@@ -110,6 +112,8 @@ fl_status();
 
 // end of automatically generated code
 
+$vpr          = fl_view(VIEW_TYPE);
+$dim_mode     = DIM_MODE;
 screw = fl_switch(screw_name,[
   ["M3_cap_screw", M3_cap_screw],
   ["M4_cap_screw", M4_cap_screw],

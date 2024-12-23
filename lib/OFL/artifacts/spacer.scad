@@ -82,15 +82,18 @@ function fl_Spacer(
 ];
 
 /*!
- * Children context:
+ * Context variables:
  *
- * - $spc_director  : layout direction
- * - $spc_nominal   : OPTIONAL screw nominal ⌀
- * - $spc_thick     : scalar thickness (always≥0) along $spc_director
- * - $spc_thickness : overall thickness (spacer length + ∑thick[i]),
- * - $spc_h         : spacer height
- * - $spc_holeR     : OPTIONAL internal hole radius
- * - $spc_verb      : triggered verb
+ * | Name           | Type      | Description                                     |
+ * | ---            | ---       | ---                                             |
+ * | $spc_director  | Children  | layout direction                                |
+ * | $spc_nominal   | Children  | OPTIONAL screw nominal ⌀                        |
+ * | $spc_thick     | Children  | scalar thickness (always≥0) along $spc_director |
+ * | $spc_thickness | Children  | overall thickness (spacer length + ∑thick[i])   |
+ * | $spc_h         | Children  | spacer height                                   |
+ * | $spc_holeR     | Children  | OPTIONAL internal hole radius                   |
+ * | $spc_verb      | Children  | triggered verb                                  |
+ *
  */
 module fl_spacer(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -129,10 +132,10 @@ module fl_spacer(
   anchor,
   //! when >0 a fillet is added to anchors
   fillet=0,
-  //! desired direction [director,rotation], native direction when undef ([+Z,0])
-  direction,
   //! when undef native positioning is used
   octant,
+  //! desired direction [director,rotation], native direction when undef ([+Z,0])
+  direction
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(spacer && fl_OFL(spacer),spacer);
@@ -157,9 +160,6 @@ module fl_spacer(
   yp  = fl_3d_axisIsSet(+Y,anchor);
   yn  = fl_3d_axisIsSet(-Y,anchor);
   zn  = fl_3d_axisIsSet(-Z,anchor);
-
-  D       = direction ? fl_direction(direction) : FL_I;
-  M       = fl_octant(octant,bbox=bbox);
 
   module knut(verbs=FL_ADD)
     let(dri_thick=[thick[0]-kn_delta,thick[1]])
@@ -311,42 +311,42 @@ module fl_spacer(
     children();
   }
 
-  fl_manage(verbs,M,D) {
+  fl_polymorph(verbs, spacer, octant=octant, direction=direction) {
 
-    if ($verb==FL_ADD) {
+    if ($this_verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
-    } else if ($verb==FL_ASSEMBLY) {
+    } else if ($this_verb==FL_ASSEMBLY) {
       fl_modifier($modifier)
         do_assembly();
 
-    } else if ($verb==FL_AXES) {
+    } else if ($this_verb==FL_AXES) {
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
 
-    } else if ($verb==FL_BBOX) {
+    } else if ($this_verb==FL_BBOX) {
       fl_modifier($modifier)
         fl_bb_add(bbox+[[0,0,-NIL],[0,0,NIL]]);
 
-    } else if ($verb==FL_DRILL) {
+    } else if ($this_verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();
 
-    } else if ($verb==FL_LAYOUT) {
+    } else if ($this_verb==FL_LAYOUT) {
       fl_modifier($modifier)
         do_layout()
           children();
 
-    } else if ($verb==FL_MOUNT) {
+    } else if ($this_verb==FL_MOUNT) {
       fl_modifier($modifier)
         do_mount()
           children();
 
-    } else if ($verb==FL_FOOTPRINT) {
+    } else if ($this_verb==FL_FOOTPRINT) {
       fl_modifier($modifier)
         do_footprint();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

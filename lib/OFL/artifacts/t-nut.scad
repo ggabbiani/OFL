@@ -11,9 +11,10 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-include <../foundation/unsafe_defs.scad>
-include <../vitamins/screw.scad>
 include <../vitamins/countersinks.scad>
+include <../foundation/dimensions.scad>
+include <../vitamins/screw.scad>
+include <../foundation/unsafe_defs.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
@@ -37,22 +38,13 @@ function fl_tnut_nominal(tnut) = fl_screw_nominal(fl_screw(knut));
 /*!
  * Constructor returning a T-slot nut.
  *
- *                                width
- *            ⭰──────────────────────────────────────────⇥
- *                               opening
- *                      ⭰───────────────────────⇥
- *       ⤒              ┌────────────────────────┐            ⤒
- *       │              │      ░░░░░░░░░░░░      │            │ wall
- *     h │              │      ░░░░░░░░░░░░      │            ⤓
- *     e │    ┌─────────┘      ░░░░░░░░░░░░      └─────────┐  ⤒
- *     i │    │                ░░░░░░░░░░░░                │  │ base
- *     g │    │                ░░░░░░░░░░░░                │  ⤓
- *     h │     ╲               ░░░░░░░░░░░░               ╱   ⤒
- *     t │       ╲             ░░░░░░░░░░░░             ╱     │ cone
- *       │         ╲           ░░░░░░░░░░░░           ╱       │
- *       ⤓           ╲______________________________╱         ⤓
- *                             ⭰─────────⇥
- *                               screw M
+ * __TOP VIEW__:
+ *
+ * ![Front view](800x600/fig_tnut_top_view.png)
+ *
+ * __RIGHT VIEW__:
+ *
+ * ![Right view](800x600/fig_tnut_right_view.png)
  */
 function fl_TNut(
   //! the opening of the T-slot
@@ -105,6 +97,16 @@ function fl_TNut(
     fl_holes(value=holes ? holes : [fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,screw=screw)]),
   if (knut)
     let(kn=fl_knut_search(screw,size.y)) assert(kn,"No knurl nut found") ["knut",kn],
+  fl_dimensions(value=fl_DimensionPack([
+    fl_Dimension(opening, "opening" ),
+    fl_Dimension(size.x,  "width"   ),
+    fl_Dimension(size.y,  "height"  ),
+    fl_Dimension(size.z,  "length"  ),
+    fl_Dimension(hole_d,  "screw d" ),
+    fl_Dimension(wall,    "wall"    ),
+    fl_Dimension(base,    "base"    ),
+    fl_Dimension(cone,    "cone"    ),
+  ]))
 ];
 
 FL_TNUT_M3_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],screw=M3_cs_cap_screw);
@@ -159,10 +161,10 @@ module fl_tnut(
   countersink=false,
   //! scalar thickness for FL_DRILL
   dri_thick,
-  //! desired direction [director,rotation], native direction when undef ([+Z,0])
-  direction,
   //! when undef native positioning is used
   octant,
+  //! desired direction [director,rotation], native direction when undef ([+Z,0])
+  direction,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
@@ -185,6 +187,7 @@ module fl_tnut(
   holes     = fl_optional(type,"holes");
   knut      = fl_optional(type,"knut");
   ext_r     = knut ? fl_knut_r(knut)+hole_t : undef;
+  dims      = fl_dimensions(type);
 
   module section_extrusion() {
     linear_extrude(size.z)
@@ -194,7 +197,7 @@ module fl_tnut(
 
   module do_add() {
     fl_color()
-      difference() {
+      render() difference() {
         // add section extrusion
         section_extrusion();
         if (screw) { // subtract holes and countersink
@@ -207,7 +210,7 @@ module fl_tnut(
           if (countersink)
             do_layout()
               translate(-Y(size.y+NIL))
-                fl_countersink(type=FL_CS_ISO_M3,tolerance=cs_t,direction=[-$hole_n,0],octant=-Z);
+                fl_countersink(type=FL_CS_ISO_M3,$fl_tolerance=cs_t,direction=[-$hole_n,0],octant=-Z);
         }
         // subtract the cylinder guide for insert
         if (knut)
@@ -217,6 +220,46 @@ module fl_tnut(
               translate(-Y(size.y+NIL))
                 fl_cylinder(h=h+2xNIL,r=ext_r,direction=[-$hole_n,0],octant=-Z);
       }
+    if (fl_dbg_symbols() && holes)
+      fl_hole_debug(holes);
+
+    if (fl_dbg_dimensions()) let(
+      dim_opening = fl_property(dims,"opening"),
+      dim_width   = fl_property(dims,"width"),
+      dim_height  = fl_property(dims,"height"),
+      dim_length  = fl_property(dims,"length"),
+      dim_d       = fl_property(dims,"screw d"),
+      dim_wall    = fl_property(dims,"wall"),
+      dim_base    = fl_property(dims,"base"),
+      dim_cone    = fl_property(dims,"cone")
+    ) {
+      let(
+        $dim_object = type,
+        $dim_view   = "top",
+        $dim_width  = 0.075,
+        $dim_align  = "centered"
+      ) {
+        fl_dimension(geometry=dim_opening,distr="v+")
+          fl_dimension(geometry=dim_width);
+        fl_dimension(geometry=dim_d,      distr="v-");
+        fl_dimension(geometry=dim_wall,   distr="h+",align="positive");
+        fl_dimension(geometry=dim_base,   distr="h+",align="negative");
+        fl_dimension(geometry=dim_cone,   distr="h+",align=-base-cone);
+        fl_dimension(geometry=dim_height, distr="h-",align=-base-cone);
+      }
+      let(
+        $dim_object = type,
+        $dim_view   = "right",
+        $dim_width  = 0.1,
+        $dim_align  = "centered"
+      ) {
+        fl_dimension(geometry=dim_length, distr="h+",align="positive");
+        fl_dimension(geometry=dim_wall,   distr="v+",align="positive");
+        fl_dimension(geometry=dim_base,   distr="v+",align="negative");
+        fl_dimension(geometry=dim_cone,   distr="v+",align=-base-cone);
+        fl_dimension(geometry=dim_height, distr="v-",align=-base-cone);
+      }
+    }
   }
 
   module do_assembly() {
@@ -251,45 +294,42 @@ module fl_tnut(
     }
   }
 
-  module do_symbols(
-    // connectors,
-    holes
-  ) {
-    if (fl_dbg_symbols() && holes)
-      fl_hole_debug(holes);
-  }
+  fl_polymorph(verbs, type, octant=octant, direction=direction) {
+    if ($this_verb==FL_ADD)
+      fl_modifier($modifier)
+        do_add();
 
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
-      do_symbols(holes);
-      fl_modifier($modifier) do_add();
+    else if ($this_verb==FL_ASSEMBLY)
+      fl_modifier($modifier)
+        do_assembly()
+          children();
 
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly() children();
-
-    } else if ($verb==FL_AXES) {
+    else if ($this_verb==FL_AXES)
       fl_modifier($FL_AXES)
         fl_doAxes(size,direction);
 
-    } else if ($verb==FL_BBOX) {
-      // echo($modifier=$modifier);
-      fl_modifier($modifier) fl_bb_add(bbox);
+    else if ($this_verb==FL_BBOX)
+      fl_modifier($modifier)
+        fl_bb_add(bbox);
 
-    } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier) do_drill();
+    else if ($this_verb==FL_DRILL)
+      fl_modifier($modifier)
+        do_drill();
 
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) section_extrusion();
+    else if ($this_verb==FL_FOOTPRINT)
+      fl_modifier($modifier)
+        section_extrusion();
 
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
-        children();
+    else if ($this_verb==FL_LAYOUT)
+      fl_modifier($modifier)
+        do_layout()
+          children();
 
-    } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier) do_mount();
+    else if ($this_verb==FL_MOUNT)
+      fl_modifier($modifier)
+        do_mount();
 
-    } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
-    }
+    else
+      fl_error(["unimplemented verb",$this_verb]);
   }
 }
