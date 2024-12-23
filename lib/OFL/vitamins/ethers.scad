@@ -14,6 +14,7 @@ use <../foundation/2d-engine.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>
+use <../foundation/polymorphic-engine.scad>
 use <../foundation/util.scad>
 
 //! ethernet namespace
@@ -83,28 +84,24 @@ module fl_ether(
    * list (retrievable through fl_cutout() getter)
    */
   cut_direction,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
-  octant
+  octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
 
-  size        = fl_size(type);
   plug_l      = FL_ETHER_PLUG_L;
   zoff        = FL_ETHER_Z_OFFSET;
-  bbox        = fl_bb_corners(type);
   engine      = fl_engine(type);
   dxf         = engine==str(FL_ETHER_NS,"/native") ? fl_dxf(type) : undef;
-  D           = direction ? fl_direction(direction) : FL_I;
-  M           = fl_octant(octant,type=type);
 
   module do_footprint() {
-    if (engine==str(FL_ETHER_NS,"/NopSCADlib")) fl_bb_add(bbox);
+    if (engine==str(FL_ETHER_NS,"/NopSCADlib")) fl_bb_add($this_bbox);
     else
-      translate(X(-size.x+FL_ETHER_FRAME_T)-Z(zoff))
-        fl_linear_extrude(direction=[X,90],length=size.x) {
+      translate(X(-$this_size.x+FL_ETHER_FRAME_T)-Z(zoff))
+        fl_linear_extrude(direction=[X,90],length=$this_size.x) {
           fl_importDxf(dxf,"body");
           fl_importDxf(dxf,"front");
           // fl_importDxf(dxf,"shield");
@@ -116,7 +113,7 @@ module fl_ether(
       if (fl_isInAxisList(axis,fl_cutout(type)))
         let(
           sys = [axis.x ? -Z : X ,O,axis],
-          t   = (bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
+          t   = ($this_bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
         )
         translate(t)
           fl_cutout(cut_thick,sys.z,sys.x,delta=cut_tolerance)
@@ -136,8 +133,8 @@ module fl_ether(
               fl_importDxf(dxf,"body");
               fl_importDxf(dxf,"plug");
             }
-        translate(-X(plug_l)+Z(size.z-0.6))
-          fl_cube(size=[size.x-plug_l-FL_ETHER_FRAME_T, size.y-2*(1.5+0.6),size.z-0.6-zoff]
+        translate(-X(plug_l)+Z($this_size.z-0.6))
+          fl_cube($this_size=[$this_size.x-plug_l-FL_ETHER_FRAME_T, $this_size.y-2*(1.5+0.6),$this_size.z-0.6-zoff]
             ,octant=-X-Z
           );
         }
@@ -148,29 +145,29 @@ module fl_ether(
       }
   }
 
-  fl_manage(verbs,M,D) {
-    if ($verb==FL_ADD) {
+  fl_polymorph(verbs, type, octant=octant, direction=direction) {
+    if ($this_verb==FL_ADD) {
       fl_modifier($modifier)
         if (engine==str(FL_ETHER_NS,"/NopSCADlib")) rj45();
         else do_add();
 
-    } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction);
+    } else if ($this_verb==FL_AXES) {
+      fl_modifier($modifier) fl_doAxes($this_size,direction);
 
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+    } else if ($this_verb==FL_BBOX) {
+      fl_modifier($modifier) fl_bb_add($this_bbox,auto=true);
 
-    } else if ($verb==FL_CUTOUT) {
+    } else if ($this_verb==FL_CUTOUT) {
       assert(cut_thick!=undef);
       fl_modifier($modifier)
         do_cutout();
 
-    } else if ($verb==FL_FOOTPRINT) {
+    } else if ($this_verb==FL_FOOTPRINT) {
       fl_modifier($modifier)
         do_footprint();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
