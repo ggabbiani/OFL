@@ -4,13 +4,14 @@
 
 ```mermaid
 graph LR
-    A1[artifacts/t-nut] --o|include| A2[foundation/unsafe_defs]
-    A1 --o|include| A3[vitamins/countersinks]
-    A1 --o|include| A4[vitamins/screw]
-    A1 --o|use| A5[foundation/3d-engine]
-    A1 --o|use| A6[foundation/bbox-engine]
-    A1 --o|use| A7[foundation/hole]
-    A1 --o|use| A8[foundation/mngm-engine]
+    A1[artifacts/t-nut] --o|include| A2[foundation/dimensions]
+    A1 --o|include| A3[foundation/unsafe_defs]
+    A1 --o|include| A4[vitamins/countersinks]
+    A1 --o|include| A5[vitamins/screw]
+    A1 --o|use| A6[foundation/3d-engine]
+    A1 --o|use| A7[foundation/bbox-engine]
+    A1 --o|use| A8[foundation/hole]
+    A1 --o|use| A9[foundation/mngm-engine]
 ```
 
 T-slot nut engine for OpenSCAD Foundation Library.
@@ -100,22 +101,13 @@ fl_TNut(opening,size,thickness,screw,knut=false,holes)
 
 Constructor returning a T-slot nut.
 
-                               width
-           ⭰──────────────────────────────────────────⇥
-                              opening
-                     ⭰───────────────────────⇥
-      ⤒              ┌────────────────────────┐            ⤒
-      │              │      ░░░░░░░░░░░░      │            │ wall
-    h │              │      ░░░░░░░░░░░░      │            ⤓
-    e │    ┌─────────┘      ░░░░░░░░░░░░      └─────────┐  ⤒
-    i │    │                ░░░░░░░░░░░░                │  │ base
-    g │    │                ░░░░░░░░░░░░                │  ⤓
-    h │     ╲               ░░░░░░░░░░░░               ╱   ⤒
-    t │       ╲             ░░░░░░░░░░░░             ╱     │ cone
-      │         ╲           ░░░░░░░░░░░░           ╱       │
-      ⤓           ╲______________________________╱         ⤓
-                            ⭰─────────⇥
-                              screw M
+__TOP VIEW__:
+
+![Front view](800x600/fig_tnut_top_view.png)
+
+__RIGHT VIEW__:
+
+![Right view](800x600/fig_tnut_right_view.png)
 
 
 __Parameters:__
@@ -197,7 +189,7 @@ fl_tnut_thickness(type,value)
 
 __Syntax:__
 
-    fl_tnut(verbs=FL_ADD,type,tolerance=0,countersink=false,dri_thick,direction,octant)
+    fl_tnut(verbs=FL_ADD,type,tolerance=0,countersink=false,dri_thick,octant,direction)
 
 T-slot nut engine.
 
@@ -220,10 +212,10 @@ tolerance=x means [x,x,x]
 __dri_thick__  
 scalar thickness for FL_DRILL
 
-__direction__  
-desired direction [director,rotation], native direction when undef ([+Z,0])
-
 __octant__  
 when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+Z,0])
 
 

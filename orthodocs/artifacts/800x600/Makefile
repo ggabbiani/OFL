@@ -3,7 +3,8 @@ include $(wildcard *.deps) $(FUNCTIONS)
 SIZE		:= $(notdir $(CURDIR))
 CURR_BASE	:= $(notdir $(CURDIR:/$(SIZE)=))
 PICTURES	:= fig_joints_front_view.png fig_joints_right_view.png fig_joints_top_view.png \
-	fig-TS15_section.png fig-TS35_section.png fig-TS35D_section.png fig-din_rails.png
+	fig-TS15_section.png fig-TS35_section.png fig-TS35D_section.png fig-din_rails.png \
+	fig_tnut_right_view.png fig_tnut_top_view.png
 
 all:	$(PICTURES)
 
@@ -47,4 +48,16 @@ fig_joints_right_view.png: $(call test-deps,artifacts/joints)
 fig_joints_top_view.png: $(call test-deps,artifacts/joints)
 	$(call target-prologue)
 	$(call make-picture,$(SIZE),$(call top-view,0,1.51,-1.91,31.23),ortho)
+	$(call target-epilogue-success)
+
+###############################################################################
+# tnuts projection views
+fig_tnut_top_view.png: $(call test-deps,artifacts/tnut)
+	$(call target-prologue)
+	$(call make-picture,$(SIZE),$(call top-view,0,-0.11,6.48,26.39),ortho)
+	$(call target-epilogue-success)
+
+fig_tnut_right_view.png: $(call test-deps,artifacts/tnut)
+	$(call target-prologue)
+	$(call make-picture,$(SIZE),$(call right-view,0,0.05,6.65,49.99),ortho)
 	$(call target-epilogue-success)

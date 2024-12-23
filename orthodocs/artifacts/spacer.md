@@ -135,17 +135,20 @@ nominal screw size optional property. TODO: shall this be substituted by [fl_nom
 
 __Syntax:__
 
-    fl_spacer(verbs=FL_ADD,spacer,thick=0,anchor,fillet=0,direction,octant)
+    fl_spacer(verbs=FL_ADD,spacer,thick=0,anchor,fillet=0,octant,direction)
 
-Children context:
+Context variables:
 
-- $spc_director  : layout direction
-- $spc_nominal   : OPTIONAL screw nominal ⌀
-- $spc_thick     : scalar thickness (always≥0) along $spc_director
-- $spc_thickness : overall thickness (spacer length + ∑thick[i]),
-- $spc_h         : spacer height
-- $spc_holeR     : OPTIONAL internal hole radius
-- $spc_verb      : triggered verb
+| Name           | Type      | Description                                     |
+| ---            | ---       | ---                                             |
+| $spc_director  | Children  | layout direction                                |
+| $spc_nominal   | Children  | OPTIONAL screw nominal ⌀                        |
+| $spc_thick     | Children  | scalar thickness (always≥0) along $spc_director |
+| $spc_thickness | Children  | overall thickness (spacer length + ∑thick[i])   |
+| $spc_h         | Children  | spacer height                                   |
+| $spc_holeR     | Children  | OPTIONAL internal hole radius                   |
+| $spc_verb      | Children  | triggered verb                                  |
+
 
 
 __Parameters:__
@@ -190,10 +193,10 @@ anchor directions in floating semi-axis list
 __fillet__  
 when >0 a fillet is added to anchors
 
-__direction__  
-desired direction [director,rotation], native direction when undef ([+Z,0])
-
 __octant__  
 when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+Z,0])
 
 

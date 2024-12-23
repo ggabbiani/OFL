@@ -65,13 +65,13 @@ function fl_DimensionPack(dimension_list) = [
  * | $dim_distr  | distribution direction, equal to the «distr» parameter   |
  * | $dim_gap    | gap between stacked dimension lines                      |
  * | $dim_label  | current dimension line label                             |
+ * | $dim_level  | current dimension line stacking level (always positive)  |
  * | $dim_mode   | current mode                                             |
  * | $dim_object | bounded object                                           |
  * | $dim_spread | distribution direction in 2D space (always X or Y axis)  |
  * | $dim_value  | current value                                            |
  * | $dim_view   | dimension line bounded view                              |
  * | $dim_width  | current line width                                       |
- * | $dim_level  | current dimension line stacking level (always positive)  |
  */
 module fl_dimension(
   //! supported verbs: FL_ADD
@@ -182,7 +182,7 @@ module fl_dimension(
   bbox          = top_bbox(fl_bb_corners(object));
   dims          = bbox[1]-bbox[0];
   // TODO: make a global getter for font usage
-  font          = "Symbola";
+  // font          = "Symbola";
 
   // bounding box calculation in the "top" view
   function top_bbox(

@@ -60,7 +60,7 @@ desired direction [director,rotation], native direction when undef ([+X+Z])
 
 __Syntax:__
 
-    fl_profile(verbs=FL_ADD,type,radius,size,material,thick,direction,octant)
+    fl_profile(verbs=FL_ADD,type,radius,size,material,thick,octant,direction)
 
 engine for generating profiles
 
@@ -78,10 +78,10 @@ external radius (square if undef)
 __material__  
 actually a color
 
-__direction__  
-desired direction [director,rotation], native direction when undef ([+X+Z])
-
 __octant__  
 when undef native positioning (see [variable FL_O](../foundation/core.md#variable-fl_o)) is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Z])
 
 

@@ -309,13 +309,15 @@ __Syntax:__
 
     fl_countersink(verbs=FL_ADD,type,direction,octant)
 
-Runtime context:
 
-- $fl_thickness: used by FL_FOOTPRINT, Can be verb-dependant (see
-  [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness)).
-- $fl_tolerance: tolerance added to countersink's dimensions during FL_ADD,
-  FL_BBOX and FL_FOOTPRINT. Can be verb-dependant (see [fl_parm_tolerance()](../foundation/core.md#function-fl_parm_tolerance)).
-
+ * Context variables:
+ *
+ * | Name           | Context   | Description |
+ * | -------------  | --------- | ---         |
+ * | $fl_thickness  | Parameter | thickness of the surface to be FL_DRILLed.
+   Can be verb-dependant (see [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness)). |
+ * | $fl_tolerance  | Parameter | tolerance added to countersink's dimensions during FL_ADD, FL_BBOX and FL_FOOTPRINT. Can be verb-dependant (see [fl_parm_tolerance()](../foundation/core.md#function-fl_parm_tolerance)). |
+ 
 
 __Parameters:__
 

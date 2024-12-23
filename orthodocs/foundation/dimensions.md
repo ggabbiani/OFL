@@ -121,13 +121,13 @@ Children context:
 | $dim_distr  | distribution direction, equal to the «distr» parameter   |
 | $dim_gap    | gap between stacked dimension lines                      |
 | $dim_label  | current dimension line label                             |
+| $dim_level  | current dimension line stacking level (always positive)  |
 | $dim_mode   | current mode                                             |
 | $dim_object | bounded object                                           |
 | $dim_spread | distribution direction in 2D space (always X or Y axis)  |
 | $dim_value  | current value                                            |
 | $dim_view   | dimension line bounded view                              |
 | $dim_width  | current line width                                       |
-| $dim_level  | current dimension line stacking level (always positive)  |
 
 
 __Parameters:__

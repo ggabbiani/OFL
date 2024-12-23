@@ -171,7 +171,8 @@ graph TD
     A46 --o|use| A5
     A46 --o|use| A3
     A46 --o|use| A4
-    A53[artifacts/t-nut] --o|include| A2
+    A53[artifacts/t-nut] --o|include| A23
+    A53 --o|include| A2
     A53 --o|include| A14
     A53 --o|include| A16
     A53 --o|use| A5
