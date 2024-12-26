@@ -140,7 +140,7 @@ define make-picture
 	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
 	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
 	rm -f unscaled-$@
-	(git checkout -- $@ && ($(IMG_DIFF) -v 0 $@ new-$@ && rm new-$@ && touch $@)) || mv new-$@ $@
+	(git checkout -- $@ && (($(IMG_DIFF) -v 0 $@ new-$@ || (echo -n "($<) " && false)) && rm new-$@ && touch $@)) || mv new-$@ $@
 	$(call fix-target-dependencies)
 endef
 
