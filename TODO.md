@@ -90,9 +90,8 @@
 - [X] renamed foundation/profile.scad into artifacts/profiles-engine.scad;
 - [X] renamed foundation/type_trait.scad into foundation/traits-engine.scad;
 - [X] implemented FL_CUTOUT in hds and sata packages;
-- [ ] review and apply everywhere the new polymorph engine for rewriting and
-  subtyping all the existing modules. Use vitamins/iec.scad as implementation
-  example/reference.
+- [X] reviewed and applied where possible the new polymorph engine for rewriting
+  and subtyping all the existing modules.
 - [ ] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
 - [ ] modify FL_DRILL verb implementation according to the type of drill to be
