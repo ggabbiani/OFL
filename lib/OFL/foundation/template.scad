@@ -51,7 +51,7 @@ module __fl_template(
   ) if ($this_verb==FL_ADD) {
       // your code ...
 
-    else if ($this_verb==FL_BBOX)
+    } else if ($this_verb==FL_BBOX)
       // ... this should be enough
       fl_bb_add(corners=$this_bbox,$FL_ADD=$FL_BBOX);
 
