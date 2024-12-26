@@ -108,8 +108,8 @@ single  = SHOW=="FL_HDMI_TYPE_A"  ? FL_HDMI_TYPE_A
         : undef;
 
 if (single)
-  fl_hdmi(verbs,single,direction=direction,octant=octant,cut_thick=cutout,cut_tolerance=tolerance,cut_drift=drift);
+  fl_hdmi(verbs,single,direction=direction,octant=octant,$fl_thickness=cutout,$fl_tolerance=tolerance,cut_drift=drift);
 else
   layout([for(socket=FL_HDMI_DICT) fl_width(socket)], 10)
-    fl_hdmi(verbs,FL_HDMI_DICT[$i],direction=direction,octant=octant,cut_thick=cutout,cut_tolerance=tolerance,cut_drift=drift);
+    fl_hdmi(verbs,FL_HDMI_DICT[$i],direction=direction,octant=octant,$fl_thickness=cutout,$fl_tolerance=tolerance,cut_drift=drift);
 
