@@ -628,14 +628,6 @@ Any combination is allowed i.e.
 
 ---
 
-### module fl_2d_doAxes
-
-__Syntax:__
-
-    fl_2d_doAxes(size)
-
----
-
 ### module fl_2d_frame
 
 __Syntax:__

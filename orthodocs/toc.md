@@ -8,7 +8,6 @@
 - [fl_2d_angleBetween (function)](foundation/2d-engine.md#function-fl_2d_anglebetween)
 - [fl_2d_closest (function)](foundation/2d-engine.md#function-fl_2d_closest)
 - [fl_2d_dist (function)](foundation/2d-engine.md#function-fl_2d_dist)
-- [fl_2d_doAxes (module)](foundation/2d-engine.md#module-fl_2d_doaxes)
 - [fl_2d_frame (module)](foundation/2d-engine.md#module-fl_2d_frame)
 - [fl_2d_frame_intCorners (function)](foundation/2d-engine.md#function-fl_2d_frame_intcorners)
 - [fl_2d_place (module)](foundation/2d-engine.md#module-fl_2d_place)
@@ -535,7 +534,6 @@
 - [fl_Magnet (function)](vitamins/magnets.md#function-fl_magnet)
 - [fl_magnet (module)](vitamins/magnets.md#module-fl_magnet)
 - [vitamins/magnets (package)](vitamins/magnets.md#package-vitaminsmagnets)
-- [fl_manage (module)](foundation/mngm-engine.md#module-fl_manage)
 - [fl_material (function)](foundation/core.md#function-fl_material)
 - [foundation/mngm-engine (package)](foundation/mngm-engine.md#package-foundationmngm-engine)
 - [fl_modifier (module)](foundation/core.md#module-fl_modifier)
@@ -927,6 +925,7 @@
 - [fl_versor (module)](foundation/core.md#module-fl_versor)
 - [fl_vFillet (module)](foundation/fillet.md#module-fl_vfillet)
 - [fl_view (function)](foundation/core.md#function-fl_view)
+- [fl_vloop (module)](foundation/mngm-engine.md#module-fl_vloop)
 
 ## W
 

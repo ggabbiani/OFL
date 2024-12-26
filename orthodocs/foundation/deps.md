@@ -23,7 +23,8 @@ graph TD
     A17[foundation/hole] --o|include| A18[foundation/label]
     A18 --o|include| A5
     A19[foundation/limits] --o|include| A10
-    A4 --o|include| A10
+    A4 --o|include| A2
+    A4 --o|use| A5
     A7 --o|include| A10
     A7 --o|use| A5
     A7 --o|use| A3

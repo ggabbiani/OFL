@@ -640,7 +640,7 @@ diameter, top of cone. r2 = d2 / 2.
 __Syntax:__
 
 ```text
-fl_direction(direction)
+fl_direction(direction,default=I)
 ```
 
 Return the direction matrix transforming native coordinates along new
@@ -661,6 +661,9 @@ __Parameters:__
 
 __direction__  
 desired direction in axis-angle representation [axis,rotation about]
+
+__default__  
+returned matrix when «direction» is undef
 
 
 ---
@@ -724,7 +727,7 @@ __bbox__
 explicit bounding box corners: overrides «type» settings
 
 __default__  
-returned matrix if «octant» is undef
+returned matrix when «octant» is undef
 
 
 ---

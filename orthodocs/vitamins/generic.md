@@ -10,6 +10,7 @@ graph LR
     A1 --o|use| A5[foundation/bbox-engine]
     A1 --o|use| A6[foundation/hole]
     A1 --o|use| A7[foundation/mngm-engine]
+    A1 --o|use| A8[foundation/polymorphic-engine]
 ```
 
 ## Variables
@@ -79,30 +80,25 @@ fl_generic_ghost(type,value)
 
 __Syntax:__
 
-    fl_generic_vitamin(verbs=FL_ADD,this,thick=0,cut_tolerance=0,cut_drift=0,octant,direction)
+    fl_generic_vitamin(verbs=FL_ADD,this,cut_drift=0,octant,direction)
 
 Generic vitamin engine, usable when a cut out, drill or layout operation is
 needed for a component not yet available as vitamin.
 
-Children context: the whole hole context is passed during FL_LAYOUT (see also
-fl_hole_Context()).
+Context variables:
+
+| Name           | Type      | Description |
+| -------------- | --------- | ----------- |
+| $hole_*        | Children  | the whole hole context is passed during FL_LAYOUT (see also fl_hole_Context()). |
+| $fl_tolerance  | Parameter | used during FL_CUTOUT |
+| $fl_thickness  | Parameter | Scalar or full semi axis value list for FL_CUTOUT, FL_DRILL and FL_LAYOUT thickness (see [fl_tt_isAxisVList()](../foundation/traits-engine.md#function-fl_tt_isaxisvlist)). This parameter represents the surface thickness along semi-axes to be drilled and/or cut out.  |
+
 
 
 __Parameters:__
 
 __verbs__  
 supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL
-
-__thick__  
-Scalar or full semi axis value list for FL_CUTOUT, FL_DRILL and FL_LAYOUT
-thickness (see [fl_tt_isAxisVList()](../foundation/traits-engine.md#function-fl_tt_isaxisvlist)).
-
-This parameter represents the surface thickness along semi-axes to be
-drilled and/or cut out.
-
-
-__cut_tolerance__  
-tolerance used during FL_CUTOUT
 
 __cut_drift__  
 Scalar or full semi axis value list for translation applied to cutout

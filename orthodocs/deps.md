@@ -61,10 +61,12 @@ graph TD
     A28 --o|use| A3
     A28 --o|use| A29[foundation/hole]
     A28 --o|use| A4
+    A28 --o|use| A8
     A30[foundation/grid] --o|include| A5
     A31[vitamins/hdmi] --o|use| A5
     A31 --o|use| A3
     A31 --o|use| A4
+    A31 --o|use| A8
     A31 --o|use| A19
     A32[vitamins/hds] --o|include| A29
     A32 --o|include| A33[vitamins/sata]
@@ -103,7 +105,8 @@ graph TD
     A41 --o|include| A14
     A41 --o|include| A16
     A41 --o|use| A4
-    A4 --o|include| A11
+    A4 --o|include| A2
+    A4 --o|use| A5
     A42[artifacts/pcb_holder] --o|include| A13
     A42 --o|include| A43[vitamins/pcbs]
     A42 --o|use| A3

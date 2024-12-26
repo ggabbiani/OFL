@@ -7,7 +7,8 @@ graph LR
     A1[vitamins/hdmi] --o|use| A2[foundation/3d-engine]
     A1 --o|use| A3[foundation/bbox-engine]
     A1 --o|use| A4[foundation/mngm-engine]
-    A1 --o|use| A5[foundation/util]
+    A1 --o|use| A5[foundation/polymorphic-engine]
+    A1 --o|use| A6[foundation/util]
 ```
 
 NopSCADlib HDMI engine wrapper.
@@ -89,26 +90,28 @@ fl_hdmi_new(nop_type)
 
 __Syntax:__
 
-    fl_hdmi(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
+    fl_hdmi(verbs=FL_ADD,type,cut_drift=0,octant,direction)
+
+Context variables:
+
+| Name | Type  | Description |
+| ---  | ---   | ---         |
+| $fl_thickness  | Parameter | thickness for FL_CUTOUT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout))          |
+| $fl_tolerance  | Parameter | tolerance used during FL_CUTOUT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout))  |
+
 
 __Parameters:__
 
 __verbs__  
 supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
 
-__cut_thick__  
-thickness for FL_CUTOUT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout))
-
-__cut_tolerance__  
-tolerance used during FL_CUTOUT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout))
-
 __cut_drift__  
 translation applied to cutout
 
-__direction__  
-desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-
 __octant__  
 when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 

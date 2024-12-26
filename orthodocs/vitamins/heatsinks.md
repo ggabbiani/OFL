@@ -108,7 +108,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_heatsink(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,direction,octant)
+    fl_heatsink(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,octant,direction)
 
 common wrapper for different heat sink model engines.
 
@@ -140,10 +140,10 @@ in this case the heatsink will perform a cutout along +X and +Z.
 list (retrievable through [fl_cutout()](../foundation/core.md#function-fl_cutout) getter)
 
 
-__direction__  
-desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-
 __octant__  
 when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 
