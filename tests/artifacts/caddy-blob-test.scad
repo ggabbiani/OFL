@@ -125,8 +125,8 @@ module blob(
                         // example:
                         // thick=[["+X",2.5],["-Z",5]]
                         // thick=2.5
-  direction,            // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   octant,               // when undef native positioning is used
+  direction             // desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
