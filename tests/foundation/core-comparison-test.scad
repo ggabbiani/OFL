@@ -14,7 +14,6 @@
 
 include <../../lib/OFL/foundation/core.scad>
 
-use <../../lib/OFL/foundation/2d-engine.scad>
 use <../../lib/OFL/foundation/3d-engine.scad>
 
 
@@ -55,10 +54,10 @@ T_ofl     = [-1.5,0,0];
 
 translate(T_legacy) {
   if (PRIMITIVE=="fl_circle vs circle") {
-    fl_2d_doAxes([1,1]);
+    fl_doAxes([1,1]);
     circle(d=1);
   } else if (PRIMITIVE=="fl_square vs square") {
-    fl_2d_doAxes([1,1]);
+    fl_doAxes([1,1]);
     square([1,1]);
   } else if (PRIMITIVE=="fl_cube vs cube") {
     fl_doAxes([1,1,1]);
