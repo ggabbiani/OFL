@@ -132,8 +132,6 @@ module blob(
 
   bbox  = fl_bb_corners(type);
   size  = fl_bb_size(type);
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {}
   module do_bbox() {}
@@ -141,7 +139,7 @@ module blob(
   module do_layout() {}
   module do_drill() {}
 
-  fl_vloop(verbs,bbox,octant,direction)  {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) fl_cube(size=size,octant=O0);
 
