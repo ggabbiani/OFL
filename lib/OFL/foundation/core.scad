@@ -679,6 +679,12 @@ module fl_versor(P) {
 /*!
  * this module add the local coordinate system with 2 or 3 axes according to
  * what specified in «size» parameter.
+ *
+ * NOTE: to force a 2d coordinate system in place of a 3d one, is enough to
+ * truncate the size from 3d to 2d like in the following example:
+ *
+ *     size3d = [1,2,3];
+ *     fl_axes(size=[size.x,size.y]);
  */
 module fl_axes(size=1,reverse=false) {
   sz  = is_list(size) ?
