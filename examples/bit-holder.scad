@@ -209,7 +209,7 @@ module holder(verbs,item) {
   fl_trace("bit",bit);
   fl_trace("magnet",magnet);
 
-  fl_manage(verbs) {
+  fl_vloop(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) fl_color()
         multmatrix(Mbox) box();
@@ -227,10 +227,6 @@ module holder(verbs,item) {
         multmatrix(Mmagnet)
           fl_magnet(FL_ADD,magnet,octant=+X,direction=[-Y,90]);
       }
-
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
 
     } else if ($verb==FL_DRILL) {
       fl_modifier($FL_DRILL) do_drill();

@@ -146,9 +146,6 @@ module fl_caddy(
           do_add() children();
     else if ($verb==FL_ASSEMBLY)
       fl_modifier($modifier) context(FL_DRAW) children();
-    else if ($verb==FL_AXES)
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
     else if ($verb==FL_CUTOUT)

@@ -392,9 +392,6 @@ module fl_DIN_rail(
           }
       }
 
-    } else if ($this_verb==FL_AXES) {
-      fl_doAxes($this_size,$this_direction);
-
     } else if ($this_verb==FL_BBOX) {
       fl_bb_add($this_bbox,auto=true,$FL_ADD=$FL_BBOX);
 

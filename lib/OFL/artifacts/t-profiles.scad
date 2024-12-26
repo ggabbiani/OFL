@@ -213,10 +213,6 @@ module fl_tProfile(
       fl_modifier($modifier)
         extrusion(nop, $this_size.z,center=true, cornerHole=false);
 
-    } else if ($this_verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes($this_size,direction);
-
     } else if ($this_verb==FL_BBOX) {
       fl_modifier($modifier)
         fl_bb_add($this_bbox);

@@ -239,14 +239,10 @@ module fl_USB(
         echo(str("***WARN***: Axis ",axis," not supported"));
   }
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         wrap();
-
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

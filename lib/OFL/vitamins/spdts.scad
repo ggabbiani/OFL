@@ -92,13 +92,9 @@ module fl_spdt(
       cylinder(d=d, h=h);
   }
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
-
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) cube(size=size,center=false);

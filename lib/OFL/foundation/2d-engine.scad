@@ -10,11 +10,6 @@ include <unsafe_defs.scad>
 use <mngm-engine.scad>
 use <bbox-engine.scad>
 
-module fl_2d_doAxes(size) {
-  sz = 1.2*size;
-  fl_axes(sz);
-}
-
 //! returns the angle between vector «a» and «b»
 function fl_2d_angleBetween(a,b) = atan2(b.y,b.x)-atan2(a.y,a.x);;
 
@@ -193,13 +188,9 @@ module fl_sector(
   fl_trace("bbox",bbox);
   fl_trace("size",size);
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(points);
-
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
@@ -439,12 +430,9 @@ module fl_ellipticSector(
   size  = bbox[1]-bbox[0];
   M     = fl_quadrant(quadrant,bbox=bbox);
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(fl_ellipticSector(e,angles));
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
     } else {
@@ -538,15 +526,12 @@ module fl_ellipticArc(
   size  = bbox[1]-bbox[0];
   M     = fl_quadrant(quadrant,bbox=bbox);
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
         fl_ellipticSector(verbs=$verb, angles=angles, e=e                 );
         fl_ellipticSector(verbs=$verb, angles=angles, e=[a-thick,b-thick] );
       }
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
     } else {
@@ -699,12 +684,9 @@ module fl_ellipse(
   fn    = $fn;
   fs    = $fs;
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(fl_ellipse(e,$fa=fa,$fn=fn,$fs=fs));
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
     } else {
@@ -741,12 +723,9 @@ module fl_circle(
   fl_trace("M",M);
   fl_trace("bbox",bbox);
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(fl_circle(r=radius));
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) %square(size=size, center=false);
     } else {
@@ -804,15 +783,12 @@ module fl_arc(
 
   fl_trace("radius",radius);
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
         fl_sector($verb, angles=angles, r=radius      );
         fl_sector($verb, angles=angles, r=radius-thick);
       }
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) if (size.x>0 && size.y>0) translate(bbox[0]) square(size=size, center=false);
     } else {
@@ -844,12 +820,9 @@ module fl_ipoly(
   M       = fl_quadrant(quadrant,bbox=bbox);
   fl_trace("bbox",bbox);
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(points);
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) %square(size=size, center=false);
     } else {
@@ -981,12 +954,9 @@ module fl_square(
   fl_trace("corners",corners);
   fl_trace("points",points);
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(points);
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) %fl_square(size=size,$FL_ADD=$FL_BBOX);
     } else {
@@ -1076,15 +1046,12 @@ module fl_2d_frame(
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
   M       = fl_quadrant(quadrant,bbox=bbox);
 
-  fl_manage(verbs,M) {
+  fl_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
         fl_square($verb,size,corners);
         fl_square($verb,size_int,corners_int);
       }
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_2d_doAxes(size);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_square(size=size);
     } else {

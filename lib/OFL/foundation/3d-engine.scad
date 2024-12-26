@@ -54,14 +54,11 @@ module fl_frame(
   D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD)
       fl_modifier($modifier)
         linear_extrude(size.z)
           fl_2d_frame(size=[size.x,size.y], corners=corners, thick=thick);
-
-    else if ($verb==FL_AXES)
-      fl_modifier($modifier) fl_doAxes(size,direction);
 
     else if ($verb==FL_BBOX)
       fl_modifier($modifier)
@@ -113,11 +110,9 @@ module fl_cube(
   D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs, bbox, octant, direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cube(size,true);
-    } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
@@ -174,11 +169,9 @@ module fl_sphere(
   D     = direction ? fl_direction(direction)  : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) resize(size) sphere();
-    } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
@@ -311,14 +304,10 @@ module fl_cylinder(
   size  = bbox[1]-bbox[0];
   step  = 360/$fn;
   R     = max(r_bot,r_top);
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs, bbox, octant, direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
-    } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
@@ -439,11 +428,9 @@ module fl_prism(
   D     = direction ? fl_direction(direction): FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
-  fl_manage(verbs,M,D)  {
+  fl_vloop(verbs,bbox,octant,direction)  {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
-    } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
@@ -496,12 +483,10 @@ module fl_pyramid(
   D       = direction ? fl_direction(direction): I;
   M       = fl_octant(octant,bbox=bbox);
 
-  fl_manage(verbs,M,D)  {
+  fl_vloop(verbs,bbox,octant,direction)  {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         polyhedron(points, faces);
-    } else if ($verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox,auto=true);
     } else {
@@ -549,7 +534,7 @@ function fl_octant(
   type,
   //! explicit bounding box corners: overrides «type» settings
   bbox,
-  //! returned matrix if «octant» is undef
+  //! returned matrix when «octant» is undef
   default=FL_I
 ) = octant ? let(
     corner  = bbox ? bbox : fl_bb_corners(type),
@@ -618,16 +603,18 @@ module fl_placeIf(
  */
 function fl_direction(
   //! desired direction in axis-angle representation [axis,rotation about]
-  direction
-) =
+  direction,
+  //! returned matrix when «direction» is undef
+  default=I
+) = direction ?
   assert(!fl_dbg_assert() || fl_tt_isDirectionRotation(direction),direction)
   let(
     alpha   = direction[1],
     Z_new = fl_versor(direction[0]),
     X_new = fl_transform(fl_align(FL_Z,Z_new),FL_X)
-  ) R(Z_new,alpha)                        // rotate «alpha» degrees around new Z
-  * fl_planeAlign(FL_Z,FL_X,Z_new,X_new); // align direction
-
+  ) R(Z_new,alpha)                          // rotate «alpha» degrees around new Z
+  * fl_planeAlign(FL_Z,FL_X,Z_new,X_new) :  // align direction
+  assert(default) default;
 /*!
  * Applies a direction matrix to its children.
  * See also fl_direction() function comments.
@@ -878,14 +865,10 @@ module fl_layout(
     }
   }
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     fl_trace(str("dispatching ",$verb));
 
-    if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
-
-    } else if ($verb==FL_BBOX) {
+    if ($verb==FL_BBOX) {
       fl_modifier($modifier,false) fl_bb_add(bbox);
 
     } else if ($verb==FL_LAYOUT) fl_modifier($modifier,false) {
@@ -1379,13 +1362,9 @@ module fl_symbol(
     context() children();
   }
 
-  fl_manage(verbs) {
+  fl_vloop(verbs,do_axes=false) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
-
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        ; // fl_doAxes(size,direction);
 
     } else if ($verb==FL_LAYOUT) {
       fl_modifier($modifier) do_layout() children();
@@ -1467,7 +1446,7 @@ module fl_sym_hole(
       fl_vector($hole_depth*Z);
   }
 
-  fl_manage(verbs,D=D) {
+  fl_vloop(verbs, bbox, direction=[$hole_n,0]) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
@@ -1492,7 +1471,6 @@ module fl_sym_point(
   d     = assert(size,size) size;
   bbox  = let(r=d/2) [[-r,-r,-r],[+r,+r,+r]];
   size  = bbox[1]-bbox[0];
-  D     = FL_I;
 
   module do_add() {
     translate(point){
@@ -1512,7 +1490,7 @@ module fl_sym_point(
     }
   }
 
-  fl_manage(verbs,D=D) {
+  fl_vloop(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
@@ -1715,12 +1693,9 @@ module fl_torus(
   fl_trace("D",D);
   fl_trace("M",M);
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) rotate_extrude($fn=$fn) translate(X(R-a)) fl_ellipse(e=e,quadrant=+X,$fn=fn);
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else {
@@ -1771,12 +1746,9 @@ module fl_tube(
       fl_ellipse(e=obase);
   }
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox,auto=true);
     } else if ($verb==FL_FOOTPRINT) {

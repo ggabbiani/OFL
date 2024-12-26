@@ -22,7 +22,7 @@ let(
 [
   fl_name(value="ELUTENG USB 3.0 TO SATA ADAPTER"),
   fl_bb_corners(value=[[-size.x/2,-handle_size.y,-size.z/2],[size.x/2,socket_size.z,+size.z/2]]),
-  fl_vendor(value=[["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/"]]),
+  fl_vendor(value=[["Amazon", "https://www.amazon.it/gp/product/B06XCV1W97/"]]),
   ["handle size", handle_size],
   ["Mpd",         Mpd],
   ["connectors",  fl_conn_import(fl_connectors(socket),Mpd)],
@@ -50,8 +50,7 @@ module sata_adapter(
   Mpd         = fl_get(type,"Mpd");
   connectors  = fl_connectors(type);
   locators    = fl_dbg_symbols();
-  D           = direction ? fl_direction(direction)  : FL_I;
-  M           = fl_octant(octant,type=type);
+  bbox        = fl_bb_corners(type);
 
   module sata_handle() {
     // transformation matrix for converting from Draw.io coord-system to OpenSCAD
@@ -76,18 +75,12 @@ module sata_adapter(
       for(c=connectors) fl_conn_add(c,2);
   }
 
-  module do_bbox() {
-    translate(fl_Y(sock_size.z))
-      fl_cube(size=size,octant=-FL_Y);
-  }
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) do_bbox();
+      fl_modifier($modifier)
+        fl_bb_add(bbox,auto=true);
     } else {
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
     }

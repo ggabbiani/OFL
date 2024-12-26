@@ -304,10 +304,6 @@ module fl_tnut(
         do_assembly()
           children();
 
-    else if ($this_verb==FL_AXES)
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
-
     else if ($this_verb==FL_BBOX)
       fl_modifier($modifier)
         fl_bb_add(bbox);

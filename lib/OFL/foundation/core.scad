@@ -676,13 +676,21 @@ module fl_versor(P) {
   fl_vector(fl_versor(P));
 }
 
+/*!
+ * this module add the local coordinate system with 2 or 3 axes according to
+ * what specified in «size» parameter.
+ */
 module fl_axes(size=1,reverse=false) {
-  sz  = is_list(size)
-      ? assert(size.x>=0 && size.y>=0 && (size.z==undef||size.z>=0)) size
-      : assert(size>=0) [size,size,size];
-  color("red")   fl_vector(sz.x*FL_X,reverse==undef || !reverse);
-  color("green") fl_vector(sz.y*FL_Y,reverse==undef || !reverse);
-  if (sz.z) color("blue")  fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
+  sz  = is_list(size) ?
+      assert(size.x>=0 && size.y>=0 && (size.z==undef||size.z>=0)) size :
+      assert(size>=0) [size,size,size];
+  color("red")
+    fl_vector(sz.x*FL_X,reverse==undef || !reverse);
+  color("green")
+    fl_vector(sz.y*FL_Y,reverse==undef || !reverse);
+  if (sz.z)
+    color("blue")
+      fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
 
 //! Generate a shade of grey to pass to color().

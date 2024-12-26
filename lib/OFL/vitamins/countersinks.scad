@@ -177,10 +177,6 @@ module fl_countersink(
       fl_modifier($modifier)
         doAdd();
 
-    else if ($this_verb==FL_AXES)
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
-
     else if ($this_verb==FL_BBOX)
       fl_modifier($modifier)
         fl_bb_add(bbox,auto=true,$FL_ADD=$FL_BBOX);

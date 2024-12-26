@@ -320,10 +320,6 @@ module fl_spacer(
       fl_modifier($modifier)
         do_assembly();
 
-    } else if ($this_verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
-
     } else if ($this_verb==FL_BBOX) {
       fl_modifier($modifier)
         fl_bb_add(bbox+[[0,0,-NIL],[0,0,NIL]]);

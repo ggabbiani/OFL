@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <core.scad>
+include <unsafe_defs.scad>
 
 use <3d-engine.scad>
 
@@ -19,6 +19,16 @@ use <3d-engine.scad>
  * «direction» parameters. It also intercepts and manages the FL_AXES verb that
  * will never arrive to children.
  *
+ *
+ * | Performed actions        | octant  | quadrant  | direction | verbs | bbox    |
+ * | ---                      | ---     | ---       | ---       | ---   | ---     |
+ * | octant translation       | X       | -         | -         | -     | X       |
+ * | quadrant translation     | undef   | X         | -         | -     | X       |
+ * | direction transformation | -       | -         | X         | -     | -       |
+ * | FL_AXES                  | -       | -         | O         | X     | X       |
+ *
+ * X: mandatory, O: optional, -: unused
+ *
  * Context variables:
  *
  * | Name       | Context   | Description
@@ -26,15 +36,17 @@ use <3d-engine.scad>
  * | $verb      | Children  | current parsed verb
  * | $modifier  | Children  | current verb modifier
  */
-module fl_manage(
+module fl_vloop(
   //! verb list
   verbs,
-  //! placement matrix
-  M,
-  //! orientation matrix
-  D,
-  //! mandatory size used for fl_axes()
-  size
+  //! mandatory bounding box
+  bbox,
+  //! when undef native positioning is used
+  octant,
+  //! desired direction [director,rotation], native direction when undef
+  direction,
+  quadrant,
+  do_axes = true
 ) {
   module context(verb_list) {
     assert(is_list(verb_list)||is_string(verb_list),verb_list);
@@ -61,17 +73,22 @@ module fl_manage(
     }
   }
 
-  M = M ? M : I;
-  D = D ? D : I;
+  M     = octant ? fl_octant(octant,bbox=bbox) : quadrant ? fl_quadrant(quadrant,bbox=bbox) : I;
+  D     = fl_direction(direction);
+  size  = bbox ? bbox[1]-bbox[0] : undef;
 
   multmatrix(D) context(verbs) union() {
-    multmatrix(M) union()
-      parse($_verbs_) children();
-    // trigger FL_AXES WITHOUT octant related transformation (i.e. matrix M)
-    if ($_axes_)
-      assert(size!=undef) let(
+    multmatrix(M)
+      union()
+        parse($_verbs_)
+          children();
+
+    // FL_AXES WITHOUT octant transformations (i.e. matrix M)
+    if ($_axes_ && do_axes && size) {
+      let(
         $verb     = FL_AXES,
         $modifier = fl_verb2modifier($verb)
-      ) fl_axes(size);
+      ) echo(size=size) fl_doAxes(size,direction);
+    }
   }
 }

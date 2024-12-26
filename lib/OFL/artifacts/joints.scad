@@ -540,10 +540,7 @@ module fl_jnt_joint(
           multmatrix(pre)
             polygon(polyRound(pts, fn=$fn));
 
-  } else if ($this_verb==FL_AXES)
-    fl_doAxes($this_size,$this_direction);
-
-  else if ($this_verb==FL_BBOX)
+  } else if ($this_verb==FL_BBOX)
     fl_bb_add(corners=$this_bbox,auto=true,$FL_ADD=$FL_BBOX);
 
   else if ($this_verb==FL_CUTOUT) {
@@ -670,10 +667,7 @@ module fl_jnt_joint(
           }
       }
 
-    } else if ($this_verb==FL_AXES)
-      fl_doAxes($this_size,$this_direction);
-
-    else if ($this_verb==FL_BBOX)
+    } else if ($this_verb==FL_BBOX)
       fl_bb_add(corners=$this_bbox,auto=true,$FL_ADD=$FL_BBOX);
 
     else

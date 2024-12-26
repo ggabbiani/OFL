@@ -166,10 +166,10 @@ module fl_heatsink(
    * list (retrievable through fl_cutout() getter)
    */
   cut_direction,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
-  octant
+  octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
@@ -391,7 +391,7 @@ module fl_heatsink(
         children();
   }
 
-  fl_manage(verbs,M,D,size) {
+  fl_vloop(verbs,bbox,octant,direction) {
     fl_modifier($modifier)
       proxy($verb);
   }

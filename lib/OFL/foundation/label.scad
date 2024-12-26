@@ -78,12 +78,9 @@ module fl_label(
             text(string, valign=valign, halign=halign, font=font);
   }
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD)
       fl_modifier($modifier) do_add();
-    else if ($verb==FL_AXES)
-      fl_modifier($modifier)
-        fl_doAxes(size,direction);
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
   }

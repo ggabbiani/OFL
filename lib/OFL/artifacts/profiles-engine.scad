@@ -87,15 +87,11 @@ module fl_profile(
         }
   }
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs, bbox, octant, direction) {
     if ($verb==FL_ADD)
       fl_modifier($modifier)
         fl_color(material)
           do_add();
-
-    else if ($verb==FL_AXES)
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
 
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) cube(size=size, center=true);
@@ -178,14 +174,10 @@ module fl_bentPlate(
           fl_label(string=str("P[",i,"]"),fg="black",size=debug_sz,$FL_ADD="ON");
   }
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs , bbox, octant, direction) {
     if ($verb==FL_ADD)
       fl_modifier($modifier)
         do_add();
-
-    else if ($verb==FL_AXES)
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
 
     else if ($verb==FL_BBOX)
       fl_modifier($modifier)

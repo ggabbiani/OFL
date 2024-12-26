@@ -141,7 +141,7 @@ module blob(
   module do_layout() {}
   module do_drill() {}
 
-  fl_manage(verbs,M,D)  {
+  fl_vloop(verbs,bbox,octant,direction)  {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) fl_cube(size=size,octant=O0);
 

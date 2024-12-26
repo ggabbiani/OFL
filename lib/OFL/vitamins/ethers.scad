@@ -151,9 +151,6 @@ module fl_ether(
         if (engine==str(FL_ETHER_NS,"/NopSCADlib")) rj45();
         else do_add();
 
-    } else if ($this_verb==FL_AXES) {
-      fl_modifier($modifier) fl_doAxes($this_size,direction);
-
     } else if ($this_verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add($this_bbox,auto=true);
 

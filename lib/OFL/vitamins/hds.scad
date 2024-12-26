@@ -155,10 +155,6 @@ module fl_hd(
     } else if ($verb==FL_ASSEMBLY) {
       // intentionally a no-op
 
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
-
     } else if ($verb==FL_MOUNT) {
       fl_modifier($modifier) do_layout($FL_ADD=$FL_MOUNT)
         fl_screw(type=screw,len=$hd_screw_len,direction=$hole_direction);

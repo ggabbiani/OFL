@@ -81,9 +81,6 @@ module fl_hdmi(
   fl_polymorph(verbs, type, octant=octant, direction=direction) {
     if ($this_verb==FL_ADD) {
       fl_modifier($modifier) hdmi(nop,false);
-    } else if ($this_verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes($this_size,direction);
     } else if ($this_verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add($this_bbox,auto=true);
     } else if ($this_verb==FL_CUTOUT) {

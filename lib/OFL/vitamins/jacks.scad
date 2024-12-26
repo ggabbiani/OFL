@@ -119,13 +119,10 @@ module fl_jack_barrelEngine(
   D     = direction ? fl_direction(direction) : FL_I;
   M     = fl_octant(octant,bbox=bbox);
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         jack();
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_CUTOUT) {
@@ -225,13 +222,9 @@ module fl_jack_mcxjphstem1Engine(
       fprint();
   }
 
-  fl_manage(verbs,M,D) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
-
-    } else if ($verb==FL_AXES) {
-      fl_modifier($FL_AXES)
-        fl_doAxes(size,direction);
 
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);

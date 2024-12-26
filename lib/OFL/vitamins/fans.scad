@@ -208,9 +208,6 @@ module fl_fan(
       translate(-Z(depth/2))
         fan(nop);
 
-    } else if ($this_verb==FL_AXES) {
-      fl_doAxes($this_size,$this_direction);
-
     } else if ($this_verb==FL_BBOX) {
       fl_bb_add(corners=$this_bbox,$FL_ADD=$FL_BBOX);
 
