@@ -307,7 +307,7 @@ module fl_heatsink(
     }
   }
 
-  module khadas(verb,type,direction,octant,) {
+  module khadas(verb,type,direction,octant) {
     dxf   = fl_dxf(type);
     // private properties
     Zs  = fl_property(type,"separator height");
@@ -382,7 +382,7 @@ module fl_heatsink(
     }
   }
 
-  module wrap(verb) {
+  module proxy(verb) {
     if (engine=="Khadas")
       khadas(verb, type, direction, octant)
         children();
@@ -391,8 +391,8 @@ module fl_heatsink(
         children();
   }
 
-  fl_manage(verbs,M,D) {
+  fl_manage(verbs,M,D,size) {
     fl_modifier($modifier)
-      wrap($verb);
+      proxy($verb);
   }
 }
