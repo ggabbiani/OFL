@@ -88,7 +88,7 @@ module fl_vloop(
       let(
         $verb     = FL_AXES,
         $modifier = fl_verb2modifier($verb)
-      ) echo(size=size) fl_doAxes(size,direction);
+      ) fl_modifier($modifier) fl_doAxes(size,direction);
     }
   }
 }
