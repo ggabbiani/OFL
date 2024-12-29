@@ -154,4 +154,3 @@ fl_box(verbs,
   fastenings=[FAST_TYPE,FAST_NOMINAL],
   octant=octant,direction=direction
 ) fl_sphere(FL_AXES,r=10,$FL_AXES="ON");
-
