@@ -33,8 +33,8 @@ function fl_Dimension(
   label,
 )  = [
   fl_native(value=true),
-  assert(label)       fl_dim_label(value=label),
-  assert(value)       fl_dim_value(value=value),
+  assert(label) fl_dim_label(value=label),
+  assert(value) fl_dim_value(value=value),
 ];
 
 /*!
