@@ -107,33 +107,6 @@ function bitHolder(name,bit,cardinality,magnet) = let(
     ["centroid",    centroid],
   ];
 
-magnet    = MAGNET=="FL_MAG_RECT_10x5x1"
-          ? FL_MAG_RECT_10x5x1
-          : MAGNET=="FL_MAG_RECT_10x5x2"
-          ? FL_MAG_RECT_10x5x2
-          : undef;
-
-SZ_magnet = fl_size(magnet);
-
-bits = [
-  if (check(BIT_1))  let(r=BIT_1)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_2))  let(r=BIT_2)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_3))  let(r=BIT_3)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_4))  let(r=BIT_4)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_5))  let(r=BIT_5)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_6))  let(r=BIT_6)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_7))  let(r=BIT_7)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_8))  let(r=BIT_8)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_9))  let(r=BIT_9)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_10)) let(r=BIT_10)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_11)) let(r=BIT_11)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_12)) let(r=BIT_12)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_13)) let(r=BIT_13)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_14)) let(r=BIT_14)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-  if (check(BIT_15)) let(r=BIT_15)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
-];
-strip();
-
 module strip() {
   if (bits) {
     strip = let(
@@ -204,11 +177,6 @@ module holder(verbs,item) {
   Mmagnet = T([0,-SZ_magnet.z/2-T_magnet-TOLERANCE,T_bottom]);
   Mbit    = T([0,-(T_magnet+2*TOLERANCE+T_hole+SZ_magnet.z+d/2),T_bottom]);
 
-  fl_trace("item",item);
-  fl_trace("size",size);
-  fl_trace("bit",bit);
-  fl_trace("magnet",magnet);
-
   fl_vloop(verbs) {
     if ($verb==FL_ADD) {
       fl_modifier($FL_ADD) fl_color()
@@ -222,10 +190,10 @@ module holder(verbs,item) {
         // bit
         multmatrix(Mbit)
           for(i=[0:card-1]) translate(-Y(i*(T_hole+d)))
-            bit();
+            bit($FL_ADD=$FL_ASSEMBLY);
         // magnet
         multmatrix(Mmagnet)
-          fl_magnet(FL_ADD,magnet,octant=+X,direction=[-Y,90]);
+          fl_magnet(FL_ADD,magnet,octant=+X,direction=[-Y,90],$FL_ADD=$FL_ASSEMBLY);
       }
 
     } else if ($verb==FL_DRILL) {
@@ -236,3 +204,30 @@ module holder(verbs,item) {
     }
   }
 }
+
+magnet    = MAGNET=="FL_MAG_RECT_10x5x1"
+          ? FL_MAG_RECT_10x5x1
+          : MAGNET=="FL_MAG_RECT_10x5x2"
+          ? FL_MAG_RECT_10x5x2
+          : undef;
+
+SZ_magnet = fl_size(magnet);
+
+bits = [
+  if (check(BIT_1))  let(r=BIT_1)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_2))  let(r=BIT_2)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_3))  let(r=BIT_3)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_4))  let(r=BIT_4)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_5))  let(r=BIT_5)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_6))  let(r=BIT_6)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_7))  let(r=BIT_7)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_8))  let(r=BIT_8)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_9))  let(r=BIT_9)   [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_10)) let(r=BIT_10)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_11)) let(r=BIT_11)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_12)) let(r=BIT_12)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_13)) let(r=BIT_13)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_14)) let(r=BIT_14)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+  if (check(BIT_15)) let(r=BIT_15)  [str(r[0],"mm"),[r[1],r[2]],r[3],volume(r[0]/2,r[2])],
+];
+strip();
