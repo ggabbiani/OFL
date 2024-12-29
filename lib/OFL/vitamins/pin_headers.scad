@@ -182,7 +182,7 @@ module fl_pinHeader(
       fl_modifier($modifier) do_drill();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

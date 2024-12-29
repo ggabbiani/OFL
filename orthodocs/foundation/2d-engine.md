@@ -727,6 +727,134 @@ __Syntax:__
 
 ---
 
+### module fl_2d_vloop
+
+__Syntax:__
+
+    fl_2d_vloop(verbs,bbox,quadrant)
+
+Low-level verb-driven OFL API management.
+
+Two-dimensional steps:
+
+1. verb looping
+2. quadrant translation
+
+**1. Verb looping:**
+
+Each passed verb triggers in turn the children modules with an execution
+context describing:
+
+- the verb actually triggered;
+- the OpenSCAD character modifier descriptor (see also [OpenSCAD User Manual/Modifier
+  Characters](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Modifier_Characters))
+
+Verb list like `[FL_ADD, FL_DRILL]` will loop children modules two times,
+once for the FL_ADD implementation and once for the FL_DRILL.
+
+The only exception to this is the FL_AXES verb, that needs to be executed
+outside the canonical transformation pipeline (without applying «quadrant» translations).
+FL_AXES implementation - when passed in the verb list - is provided
+automatically by the library.
+
+So a verb list like `[FL_ADD, FL_AXES, FL_DRILL]` will trigger the children
+modules twice: once for FL_ADD and once for FL_DRILL. OFL will trigger an
+internal FL_AXES 2d implementation.
+
+**2. Quadrant translation**
+
+A coordinate system divides two-dimensional spaces in four
+[quadrants](https://en.wikipedia.org/wiki/Quadrant_(plane_geometry)).
+
+Using the bounding-box information provided by the 2d «bbox» parameter, we
+can fit the shapes defined by children modules exactly in one quadrant.
+
+Context variables:
+
+| Name       | Context   | Description
+| ---------- | --------- | ---------------------
+|            | Children  | see [fl_generic_vloop{}](mngm-engine.md#module-fl_generic_vloop) context variables
+
+
+__Parameters:__
+
+__verbs__  
+verb list
+
+__bbox__  
+mandatory bounding box
+
+__quadrant__  
+when undef native positioning is used
+
+
+---
+
+### module fl_2d_vmanage
+
+__Syntax:__
+
+    fl_2d_vmanage(verbs,this,quadrant)
+
+High-level (OFL 'objects' only) verb-driven OFL API management for
+two-dimension spaces.
+
+It does pretty much the same things like [fl_2d_vloop{}](#module-fl_2d_vloop) but with a different
+interface and enriching the children context with new context variables.
+
+**Usage:**
+
+    // An OFL object is a list of [key,values] items
+    object = fl_Object(...);
+
+    ...
+
+    // this engine is called once for every verb passed to module fl_vmanage
+    module engine() let(
+      ...
+    ) if ($this_verb==FL_ADD)
+      ...;
+
+      else if ($this_verb==FL_BBOX)
+      ...;
+
+      else if ($this_verb==FL_CUTOUT)
+      ...;
+
+      else if ($this_verb==FL_DRILL)
+      ...;
+
+      else if ($this_verb==FL_LAYOUT)
+      ...;
+
+      else if ($this_verb==FL_MOUNT)
+      ...;
+
+      else
+        fl_error(["unimplemented verb",$this_verb]);
+
+    ...
+
+    fl_2d_vmanage(verbs,object,octant=octant,direction=direction)
+      engine(thick=T)
+        // child passed to engine for further manipulation (ex. during FL_LAYOUT)
+        fl_circle(...);
+
+Context variables:
+
+| Name             | Context   | Description                                         |
+| ---------------- | --------- | --------------------------------------------------- |
+|                  | Children  | see [fl_generic_vmanage{}](mngm-engine.md#module-fl_generic_vmanage) Children context                     |
+
+
+__Parameters:__
+
+__quadrant__  
+when undef native positioning is used
+
+
+---
+
 ### module fl_annulus
 
 __Syntax:__

@@ -1,5 +1,5 @@
 /*
- * fl_polymorph{} usage example, implementing a NopSCADlib IEC wrapper engine.
+ * fl_vmanage{} usage example, implementing a NopSCADlib IEC wrapper engine.
  *
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
@@ -16,9 +16,6 @@ include <../../lib/ext/NopSCADlib/core.scad>
 include <../../lib/ext/NopSCADlib/vitamins/iecs.scad>
 
 include <../../lib/OFL/vitamins/screw.scad>
-
-use <../../lib/OFL/foundation/polymorphic-engine.scad>
-
 
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -147,7 +144,7 @@ iec = let(
   fl_engine(value="iec"),
 ];
 
-fl_polymorph(verbs,iec,octant=octant,direction=direction)
+fl_vmanage(verbs,iec,octant=octant,direction=direction)
   engine(thick=T)
     fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
 

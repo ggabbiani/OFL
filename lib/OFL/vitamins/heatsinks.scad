@@ -303,7 +303,7 @@ module fl_heatsink(
       do_footprint();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 
@@ -378,7 +378,7 @@ module fl_heatsink(
       do_footprint();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 

@@ -4,9 +4,8 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/iec] --o|include| A2[foundation/polymorphic-engine]
-    A1 --o|include| A3[foundation/unsafe_defs]
-    A1 --o|include| A4[vitamins/screw]
+    A1[vitamins/iec] --o|include| A2[foundation/unsafe_defs]
+    A1 --o|include| A3[vitamins/screw]
 ```
 
 NopSCADlib IEC wrapper library. This library wraps NopSCADlib IEC instances

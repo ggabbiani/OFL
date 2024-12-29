@@ -46,7 +46,6 @@ include <../foundation/util.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
-use <../foundation/polymorphic-engine.scad>
 
 //! prefix used for namespacing
 FL_DIN_NS  = "DIN";
@@ -335,7 +334,7 @@ module fl_DIN_rail(
       }
   }
 
-  // run with an execution context set by fl_polymorph{}
+  // run with an execution context set by fl_vmanage{}
   module engine() {
 
     if ($this_verb==FL_ADD) {
@@ -419,12 +418,12 @@ module fl_DIN_rail(
       // to be implemented ...
 
     } else
-      assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 
-  // fl_polymorph() manages standard parameters and prepares the execution
+  // fl_vmanage() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant=octant,direction=direction)
+  fl_vmanage(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

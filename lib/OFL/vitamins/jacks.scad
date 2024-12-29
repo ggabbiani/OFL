@@ -132,7 +132,7 @@ module fl_jack_barrelEngine(
           fl_cutout(len=cut_thick,z=X,x=-FL_Z,delta=cut_tolerance,trim=fl_X(-size.x/2),cut=true)
             jack();
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -236,7 +236,7 @@ module fl_jack_mcxjphstem1Engine(
       fl_modifier($modifier) do_footprint();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

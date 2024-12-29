@@ -7,7 +7,6 @@ graph LR
     A1[foundation/dimensions] --o|include| A2[foundation/unsafe_defs]
     A1 --o|use| A3[foundation/3d-engine]
     A1 --o|use| A4[foundation/bbox-engine]
-    A1 --o|use| A5[foundation/polymorphic-engine]
 ```
 
 Dimension line library.

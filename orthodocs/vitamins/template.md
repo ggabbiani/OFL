@@ -5,7 +5,6 @@
 ```mermaid
 graph LR
     A1[vitamins/template] --o|include| A2[foundation/unsafe_defs]
-    A1 --o|use| A3[foundation/polymorphic-engine]
 ```
 
 Vitamin template for OpenSCAD Foundation Library.

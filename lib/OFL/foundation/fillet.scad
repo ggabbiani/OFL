@@ -63,7 +63,7 @@ module fl_hFillet(
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_bb_add(bbox);
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 }
 
@@ -106,7 +106,7 @@ module fl_fillet(
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) fl_cube(size=size,octant=O0);
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 }
 
@@ -163,6 +163,6 @@ module fl_90DegFillet(
     else if ($verb==FL_BBOX)
       fl_modifier($modifier) translate(bbox[0]) fl_cube(size=size,octant=O0);
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 }

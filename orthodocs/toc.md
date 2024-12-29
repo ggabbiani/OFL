@@ -14,6 +14,8 @@
 - [fl_2d_placeIf (module)](foundation/2d-engine.md#module-fl_2d_placeif)
 - [fl_2d_polygonLabels (module)](foundation/2d-engine.md#module-fl_2d_polygonlabels)
 - [fl_2d_polygonSymbols (module)](foundation/2d-engine.md#module-fl_2d_polygonsymbols)
+- [fl_2d_vloop (module)](foundation/2d-engine.md#module-fl_2d_vloop)
+- [fl_2d_vmanage (module)](foundation/2d-engine.md#module-fl_2d_vmanage)
 - [2xNIL (variable)](foundation/unsafe_defs.md#variable-2xnil)
 - [FL_2xNIL (variable)](foundation/core.md#variable-fl_2xnil)
 
@@ -314,6 +316,8 @@
 - [FL_GENERIC_NS (variable)](vitamins/generic.md#variable-fl_generic_ns)
 - [fl_generic_Vitamin (function)](vitamins/generic.md#function-fl_generic_vitamin)
 - [fl_generic_vitamin (module)](vitamins/generic.md#module-fl_generic_vitamin)
+- [fl_generic_vloop (module)](foundation/mngm-engine.md#module-fl_generic_vloop)
+- [fl_generic_vmanage (module)](foundation/mngm-engine.md#module-fl_generic_vmanage)
 - [fl_get (function)](foundation/core.md#function-fl_get)
 - [fl_grey (function)](foundation/core.md#function-fl_grey)
 - [foundation/grid (package)](foundation/grid.md#package-foundationgrid)
@@ -649,8 +653,6 @@
 - [fl_planeAlign (function)](foundation/3d-engine.md#function-fl_planealign)
 - [fl_planeAlign (module)](foundation/3d-engine.md#module-fl_planealign)
 - [fl_planes (module)](foundation/algo-engine.md#module-fl_planes)
-- [fl_polymorph (module)](foundation/polymorphic-engine.md#module-fl_polymorph)
-- [foundation/polymorphic-engine (package)](foundation/polymorphic-engine.md#package-foundationpolymorphic-engine)
 - [fl_pop (function)](foundation/core.md#function-fl_pop)
 - [$fl_print_tech (variable)](foundation/limits.md#variable-$fl_print_tech)
 - [fl_Prism (function)](foundation/3d-engine.md#function-fl_prism)
@@ -925,7 +927,8 @@
 - [fl_versor (module)](foundation/core.md#module-fl_versor)
 - [fl_vFillet (module)](foundation/fillet.md#module-fl_vfillet)
 - [fl_view (function)](foundation/core.md#function-fl_view)
-- [fl_vloop (module)](foundation/mngm-engine.md#module-fl_vloop)
+- [fl_vloop (module)](foundation/3d-engine.md#module-fl_vloop)
+- [fl_vmanage (module)](foundation/3d-engine.md#module-fl_vmanage)
 
 ## W
 

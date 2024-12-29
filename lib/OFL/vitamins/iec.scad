@@ -13,7 +13,6 @@ include <../../ext/NopSCADlib/core.scad>
 include <../../ext/NopSCADlib/vitamins/iecs.scad>
 
 include <../foundation/unsafe_defs.scad>
-include <../foundation/polymorphic-engine.scad>
 include <screw.scad>
 
 FL_IEC_NS="iec";
@@ -147,7 +146,7 @@ module fl_iec(
     else
       fl_error(["unimplemented verb",$this_verb]);
 
-  fl_polymorph(verbs,this,octant=octant,direction=direction)
+  fl_vmanage(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

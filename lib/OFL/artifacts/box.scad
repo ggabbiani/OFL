@@ -239,6 +239,6 @@ module fl_box(
         fl_bb_add(pload);
 
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error("unimplemented verb",$verb);
   }
 }

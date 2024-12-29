@@ -10,7 +10,6 @@ graph LR
     A1 --o|include| A5[foundation/util]
     A1 --o|use| A6[foundation/3d-engine]
     A1 --o|use| A7[foundation/bbox-engine]
-    A1 --o|use| A8[foundation/polymorphic-engine]
 ```
 
 A DIN rail is a metal rail of a standard type widely used for mounting

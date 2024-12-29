@@ -190,7 +190,7 @@ module fl_pcbHolder(
         fl_pcb(FL_DRAW,pcb);
   }
 
-  fl_polymorph(verbs, this, octant, direction) {
+  fl_vmanage(verbs, this, octant, direction) {
     if ($this_verb==FL_ADD) {
       fl_modifier($modifier)
         contextualLayout($FL_LAYOUT=$FL_ADD)
@@ -227,7 +227,7 @@ module fl_pcbHolder(
           fl_bb_add(pcb_bb);
 
     } else {
-      fl_error(["Unimplemented verb: ",$this_verb]);
+      fl_error(["Unimplemented verb",$this_verb]);
     }
   }
 }

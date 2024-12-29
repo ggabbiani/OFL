@@ -311,7 +311,7 @@ module fl_spacer(
     children();
   }
 
-  fl_polymorph(verbs, spacer, octant=octant, direction=direction) {
+  fl_vmanage(verbs, spacer, octant=octant, direction=direction) {
 
     if ($this_verb==FL_ADD) {
       fl_modifier($modifier) do_add();

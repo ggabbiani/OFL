@@ -9,7 +9,6 @@ graph LR
     A1 --o|use| A4[foundation/3d-engine]
     A1 --o|use| A5[foundation/bbox-engine]
     A1 --o|use| A6[foundation/fillet]
-    A1 --o|use| A7[foundation/polymorphic-engine]
 ```
 
 Snap-fit joints, for 'how to' about snap-fit joint 3d printing, see also [How

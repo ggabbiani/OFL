@@ -110,7 +110,7 @@ function fl_error(
   message
 ) = fl_strcat(concat(["***OFL ERROR***:"],is_list(message) ? message : [message])," ");
 
-//! force an error if condition is true
+//! force an error if condition is false or undef
 module fl_error(
   //! string or vector of strings
   message,
@@ -690,12 +690,12 @@ module fl_axes(size=1,reverse=false) {
   sz  = is_list(size) ?
       assert(size.x>=0 && size.y>=0 && (size.z==undef||size.z>=0)) size :
       assert(size>=0) [size,size,size];
-  color("red")
+  fl_color("red")
     fl_vector(sz.x*FL_X,reverse==undef || !reverse);
-  color("green")
+  fl_color("green")
     fl_vector(sz.y*FL_Y,reverse==undef || !reverse);
   if (sz.z)
-    color("blue")
+    fl_color("blue")
       fl_vector(sz.z*FL_Z,reverse==undef || !reverse);
 }
 

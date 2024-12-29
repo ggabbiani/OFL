@@ -144,3 +144,4 @@
 - [ ] write an application customizer template similar to the one existing for tests;
 - [ ] add package with customizer helpers;
 - [ ] document Docker build process and more generally developer information;
+- [ ] fix transparency issue on FL_AXES;

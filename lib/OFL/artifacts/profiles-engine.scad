@@ -97,7 +97,7 @@ module fl_profile(
       fl_modifier($modifier) cube(size=size, center=true);
 
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
 
   }
 }
@@ -184,6 +184,6 @@ module fl_bentPlate(
         fl_cube(size=size, octant=O);
 
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 }

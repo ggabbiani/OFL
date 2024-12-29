@@ -9,20 +9,153 @@
 use <../dxf.scad>
 
 include <2d-engine.scad>
-include <traits-engine.scad>
 
-use <polymorphic-engine.scad>
+use <traits-engine.scad>
 use <type-engine.scad>
+
 use <../../ext/NopSCADlib/utils/maths.scad>
 
-module fl_doAxes(
-  size,
+/*!
+ * High-level (OFL 'objects' only) verb-driven OFL API management.
+ *
+ * It does pretty much the same things like fl_vloop{} but with a different
+ * interface and enriching the children context with new context variables.
+ *
+ * **Usage:**
+ *
+ *     // An OFL object is a list of [key,values] items
+ *     object = fl_Object(...);
+ *
+ *     ...
+ *
+ *     // this engine is called once for every verb passed to module fl_vmanage
+ *     module engine() let(
+ *       ...
+ *     ) if ($this_verb==FL_ADD)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_BBOX)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_CUTOUT)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_DRILL)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_LAYOUT)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_MOUNT)
+ *       ...;
+ *
+ *       else
+ *         fl_error(["unimplemented verb",$this_verb]);
+ *
+ *     ...
+ *
+ *     fl_vmanage(verbs,object,octant=octant,direction=direction)
+ *       engine(thick=T)
+ *         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
+ *         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                         |
+ * | ---------------- | --------- | --------------------------------------------------- |
+ * |                  | Children  | see fl_generic_vmanage{} Children context                     |
+ */
+module fl_vmanage(
+  verbs,
+  this,
+  //! when undef native positioning is used
+  octant,
+  //! desired direction [director,rotation], native direction when undef
   direction
 ) {
-  sz = 1.2*size;
-  fl_axes(sz);
+  fl_generic_vmanage(
+    verbs,
+    this,
+    positioning = octant,
+    direction   = direction,
+    m           = function(octant,type) fl_octant(octant,type),
+    d           = function(direction)   fl_direction(direction)
+  ) {
+    children();
+    fl_doAxes(size=1.2*$this_size, direction=direction);
+  }
+}
+
+/*!
+ * Low-level verb-driven OFL API management.
+ *
+ * Three-dimensional steps:
+ *
+ * 1. verb looping
+ * 2. octant translation («octant» parameter)
+ * 3. orientation along a given direction / angle («direction» parameter)
+ *
+ * **1. Verb looping:**
+ *
+ * Each passed verb triggers in turn the children modules with an execution
+ * context describing:
+ *
+ * - the verb actually triggered;
+ * - the OpenSCAD character modifier descriptor (see also [OpenSCAD User Manual/Modifier
+ *   Characters](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Modifier_Characters))
+ *
+ * Verb list like `[FL_ADD, FL_DRILL]` will loop children modules two times,
+ * once for the FL_ADD implementation and once for the FL_DRILL.
+ *
+ * The only exception to this is the FL_AXES verb, that needs to be executed
+ * outside the canonical transformation pipeline (without applying «octant» translations).
+ * FL_AXES implementation - when passed in the verb list - is provided
+ * automatically by the library.
+ *
+ * So a verb list like `[FL_ADD, FL_AXES, FL_DRILL]` will trigger the children
+ * modules twice: once for FL_ADD and once for FL_DRILL. OFL will trigger an
+ * internal FL_AXES implementation.
+ *
+ * **2. Octant translation**
+ *
+ * A coordinate system divides three-dimensional spaces in eight
+ * [octants](https://en.wikipedia.org/wiki/Octant_(solid_geometry)).
+ *
+ * Using the bounding-box information provided by the «bbox» parameter, we can
+ * fit the shapes defined by children modules exactly in one octant.
+ *
+ * **3. Orientation**
+ *
+ * OFL can also orient shapes defined by children modules along arbitrary axis
+ * and additionally rotate around it.
+ *
+ * Context variables:
+ *
+ * | Name       | Context   | Description
+ * | ---------- | --------- | ---------------------
+ * |            | Children  | see fl_generic_vloop{} context variables
+ */
+module fl_vloop(
+  //! verb list
+  verbs,
+  //! mandatory bounding box
+  bbox,
+  //! when undef native positioning is used
+  octant,
+  //! desired direction [director,rotation], native direction when undef
+  direction
+) let(
+    $this_octant  = octant
+  ) assert($children==1)
+    fl_generic_vloop(verbs,bbox,M=fl_octant(octant, bbox=bbox),D=fl_direction(direction)) {
+      children();
+      fl_doAxes(size=1.2*(bbox[1]-bbox[0]), direction=direction);
+    }
+
+module fl_doAxes(size,direction) {
+  fl_axes(size);
   if (fl_dbg_symbols() && direction)
-    fl_sym_direction(direction=direction,size=sz);
+    fl_sym_direction(direction=direction,size=size);
 }
 
 /*!
@@ -116,7 +249,7 @@ module fl_cube(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -175,7 +308,7 @@ module fl_sphere(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -311,7 +444,7 @@ module fl_cylinder(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -434,7 +567,7 @@ module fl_prism(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -490,7 +623,7 @@ module fl_pyramid(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox,auto=true);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -866,7 +999,6 @@ module fl_layout(
   }
 
   fl_vloop(verbs,bbox,octant,direction) {
-    fl_trace(str("dispatching ",$verb));
 
     if ($verb==FL_BBOX) {
       fl_modifier($modifier,false) fl_bb_add(bbox);
@@ -877,7 +1009,7 @@ module fl_layout(
 
     } else {
       // fl_modifier($modifier,false) context() children();
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -898,7 +1030,7 @@ module fl_bb_add(
   //! 2d switch
   2d=false,
   //! when true, z-fight correction is applied
-  auto=false
+  auto=true
 ) {
   assert(fl_tt_isBoundingBox(corners,2d),corners);
   if (2d)
@@ -1362,7 +1494,7 @@ module fl_symbol(
     context() children();
   }
 
-  fl_vloop(verbs,do_axes=false) {
+  fl_vloop(fl_list_filter(verbs,function(item) item!=FL_AXES)) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
@@ -1370,7 +1502,7 @@ module fl_symbol(
       fl_modifier($modifier) do_layout() children();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -1451,7 +1583,7 @@ module fl_sym_hole(
       fl_modifier($modifier) do_add();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -1495,7 +1627,7 @@ module fl_sym_point(
       fl_modifier($modifier) do_add();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -1699,7 +1831,7 @@ module fl_torus(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -1754,7 +1886,7 @@ module fl_tube(
     } else if ($verb==FL_FOOTPRINT) {
       fl_modifier($modifier) do_fprint();
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

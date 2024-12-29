@@ -259,11 +259,11 @@ module fl_magnet(
         do_layout() fl_screw(FL_DRILL,screw,$fl_thickness=screw_thick);
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 
-  fl_polymorph(verbs,type,octant=octant,direction=direction)
+  fl_vmanage(verbs,type,octant=octant,direction=direction)
     engine()
       children();
 }

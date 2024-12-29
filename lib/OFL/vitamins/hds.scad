@@ -148,7 +148,7 @@ module fl_hd(
       $fl_thickness = fl_3d_axisValue(-Y, values=thick)
     ) fl_sata(FL_CUTOUT,plug,$dbg_Symbols=false,drift=drift);
 
-  fl_polymorph(verbs,type,octant=octant,direction=direction)
+  fl_vmanage(verbs,type,octant=octant,direction=direction)
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 

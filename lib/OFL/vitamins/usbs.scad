@@ -267,7 +267,7 @@ module fl_USB(
       fl_modifier($modifier) fl_bb_add(bbox/* +tolerance*[[-1,-1,-1],[1,1,1]] */);
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

@@ -82,6 +82,6 @@ module fl_label(
     if ($verb==FL_ADD)
       fl_modifier($modifier) do_add();
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 }

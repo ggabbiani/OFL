@@ -10,7 +10,6 @@ graph LR
     A1 --o|use| A5[foundation/bbox-engine]
     A1 --o|use| A6[foundation/hole]
     A1 --o|use| A7[foundation/mngm-engine]
-    A1 --o|use| A8[foundation/polymorphic-engine]
 ```
 
 ## Variables

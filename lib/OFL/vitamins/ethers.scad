@@ -14,7 +14,6 @@ use <../foundation/2d-engine.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>
-use <../foundation/polymorphic-engine.scad>
 use <../foundation/util.scad>
 
 //! ethernet namespace
@@ -145,7 +144,7 @@ module fl_ether(
       }
   }
 
-  fl_polymorph(verbs, type, octant=octant, direction=direction) {
+  fl_vmanage(verbs, type, octant=octant, direction=direction) {
     if ($this_verb==FL_ADD) {
       fl_modifier($modifier)
         if (engine==str(FL_ETHER_NS,"/NopSCADlib")) rj45();

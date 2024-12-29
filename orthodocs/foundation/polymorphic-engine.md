@@ -23,11 +23,11 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### module fl_polymorph
+### module fl_vmanage
 
 __Syntax:__
 
-    fl_polymorph(verbs=FL_ADD,this,octant,direction)
+    fl_vmanage(verbs=FL_ADD,this,octant,direction)
 
 This module manages OFL types leveraging children implementation of the
 actual engine while decoupling standard OFL parameters manipulation from
@@ -47,7 +47,7 @@ literals, simplifying the new type module writing.
 
 A typical use of this high-level management module is the following:
 
-    // this engine is called once for every verb passed to module fl_polymorph
+    // this engine is called once for every verb passed to module fl_vmanage
     module engine() let(
       ...
     ) if ($this_verb==FL_ADD)
@@ -71,7 +71,7 @@ A typical use of this high-level management module is the following:
       else
         fl_error(["unimplemented verb",$this_verb]);
 
-    fl_polymorph(verbs,object,octant=octant,direction=direction)
+    fl_vmanage(verbs,object,octant=octant,direction=direction)
       engine(thick=T)
         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
         fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);

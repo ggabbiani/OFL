@@ -44,7 +44,7 @@ module __fl_template(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) {
-  // run with an execution context set by fl_polymorph{}
+  // run with an execution context set by fl_vmanage{}
   module engine() let(
     // start of engine specific internal variables
     dummy_var = "whatever you need"
@@ -68,11 +68,11 @@ module __fl_template(
       // your code ...
 
     } else
-      assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
+      fl_error(["unimplemented verb",$verb]);
 
-  // fl_polymorph() manages standard parameters and prepares the execution
+  // fl_vmanage() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant=octant,direction=direction)
+  fl_vmanage(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

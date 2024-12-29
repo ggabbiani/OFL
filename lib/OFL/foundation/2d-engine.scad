@@ -10,6 +10,137 @@ include <unsafe_defs.scad>
 use <mngm-engine.scad>
 use <bbox-engine.scad>
 
+/*!
+ * High-level (OFL 'objects' only) verb-driven OFL API management for
+ * two-dimension spaces.
+ *
+ * It does pretty much the same things like fl_2d_vloop{} but with a different
+ * interface and enriching the children context with new context variables.
+ *
+ * **Usage:**
+ *
+ *     // An OFL object is a list of [key,values] items
+ *     object = fl_Object(...);
+ *
+ *     ...
+ *
+ *     // this engine is called once for every verb passed to module fl_vmanage
+ *     module engine() let(
+ *       ...
+ *     ) if ($this_verb==FL_ADD)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_BBOX)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_CUTOUT)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_DRILL)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_LAYOUT)
+ *       ...;
+ *
+ *       else if ($this_verb==FL_MOUNT)
+ *       ...;
+ *
+ *       else
+ *         fl_error(["unimplemented verb",$this_verb]);
+ *
+ *     ...
+ *
+ *     fl_2d_vmanage(verbs,object,octant=octant,direction=direction)
+ *       engine(thick=T)
+ *         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
+ *         fl_circle(...);
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                         |
+ * | ---------------- | --------- | --------------------------------------------------- |
+ * |                  | Children  | see fl_generic_vmanage{} Children context                     |
+ */
+module fl_2d_vmanage(
+  verbs,
+  this,
+  //! when undef native positioning is used
+  quadrant
+) {
+  fl_generic_vmanage(
+    verbs,
+    this,
+    positioning = quadrant,
+    m           = function(quadrant,bbox) fl_octant(octant,this),
+    d           = function(direction)     fl_direction(direction)
+  ) {
+    children();
+    fl_axes(size=1.2*$this_size);
+  }
+}
+
+/*!
+ * Low-level verb-driven OFL API management.
+ *
+ * Two-dimensional steps:
+ *
+ * 1. verb looping
+ * 2. quadrant translation
+ *
+ * **1. Verb looping:**
+ *
+ * Each passed verb triggers in turn the children modules with an execution
+ * context describing:
+ *
+ * - the verb actually triggered;
+ * - the OpenSCAD character modifier descriptor (see also [OpenSCAD User Manual/Modifier
+ *   Characters](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Modifier_Characters))
+ *
+ * Verb list like `[FL_ADD, FL_DRILL]` will loop children modules two times,
+ * once for the FL_ADD implementation and once for the FL_DRILL.
+ *
+ * The only exception to this is the FL_AXES verb, that needs to be executed
+ * outside the canonical transformation pipeline (without applying «quadrant» translations).
+ * FL_AXES implementation - when passed in the verb list - is provided
+ * automatically by the library.
+ *
+ * So a verb list like `[FL_ADD, FL_AXES, FL_DRILL]` will trigger the children
+ * modules twice: once for FL_ADD and once for FL_DRILL. OFL will trigger an
+ * internal FL_AXES 2d implementation.
+ *
+ * **2. Quadrant translation**
+ *
+ * A coordinate system divides two-dimensional spaces in four
+ * [quadrants](https://en.wikipedia.org/wiki/Quadrant_(plane_geometry)).
+ *
+ * Using the bounding-box information provided by the 2d «bbox» parameter, we
+ * can fit the shapes defined by children modules exactly in one quadrant.
+ *
+ * Context variables:
+ *
+ * | Name       | Context   | Description
+ * | ---------- | --------- | ---------------------
+ * |            | Children  | see fl_generic_vloop{} context variables
+ */
+module fl_2d_vloop(
+  //! verb list
+  verbs,
+  //! mandatory bounding box
+  bbox,
+  //! when undef native positioning is used
+  quadrant
+) {
+  $this_quadrant  = quadrant;
+  fl_generic_vloop(
+    verbs,
+    bbox,
+    M = fl_quadrant(quadrant, bbox=bbox)
+  ) {
+    children();
+    fl_axes(size=let(size=bbox[1]-bbox[0]) assert(len(size)==2) 1.2*[size.x,size.y]);
+  }
+}
+
 //! returns the angle between vector «a» and «b»
 function fl_2d_angleBetween(a,b) = atan2(b.y,b.x)-atan2(a.y,a.x);;
 
@@ -182,13 +313,8 @@ module fl_sector(
   points  = fl_sector(r=radius,angles=angles);
   bbox    = fl_bb_sector(r=radius,angles=angles);
   size    = bbox[1] - bbox[0];
-  M       = fl_quadrant(quadrant,bbox=bbox);
-  fl_trace("radius",radius);
-  fl_trace("points",points);
-  fl_trace("bbox",bbox);
-  fl_trace("size",size);
 
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(points);
 
@@ -196,7 +322,7 @@ module fl_sector(
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -428,15 +554,14 @@ module fl_ellipticSector(
   b     = e[1];
   bbox  = fl_bb_ellipticSector(e,angles);
   size  = bbox[1]-bbox[0];
-  M     = fl_quadrant(quadrant,bbox=bbox);
 
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(fl_ellipticSector(e,angles));
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -524,9 +649,8 @@ module fl_ellipticArc(
   b     = e.y;
   bbox  = fl_bb_ellipticArc(e,angles,thick);
   size  = bbox[1]-bbox[0];
-  M     = fl_quadrant(quadrant,bbox=bbox);
 
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
         fl_ellipticSector(verbs=$verb, angles=angles, e=e                 );
@@ -535,7 +659,7 @@ module fl_ellipticArc(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -678,19 +802,18 @@ module fl_ellipse(
   b     = e[1];
   bbox  = fl_bb_ellipse(e);
   size  = bbox[1]-bbox[0];
-  M     = fl_quadrant(quadrant,bbox=bbox);
 
   fa    = $fa;
   fn    = $fn;
   fs    = $fs;
 
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(fl_ellipse(e,$fa=fa,$fn=fn,$fs=fs));
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -718,18 +841,14 @@ module fl_circle(
   radius  = r!=undef ? r : d/2; assert(is_num(radius));
   bbox    = fl_bb_circle(r=radius);
   size    = bbox[1] - bbox[0];
-  M       = fl_quadrant(quadrant,bbox=bbox);
-  fl_trace("quadrant",quadrant);
-  fl_trace("M",M);
-  fl_trace("bbox",bbox);
 
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(fl_circle(r=radius));
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) %square(size=size, center=false);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -779,11 +898,8 @@ module fl_arc(
   radius  = r!=undef ? r : d/2; assert(is_num(radius));
   bbox    = fl_bb_arc(r=radius,angles=angles,thick=thick);
   size    = bbox[1] - bbox[0];
-  M       = fl_quadrant(quadrant,bbox=bbox);
 
-  fl_trace("radius",radius);
-
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
         fl_sector($verb, angles=angles, r=radius      );
@@ -792,7 +908,7 @@ module fl_arc(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) if (size.x>0 && size.y>0) translate(bbox[0]) square(size=size, center=false);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -817,16 +933,14 @@ module fl_ipoly(
 
   bbox    = fl_bb_polygon(points);
   size    = bbox[1] - bbox[0];
-  M       = fl_quadrant(quadrant,bbox=bbox);
-  fl_trace("bbox",bbox);
 
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(points);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) %square(size=size, center=false);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -954,13 +1068,13 @@ module fl_square(
   fl_trace("corners",corners);
   fl_trace("points",points);
 
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) polygon(points);
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) %fl_square(size=size,$FL_ADD=$FL_BBOX);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -1044,9 +1158,8 @@ module fl_2d_frame(
   corners_int = fl_2d_frame_intCorners(size,corners,thick);
 
   bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
-  M       = fl_quadrant(quadrant,bbox=bbox);
 
-  fl_vloop(verbs,bbox,quadrant=quadrant) {
+  fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
         fl_square($verb,size,corners);
@@ -1055,7 +1168,7 @@ module fl_2d_frame(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_square(size=size);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

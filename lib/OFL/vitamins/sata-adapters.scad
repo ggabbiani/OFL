@@ -82,7 +82,7 @@ module sata_adapter(
       fl_modifier($modifier)
         fl_bb_add(bbox,auto=true);
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

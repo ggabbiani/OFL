@@ -11,7 +11,6 @@ include <../foundation/core.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/fillet.scad>
 use <../foundation/mngm-engine.scad>
-use <../foundation/polymorphic-engine.scad>
 
 //! Caddy's namespace
 FL_NS_CAD = "cad";
@@ -161,9 +160,9 @@ module fl_caddy(
     else if ($verb==FL_PAYLOAD)
       fl_modifier($modifier) fl_bb_add(pload);
     else
-      fl_error(["unimplemented verb: ",$verb]);
+      fl_error(["unimplemented verb",$this_verb]);
 
-  fl_polymorph(verbs,type,octant=octant,direction=direction)
+  fl_vmanage(verbs,type,octant=octant,direction=direction)
     engine()
       children();
 

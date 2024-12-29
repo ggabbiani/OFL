@@ -12,7 +12,6 @@ use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/util.scad>
 use <../foundation/mngm-engine.scad>
-use <../foundation/polymorphic-engine.scad>
 
 
 FL_HDMI_NS = "hdmi";
@@ -78,7 +77,7 @@ module fl_hdmi(
 
   nop = fl_nopSCADlib(type);
 
-  fl_polymorph(verbs, type, octant=octant, direction=direction) {
+  fl_vmanage(verbs, type, octant=octant, direction=direction) {
     if ($this_verb==FL_ADD) {
       fl_modifier($modifier) hdmi(nop,false);
     } else if ($this_verb==FL_BBOX) {

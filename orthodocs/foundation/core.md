@@ -2535,7 +2535,7 @@ __Syntax:__
 
     fl_error(message,condition)
 
-force an error if condition is true
+force an error if condition is false or undef
 
 __Parameters:__
 

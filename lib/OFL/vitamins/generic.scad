@@ -15,7 +15,6 @@ use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/hole.scad>
 use <../foundation/mngm-engine.scad>
-use <../foundation/polymorphic-engine.scad>
 
 FL_GENERIC_NS = "GENERIC";
 
@@ -173,7 +172,7 @@ module fl_generic_vitamin(
       children();
   }
 
-  fl_polymorph(verbs, this, octant=octant, direction=direction) {
+  fl_vmanage(verbs, this, octant=octant, direction=direction) {
     if ($this_verb==FL_ADD) {
       fl_modifier($modifier)
         do_add();

@@ -12,7 +12,6 @@ include <../../ext/NopSCADlib/vitamins/screws.scad>
 include <../foundation/core.scad>
 
 use <../foundation/bbox-engine.scad>
-use <../foundation/polymorphic-engine.scad>
 
 //! countersinks namespace
 FL_CS_NS  = "cs";
@@ -194,7 +193,7 @@ module fl_countersink(
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$this_verb));
 
-  fl_polymorph(verbs,type,octant=octant,direction=direction)
+  fl_vmanage(verbs,type,octant=octant,direction=direction)
     engine()
       children();
 }

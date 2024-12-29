@@ -20,7 +20,6 @@ include <../../ext/Round-Anything/polyround.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/fillet.scad>
-use <../foundation/polymorphic-engine.scad>
 
 //! prefix used for namespacing
 FL_JNT_NS  = "jnt";
@@ -493,7 +492,7 @@ module fl_jnt_joint(
     $fl_tolerance = is_undef($fl_tolerance) ? 0 : $fl_tolerance
   ) children();
 
-  // run with an execution context set by fl_polymorph{}
+  // run with an execution context set by fl_vmanage{}
   module engine()
     context()
       if (engine==str(FL_JNT_NS,"/cantilever/rect"))
@@ -673,9 +672,9 @@ module fl_jnt_joint(
     else
       fl_error(["unimplemented verb",$this_verb]);
 
-  // fl_polymorph() manages standard parameters and prepares the execution
+  // fl_vmanage() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant=octant,direction=direction)
+  fl_vmanage(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

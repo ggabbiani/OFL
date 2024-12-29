@@ -12,7 +12,6 @@ include <../foundation/unsafe_defs.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
-use <../foundation/polymorphic-engine.scad>
 
 //! prefix used for namespacing
 FL_DIM_NS  = "dim";
@@ -307,7 +306,7 @@ module fl_dimension(
       fl_error(str("spread=",xy_spread));
   }
 
-  // run with an execution context set by fl_polymorph{}
+  // run with an execution context set by fl_vmanage{}
   module engine() let(
   ) if ($this_verb==FL_ADD) {
       context() {
@@ -325,7 +324,7 @@ module fl_dimension(
       fl_error(["unimplemented verb","'",$this_verb,"'"]);
 
   if (view==fl_currentView())
-    fl_polymorph(verbs,[fl_bb_corners(value=bbox)])
+    fl_vmanage(verbs,[fl_bb_corners(value=bbox)])
       engine()
         children();
 }

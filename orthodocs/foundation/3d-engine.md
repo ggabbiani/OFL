@@ -5,10 +5,9 @@
 ```mermaid
 graph LR
     A1[foundation/3d-engine] --o|include| A2[foundation/2d-engine]
-    A1 --o|include| A3[foundation/traits-engine]
-    A1 --o|use| A4[dxf]
-    A1 --o|use| A5[foundation/polymorphic-engine]
-    A1 --o|use| A6[foundation/type-engine]
+    A1 --o|use| A3[dxf]
+    A1 --o|use| A4[foundation/traits-engine]
+    A1 --o|use| A5[foundation/type-engine]
 ```
 
 3d primitives
@@ -927,7 +926,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_bb_add(corners,2d=false,auto=false)
+    fl_bb_add(corners,2d=false,auto=true)
 
 add a bounding box shape to the scene
 
@@ -1586,5 +1585,144 @@ desired direction [director,rotation], native direction when undef ([+X+Y+Z])
 
 __octant__  
 when undef native positioning is used
+
+
+---
+
+### module fl_vloop
+
+__Syntax:__
+
+    fl_vloop(verbs,bbox,octant,direction)
+
+Low-level verb-driven OFL API management.
+
+Three-dimensional steps:
+
+1. verb looping
+2. octant translation («octant» parameter)
+3. orientation along a given direction / angle («direction» parameter)
+
+**1. Verb looping:**
+
+Each passed verb triggers in turn the children modules with an execution
+context describing:
+
+- the verb actually triggered;
+- the OpenSCAD character modifier descriptor (see also [OpenSCAD User Manual/Modifier
+  Characters](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Modifier_Characters))
+
+Verb list like `[FL_ADD, FL_DRILL]` will loop children modules two times,
+once for the FL_ADD implementation and once for the FL_DRILL.
+
+The only exception to this is the FL_AXES verb, that needs to be executed
+outside the canonical transformation pipeline (without applying «octant» translations).
+FL_AXES implementation - when passed in the verb list - is provided
+automatically by the library.
+
+So a verb list like `[FL_ADD, FL_AXES, FL_DRILL]` will trigger the children
+modules twice: once for FL_ADD and once for FL_DRILL. OFL will trigger an
+internal FL_AXES implementation.
+
+**2. Octant translation**
+
+A coordinate system divides three-dimensional spaces in eight
+[octants](https://en.wikipedia.org/wiki/Octant_(solid_geometry)).
+
+Using the bounding-box information provided by the «bbox» parameter, we can
+fit the shapes defined by children modules exactly in one octant.
+
+**3. Orientation**
+
+OFL can also orient shapes defined by children modules along arbitrary axis
+and additionally rotate around it.
+
+Context variables:
+
+| Name       | Context   | Description
+| ---------- | --------- | ---------------------
+|            | Children  | see [fl_generic_vloop{}](mngm-engine.md#module-fl_generic_vloop) context variables
+
+
+__Parameters:__
+
+__verbs__  
+verb list
+
+__bbox__  
+mandatory bounding box
+
+__octant__  
+when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef
+
+
+---
+
+### module fl_vmanage
+
+__Syntax:__
+
+    fl_vmanage(verbs,this,octant,direction)
+
+High-level (OFL 'objects' only) verb-driven OFL API management.
+
+It does pretty much the same things like [fl_vloop{}](#module-fl_vloop) but with a different
+interface and enriching the children context with new context variables.
+
+**Usage:**
+
+    // An OFL object is a list of [key,values] items
+    object = fl_Object(...);
+
+    ...
+
+    // this engine is called once for every verb passed to module fl_vmanage
+    module engine() let(
+      ...
+    ) if ($this_verb==FL_ADD)
+      ...;
+
+      else if ($this_verb==FL_BBOX)
+      ...;
+
+      else if ($this_verb==FL_CUTOUT)
+      ...;
+
+      else if ($this_verb==FL_DRILL)
+      ...;
+
+      else if ($this_verb==FL_LAYOUT)
+      ...;
+
+      else if ($this_verb==FL_MOUNT)
+      ...;
+
+      else
+        fl_error(["unimplemented verb",$this_verb]);
+
+    ...
+
+    fl_vmanage(verbs,object,octant=octant,direction=direction)
+      engine(thick=T)
+        // child passed to engine for further manipulation (ex. during FL_LAYOUT)
+        fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
+
+Context variables:
+
+| Name             | Context   | Description                                         |
+| ---------------- | --------- | --------------------------------------------------- |
+|                  | Children  | see [fl_generic_vmanage{}](mngm-engine.md#module-fl_generic_vmanage) Children context                     |
+
+
+__Parameters:__
+
+__octant__  
+when undef native positioning is used
+
+__direction__  
+desired direction [director,rotation], native direction when undef
 
 

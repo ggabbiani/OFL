@@ -848,14 +848,14 @@ module fl_pcb(
       do_payload();
 
     else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 
   if (fl_optProperty(type,fl_engine()[0])==FL_PCB_ENGINE_FRAME)
     fl_pcb_frame(verbs,type,thick=thick,lay_direction=lay_direction,cut_tolerance=$fl_tolerance,components=components,cut_direction=cut_direction,direction=direction,octant=octant)
       children();
   else
-    fl_polymorph(verbs,type,octant=octant,direction=direction)
+    fl_vmanage(verbs,type,octant=octant,direction=direction)
       native()
         children();
 
@@ -987,7 +987,7 @@ module fl_pcb_adapter(
       fl_modifier($modifier) do_payload();
 
     } else
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
   }
 }
 
@@ -1303,7 +1303,7 @@ module fl_pcb_frame(
         fl_pcb($verb,pcb);
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

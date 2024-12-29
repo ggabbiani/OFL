@@ -312,7 +312,7 @@ module fl_screw(
     } else if ($verb==FL_FOOTPRINT) {
       fl_modifier($modifier) do_footprint();
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

@@ -17,7 +17,6 @@ include <../foundation/unsafe_defs.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
-use <../foundation/polymorphic-engine.scad>
 
 //! prefix used for namespacing
 FL_FAN_NS  = "fan";
@@ -202,7 +201,7 @@ module fl_fan(
     }
   }
 
-  // run with an execution context set by fl_polymorph{}
+  // run with an execution context set by fl_vmanage{}
   module engine() let(
   ) if ($this_verb==FL_ADD) {
       translate(-Z(depth/2))
@@ -238,9 +237,9 @@ module fl_fan(
     } else
       assert(false,str("***OFL ERROR***: unimplemented verb ",$this_verb));
 
-  // fl_polymorph() manages standard parameters and prepares the execution
+  // fl_vmanage() manages standard parameters and prepares the execution
   // context for the engine.
-  fl_polymorph(verbs,this,octant=octant,direction=direction)
+  fl_vmanage(verbs,this,octant=octant,direction=direction)
     engine()
       children();
 }

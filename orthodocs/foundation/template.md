@@ -5,7 +5,6 @@
 ```mermaid
 graph LR
     A1[foundation/template] --o|include| A2[foundation/unsafe_defs]
-    A1 --o|use| A3[foundation/polymorphic-engine]
 ```
 
 Foundation template for OpenSCAD Foundation Library.

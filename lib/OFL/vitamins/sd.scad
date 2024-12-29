@@ -77,7 +77,7 @@ module fl_sd_usocket(
       fl_modifier($modifier) do_cutout();
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

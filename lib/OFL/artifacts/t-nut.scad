@@ -294,7 +294,7 @@ module fl_tnut(
     }
   }
 
-  fl_polymorph(verbs, type, octant=octant, direction=direction) {
+  fl_vmanage(verbs, type, octant=octant, direction=direction) {
     if ($this_verb==FL_ADD)
       fl_modifier($modifier)
         do_add();

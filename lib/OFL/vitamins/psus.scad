@@ -309,7 +309,7 @@ module fl_psu(
     } else if ($verb==FL_CUTOUT) {  // intentionally a no-op
 
     } else {
-      assert(false,str("***UNIMPLEMENTED VERB***: ",$verb));
+      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }

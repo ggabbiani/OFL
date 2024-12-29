@@ -252,7 +252,7 @@ module fl_sata(
         fl_cutout(thick,delta=$fl_tolerance)
           do_footprint();
 
-    fl_polymorph(verbs,type,octant=octant,direction=direction)
+    fl_vmanage(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
         fl_modifier($modifier)
           do_add();
@@ -322,7 +322,7 @@ module fl_sata(
         fl_cutout(thick,delta=$fl_tolerance)
           do_footprint();
 
-    fl_polymorph(verbs,type,octant=octant,direction=direction)
+    fl_vmanage(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
         fl_modifier($modifier)
           do_add();
@@ -417,7 +417,7 @@ module fl_sata(
         fl_cutout(thick,delta=$fl_tolerance)
           do_footprint();
 
-    fl_polymorph(verbs,type,octant=octant,direction=direction)
+    fl_vmanage(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
         fl_modifier($modifier)
           do_add();
