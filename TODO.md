@@ -92,6 +92,7 @@
 - [X] implemented FL_CUTOUT in hds and sata packages;
 - [X] reviewed and applied where possible the new polymorph engine for rewriting
   and subtyping all the existing modules.
+- [ ] integrate in tests also the examples
 - [ ] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
 - [ ] modify FL_DRILL verb implementation according to the type of drill to be
@@ -109,10 +110,7 @@
 - [X] add constructors to spacer and pcb_holder libraries
 - [X] new artifact: fl_pcb_frame adapting a pcb to holes in order to be later
   mounted on standard pcb holder
-- [ ] fix bug in fl_sector(): order of generated points must follow the sign of
-  the angle.
 - [X] implemented PCB frames as PCB proxies
-- [ ] integrate in tests also the examples
 - [ ] constructor for fl_layout()
 - [ ] review and apply everywhere the new generalized cutout algorithm. Use
   vitamins/{ethers,heatsink,usbs}.scad as implementation example/reference.
@@ -145,3 +143,5 @@
 - [ ] add package with customizer helpers;
 - [ ] document Docker build process and more generally developer information;
 - [ ] fix transparency issue on FL_AXES;
+- [ ] fix bug in fl_sector(): order of generated points must follow the sign of
+  the angle.
