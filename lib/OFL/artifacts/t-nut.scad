@@ -102,7 +102,7 @@ function fl_TNut(
     fl_Dimension(size.x,  "width"   ),
     fl_Dimension(size.y,  "height"  ),
     fl_Dimension(size.z,  "length"  ),
-    fl_Dimension(hole_d,  "screw d" ),
+    if (hole_d) fl_Dimension(hole_d,  "screw d" ),
     fl_Dimension(wall,    "wall"    ),
     fl_Dimension(base,    "base"    ),
     fl_Dimension(cone,    "cone"    ),
