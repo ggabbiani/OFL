@@ -67,6 +67,7 @@ jobs:
           make -s docker/fedora
           docker run -v .:/import:Z --rm ${IMAGE_NAME}
           docker run -v .:/import:Z --rm ${IMAGE_NAME} tests/runs
+          docker run -v .:/import:Z --rm ${IMAGE_name} examples/runs
           docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
           docker push ${DOCKER_IMAGE}
 
@@ -76,6 +77,7 @@ jobs:
           make -s clean
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE}
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE} tests/runs
+          docker run -v .:/import:Z --rm ${DOCKER_IMAGE} examples/runs
 
   ubuntu:
     name: Ubuntu
@@ -124,8 +126,9 @@ jobs:
         if: steps.docker.outputs.changed=='yes'
         run: |
           make -s docker/ubuntu
-          docker run -v .:/import:Z --rm ${IMAGE_NAME}
-          docker run -v .:/import:Z --rm ${IMAGE_NAME} tests/runs
+          docker run -v .:/import --rm ${IMAGE_NAME}
+          docker run -v .:/import --rm ${IMAGE_NAME} tests/runs
+          docker run -v .:/import --rm ${IMAGE_NAME} examples/runs
           docker tag ${IMAGE_NAME} ${DOCKER_IMAGE}
           docker push ${DOCKER_IMAGE}
 
@@ -133,5 +136,6 @@ jobs:
         if: steps.docker.outputs.changed=='no'
         run: |
           make -s clean
-          docker run -v .:/import:Z --rm ${DOCKER_IMAGE}
-          docker run -v .:/import:Z --rm ${DOCKER_IMAGE} tests/runs
+          docker run -v .:/import --rm ${DOCKER_IMAGE}
+          docker run -v .:/import --rm ${DOCKER_IMAGE} tests/runs
+          docker run -v .:/import --rm ${DOCKER_IMAGE} examples/runs

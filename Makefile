@@ -59,6 +59,9 @@ orthodocs/%: $(LIB_SOURCES)
 docs/%:
 	$(call make_sub)
 
+examples/%:
+	$(call make_sub)
+
 tests/%:
 	$(call make_sub)
 
