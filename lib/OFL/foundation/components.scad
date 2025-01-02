@@ -36,7 +36,7 @@ FL_COMP_OCTANT = str(FL_COMP_NS,"/octant");
 /*!
  * [OPTIONAL boolean] external components don't contribute to payload calculations
  */
-FL_COMP_EXTERNAL = str(FL_COMP_NS,"/octant");
+FL_COMP_EXTERNAL = str(FL_COMP_NS,"/external");
 
 /*
  * Component constructor
@@ -61,6 +61,7 @@ function fl_Component(
    * - FL_COMP_DRIFT - see variable FL_COMP_DRIFT
    * - FL_COMP_COLOR - see variable FL_COMP_COLOR
    * - FL_COMP_OCTANT - see variable FL_COMP_OCTANT
+   * - FL_COMP_EXTERNAL - see variable FL_COMP_EXTERNAL
    */
   parameters
 ) = let(
