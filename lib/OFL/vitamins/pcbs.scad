@@ -826,7 +826,7 @@ module fl_pcb(
       do_assembly();
 
     else if ($verb==FL_BBOX)
-      fl_bb_add(bbox,auto=true);
+      fl_bb_add(bbox);
 
     else if ($verb==FL_CUTOUT)
       do_cutout();
@@ -1184,7 +1184,6 @@ module fl_pcb_frame(
   octant,
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  echo(components=components);
 
   bbox  = fl_bb_corners(this);
   size  = fl_bb_size(this);
