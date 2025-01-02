@@ -50,7 +50,7 @@ module fl_trimpot(
     trimpot10();
   }
 
-  fl_vloop(verbs,bbox,octant,direction) echo($verb=$verb) {
+  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) trimpot10();
 
