@@ -75,7 +75,7 @@ CUT_THICK = 10; // [0:1:10]
 // Tolerance during FL_CUTOUT
 CUT_TOLERANCE = 1; // [0:0.1:2]
 CUT_DIRECTION  = ["±x","±y","±z"]; // [+X,-X,+Y,-Y,+Z,-Z,±x,±y,±z]
-
+CUT_DRIFT     = 0; // [-5:+5]
 
 /* [Hidden] */
 
@@ -100,7 +100,13 @@ type  = (TYPE=="FL_HS_PIMORONI_TOP") ? FL_HS_PIMORONI_TOP
       : (TYPE=="FL_HS_PIMORONI_BOTTOM") ? FL_HS_PIMORONI_BOTTOM
       : FL_HS_KHADAS;
 
-fl_heatsink(verbs, type=type, cut_thick=CUT_THICK, cut_tolerance=CUT_TOLERANCE, cut_direction=fl_3d_AxisList(CUT_DIRECTION), direction=direction, octant=octant)
+fl_heatsink(verbs, type=type,
+  cut_thick=CUT_THICK,
+  cut_tolerance=CUT_TOLERANCE,
+  cut_direction=fl_3d_AxisList(CUT_DIRECTION),
+  cut_drift=CUT_DRIFT,
+  direction=direction,
+  octant=octant)
   fl_color()
     fl_cylinder(h=10,d=5,octant=$hs_normal);
 
