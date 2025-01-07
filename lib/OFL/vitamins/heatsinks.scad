@@ -296,6 +296,9 @@ module fl_heatsink(
     if (verb==FL_ADD) {
       do_add(false);
 
+    } else if (verb==FL_BBOX) {
+      fl_bb_add(bbox);
+
     } else if (verb==FL_CUTOUT) {
       do_cutout();
 
@@ -303,7 +306,7 @@ module fl_heatsink(
       do_footprint();
 
     } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      fl_error(["unimplemented verb",verb]);
     }
   }
 
@@ -371,6 +374,9 @@ module fl_heatsink(
     if (verb==FL_ADD) {
       do_add(false);
 
+    } else if (verb==FL_BBOX) {
+      fl_bb_add(bbox);
+
     } else if (verb==FL_CUTOUT) {
       do_cutout();
 
@@ -378,7 +384,7 @@ module fl_heatsink(
       do_footprint();
 
     } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      fl_error(["unimplemented verb",verb]);
     }
   }
 
