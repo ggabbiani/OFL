@@ -363,8 +363,29 @@ FL_ASSEMBLY   = "FL_ASSEMBLY add predefined component shape(s)";
 FL_AXES       = "FL_AXES draw of local reference axes";
 //! adds a bounding box containing the object
 FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
-//! layout of predefined cutout shapes (±X,±Y,±Z)
-FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (±X,±Y,±Z).";
+/*!
+ * Layout of predefined cutout shapes (±X,±Y,±Z).
+ *
+ * A cutout is by default the projection of one object section along one or more
+ * semi-axes (±X,±Y,±Z).
+ *
+ * **Preferred directions**
+ *
+ * Even if OFL objects can cutout along any semi-axis, they can have one or more
+ * 'preferred' directions (see fl_cutout() property). In these cases, the object
+ * will not contribute to the bounding box calculations of a parent along any of
+ * its 'preferred' directions. This happens because a 'preferred' cutout
+ * direction doesn't correspond 'exactly' to an object section but it is rather
+ * a specialized carving shape (like - for example - the cylindrical cutout
+ * shape of an audio jack plug along its +Z semi-axis).
+ *
+ * **NOTE:** this verb is a no-op if no cutout direction is provided.
+ *
+ * **NOTE**: The main difference between this verb and FL_DRILL (see variable
+ * FL_DRILL) is that the FL_CUTOUT acts on every semi-axis provided by the
+ * caller, while the latter operates ONLY along its 'preferred' direction(s).
+ */
+FL_CUTOUT     = "FL_CUTOUT";
 //! test verb for library development
 FL_DEPRECATED = "FL_DEPRECATED is a test verb. **DEPRECATED**";
 /*!
