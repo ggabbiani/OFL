@@ -215,7 +215,7 @@ FL_PCB_RPI4 = let(
     ["GPIO",     fl_Component(FL_PHDR_NS, [-w/2+3.5, 32.5, 0  ], [+Z,90], [+Z], FL_PHDR_GPIOHDR)],
     ["uSD",      fl_Component(FL_SD_NS,   [0, 2, -pcb_t       ], [-Z,0 ], [-Y], FL_SD_MOLEX_uSD_SOCKET, [[FL_COMP_OCTANT,+Y+Z],[FL_COMP_DRIFT,2]] )],
     ["PIM TOP",  fl_Component(FL_HS_NS,   [0, 0, 0            ], [+Z,0 ], [+Z], FL_HS_PIMORONI_TOP )],
-    ["PIM BOT",  fl_Component(FL_HS_NS,   [0, 0, -pcb_t       ], [+Z,0 ], [+Y,-Z], FL_HS_PIMORONI_BOTTOM )],
+    ["PIM BOT",  fl_Component(FL_HS_NS,   [0, 0, -pcb_t       ], [+Z,0 ], [+Y,-Z], FL_HS_PIMORONI_BOTTOM,[[FL_COMP_DRIFT,-2]] )],
   ],
   vendors = [["Amazon","https://www.amazon.it/gp/product/B0899VXM8F"]],
   gpio_c  = fl_comp_connectors(comps[7][1])[0],
@@ -692,7 +692,21 @@ module fl_pcb(
       module filter(dirs)
         for(c=comps)
           fl_comp_Specs(c)
-            children();
+            if (dirs) {
+              // filter component whose cut_direction(s) is present in the
+              // component direction list
+              let(
+                // transform component directions into pcb coordinate system
+                dirs  = fl_cutout($comp_type),
+                D     = fl_direction($comp_direction),
+                new   = [for(d=dirs) fl_transform(D,d)]
+              )
+              if (search(new,cut_direction)!=[[]])
+                children();
+            } else {
+              // no direction filtering
+              children();
+            }
 
       if (class=="components")
         filter(directions)
@@ -781,7 +795,7 @@ module fl_pcb(
           fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_HS_NS)
           // TODO: implement a rationale for heat-sinks cut-out operations
-          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_direction=fl_comp_actualCuts(cut_direction),cut_thick=cut_thick-$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_direction=fl_comp_actualCuts(cut_direction),cut_thick=cut_thick-$comp_drift,cut_drift=$comp_drift,cut_tolerance=$fl_tolerance,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_GENERIC_NS)
           fl_generic_vitamin(FL_CUTOUT,$comp_type,$fl_thickness=cut_thick-$comp_drift,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else
