@@ -370,7 +370,7 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  * semi-axes (±X,±Y,±Z).
  *
  * **Preferred directions**
-
+ *
  * OFL objects can cut themselves along any direction by extruding their section
  * orthogonal to the direction itself. For objects that allow it, the
  * fl_cutout() property returns a list of directions along which the cutout
@@ -387,7 +387,7 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  *
  * **NOTE:** this verb is a no-op if no cutout direction is provided.
  *
- * **NOTE**: The main difference between this verb and FL_DRILL (see variable
+ * **NOTE:** The main difference between this verb and FL_DRILL (see variable
  * FL_DRILL) is that the FL_CUTOUT acts on every semi-axis provided by the
  * caller, while the latter operates ONLY along its 'preferred' direction(s).
  */
