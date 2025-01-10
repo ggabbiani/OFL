@@ -46,7 +46,7 @@ __Default:__
 
 __Default:__
 
-    str(FL_COMP_NS,"/octant")
+    str(FL_COMP_NS,"/external")
 
 [OPTIONAL boolean] external components don't contribute to payload calculations
 
@@ -117,6 +117,7 @@ list of optional component properties:
 - FL_COMP_DRIFT - see [variable FL_COMP_DRIFT](#variable-fl_comp_drift)
 - FL_COMP_COLOR - see variable FL_COMP_COLOR
 - FL_COMP_OCTANT - see variable FL_COMP_OCTANT
+- FL_COMP_EXTERNAL - see [variable FL_COMP_EXTERNAL](#variable-fl_comp_external)
 
 
 

@@ -92,7 +92,8 @@
 - [X] implemented FL_CUTOUT in hds and sata packages;
 - [X] reviewed and applied where possible the new polymorph engine for rewriting
   and subtyping all the existing modules.
-- [ ] integrate in tests also the examples
+- [X] integrate also the examples in tests;
+- [ ] apply the FL_CUTOUT 'manifest'
 - [ ] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
 - [ ] modify FL_DRILL verb implementation according to the type of drill to be

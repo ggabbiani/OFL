@@ -370,14 +370,20 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  * semi-axes (±X,±Y,±Z).
  *
  * **Preferred directions**
+
+ * OFL objects can cut themselves along any direction by extruding their section
+ * orthogonal to the direction itself. For objects that allow it, the
+ * fl_cutout() property returns a list of directions along which the cutout
+ * occurs on alternative sections to the default ones. This is the case - for
+ * example - of an audio jack: the default cutout is the standard one on all
+ * directions except +Z, along which the cutout section is circular to allow the
+ * insertion of the male jack.
  *
- * Even if OFL objects can cutout along any semi-axis, they can have one or more
- * 'preferred' directions (see fl_cutout() property). In these cases, the object
- * will not contribute to the bounding box calculations of a parent along any of
- * its 'preferred' directions. This happens because a 'preferred' cutout
- * direction doesn't correspond 'exactly' to an object section but it is rather
- * a specialized carving shape (like - for example - the cylindrical cutout
- * shape of an audio jack plug along its +Z semi-axis).
+ * **NOTE:** The fl_cutout() property also modifies the behavior of the object
+ * when it is passed as a component (via fl_Component()) of a 'parent' object.
+ * In these cases, in fact, the object will no longer modify the bounding box of
+ * its parent in the 'preferred' directions, while on all the others it will
+ * maintain the standard behavior.
  *
  * **NOTE:** this verb is a no-op if no cutout direction is provided.
  *
