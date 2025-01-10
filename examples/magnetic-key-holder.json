@@ -19,6 +19,24 @@
             "MAGNET": "M4_cs_magnet32x6",
             "NUM_MAGS": "4",
             "TOLERANCE": "0.15"
+        },
+        "pic-magnetic-key-holder": {
+            "$FL_ADD": "ON",
+            "$FL_ASSEMBLY": "ON",
+            "$FL_AXES": "OFF",
+            "$FL_BBOX": "OFF",
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fn": "100",
+            "BASE_T": "1",
+            "FILAMENT": "DodgerBlue",
+            "FILLET_R": "4",
+            "FILLET_STEPS": "20",
+            "GAP": "0",
+            "HOLDER_T": "1",
+            "MAGNET": "M4_cs_magnet32x6",
+            "NUM_MAGS": "4",
+            "TOLERANCE": "0.15"
         }
     },
     "fileFormatVersion": "1"

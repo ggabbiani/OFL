@@ -70,11 +70,8 @@ tolerance   = 0.1;
 
 /* [Hidden] */
 
-module block() {
-  fl_color()
+module block()
   linear_extrude(base_sz.x) {
-
-    // hull() {
     diag_sz = [w-tolerance,T];
     translate(X(T_SLOT))
       rotate(-45,Z)
@@ -83,7 +80,6 @@ module block() {
     horiz_sz  = [SIDE_GAP+T+tolerance,T];
     translate(X(T_SLOT))
       fl_square(size=horiz_sz, corners=[2,0,0,0], quadrant=+X+Y);
-    // }
 
     vert_sz   = [T,H];
     translate(X(T_SLOT+SIDE_GAP+tolerance))
@@ -92,7 +88,6 @@ module block() {
     translate(X(T_SLOT+SIDE_GAP+tolerance-ARC_GAP))
       fl_arc(r=ARC_R+T, angles=[-90,-90-ARC_SIZE], thick=T, quadrant=-X+Y);
   }
-}
 
 w = T_SLOT*sqrt(2);
 base_sz = [30,2,w];
@@ -118,12 +113,14 @@ nut = fl_TNut(opening,[in_width,length],[wall_thick,base_thick,cone_thick],screw
 knut  = fl_knut_search(screw=screw,thick=nut_thick);
 
 if (VIEW_BLOCK)
-  difference() {
-    block();
-    // holes subtraction
-    translate([10,10,0])
-      fl_tnut([FL_DRILL],nut,direction=[Z,-45],dri_thick=10);
-  }
+  fl_color()
+    render()
+      difference() {
+        block();
+        // holes subtraction
+        translate([10,10,0])
+          fl_tnut([FL_DRILL],nut,direction=[Z,-45],dri_thick=10);
+      }
 
 if (VIEW_TNUT)
   translate([10,10,0])

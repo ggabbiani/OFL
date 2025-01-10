@@ -1,0 +1,33 @@
+{
+    "parameterSets": {
+        "pic-camera-mount": {
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_filament": "DodgerBlue",
+            "$fl_print_tech": "Selective Laser sintering",
+            "$fn": "50",
+            "ARM": "true",
+            "CAMERA_STOPPER": "true",
+            "DIRECTION": "[0, 1, -0.4]",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "T_NUT": "true",
+            "VIEW_MODE": "FULL",
+            "base_sz": "[30, 2, 20]",
+            "base_thick": "1",
+            "cone_thick": "2",
+            "countersink_tolerance": "0",
+            "hole_tolerance": "0",
+            "in_width": "10",
+            "length": "30",
+            "nut_tolerance": "0",
+            "opening": "6",
+            "thr_d": "15.8",
+            "thr_len": "6.9",
+            "thr_pitch": "2",
+            "thr_starts": "4",
+            "wall_thick": "2"
+        }
+    },
+    "fileFormatVersion": "1"
+}

@@ -1,0 +1,20 @@
+{
+    "parameterSets": {
+        "pic-Snapmaker-enclosure-handles": {
+            "$FL_RENDER": "false",
+            "$fl_filament": "DodgerBlue",
+            "$fl_print_tech": "Fused deposition modeling",
+            "$fn": "100",
+            "MAGNET": "FL_MAG_M3_CS_D10x2",
+            "PART": "Front",
+            "SCREW": "default",
+            "VIEW_MODE": "FULL",
+            "e": "[15, 18]",
+            "fill_r": "3",
+            "h": "30",
+            "pin_h": "3",
+            "tube_thick": "1.6"
+        }
+    },
+    "fileFormatVersion": "1"
+}

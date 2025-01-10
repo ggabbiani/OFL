@@ -117,7 +117,8 @@ module sbcBox(mode)
           sbc,
           thick=3*T,
           $fl_tolerance=CUT_TOLERANCE,
-          cut_direction=[if (SBC=="rpi4") +X,-Y,+Y]
+          cut_direction=[if (SBC=="khadas") -X, if (SBC=="rpi4") +X,-Y,+Y]
+          // $FL_CUTOUT="DEBUG"
         );
 
 difference() {

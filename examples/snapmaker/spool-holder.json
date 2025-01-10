@@ -6,6 +6,21 @@
             "PARTS": "body",
             "P_len": "463",
             "TOLERANCE": "true"
+        },
+        "pic-spool-holder": {
+            "$fn": "50",
+            "FILAMENT_CENTRAL": "DodgerBlue",
+            "FILAMENT_SIDE": "SteelBlue",
+            "MAX_SPOOLER_W": "80",
+            "MODE": "assembly",
+            "PARTS": "all",
+            "PLEXI_SZ": "[463, 605, 2.5]",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "SIDE_T": "5",
+            "TOLERANCE": "true",
+            "TSP_length": "463",
+            "knut_hole_d": "2.8"
         }
     }
 }

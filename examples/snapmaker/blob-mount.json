@@ -1,0 +1,34 @@
+{
+    "parameterSets": {
+        "pic-blob-mount": {
+            "$FL_RENDER": "false",
+            "$FL_TRACES": "-2",
+            "$fl_filament": "DodgerBlue",
+            "$fl_print_tech": "Selective Laser sintering",
+            "$fn": "50",
+            "ARC_GAP": "0",
+            "ARC_R": "5.73",
+            "ARC_SIZE": "45",
+            "H": "20",
+            "SHOW_LABELS": "false",
+            "SHOW_SYMBOLS": "false",
+            "SIDE_GAP": "3.1",
+            "T": "2",
+            "T_SLOT": "24",
+            "VIEW_BLOCK": "true",
+            "VIEW_MODE": "FULL",
+            "VIEW_TNUT": "true",
+            "base_thick": "1",
+            "cone_thick": "2",
+            "countersink_tolerance": "0",
+            "hole_tolerance": "0",
+            "in_width": "10",
+            "length": "30",
+            "nut_tolerance": "0",
+            "opening": "6",
+            "tolerance": "0.1",
+            "wall_thick": "2"
+        }
+    },
+    "fileFormatVersion": "1"
+}

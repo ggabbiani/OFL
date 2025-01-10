@@ -194,22 +194,30 @@ module show() {
 }
 
 show() {
-  difference() {
-    union() {
-      if (PARTS=="central"||PARTS=="all")
-        fl_color(FILAMENT_CENTRAL)
-          central();
-      // one or two sides
-      fl_color(FILAMENT_SIDE)
-        if (PARTS=="side")
-          side(normal=+Z);
-        else if (PARTS=="all") {
-          translate(Z(-(BLK_size.z+SIDE_T)/2)) side(normal=-Z);
-          translate(Z(+(BLK_size.z+SIDE_T)/2)) side(normal=+Z);
-        }
-      // T-slotted nuts and profile
-      profile(depth=BLK_size.z,tnuts=PARTS=="central"||PARTS=="all");
-    }
+  // T-slotted nuts and profile
+  profile(depth=BLK_size.z,tnuts=PARTS=="central"||PARTS=="all");
+
+  fl_color(FILAMENT_CENTRAL) render() difference() {
+    if (PARTS=="central"||PARTS=="all")
+      fl_color(FILAMENT_CENTRAL)
+        central();
+
+    // - holes
+    if (PARTS=="central"||PARTS=="all")
+      central("drill");
+    translate(Z(-(BLK_size.z+SIDE_T)/2)) side("drill",normal=-Z);
+    translate(Z(+(BLK_size.z+SIDE_T)/2)) side("drill",normal=+Z);
+  }
+
+  fl_color(FILAMENT_SIDE) render() difference() {
+    // one or two sides
+    fl_color(FILAMENT_SIDE)
+      if (PARTS=="side")
+        side(normal=+Z);
+      else if (PARTS=="all") {
+        translate(Z(-(BLK_size.z+SIDE_T)/2)) side(normal=-Z);
+        translate(Z(+(BLK_size.z+SIDE_T)/2)) side(normal=+Z);
+      }
     // - holes
     if (PARTS=="central"||PARTS=="all")
       central("drill");

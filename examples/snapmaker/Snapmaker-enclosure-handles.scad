@@ -59,8 +59,8 @@ fill_r    = 3;
 pin_r     = 2.5/2;
 pin_h     = 3;
 
-difference() {
-  fl_color() {
+fl_color() render() difference() {
+  union() {
     linear_extrude(height = h+T) {
       // elliptic arc
       fl_ellipticArc(e=e, angles = e_angles, thick =T, quadrant=+X+Y);

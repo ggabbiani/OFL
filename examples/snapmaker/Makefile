@@ -8,27 +8,15 @@
 
 # 'Lazy Set'
 T_LIST		= blob-mount camera-mount Snapmaker-enclosure-handles spool-holder
-SOURCES		= $(foreach t,$(T_LIST),$(t).scad)
-RESULTS		= $(foreach t,$(T_LIST),$(t).echo)
 
 include $(FUNCTIONS) $(DEF_RULES)
 
-.PRECIOUS: $(SOURCES)
+# 'Lazy Set'
+PICS		= pic-blob-mount.png pic-camera-mount.png pic-Snapmaker-enclosure-handles.png pic-spool-holder.png
 
-sources: $(SOURCES)
+runs: $(PICS)
 
-snapmaker/%:
-	$(call make_sub)
-
-runs: clean-results $(RESULTS)
-
-clean-results:
+clean:
 	$(call aggregate-prologue)
-	@for f in $(RESULTS) ; do rm -fr $$f ; done
+	@for f in $(PICS) ; do rm -fr $$f ; done
 	$(call aggregate-epilogue)
-
-clean: clean-results snapmaker/clean
-	$(call aggregate-prologue)
-	@for f in $(SOURCES) ; do rm -f $$f ; done
-	$(call aggregate-epilogue)
-#	@echo "$(SOURCES): DELETED"

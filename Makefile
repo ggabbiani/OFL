@@ -44,7 +44,7 @@ export WGET		:= $(shell $(call which) $(if $(call is-mac), curl,wget))
 # tests creation
 all: check lib tests/sources docs/all orthodocs/all
 
-clean: docs/clean orthodocs/clean tests/clean docker/clean
+clean: docs/clean examples/clean orthodocs/clean tests/clean docker/clean
 
 check:
 ifdef IMVER

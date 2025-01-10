@@ -1,4 +1,4 @@
-# Makefile for automatic test source generation
+# Makefile for automatic example tests
 #
 # This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 #
@@ -9,31 +9,21 @@
 # 'Immediate Set'
 DEF_RULES	:= $(CURDIR)/defaults.mk
 
+# explicit wildcard expansion suppresses errors when no files are found
+include $(wildcard *.deps) $(FUNCTIONS) $(DEF_RULES)
+
 # 'Lazy Set'
-T_LIST		= bit-holder label-holder magnetic-key-holder sbc-box sliding-door-guide
-SOURCES		= $(foreach t,$(T_LIST),$(t).scad)
-RESULTS		= $(foreach t,$(T_LIST),$(t).echo)
+PICS		= pic-bit-holder.png pic-magnetic-key-holder.png
 
 export DEF_RULES
 
-include $(FUNCTIONS) $(DEF_RULES)
-
-.PRECIOUS: $(SOURCES)
-
-sources: $(SOURCES) snapmaker/sources
+runs: $(PICS) snapmaker/runs
 
 snapmaker/%:
 	$(call make_sub)
 
-runs: clean-results $(RESULTS) snapmaker/runs
-
-clean-results:
+clean:
 	$(call aggregate-prologue)
-	@for f in $(RESULTS) ; do rm -fr $$f ; done
+	@for f in $(PICS) ; do rm -fr $$f ; done
 	$(call aggregate-epilogue)
-
-clean: clean-results snapmaker/clean
-	$(call aggregate-prologue)
-	@for f in $(SOURCES) ; do rm -f $$f ; done
-	$(call aggregate-epilogue)
-#	@echo "$(SOURCES): DELETED"
+	make -s -C snapmaker clean

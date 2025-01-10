@@ -163,14 +163,13 @@
             "T_hole": "1.5",
             "T_magnet": "0.5"
         },
-        "TEST": {
+        "pic-bit-holder": {
             "$FL_ADD": "DEBUG",
             "$FL_ASSEMBLY": "ON",
             "$FL_BBOX": "OFF",
-            "$FL_DEBUG": "false",
-            "$FL_FILAMENT": "DodgerBlue",
             "$FL_RENDER": "false",
-            "$FL_TRACE": "false",
+            "$FL_TRACES": "-2",
+            "$fl_filament": "DodgerBlue",
             "$fn": "50",
             "BIT_1": "[3, 2.73, 70, 1]",
             "BIT_10": "[0, 0, 0, 0]",
@@ -187,13 +186,20 @@
             "BIT_7": "[0, 0, 0, 0]",
             "BIT_8": "[0, 0, 0, 0]",
             "BIT_9": "[0, 0, 0, 0]",
+            "DEBUG_ASSERTIONS": "false",
+            "DEBUG_COLOR": "false",
+            "DEBUG_COMPONENTS": "[\"none\"]",
+            "DEBUG_DIMENSIONS": "false",
+            "DEBUG_LABELS": "false",
+            "DEBUG_SYMBOLS": "false",
             "HEIGHT": "20",
             "I_holder": "1",
             "MAGNET": "FL_MAG_RECT_10x5x2",
             "TOLERANCE": "0.18",
             "T_bottom": "1",
             "T_hole": "1.5",
-            "T_magnet": "0.5"
+            "T_magnet": "0.5",
+            "VERB_CENTROID": "calculates the centroid of a distributed mass"
         }
     },
     "fileFormatVersion": "1",

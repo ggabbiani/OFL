@@ -104,34 +104,37 @@ define fix-target-dependencies
 sed '1s|.*:|$@:|' --in-place $@.deps
 endef
 
-# if $(1) contains 'similarity' executes $(2), otherwise executes 'true'
-# define if-similarity
-# 	$(if $(findstring similarity,$(1)),$(2),$(3))
-# endef
-
-# rename target if exists
-# define backup-target
-# 	test ! -e $@ || mv -f $@ $@.orig
-# endef
-
-# makes target and check for exact structural similarity to the git committed
-# one.
-# if similar keeps the original otherwise keeps new and rise an error
+# Creates the target and check the exact structural similarity with the one
+# committed on git. If similar keeps the original OTHERWISE keeps the new one
+# prefixed with 'new-' and rise an error. In the latter case if the new image is
+# the desired behavior, it is required to:
+#
+# - rename the 'new-'$@ into $@
+# - commit the new target
+#
+# NOTE: json file is expected to have a profile set with the same name of the
+# target.
+#
 # $(1)=target resolution in 'openscad' format i.e. 800x600
 # $(2)=camera view settings
 # $(3)=projection type ('ortho' or 'perspective')
 # $(4)=other parameter(s)
 define check-picture
 	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
-	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
-	rm unscaled-$@
-	git checkout -- $@
-	($(IMG_DIFF) $@ new-$@ && rm new-$@ && touch $@) || (mv new-$@ $@ && false)
+	# creation of new-$@
+	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null && rm unscaled-$@
+	(test -f $@ && cp $@ old-$@) || (git checkout -- $@ 2>/dev/null && mv $@ old-$@) || true
+	(test ! -f old-$@ && mv new-$@ $@) || (($(IMG_DIFF) -v 0 old-$@ new-$@ || (rm old-$@ && false)) && rm -f new-$@ mv old-$@)
 	$(call fix-target-dependencies)
 endef
 
-# makes target and check for exact structural similarity to the git committed one
-# if similar keeps the original otherwise keeps the new
+# Makes target and check for exact structural similarity with the one committed
+# on git. If similar keeps the original OTHERWISE no error is risen and the
+# generated target is ready to be committed to git.
+#
+# NOTE: json file is expected to have a profile set with the same name of the
+# target.
+#
 # $(1)=target resolution in 'openscad' format i.e. 800x600
 # $(2)=camera view settings
 # $(3)=projection type ('ortho' or 'perspective')
@@ -140,7 +143,7 @@ define make-picture
 	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
 	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
 	rm -f unscaled-$@
-	(git checkout -- $@ && (($(IMG_DIFF) -v 0 $@ new-$@ || (echo -n "($<) " && false)) && rm new-$@ && touch $@)) || mv new-$@ $@
+	(git checkout -- $@ 2>/dev/null && (($(IMG_DIFF) -v 0 $@ new-$@ || (echo -n "($<) " && false)) && rm new-$@ && touch $@)) || mv new-$@ $@
 	$(call fix-target-dependencies)
 endef
 
