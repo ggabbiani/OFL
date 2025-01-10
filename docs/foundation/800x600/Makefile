@@ -10,6 +10,7 @@
 
 # explicit wildcard expansion suppresses errors when no files are found
 include $(wildcard *.deps) $(FUNCTIONS)
+
 SIZE		:= $(notdir $(CURDIR))
 FOUNDATION	:= $(LIB_ROOT)/foundation
 PICTURES	:= pic-0.png pic-1.png pic-2.png pic-3.png pic-4.png pic-5.png pic-6.png pic-7.png pic-8.png pic-9.png torus.png
