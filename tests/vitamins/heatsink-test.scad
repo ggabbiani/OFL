@@ -75,7 +75,7 @@ CUT_THICK = 10; // [0:1:10]
 // Tolerance during FL_CUTOUT
 CUT_TOLERANCE = 1; // [0:0.1:2]
 CUT_DIRECTION  = ["±x","±y","±z"]; // [+X,-X,+Y,-Y,+Z,-Z,±x,±y,±z]
-CUT_DRIFT     = 0; // [-5:+5]
+CUT_DRIFT      = 0; // [-5:+5]
 
 /* [Hidden] */
 
