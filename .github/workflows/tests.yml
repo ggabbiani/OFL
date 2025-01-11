@@ -60,8 +60,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Docker image build, document, test and push
+      # Docker image push after successful build, documentation make and tests execution
+      - name: promote
         if: steps.docker.outputs.changed=='yes'
         run: |
           make -s docker/fedora
@@ -74,7 +74,6 @@ jobs:
       - name: Docker image pull, document and test
         if: steps.docker.outputs.changed=='no'
         run: |
-          docker run -v .:/import:Z --rm ${DOCKER_IMAGE} clean
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE}
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE} tests/runs
           docker run -v .:/import:Z --rm ${DOCKER_IMAGE} examples/runs
@@ -121,8 +120,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Docker image build, document, test and push
+      # Docker image push after successful build, documentation make and tests execution
+      - name: promote
         if: steps.docker.outputs.changed=='yes'
         run: |
           make -s docker/ubuntu
@@ -135,7 +134,6 @@ jobs:
       - name: Docker image pull, document and test
         if: steps.docker.outputs.changed=='no'
         run: |
-          docker run -v .:/import --rm ${DOCKER_IMAGE} clean
           docker run -v .:/import --rm ${DOCKER_IMAGE}
           docker run -v .:/import --rm ${DOCKER_IMAGE} tests/runs
           docker run -v .:/import --rm ${DOCKER_IMAGE} examples/runs
