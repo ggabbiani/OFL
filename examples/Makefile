@@ -22,8 +22,8 @@ runs: $(PICS) snapmaker/runs
 snapmaker/%:
 	$(call make_sub)
 
-clean:
+clean: snapmaker/clean
 	$(call aggregate-prologue)
 	@for f in $(PICS) ; do rm -fr $$f ; done
+	@rm *.deps
 	$(call aggregate-epilogue)
-	make -s -C snapmaker clean

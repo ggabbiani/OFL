@@ -18,5 +18,6 @@ runs: $(PICS)
 
 clean:
 	$(call aggregate-prologue)
-	@for f in $(PICS) ; do rm -fr $$f ; done
+	@for f in $(PICS) ; do rm -fr $$f; done
+	@rm *.deps
 	$(call aggregate-epilogue)
