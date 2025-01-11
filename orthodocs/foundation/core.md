@@ -194,34 +194,33 @@ __Default:__
 
     "FL_CUTOUT"
 
+Layout of predefined cutout shapes (±X,±Y,±Z).
 
- * Layout of predefined cutout shapes (±X,±Y,±Z).
- *
- * A cutout is by default the projection of one object section along one or more
- * semi-axes (±X,±Y,±Z).
- *
- * **Preferred directions**
+A cutout is by default the projection of one object section along one or more
+semi-axes (±X,±Y,±Z).
 
- * OFL objects can cut themselves along any direction by extruding their section
- * orthogonal to the direction itself. For objects that allow it, the
- * [fl_cutout()](#function-fl_cutout) property returns a list of directions along which the cutout
- * occurs on alternative sections to the default ones. This is the case - for
- * example - of an audio jack: the default cutout is the standard one on all
- * directions except +Z, along which the cutout section is circular to allow the
- * insertion of the male jack.
- *
- * :memo: **NOTE:** The [fl_cutout()](#function-fl_cutout) property also modifies the behavior of the object
- * when it is passed as a component (via fl_Component()) of a 'parent' object.
- * In these cases, in fact, the object will no longer modify the bounding box of
- * its parent in the 'preferred' directions, while on all the others it will
- * maintain the standard behavior.
- *
- * :memo: **NOTE:** this verb is a no-op if no cutout direction is provided.
- *
- * **NOTE**: The main difference between this verb and FL_DRILL (see variable
- * FL_DRILL) is that the FL_CUTOUT acts on every semi-axis provided by the
- * caller, while the latter operates ONLY along its 'preferred' direction(s).
- 
+**Preferred directions**
+
+OFL objects can cut themselves along any direction by extruding their section
+orthogonal to the direction itself. For objects that allow it, the
+[fl_cutout()](#function-fl_cutout) property returns a list of directions along which the cutout
+occurs on alternative sections to the default ones. This is the case - for
+example - of an audio jack: the default cutout is the standard one on all
+directions except +Z, along which the cutout section is circular to allow the
+insertion of the male jack.
+
+:memo: **NOTE:** The [fl_cutout()](#function-fl_cutout) property also modifies the behavior of the object
+when it is passed as a component (via fl_Component()) of a 'parent' object.
+In these cases, in fact, the object will no longer modify the bounding box of
+its parent in the 'preferred' directions, while on all the others it will
+maintain the standard behavior.
+
+:memo: **NOTE:** this verb is a no-op if no cutout direction is provided.
+
+:memo: **NOTE:** The main difference between this verb and FL_DRILL (see variable
+FL_DRILL) is that the FL_CUTOUT acts on every semi-axis provided by the
+caller, while the latter operates ONLY along its 'preferred' direction(s).
+
 
 ---
 
