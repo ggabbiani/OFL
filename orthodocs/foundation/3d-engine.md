@@ -1256,6 +1256,38 @@ rotates children to face camera
 
 ---
 
+### module fl_new_cutout
+
+__Syntax:__
+
+    fl_new_cutout(bbox,director,drift)
+
+Cutout along arbitrary direction.
+
+Context variables:
+
+| Name             | Context   | Description                                     |
+| ---------------- | --------- | ----------------------------------------------- |
+| $fl_thickness    | Parameter | multi-verb parameter (see [fl_parm_thickness()](core.md#function-fl_parm_thickness))  |
+| $fl_tolerance    | Parameter | multi-verb parameter (see [fl_parm_tolerance()](core.md#function-fl_parm_tolerance))  |
+
+
+__Parameters:__
+
+__bbox__  
+bounding box delimiting children shape(s)
+
+__director__  
+direction vector
+
+__drift__  
+Distance added from children boundaries to the section extrusion.
+When negative this value is actually subtracted.
+
+
+
+---
+
 ### module fl_place
 
 __Syntax:__

@@ -551,6 +551,7 @@
 
 - [fl_name (function)](foundation/core.md#function-fl_name)
 - [fl_native (function)](foundation/core.md#function-fl_native)
+- [fl_new_cutout (module)](foundation/3d-engine.md#module-fl_new_cutout)
 - [NIL (variable)](foundation/unsafe_defs.md#variable-nil)
 - [FL_NIL (variable)](foundation/core.md#variable-fl_nil)
 - [fl_nominal (function)](foundation/core.md#function-fl_nominal)

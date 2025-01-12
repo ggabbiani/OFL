@@ -1332,6 +1332,65 @@ module fl_direction_extrude(
 }
 
 /*!
+ * Cutout along arbitrary direction.
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                     |
+ * | ---------------- | --------- | ----------------------------------------------- |
+ * | $fl_thickness    | Parameter | multi-verb parameter (see fl_parm_thickness())  |
+ * | $fl_tolerance    | Parameter | multi-verb parameter (see fl_parm_tolerance())  |
+ */
+module fl_new_cutout(
+  //! bounding box delimiting children shape(s)
+  bbox,
+  //! direction vector
+  director,
+  /*!
+   * Distance added from children boundaries to the section extrusion.
+   * When negative this value is actually subtracted.
+   */
+  drift
+) {
+
+  // Returns the distance from point «P» to plane crossing the origin and with its
+  // normal equal to «n».
+  // Modified from [Distance from point to plane - Math Insight](https://mathinsight.org/distance_point_plane)
+  function distance(P,n) =
+    abs(n*P)/sqrt(n.x*n.x+n.y*n.y+n.z*n.z);
+
+  // returns the intercept point P between a vector v and a cube defined by its
+  // bounding box.
+  // Modified from [c - Position of intersection of a 3d vector and a cube - Stack Overflow](https://stackoverflow.com/questions/3184084/position-of-intersection-of-a-3d-vector-and-a-cube)
+  function intercept(v,bbox) = let(
+    half  = (bbox[1]-bbox[0])/2,
+    offset  = [
+      abs(v.x>0 ? bbox[1].x : bbox[0].x),
+      abs(v.y>0 ? bbox[1].y : bbox[0].y),
+      abs(v.z>0 ? bbox[1].z : bbox[0].z)
+    ],
+    pivot = abs(v.x)>abs(v.y) && abs(v.x)>abs(v.z) ? abs(v.x) :
+            abs(v.y)>abs(v.z) ? abs(v.y) :
+            abs(v.z)
+  ) [
+    offset.x*v.x/pivot,
+    offset.y*v.y/pivot,
+    offset.z*v.z/pivot
+  ];
+
+  let(
+    // intersection point between the 3d bounding-box and the plane crossing origin
+    // with normal «co_axis»
+    I = intercept(director,bbox),
+    // minimum distance between «I» and «co_axis»
+    d = distance(I,director)
+  ) translate((drift+d)*fl_versor(director))
+      fl_direction_extrude([director,0],$fl_thickness,r=$fl_tolerance)
+        children();
+}
+
+
+/*!
  * linear_extrude{} with optional fillet radius on each end.
  *
  * Positive radii will expand outward towards their end, negative will shrink
