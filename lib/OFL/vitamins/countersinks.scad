@@ -131,8 +131,7 @@ function fl_cs_search(
  *
  * | Name           | Context   | Description |
  * | -------------  | --------- | ---         |
- * | $fl_thickness  | Parameter | thickness of the surface to be FL_DRILLed.
-   Can be verb-dependant (see fl_parm_thickness()). |
+ * | $fl_thickness  | Parameter | thickness of the surface to be FL_DRILLed. Can be verb-dependant (see fl_parm_thickness()). |
  * | $fl_tolerance  | Parameter | tolerance added to countersink's dimensions during FL_ADD, FL_BBOX and FL_FOOTPRINT. Can be verb-dependant (see fl_parm_tolerance()). |
  */
 module fl_countersink(
