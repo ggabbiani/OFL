@@ -66,15 +66,19 @@ FL_JACK_DICT = [
 
 /*!
  * Jack engine.
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                           |
+ * | ---------------- | --------- | ----------------------------------------------------- |
+ * | $fl_thickness    | Parameter | Used during FL_CUTOUT (see also fl_parm_thickness())  |
+ * | $fl_tolerance    | Parameter | Used during FL_CUTOUT (see fl_parm_tolerance())       |
+ *
  */
 module fl_jack(
   //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   verbs       = FL_ADD,
   type,
-  //! thickness for FL_CUTOUT
-  cut_thick,
-  //! tolerance used during FL_CUTOUT
-  cut_tolerance=0,
   //! translation applied to cutout
   cut_drift=0,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -86,9 +90,9 @@ module fl_jack(
   assert(type!=undef);
   engine  = fl_engine(type);
   if (engine=="fl_jack_barrelEngine")
-    fl_jack_barrelEngine(verbs,type,cut_thick,cut_tolerance,cut_drift,direction,octant);
+    fl_jack_barrelEngine(verbs,type,cut_drift,direction,octant);
   else if (engine=="fl_jack_mcxjphstem1Engine")
-    fl_jack_mcxjphstem1Engine(verbs,type,cut_thick,cut_tolerance,cut_drift,direction,octant);
+    fl_jack_mcxjphstem1Engine(verbs,type,cut_drift,direction,octant);
   else
     assert(false,str("Engine '",engine,"' unknown."));
 }
@@ -100,10 +104,6 @@ module fl_jack_barrelEngine(
   //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   verbs       = FL_ADD,
   type,
-  //! thickness for FL_CUTOUT
-  cut_thick,
-  //! tolerance used during FL_CUTOUT
-  cut_tolerance=0,
   //! translation applied to cutout
   cut_drift=0,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -126,10 +126,10 @@ module fl_jack_barrelEngine(
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
     } else if ($verb==FL_CUTOUT) {
-      assert(cut_thick!=undef);
+      assert($fl_thickness!=undef);
       fl_modifier($modifier)
         translate(+fl_X(bbox[1].x-2.5+cut_drift))
-          fl_cutout(len=cut_thick,z=X,x=-FL_Z,delta=cut_tolerance,trim=fl_X(-size.x/2),cut=true)
+          fl_cutout(len=$fl_thickness,z=X,x=-FL_Z,delta=$fl_tolerance,trim=fl_X(-size.x/2),cut=true)
             jack();
     } else {
       fl_error(["unimplemented verb",$this_verb]);
@@ -146,10 +146,6 @@ module fl_jack_mcxjphstem1Engine(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   type,
-  //! thickness for FL_CUTOUT
-  cut_thick,
-  //! tolerance used during FL_CUTOUT
-  cut_tolerance=0,
   //! translation applied to cutout
   cut_drift=0,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -197,11 +193,11 @@ module fl_jack_mcxjphstem1Engine(
   }
 
   module do_cutout() {
-    assert(cut_thick);
+    assert($fl_thickness);
     translate(-fl_Y(cut_drift))
       multmatrix(Mshape)
         translate([0,axis.z,size.y])
-          fl_cylinder(d=3.45+cut_tolerance*2,h=cut_thick);
+          fl_cylinder(d=3.45+$fl_tolerance*2,h=$fl_thickness);
   }
 
   module fprint() {

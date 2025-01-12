@@ -64,18 +64,17 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
-
-
 /* [Jack] */
 
 SHOW        = "ALL"; // [ALL,FL_JACK_BARREL,MCXJPHSTEM1]
 // tolerance used during FL_CUTOUT
-CO_TOLERANCE   = 0;  // [0:0.1:5]
+CO_TOLERANCE   = 0;   // [0:0.1:0.5]
 // thickness for FL_CUTOUT
-CO_T  = 2.5;
+CO_T  = 2.5;          // [0:0.1:5]
 // translation applied to cutout
-CO_DRIFT = 0; // [-5:0.05:5]
-
+CO_DRIFT = 0;         // [-5:0.05:5]
+// FL_CUTOUT axes: ±x,±y,±z
+CO_AXES = ["+z"];
 
 /* [Hidden] */
 
@@ -95,30 +94,21 @@ fl_status();
 
 // end of automatically generated code
 
-thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
-tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
-drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
+$fl_thickness = $FL_CUTOUT!="OFF" ? CO_T          : undef;
+$fl_tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
+drift         = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
+verbs         = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT]);
 
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
-];
 // target object(s)
 single  = SHOW=="FL_JACK_BARREL"  ? FL_JACK_BARREL
         : SHOW=="MCXJPHSTEM1"     ? FL_JACK_MCXJPHSTEM1
         : undef;
 
-fl_trace("verbs",verbs);
-fl_trace("single",single);
-fl_trace("FL_JACK_DICT",FL_JACK_DICT);
-
 if (single)
   fl_jack(verbs,single,
-    direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift);
+    direction=direction,octant=octant,cut_drift=drift);
 else
   layout([for(socket=FL_JACK_DICT) fl_width(socket)], 10)
     fl_jack(verbs,FL_JACK_DICT[$i],
-      direction=direction,octant=octant,cut_thick=thick,cut_tolerance=tolerance,cut_drift=drift);
+      direction=direction,octant=octant,cut_drift=drift);
 
