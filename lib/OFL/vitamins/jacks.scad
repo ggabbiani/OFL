@@ -81,18 +81,18 @@ module fl_jack(
   type,
   //! translation applied to cutout
   cut_drift=0,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
   octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
   engine  = fl_engine(type);
   if (engine=="fl_jack_barrelEngine")
-    fl_jack_barrelEngine(verbs,type,cut_drift,direction,octant);
+    fl_jack_barrelEngine(verbs,type,cut_drift,octant,direction);
   else if (engine=="fl_jack_mcxjphstem1Engine")
-    fl_jack_mcxjphstem1Engine(verbs,type,cut_drift,direction,octant);
+    fl_jack_mcxjphstem1Engine(verbs,type,cut_drift,octant,direction);
   else
     assert(false,str("Engine '",engine,"' unknown."));
 }
@@ -106,10 +106,10 @@ module fl_jack_barrelEngine(
   type,
   //! translation applied to cutout
   cut_drift=0,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
   octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(type!=undef);
@@ -126,9 +126,8 @@ module fl_jack_barrelEngine(
     } else if ($verb==FL_CUTOUT) {
       assert($fl_thickness!=undef);
       fl_modifier($modifier)
-        translate(+fl_X(bbox[1].x-2.5+cut_drift))
-          fl_cutout(len=$fl_thickness,z=X,x=-FL_Z,delta=$fl_tolerance,trim=fl_X(-size.x/2),cut=true)
-            jack();
+        fl_new_cutout(bbox, director=+X, drift=-2.5+cut_drift, trim=X(-size.x/2))
+          jack();
     } else {
       fl_error(["unimplemented verb",$this_verb]);
     }
@@ -146,10 +145,10 @@ module fl_jack_mcxjphstem1Engine(
   type,
   //! translation applied to cutout
   cut_drift=0,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
   //! when undef native positioning is used
   octant,
+  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
+  direction
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
