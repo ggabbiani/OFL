@@ -1309,7 +1309,14 @@ module fl_direction_extrude(
   //! offset() delta (ignored when r!=0)
   delta,
   //! offset() chamfer (ignored when r!=0)
-  chamfer
+  chamfer,
+  /*!
+   * Translation list applied BEFORE projection().
+   *
+   * **NOTE:** trimming modify projection() behavior, enabling its cut parameter
+   * to true.
+   */
+  trim
 ) {
   module offset_if()
     if (r)
@@ -1326,9 +1333,13 @@ module fl_direction_extrude(
   multmatrix(D)
     linear_extrude(height=length,convexity=convexity)
       offset_if()
-        projection()
+        projection(cut=(trim!=undef))
           multmatrix(E)
-            children();
+            if (trim)
+              translate(trim)
+                children();
+            else
+              children();
 }
 
 /*!
@@ -1350,7 +1361,14 @@ module fl_new_cutout(
    * Distance added from children boundaries to the section extrusion.
    * When negative this value is actually subtracted.
    */
-  drift
+  drift,
+  /*!
+   * Translation list applied BEFORE projection().
+   *
+   * **NOTE:** trimming modify projection() behavior, enabling its cut parameter
+   * to true.
+   */
+  trim
 ) {
 
   // Returns the distance from point «P» to plane crossing the origin and with its
@@ -1385,7 +1403,7 @@ module fl_new_cutout(
     // minimum distance between «I» and «co_axis»
     d = distance(I,director)
   ) translate((drift+d)*fl_versor(director))
-      fl_direction_extrude([director,0],$fl_thickness,r=$fl_tolerance)
+      fl_direction_extrude([director,0],$fl_thickness,r=$fl_tolerance,trim=trim)
         children();
 }
 
