@@ -1269,12 +1269,20 @@ function fl_3d_axisIsSet(
     rest  = len>1 ? [for(i=[1:len-1]) list[i]] : []
   ) curr==axis ? true : len>1 ? fl_3d_axisIsSet(axis,rest) :  false;
 
-  function fl_isInAxisList(axis,list) =
-    list==[] ?
-      false :
-      list[0]==axis ?
-        true :
-        fl_isInAxisList(axis,fl_list_tail(list,-1));
+/*!
+ * True when «axis» is contained in the floating semi-axis «list», false
+ * otherwise.
+ *
+ * TODO: let the function name follow the order of parameters (i.e. rename as
+ * fl_isAxisInList(axis,list)
+ *
+ */
+function fl_isInAxisList(axis,list) =
+  list==[] ?
+    false :
+    list[0]==axis ?
+      true :
+      fl_isInAxisList(axis,fl_list_tail(list,-1));
 
 /*!
  * Z-Axis extrusion is oriented along arbitrary axis/rotation
@@ -1358,10 +1366,10 @@ module fl_new_cutout(
   //! direction vector
   director,
   /*!
-   * Distance added from children boundaries to the section extrusion.
+   * Additional distance from children boundaries.
    * When negative this value is actually subtracted.
    */
-  drift,
+  drift=0,
   /*!
    * Translation list applied BEFORE projection().
    *

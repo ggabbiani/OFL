@@ -130,7 +130,12 @@ module fl_generic_vloop(
     }
   }
 
-  assert($children<=2);
+  if (fl_dbg_assert()) {
+    assert(is_list(verbs)||is_string(verbs),verbs)
+    assert(is_list(bbox),bbox)
+    assert($children<=2,$children);
+  }
+
   size  = bbox ? bbox[1]-bbox[0] : undef;
 
   multmatrix(D)

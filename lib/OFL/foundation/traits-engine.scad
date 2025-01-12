@@ -238,8 +238,10 @@ function fl_tt_isAxis(axis) = let(
  * example:
  *
  * ```
- * [-X,+Z,-Y]
+ * floating_semi_axis_list = [-X,+Z,-Y];
  * ```
+ *
+ * TODO: rename with a decent name like fl_tt_isFloatingSemiAxisList()
  */
 function fl_tt_isAxisList(list) =
   fl_tt_isList(list,f=function(axis) fl_tt_isAxis(axis));
