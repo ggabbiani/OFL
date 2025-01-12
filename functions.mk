@@ -151,6 +151,10 @@ define make-picture
 	$(call fix-target-dependencies)
 endef
 
+# creates OpenSCAD camera settings for full view
+# $(1),$(2),$(3) translations
+# $(4),$(5),$(6) rotation
+# $(7) distance
 define make-camera
 $(1)$(COMMA)$(2)$(COMMA)$(3)$(COMMA)$(4)$(COMMA)$(5)$(COMMA)$(6)$(COMMA)$(7)
 endef

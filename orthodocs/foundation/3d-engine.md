@@ -675,6 +675,14 @@ __Syntax:__
 fl_isInAxisList(axis,list)
 ```
 
+True when «axis» is contained in the floating semi-axis «list», false
+otherwise.
+
+TODO: let the function name follow the order of parameters (i.e. rename as
+fl_isAxisInList(axis,list))
+
+
+
 ---
 
 ### function fl_octant
@@ -1047,7 +1055,7 @@ desired direction in axis-angle representation [axis,rotation about]
 
 __Syntax:__
 
-    fl_direction_extrude(direction,length,convexity=10,r,delta,chamfer)
+    fl_direction_extrude(direction,length,convexity=10,r,delta,chamfer,trim)
 
 Extrusion along arbitrary direction.
 
@@ -1070,6 +1078,13 @@ offset() delta (ignored when r!=0)
 
 __chamfer__  
 offset() chamfer (ignored when r!=0)
+
+__trim__  
+Translation list applied BEFORE projection().
+
+:memo: **NOTE:** trimming modify projection() behavior, enabling its cut parameter
+to true.
+
 
 
 ---
@@ -1260,7 +1275,7 @@ rotates children to face camera
 
 __Syntax:__
 
-    fl_new_cutout(bbox,director,drift)
+    fl_new_cutout(bbox,director,drift=0,trim)
 
 Cutout along arbitrary direction.
 
@@ -1281,8 +1296,15 @@ __director__
 direction vector
 
 __drift__  
-Distance added from children boundaries to the section extrusion.
+Additional distance from children boundaries.
 When negative this value is actually subtracted.
+
+
+__trim__  
+Translation list applied BEFORE projection().
+
+:memo: **NOTE:** trimming modify projection() behavior, enabling its cut parameter
+to true.
 
 
 

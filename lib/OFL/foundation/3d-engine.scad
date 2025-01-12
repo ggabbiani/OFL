@@ -1274,7 +1274,7 @@ function fl_3d_axisIsSet(
  * otherwise.
  *
  * TODO: let the function name follow the order of parameters (i.e. rename as
- * fl_isAxisInList(axis,list)
+ * fl_isAxisInList(axis,list))
  *
  */
 function fl_isInAxisList(axis,list) =

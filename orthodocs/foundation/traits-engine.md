@@ -90,8 +90,10 @@ One row with matrix representation of cartesian semi-axes in whatever order.
 example:
 
 ```
-[-X,+Z,-Y]
+floating_semi_axis_list = [-X,+Z,-Y];
 ```
+
+TODO: rename with a decent name like fl_tt_isFloatingSemiAxisList()
 
 
 ---

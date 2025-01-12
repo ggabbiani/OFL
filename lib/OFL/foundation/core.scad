@@ -375,9 +375,10 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  * orthogonal to the direction itself. For objects that allow it, the
  * fl_cutout() property returns a list of directions along which the cutout
  * occurs on alternative sections to the default ones. This is the case - for
- * example - of an audio jack: the default cutout is the standard one on all
- * directions except +Z, along which the cutout section is circular to allow the
- * insertion of the male jack.
+ * example - of an audio jack (see variable FL_JACK_BARREL): on all directions
+ * but +X (its 'preferred' cutout direction as returned from the fl_cutout()
+ * property) the cutout is the standard one, on +X axis the cutout section is
+ * circular to allow the insertion of the male jack.
  *
  * **NOTE:** The fl_cutout() property also modifies the behavior of the object
  * when it is passed as a component (via fl_Component()) of a 'parent' object.

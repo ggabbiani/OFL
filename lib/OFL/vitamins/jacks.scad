@@ -16,6 +16,18 @@ use <../foundation/util.scad>
 
 FL_JACK_NS = "jack";
 
+/*!
+ * 'Barrel' jack plug.
+ *
+ * The preferred cutout direction on +X is circular allowing the carving for
+ * jack plug insertion:
+ *
+ * ![preferred cutouts on +x](256x256/fig_jack_barrel_preferred_cutouts.png)
+ *
+ * On the other directions the cutout section is standard:
+ *
+ * ![default cutouts on -x,±y and ±z](256x256/fig_jack_barrel_default_cutouts.png)
+ */
 FL_JACK_BARREL = let(
   // following data definitions taken from NopSCADlib jack() module
   l = 12,
