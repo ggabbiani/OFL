@@ -24,12 +24,7 @@ FL_JACK_BARREL = let(
   ch = 2.5,
   // calculated bounding box corners
   bbox      = [[-l/2,-w/2,0],[+l/2+ch,+w/2,h]]
-) [
-  fl_bb_corners(value=bbox),
-  // fl_director(value=+FL_X),fl_rotor(value=+FL_Y),
-  fl_cutout(value = [+FL_X]),
-  fl_engine(value="fl_jack_barrelEngine"),
-];
+) fl_Object(bbox, engine="jack/barrel", others=[fl_cutout(value=[+X])]);
 
 FL_JACK_MCXJPHSTEM1 = let(
   name  = "50Ω MCX EDGE MOUNT JACK PCB CONNECTOR",
@@ -43,12 +38,8 @@ FL_JACK_MCXJPHSTEM1 = let(
   head  = 6.25,
   tail  = sz.y - head,
   jack  = sz.y-2
-) [
-  fl_name(value=name),
-  fl_bb_corners(value=bbox),
-  // fl_director(value=-FL_Y),fl_rotor(value=+X),
-  fl_cutout(value = [-FL_Y]),
-  fl_engine(value="fl_jack_mcxjphstem1Engine"),
+) fl_Object(bbox, name=name, engine="jack/mcxjphstem1", others=[
+  fl_cutout(value=[-Y]),
   fl_connectors(value=[
     conn_Socket("antenna",+FL_X,-FL_Z,[0,0,axis.z],size=3.45,octant=-FL_X-FL_Y,direction=[-FL_Z,180])
   ]),
@@ -57,7 +48,7 @@ FL_JACK_MCXJPHSTEM1 = let(
   ["head",              head],
   ["tail",              tail],
   ["jack length",       jack]
-];
+]);
 
 FL_JACK_DICT = [
   FL_JACK_BARREL,
@@ -65,7 +56,7 @@ FL_JACK_DICT = [
 ];
 
 /*!
- * Jack engine.
+ * Common jack engine adapter.
  *
  * Context variables:
  *
@@ -81,24 +72,34 @@ module fl_jack(
   type,
   //! translation applied to cutout
   cut_drift=0,
+  //! FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
+  co_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(type!=undef);
-  engine  = fl_engine(type);
-  if (engine=="fl_jack_barrelEngine")
-    fl_jack_barrelEngine(verbs,type,cut_drift,octant,direction);
-  else if (engine=="fl_jack_mcxjphstem1Engine")
-    fl_jack_mcxjphstem1Engine(verbs,type,cut_drift,octant,direction);
+  assert(type);
+
+  engine        = fl_engine(type);
+
+  if (engine=="jack/barrel")
+    fl_jack_barrelEngine(verbs,type,cut_drift,co_dirs,octant,direction);
+  else if (engine=="jack/mcxjphstem1")
+    fl_jack_mcxjphstem1Engine(verbs,type,cut_drift,co_dirs,octant,direction);
   else
     assert(false,str("Engine '",engine,"' unknown."));
 }
 
 /*!
  * Barrel jack engine.
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                           |
+ * | ---------------- | --------- | ----------------------------------------------------- |
+ * | $fl_thickness    | Parameter | Used during FL_CUTOUT (see also fl_parm_thickness())  |
+ * | $fl_tolerance    | Parameter | Used during FL_CUTOUT (see fl_parm_tolerance())       |
  */
 module fl_jack_barrelEngine(
   //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
@@ -106,28 +107,39 @@ module fl_jack_barrelEngine(
   type,
   //! translation applied to cutout
   cut_drift=0,
+  //! See fl_jack{}.
+  co_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(type!=undef);
+  bbox    = fl_bb_corners(type);
+  size    = fl_bb_size(type);
+  preferred_co  = fl_cutout(type);
+  co_dirs       = co_dirs ? co_dirs : preferred_co;
 
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
+  module do_cutout()
+    assert(!fl_dbg_assert() || fl_tt_isAxisList(co_dirs),co_dirs)
+    for (dir=co_dirs) {
+      preferred = fl_isInAxisList(dir,preferred_co);
+      drift     = cut_drift+(preferred ? -2.5 : 0);
+      trim      = preferred ? X(-size.x/2) : undef;
+      fl_new_cutout(bbox, director=dir, drift=drift, trim=trim, $fl_tolerance=$fl_tolerance+2xNIL)
+        jack();
+    }
 
   fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier)
         jack();
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
-    } else if ($verb==FL_CUTOUT) {
-      assert($fl_thickness!=undef);
       fl_modifier($modifier)
-        fl_new_cutout(bbox, director=+X, drift=-2.5+cut_drift, trim=X(-size.x/2))
-          jack();
+        fl_bb_add(bbox);
+    } else if ($verb==FL_CUTOUT) {
+      assert($fl_thickness!=undef)
+      fl_modifier($modifier)
+        do_cutout();
     } else {
       fl_error(["unimplemented verb",$this_verb]);
     }
@@ -138,6 +150,13 @@ module fl_jack_barrelEngine(
 /*!
  * Engine for RF MCX edge mount jack pcb connector
  * specs taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                           |
+ * | ---------------- | --------- | ----------------------------------------------------- |
+ * | $fl_thickness    | Parameter | Used during FL_CUTOUT (see also fl_parm_thickness())  |
+ * | $fl_tolerance    | Parameter | Used during FL_CUTOUT (see fl_parm_tolerance())       |
  */
 module fl_jack_mcxjphstem1Engine(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -145,6 +164,8 @@ module fl_jack_mcxjphstem1Engine(
   type,
   //! translation applied to cutout
   cut_drift=0,
+  //! See fl_jack{}.
+  co_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -161,6 +182,8 @@ module fl_jack_mcxjphstem1Engine(
   jack    = fl_get(type,"jack length");
   Mshape  = T(+fl_Y(size.y)) * Rx(90);
   conns   = fl_connectors(type);
+  preferred_co  = fl_cutout(type);
+  co_dirs       = co_dirs ? co_dirs : preferred_co;
 
   module do_add() {
     multmatrix(Mshape) {
@@ -187,13 +210,17 @@ module fl_jack_mcxjphstem1Engine(
     }
   }
 
-  module do_cutout() {
-    assert($fl_thickness);
-    translate(-fl_Y(cut_drift))
-      multmatrix(Mshape)
-        translate([0,axis.z,size.y])
-          fl_cylinder(d=3.45+$fl_tolerance*2,h=$fl_thickness);
-  }
+  module do_cutout()
+    assert(!fl_dbg_assert() || fl_tt_isAxisList(co_dirs),co_dirs)
+    for (dir=co_dirs) let(
+      preferred = fl_isInAxisList(dir,preferred_co)
+    ) fl_new_cutout(bbox, director=dir, drift=cut_drift, $fl_tolerance=$fl_tolerance+2xNIL)
+        if (preferred)
+          multmatrix(Mshape)
+            translate([0,axis.z,size.y])
+              fl_cylinder(d=3.45+$fl_tolerance*2,h=$fl_thickness);
+        else
+          do_add($FL_ADD=$FL_CUTOUT);
 
   module fprint() {
     difference() {

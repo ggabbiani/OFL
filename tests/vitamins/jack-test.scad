@@ -73,8 +73,8 @@ CO_TOLERANCE   = 0;   // [0:0.1:0.5]
 CO_T  = 2.5;          // [0:0.1:5]
 // translation applied to cutout
 CO_DRIFT = 0;         // [-5:0.05:5]
-// FL_CUTOUT axes: ±x,±y,±z
-CO_AXES = ["+z"];
+// FL_CUTOUT direction list: ±x,±y,±z
+CO_DIRS = ["+z"];
 
 /* [Hidden] */
 
@@ -98,6 +98,7 @@ $fl_thickness = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 $fl_tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 drift         = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
 verbs         = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT]);
+co_dirs       = fl_3d_AxisList(CO_DIRS);
 
 // target object(s)
 single  = SHOW=="FL_JACK_BARREL"  ? FL_JACK_BARREL
@@ -105,10 +106,8 @@ single  = SHOW=="FL_JACK_BARREL"  ? FL_JACK_BARREL
         : undef;
 
 if (single)
-  fl_jack(verbs,single,
-    direction=direction,octant=octant,cut_drift=drift);
+  fl_jack(verbs,single,cut_drift=drift,co_dirs=co_dirs,octant=octant,direction=direction);
 else
   layout([for(socket=FL_JACK_DICT) fl_width(socket)], 10)
-    fl_jack(verbs,FL_JACK_DICT[$i],
-      direction=direction,octant=octant,cut_drift=drift);
+    fl_jack(verbs,FL_JACK_DICT[$i],cut_drift=drift,co_dirs=co_dirs,direction=direction,octant=octant);
 
