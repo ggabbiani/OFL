@@ -81,10 +81,9 @@ fl_status();
 
 // end of automatically generated code
 
-thick         = $FL_CUTOUT!="OFF" ? CO_T       : undef;
-tolerance     = $FL_CUTOUT!="OFF" || $FL_FOOTPRINT!="OFF" ? TOLERANCE  : undef;
+$fl_thickness = $FL_CUTOUT!="OFF" ? CO_T       : undef;
+$fl_tolerance = $FL_CUTOUT!="OFF" || $FL_FOOTPRINT!="OFF" ? TOLERANCE  : undef;
 drift         = $FL_CUTOUT!="OFF" ? CO_DRIFT   : undef;
-p_thick       = thick!=undef && drift!=undef ? thick-drift : undef;
 co_direction  = fl_3d_AxisList(CO_DIRECTION);
 
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT]);
@@ -126,7 +125,7 @@ if (single) {
   fl_layout(axis=+X,gap=3,types=all,$FL_LAYOUT="ON")
     fl_DIN_rail(
       verbs,all[$i],
-      cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
+      cut_direction=co_direction,cut_drift=drift,
       octant=octant,direction=direction
     );
 }

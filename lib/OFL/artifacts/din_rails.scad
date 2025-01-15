@@ -275,15 +275,18 @@ FL_DIN_RAIL_INVENTORY = [
 
 /*!
  * DIN rail engine module.
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                           |
+ * | ---------------- | --------- | ----------------------------------------------------- |
+ * | $fl_thickness    | Parameter | Used during FL_CUTOUT (see also fl_parm_thickness())  |
+ * | $fl_tolerance    | Parameter | Used during FL_CUTOUT (see fl_parm_tolerance())       |
  */
 module fl_DIN_rail(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, CO_FOOTPRINT, FL_LAYOUT, FL_MOUNT
   verbs = FL_ADD,
   this,
-  //! thickness for FL_CUTOUT
-  cut_thick,
-  //! tolerance used during FL_CUTOUT and FL_FOOTPRINT
-  tolerance=0,
   //! translation applied to cutout (default 0)
   cut_drift=0,
   /*!
@@ -295,8 +298,8 @@ module fl_DIN_rail(
    *
    * in this case the rail will perform a cutout along +Z and -Z.
    *
-   * **Note:** axes specified must be present in the supported cutout direction
-   * list (retrievable through the standard fl_cutout() getter)
+   * **NOTE:** when undefined this parameter defaults to the preferred cutout
+   * directions as specified by fl_cutout().
    */
   cut_direction,
   //! when undef native positioning is used
@@ -305,8 +308,7 @@ module fl_DIN_rail(
   direction
 ) {
   assert($fn,$fn);
-  bbox    = fl_bb_corners(this);
-  size    = bbox[1]-bbox[0];
+  cut_direction = cut_direction ? cut_direction : fl_cutout(this);
   punch   = fl_optional(this,"DIN/rail/punch");
   length  = fl_property(this,"DIN/rail/length");
   profile = fl_DIN_railProfile(this);
@@ -315,27 +317,27 @@ module fl_DIN_rail(
   points  = fl_DIN_profilePoints(profile);
   thick   = fl_DIN_profileThick(profile);
 
-  module do_shape(delta=0,footprint=false) {
-    fl_extrude_if(!fl_dbg_labels() && !fl_dbg_symbols(), size.z, 3)
-      let(points=footprint ? concat([points[0]],fl_list_sub(points,5)) : points)
-        offset(delta)
-          polygon(polyRound(points,fn=$fn));
-    // debug parameters management
-    translate(+Z(size.z+0*0.5))
-      if (!footprint) {
-        if (fl_dbg_labels())
-          for(i=[0:len(points)-1])
-            let(p=points[i])
-              translate([p.x,p.y])
-                fl_label(string=str("P[",i,"]"),size=1,$FL_ADD="ON");
-        if (fl_dbg_symbols())
-          for(p=points)
-            fl_sym_point(point=[p.x,p.y], size=0.25, $FL_ADD="ON");
-      }
-  }
-
   // run with an execution context set by fl_vmanage{}
   module engine() {
+
+    module do_shape(delta=0,footprint=false) {
+      fl_extrude_if(!fl_dbg_labels() && !fl_dbg_symbols(), $this_size.z, 3)
+        let(points=footprint ? concat([points[0]],fl_list_sub(points,5)) : points)
+          offset(delta)
+            polygon(polyRound(points,fn=$fn));
+      // debug parameters management
+      translate(+Z($this_size.z+0*0.5))
+        if (!footprint) {
+          if (fl_dbg_labels())
+            for(i=[0:len(points)-1])
+              let(p=points[i])
+                translate([p.x,p.y])
+                  fl_label(string=str("P[",i,"]"),size=1,$FL_ADD="ON");
+          if (fl_dbg_symbols())
+            for(p=points)
+              fl_sym_point(point=[p.x,p.y], size=0.25, $FL_ADD="ON");
+        }
+    }
 
     if ($this_verb==FL_ADD) {
       // fl_render_if()
@@ -392,24 +394,16 @@ module fl_DIN_rail(
       }
 
     } else if ($this_verb==FL_BBOX) {
-      fl_bb_add($this_bbox,auto=true,$FL_ADD=$FL_BBOX);
+      fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
     } else if ($this_verb==FL_CUTOUT) {
-      for(axis=cut_direction)
-        if (fl_isInAxisList(axis,fl_cutout(this)))
-          let(
-            sys = [axis.x ? -Z : X ,O,axis],
-            t   = ($this_bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
-          )
-          translate(t)
-            fl_cutout(cut_thick,sys.z,sys.x,delta=tolerance)
-              linear_extrude(size.z)
-                polygon(polyRound(points,fn=$fn));
-        else
-          echo(str("***WARN***: Axis ",axis," not supported"));
+      fl_cutoutLoop(cut_direction,fl_cutout(this))
+        fl_new_cutout($this_bbox,$co_current,cut_drift)
+          linear_extrude($this_size.z)
+            polygon(polyRound(points,fn=$fn));
 
     } else if ($this_verb==FL_FOOTPRINT) {
-      do_shape(tolerance,true);
+      do_shape($fl_tolerance,true);
 
     } else if ($this_verb==FL_LAYOUT) {
       // to be implemented ...

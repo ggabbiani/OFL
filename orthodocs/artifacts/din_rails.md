@@ -310,21 +310,22 @@ This module defines the punch shape stepped by.
 
 __Syntax:__
 
-    fl_DIN_rail(verbs=FL_ADD,this,cut_thick,tolerance=0,cut_drift=0,cut_direction,octant,direction)
+    fl_DIN_rail(verbs=FL_ADD,this,cut_drift=0,cut_direction,octant,direction)
 
 DIN rail engine module.
+
+Context variables:
+
+| Name             | Context   | Description                                           |
+| ---------------- | --------- | ----------------------------------------------------- |
+| $fl_thickness    | Parameter | Used during FL_CUTOUT (see also [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness))  |
+| $fl_tolerance    | Parameter | Used during FL_CUTOUT (see [fl_parm_tolerance()](../foundation/core.md#function-fl_parm_tolerance))       |
 
 
 __Parameters:__
 
 __verbs__  
 supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, CO_FOOTPRINT, FL_LAYOUT, FL_MOUNT
-
-__cut_thick__  
-thickness for FL_CUTOUT
-
-__tolerance__  
-tolerance used during FL_CUTOUT and FL_FOOTPRINT
 
 __cut_drift__  
 translation applied to cutout (default 0)
@@ -338,8 +339,8 @@ Example:
 
 in this case the rail will perform a cutout along +Z and -Z.
 
-:memo: **Note:** axes specified must be present in the supported cutout direction
-list (retrievable through the standard [fl_cutout()](../foundation/core.md#function-fl_cutout) getter)
+:memo: **NOTE:** when undefined this parameter defaults to the preferred cutout
+directions as specified by [fl_cutout()](../foundation/core.md#function-fl_cutout).
 
 
 __octant__  
