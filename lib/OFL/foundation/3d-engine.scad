@@ -1321,8 +1321,8 @@ module fl_direction_extrude(
   /*!
    * Translation list applied BEFORE projection().
    *
-   * **NOTE:** trimming modify projection() behavior, enabling its cut parameter
-   * to true.
+   * **NOTE:** trimming modify projection() behavior, enabling its «cut»
+   * parameter to true.
    */
   trim
 ) {
@@ -1373,8 +1373,8 @@ module fl_new_cutout(
   /*!
    * Translation list applied BEFORE projection().
    *
-   * **NOTE:** trimming modify projection() behavior, enabling its cut parameter
-   * to true.
+   * **NOTE:** trimming modify projection() behavior, enabling its «cut»
+   * parameter to true.
    */
   trim
 ) {
@@ -1407,14 +1407,32 @@ module fl_new_cutout(
   let(
     // intersection point between the 3d bounding-box and the plane crossing origin
     // with normal «co_axis»
-    I = intercept(director,bbox),
+    I     = intercept(director,bbox),
     // minimum distance between «I» and «co_axis»
-    d = distance(I,director)
+    d     = distance(I,director),
+    drift = is_function(drift)  ? drift() : drift,
+    trim  = is_function(trim)   ? trim()  : trim
   ) translate((drift+d)*fl_versor(director))
       fl_direction_extrude([director,0],$fl_thickness,r=$fl_tolerance,trim=trim)
         children();
 }
 
+/*!
+ * Cutout helper: loops over passed axes initializing a children context as
+ * follow:
+ *
+ * | Name           | Context   | Description                                 |
+ * | -------------- | --------- | ------------------------------------------- |
+ * | $co_current    | Children  | Current axis                                |
+ * | $co_preferred  | Children  | true if $co_current axis is a preferred one |
+ *
+ * This facility is meant to be used with fl_new_cutout().
+ */
+module fl_cutoutLoop(list,preferred) {
+  for($co_current=list) let(
+    $co_preferred = fl_isInAxisList($co_current,preferred)
+  ) children();
+}
 
 /*!
  * linear_extrude{} with optional fillet radius on each end.

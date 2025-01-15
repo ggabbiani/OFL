@@ -128,34 +128,26 @@ module fl_jack_barrelEngine(
 ) {
   bbox    = fl_bb_corners(type);
   size    = fl_bb_size(type);
-  preferred_co  = fl_cutout(type);
-  co_dirs       = co_dirs ? co_dirs : preferred_co;
 
-  module do_cutout()
-    assert(!fl_dbg_assert() || fl_tt_isAxisList(co_dirs),co_dirs)
-    for (dir=co_dirs) {
-      preferred = fl_isInAxisList(dir,preferred_co);
-      drift     = cut_drift+(preferred ? -2.5 : 0);
-      trim      = preferred ? X(-size.x/2) : undef;
-      fl_new_cutout(bbox, director=dir, drift=drift, trim=trim, $fl_tolerance=$fl_tolerance+2xNIL)
-        jack();
-    }
-
-  fl_vloop(verbs,bbox,octant,direction) {
-    if ($verb==FL_ADD) {
+  fl_vloop(verbs,bbox,octant,direction)
+    if ($verb==FL_ADD)
       fl_modifier($modifier)
         jack();
-    } else if ($verb==FL_BBOX) {
+    else if ($verb==FL_BBOX)
       fl_modifier($modifier)
         fl_bb_add(bbox);
-    } else if ($verb==FL_CUTOUT) {
+    else if ($verb==FL_CUTOUT)
       assert($fl_thickness!=undef)
-      fl_modifier($modifier)
-        do_cutout();
-    } else {
+        fl_modifier($modifier)
+          fl_cutoutLoop(co_dirs, fl_cutout(type))
+            fl_new_cutout(bbox,$co_current,
+              drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
+              trim          = function() $co_preferred ? X(-size.x/2) : undef,
+              $fl_tolerance = $fl_tolerance+2xNIL
+            ) jack();
+    else
       fl_error(["unimplemented verb",$this_verb]);
-    }
-  }
+
 }
 
 // FIXME: issue when directing, likely to be related to the 'D' matrix when director is not +Z
@@ -223,11 +215,9 @@ module fl_jack_mcxjphstem1Engine(
   }
 
   module do_cutout()
-    assert(!fl_dbg_assert() || fl_tt_isAxisList(co_dirs),co_dirs)
-    for (dir=co_dirs) let(
-      preferred = fl_isInAxisList(dir,preferred_co)
-    ) fl_new_cutout(bbox, director=dir, drift=cut_drift, $fl_tolerance=$fl_tolerance+2xNIL)
-        if (preferred)
+    fl_cutoutLoop(co_dirs, fl_cutout(type))
+      fl_new_cutout(bbox,$co_current,drift=cut_drift, $fl_tolerance=$fl_tolerance+2xNIL)
+        if ($co_preferred)
           multmatrix(Mshape)
             translate([0,axis.z,size.y])
               fl_cylinder(d=3.45+$fl_tolerance*2,h=$fl_thickness);
