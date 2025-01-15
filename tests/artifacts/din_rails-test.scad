@@ -84,8 +84,8 @@ TOLERANCE   = 0;  // [0:0.1:5]
 CO_T  = 2.5;          // [0:0.5:5]
 // translation applied to cutout
 CO_DRIFT = 0; // [-100:0.5:100]
+// list of cutout directions or "undef" for preferred directions only
 CO_DIRECTION  = ["±Z"];
-
 
 /* [Hidden] */
 
