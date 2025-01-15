@@ -25,7 +25,7 @@ export BIN					:= $(CURDIR)/bin
 export FUNCTIONS			:= $(CURDIR)/functions.mk
 export SHELL				:= /bin/bash
 export COMMA				:= ,
-export IMG_DIFF				:= $(BIN)/image-diff.py
+export IMG_DIFF				:= $(BIN)/image-diff.py --threshold 99
 
 include $(FUNCTIONS)
 
