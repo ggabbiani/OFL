@@ -190,6 +190,7 @@
 - [fl_cutout (module)](foundation/util.md#module-fl_cutout)
 - [$FL_CUTOUT (variable)](foundation/core.md#variable-$fl_cutout)
 - [FL_CUTOUT (variable)](foundation/core.md#variable-fl_cutout)
+- [fl_cutoutLoop (module)](foundation/3d-engine.md#module-fl_cutoutloop)
 - [fl_cyl_botRadius (function)](foundation/3d-engine.md#function-fl_cyl_botradius)
 - [fl_cyl_h (function)](foundation/3d-engine.md#function-fl_cyl_h)
 - [fl_cyl_topRadius (function)](foundation/3d-engine.md#function-fl_cyl_topradius)
