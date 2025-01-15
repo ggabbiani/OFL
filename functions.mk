@@ -123,12 +123,13 @@ define check-picture
 	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
 	# creation of new-$@
 	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null && rm unscaled-$@
-	# old creation from current target or from git when not existing
-	(test -f $@ && cp $@ old-$@) || (git checkout -- $@ 2>/dev/null && mv $@ old-$@) || true
+	# old creation from git or from current target when not existing
+	(git checkout -- $@ 2>/dev/null && mv $@ old-$@) || (test -f $@ && cp $@ old-$@) || true
 	# when no old version exists promote new
-	# when old exists: performs similarity test and if unsuccessful removes old
-	# leaving new otherwise removes new and promote old
-	(test ! -f old-$@ && mv new-$@ $@) || (($(IMG_DIFF) -v 0 old-$@ new-$@ || (rm old-$@ && false)) && rm -f new-$@ && mv old-$@ $@)
+	# when old exists: performs similarity test and
+	# if unsuccessful removes old leaving new and rising error
+	# otherwise removes new and promote old
+	(test ! -f old-$@ && mv new-$@ $@) || (($(IMG_DIFF) -v 0 old-$@ new-$@ || (rm old-$@ && echo "insufficient similariry either correct sources or commit new-$@" && false)) && rm -f new-$@ && mv old-$@ $@)
 	$(call fix-target-dependencies)
 endef
 
