@@ -129,22 +129,19 @@ module fl_jack_barrelEngine(
   bbox    = fl_bb_corners(type);
   size    = fl_bb_size(type);
 
-  fl_vloop(verbs,bbox,octant,direction)
+  fl_vmanage(verbs,type,octant,direction)
     if ($verb==FL_ADD)
-      fl_modifier($modifier)
-        jack();
+      jack();
     else if ($verb==FL_BBOX)
-      fl_modifier($modifier)
-        fl_bb_add(bbox);
+      fl_bb_add(bbox);
     else if ($verb==FL_CUTOUT)
       assert($fl_thickness!=undef)
-        fl_modifier($modifier)
-          fl_cutoutLoop(co_dirs, fl_cutout(type))
-            fl_new_cutout(bbox,$co_current,
-              drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
-              trim          = function() $co_preferred ? X(-size.x/2) : undef,
-              $fl_tolerance = $fl_tolerance+2xNIL
-            ) jack();
+        fl_cutoutLoop(co_dirs, fl_cutout(type))
+          fl_new_cutout(bbox,$co_current,
+            drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
+            trim          = function() $co_preferred ? X(-size.x/2) : undef,
+            $fl_tolerance = $fl_tolerance+2xNIL
+          ) jack();
     else
       fl_error(["unimplemented verb",$this_verb]);
 
@@ -242,18 +239,18 @@ module fl_jack_mcxjphstem1Engine(
       fprint();
   }
 
-  fl_vloop(verbs,bbox,octant,direction) {
+  fl_vmanage(verbs,type,octant,direction) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+      do_add();
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_bb_add(bbox);
 
     } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier) do_cutout();
+      do_cutout();
 
     } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) do_footprint();
+      do_footprint();
 
     } else {
       fl_error(["unimplemented verb",$this_verb]);
