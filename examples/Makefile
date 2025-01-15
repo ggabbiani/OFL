@@ -25,5 +25,5 @@ snapmaker/%:
 clean: snapmaker/clean
 	$(call aggregate-prologue)
 	@for f in $(PICS) ; do rm -fr $$f ; done
-	@rm *.deps
+	@rm -f *.deps
 	$(call aggregate-epilogue)
