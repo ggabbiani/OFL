@@ -64,15 +64,17 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
+
+
 /* [Jack] */
 
-SHOW        = "ALL"; // [ALL,FL_JACK_BARREL,MCXJPHSTEM1]
+SHOW          = "ALL";  // [ALL,FL_JACK_BARREL,MCXJPHSTEM1]
 // tolerance used during FL_CUTOUT
-CO_TOLERANCE   = 0;   // [0:0.1:0.5]
+CO_TOLERANCE  = 0;        // [0:0.1:5]
 // thickness for FL_CUTOUT
-CO_T  = 2.5;          // [0:0.1:5]
+CO_T          = 2.5;      // [0:0.1:5]
 // translation applied to cutout
-CO_DRIFT = 0;         // [-5:0.05:5]
+CO_DRIFT      = 0;        // [-5:0.05:5]
 // FL_CUTOUT direction list: ±x,±y,±z
 CO_DIRS = ["+z"];
 
@@ -110,4 +112,3 @@ if (single)
 else
   layout([for(socket=FL_JACK_DICT) fl_width(socket)], 10)
     fl_jack(verbs,FL_JACK_DICT[$i],cut_drift=drift,co_dirs=co_dirs,direction=direction,octant=octant);
-
