@@ -129,7 +129,7 @@ define check-picture
 	# when old exists: performs similarity test and
 	# if unsuccessful removes old leaving new and rising error
 	# otherwise removes new and promote old
-	(test ! -f old-$@ && mv new-$@ $@) || (($(IMG_DIFF) -v 0 old-$@ new-$@ || (rm old-$@ && echo "insufficient similariry either correct sources or commit new-$@" && false)) && rm -f new-$@ && mv old-$@ $@)
+	(test ! -f old-$@ && mv new-$@ $@) || (($(IMG_DIFF) -v 0 old-$@ new-$@ || (rm old-$@ && echo "insufficient similariry either correct $? or commit new-$@" && false)) && rm -f new-$@ && mv old-$@ $@)
 	$(call fix-target-dependencies)
 endef
 

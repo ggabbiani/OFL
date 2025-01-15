@@ -20,7 +20,7 @@ fig_jack_barrel_default_cutouts.png: $(call test-deps,vitamins/jack)
 
 fig_jack_barrel_preferred_cutouts.png: $(call test-deps,vitamins/jack)
 	$(call target-prologue)
-	$(call make-picture,$(SIZE),$(make-camera 3.2,0,3,68.3,0,44.5,94.2219),,--view axes)
+	$(call check-picture,$(SIZE),$(make-camera 3.2,0,3,68.3,0,44.5,94.2219),,--view axes)
 	$(call target-epilogue-success)
 
 fig_FL_IEC_%.png: iecs.scad iecs.json
