@@ -980,6 +980,25 @@ desired direction [director,rotation] or native direction if undef
 
 ---
 
+### module fl_cutoutLoop
+
+__Syntax:__
+
+    fl_cutoutLoop(list,preferred)
+
+Cutout helper: loops over passed axes initializing a children context as
+follow:
+
+| Name           | Context   | Description                                 |
+| -------------- | --------- | ------------------------------------------- |
+| $co_current    | Children  | Current axis                                |
+| $co_preferred  | Children  | true if $co_current axis is a preferred one |
+
+This facility is meant to be used with fl_new_cutout().
+
+
+---
+
 ### module fl_cylinder
 
 __Syntax:__
@@ -1082,8 +1101,8 @@ offset() chamfer (ignored when r!=0)
 __trim__  
 Translation list applied BEFORE projection().
 
-:memo: **NOTE:** trimming modify projection() behavior, enabling its cut parameter
-to true.
+:memo: **NOTE:** trimming modify projection() behavior, enabling its «cut»
+parameter to true.
 
 
 
@@ -1303,8 +1322,8 @@ When negative this value is actually subtracted.
 __trim__  
 Translation list applied BEFORE projection().
 
-:memo: **NOTE:** trimming modify projection() behavior, enabling its cut parameter
-to true.
+:memo: **NOTE:** trimming modify projection() behavior, enabling its «cut»
+parameter to true.
 
 
 
