@@ -818,13 +818,13 @@ function fl_atof(str) =
     0 : let(
       expon1 = search("e", str),
       expon = len(expon1) ? expon1 : search("E", str)
-    ) len(expon) ? fl_atof(substr(str,pos=0,len=expon[0])) * pow(10, fl_atoi(substr(str,pos=expon[0]+1)))
+    ) len(expon) ? fl_atof(fl_substr(str,pos=0,len=expon[0])) * pow(10, fl_atoi(fl_substr(str,pos=expon[0]+1)))
     : let(
       multiplyBy = (str[0] == "-") ? -1 : 1,
-      str = (str[0] == "-" || str[0] == "+") ? substr(str, 1, len(str)-1) : str,
+      str = (str[0] == "-" || str[0] == "+") ? fl_substr(str, 1, len(str)-1) : str,
       decimal = search(".", str),
-      beforeDecimal = decimal == [] ? str : substr(str, 0, decimal[0]),
-      afterDecimal = decimal == [] ? "0" : substr(str, decimal[0]+1)
+      beforeDecimal = decimal == [] ? str : fl_substr(str, 0, decimal[0]),
+      afterDecimal = decimal == [] ? "0" : fl_substr(str, decimal[0]+1)
     ) (multiplyBy * (fl_atoi(beforeDecimal) + fl_atoi(afterDecimal)/pow(10,len(afterDecimal))));
 
 /*!
@@ -882,9 +882,9 @@ function fl_vector_sign(v) = [for(x=v) sign(x)];
  * Usage:
  *
  *     str = "OpenScad is a free CAD software.";
- *     echo(substr(str, 12)); // "a free CAD software."
- *     echo(substr(str, 12, 10)); // "a free CAD"
- *     echo(substr(str, len=8)); // or substr(str, 0, 8); // "OpenScad"
+ *     echo(fl_substr(str, 12)); // "a free CAD software."
+ *     echo(fl_substr(str, 12, 10)); // "a free CAD"
+ *     echo(fl_substr(str, len=8)); // or fl_substr(str, 0, 8); // "OpenScad"
  *
  * Original code pasted from TOUL: [The OpenScad Useful
  * Library](http://www.thingiverse.com/thing:1237203)
