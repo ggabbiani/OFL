@@ -6,7 +6,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../../lib/OFL/foundation/3d-engine.scad>
+include <../../lib/OFL/artifacts/din_rails.scad>
+include <../../lib/OFL/vitamins/ethers.scad>
+include <../../lib/OFL/vitamins/jacks.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -27,7 +29,7 @@ $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
-$FL_CUTOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+$FL_CUTOUT    = "DEBUG";// [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
@@ -52,77 +54,73 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [Test] */
+/* [Object selection] */
 
-$hole_syms   = true;
-
-/* [Bounding box] */
-
-BB_NEGATIVE = [-1,-1,-0.5]; // [-1:0.1:1]
-BB_POSITIVE = [1,1,0];      // [-1:0.1:1]
+// ... please take a decision!
+CLASS  = "jack";  // [jack,DIN,ether]
 
 /* [cutout] */
 
-CUTOUT_AXIS   = [0,0,1];  // [-1:0.1:+1]
-CUTOUT_DRIFT  = 0;  // [-2:0.1:2]
-$fl_thickness = 0.1;  // [0:0.1:2]
-$fl_tolerance = 0;  // [0:0.1:2]
+// list of cutout directions or "preferred" for preferred directions only
+CUTOUT_DIRS  = ["preferred"];
+// space added/subtracted to the bounding box before carving
+CUTOUT_DRIFT  = 0;        // [-5:0.1:5]
+// overall thickness to be carved out
+$fl_thickness = 2.5;      // [0:0.1:5]
+// tolerance added/subtracted to the object section boundaries
+$fl_tolerance = 0;        // [0:0.1:2]
 
 /* [Hidden] */
 
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs     = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT,FL_PAYLOAD]);
-bbox      = [BB_NEGATIVE,BB_POSITIVE];
+co_dirs   = CUTOUT_DIRS==["preferred"] ? undef : fl_3d_AxisList(CUTOUT_DIRS);
 
-test      = fl_Object(bbox=bbox, name="Cut-out test object", engine="cutout-test");
+/*!
+ * True if the «type» engine is a sub domain of «engine».
+ *
+ * Example: if «type» has the fl_engine() attribute set to "jack/barrel", the
+ * following code
+ *
+ *     fl_typeIsEngine(type,"jack")
+ *
+ * will return true.
+ */
+function fl_typeIsEngine(type,engine) = fl_substr(fl_engine(type),len=len(engine))==engine;
 
-module cutout_test(
+function all(inventory,builder) = let(
+) [for(i=[0:len(inventory)-1]) builder ? builder(i) : inventory[i]];
+
+module proxy(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
-  this,
-  // cutout axis
-  co_axis,
+  // cutout axes list
+  co_dirs,
   // cutout drift (scalar)
   co_drift,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
-) {
+) let(
+    gap     = 2*$fl_thickness
+) if (CLASS=="jack") let(
+    all = all(FL_JACK_DICT)
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+    fl_jack(verbs,all[$i],co_drift,co_dirs,octant,direction);
 
-  // run with an execution context set by fl_vmanage{}
-  module engine() let(
-    // start of engine specific internal variables
-    dummy_var = "whatever you need"
-  ) if ($this_verb==FL_ADD) {
-    fl_bb_add(corners=$this_bbox,auto=false);
+  else if (CLASS=="DIN") let(
+    all = all(FL_DIN_RAIL_INVENTORY,function(i) FL_DIN_RAIL_INVENTORY[i](fl_bb_size(FL_DIN_TS_INVENTORY[i]).x*2))
+  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+    fl_DIN_rail(verbs,all[$i],cut_direction=co_dirs,cut_drift=co_drift,octant=octant,direction=direction);
 
-  } else if ($this_verb==FL_BBOX)
-    // ... this should be enough
-    fl_bb_add(corners=$this_bbox,$FL_ADD=$FL_BBOX);
+  else if (CLASS=="ether") let(
+    all = all(FL_ETHER_DICT)
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+    fl_ether(verbs, all[$i], cut_drift=co_drift, cut_direction=co_dirs, octant=octant, direction=direction);
 
-  else if ($this_verb==FL_CUTOUT) {
-    fl_new_cutout(bbox,co_axis,co_drift)
-      fl_bb_add(corners=$this_bbox,auto=false,$FL_ADD=$FL_CUTOUT);
+  else
+    fl_error(["Unsupported class engine",CLASS]);
 
-  } else if ($this_verb==FL_DRILL) {
-    // your code ...
-
-  } else if ($this_verb==FL_LAYOUT) {
-    // your code ...
-
-  } else if ($this_verb==FL_MOUNT) {
-    // your code ...
-
-  } else
-    fl_error(["unimplemented verb",$this_verb]);
-
-  // fl_vmanage() manages standard parameters and prepares the execution
-  // context for the engine.
-  fl_vmanage(verbs,this,octant=octant,direction=direction)
-    engine()
-      children();
-}
-
-cutout_test(verbs, test, co_axis=CUTOUT_AXIS, co_drift=CUTOUT_DRIFT, octant=octant, direction=direction);
+proxy(verbs, co_dirs, CUTOUT_DRIFT, octant=octant, direction=direction);
