@@ -1407,7 +1407,7 @@ module fl_new_cutout(
   let(
     // intersection point between the 3d bounding-box and the plane crossing origin
     // with normal «co_axis»
-    I     = intercept(director,bbox),
+    I     = assert(director) intercept(director,bbox),
     // minimum distance between «I» and «co_axis»
     d     = distance(I,director),
     drift = is_function(drift)  ? drift() : drift,
