@@ -38,7 +38,7 @@ FL_ETHER_RJ45 = let(
 ) [
   fl_name(value="RJ45"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
-  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
+  fl_cutout(value=[+X]),
 
   fl_engine(value=str(FL_ETHER_NS,"/NopSCADlib")),
 ];
@@ -49,7 +49,7 @@ FL_ETHER_RJ45_SM = let(
 ) [
   fl_name(value="RJ45 SLIM"),
   fl_bb_corners(value=[[-l+FL_ETHER_FRAME_T,-w/2,-FL_ETHER_Z_OFFSET],+[FL_ETHER_FRAME_T,w/2,h-FL_ETHER_Z_OFFSET]]),
-  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
+  fl_cutout(value=[+X]),
 
   fl_dxf(value="vitamins/ether-slim.dxf"),
   fl_engine(value=str(FL_ETHER_NS,"/native")),
@@ -60,14 +60,20 @@ FL_ETHER_DICT = [
   FL_ETHER_RJ45_SM
 ];
 
+/*!
+ * Ethernet engine.
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                           |
+ * | ---------------- | --------- | ----------------------------------------------------- |
+ * | $fl_thickness    | Parameter | Used during FL_CUTOUT (see also fl_parm_thickness())  |
+ * | $fl_tolerance    | Parameter | Used during FL_CUTOUT (see fl_parm_tolerance())       |
+ */
 module fl_ether(
   //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
   verbs       = FL_ADD,
   type,
-  //! thickness for FL_CUTOUT
-  cut_thick,
-  //! tolerance used during FL_CUTOUT
-  cut_tolerance=0,
   //! translation applied to cutout (default 0)
   cut_drift=0,
   /*!
@@ -95,6 +101,7 @@ module fl_ether(
   zoff        = FL_ETHER_Z_OFFSET;
   engine      = fl_engine(type);
   dxf         = engine==str(FL_ETHER_NS,"/native") ? fl_dxf(type) : undef;
+  cut_direction = cut_direction ? cut_direction : fl_cutout(type);
 
   module do_footprint() {
     if (engine==str(FL_ETHER_NS,"/NopSCADlib")) fl_bb_add($this_bbox);
@@ -107,19 +114,13 @@ module fl_ether(
         }
   }
 
-  module do_cutout() {
-    for(axis=cut_direction)
-      if (fl_isInAxisList(axis,fl_cutout(type)))
-        let(
-          sys = [axis.x ? -Z : X ,O,axis],
-          t   = ($this_bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
-        )
-        translate(t)
-          fl_cutout(cut_thick,sys.z,sys.x,delta=cut_tolerance)
-            do_footprint();
-      else
-        echo(str("***WARN***: Axis ",axis," not supported"));
-  }
+  module do_cutout()
+    assert(!is_undef($fl_thickness))
+      fl_cutoutLoop(cut_direction, fl_cutout(type))
+        fl_new_cutout($this_bbox,$co_current,
+          drift         = cut_drift,
+          $fl_tolerance = $fl_tolerance+2xNIL
+        ) do_footprint();
 
   module do_add() {
     translate(-Z(zoff)) {
@@ -154,7 +155,7 @@ module fl_ether(
       fl_modifier($modifier) fl_bb_add($this_bbox,auto=true);
 
     } else if ($this_verb==FL_CUTOUT) {
-      assert(cut_thick!=undef);
+      assert($fl_thickness!=undef);
       fl_modifier($modifier)
         do_cutout();
 
