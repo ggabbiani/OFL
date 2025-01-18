@@ -2140,9 +2140,9 @@ Returns a substring of a string.
 Usage:
 
     str = "OpenScad is a free CAD software.";
-    echo(substr(str, 12)); // "a free CAD software."
-    echo(substr(str, 12, 10)); // "a free CAD"
-    echo(substr(str, len=8)); // or substr(str, 0, 8); // "OpenScad"
+    echo(fl_substr(str, 12)); // "a free CAD software."
+    echo(fl_substr(str, 12, 10)); // "a free CAD"
+    echo(fl_substr(str, len=8)); // or fl_substr(str, 0, 8); // "OpenScad"
 
 Original code pasted from TOUL: [The OpenScad Useful
 Library](http://www.thingiverse.com/thing:1237203)

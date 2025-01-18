@@ -65,7 +65,7 @@ value of the internally inserted part of an RJ45 plug
 
 __Default:__
 
-    let(l=21,w=16,h=13.5)[fl_name(value="RJ45"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_engine(value=str(FL_ETHER_NS,"/NopSCADlib")),]
+    let(l=21,w=16,h=13.5)[fl_name(value="RJ45"),fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),fl_cutout(value=[+X]),fl_engine(value=str(FL_ETHER_NS,"/NopSCADlib")),]
 
 ---
 
@@ -73,7 +73,7 @@ __Default:__
 
 __Default:__
 
-    let(l=12.6,w=17.4,h=11.5)[fl_name(value="RJ45 SLIM"),fl_bb_corners(value=[[-l+FL_ETHER_FRAME_T,-w/2,-FL_ETHER_Z_OFFSET],+[FL_ETHER_FRAME_T,w/2,h-FL_ETHER_Z_OFFSET]]),fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),fl_dxf(value="vitamins/ether-slim.dxf"),fl_engine(value=str(FL_ETHER_NS,"/native")),]
+    let(l=12.6,w=17.4,h=11.5)[fl_name(value="RJ45 SLIM"),fl_bb_corners(value=[[-l+FL_ETHER_FRAME_T,-w/2,-FL_ETHER_Z_OFFSET],+[FL_ETHER_FRAME_T,w/2,h-FL_ETHER_Z_OFFSET]]),fl_cutout(value=[+X]),fl_dxf(value="vitamins/ether-slim.dxf"),fl_engine(value=str(FL_ETHER_NS,"/native")),]
 
 ---
 
@@ -105,18 +105,22 @@ fl_ether_Zoffset(type,value)
 
 __Syntax:__
 
-    fl_ether(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_direction,octant,direction)
+    fl_ether(verbs=FL_ADD,type,cut_drift=0,cut_direction,octant,direction)
+
+Ethernet engine.
+
+Context variables:
+
+| Name             | Context   | Description                                           |
+| ---------------- | --------- | ----------------------------------------------------- |
+| $fl_thickness    | Parameter | Used during FL_CUTOUT (see also [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness))  |
+| $fl_tolerance    | Parameter | Used during FL_CUTOUT (see [fl_parm_tolerance()](../foundation/core.md#function-fl_parm_tolerance))       |
+
 
 __Parameters:__
 
 __verbs__  
 supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
-
-__cut_thick__  
-thickness for FL_CUTOUT
-
-__cut_tolerance__  
-tolerance used during FL_CUTOUT
 
 __cut_drift__  
 translation applied to cutout (default 0)
