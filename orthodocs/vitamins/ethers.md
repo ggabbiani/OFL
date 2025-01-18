@@ -134,8 +134,6 @@ Example:
 
 in this case the ethernet plug will perform a cutout along +X and +Z.
 
-:memo: **Note:** axes specified must be present in the supported cutout direction
-list (retrievable through [fl_cutout()](../foundation/core.md#function-fl_cutout) getter)
 
 
 __octant__  

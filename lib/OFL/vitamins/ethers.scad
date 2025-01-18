@@ -85,8 +85,6 @@ module fl_ether(
    *
    * in this case the ethernet plug will perform a cutout along +X and +Z.
    *
-   * **Note:** axes specified must be present in the supported cutout direction
-   * list (retrievable through fl_cutout() getter)
    */
   cut_direction,
   //! when undef native positioning is used

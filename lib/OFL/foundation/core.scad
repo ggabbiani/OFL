@@ -366,19 +366,17 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
 /*!
  * Layout of predefined cutout shapes (±X,±Y,±Z).
  *
- * A cutout is by default the projection of one object section along one or more
- * semi-axes (±X,±Y,±Z).
+ * Default cutouts are provided through extrusion of object sections along
+ * one or more semi-axes (±X,±Y,±Z).
  *
  * **Preferred directions**
  *
- * OFL objects can cut themselves along any direction by extruding their section
- * orthogonal to the direction itself. For objects that allow it, the
- * fl_cutout() property returns a list of directions along which the cutout
- * occurs on alternative sections to the default ones. This is the case - for
- * example - of an audio jack (see variable FL_JACK_BARREL): on all directions
- * but +X (its 'preferred' cutout direction as returned from the fl_cutout()
- * property) the cutout is the standard one, on +X axis the cutout section is
- * circular to allow the insertion of the male jack.
+ * Preferred cutout directions are specified through the fl_cutout() property as
+ * a list of directions along which the cutout occurs on eventually alternative
+ * sections. This is the case - for example - of an audio jack socket (see
+ * variable FL_JACK_BARREL): on all directions but +X (its 'preferred' cutout
+ * direction) the cutout is the standard one, on +X axis the cutout section is
+ * circular to allow the insertion of the jack plug.
  *
  * **NOTE:** The fl_cutout() property also modifies the behavior of the object
  * when it is passed as a component (via fl_Component()) of a 'parent' object.
@@ -386,11 +384,27 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  * its parent in the 'preferred' directions, while on all the others it will
  * maintain the standard behavior.
  *
- * **NOTE:** this verb is a no-op if no cutout direction is provided.
+ * **NOTE:** The existence of one or more 'preferred' cutout direction, modify
+ * also the behavior of a FL_CUTOUT operation. When no cutout direction is
+ * provided, the preferred directions are anyway executed. The only way for
+ * producing a no-op is passing an empty cutout direction list (`cut_dirs=[]`).
  *
  * **NOTE:** The main difference between this verb and FL_DRILL (see variable
  * FL_DRILL) is that the FL_CUTOUT acts on every semi-axis provided by the
  * caller, while the latter operates ONLY along its 'preferred' direction(s).
+ *
+ * **Parameters**
+ *
+ * FL_CUTOUT behavior can be modified through the following parameters:
+ *
+ * | Name           | Default                 | Description                                       |
+ * | -------------- | ----------------------- | ------------------------------------------------- |
+ * | cut_dirs       | Object 'preferred' ones as returned by the fl_cutout() property | list of semi-axes indicating the cutout directions. |
+ * | cut_drift      | 0                       | Cutout extrusions are adjacent to the object bounding box, this parameter adds or subtracts a delta. |
+ * | cut_trim       | undef                   | 3d translation applied to children() before extrusion, when set object section is modified like the «cut» parameters does in the OpenSCAD primitive projection{} |
+ * | $fl_thickness  | see fl_parm_thickness() | overall thickness of the cutout surface           |
+ * | $fl_tolerance  | see fl_parm_tolerance() | delta added or subtracted from the object section |
+ *
  */
 FL_CUTOUT     = "FL_CUTOUT";
 //! test verb for library development
