@@ -36,7 +36,7 @@ FL_JACK_BARREL = let(
   ch = 2.5,
   // calculated bounding box corners
   bbox      = [[-l/2,-w/2,0],[+l/2+ch,+w/2,h]]
-) fl_Object(bbox, engine="jack/barrel", others=[fl_cutout(value=[+X])]);
+) fl_Object(bbox, engine=str(FL_JACK_NS,"/barrel"), others=[fl_cutout(value=[+X])]);
 
 FL_JACK_MCXJPHSTEM1 = let(
   name  = "50Ω MCX EDGE MOUNT JACK PCB CONNECTOR",
@@ -50,7 +50,7 @@ FL_JACK_MCXJPHSTEM1 = let(
   head  = 6.25,
   tail  = sz.y - head,
   jack  = sz.y-2
-) fl_Object(bbox, name=name, engine="jack/mcxjphstem1", others=[
+) fl_Object(bbox, name=name, engine=str(FL_JACK_NS,"/mcx edge mount"), others=[
   fl_cutout(value=[-Y]),
   fl_connectors(value=[
     conn_Socket("antenna",+FL_X,-FL_Z,[0,0,axis.z],size=3.45,octant=-FL_X-FL_Y,direction=[-FL_Z,180])
@@ -95,9 +95,9 @@ module fl_jack(
 
   engine        = fl_engine(type);
 
-  if (engine=="jack/barrel")
+  if (engine==str(FL_JACK_NS,"/barrel"))
     fl_jack_barrelEngine(verbs,type,cut_drift,co_dirs,octant,direction);
-  else if (engine=="jack/mcxjphstem1")
+  else if (engine==str(FL_JACK_NS,"/mcx edge mount"))
     fl_jack_mcxjphstem1Engine(verbs,type,cut_drift,co_dirs,octant,direction);
   else
     assert(false,str("Engine '",engine,"' unknown."));
@@ -125,27 +125,22 @@ module fl_jack_barrelEngine(
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
-) {
-  bbox    = fl_bb_corners(type);
-  size    = fl_bb_size(type);
-
-  fl_vmanage(verbs,type,octant,direction)
-    if ($verb==FL_ADD)
+) fl_vmanage(verbs,type,octant,direction) let(
+    co_dirs = co_dirs ? co_dirs : fl_cutout(type)
+  ) if ($verb==FL_ADD)
       jack();
     else if ($verb==FL_BBOX)
-      fl_bb_add(bbox);
+      fl_bb_add($this_bbox);
     else if ($verb==FL_CUTOUT)
       assert($fl_thickness!=undef)
         fl_cutoutLoop(co_dirs, fl_cutout(type))
-          fl_new_cutout(bbox,$co_current,
+          fl_new_cutout($this_bbox,$co_current,
             drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
-            trim          = function() $co_preferred ? X(-size.x/2) : undef,
+            trim          = function() $co_preferred ? X(-$this_size.x/2) : undef,
             $fl_tolerance = $fl_tolerance+2xNIL
           ) jack();
     else
       fl_error(["unimplemented verb",$this_verb]);
-
-}
 
 // FIXME: issue when directing, likely to be related to the 'D' matrix when director is not +Z
 /*!

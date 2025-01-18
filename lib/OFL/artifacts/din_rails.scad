@@ -160,12 +160,8 @@ function fl_DIN_TopHatSection(
     [-size.x[0]/2,-thick,r[1]],
     [-size.x[1]/2,-thick,0]
   ]
-) [
-  fl_native(value=true),
-  assert(name) fl_name(value=name),
-  if (description) fl_description(value=description),
+) fl_Object(fl_bb_polygon(pts), name=name, description=description, others = [
   fl_DIN_profilePoints(value=pts),
-  fl_bb_corners(value=fl_bb_polygon(pts)),
   ["DIN/profile/radii",r],
   fl_DIN_profileThick(value=thick),
   fl_DIN_profileSize(value=size),
@@ -176,7 +172,7 @@ function fl_DIN_TopHatSection(
     fl_Dimension(thick,"t"),
     fl_Dimension((size[0][1]-size[0][0])/2,"delta"),
   ])),
-];
+]);
 
 /*!
  * Top hat section profile IEC/EN 60715 – 15×5.5 mm
@@ -218,20 +214,16 @@ function fl_DIN_Rail(
   //! optional parameter as returned from fl_Punch()
   punch
 ) = let(
-  bbox          = let(
-    2d  = fl_bb_corners(profile)
-  ) [[2d[0].x,2d[0].y,0],[2d[1].x,2d[1].y,length]]
-) [
-  fl_native(value=true),
-  fl_bb_corners(value=bbox),
+  bbox  = let(2d = fl_bb_corners(profile)) [[2d[0].x,2d[0].y,0],[2d[1].x,2d[1].y,length]]
+) fl_Object(bbox, engine=FL_DIN_NS, others = [
   assert(profile) fl_DIN_railProfile(value=profile),
-  assert(length)  ["DIN/rail/length", length],
-  if (punch) ["DIN/rail/punch", punch],
+  assert(length)  [str(FL_DIN_NS,"/rail/length"), length],
+  if (punch)      [str(FL_DIN_NS,"/rail/punch"), punch],
   fl_cutout(value=[+Z,-Z]),
   fl_dimensions(value=fl_DimensionPack([
     fl_Dimension(length,"L"),
-  ])),
-];
+  ]))
+]);
 
 // Specs taken from [RS PRO | RS PRO Steel Perforated DIN Rail, Mini Top Hat Compatible, 1m x 15mm x 5.5mm | 467-349 | RS Components](https://in.rsdelivers.com/product/rs-pro/rs-pro-steel-perforated-din-rail-mini-top-hat-1m-x/0467349)
 
