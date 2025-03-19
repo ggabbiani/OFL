@@ -1371,14 +1371,13 @@ module fl_new_cutout(
    */
   drift=0,
   /*!
-   * Translation list applied BEFORE projection().
+   * 3d translation applied BEFORE projection().
    *
    * **NOTE:** trimming modify projection() behavior, enabling its «cut»
    * parameter to true.
    */
   trim
 ) {
-
   // Returns the distance from point «P» to plane crossing the origin and with its
   // normal equal to «n».
   // Modified from [Distance from point to plane - Math Insight](https://mathinsight.org/distance_point_plane)
@@ -1564,9 +1563,7 @@ module fl_symbol(
   overlap = sz.z / 5;
   h       = (sz.z + 2 * overlap) / 3;
   delta   = h - overlap;
-  fl_trace("verbs",verbs);
-  fl_trace("size",size);
-  fl_trace("sz",sz);
+  verbs   = is_string(verbs) ? [verbs] : verbs;
 
   module context() {
     $sym_ldir = symbol=="plug" ? [+Z,0] : [-Z,180];
@@ -1700,7 +1697,8 @@ module fl_sym_point(
   // point 2d/3d coords
   point=FL_O,
   //! synonymous of point diameter
-  size
+  size,
+  color="black"
 ) {
 
   d     = assert(size,size) size;
@@ -1720,7 +1718,7 @@ module fl_sym_point(
           translate(-Z(l/2))
             fl_vector(l*Z);
       }
-      fl_color("black")
+      fl_color(color)
         fl_sphere(d=d);
     }
   }
@@ -2011,9 +2009,9 @@ function fl_3d_medianValue(list,axis,pre_ordered=false) = let(
   n = len(list)
 ) fl_isOdd(n) ? value(o,(n+1)/2-1) : let(i=n/2) (value(o,i-1)+value(o,i))/2;
 
-module fl_3d_polyhedronSymbols(poly, size)
+module fl_3d_polyhedronSymbols(poly, size, color="black")
   for(p=poly)
-    fl_sym_point(point=[p.x,p.y,p.z], size=size);
+    fl_sym_point(point=[p.x,p.y,p.z], size=size, color=color);
 
 module fl_3d_polyhedronLabels(poly,size,label="P")
   for(i=[0:len(poly)-1])

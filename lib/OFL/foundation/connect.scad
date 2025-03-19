@@ -19,7 +19,11 @@ function fl_conn_type(type,value) = fl_property(type,"conn/type",value);
 function fl_conn_ldir(type,value) = fl_property(type,"conn/label [direction,rotation]",value);
 function fl_conn_loct(type,value) = fl_property(type,"conn/label octant",value);
 
-// constructors
+/*!
+ * constructors
+ *
+ * TODO: a more convenient way for positioning is the one used for holes.
+ */
 function conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+FL_Z,0]) =
   assert(is_string(id))
   assert(is_list(ox))
@@ -203,7 +207,7 @@ module fl_connect(
 module fl_conn_add(connector,size,label) {
   assert(connector!=undef);
   fl_conn_Context(connector)
-    multmatrix(T($conn_pos)*fl_planeAlign(FL_X,FL_Y,$conn_ox,$conn_oy))
+    multmatrix(T($conn_pos)*fl_planeAlign(X,Y,$conn_ox,$conn_oy))
       fl_symbol(size=size,symbol=$conn_type);
 }
 
