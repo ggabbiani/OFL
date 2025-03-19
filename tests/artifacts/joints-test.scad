@@ -77,7 +77,7 @@ DIM_W         = 0.05;       // [0.01:0.01:1]
 
 JOINT_SHAPE   = "rect";         // [rect,ring]
 JOINT_TYPE    = "full scaled";  // [const,scaled thickness,scaled width,full scaled]
-// undef or actual filet radius value (0 for 'no fillet')
+// "undef" or actual filet radius value (0 for 'no fillet')
 JOINT_FILLET  = "undef";
 ARM = 6;  // [0.1:0.1:10]
 TOOTH = 2; // [0.1:0.1:5]
