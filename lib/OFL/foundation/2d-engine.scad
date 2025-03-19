@@ -10,6 +10,20 @@ include <unsafe_defs.scad>
 use <mngm-engine.scad>
 use <bbox-engine.scad>
 
+include <../../ext/Round-Anything/polyround.scad>
+
+/*!
+ * polyRound() wrapper.
+ *
+ * Context variables:
+ *
+ * | Name             | Context   | Description                                         |
+ * | ---------------- | --------- | --------------------------------------------------- |
+ * | $fl_polyround    | Parameter | when true polyRound() is called, otherwise radiipoints are transformed in normal 2d points ready for polygon() |
+ */
+function fl_2d_polyRound(radiipoints,fn=5,mode=0) =
+  $fl_polyround ? polyRound(radiipoints,fn,mode) : [for(p=radiipoints) [p.x,p.y]] ;
+
 /*!
  * High-level (OFL 'objects' only) verb-driven OFL API management for
  * two-dimension spaces.
@@ -143,6 +157,130 @@ module fl_2d_vloop(
 
 //! returns the angle between vector «a» and «b»
 function fl_2d_angleBetween(a,b) = atan2(b.y,b.x)-atan2(a.y,a.x);;
+
+/*!
+ * Returns the bisector of the angle formed by lines «line1» and «line2».
+ *
+ * The resulting line is in standard form ax+by+c=0 ⇒[a,b,c]
+ */
+function fl_2d_bisector(line1,line2) = let(
+  a1    = line1[0], b1 = line1[1], c1=line1[2],
+  a2    = line2[0], b2 = line2[1], c2=line2[2],
+  a     = a1*sqrt(a2*a2+b2*b2)+a2*sqrt(a1*a1+b1*b1),
+  b     = b1*sqrt(a2*a2+b2*b2)+b2*sqrt(a1*a1+b1*b1),
+  c     = c1*sqrt(a2*a2+b2*b2)+c2*sqrt(a1*a1+b1*b1)
+) [a,b,c];
+
+/*!
+ * line constructor, result in standard form ax+by+c=0.
+ *
+ * Example 1: line from two points A and B
+ *
+ *     line = fl_2d_Line(A,B);
+ *
+ * Example 2: line from one point P and slope m
+ *
+ *     line = fl_2d_Line(P,m=m);
+ *
+ * Example 3: vertical line x=k
+ *
+ *     line = fl_2d_Line(x=k);
+ *
+ * Example 4: horizontal line y=q
+ *
+ *     line = fl_2d_Line(y=q);
+ */
+function fl_2d_Line(A,B,m,x,y) =
+  A && B && is_undef(m) ? [ +A.y-B.y, +B.x-A.x, +A.x*B.y-B.x*A.y  ]:
+  A && is_undef(B) && m ? [ -m,       +1,       -A.y+m*A.x        ]:
+  is_num(x)             ? [ +1,        0,       -x                ]:
+  assert(is_num(y),y)     [  0,       +1,       -y                ];
+
+//! canonical circle centered in «C» with radius «r»
+/*!
+ * Circle constructor, result in canonical form x^2+y^2+ax+by+c=0 ⇒[1,1,a,b,c].
+ *
+ * Example: circle with center in point C and radius r
+ *
+ *     circle = fl_2d_Circle(C,B);
+ */
+function fl_2d_Circo(C,r) = let(
+  a=-2*C.x,b=-2*C.y,c=C.x*C.x+C.y*C.y-r*r
+) [1,1,a,b,c];
+
+/*!
+ * Returns the line slope.
+ *
+ * Example 1: slope of a line in standard form
+ *
+ *     slope = fl_2d_slope(line=[a,b,c]);
+ *
+ * Example 2: slope angle of the line crossing two points A and B
+ *
+ *     slope = fl_2d_slope(A,B);
+ */
+function fl_2d_slope(
+  //! two points crossed by the line
+  A,B,
+  //! line in standard form ax+by+c=0
+  line,
+) =
+  line ?
+    let(a=line[0],b=line[1],c=line[2])    -a/b :
+    assert(!is_undef(A) && !is_undef(B))   (B.y-A.y)/(B.x-A.x);
+
+/*!
+  * Returns the angle formed by the positive X semi-axis and the part of
+  * «line» lying in the upper half-plane.
+  *
+  * Example 1: slope angle of a line in standard form
+  *
+  *     angle = fl_2d_slopeAngle(line=[a,b,c]);
+  *
+  * Example 2: slope angle of the line crossing two points A and B
+  *
+  *     angle = fl_2d_slopeAngle(A,B);
+  */
+function fl_2d_slopeAngle(
+  //! two points crossed by the line
+  A,B,
+  //! line in standard form
+  line
+) = let(
+  line  = line ? line : fl_2d_Line(A,B)
+) let(a=line[0],b=line[1],c=line[2]) atan2(-a,b);
+
+/*!
+ * Intersection point between «line» and «line2» or between «line» and «circle».
+ *
+ * NOTE: in case of intersection between a first grade equation (line1) and a
+ * quadratic one (circle) the result can be a single 2d point or a list of two
+ * points depending if line is tangential or not to the circle.
+ */
+function fl_2d_intersection(
+    //! line in standard form ax+by+c=0 ⇒[a,b,c]
+  line,
+    //! line in standard form ax+by+c=0 ⇒[a,b,c]
+  line2,
+  //! circumference in canonical form X^2+y^2+ax+by+c=0 ⇒[1,1,a,b,c]
+  circle
+) = let(
+  ll  = function(line1,line2)
+    let(
+      a1      = line1[0], b1 = line1[1], c1=line1[2],
+      a2      = line2[0], b2 = line2[1], c2=line2[2],
+      delta   = +a1*b2-a2*b1,
+      delta_x = -c1*b2+c2*b1,
+      delta_y = -a1*c2+a2*c1
+    ) [delta_x,delta_y]/delta,
+  lc  = function (line,circle)
+    let(
+      a = line[0],     b=line[1],         c=line[2],
+      d = circle[2],    e=circle[3],        f=circle[4],
+      A = (a*a+b*b)/b,  B=(2*a*c+b*d-a*e),  C=(c*c-b*c*e+b*b*f)/b,
+      x = fl_quadraticSolve(A,B,C), y=is_num(x)?-(a*x+c)/b:[-(a*x[0]+c)/b,-(a*x[1]+c)/b]
+    ) is_num(x) ? [x,y] : [[x[0],y[0]],[x[1],y[1]]]
+) line && line2 ? ll(line,line2) : assert(line && circle) lc(line,circle);
 
 //**** 2d bounding box calculations *******************************************
 
@@ -653,8 +791,8 @@ module fl_ellipticArc(
   fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
-        fl_ellipticSector(verbs=$verb, angles=angles, e=e                 );
-        fl_ellipticSector(verbs=$verb, angles=angles, e=[a-thick,b-thick] );
+        fl_ellipticSector(verbs=$verb, angles=angles, e=e);
+        fl_ellipse(verbs=$verb, e=[a-thick,b-thick]);
       }
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) translate(bbox[0]) square(size=size, center=false);
@@ -898,12 +1036,13 @@ module fl_arc(
   radius  = r!=undef ? r : d/2; assert(is_num(radius));
   bbox    = fl_bb_arc(r=radius,angles=angles,thick=thick);
   size    = bbox[1] - bbox[0];
+  // epsilon = 1;  // needed for eliminating edge-fighting problem
 
   fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
     if ($verb==FL_ADD) {
       fl_modifier($modifier) difference() {
         fl_sector($verb, angles=angles, r=radius      );
-        fl_sector($verb, angles=angles, r=radius-thick);
+        fl_circle(r=radius-thick);
       }
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) if (size.x>0 && size.y>0) translate(bbox[0]) square(size=size, center=false);
