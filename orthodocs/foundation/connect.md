@@ -26,6 +26,11 @@ __Syntax:__
 conn_Plug(id,ox,oy,pos,size=2.54,octant,direction=[+FL_Z,0])
 ```
 
+constructors
+
+TODO: a more convenient way for positioning is the one used for holes.
+
+
 ---
 
 ### function conn_Socket

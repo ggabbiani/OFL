@@ -926,7 +926,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_3d_polyhedronSymbols(poly,size)
+    fl_3d_polyhedronSymbols(poly,size,color="black")
 
 ---
 
@@ -1320,7 +1320,7 @@ When negative this value is actually subtracted.
 
 
 __trim__  
-Translation list applied BEFORE projection().
+3d translation applied BEFORE projection().
 
 :memo: **NOTE:** trimming modify projection() behavior, enabling its «cut»
 parameter to true.
@@ -1532,7 +1532,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_sym_point(verbs=FL_ADD,point=FL_O,size)
+    fl_sym_point(verbs=FL_ADD,point=FL_O,size,color="black")
 
 Point symbol.
 

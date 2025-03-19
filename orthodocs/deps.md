@@ -96,98 +96,103 @@ graph TD
     A40 --o|use| A4
     A4 --o|include| A2
     A4 --o|use| A3
-    A41[artifacts/pcb_holder] --o|include| A12
-    A41 --o|include| A42[vitamins/pcbs]
+    A41[artifacts/new-joints-test] --o|include| A22
+    A41 --o|include| A24
+    A41 --o|use| A5
     A41 --o|use| A3
-    A41 --o|use| A4
-    A42 --o|include| A20
-    A42 --o|include| A29
-    A42 --o|include| A28
-    A42 --o|include| A24
-    A42 --o|include| A25
-    A42 --o|include| A27
-    A42 --o|include| A30
-    A42 --o|include| A33
-    A42 --o|include| A35
-    A42 --o|include| A43[vitamins/pin_headers]
-    A42 --o|include| A15
-    A42 --o|include| A44[vitamins/sd]
-    A42 --o|include| A45[vitamins/switch]
-    A42 --o|include| A46[vitamins/trimpot]
-    A42 --o|include| A47[vitamins/usbs]
-    A42 --o|use| A6
+    A41 --o|use| A17
+    A42[artifacts/pcb_holder] --o|include| A12
+    A42 --o|include| A43[vitamins/pcbs]
+    A42 --o|use| A3
     A42 --o|use| A4
-    A43 --o|include| A21
+    A43 --o|include| A20
+    A43 --o|include| A29
+    A43 --o|include| A28
     A43 --o|include| A24
-    A43 --o|include| A2
+    A43 --o|include| A25
+    A43 --o|include| A27
+    A43 --o|include| A30
+    A43 --o|include| A33
+    A43 --o|include| A35
+    A43 --o|include| A44[vitamins/pin_headers]
+    A43 --o|include| A15
+    A43 --o|include| A45[vitamins/sd]
+    A43 --o|include| A46[vitamins/switch]
+    A43 --o|include| A47[vitamins/trimpot]
+    A43 --o|include| A48[vitamins/usbs]
+    A43 --o|use| A6
     A43 --o|use| A4
-    A43 --o|use| A18
+    A44 --o|include| A21
+    A44 --o|include| A24
+    A44 --o|include| A2
+    A44 --o|use| A4
+    A44 --o|use| A18
     A16 --o|include| A24
-    A48[vitamins/psus] --o|include| A29
-    A48 --o|include| A28
-    A48 --o|include| A2
-    A48 --o|include| A15
-    A48 --o|use| A4
-    A48 --o|use| A18
-    A49[foundation/quaternions]
+    A49[vitamins/psus] --o|include| A29
+    A49 --o|include| A28
+    A49 --o|include| A2
+    A49 --o|include| A15
+    A49 --o|use| A4
+    A49 --o|use| A18
+    A50[foundation/quaternions]
     A32 --o|include| A21
     A32 --o|use| A6
     A32 --o|use| A9
     A32 --o|use| A4
-    A50[vitamins/sata-adapters] --o|include| A32
-    A50 --o|use| A4
+    A51[vitamins/sata-adapters] --o|include| A32
+    A51 --o|use| A4
     A15 --o|include| A2
     A15 --o|use| A5
     A15 --o|use| A3
     A15 --o|use| A28
     A15 --o|use| A4
-    A44 --o|use| A5
-    A44 --o|use| A3
-    A44 --o|use| A4
-    A44 --o|use| A18
+    A45 --o|use| A5
+    A45 --o|use| A3
+    A45 --o|use| A4
+    A45 --o|use| A18
     A12 --o|include| A5
     A12 --o|include| A28
     A12 --o|include| A2
     A12 --o|include| A14
     A12 --o|use| A17
     A12 --o|use| A4
-    A51[vitamins/spdts] --o|include| A10
-    A51 --o|use| A5
-    A51 --o|use| A3
-    A51 --o|use| A4
-    A45 --o|include| A2
-    A45 --o|use| A1
-    A45 --o|use| A5
-    A45 --o|use| A3
-    A45 --o|use| A4
-    A52[artifacts/t-nut] --o|include| A22
-    A52 --o|include| A2
-    A52 --o|include| A13
-    A52 --o|include| A15
+    A52[vitamins/spdts] --o|include| A10
     A52 --o|use| A5
     A52 --o|use| A3
-    A52 --o|use| A28
     A52 --o|use| A4
-    A53[artifacts/t-profiles] --o|include| A5
-    A53 --o|use| A4
-    A54[artifacts/template] --o|include| A2
-    A55[foundation/template] --o|include| A2
-    A56[vitamins/template] --o|include| A2
-    A7 --o|include| A10
     A46 --o|include| A2
+    A46 --o|use| A1
     A46 --o|use| A5
     A46 --o|use| A3
     A46 --o|use| A4
-    A46 --o|use| A18
-    A8 --o|include| A10
-    A8 --o|use| A3
-    A2 --o|include| A10
+    A53[artifacts/t-nut] --o|include| A22
+    A53 --o|include| A2
+    A53 --o|include| A13
+    A53 --o|include| A15
+    A53 --o|use| A5
+    A53 --o|use| A3
+    A53 --o|use| A28
+    A53 --o|use| A4
+    A54[artifacts/t-profiles] --o|include| A5
+    A54 --o|use| A4
+    A55[artifacts/template] --o|include| A2
+    A56[foundation/template] --o|include| A2
+    A57[vitamins/template] --o|include| A2
+    A7 --o|include| A10
     A47 --o|include| A2
-    A47 --o|use| A1
     A47 --o|use| A5
     A47 --o|use| A3
     A47 --o|use| A4
     A47 --o|use| A18
+    A8 --o|include| A10
+    A8 --o|use| A3
+    A2 --o|include| A10
+    A48 --o|include| A2
+    A48 --o|use| A1
+    A48 --o|use| A5
+    A48 --o|use| A3
+    A48 --o|use| A4
+    A48 --o|use| A18
     A18 --o|include| A5
 ```
 

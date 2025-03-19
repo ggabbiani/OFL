@@ -1656,8 +1656,8 @@ This getter returns 'undef' when the key is not found and no default is passed.
 | type    | key     | default | key found | result      | semantic |
 | ------- | ------- | ------- | --------- | ----------- | -------- |
 | undef   | defined | undef   | *         | [key,value] | SETTER   |
-| defined | defined | *       | false     | default     | GETTER   |
 | defined | defined | *       | true      | value       | GETTER   |
+| defined | defined | *       | false     | default     | GETTER   |
 
 **ERROR** in all the other cases
 
@@ -1993,6 +1993,18 @@ fl_push(list,item)
 ```
 
 push «item» on tail of list «l»
+
+---
+
+### function fl_quadraticSolve
+
+__Syntax:__
+
+```text
+fl_quadraticSolve(a,b,c,epsilon=NIL)
+```
+
+solves a quadratic equation ax^2+bx+c=0 through the Quadratic Formula.
 
 ---
 

@@ -93,6 +93,7 @@
 - [X] reviewed and applied where possible the new polymorph engine for rewriting
   and subtyping all the existing modules.
 - [X] integrate also the examples in tests;
+- [X] fixed z-fighting bug in fl_ellipticArc{} and fl_arc{};
 - [ ] apply the FL_CUTOUT 'manifest'
 - [ ] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
@@ -146,3 +147,4 @@
 - [ ] fix transparency issue on FL_AXES;
 - [ ] fix bug in fl_sector(): order of generated points must follow the sign of
   the angle.
+- [ ] add further extensions from Home Assistant / Google Coral (coral.scad), MeLE Quieter4C Mini PC (mele.scad)

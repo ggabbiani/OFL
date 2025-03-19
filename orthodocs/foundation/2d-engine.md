@@ -20,6 +20,52 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
+### function fl_2d_Circo
+
+__Syntax:__
+
+```text
+fl_2d_Circo(C,r)
+```
+
+Circle constructor, result in canonical form x^2+y^2+ax+by+c=0 ⇒[1,1,a,b,c].
+
+Example: circle with center in point C and radius r
+
+    circle = fl_2d_Circle(C,B);
+
+
+---
+
+### function fl_2d_Line
+
+__Syntax:__
+
+```text
+fl_2d_Line(A,B,m,x,y)
+```
+
+line constructor, result in standard form ax+by+c=0.
+
+Example 1: line from two points A and B
+
+    line = fl_2d_Line(A,B);
+
+Example 2: line from one point P and slope m
+
+    line = fl_2d_Line(P,m=m);
+
+Example 3: vertical line x=k
+
+    line = fl_2d_Line(x=k);
+
+Example 4: horizontal line y=q
+
+    line = fl_2d_Line(y=q);
+
+
+---
+
 ### function fl_2d_angleBetween
 
 __Syntax:__
@@ -29,6 +75,21 @@ fl_2d_angleBetween(a,b)
 ```
 
 returns the angle between vector «a» and «b»
+
+---
+
+### function fl_2d_bisector
+
+__Syntax:__
+
+```text
+fl_2d_bisector(line1,line2)
+```
+
+Returns the bisector of the angle formed by lines «line1» and «line2».
+
+The resulting line is in standard form ax+by+c=0 ⇒[a,b,c]
+
 
 ---
 
@@ -100,6 +161,115 @@ One scalar value R means corners=[R,R,R,R]
 
 __thick__  
 subtracted to size defines the internal size
+
+
+---
+
+### function fl_2d_intersection
+
+__Syntax:__
+
+```text
+fl_2d_intersection(line,line2,circle)
+```
+
+Intersection point between «line» and «line2» or between «line» and «circle».
+
+NOTE: in case of intersection between a first grade equation (line1) and a
+quadratic one (circle) the result can be a single 2d point or a list of two
+points depending if line is tangential or not to the circle.
+
+
+__Parameters:__
+
+__line__  
+line in standard form ax+by+c=0 ⇒[a,b,c]
+
+__line2__  
+line in standard form ax+by+c=0 ⇒[a,b,c]
+
+__circle__  
+circumference in canonical form X^2+y^2+ax+by+c=0 ⇒[1,1,a,b,c]
+
+
+---
+
+### function fl_2d_polyRound
+
+__Syntax:__
+
+```text
+fl_2d_polyRound(radiipoints,fn=5,mode=0)
+```
+
+polyRound() wrapper.
+
+Context variables:
+
+| Name             | Context   | Description                                         |
+| ---------------- | --------- | --------------------------------------------------- |
+| $fl_polyround    | Parameter | when true polyRound() is called, otherwise radiipoints are transformed in normal 2d points ready for polygon() |
+
+
+---
+
+### function fl_2d_slope
+
+__Syntax:__
+
+```text
+fl_2d_slope(A,B,line)
+```
+
+Returns the line slope.
+
+Example 1: slope of a line in standard form
+
+    slope = fl_2d_slope(line=[a,b,c]);
+
+Example 2: slope angle of the line crossing two points A and B
+
+    slope = fl_2d_slope(A,B);
+
+
+__Parameters:__
+
+__A__  
+two points crossed by the line
+
+__line__  
+line in standard form ax+by+c=0
+
+
+---
+
+### function fl_2d_slopeAngle
+
+__Syntax:__
+
+```text
+fl_2d_slopeAngle(A,B,line)
+```
+
+Returns the angle formed by the positive X semi-axis and the part of
+«line» lying in the upper half-plane.
+
+Example 1: slope angle of a line in standard form
+
+    angle = fl_2d_slopeAngle(line=[a,b,c]);
+
+Example 2: slope angle of the line crossing two points A and B
+
+    angle = fl_2d_slopeAngle(A,B);
+
+
+__Parameters:__
+
+__A__  
+two points crossed by the line
+
+__line__  
+line in standard form
 
 
 ---

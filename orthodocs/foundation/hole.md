@@ -168,6 +168,8 @@ __Syntax:__
 fl_tt_isHoleList(list)
 ```
 
+Checks weather each «list» element is a hole
+
 ## Modules
 
 ---
@@ -293,7 +295,13 @@ enabled normals in floating semi-axis list form
 __thick__  
 pass-through thickness
 
+TODO: replace with $fl_thickness?
+
+
 __screw__  
 fallback screw
+
+TODO: really needed?
+
 
 
