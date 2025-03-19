@@ -818,6 +818,13 @@ function fl_cumulativeSum(v) = [
     fl_accum([for(j=[0:i]) v[j]])
 ];
 
+//! solves a quadratic equation ax^2+bx+c=0 through the Quadratic Formula.
+function fl_quadraticSolve(a,b,c,epsilon=NIL) = let(
+  delta = b*b-4*a*c
+) delta>epsilon ?
+  let(sqrt = sqrt(delta)) [(-b+sqrt)/2/a,(-b-sqrt)/2/a] :
+  -b/2/a;
+
 /*!
  * Ascii string to number conversion function atof() by Jesse Campbell.
  *
@@ -1363,8 +1370,8 @@ function fl_property(type,key,value,default)  =
  * | type    | key     | default | key found | result      | semantic |
  * | ------- | ------- | ------- | --------- | ----------- | -------- |
  * | undef   | defined | undef   | *         | [key,value] | SETTER   |
- * | defined | defined | *       | false     | default     | GETTER   |
  * | defined | defined | *       | true      | value       | GETTER   |
+ * | defined | defined | *       | false     | default     | GETTER   |
  *
  * **ERROR** in all the other cases
  */
