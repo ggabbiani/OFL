@@ -82,15 +82,10 @@ module fl_fillet(
   //! when undef native positioning is used (+Z)
   octant
   ) {
-  default = [+Z,+X];  // default director and rotor
   rx      = r ? r : rx;
   ry      = r ? r : ry;
   size    = [rx,ry,h];
   bbox    = [O,size];
-  M       = octant!=undef ? fl_octant(octant=octant,bbox=bbox) : I;
-  D       = direction!=undef ? fl_direction(direction) : FL_I;
-  fl_trace("D",D);
-  fl_trace("default",default);
 
   module do_add() {
     linear_extrude(h)
@@ -104,7 +99,8 @@ module fl_fillet(
     if ($verb==FL_ADD)
       fl_modifier($modifier) do_add();
     else if ($verb==FL_BBOX)
-      fl_modifier($modifier) fl_cube(size=size,octant=O0);
+      fl_modifier($modifier)
+        fl_bb_add(bbox);
     else
       fl_error(["unimplemented verb",$this_verb]);
   }

@@ -43,6 +43,7 @@ function fl_tt_isHole(hole) = let(
   && (is_undef(ldir) || fl_tt_isDirectionRotation(ldir))
   && (is_undef(loct) || fl_tt_isOctant(loct));
 
+//! Checks weather each «list» element is a hole
 function fl_tt_isHoleList(list) = fl_tt_isList(list,f=function(hole) fl_tt_isHole(hole));
 
 //! hole constructor in key-value list format
@@ -138,17 +139,21 @@ module fl_lay_holes(
   holes,
   //! enabled normals in floating semi-axis list form
   enable  = [-X,+X,-Y,+Y,-Z,+Z],
-  //! pass-through thickness
+  /*!
+   * pass-through thickness
+   *
+   * TODO: replace with $fl_thickness?
+   */
   thick=0,
-  //! fallback screw
+  /*!
+   * fallback screw
+   *
+   * TODO: really needed?
+   */
   screw
 ) {
   assert(fl_tt_isHoleList(holes),holes);
   assert(fl_tt_isAxisList(enable),enable);
-
-  fl_trace("enable",enable);
-  fl_trace("holes",holes);
-  fl_trace("thick",thick);
 
   for(i=[0:len(holes)-1])
     fl_hole_Context(holes[i],thick,i,screw)

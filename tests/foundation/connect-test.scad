@@ -48,7 +48,7 @@ VIEW_BALL       = true;
 
 /* [Socket] */
 
-// canonical view is solidal with the connector position and orientation
+// canonical view is relative to connector position and orientation
 SOCKET_VIEW     = "actual"; // [natural,canonical,actual]
 SOCKET_ALPHA    = 120;      // [0:360]
 SOCKET_BETA     = 30;       // [0:360]
@@ -56,7 +56,7 @@ SOCKET_DISTANCE = 6;        // [0:10]
 
 /* [Plug] */
 
-// canonical view is solidal with the connector position and orientation
+// canonical view is relative to connector position and orientation
 PLUG_VIEW       = "actual"; // [natural,canonical,actual]
 
 

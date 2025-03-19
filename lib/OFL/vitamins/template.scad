@@ -17,7 +17,11 @@ __FL_TMP_NS  = "tmp";
 __FL_TMP_INVENTORY = [
 ];
 
-//! helper for new 'object' definition
+/*!
+ * helper for new 'object' definition.
+ *
+ * TODO: use fl_Object()
+ */
 function __fl_Template(
   //! optional description
   description
