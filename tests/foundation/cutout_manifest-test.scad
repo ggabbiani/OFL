@@ -7,6 +7,7 @@
  */
 
 include <../../lib/OFL/artifacts/din_rails.scad>
+// include <../../lib/OFL/artifacts/joints.scad>
 include <../../lib/OFL/vitamins/ethers.scad>
 include <../../lib/OFL/vitamins/jacks.scad>
 
@@ -57,7 +58,7 @@ DIR_R       = 0;        // [0:360]
 /* [Object selection] */
 
 // ... please take a decision!
-CLASS  = "jack";  // [jack,DIN,ether]
+CLASS  = "jack";  // [jack,DIN,ether,snapfit joint]
 
 /* [cutout] */
 
@@ -119,6 +120,10 @@ module proxy(
     all = all(FL_ETHER_DICT)
   ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
     fl_ether(verbs, all[$i], cut_drift=co_drift, cut_direction=co_dirs, octant=octant, direction=direction);
+
+  else if (CLASS=="snapfit joint") let(
+  )
+  ;
 
   else
     fl_error(["Unsupported class engine",CLASS]);
