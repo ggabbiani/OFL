@@ -255,11 +255,11 @@ function fl_jnt_RingCantilever(
       assert(r)     [str(FL_JNT_RING_NS,"/arm r"),r         ],
 
       fl_dimensions(value=fl_DimensionPack([
-        fl_Dimension(arm_l,       "arm"       ),
+        fl_Dimension(arm_l,     "arm"       ),
         fl_Dimension(h[0],      "h[0]"      ),
         fl_Dimension(h[1],      "h[1]"      ),
         fl_Dimension(undercut,  "undercut"  ),
-        fl_Dimension(tooth_l,     "tooth"     ),
+        fl_Dimension(tooth_l,   "tooth"     ),
       ])),
     ]
   )
