@@ -154,8 +154,11 @@ function fl_tsp_length(type,value)    = fl_property(type,"tsp/length",value);
 
 //! T-slotted profile constructor
 function fl_tsp_TProfile(
+  //! mandatory cross-section
   xsec,
-  length
+  //! mandatory length (width and height come from «xsec»)
+  length,
+  corner_hole=false
 ) = assert(xsec,xsec) assert(length,length) let(
   nop = fl_nopSCADlib(xsec),
   w   = extrusion_width(nop),
@@ -164,11 +167,21 @@ function fl_tsp_TProfile(
   fl_nopSCADlib(value=nop),
   // fl_tsp_xsection(value=xsec),
   fl_tsp_length(value=length),
-  fl_bb_corners(value=[[-w/2,-h/2,-length/2],[+w/2,+h/2,+length/2]])
+  fl_bb_corners(value=[[-w/2,-h/2,-length/2],[+w/2,+h/2,+length/2]]),
+  ["corner hole",corner_hole],
 ];
 
 /*!
- * TODO: document context variables
+ * T-slotted profile engine.
+ *
+ * Context variables:
+ *
+ * | Name       | Context   | Description
+ * | ---------- | --------- | ---------------------
+ * | $tsp_size  | Children  | t-profile size
+ * | $tsp_tabT  | Children  | tab thickness as reported by extrusion_tab_thickness()
+ *
+ * TODO: add dimension lines
  */
 module fl_tProfile(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_FOOTPRINT, FL_LAYOUT
@@ -188,13 +201,13 @@ module fl_tProfile(
   assert(is_list(verbs)||is_string(verbs),verbs);
   assert(is_undef(lay_surface) || fl_tt_isAxisList(lay_surface),lay_surface);
 
-  nop   = fl_nopSCADlib(type);
+  nop         = fl_nopSCADlib(type);
+  corner_hole = fl_property(type,"corner hole");
 
-  module do_fprint() {
-    translate(-Z($this_size.z/2))
-      linear_extrude($this_size.z)
-        fl_square($this_size=[$this_size.x,$this_size.y],corners=extrusion_fillet(nop));
-  }
+  module do_fprint()
+    translate(-Z($this_size.z/2+NIL))
+      linear_extrude($this_size.z+2*NIL)
+        fl_square(size=fl_2($this_size)+2*$fl_tolerance*[1,1],corners=extrusion_fillet(nop),$FL_ADD=$FL_FOOTPRINT);
 
   module do_layout() {
     assert(lay_surface);
@@ -207,26 +220,16 @@ module fl_tProfile(
           children();
   }
 
-
   fl_vmanage(verbs, type, octant=octant, direction=direction) {
-    if ($this_verb==FL_ADD) {
-      fl_modifier($modifier)
-        extrusion(nop, $this_size.z,center=true, cornerHole=false);
-
-    } else if ($this_verb==FL_BBOX) {
-      fl_modifier($modifier)
-        fl_bb_add($this_bbox);
-
-    } else if ($this_verb==FL_FOOTPRINT) {
-      fl_modifier($modifier)
-        do_fprint();
-
-    } else if ($this_verb==FL_LAYOUT) {
-      fl_modifier($modifier)
-        do_layout() children();
-
-    } else {
+    if ($this_verb==FL_ADD)
+      extrusion(nop, $this_size.z,center=true, cornerHole=corner_hole);
+    else if ($this_verb==FL_BBOX)
+      fl_bb_add($this_bbox);
+    else if ($this_verb==FL_FOOTPRINT)
+      do_fprint();
+    else if ($this_verb==FL_LAYOUT)
+      do_layout() children();
+    else
       fl_error(["unimplemented verb",$this_verb]);
-    }
   }
 }
