@@ -146,5 +146,9 @@
 - [ ] document Docker build process and more generally developer information;
 - [ ] fix transparency issue on FL_AXES;
 - [ ] fix bug in fl_sector(): order of generated points must follow the sign of
-  the angle.
-- [ ] add further extensions from Home Assistant / Google Coral (coral.scad), MeLE Quieter4C Mini PC (mele.scad)
+  the angle;
+- [ ] add further extensions from Home Assistant / Google Coral (coral.scad), MeLE Quieter4C Mini PC (mele.scad);
+- [ ] concentrate standard parameter check on fl_vmanage();
+- [ ] substitute all the assert(false,...) with fl_error{};
+- [ ] remove all the fl_modifier($modifier) instances in modules managed through
+fl_vmanage{} since verb attributes are already managed;
