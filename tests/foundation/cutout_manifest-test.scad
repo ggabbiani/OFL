@@ -7,9 +7,10 @@
  */
 
 include <../../lib/OFL/artifacts/din_rails.scad>
-// include <../../lib/OFL/artifacts/joints.scad>
 include <../../lib/OFL/vitamins/ethers.scad>
 include <../../lib/OFL/vitamins/jacks.scad>
+include <../../lib/OFL/vitamins/hdmi.scad>
+include <../../lib/OFL/vitamins/hds.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -58,12 +59,12 @@ DIR_R       = 0;        // [0:360]
 /* [Object selection] */
 
 // ... please take a decision!
-CLASS  = "jack";  // [jack,DIN,ether,snapfit joint]
+CLASS  = "jack";  // [hd,hdmi,jack,DIN,ether,snapfit joint]
 
 /* [cutout] */
 
-// list of cutout directions or "preferred" for preferred directions only
-CUTOUT_DIRS  = ["preferred"];
+// list of cutout directions or ["preferred"] for preferred directions only
+CUTOUT_DIRS  = ["preferred"]; // [preferred,-x,+x,±x,-y,+y,±y,-z,+z,±z]
 // space added/subtracted to the bounding box before carving
 CUTOUT_DRIFT  = 0;        // [-5:0.1:5]
 // overall thickness to be carved out
@@ -76,7 +77,7 @@ $fl_tolerance = 0;        // [0:0.1:2]
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs     = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT,FL_PAYLOAD]);
-co_dirs   = CUTOUT_DIRS==["preferred"] ? undef : fl_3d_AxisList(CUTOUT_DIRS);
+dirs      = CUTOUT_DIRS==["preferred"] ? undef : fl_3d_AxisList(CUTOUT_DIRS);
 
 /*!
  * True if the «type» engine is a sub domain of «engine».
@@ -97,9 +98,9 @@ module proxy(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
   // cutout axes list
-  co_dirs,
+  cut_dirs,
   // cutout drift (scalar)
-  co_drift,
+  cut_drift,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -109,23 +110,29 @@ module proxy(
 ) if (CLASS=="jack") let(
     all = all(FL_JACK_DICT)
   ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_jack(verbs,all[$i],co_drift,co_dirs,octant,direction);
+    fl_jack(verbs,all[$i],cut_drift,cut_dirs,octant,direction);
 
   else if (CLASS=="DIN") let(
     all = all(FL_DIN_RAIL_INVENTORY,function(i) FL_DIN_RAIL_INVENTORY[i](fl_bb_size(FL_DIN_TS_INVENTORY[i]).x*2))
   ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
-    fl_DIN_rail(verbs,all[$i],cut_direction=co_dirs,cut_drift=co_drift,octant=octant,direction=direction);
+    fl_DIN_rail(verbs,all[$i],cut_dirs=cut_dirs,cut_drift=cut_drift,octant=octant,direction=direction);
 
   else if (CLASS=="ether") let(
     all = all(FL_ETHER_DICT)
   ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_ether(verbs, all[$i], cut_drift=co_drift, cut_direction=co_dirs, octant=octant, direction=direction);
+    fl_ether(verbs, all[$i], cut_dirs=cut_dirs, cut_drift=cut_drift, octant=octant, direction=direction);
 
-  else if (CLASS=="snapfit joint") let(
-  )
-  ;
+  else if (CLASS=="hdmi") let(
+    all = all(FL_HDMI_DICT)
+  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+    fl_hdmi(verbs,all[$i],cut_drift=cut_drift,cut_dirs=cut_dirs,octant=octant,direction=direction);
+
+  else if (CLASS=="hd") let(
+    all = all(FL_HD_DICT)
+  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+    fl_hd(verbs,all[$i],drift=cut_drift,cut_dirs=cut_dirs,direction=direction,octant=octant);
 
   else
     fl_error(["Unsupported class engine",CLASS]);
 
-proxy(verbs, co_dirs, CUTOUT_DRIFT, octant=octant, direction=direction);
+proxy(verbs, dirs, CUTOUT_DRIFT, octant=octant, direction=direction);
