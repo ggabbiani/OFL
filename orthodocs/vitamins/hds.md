@@ -54,11 +54,11 @@ __Default:__
 
 __Syntax:__
 
-    fl_hd(verbs=FL_ADD,type,lay_direction=[-X,+X,-Z],dri_rails=[[0,0],[0,0],[0,0]],drift=0,octant,direction)
+    fl_hd(verbs=FL_ADD,type,lay_direction=[-X,+X,-Z],dri_rails=[[0,0],[0,0],[0,0]],drift=0,cut_dirs,octant,direction)
 
 Hard-drive engine.
 
-Used context:
+Context variables:
 
 | Name           | Context   | Description                           |
 | ------------   | -------   | ------------------------------------- |
@@ -83,6 +83,17 @@ rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
 
 __drift__  
 FL_CUTOUT scalar drift
+
+__cut_dirs__  
+Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
+
+Example:
+
+    cut_dirs=[+X,+Z]
+
+in this case the ethernet plug will perform a cutout along +X and +Z.
+
+
 
 __octant__  
 when undef native positioning is used

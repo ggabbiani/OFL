@@ -310,7 +310,7 @@ This module defines the punch shape stepped by.
 
 __Syntax:__
 
-    fl_DIN_rail(verbs=FL_ADD,this,cut_drift=0,cut_direction,octant,direction)
+    fl_DIN_rail(verbs=FL_ADD,this,cut_drift=0,cut_dirs,octant,direction)
 
 DIN rail engine module.
 
@@ -330,12 +330,12 @@ supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, CO_FOOTPRINT, FL
 __cut_drift__  
 translation applied to cutout (default 0)
 
-__cut_direction__  
+__cut_dirs__  
 Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
 
 Example:
 
-    cut_direction=[±Z]
+    cut_dirs=[±Z]
 
 in this case the rail will perform a cutout along +Z and -Z.
 

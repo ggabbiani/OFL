@@ -105,7 +105,7 @@ fl_ether_Zoffset(type,value)
 
 __Syntax:__
 
-    fl_ether(verbs=FL_ADD,type,cut_drift=0,cut_direction,octant,direction)
+    fl_ether(verbs=FL_ADD,type,cut_drift=0,cut_dirs,octant,direction)
 
 Ethernet engine.
 
@@ -125,12 +125,12 @@ supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
 __cut_drift__  
 translation applied to cutout (default 0)
 
-__cut_direction__  
+__cut_dirs__  
 Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
 
 Example:
 
-    cut_direction=[+X,+Z]
+    cut_dirs=[+X,+Z]
 
 in this case the ethernet plug will perform a cutout along +X and +Z.
 

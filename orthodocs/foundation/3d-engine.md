@@ -1756,22 +1756,22 @@ interface and enriching the children context with new context variables.
     module engine() let(
       ...
     ) if ($this_verb==FL_ADD)
-      ...;
+      ; // verb implementation code
 
       else if ($this_verb==FL_BBOX)
-      ...;
+      ; // verb implementation code
 
       else if ($this_verb==FL_CUTOUT)
-      ...;
+      ; // verb implementation code
 
       else if ($this_verb==FL_DRILL)
-      ...;
+      ; // verb implementation code
 
       else if ($this_verb==FL_LAYOUT)
-      ...;
+      ; // verb implementation code
 
       else if ($this_verb==FL_MOUNT)
-      ...;
+      ; // verb implementation code
 
       else
         fl_error(["unimplemented verb",$this_verb]);
@@ -1779,9 +1779,7 @@ interface and enriching the children context with new context variables.
     ...
 
     fl_vmanage(verbs,object,octant=octant,direction=direction)
-      engine(thick=T)
-        // child passed to engine for further manipulation (ex. during FL_LAYOUT)
-        fl_cylinder(h=10,r=screw_radius($iec_screw),octant=-Z);
+      engine();
 
 Context variables:
 

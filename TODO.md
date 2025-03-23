@@ -151,4 +151,6 @@
 - [ ] concentrate standard parameter check on fl_vmanage();
 - [ ] substitute all the assert(false,...) with fl_error{};
 - [ ] remove all the fl_modifier($modifier) instances in modules managed through
-fl_vmanage{} since verb attributes are already managed;
+  fl_vmanage{} since verb attributes are already managed;
+- [ ] add a global modifier of the main loop establishing when/if ignoring the
+  not implemented verb(s;)

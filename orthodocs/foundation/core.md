@@ -223,17 +223,40 @@ producing a no-op is passing an empty cutout direction list (`cut_dirs=[]`).
 FL_DRILL) is that the FL_CUTOUT acts on every semi-axis provided by the
 caller, while the latter operates ONLY along its 'preferred' direction(s).
 
+
+**Usage**
+
+when implementing this verb inside a [fl_vmanage{}](3d-engine.md#module-fl_vmanage) loop, its typical usage is
+the following:
+
+    ...
+    cut_dirs    = cut_dirs ? cut_dirs : fl_cutout(type);
+    ...
+    fl_vmanage(verbs,type,octant=octant,direction=direction)
+      ...
+      else if ($this_verb==FL_CUTOUT)
+        fl_cutoutLoop(cut_dirs, fl_cutout($this))
+          if ($co_preferred) {
+            // $co_current contain the current preferred cutout direction
+            ...
+          } else {
+            fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+2xNIL)
+              // children shape from which create the 'standard' cutout
+              ...
+          }
+      ...
+
 **Parameters**
 
 FL_CUTOUT behavior can be modified through the following parameters:
 
-| Name           | Default                 | Description                                       |
-| -------------- | ----------------------- | ------------------------------------------------- |
-| cut_dirs       | Object 'preferred' ones as returned by the [fl_cutout()](#function-fl_cutout) property | list of semi-axes indicating the cutout directions. |
-| cut_drift      | 0                       | Cutout extrusions are adjacent to the object bounding box, this parameter adds or subtracts a delta. |
-| cut_trim       | undef                   | 3d translation applied to children() before extrusion, when set object section is modified like the «cut» parameters does in the OpenSCAD primitive projection{} |
-| $fl_thickness  | see fl_parm_thickness() | overall thickness of the cutout surface           |
-| $fl_tolerance  | see fl_parm_tolerance() | delta added or subtracted from the object section |
+| Name           | Type              | Default                 | Description                                       |
+| -------------- | ----------------- | ----------------------- | ------------------------------------------------- |
+| cut_dirs       | parameter         | Object 'preferred' ones as returned by the [fl_cutout()](#function-fl_cutout) property | list of semi-axes indicating the cutout directions. |
+| cut_drift      | parameter         | 0                       | Cutout extrusions are adjacent to the object bounding box, this parameter adds or subtracts a delta. |
+| cut_trim       | parameter         | undef                   | 3d translation applied to children() before extrusion, when set object section is modified like the «cut» parameters does in the OpenSCAD primitive projection{} |
+| $fl_thickness  | parameter context | see fl_parm_thickness() | overall thickness of the cutout surface           |
+| $fl_tolerance  | parameter context | see fl_parm_tolerance() | delta added or subtracted from the object section |
 
 
 

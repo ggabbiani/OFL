@@ -4,10 +4,10 @@
 
 ```mermaid
 graph LR
-    A1[vitamins/hdmi] --o|use| A2[foundation/3d-engine]
-    A1 --o|use| A3[foundation/bbox-engine]
-    A1 --o|use| A4[foundation/mngm-engine]
-    A1 --o|use| A5[foundation/util]
+    A1[vitamins/hdmi] --o|include| A2[foundation/util]
+    A1 --o|use| A3[foundation/3d-engine]
+    A1 --o|use| A4[foundation/bbox-engine]
+    A1 --o|use| A5[foundation/mngm-engine]
 ```
 
 NopSCADlib HDMI engine wrapper.
@@ -63,22 +63,12 @@ __Default:__
 
 ---
 
-### function fl_hdmi_nameKV
-
-__Syntax:__
-
-```text
-fl_hdmi_nameKV(value)
-```
-
----
-
 ### function fl_hdmi_new
 
 __Syntax:__
 
 ```text
-fl_hdmi_new(nop_type)
+fl_hdmi_new(nop)
 ```
 
 ## Modules
@@ -89,14 +79,14 @@ fl_hdmi_new(nop_type)
 
 __Syntax:__
 
-    fl_hdmi(verbs=FL_ADD,type,cut_drift=0,octant,direction)
+    fl_hdmi(verbs=FL_ADD,type,cut_drift=0,cut_dirs,octant,direction)
 
 Context variables:
 
-| Name | Type  | Description |
-| ---  | ---   | ---         |
-| $fl_thickness  | Parameter | thickness for FL_CUTOUT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout))          |
-| $fl_tolerance  | Parameter | tolerance used during FL_CUTOUT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout))  |
+| Name           | Type      | Description                                 |
+| -------------  | -------   | ------------------------------------------- |
+| $fl_thickness  | Parameter | thickness in FL_CUTOUT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout))          |
+| $fl_tolerance  | Parameter | tolerance in FL_CUTOUT and FL_FOOTPRINT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout) and variable FL_FOOTPRINT)  |
 
 
 __Parameters:__
@@ -106,6 +96,17 @@ supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
 
 __cut_drift__  
 translation applied to cutout
+
+__cut_dirs__  
+Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
+
+Example:
+
+    cut_dirs=[+X,+Z]
+
+in this case the cutout is performed along +X and +Z.
+
+
 
 __octant__  
 when undef native positioning is used

@@ -210,10 +210,19 @@ verbatim NopSCADlib cross-section definition
 __Syntax:__
 
 ```text
-fl_tsp_TProfile(xsec,length)
+fl_tsp_TProfile(xsec,length,corner_hole=false)
 ```
 
 T-slotted profile constructor
+
+__Parameters:__
+
+__xsec__  
+mandatory cross-section
+
+__length__  
+mandatory length (width and height come from «xsec»)
+
 
 ---
 
@@ -341,7 +350,16 @@ __Syntax:__
 
     fl_tProfile(verbs=FL_ADD,type,lay_surface,octant,direction)
 
-TODO: document context variables
+T-slotted profile engine.
+
+Context variables:
+
+| Name       | Context   | Description
+| ---------- | --------- | ---------------------
+| $tsp_size  | Children  | t-profile size
+| $tsp_tabT  | Children  | tab thickness as reported by extrusion_tab_thickness()
+
+TODO: add dimension lines
 
 
 __Parameters:__

@@ -32,22 +32,22 @@ use <../../ext/NopSCADlib/utils/maths.scad>
  *     module engine() let(
  *       ...
  *     ) if ($this_verb==FL_ADD)
- *       \/* verb implementation code *\/;
+ *       ; // verb implementation code
  *
  *       else if ($this_verb==FL_BBOX)
- *       \/* verb implementation code *\/;
+ *       ; // verb implementation code
  *
  *       else if ($this_verb==FL_CUTOUT)
- *       \/* verb implementation code *\/;
+ *       ; // verb implementation code
  *
  *       else if ($this_verb==FL_DRILL)
- *       \/* verb implementation code *\/;
+ *       ; // verb implementation code
  *
  *       else if ($this_verb==FL_LAYOUT)
- *       \/* verb implementation code *\/;
+ *       ; // verb implementation code
  *
  *       else if ($this_verb==FL_MOUNT)
- *       \/* verb implementation code *\/;
+ *       ; // verb implementation code
  *
  *       else
  *         fl_error(["unimplemented verb",$this_verb]);
