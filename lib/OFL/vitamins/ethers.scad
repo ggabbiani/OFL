@@ -81,12 +81,12 @@ module fl_ether(
    *
    * Example:
    *
-   *     cut_direction=[+X,+Z]
+   *     cut_dirs=[+X,+Z]
    *
    * in this case the ethernet plug will perform a cutout along +X and +Z.
    *
    */
-  cut_direction,
+  cut_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -99,7 +99,7 @@ module fl_ether(
   zoff        = FL_ETHER_Z_OFFSET;
   engine      = fl_engine(type);
   dxf         = engine==str(FL_ETHER_NS,"/native") ? fl_dxf(type) : undef;
-  cut_direction = cut_direction ? cut_direction : fl_cutout(type);
+  cut_dirs = cut_dirs ? cut_dirs : fl_cutout(type);
 
   module do_footprint() {
     if (engine==str(FL_ETHER_NS,"/NopSCADlib")) fl_bb_add($this_bbox);
@@ -113,12 +113,11 @@ module fl_ether(
   }
 
   module do_cutout()
-    assert(!is_undef($fl_thickness))
-      fl_cutoutLoop(cut_direction, fl_cutout(type))
-        fl_new_cutout($this_bbox,$co_current,
-          drift         = cut_drift,
-          $fl_tolerance = $fl_tolerance+2xNIL
-        ) do_footprint();
+    fl_cutoutLoop(cut_dirs, fl_cutout($this))
+      fl_new_cutout($this_bbox,$co_current,
+        drift         = cut_drift,
+        $fl_tolerance = $fl_tolerance+2xNIL
+      ) do_footprint();
 
   module do_add() {
     translate(-Z(zoff)) {
@@ -143,26 +142,23 @@ module fl_ether(
       }
   }
 
-  fl_vmanage(verbs, type, octant=octant, direction=direction) {
-    if ($this_verb==FL_ADD) {
-      fl_modifier($modifier)
-        if (engine==str(FL_ETHER_NS,"/NopSCADlib")) rj45();
-        else do_add();
+  fl_vmanage(verbs, type, octant=octant, direction=direction)
+    if ($this_verb==FL_ADD)
+      if (engine==str(FL_ETHER_NS,"/NopSCADlib"))
+        rj45();
+      else
+        do_add();
 
-    } else if ($this_verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add($this_bbox,auto=true);
+    else if ($this_verb==FL_BBOX)
+      fl_bb_add($this_bbox);
 
-    } else if ($this_verb==FL_CUTOUT) {
-      assert($fl_thickness!=undef);
-      fl_modifier($modifier)
-        do_cutout();
+    else if ($this_verb==FL_CUTOUT)
+      assert(!is_undef($fl_thickness))
+      do_cutout();
 
-    } else if ($this_verb==FL_FOOTPRINT) {
-      fl_modifier($modifier)
-        do_footprint();
+    else if ($this_verb==FL_FOOTPRINT)
+      do_footprint();
 
-    } else {
+    else
       fl_error(["unimplemented verb",$this_verb]);
-    }
-  }
 }

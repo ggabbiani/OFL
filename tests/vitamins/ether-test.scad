@@ -112,6 +112,6 @@ co_direction  = fl_3d_AxisList(CO_DIRECTION);
 
 fl_ether(verbs,ether,
   direction=direction,octant=octant,
-  cut_direction=co_direction,$fl_thickness=thick,$fl_tolerance=tolerance,cut_drift=drift
+  cut_dirs=co_direction,$fl_thickness=thick,$fl_tolerance=tolerance,cut_drift=drift
 );
 

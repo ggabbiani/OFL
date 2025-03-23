@@ -110,27 +110,27 @@ module proxy(
 ) if (CLASS=="jack") let(
     all = all(FL_JACK_DICT)
   ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_jack(verbs,all[$i],cut_drift,cut_dirs,octant,direction);
+    fl_jack(verbs,$item,cut_drift,cut_dirs,octant,direction);
 
   else if (CLASS=="DIN") let(
     all = all(FL_DIN_RAIL_INVENTORY,function(i) FL_DIN_RAIL_INVENTORY[i](fl_bb_size(FL_DIN_TS_INVENTORY[i]).x*2))
   ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
-    fl_DIN_rail(verbs,all[$i],cut_dirs=cut_dirs,cut_drift=cut_drift,octant=octant,direction=direction);
+    fl_DIN_rail(verbs,$item,cut_dirs=cut_dirs,cut_drift=cut_drift,octant=octant,direction=direction);
 
   else if (CLASS=="ether") let(
     all = all(FL_ETHER_DICT)
   ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_ether(verbs, all[$i], cut_dirs=cut_dirs, cut_drift=cut_drift, octant=octant, direction=direction);
+    fl_ether(verbs, $item, cut_dirs=cut_dirs, cut_drift=cut_drift, octant=octant, direction=direction);
 
   else if (CLASS=="hdmi") let(
     all = all(FL_HDMI_DICT)
   ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
-    fl_hdmi(verbs,all[$i],cut_drift=cut_drift,cut_dirs=cut_dirs,octant=octant,direction=direction);
+    fl_hdmi(verbs,$item,cut_drift=cut_drift,cut_dirs=cut_dirs,octant=octant,direction=direction);
 
   else if (CLASS=="hd") let(
     all = all(FL_HD_DICT)
   ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
-    fl_hd(verbs,all[$i],drift=cut_drift,cut_dirs=cut_dirs,direction=direction,octant=octant);
+    fl_hd(verbs,$item,drift=cut_drift,cut_dirs=cut_dirs,direction=direction,octant=octant);
 
   else
     fl_error(["Unsupported class engine",CLASS]);

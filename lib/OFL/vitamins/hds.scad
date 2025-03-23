@@ -69,7 +69,7 @@ FL_HD_DICT  = [ FL_HD_EVO860 ];
 /*!
  * Hard-drive engine.
  *
- * Used context:
+ * Context variables:
  *
  * | Name           | Context   | Description                           |
  * | ------------   | -------   | ------------------------------------- |
@@ -90,6 +90,17 @@ module fl_hd(
   dri_rails=[[0,0],[0,0],[0,0]],
   //! FL_CUTOUT scalar drift
   drift=0,
+  /*!
+   * Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
+   *
+   * Example:
+   *
+   *     cut_dirs=[+X,+Z]
+   *
+   * in this case the ethernet plug will perform a cutout along +X and +Z.
+   *
+   */
+  cut_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [vector,rotation], native direction when undef ([+X+Y+Z])
@@ -111,6 +122,7 @@ module fl_hd(
   plug        = fl_sata_plug(type);
   Mpd         = fl_get(type,"Mpd");
   holes       = fl_holes(type);
+  cut_dirs    = cut_dirs ? cut_dirs : fl_cutout(type);
 
   module context() {
     $fl_thickness = $hole_n ? fl_3d_axisValue($hole_n,thick) : undef;
@@ -127,7 +139,8 @@ module fl_hd(
   module do_add() {
     difference() {
       fl_color("dimgray") difference() {
-        linear_extrude(height=size.z) fl_square(size=size,corners=corner_r,quadrant=+Y);
+        linear_extrude(height=size.z)
+          fl_square(size=size,corners=corner_r,quadrant=+Y);
         fl_holes(holes,[-X,+X,-Z]);
       }
       multmatrix(Mpd)
@@ -141,47 +154,50 @@ module fl_hd(
         fl_conn_add(c,2);
   }
 
-  // see fl_USB{} for a complete cutout implementation
-  module do_cutout()
-    multmatrix(Mpd) let(
-      // the only cutout axis is +Z so we use just the related scalar
-      $fl_thickness = fl_3d_axisValue(-Y, values=thick)
-    ) fl_sata(FL_CUTOUT,plug,$dbg_Symbols=false,drift=drift);
+  module do_footprint()
+    translate(-Z($fl_tolerance))
+      linear_extrude(height=size.z+2*$fl_tolerance)
+        offset($fl_tolerance)
+          fl_square(size=size,corners=corner_r,quadrant=+Y,$FL_ADD=$FL_FOOTPRINT);
 
   fl_vmanage(verbs,type,octant=octant,direction=direction)
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+    if ($verb==FL_ADD)
+      do_add();
 
-    } else if ($verb==FL_ASSEMBLY) {
-      // intentionally a no-op
+    else if ($verb==FL_ASSEMBLY)
+      ; // intentionally a no-op
 
-    } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier) do_layout($FL_ADD=$FL_MOUNT)
-        fl_screw(type=screw,len=$hd_screw_len,direction=$hole_direction);
+    else if ($verb==FL_BBOX)
+      fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout($FL_ADD=$FL_LAYOUT)
-        children();
+    else if ($verb==FL_CUTOUT)
+      fl_cutoutLoop(cut_dirs, fl_cutout($this))
+        if ($co_preferred)
+          multmatrix(Mpd) let(
+            // the only cutout axis is -Y so we use just the related scalar
+            $fl_thickness = fl_3d_axisValue(-Y, values=thick)
+          ) fl_sata(FL_CUTOUT,plug,$dbg_Symbols=false,drift=drift);
+        else
+          fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+2xNIL)
+            do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
-    } else if ($verb==FL_DRILL) {
+    else if ($verb==FL_DRILL)
       assert(thick)
-      fl_modifier($modifier) do_layout()
+      do_layout()
         fl_rail(fl_3d_axisValue($hole_n,dri_rails))
           fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction,$FL_FOOTPRINT=$FL_DRILL);
 
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier)
-        fl_bb_add($this_bbox, auto=true);
+    else if ($verb==FL_FOOTPRINT)
+      fl_bb_add($this_bbox, auto=true);
 
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier)
-        fl_bb_add($this_bbox, auto=true);
+    else if ($verb==FL_LAYOUT)
+      do_layout($FL_ADD=$FL_LAYOUT)
+        children();
 
-    } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier)
-        do_cutout();
+    else if ($verb==FL_MOUNT)
+      do_layout($FL_ADD=$FL_MOUNT)
+        fl_screw(type=screw,len=$hd_screw_len,direction=$hole_direction);
 
-    } else {
+    else
       fl_error(["unimplemented verb",$this_verb]);
-    }
 }
