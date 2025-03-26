@@ -196,54 +196,43 @@ __Default:__
 
 Layout of predefined cutout shapes (±X,±Y,±Z).
 
-Default cutouts are provided through extrusion of object sections along
-one or more semi-axes (±X,±Y,±Z).
+Cutouts are provided through extrusion of object sections along one or more
+semi-axes (±X,±Y,±Z).
 
-**Preferred directions**
+**Supported directions**
 
-Preferred cutout directions are specified through the [fl_cutout()](#function-fl_cutout) property as
-a list of directions along which the cutout occurs on eventually alternative
-sections. This is the case - for example - of an audio jack socket (see
-[variable FL_JACK_BARREL](../vitamins/jacks.md#variable-fl_jack_barrel)): on all directions but +X (its 'preferred' cutout
-direction) the cutout is the standard one, on +X axis the cutout section is
-circular to allow the insertion of the jack plug.
+The supported cutout directions are specified via [fl_cutout()](#function-fl_cutout) property as a
+list of directions along which the cutout occurs. Audio jacks for example
+support cutout along +X axis, while DIN rails support cutout on -Z and +Z axes.
 
-:memo: **NOTE:** The [fl_cutout()](#function-fl_cutout) property also modifies the behavior of the object
+When triggering the FL_CUTOUT verb without passing any direction
+(`cut_dirs==undef`), cutout is done on **all** the supported directions. When
+`cut_dirs==[]` instead, the FL_CUTOUT is a no-op. In all the other cases,
+cutout is performed only on the directions that are specified in the cut_dirs
+parameter AND that are supported (i.e. present as list element in the
+[fl_cutout()](#function-fl_cutout) property).
+
+:memo: **NOTE:** The fl_cutout() property also modifies the behavior of the object
 when it is passed as a component (via fl_Component()) of a 'parent' object.
-In these cases, in fact, the object will no longer modify the bounding box of
-its parent in the 'preferred' directions, while on all the others it will
-maintain the standard behavior.
+In these cases, objects do not modify the bounding box of their parent along
+the 'supported' directions.
 
-:memo: **NOTE:** The existence of one or more 'preferred' cutout direction, modify
-also the behavior of a FL_CUTOUT operation. When no cutout direction is
-provided, the preferred directions are anyway executed. The only way for
-producing a no-op is passing an empty cutout direction list (`cut_dirs=[]`).
+**Verb implementation**
 
-:memo: **NOTE:** The main difference between this verb and FL_DRILL (see variable
-FL_DRILL) is that the FL_CUTOUT acts on every semi-axis provided by the
-caller, while the latter operates ONLY along its 'preferred' direction(s).
-
-
-**Usage**
-
-when implementing this verb inside a [fl_vmanage{}](3d-engine.md#module-fl_vmanage) loop, its typical usage is
-the following:
+Inside a [fl_vmanage{}](3d-engine.md#module-fl_vmanage) loop, its typical usage is the following:
 
     ...
     cut_dirs    = cut_dirs ? cut_dirs : fl_cutout(type);
     ...
     fl_vmanage(verbs,type,octant=octant,direction=direction)
       ...
-      else if ($this_verb==FL_CUTOUT)
+      else if ($this_verb==FL_CUTOUT) {
         fl_cutoutLoop(cut_dirs, fl_cutout($this))
           if ($co_preferred) {
             // $co_current contain the current preferred cutout direction
             ...
-          } else {
-            fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+2xNIL)
-              // children shape from which create the 'standard' cutout
-              ...
           }
+      }
       ...
 
 **Parameters**
@@ -252,7 +241,7 @@ FL_CUTOUT behavior can be modified through the following parameters:
 
 | Name           | Type              | Default                 | Description                                       |
 | -------------- | ----------------- | ----------------------- | ------------------------------------------------- |
-| cut_dirs       | parameter         | Object 'preferred' ones as returned by the [fl_cutout()](#function-fl_cutout) property | list of semi-axes indicating the cutout directions. |
+| cut_dirs       | parameter         | supported cutout directors as returned by [fl_cutout()](#function-fl_cutout) property | List of semi-axes for the desired cutout directions, cutout will be actually performed on all and only the supported ones |
 | cut_drift      | parameter         | 0                       | Cutout extrusions are adjacent to the object bounding box, this parameter adds or subtracts a delta. |
 | cut_trim       | parameter         | undef                   | 3d translation applied to children() before extrusion, when set object section is modified like the «cut» parameters does in the OpenSCAD primitive projection{} |
 | $fl_thickness  | parameter context | see fl_parm_thickness() | overall thickness of the cutout surface           |

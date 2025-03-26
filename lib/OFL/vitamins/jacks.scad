@@ -19,14 +19,11 @@ FL_JACK_NS = "jack";
 /*!
  * 'Barrel' jack plug.
  *
- * The preferred cutout direction on +X is circular allowing the carving for
+ * The supported cutout direction on +X is circular allowing the carving for
  * jack plug insertion:
  *
  * ![preferred cutouts on +x](256x256/fig_jack_barrel_preferred_cutouts.png)
  *
- * On the other directions the cutout section is standard:
- *
- * ![default cutouts on -x,±y and ±z](256x256/fig_jack_barrel_default_cutouts.png)
  */
 FL_JACK_BARREL = let(
   // following data definitions taken from NopSCADlib jack() module
@@ -38,6 +35,15 @@ FL_JACK_BARREL = let(
   bbox      = [[-l/2,-w/2,0],[+l/2+ch,+w/2,h]]
 ) fl_Object(bbox, engine=str(FL_JACK_NS,"/barrel"), others=[fl_cutout(value=[+X])]);
 
+/*!
+ * Edge mount jack PCB connector.
+ *
+ * The supported cutout direction on -Y is circular allowing the carving for
+ * jack plug insertion:
+ *
+ * ![preferred cutouts on -y](256x256/fig_jack_edge_supported_cutouts.png)
+ *
+ */
 FL_JACK_MCXJPHSTEM1 = let(
   name  = "50Ω MCX EDGE MOUNT JACK PCB CONNECTOR",
   w     = 6.7,

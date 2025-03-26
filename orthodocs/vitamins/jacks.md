@@ -31,14 +31,11 @@ __Default:__
 
 'Barrel' jack plug.
 
-The preferred cutout direction on +X is circular allowing the carving for
+The supported cutout direction on +X is circular allowing the carving for
 jack plug insertion:
 
 ![preferred cutouts on +x](256x256/fig_jack_barrel_preferred_cutouts.png)
 
-On the other directions the cutout section is standard:
-
-![default cutouts on -x,±y and ±z](256x256/fig_jack_barrel_default_cutouts.png)
 
 
 ---
@@ -56,6 +53,15 @@ __Default:__
 __Default:__
 
     let(name="50Ω MCX EDGE MOUNT JACK PCB CONNECTOR",w=6.7,l=9.3,h=5,sz=[w,l,h],axis=[0,0,0.4],bbox=[[-w/2,0,-h/2+axis.z],[+w/2,l,+h/2+axis.z]],d_ext=6.7,head=6.25,tail=sz.y-head,jack=sz.y-2)fl_Object(bbox,name=name,engine=str(FL_JACK_NS,"/mcx edge mount"),others=[fl_cutout(value=[-Y]),fl_connectors(value=[conn_Socket("antenna",+FL_X,-FL_Z,[0,0,axis.z],size=3.45,octant=-FL_X-FL_Y,direction=[-FL_Z,180])]),["axis of symmetry",axis],["external diameter",d_ext],["head",head],["tail",tail],["jack length",jack]])
+
+Edge mount jack PCB connector.
+
+The supported cutout direction on -Y is circular allowing the carving for
+jack plug insertion:
+
+![preferred cutouts on -y](256x256/fig_jack_edge_supported_cutouts.png)
+
+
 
 ---
 

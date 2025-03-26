@@ -1296,7 +1296,7 @@ __Syntax:__
 
     fl_new_cutout(bbox,director,drift=0,trim)
 
-Cutout along arbitrary direction.
+Cutout along arbitrary direction of children shapes.
 
 Context variables:
 
@@ -1312,18 +1312,20 @@ __bbox__
 bounding box delimiting children shape(s)
 
 __director__  
-direction vector
+direction vector (3d vector format)
 
 __drift__  
-Additional distance from children boundaries.
-When negative this value is actually subtracted.
+Scalar or function literal returning a scalar value, adding space from
+children boundaries (if negative this value is actually subtracted).
+
+:memo: **NOTE:** the function literal is invoked without any parameter.
 
 
 __trim__  
 3d translation applied BEFORE projection().
 
-:memo: **NOTE:** trimming modify projection() behavior, enabling its «cut»
-parameter to true.
+:memo: **NOTE:** trimming modify the OpenSCAD projection module behavior, enabling
+its «cut» parameter.
 
 
 

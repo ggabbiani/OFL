@@ -335,9 +335,9 @@ Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](
 
 Example:
 
-    cut_dirs=[±Z]
+    cut_dirs=[-Z,+Z]
 
-in this case the rail will perform a cutout along +Z and -Z.
+in this case the rail will perform a cutout along -Z and +Z.
 
 :memo: **NOTE:** when undefined this parameter defaults to the preferred cutout
 directions as specified by [fl_cutout()](../foundation/core.md#function-fl_cutout).
