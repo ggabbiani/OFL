@@ -99,10 +99,9 @@ module fl_ether(
    *
    * Example 3:
    *
-   *     cut_dirs=undef
+   *     cut_dirs=[]
    *
-   * in this case the ethernet plug will perform a cutout along +X (the
-   * supported cutout direction).
+   * in this case the ethernet plug will not perform any cutout.
    *
    */
   cut_dirs,

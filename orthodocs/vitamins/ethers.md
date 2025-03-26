@@ -126,13 +126,31 @@ __cut_drift__
 translation applied to cutout (default 0)
 
 __cut_dirs__  
-Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
+Cutout direction list in floating semi-axis list (see also
+[fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
 
-Example:
+**NOTE**: defaults to [fl_cutout()](../foundation/core.md#function-fl_cutout) when undef (so all the preferred cutout
+directions are included)
+
+Example 1:
 
     cut_dirs=[+X,+Z]
 
-in this case the ethernet plug will perform a cutout along +X and +Z.
+in this case the ethernet plug will perform a cutout along +X (since +Z is
+not supported).
+
+Example 2:
+
+    cut_dirs=undef
+
+in this case the ethernet plug will perform a cutout along +X (the
+supported cutout direction).
+
+Example 3:
+
+    cut_dirs=[]
+
+in this case the ethernet plug will not perform any cutout.
 
 
 
