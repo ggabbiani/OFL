@@ -1291,7 +1291,7 @@ module fl_linear_extrude(
   length,
   convexity = 10,
 ) {
-  D = direction ? fl_direction(direction) : FL_I;
+  D = direction ? fl_direction(direction) : I;
   multmatrix(D)
     linear_extrude(height=length,convexity=convexity)
       children();
@@ -1349,7 +1349,7 @@ module fl_direction_extrude(
 }
 
 /*!
- * Cutout along arbitrary direction.
+ * Cutout along arbitrary direction of children shapes.
  *
  * Context variables:
  *
@@ -1361,18 +1361,20 @@ module fl_direction_extrude(
 module fl_new_cutout(
   //! bounding box delimiting children shape(s)
   bbox,
-  //! direction vector
+  //! direction vector (3d vector format)
   director,
   /*!
-   * Additional distance from children boundaries.
-   * When negative this value is actually subtracted.
+   * Scalar or function literal returning a scalar value, adding space from
+   * children boundaries (if negative this value is actually subtracted).
+   *
+   * **NOTE:** the function literal is invoked without any parameter.
    */
   drift=0,
   /*!
    * 3d translation applied BEFORE projection().
    *
-   * **NOTE:** trimming modify projection() behavior, enabling its «cut»
-   * parameter to true.
+   * **NOTE:** trimming modify the OpenSCAD projection module behavior, enabling
+   * its «cut» parameter.
    */
   trim
 ) {
@@ -1382,8 +1384,7 @@ module fl_new_cutout(
   function distance(P,n) =
     abs(n*P)/sqrt(n.x*n.x+n.y*n.y+n.z*n.z);
 
-  // returns the intercept point P between a vector v and a cube defined by its
-  // bounding box.
+  // Returns the intercept point P between a vector v and a bounding box.
   // Modified from [c - Position of intersection of a 3d vector and a cube - Stack Overflow](https://stackoverflow.com/questions/3184084/position-of-intersection-of-a-3d-vector-and-a-cube)
   function intercept(v,bbox) = let(
     half  = (bbox[1]-bbox[0])/2,
