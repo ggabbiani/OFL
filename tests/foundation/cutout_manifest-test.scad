@@ -56,15 +56,11 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [0:360]
 
-/* [Object selection] */
-
-// ... please take a decision!
-CLASS  = "jack";  // [hd,hdmi,jack,DIN,ether,snapfit joint]
-
 /* [cutout] */
 
-// list of cutout directions or ["preferred"] for preferred directions only
-CUTOUT_DIRS  = ["preferred"]; // [preferred,-x,+x,±x,-y,+y,±y,-z,+z,±z]
+CLASS         = "jack";  // [hd,hdmi,jack,DIN,ether,snapfit joint]
+// list of cutout directions like -x,+x,±x,-y,+y,±y,-z,+z,±z, "undef" or "empty"
+CUTOUT_DIRS   = ["undef"]; // [undef,empty,-x,+x,±x,-y,+y,±y,-z,+z,±z]
 // space added/subtracted to the bounding box before carving
 CUTOUT_DRIFT  = 0;        // [-5:0.1:5]
 // overall thickness to be carved out
@@ -77,7 +73,7 @@ $fl_tolerance = 0;        // [0:0.1:2]
 direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs     = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT,FL_PAYLOAD]);
-dirs      = CUTOUT_DIRS==["preferred"] ? undef : fl_3d_AxisList(CUTOUT_DIRS);
+dirs      = CUTOUT_DIRS==["undef"] ? undef : CUTOUT_DIRS==["empty"] ? [] : fl_3d_AxisList(CUTOUT_DIRS);
 
 /*!
  * True if the «type» engine is a sub domain of «engine».

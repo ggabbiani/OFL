@@ -77,13 +77,32 @@ module fl_ether(
   //! translation applied to cutout (default 0)
   cut_drift=0,
   /*!
-   * Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
+   * Cutout direction list in floating semi-axis list (see also
+   * fl_tt_isAxisList()).
    *
-   * Example:
+   * **NOTE**: defaults to fl_cutout() when undef (so all the preferred cutout
+   * directions are included)
+   *
+   * Example 1:
    *
    *     cut_dirs=[+X,+Z]
    *
-   * in this case the ethernet plug will perform a cutout along +X and +Z.
+   * in this case the ethernet plug will perform a cutout along +X (since +Z is
+   * not supported).
+   *
+   * Example 2:
+   *
+   *     cut_dirs=undef
+   *
+   * in this case the ethernet plug will perform a cutout along +X (the
+   * supported cutout direction).
+   *
+   * Example 3:
+   *
+   *     cut_dirs=undef
+   *
+   * in this case the ethernet plug will perform a cutout along +X (the
+   * supported cutout direction).
    *
    */
   cut_dirs,
@@ -99,7 +118,7 @@ module fl_ether(
   zoff        = FL_ETHER_Z_OFFSET;
   engine      = fl_engine(type);
   dxf         = engine==str(FL_ETHER_NS,"/native") ? fl_dxf(type) : undef;
-  cut_dirs = cut_dirs ? cut_dirs : fl_cutout(type);
+  cut_dirs    = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
   module do_footprint() {
     if (engine==str(FL_ETHER_NS,"/NopSCADlib")) fl_bb_add($this_bbox);
@@ -114,10 +133,11 @@ module fl_ether(
 
   module do_cutout()
     fl_cutoutLoop(cut_dirs, fl_cutout($this))
-      fl_new_cutout($this_bbox,$co_current,
-        drift         = cut_drift,
-        $fl_tolerance = $fl_tolerance+2xNIL
-      ) do_footprint();
+      if ($co_preferred)
+        fl_new_cutout($this_bbox,$co_current,
+          drift         = cut_drift,
+          $fl_tolerance = $fl_tolerance+2xNIL
+        ) do_footprint();
 
   module do_add() {
     translate(-Z(zoff)) {

@@ -286,9 +286,9 @@ module fl_DIN_rail(
    *
    * Example:
    *
-   *     cut_dirs=[±Z]
+   *     cut_dirs=[-Z,+Z]
    *
-   * in this case the rail will perform a cutout along +Z and -Z.
+   * in this case the rail will perform a cutout along -Z and +Z.
    *
    * **NOTE:** when undefined this parameter defaults to the preferred cutout
    * directions as specified by fl_cutout().
@@ -299,8 +299,8 @@ module fl_DIN_rail(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) {
-  assert($fn,$fn);
-  cut_dirs = cut_dirs ? cut_dirs : fl_cutout(this);
+  // assert($fn,$fn);
+  cut_dirs= is_undef(cut_dirs) ? fl_cutout(this) : cut_dirs;
   punch   = fl_optional(this,"DIN/rail/punch");
   length  = fl_property(this,"DIN/rail/length");
   profile = fl_DIN_railProfile(this);
@@ -391,8 +391,9 @@ module fl_DIN_rail(
     } else if ($this_verb==FL_CUTOUT) {
       fl_cutoutLoop(cut_dirs,fl_cutout(this))
         fl_new_cutout($this_bbox,$co_current,cut_drift)
-          linear_extrude($this_size.z)
-            polygon(polyRound(points,fn=$fn));
+          if ($co_preferred)
+            linear_extrude($this_size.z)
+              polygon(polyRound(points,fn=$fn));
 
     } else if ($this_verb==FL_FOOTPRINT) {
       do_shape($fl_tolerance,true);

@@ -86,7 +86,7 @@ module fl_hdmi(
 
   nop       = fl_nopSCADlib(type);
   l         = hdmi_depth(nop);
-  cut_dirs  = cut_dirs ? cut_dirs : fl_cutout(type);
+  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
   module D() let(
     iw1 = hdmi_width1(nop),
@@ -116,12 +116,13 @@ module fl_hdmi(
     else if ($this_verb==FL_BBOX)
       fl_modifier($modifier) fl_bb_add($this_bbox,auto=true);
 
-    else if ($this_verb==FL_CUTOUT)
+    else if ($this_verb==FL_CUTOUT) {
       fl_cutoutLoop(cut_dirs, fl_cutout($this))
-        fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=$fl_tolerance+2xNIL)
-          do_footprint();
+        if ($co_preferred)
+          fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=$fl_tolerance+2xNIL)
+            do_footprint();
 
-    else if ($this_verb==FL_FOOTPRINT)
+    } else if ($this_verb==FL_FOOTPRINT)
       do_footprint();
 
     else

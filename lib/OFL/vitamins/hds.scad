@@ -122,7 +122,7 @@ module fl_hd(
   plug        = fl_sata_plug(type);
   Mpd         = fl_get(type,"Mpd");
   holes       = fl_holes(type);
-  cut_dirs    = cut_dirs ? cut_dirs : fl_cutout(type);
+  cut_dirs    = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
   module context() {
     $fl_thickness = $hole_n ? fl_3d_axisValue($hole_n,thick) : undef;
@@ -170,18 +170,18 @@ module fl_hd(
     else if ($verb==FL_BBOX)
       fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
-    else if ($verb==FL_CUTOUT)
+    else if ($verb==FL_CUTOUT) {
       fl_cutoutLoop(cut_dirs, fl_cutout($this))
         if ($co_preferred)
           multmatrix(Mpd) let(
             // the only cutout axis is -Y so we use just the related scalar
             $fl_thickness = fl_3d_axisValue(-Y, values=thick)
           ) fl_sata(FL_CUTOUT,plug,$dbg_Symbols=false,drift=drift);
-        else
-          fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+2xNIL)
-            do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
+        // else
+        //   fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+2xNIL)
+        //     do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
-    else if ($verb==FL_DRILL)
+    } else if ($verb==FL_DRILL)
       assert(thick)
       do_layout()
         fl_rail(fl_3d_axisValue($hole_n,dri_rails))

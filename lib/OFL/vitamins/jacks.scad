@@ -93,7 +93,8 @@ module fl_jack(
 ) {
   assert(type);
 
-  engine        = fl_engine(type);
+  engine  = fl_engine(type);
+  co_dirs = is_undef(co_dirs) ? fl_cutout(type) : co_dirs;
 
   if (engine==str(FL_JACK_NS,"/barrel"))
     fl_jack_barrelEngine(verbs,type,cut_drift,co_dirs,octant,direction);
@@ -126,20 +127,20 @@ module fl_jack_barrelEngine(
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction
 ) fl_vmanage(verbs,type,octant,direction) let(
-    co_dirs = co_dirs ? co_dirs : fl_cutout(type)
   ) if ($verb==FL_ADD)
       jack();
     else if ($verb==FL_BBOX)
       fl_bb_add($this_bbox);
-    else if ($verb==FL_CUTOUT)
+    else if ($verb==FL_CUTOUT) {
       assert($fl_thickness!=undef)
         fl_cutoutLoop(co_dirs, fl_cutout(type))
-          fl_new_cutout($this_bbox,$co_current,
-            drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
-            trim          = function() $co_preferred ? X(-$this_size.x/2) : undef,
-            $fl_tolerance = $fl_tolerance+2xNIL
-          ) jack();
-    else
+          if ($co_preferred)
+            fl_new_cutout($this_bbox,$co_current,
+              drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
+              trim          = function() $co_preferred ? X(-$this_size.x/2) : undef,
+              $fl_tolerance = $fl_tolerance+2xNIL
+            ) jack();
+    } else
       fl_error(["unimplemented verb",$this_verb]);
 
 // FIXME: issue when directing, likely to be related to the 'D' matrix when director is not +Z
@@ -178,8 +179,6 @@ module fl_jack_mcxjphstem1Engine(
   jack    = fl_get(type,"jack length");
   Mshape  = T(+fl_Y(size.y)) * Rx(90);
   conns   = fl_connectors(type);
-  preferred_co  = fl_cutout(type);
-  co_dirs       = co_dirs ? co_dirs : preferred_co;
 
   module do_add() {
     multmatrix(Mshape) {
@@ -206,15 +205,16 @@ module fl_jack_mcxjphstem1Engine(
     }
   }
 
-  module do_cutout()
+  module do_cutout() {
     fl_cutoutLoop(co_dirs, fl_cutout(type))
       fl_new_cutout(bbox,$co_current,drift=cut_drift, $fl_tolerance=$fl_tolerance+2xNIL)
         if ($co_preferred)
           multmatrix(Mshape)
             translate([0,axis.z,size.y])
               fl_cylinder(d=3.45+$fl_tolerance*2,h=$fl_thickness);
-        else
-          do_add($FL_ADD=$FL_CUTOUT);
+        // else
+        //   do_add($FL_ADD=$FL_CUTOUT);
+  }
 
   module fprint() {
     difference() {
