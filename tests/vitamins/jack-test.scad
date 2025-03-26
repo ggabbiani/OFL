@@ -28,7 +28,7 @@ $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES        = -2;     // [-2:10]
 DEBUG_ASSERTIONS  = false;
 DEBUG_COMPONENTS  = ["none"];
 DEBUG_COLOR       = false;
@@ -75,8 +75,8 @@ CO_TOLERANCE  = 0;        // [0:0.1:5]
 CO_T          = 2.5;      // [0:0.1:5]
 // translation applied to cutout
 CO_DRIFT      = 0;        // [-5:0.05:5]
-// FL_CUTOUT direction list: ±x,±y,±z
-CO_DIRS = ["+z"];
+// list of cutout directions like -x,+x,±x,-y,+y,±y,-z,+z,±z, "undef" or "empty"
+CUT_DIRS      = ["undef"]; // [undef,empty,-x,+x,±x,-y,+y,±y,-z,+z,±z]
 
 /* [Hidden] */
 
@@ -100,7 +100,7 @@ $fl_thickness = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 $fl_tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 drift         = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
 verbs         = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT]);
-co_dirs       = fl_3d_AxisList(CO_DIRS);
+cut_dirs      = CUT_DIRS==["undef"] ? undef : CUT_DIRS==["empty"] ? [] : fl_3d_AxisList(CUT_DIRS);
 
 // target object(s)
 single  = SHOW=="FL_JACK_BARREL"  ? FL_JACK_BARREL
@@ -108,7 +108,7 @@ single  = SHOW=="FL_JACK_BARREL"  ? FL_JACK_BARREL
         : undef;
 
 if (single)
-  fl_jack(verbs,single,cut_drift=drift,co_dirs=co_dirs,octant=octant,direction=direction);
+  fl_jack(verbs,single,cut_drift=drift,co_dirs=cut_dirs,octant=octant,direction=direction);
 else
   layout([for(socket=FL_JACK_DICT) fl_width(socket)], 10)
-    fl_jack(verbs,FL_JACK_DICT[$i],cut_drift=drift,co_dirs=co_dirs,direction=direction,octant=octant);
+    fl_jack(verbs,FL_JACK_DICT[$i],cut_drift=drift,co_dirs=cut_dirs,octant=octant,direction=direction);
