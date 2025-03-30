@@ -96,51 +96,6 @@ FL_HS_KHADAS = let(
 FL_HS_DICT  = [FL_HS_PIMORONI_TOP, FL_HS_PIMORONI_BOTTOM, FL_HS_KHADAS];
 
 /*!
- * TODO: TO BE REMOVED
- */
-function fl_pimoroni(
-  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verb      = FL_ADD,
-  type,
-  //! FL_DRILL thickness in scalar form for -Z normal
-  thick=0,
-  //! either "mount" or "assembly"
-  lay_what  = "mount",
-  //! top part
-  top       = true,
-  //! bottom part
-  bottom    = true,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction,
-  //! when undef native positioning is used
-  octant
-) = let(
-  bbox      = fl_bb_pimoroni(type,top=top,bottom=bottom),
-  size      = fl_bb_size(type),
-  corner_r  = fl_get(type,"corner radius"),
-  bottom_p  = fl_get(type,"bottom part"),
-  top_p     = fl_get(type,"top part"),
-  rpi4      = FL_PCB_RPI4,
-  pcb_t     = fl_pcb_thick(rpi4),
-  screw     = fl_screw(type),
-  dxf       = fl_dxf(type),
-
-  bot_base_t    = fl_get(bottom_p,"layer 0 base thickness"),
-  bot_fluting_t = fl_get(bottom_p,"layer 0 fluting thickness"),
-  bot_holder_t  = fl_get(bottom_p,"layer 0 holders thickness"),
-  top_base_t    = fl_get(top_p,"layer 1 base thickness"),
-  top_fluting_t = fl_get(top_p,"layer 1 fluting thickness"),
-  top_holder_t  = fl_get(top_p,"layer 1 holders thickness"),
-
-  D         = direction ? fl_direction(direction) : FL_I,
-  M         = fl_octant(octant,bbox=bbox),
-
-  bottom_sz = function() [size.x,size.y,bot_base_t+bot_fluting_t+bot_holder_t]
-
-) verb==FL_LAYOUT ? T(+Z(bottom_sz().z+pcb_t))
-: undef;
-
-/*!
  * common wrapper for different heat sink model engines.
  */
 module fl_heatsink(
