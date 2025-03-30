@@ -1373,6 +1373,8 @@ module fl_new_cutout(
   /*!
    * 3d translation applied BEFORE projection().
    *
+   * **NOTE:** it can be a function literal (with no parameters)
+   *
    * **NOTE:** trimming modify the OpenSCAD projection module behavior, enabling
    * its «cut» parameter.
    */
