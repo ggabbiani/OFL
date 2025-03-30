@@ -34,7 +34,7 @@ FL_HS_PIMORONI_TOP = let(
     ]
   ),
   fl_engine(value="Pimoroni"),
-  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
+  fl_cutout(value=[+Z]),
 
   // private/undocumented properties
   ["corner radius",     3         ],
@@ -61,7 +61,7 @@ FL_HS_PIMORONI_BOTTOM = let(
     ]
   ),
   fl_engine(value="Pimoroni"),
-  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
+  fl_cutout(value=[+Y]),
 
   // private/undocumented properties
   ["corner radius",     3         ],
@@ -84,7 +84,7 @@ FL_HS_KHADAS = let(
   fl_screw(value=M2_cap_screw),
   fl_dxf(value="vitamins/hs-khadas.dxf"),
   fl_engine(value="Khadas"),
-  fl_cutout(value=[+FL_X,-FL_X,+FL_Y,-FL_Y,+FL_Z,-FL_Z]),
+  fl_cutout(value=[+Z]),
 
   // private/undocumented properties
   fl_property(key="separator height", value=Zs),
@@ -149,23 +149,16 @@ module fl_heatsink(
   type,
   //! thickness for FL_CUTOUT
   cut_thick,
-  //! tolerance used during FL_CUTOUT
+  /*!
+   * tolerance used during FL_CUTOUT
+   *
+   * TODO: replace with $fl_tolerance
+   */
   cut_tolerance=0,
   //! translation applied to cutout (default 0)
   cut_drift=0,
-  /*!
-   * Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
-   *
-   * Example:
-   *
-   *     cut_direction=[+X,+Z]
-   *
-   * in this case the heatsink will perform a cutout along +X and +Z.
-   *
-   * **Note:** axes specified must be present in the supported cutout direction
-   * list (retrievable through fl_cutout() getter)
-   */
-  cut_direction,
+  //! Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
+  cut_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -173,11 +166,10 @@ module fl_heatsink(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  bbox    = fl_bb_corners(type);
-  size    = fl_bb_size(type);
-  engine  = fl_engine(type);
-  D       = direction ? fl_direction(direction)  : FL_I;
-  M       = fl_octant(octant,bbox=bbox);
+  bbox      = fl_bb_corners(type);
+  size      = fl_bb_size(type);
+  engine    = fl_engine(type);
+  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
   module pimoroni(verb,type,direction,octant) {
     dxf       = fl_dxf(type);
@@ -188,9 +180,6 @@ module fl_heatsink(
     fluting_t = fl_property(type,"fluting thickness");
     holder_t  = fl_property(type,"holders thickness");
     part      = fl_property(type,"part");
-
-    D         = direction ? fl_direction(direction) : FL_I;
-    M         = fl_octant(octant,bbox=bbox);
 
     module do_add(fprint) {
 
@@ -272,24 +261,6 @@ module fl_heatsink(
         bottom(fprint);
     }
 
-    module do_cutout() {
-      for(axis=cut_direction)
-        if (fl_isInAxisList(axis,fl_cutout(type)))
-          let(
-            sys = [axis.x ? -Z : X ,O,axis],
-            chf = (part=="top") ?
-                    (axis==+Z ? chamfer_t : 0) :
-                    (axis==-Z ? chamfer_t : 0),
-            t   = (bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift-chf)*axis,
-            len = cut_thick + chf
-          )
-          translate(t)
-            fl_cutout(len,sys.z,sys.x,delta=cut_tolerance)
-              do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
-        else
-          echo(str("***WARN***: Axis ",axis," not supported"));
-    }
-
     module do_footprint()
       do_add(true,$FL_ADD=$FL_FOOTPRINT);
 
@@ -297,10 +268,15 @@ module fl_heatsink(
       do_add(false);
 
     } else if (verb==FL_BBOX) {
-      fl_bb_add(bbox);
+      fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
 
     } else if (verb==FL_CUTOUT) {
-      do_cutout();
+      fl_cutoutLoop(cut_dirs, fl_cutout(type), $fl_thickness=cut_thick+(part=="top"?chamfer_t:corner_r))
+        if ($co_preferred)
+          fl_new_cutout(bbox,$co_current,
+            drift         = cut_drift-(part=="top"?chamfer_t:corner_r),
+            $fl_tolerance = cut_tolerance+2xNIL
+          ) do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
     } else if (verb==FL_FOOTPRINT) {
       do_footprint();
@@ -318,24 +294,6 @@ module fl_heatsink(
     Zf  = fl_property(type,"fin height");
     Zt  = fl_property(type,"tooth height");
 
-    D     = direction ? fl_direction(direction)  : FL_I;
-    M     = fl_octant(octant,bbox=bbox);
-
-    module do_cutout() {
-      for(axis=cut_direction)
-        if (fl_isInAxisList(axis,fl_cutout(type)))
-          let(
-            sys = [axis.x ? -Z : X ,O,axis],
-            t   = (bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
-          )
-          echo(dirs=cut_direction,sys=sys,t=t)
-          translate(t)
-            fl_cutout(cut_thick,sys.z,sys.x,delta=cut_tolerance)
-              do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
-        else
-          echo(str("***WARN***: Axis ",axis," not supported"));
-    }
-
     module do_footprint() {
       linear_extrude(Zs+Zh)
         fl_importDxf(file=dxf,layer="heatsink");
@@ -345,42 +303,47 @@ module fl_heatsink(
     }
 
     module do_add(fprint) {
-      fl_color(fl_grey(30)) {
-        if (!fprint)
-          linear_extrude(Zs)
-            fl_importDxf(file=dxf,layer="separators");
-        translate(+Z(fprint?0:Zs)) {
-          linear_extrude((fprint?Zs:0)+Zh)
-            difference() {
-              fl_importDxf(file=dxf,layer="heatsink");
-              if (!fprint)
-                fl_importDxf(file=dxf,layer="holes");
-            }
-          translate(+Z(Zh)) {
-            if (fprint) {
-              translate([4.5,-7.17])
-                fl_cube(size=[35,35,Zf+Zt],octant=+X-Y+Z);
-            } else {
-              linear_extrude(Zf)
-                fl_importDxf(file=dxf,layer="fins");
-              linear_extrude(Zt)
-                fl_importDxf(file=dxf,layer="tooth");
-            }
+      if (!fprint)
+        linear_extrude(Zs)
+          fl_importDxf(file=dxf,layer="separators");
+      translate(+Z(fprint?0:Zs)) {
+        linear_extrude((fprint?Zs:0)+Zh)
+          difference() {
+            fl_importDxf(file=dxf,layer="heatsink");
+            if (!fprint)
+              fl_importDxf(file=dxf,layer="holes");
+          }
+        translate(+Z(Zh)) {
+          if (fprint) {
+            translate([4.5,-7.17])
+              fl_cube(size=[35,35,Zf+Zt],octant=+X-Y+Z);
+          } else {
+            linear_extrude(Zf)
+              fl_importDxf(file=dxf,layer="fins");
+            linear_extrude(Zt)
+              fl_importDxf(file=dxf,layer="tooth");
           }
         }
       }
     }
 
     if (verb==FL_ADD) {
-      do_add(false);
+      fl_color(fl_grey(30))
+        do_add(false);
 
     } else if (verb==FL_BBOX) {
       fl_bb_add(bbox);
 
     } else if (verb==FL_CUTOUT) {
-      do_cutout();
+      fl_cutoutLoop(cut_dirs, fl_cutout(type), $fl_thickness=cut_thick)
+        if ($co_preferred)
+          fl_new_cutout(bbox,$co_current,
+            drift         = cut_drift,
+            $fl_tolerance = cut_tolerance+2xNIL
+          ) do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
     } else if (verb==FL_FOOTPRINT) {
+      // do_add(true,$FL_ADD=$FL_FOOTPRINT);
       do_footprint();
 
     } else {
@@ -388,17 +351,13 @@ module fl_heatsink(
     }
   }
 
-  module proxy(verb) {
-    if (engine=="Khadas")
-      khadas(verb, type, direction, octant)
-        children();
-    else if (engine=="Pimoroni")
-      pimoroni(verb, type, direction, octant)
-        children();
-  }
-
-  fl_vloop(verbs,bbox,octant,direction) {
+  fl_vloop(verbs,bbox,octant,direction)
     fl_modifier($modifier)
-      proxy($verb);
-  }
+      if (engine=="Khadas")
+        khadas($verb, type, direction, octant)
+          children();
+      else if (engine=="Pimoroni")
+        pimoroni($verb, type, direction, octant)
+          children();
+
 }

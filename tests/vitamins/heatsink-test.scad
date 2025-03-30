@@ -103,7 +103,7 @@ type  = (TYPE=="FL_HS_PIMORONI_TOP") ? FL_HS_PIMORONI_TOP
 fl_heatsink(verbs, type=type,
   cut_thick=CUT_THICK,
   cut_tolerance=CUT_TOLERANCE,
-  cut_direction=fl_3d_AxisList(CUT_DIRECTION),
+  cut_dirs=fl_3d_AxisList(CUT_DIRECTION),
   cut_drift=CUT_DRIFT,
   direction=direction,
   octant=octant)

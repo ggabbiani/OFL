@@ -9,6 +9,7 @@
 include <../../lib/OFL/artifacts/din_rails.scad>
 include <../../lib/OFL/vitamins/ethers.scad>
 include <../../lib/OFL/vitamins/jacks.scad>
+include <../../lib/OFL/vitamins/heatsinks.scad>
 include <../../lib/OFL/vitamins/hdmi.scad>
 include <../../lib/OFL/vitamins/hds.scad>
 
@@ -58,7 +59,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [cutout] */
 
-CLASS         = "jack";  // [hd,hdmi,jack,DIN,ether,snapfit joint]
+CLASS         = "jack";  // [hd,hdmi,heatsinks,jack,DIN,ether,snapfit joint]
 // list of cutout directions like -x,+x,±x,-y,+y,±y,-z,+z,±z, "undef" or "empty"
 CUTOUT_DIRS   = ["undef"]; // [undef,empty,-x,+x,±x,-y,+y,±y,-z,+z,±z]
 // space added/subtracted to the bounding box before carving
@@ -127,6 +128,11 @@ module proxy(
     all = all(FL_HD_DICT)
   ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
     fl_hd(verbs,$item,drift=cut_drift,cut_dirs=cut_dirs,direction=direction,octant=octant);
+
+  else if (CLASS=="heatsinks") let(
+    all = all(FL_HS_DICT)
+  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+    fl_heatsink(verbs,$item,cut_drift=cut_drift,cut_dirs=cut_dirs,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,octant=octant,direction=direction);
 
   else
     fl_error(["Unsupported class engine",CLASS]);
