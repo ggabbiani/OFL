@@ -1315,14 +1315,15 @@ __director__
 direction vector (3d vector format)
 
 __drift__  
-Scalar or function literal returning a scalar value, adding space from
-children boundaries (if negative this value is actually subtracted).
+Scalar or function literal (with signature `drift()`) returning a scalar
+value, adding space from children boundaries (if negative this value is
+actually subtracted).
 
-:memo: **NOTE:** the function literal is invoked without any parameter.
 
 
 __trim__  
-3d translation applied BEFORE projection().
+3d translation or function literal (signature `trim()`) returning a 3d
+translation that is applied BEFORE projection().
 
 :memo: **NOTE:** trimming modify the OpenSCAD projection module behavior, enabling
 its «cut» parameter.

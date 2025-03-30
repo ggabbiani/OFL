@@ -1364,16 +1364,15 @@ module fl_new_cutout(
   //! direction vector (3d vector format)
   director,
   /*!
-   * Scalar or function literal returning a scalar value, adding space from
-   * children boundaries (if negative this value is actually subtracted).
+   * Scalar or function literal (with signature `drift()`) returning a scalar
+   * value, adding space from children boundaries (if negative this value is
+   * actually subtracted).
    *
-   * **NOTE:** the function literal is invoked without any parameter.
    */
   drift=0,
   /*!
-   * 3d translation applied BEFORE projection().
-   *
-   * **NOTE:** it can be a function literal (with no parameters)
+   * 3d translation or function literal (signature `trim()`) returning a 3d
+   * translation that is applied BEFORE projection().
    *
    * **NOTE:** trimming modify the OpenSCAD projection module behavior, enabling
    * its «cut» parameter.

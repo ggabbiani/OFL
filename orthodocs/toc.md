@@ -647,7 +647,6 @@
 - [FL_PHDR_GPIOHDR_FL (variable)](vitamins/pin_headers.md#variable-fl_phdr_gpiohdr_fl)
 - [fl_phdr_nopSize (function)](vitamins/pin_headers.md#function-fl_phdr_nopsize)
 - [FL_PHDR_NS (variable)](vitamins/pin_headers.md#variable-fl_phdr_ns)
-- [fl_pimoroni (function)](vitamins/heatsinks.md#function-fl_pimoroni)
 - [vitamins/pin_headers (package)](vitamins/pin_headers.md#package-vitaminspin_headers)
 - [fl_PinHeader (function)](vitamins/pin_headers.md#function-fl_pinheader)
 - [fl_pinHeader (module)](vitamins/pin_headers.md#module-fl_pinheader)
