@@ -13,17 +13,19 @@ include <../foundation/unsafe_defs.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>
+use <../foundation/type-engine.scad>
 use <../foundation/util.scad>
 
 // namespace
 FL_TRIM_NS    = "trim";
 
 FL_TRIM_POT10  = let(
-  sz  = [9.5,10+1.5,4.8]
-) [
-  fl_name(value="ten turn trimpot"),
-  fl_bb_corners(value=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]),
-  fl_cutout(value=[-Y]),
+  sz    = [9.5,10+1.5,4.8],
+  bbox  = [[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]
+) fl_Object(bbox, name="ten turn trimpot", engine=FL_TRIM_NS, others=[fl_cutout(value=[-Y]),]);
+
+FL_TRIM_DICT  = [
+  FL_TRIM_POT10,
 ];
 
 module fl_trimpot(
@@ -36,33 +38,27 @@ module fl_trimpot(
   cut_tolerance=0,
   //! translation applied to cutout (default 0)
   cut_drift=0,
+  //! FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
+  cut_dirs,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
   octant
 ) {
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
+  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
-  module do_add() {
-    trimpot10();
-  }
-
-  fl_vloop(verbs,bbox,octant,direction) {
+  fl_vmanage(verbs,type,octant,direction) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) trimpot10();
+      trimpot10();
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+      fl_bb_add(bbox);
 
     } else if ($verb==FL_CUTOUT) {
-      if (cut_thick)
-        fl_modifier($modifier)
-          translate(-Y(6.5+cut_drift))
-            fl_cutout(len=cut_thick,delta=cut_tolerance,trim=[0,5.1,0],z=-Y,cut=true)
-              do_add();
+      fl_cutoutLoop(cut_dirs,fl_cutout(type))
+        if ($co_preferred)
+          fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=cut_tolerance,$fl_thickness=cut_thick,trim=[0,5.1,0])
+            trimpot10();
 
     } else {
       fl_error(["unimplemented verb",$this_verb]);
