@@ -112,7 +112,7 @@ module proxy(
 
   else if (CLASS=="DIN") let(
     all = all(FL_DIN_RAIL_INVENTORY,function(i) FL_DIN_RAIL_INVENTORY[i](fl_bb_size(FL_DIN_TS_INVENTORY[i]).x*2))
-  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
     fl_DIN_rail(verbs,$item,cut_dirs=cut_dirs,cut_drift=cut_drift,octant=octant,direction=direction);
 
   else if (CLASS=="ether") let(
@@ -122,22 +122,22 @@ module proxy(
 
   else if (CLASS=="hdmi") let(
     all = all(FL_HDMI_DICT)
-  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
     fl_hdmi(verbs,$item,cut_drift=cut_drift,cut_dirs=cut_dirs,octant=octant,direction=direction);
 
   else if (CLASS=="hd") let(
     all = all(FL_HD_DICT)
-  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
     fl_hd(verbs,$item,drift=cut_drift,cut_dirs=cut_dirs,direction=direction,octant=octant);
 
   else if (CLASS=="heatsinks") let(
     all = all(FL_HS_DICT)
-  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
     fl_heatsink(verbs,$item,cut_drift=cut_drift,cut_dirs=cut_dirs,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,octant=octant,direction=direction);
 
   else if (CLASS=="pin header") let(
     all = all(FL_PHDR_DICT)
-  ) fl_layout(axis=+X,gap=2*$fl_thickness,types=all,$FL_LAYOUT="ON")
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
     fl_pinHeader(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_dirs=cut_dirs, octant=octant, direction=direction);
 
   else
