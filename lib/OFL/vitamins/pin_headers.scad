@@ -104,7 +104,7 @@ let(
     ["phdr/smt", smt],
     ["phdr/pass-through", through],
     if (vendors!=[]) fl_vendor(value=vendors),
-    fl_cutout(value=[+FL_Z]),
+    fl_cutout(value=[+Z]),
   ];
 
 /*!
@@ -119,6 +119,8 @@ module fl_pinHeader(
   cut_thick,
   //! tolerance used during FL_CUTOUT
   cut_tolerance=0,
+  //! Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
+  cut_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef
@@ -129,25 +131,13 @@ module fl_pinHeader(
 
   nop       = fl_nopSCADlib(type);
   geometry  = fl_phdr_geometry(type);
-  bbox      = fl_bb_corners(type);
-  size      = bbox[1]-bbox[0];
   cols      = geometry.x;
   rows      = geometry.y;
   conns     = fl_connectors(type);
   pitch_sz  = hdr_pitch(nop);
   engine    = fl_engine(type);
   smt       = fl_property(type,"phdr/smt");
-
-  D     = direction ? fl_direction(direction) : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
-
-  fl_trace("conns",conns);
-  fl_trace("hdr_pin_length",hdr_pin_length(nop));
-  fl_trace("hdr_pin_below",hdr_pin_below(nop));
-  fl_trace("hdr_pin_width",hdr_pin_width(nop));
-  fl_trace("hdr_box_size",hdr_box_size(nop));
-  fl_trace("hdr_box_wall",hdr_box_wall(nop));
-  fl_trace("hdr_pitch",hdr_pitch(nop));
+  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
   module do_add() {
     if (engine=="male")
@@ -157,34 +147,32 @@ module fl_pinHeader(
   }
 
   module do_drill() {
-    fl_trace("pin_sz",pin_sz);
     pin_sz  = let(w=hdr_pin_width(nop),l=hdr_pin_below(nop)) [w,w,cut_thick];
     for(x=[0:geometry.x-1],y=[0:geometry.y-1])
       translate([pitch_sz * (x - (geometry.x - 1) / 2), pitch_sz * (y - (geometry.y - 1) / 2)])
         fl_cube(size=pin_sz,octant=-Z);
   }
 
-  fl_vloop(verbs,bbox,octant,direction) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+  fl_vmanage(verbs, type, octant=octant, direction=direction)
+    if ($verb==FL_ADD)
+      do_add();
 
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+    else if ($verb==FL_BBOX)
+      fl_bb_add($this_bbox);
 
-    } else if ($verb==FL_CUTOUT) {
-      assert(cut_thick!=undef);
-      fl_modifier($modifier)
-        fl_cutout(len=cut_thick,delta=cut_tolerance)
-          do_add();
+    else if ($verb==FL_CUTOUT)
+      fl_cutoutLoop(cut_dirs, fl_cutout(type),$fl_thickness=cut_thick,$fl_tolerance=cut_tolerance) {
+        if ($co_preferred)
+          fl_new_cutout($this_bbox,$co_current)
+            do_add();
+      }
 
-    } else if ($verb==FL_DRILL) {
-      assert(cut_thick!=undef);
-      fl_modifier($modifier) do_drill();
+    else if ($verb==FL_DRILL)
+      assert(cut_thick!=undef)
+      do_drill();
 
-    } else {
+    else
       fl_error(["unimplemented verb",$this_verb]);
-    }
-  }
 }
 
 FL_PHDR_GPIOHDR          = fl_PinHeader(

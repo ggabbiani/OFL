@@ -74,6 +74,8 @@ PIN_COLOR     = "base";   // [base,red]
 CO_TOLERANCE  = 0.5;      // [0:0.1:5]
 // thickness for FL_CUTOUT
 CO_T          = 15;     // [0:0.1:20]
+// list of cutout directions like -x,+x,±x,-y,+y,±y,-z,+z,±z, "undef" or "empty"
+CUTOUT_DIRS   = ["undef"]; // [undef,empty,-x,+x,±x,-y,+y,±y,-z,+z,±z]
 
 /* [Custom pin header] */
 
@@ -105,9 +107,10 @@ tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = PIN_COLOR=="base"?grey(20):PIN_COLOR;
 type      = fl_dict_search(FL_PHDR_DICT,SHOW)[0];
 verbs     = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL]);
+dirs      = CUTOUT_DIRS==["undef"] ? undef : CUTOUT_DIRS==["empty"] ? [] : fl_3d_AxisList(CUTOUT_DIRS);
 
 module wrapIt(type) {
-  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,octant=octant,direction=direction);
+  fl_pinHeader(verbs,type,color=color,cut_thick=thick,cut_tolerance=tolerance,cut_dirs=dirs,octant=octant,direction=direction);
 }
 
 // one predefined
