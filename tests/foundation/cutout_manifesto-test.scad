@@ -14,6 +14,7 @@ include <../../lib/OFL/vitamins/hdmi.scad>
 include <../../lib/OFL/vitamins/hds.scad>
 include <../../lib/OFL/vitamins/pin_headers.scad>
 include <../../lib/OFL/vitamins/sata.scad>
+include <../../lib/OFL/vitamins/sd.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -61,7 +62,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [cutout] */
 
-CLASS         = "jack";  // [hd,hdmi,heatsinks,jack,DIN,ether,pin header,SATA,snapfit joint]
+CLASS         = "jack";  // [hd,hdmi,heatsinks,jack,DIN,ether,pin header,SATA,SD,snapfit joint]
 // list of cutout directions like -x,+x,±x,-y,+y,±y,-z,+z,±z, "undef" or "empty"
 CUTOUT_DIRS   = ["undef"]; // [undef,empty,-x,+x,±x,-y,+y,±y,-z,+z,±z]
 // space added/subtracted to the bounding box before carving
@@ -145,6 +146,11 @@ module proxy(
     all = all(FL_SATA_DICT)
   ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
     fl_sata(verbs,$item, drift=CUTOUT_DRIFT, cut_dirs=cut_dirs, octant=octant, direction=direction);
+
+  else if (CLASS=="SD") let(
+    all = all(FL_SD_DICT)
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+    fl_sd_usocket(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_dirs=cut_dirs,direction=direction,octant=octant);
 
   else
     fl_error(["Unsupported class engine",CLASS]);

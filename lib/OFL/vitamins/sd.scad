@@ -37,47 +37,40 @@ module fl_sd_usocket(
   verbs       = FL_ADD,
   //! Secure Digital flash memory card socket type
   type,
+  //! translation applied to cutout
+  cut_drift=0,
   //! thickness for FL_CUTOUT
   cut_thick,
   //! tolerance used during FL_CUTOUT
   cut_tolerance=0,
+  //! FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
+  cut_dirs,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
   octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
-
-  module do_add() {
+  module do_print()
     rotate(-90,Z)
-      uSD(size);
-  }
+      uSD($this_size);
 
-  module do_cutout() {
-    assert(cut_thick!=undef);
-    translate(-Y(size.y/2))
-      fl_cutout(len=cut_thick,z=-Y,x=X,delta=cut_tolerance)
-        rotate(-90,Z)
-          uSD(size);
-  }
+  fl_vmanage(verbs,type,octant=octant,direction=direction) {
+    if ($verb==FL_ADD)
+      do_print();
 
-  fl_vloop(verbs,bbox,octant,direction) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+    else if ($verb==FL_BBOX)
+      fl_bb_add($this_bbox);
 
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+    else if ($verb==FL_CUTOUT)
+      fl_cutoutLoop(cut_dirs,fl_cutout(type))
+        if ($co_preferred)
+          fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=cut_tolerance,$fl_thickness=cut_thick)
+            do_print();
 
-    } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier) do_cutout();
-
-    } else {
+    else
       fl_error(["unimplemented verb",$this_verb]);
-    }
   }
 }
