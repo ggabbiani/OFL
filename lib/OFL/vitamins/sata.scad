@@ -82,6 +82,7 @@ FL_SATA_POWERDATASOCKET = let(
   others  = [
   fl_conn_id(value=cid),
   fl_connectors(value=[pc,dc]),
+  fl_cutout(value=[+Z]),
   ["points",          [[2, 0], [2, -4], [0, -2], [0, 0]]],
   ["block size",      blk_sz],
   ["side block size", side_blk_sz],
@@ -114,6 +115,7 @@ FL_SATA_DATAPLUG  = let(
   others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[conn_Plug(cid,+X,+Y,[0,0,0])]),
+  fl_cutout(value=[+Z]),
   ["contact sizes", [
     ["short", [c_w,c_h,d_short]],
     ["long",  [c_w,c_h,d_long]]
@@ -137,6 +139,7 @@ FL_SATA_POWERPLUG = let(
   others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[conn_Plug(cid,+X,+Y,[size.x,0,0])]),
+  fl_cutout(value=[+Z]),
   ["contact sizes", [
     ["short", [c_w,c_h,d_short]],
     ["long",  [c_w,c_h,d_long]]
@@ -175,6 +178,7 @@ FL_SATA_POWERDATAPLUG = let(
   others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[pc,dc]),
+  fl_cutout(value=[+Z]),
   ["power plug",  power],
   ["data plug",   data],
   ["shell thick", thick],
@@ -206,6 +210,35 @@ module fl_sata(
   type,
   //! FL_CUTOUT scalar drift
   drift=0,
+  /*!
+   * Cutout direction list in floating semi-axis list (see also
+   * fl_tt_isAxisList()).
+   *
+   * **NOTE**: defaults to fl_cutout() when undef (so all the preferred cutout
+   * directions are included)
+   *
+   * Example 1:
+   *
+   *     cut_dirs=[+X,+Z]
+   *
+   * in this case the ethernet plug will perform a cutout along +X (since +Z is
+   * not supported).
+   *
+   * Example 2:
+   *
+   *     cut_dirs=undef
+   *
+   * in this case the ethernet plug will perform a cutout along +X (the
+   * supported cutout direction).
+   *
+   * Example 3:
+   *
+   *     cut_dirs=[]
+   *
+   * in this case the ethernet plug will not perform any cutout.
+   *
+   */
+  cut_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -215,6 +248,7 @@ module fl_sata(
     is_undef($fl_thickness)       ? 0 :
     is_num($fl_thickness)         ? $fl_thickness :
     assert(is_list($fl_thickness))  $fl_thickness.z[1];
+  cut_dirs    = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
   module singlePlug(
     verbs       = FL_ADD,
@@ -248,23 +282,20 @@ module fl_sata(
     }
 
     module do_cutout()
-      translate(+Z($this_bbox[1].z+drift+NIL))
-        fl_cutout(thick,delta=$fl_tolerance)
-          do_footprint();
+      fl_cutoutLoop(cut_dirs, fl_cutout(type))
+        if ($co_preferred)
+          fl_new_cutout($this_bbox,$co_current,drift=drift)
+            do_footprint();
 
     fl_vmanage(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
-        fl_modifier($modifier)
-          do_add();
+        do_add();
       else if ($this_verb==FL_BBOX)
-        fl_modifier($modifier)
-          fl_bb_add(bbox,auto=true);
+        fl_bb_add(bbox,auto=true);
       else if ($this_verb==FL_CUTOUT)
-        fl_modifier($modifier)
-          do_cutout();
+        do_cutout();
       else if ($this_verb==FL_FOOTPRINT)
-        fl_modifier($modifier)
-          do_footprint();
+        do_footprint();
       else
         fl_error(["unimplemented verb",$this_verb]);
   }
@@ -318,9 +349,10 @@ module fl_sata(
     }
 
     module do_cutout()
-      translate(+Z($this_bbox[1].z+drift+NIL))
-        fl_cutout(thick,delta=$fl_tolerance)
-          do_footprint();
+      fl_cutoutLoop(cut_dirs, fl_cutout(type))
+        if ($co_preferred)
+          fl_new_cutout($this_bbox,$co_current,drift=drift)
+            do_footprint();
 
     fl_vmanage(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
@@ -413,9 +445,10 @@ module fl_sata(
         fl_cube(size=size,octant=O);
 
     module do_cutout()
-      translate(+Z($this_bbox[1].z+drift+NIL))
-        fl_cutout(thick,delta=$fl_tolerance)
-          do_footprint();
+      fl_cutoutLoop(cut_dirs, fl_cutout(type))
+        if ($co_preferred)
+          fl_new_cutout($this_bbox,$co_current,drift=drift)
+            do_footprint();
 
     fl_vmanage(verbs,type,octant=octant,direction=direction)
       if ($this_verb==FL_ADD)
