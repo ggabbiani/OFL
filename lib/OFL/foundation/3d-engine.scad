@@ -1425,7 +1425,17 @@ module fl_new_cutout(
  * | $co_current    | Children  | Current axis                                |
  * | $co_preferred  | Children  | true if $co_current axis is a preferred one |
  *
- * This facility is meant to be used with fl_new_cutout().
+ * This facility is meant to be used with fl_new_cutout() like in the following
+ * example:
+ *
+ * ```
+ * fl_cutoutLoop(cut_dirs, fl_cutout($this))
+ *   if ($co_preferred)
+ *     fl_new_cutout($this_bbox,$co_current,
+ *       drift         = cut_drift,
+ *       $fl_tolerance = $fl_tolerance+2xNIL
+ *     ) do_footprint();
+ * ```
  */
 module fl_cutoutLoop(list,preferred) {
   for($co_current=list) let(
