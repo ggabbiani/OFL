@@ -36,58 +36,59 @@ module fl_switch(
   cut_thick,
   cut_tolerance,
   cut_drift,
+  //! FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
+  cut_dirs,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
   octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
+  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
   Tshild  = 0.1;
   Tbutton = 1;
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
 
   module do_add() {
     fl_color(color="beige")
       translate(-X(Tshild))
-        fl_cube(size=[size.x-Tbutton-Tshild,size.y-2*Tshild,size.z],octant=-X+Z);
+        fl_cube(size=[$this_size.x-Tbutton-Tshild,$this_size.y-2*Tshild,$this_size.z],octant=-X+Z);
     fl_color("silver")
-      let(l=size.x,w=size.y,h=size.z)
-        linear_extrude(size.z)
+      let(l=$this_size.x,w=$this_size.y,h=$this_size.z)
+        linear_extrude($this_size.z)
           polygon([[-l/2,-w/2],[0,-w/2],[0,+w/2],[-l/2,w/2],[-l/2,w/2-Tshild],[-Tshild,w/2-Tshild],[-Tshild,-w/2+Tshild],[-l/2,-w/2+Tshild]]);
     fl_color(color="beige")
       let(sz=[0.3,0.62,1.5])
-        translate(Z(size.z/2))
+        translate(Z($this_size.z/2))
           for(y=[-2.5,2.5])
             translate(Y(y))
               fl_cube(size=sz,octant=+X);
     fl_color(fl_grey(30))
-      translate(+Z(size.z/2))
+      translate(+Z($this_size.z/2))
         fl_cube(size=[1,3.22,1.6],octant=+X);
   }
 
   module do_cutout() {
-    translate(+X(cut_drift)+Z(size.z/2))
+    translate(+X(cut_drift)+Z($this_size.z/2))
       fl_linear_extrude(direction=[+X,0],length=cut_thick)
         offset(r=cut_tolerance)
           fl_square(size=[1.6,3.22]);
   }
 
-  fl_vloop(verbs,bbox,octant,direction) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+  fl_vmanage(verbs,type,octant=octant,direction=direction) {
+    if ($verb==FL_ADD)
+      do_add();
 
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
+    else if ($verb==FL_BBOX)
+      fl_bb_add($this_bbox);
 
-    } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier) do_cutout();
+    else if ($verb==FL_CUTOUT)
+      fl_cutoutLoop(cut_dirs,fl_cutout(type)) {
+        if ($co_preferred)
+          do_cutout();
+      }
 
-    } else {
+    else
       fl_error(["unimplemented verb",$this_verb]);
-    }
   }
 }
