@@ -8,7 +8,8 @@ graph LR
     A1 --o|use| A3[foundation/3d-engine]
     A1 --o|use| A4[foundation/bbox-engine]
     A1 --o|use| A5[foundation/mngm-engine]
-    A1 --o|use| A6[foundation/util]
+    A1 --o|use| A6[foundation/type-engine]
+    A1 --o|use| A7[foundation/util]
 ```
 
 trimpot engine file
@@ -19,6 +20,14 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 
 ## Variables
+
+---
+
+### variable FL_TRIM_DICT
+
+__Default:__
+
+    [FL_TRIM_POT10,]
 
 ---
 
@@ -34,7 +43,7 @@ __Default:__
 
 __Default:__
 
-    let(sz=[9.5,10+1.5,4.8])[fl_name(value="ten turn trimpot"),fl_bb_corners(value=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]),fl_cutout(value=[-Y]),]
+    let(sz=[9.5,10+1.5,4.8],bbox=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]])fl_Object(bbox,name="ten turn trimpot",engine=FL_TRIM_NS,others=[fl_cutout(value=[-Y]),])
 
 ## Modules
 
@@ -44,7 +53,7 @@ __Default:__
 
 __Syntax:__
 
-    fl_trimpot(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,direction,octant)
+    fl_trimpot(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_dirs,direction,octant)
 
 __Parameters:__
 
@@ -59,6 +68,9 @@ tolerance used during FL_CUTOUT
 
 __cut_drift__  
 translation applied to cutout (default 0)
+
+__cut_dirs__  
+FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

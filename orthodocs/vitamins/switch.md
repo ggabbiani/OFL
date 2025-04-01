@@ -47,12 +47,15 @@ __Default:__
 
 __Syntax:__
 
-    fl_switch(verbs=FL_ADD,type,cut_thick,cut_tolerance,cut_drift,direction,octant)
+    fl_switch(verbs=FL_ADD,type,cut_thick,cut_tolerance,cut_drift,cut_dirs,direction,octant)
 
 __Parameters:__
 
 __verbs__  
 supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+
+__cut_dirs__  
+FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

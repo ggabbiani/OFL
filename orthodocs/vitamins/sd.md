@@ -55,7 +55,7 @@ sd namespace
 
 __Syntax:__
 
-    fl_sd_usocket(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,direction,octant)
+    fl_sd_usocket(verbs=FL_ADD,type,cut_drift=0,cut_thick,cut_tolerance=0,cut_dirs,direction,octant)
 
 micro SD socket
 
@@ -68,11 +68,17 @@ supported verbs: FL_ADD, FL_BBOX, FL_CUTOUT
 __type__  
 Secure Digital flash memory card socket type
 
+__cut_drift__  
+translation applied to cutout
+
 __cut_thick__  
 thickness for FL_CUTOUT
 
 __cut_tolerance__  
 tolerance used during FL_CUTOUT
+
+__cut_dirs__  
+FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])

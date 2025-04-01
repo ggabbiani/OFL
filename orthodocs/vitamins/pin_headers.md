@@ -184,7 +184,7 @@ __engine__
 
 __Syntax:__
 
-    fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,octant,direction)
+    fl_pinHeader(verbs=FL_ADD,type,color,cut_thick,cut_tolerance=0,cut_dirs,octant,direction)
 
 Pin headers engine.
 
@@ -199,6 +199,9 @@ thickness for FL_CUTOUT
 
 __cut_tolerance__  
 tolerance used during FL_CUTOUT
+
+__cut_dirs__  
+Cutout direction list in floating semi-axis list (see also [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
 
 __octant__  
 when undef native positioning is used
