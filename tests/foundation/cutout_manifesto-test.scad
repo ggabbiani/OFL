@@ -1,5 +1,6 @@
 /*
- * Foundation test template.
+ * All OFL objects implementing the FL_CUTOUT verb are triggered with same
+ * cutout parameters to compare the behavior implemented.
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
