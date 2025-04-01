@@ -23,7 +23,7 @@ without the need of a local build.
 
     $ cd <OFL root directory>
     $
-    $ make -s orthodocs/clean
+    $ make -s clean
     $
     $ docker run -v ./:/import:Z  -it --rm ofl:fedora
 
@@ -32,6 +32,7 @@ without the need of a local build.
     $ cd <OFL root directory>
     $
     $ docker run -v ./:/import:Z  -it --rm ofl:fedora tests/runs
+    $ docker run -v ./:/import:Z  -it --rm ofl:fedora examples/runs
 
 ## Public image
 
@@ -48,3 +49,4 @@ without the need of a local build.
     $ cd <OFL root directory>
     $
     $ docker run -v ./:/import:Z  -it --rm ggabbiani/ofl:fedora tests/runs
+    $ docker run -v ./:/import:Z  -it --rm ggabbiani/ofl:fedora examples/runs

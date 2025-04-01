@@ -23,7 +23,7 @@ without the need of a local build.
 
     $ cd <OFL root directory>
     $
-    $ make -s orthodocs/clean
+    $ make -s clean
     $
     $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu
 
@@ -32,6 +32,7 @@ without the need of a local build.
     $ cd <OFL root directory>
     $
     $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu tests/runs
+    $ docker run -v ./:/import:Z  -it --rm ofl:ubuntu examples/runs
 
 ## Public image
 
@@ -48,3 +49,4 @@ without the need of a local build.
     $ cd <OFL root directory>
     $
     $ docker run -v ./:/import:Z  -it --rm ggabbiani/ofl:ubuntu tests/runs
+    $ docker run -v ./:/import:Z  -it --rm ggabbiani/ofl:ubuntu examples/runs
