@@ -17,6 +17,7 @@ include <../../lib/OFL/vitamins/sata.scad>
 include <../../lib/OFL/vitamins/sd.scad>
 include <../../lib/OFL/vitamins/switch.scad>
 include <../../lib/OFL/vitamins/trimpot.scad>
+include <../../lib/OFL/vitamins/usbs.scad>
 
 $fn         = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -64,7 +65,7 @@ DIR_R       = 0;        // [0:360]
 
 /* [cutout] */
 
-CLASS         = "jack";  // [hd,hdmi,heatsinks,jack,DIN,ether,pin header,SATA,SD,snapfit joint,switch,trimpot]
+CLASS         = "jack";  // [hd,hdmi,heatsinks,jack,DIN,ether,pin header,SATA,SD,snapfit joint,switch,trimpot,USB]
 // list of cutout directions like -x,+x,±x,-y,+y,±y,-z,+z,±z, "undef" or "empty"
 CUTOUT_DIRS   = ["undef"]; // [undef,empty,-x,+x,±x,-y,+y,±y,-z,+z,±z]
 // space added/subtracted to the bounding box before carving
@@ -163,6 +164,11 @@ module proxy(
     all = all(FL_TRIM_DICT)
   ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
     fl_trimpot(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=cut_dirs,direction=direction,octant=octant);
+
+  else if (CLASS=="USB") let(
+    all = all(FL_USB_DICT)
+  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+    fl_USB(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=cut_dirs,direction=direction,octant=octant);
 
   else
     fl_error(["Unsupported class engine",CLASS]);
