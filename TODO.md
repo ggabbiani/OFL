@@ -94,7 +94,7 @@
   and subtyping all the existing modules.
 - [X] integrate also the examples in tests;
 - [X] fixed z-fighting bug in fl_ellipticArc{} and fl_arc{};
-- [ ] apply the FL_CUTOUT 'manifest'
+- [X] apply the FL_CUTOUT 'manifest'
 - [ ] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
 - [ ] modify FL_DRILL verb implementation according to the type of drill to be
