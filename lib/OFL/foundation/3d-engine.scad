@@ -1431,7 +1431,7 @@ module fl_new_cutout(
  * ```
  * fl_cutoutLoop(cut_dirs, fl_cutout($this))
  *   if ($co_preferred) {
- *     fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=$fl_tolerance)
+ *     fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_thickness=...,$fl_tolerance=..)
  *       do_footprint();
  *   }
  * ```
