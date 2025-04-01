@@ -775,11 +775,11 @@ module fl_pcb(
         // echo(str("fl_pcb{} do_cutout{} trigger{",$comp_engine,"} cut_thick=",cut_thick))
 
         if ($comp_engine==FL_USB_NS)
-          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_direction=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
+          fl_USB(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_dirs=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction,cut_drift=$comp_drift);
         else if ($comp_engine==FL_HDMI_NS)
           fl_hdmi(FL_CUTOUT,$comp_type,$fl_thickness=cut_thick-$comp_drift,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_JACK_NS)
-          fl_jack(FL_CUTOUT,$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
+          fl_jack(FL_CUTOUT,$comp_type,$fl_thickness=cut_thick-$comp_drift,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_ETHER_NS)
           fl_ether(FL_CUTOUT,$comp_type,$fl_thickness=cut_thick-$comp_drift,$fl_tolerance=$fl_tolerance,cut_drift=$comp_drift,cut_dirs=fl_comp_actualCuts(cut_direction),octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_PHDR_NS) let(
@@ -795,7 +795,7 @@ module fl_pcb(
           fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_HS_NS)
           // TODO: implement a rationale for heat-sinks cut-out operations
-          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_direction=fl_comp_actualCuts(cut_direction),cut_thick=cut_thick-$comp_drift,cut_drift=$comp_drift,cut_tolerance=$fl_tolerance,octant=$comp_octant,direction=$comp_direction);
+          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_dirs=fl_comp_actualCuts(cut_direction),cut_thick=cut_thick-$comp_drift,cut_drift=$comp_drift,cut_tolerance=$fl_tolerance,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_GENERIC_NS)
           fl_generic_vitamin(FL_CUTOUT,$comp_type,$fl_thickness=cut_thick-$comp_drift,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else
