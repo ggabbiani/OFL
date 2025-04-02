@@ -127,7 +127,7 @@ fl_sata_sock(type,value)
 
 __Syntax:__
 
-    fl_sata(verbs=FL_ADD,type,drift=0,cut_dirs,octant,direction)
+    fl_sata(verbs=FL_ADD,type,cut_drift=0,cut_dirs,octant,direction)
 
 SATA plug and socket module.
 
@@ -145,7 +145,7 @@ __Parameters:__
 __verbs__  
 supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_FOOTPRINT
 
-__drift__  
+__cut_drift__  
 FL_CUTOUT scalar drift
 
 __cut_dirs__  

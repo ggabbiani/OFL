@@ -2,6 +2,15 @@
 
 Base definitions for OpenSCAD.
 
+Each module should describe the execution context providing a similar table:
+
+Context variables:
+
+| Name | Context   | Description
+| ---  | ---       | ---
+| blah | Parameter | «blah» description following here ...
+| ooh  | Children  | «ooh» description following here ...
+
 This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 
 Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
@@ -905,6 +914,19 @@ returns the esoteric name associated to the current OpenSCAD view:
 | "front"          | XZ                |
 | "back"           | ZX                |
 | "other"          | -                 |
+
+
+---
+
+### function fl_cut_dirs
+
+__Syntax:__
+
+```text
+fl_cut_dirs(value,type)
+```
+
+setup FL_CUTOUT «cut_dirs» parameter.
 
 
 ---

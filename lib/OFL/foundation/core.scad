@@ -1,6 +1,15 @@
 /*!
  * Base definitions for OpenSCAD.
  *
+ * Each module should describe the execution context providing a similar table:
+ *
+ * Context variables:
+ *
+ * | Name | Context   | Description
+ * | ---  | ---       | ---
+ * | blah | Parameter | «blah» description following here ...
+ * | ooh  | Children  | «ooh» description following here ...
+ *
  * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
  *
  * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
@@ -1666,6 +1675,13 @@ function fl_parm_tolerance(default=0) =
  */
 function fl_parm_thickness(default=0) =
   fl_parm_multiverb(is_undef($fl_thickness)?undef:$fl_thickness,default);
+
+//**** Cutout standard parameters *********************************************
+
+/*!
+ * setup FL_CUTOUT «cut_dirs» parameter.
+ */
+function fl_cut_dirs(value,type)  = is_undef(value) ? fl_cutout(type) : assert(is_list(value)) value;
 
 //**** Execution context helpers **********************************************
 

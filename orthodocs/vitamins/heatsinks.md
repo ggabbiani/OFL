@@ -71,7 +71,14 @@ __Syntax:__
 
     fl_heatsink(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_dirs,octant,direction)
 
-common wrapper for different heat sink model engines.
+Common wrapper for different heat sink model engines.
+
+Context variables:
+
+| Name           | Context   | Description
+| ---            | ---       | ---
+| $co_current    | Children  | current axis
+| $co_preferred  | Children  | true if $co_current axis is a preferred one
 
 
 __Parameters:__

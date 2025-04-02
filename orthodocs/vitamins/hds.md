@@ -54,7 +54,7 @@ __Default:__
 
 __Syntax:__
 
-    fl_hd(verbs=FL_ADD,type,lay_direction=[-X,+X,-Z],dri_rails=[[0,0],[0,0],[0,0]],drift=0,cut_dirs,octant,direction)
+    fl_hd(verbs=FL_ADD,type,lay_direction=[-X,+X,-Z],dri_rails=[[0,0],[0,0],[0,0]],cut_drift=0,cut_dirs,octant,direction)
 
 Hard-drive engine.
 
@@ -81,7 +81,7 @@ FL_LAYOUT directions in floating semi-axis list form
 __dri_rails__  
 rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
 
-__drift__  
+__cut_drift__  
 FL_CUTOUT scalar drift
 
 __cut_dirs__  

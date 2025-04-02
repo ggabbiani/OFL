@@ -96,7 +96,14 @@ FL_HS_KHADAS = let(
 FL_HS_DICT  = [FL_HS_PIMORONI_TOP, FL_HS_PIMORONI_BOTTOM, FL_HS_KHADAS];
 
 /*!
- * common wrapper for different heat sink model engines.
+ * Common wrapper for different heat sink model engines.
+ *
+ * Context variables:
+ *
+ * | Name           | Context   | Description
+ * | ---            | ---       | ---
+ * | $co_current    | Children  | current axis
+ * | $co_preferred  | Children  | true if $co_current axis is a preferred one
  */
 module fl_heatsink(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_FOOTPRINT
@@ -111,7 +118,7 @@ module fl_heatsink(
    */
   cut_tolerance=0,
   //! translation applied to cutout (default 0)
-  cut_drift=0,
+  cut_drift = 0,
   //! Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
   cut_dirs,
   //! when undef native positioning is used

@@ -193,6 +193,7 @@
 - [fl_cube_size (function)](foundation/3d-engine.md#function-fl_cube_size)
 - [fl_cumulativeSum (function)](foundation/core.md#function-fl_cumulativesum)
 - [fl_currentView (function)](foundation/core.md#function-fl_currentview)
+- [fl_cut_dirs (function)](foundation/core.md#function-fl_cut_dirs)
 - [fl_cutout (function)](foundation/core.md#function-fl_cutout)
 - [fl_cutout (module)](foundation/util.md#module-fl_cutout)
 - [$FL_CUTOUT (variable)](foundation/core.md#variable-$fl_cutout)

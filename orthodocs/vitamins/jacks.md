@@ -79,7 +79,7 @@ __Default:__
 
 __Syntax:__
 
-    fl_jack(verbs=FL_ADD,type,cut_drift=0,co_dirs,octant,direction)
+    fl_jack(verbs=FL_ADD,type,cut_drift=0,cut_dirs,octant,direction)
 
 Common jack engine adapter.
 
@@ -100,8 +100,8 @@ supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
 __cut_drift__  
 translation applied to cutout
 
-__co_dirs__  
-FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
+__cut_dirs__  
+FL_CUTOUT direction list. Defaults to 'supported' cutout direction
 
 __octant__  
 when undef native positioning is used
