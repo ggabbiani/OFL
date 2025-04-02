@@ -132,5 +132,5 @@ hd_ctor = fl_connectors(hd)[0];
 lay_dir = fl_3d_AxisList(LAY_DIRECTION);
 fl_trace("lay_dir",lay_dir);
 
-fl_hd(verbs,hd,drift=DRIFT,$fl_tolerance=TOLERANCE,$fl_thickness=T,lay_direction=lay_dir,dri_rails=rail,direction=direction,octant=octant)
+fl_hd(verbs,hd,cut_drift=DRIFT,$fl_tolerance=TOLERANCE,$fl_thickness=T,lay_direction=lay_dir,dri_rails=rail,direction=direction,octant=octant)
   fl_cylinder(h=$hd_screw_len,d=$hole_d,direction=$hole_direction,octant=-Z);

@@ -85,11 +85,11 @@ module fl_hd(
   verbs=FL_ADD,
   type,
   //! FL_LAYOUT directions in floating semi-axis list form
-  lay_direction   = [-X,+X,-Z],
+  lay_direction = [-X,+X,-Z],
   //! rail lengths during FL_DRILL in fixed form [[-X,+X],[-Y,+Y],[-Z,+Z]].
-  dri_rails=[[0,0],[0,0],[0,0]],
+  dri_rails     = [[0,0],[0,0],[0,0]],
   //! FL_CUTOUT scalar drift
-  drift=0,
+  cut_drift = 0,
   /*!
    * Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
    *
@@ -122,7 +122,7 @@ module fl_hd(
   plug        = fl_sata_plug(type);
   Mpd         = fl_get(type,"Mpd");
   holes       = fl_holes(type);
-  cut_dirs    = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs    = fl_cut_dirs(cut_dirs,type);
 
   module context() {
     $fl_thickness = $hole_n ? fl_3d_axisValue($hole_n,thick) : undef;
@@ -176,7 +176,7 @@ module fl_hd(
           multmatrix(Mpd) let(
             // the only cutout axis is -Y so we use just the related scalar
             $fl_thickness = fl_3d_axisValue(-Y, values=thick)
-          ) fl_sata(FL_CUTOUT,plug,$dbg_Symbols=false,drift=drift);
+          ) fl_sata(FL_CUTOUT,plug,$dbg_Symbols=false,cut_drift=cut_drift);
         // else
         //   fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+2xNIL)
         //     do_footprint($FL_FOOTPRINT=$FL_CUTOUT);

@@ -86,12 +86,12 @@ FL_JACK_DICT = [
  */
 module fl_jack(
   //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT
-  verbs       = FL_ADD,
+  verbs     = FL_ADD,
   type,
   //! translation applied to cutout
-  cut_drift=0,
-  //! FL_CUTOUT direction list. Defaults to 'preferred' cutout direction
-  co_dirs,
+  cut_drift = 0,
+  //! FL_CUTOUT direction list. Defaults to 'supported' cutout direction
+  cut_dirs,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -99,13 +99,13 @@ module fl_jack(
 ) {
   assert(type);
 
-  engine  = fl_engine(type);
-  co_dirs = is_undef(co_dirs) ? fl_cutout(type) : co_dirs;
+  engine    = fl_engine(type);
+  cut_dirs  = fl_cut_dirs(cut_dirs,type);
 
   if (engine==str(FL_JACK_NS,"/barrel"))
-    fl_jack_barrelEngine(verbs,type,cut_drift,co_dirs,octant,direction);
+    fl_jack_barrelEngine(verbs,type,cut_drift,cut_dirs,octant,direction);
   else if (engine==str(FL_JACK_NS,"/mcx edge mount"))
-    fl_jack_mcxjphstem1Engine(verbs,type,cut_drift,co_dirs,octant,direction);
+    fl_jack_mcxjphstem1Engine(verbs,type,cut_drift,cut_dirs,octant,direction);
   else
     assert(false,str("Engine '",engine,"' unknown."));
 }

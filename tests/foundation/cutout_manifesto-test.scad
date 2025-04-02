@@ -1,6 +1,21 @@
 /*
  * All OFL objects implementing the FL_CUTOUT verb are triggered with same
- * cutout parameters to compare the behavior implemented.
+ * cutout parameters to compare the behavior implemented. This test is also
+ * important to verify that the cutout parameters used are consistent in the
+ * different modules.
+ *
+ * For the detailed description of the behavior expected when triggering
+ * FL_CUTOUT verb and the cutout parameters used see the variable FL_CUTOUT
+ * documentation.
+ *
+ * Standard parameters for FL_CUTOUT:
+ *
+ * | name           | default         | type      |
+ * | ---            | ---             | ---       |
+ * | cut_drift      | 0               | parameter |
+ * | cut_dirs       | fl_cutout(type) | parameter |
+ * | $fl_thickness  | 0               | context   |
+ * | $fl_tolerance  | 0               | context   |
  *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
@@ -82,6 +97,7 @@ direction = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant    = PLACE_NATIVE  ? undef : OCTANT;
 verbs     = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT,FL_PAYLOAD]);
 dirs      = CUTOUT_DIRS==["undef"] ? undef : CUTOUT_DIRS==["empty"] ? [] : fl_3d_AxisList(CUTOUT_DIRS);
+gap       = 2*$fl_thickness;
 
 /*!
  * True if the «type» engine is a sub domain of «engine».
@@ -98,80 +114,65 @@ function fl_typeIsEngine(type,engine) = fl_substr(fl_engine(type),len=len(engine
 function all(inventory,builder) = let(
 ) [for(i=[0:len(inventory)-1]) builder ? builder(i) : inventory[i]];
 
-module proxy(
-  //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
-  verbs       = FL_ADD,
-  // cutout axes list
-  cut_dirs,
-  // cutout drift (scalar)
-  cut_drift,
-  //! when undef native positioning is used
-  octant,
-  //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
-  direction
-) let(
-    gap     = 2*$fl_thickness
-) if (CLASS=="jack") let(
-    all = all(FL_JACK_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_jack(verbs,$item,cut_drift,cut_dirs,octant,direction);
+if (CLASS=="jack") let(
+  all = all(FL_JACK_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_jack(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,octant=octant,direction=direction);
 
-  else if (CLASS=="DIN") let(
-    all = all(FL_DIN_RAIL_INVENTORY,function(i) FL_DIN_RAIL_INVENTORY[i](fl_bb_size(FL_DIN_TS_INVENTORY[i]).x*2))
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_DIN_rail(verbs,$item,cut_dirs=cut_dirs,cut_drift=cut_drift,octant=octant,direction=direction);
+else if (CLASS=="DIN") let(
+  all = all(FL_DIN_RAIL_INVENTORY,function(i) FL_DIN_RAIL_INVENTORY[i](fl_bb_size(FL_DIN_TS_INVENTORY[i]).x*2))
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_DIN_rail(verbs,$item,cut_dirs=dirs,cut_drift=CUTOUT_DRIFT,octant=octant,direction=direction);
 
-  else if (CLASS=="ether") let(
-    all = all(FL_ETHER_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_ether(verbs, $item, cut_dirs=cut_dirs, cut_drift=cut_drift, octant=octant, direction=direction);
+else if (CLASS=="ether") let(
+  all = all(FL_ETHER_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_ether(verbs, $item, cut_dirs=dirs, cut_drift=CUTOUT_DRIFT, octant=octant, direction=direction);
 
-  else if (CLASS=="hdmi") let(
-    all = all(FL_HDMI_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_hdmi(verbs,$item,cut_drift=cut_drift,cut_dirs=cut_dirs,octant=octant,direction=direction);
+else if (CLASS=="hdmi") let(
+  all = all(FL_HDMI_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_hdmi(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,octant=octant,direction=direction);
 
-  else if (CLASS=="hd") let(
-    all = all(FL_HD_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_hd(verbs,$item,drift=cut_drift,cut_dirs=cut_dirs,direction=direction,octant=octant);
+else if (CLASS=="hd") let(
+  all = all(FL_HD_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_hd(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,direction=direction,octant=octant);
 
-  else if (CLASS=="heatsinks") let(
-    all = all(FL_HS_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_heatsink(verbs,$item,cut_drift=cut_drift,cut_dirs=cut_dirs,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,octant=octant,direction=direction);
+else if (CLASS=="heatsinks") let(
+  all = all(FL_HS_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_heatsink(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,octant=octant,direction=direction);
 
-  else if (CLASS=="pin header") let(
-    all = all(FL_PHDR_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_pinHeader(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_dirs=cut_dirs, octant=octant, direction=direction);
+else if (CLASS=="pin header") let(
+  all = all(FL_PHDR_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_pinHeader(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_dirs=dirs, octant=octant, direction=direction);
 
-  else if (CLASS=="SATA") let(
-    all = all(FL_SATA_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_sata(verbs,$item, drift=CUTOUT_DRIFT, cut_dirs=cut_dirs, octant=octant, direction=direction);
+else if (CLASS=="SATA") let(
+  all = all(FL_SATA_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_sata(verbs,$item, cut_drift=CUTOUT_DRIFT, cut_dirs=dirs, octant=octant, direction=direction);
 
-  else if (CLASS=="SD") let(
-    all = all(FL_SD_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_sd_usocket(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_dirs=cut_dirs,direction=direction,octant=octant);
+else if (CLASS=="SD") let(
+  all = all(FL_SD_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_sd_usocket(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_dirs=dirs,direction=direction,octant=octant);
 
-  else if (CLASS=="switch") let(
-    all = all(FL_SWT_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_switch(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=cut_dirs,direction=direction,octant=octant);
+else if (CLASS=="switch") let(
+  all = all(FL_SWT_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_switch(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,direction=direction,octant=octant);
 
-  else if (CLASS=="trimpot") let(
-    all = all(FL_TRIM_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_trimpot(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=cut_dirs,direction=direction,octant=octant);
+else if (CLASS=="trimpot") let(
+  all = all(FL_TRIM_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_trimpot(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,direction=direction,octant=octant);
 
-  else if (CLASS=="USB") let(
-    all = all(FL_USB_DICT)
-  ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-    fl_USB(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=cut_dirs,direction=direction,octant=octant);
+else if (CLASS=="USB") let(
+  all = all(FL_USB_DICT)
+) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
+  fl_USB(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,direction=direction,octant=octant);
 
-  else
-    fl_error(["Unsupported class engine",CLASS]);
-
-proxy(verbs, dirs, CUTOUT_DRIFT, octant=octant, direction=direction);
+else
+  fl_error(["Unsupported class engine",CLASS]);

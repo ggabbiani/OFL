@@ -117,7 +117,7 @@ module fl_ether(
   zoff        = FL_ETHER_Z_OFFSET;
   engine      = fl_engine(type);
   dxf         = engine==str(FL_ETHER_NS,"/native") ? fl_dxf(type) : undef;
-  cut_dirs    = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs    = fl_cut_dirs(cut_dirs,type);
 
   module do_footprint() {
     if (engine==str(FL_ETHER_NS,"/NopSCADlib")) fl_bb_add($this_bbox);

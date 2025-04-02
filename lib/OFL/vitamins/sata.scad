@@ -209,7 +209,7 @@ module fl_sata(
   verbs       = FL_ADD,
   type,
   //! FL_CUTOUT scalar drift
-  drift=0,
+  cut_drift=0,
   /*!
    * Cutout direction list in floating semi-axis list (see also
    * fl_tt_isAxisList()).
@@ -284,7 +284,7 @@ module fl_sata(
     module do_cutout()
       fl_cutoutLoop(cut_dirs, fl_cutout(type))
         if ($co_preferred)
-          fl_new_cutout($this_bbox,$co_current,drift=drift)
+          fl_new_cutout($this_bbox,$co_current,drift=cut_drift)
             do_footprint();
 
     fl_vmanage(verbs,type,octant=octant,direction=direction)
@@ -351,7 +351,7 @@ module fl_sata(
     module do_cutout()
       fl_cutoutLoop(cut_dirs, fl_cutout(type))
         if ($co_preferred)
-          fl_new_cutout($this_bbox,$co_current,drift=drift)
+          fl_new_cutout($this_bbox,$co_current,drift=cut_drift)
             do_footprint();
 
     fl_vmanage(verbs,type,octant=octant,direction=direction)
@@ -447,7 +447,7 @@ module fl_sata(
     module do_cutout()
       fl_cutoutLoop(cut_dirs, fl_cutout(type))
         if ($co_preferred)
-          fl_new_cutout($this_bbox,$co_current,drift=drift)
+          fl_new_cutout($this_bbox,$co_current,drift=cut_drift)
             do_footprint();
 
     fl_vmanage(verbs,type,octant=octant,direction=direction)

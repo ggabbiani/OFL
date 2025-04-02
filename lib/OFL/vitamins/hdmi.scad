@@ -86,7 +86,7 @@ module fl_hdmi(
 
   nop       = fl_nopSCADlib(type);
   l         = hdmi_depth(nop);
-  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs  = fl_cut_dirs(cut_dirs,type);
 
   module D() let(
     iw1 = hdmi_width1(nop),

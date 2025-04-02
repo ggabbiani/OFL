@@ -300,7 +300,7 @@ module fl_DIN_rail(
   direction
 ) {
   // assert($fn,$fn);
-  cut_dirs= is_undef(cut_dirs) ? fl_cutout(this) : cut_dirs;
+  cut_dirs= fl_cut_dirs(cut_dirs,this);
   punch   = fl_optional(this,"DIN/rail/punch");
   length  = fl_property(this,"DIN/rail/length");
   profile = fl_DIN_railProfile(this);
