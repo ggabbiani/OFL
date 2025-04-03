@@ -795,7 +795,7 @@ module fl_pcb(
           fl_switch(FL_CUTOUT,type=$comp_type,cut_thick=cut_thick-$comp_drift,cut_tolerance=$fl_tolerance,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_HS_NS)
           // TODO: implement a rationale for heat-sinks cut-out operations
-          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_dirs=fl_comp_actualCuts(cut_direction),cut_thick=cut_thick-$comp_drift,cut_drift=$comp_drift,cut_tolerance=$fl_tolerance,octant=$comp_octant,direction=$comp_direction);
+          fl_heatsink(FL_CUTOUT,type=$comp_type,cut_dirs=fl_comp_actualCuts(cut_direction),$fl_thickness=cut_thick-$comp_drift,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else if ($comp_engine==FL_GENERIC_NS)
           fl_generic_vitamin(FL_CUTOUT,$comp_type,$fl_thickness=cut_thick-$comp_drift,cut_drift=$comp_drift,octant=$comp_octant,direction=$comp_direction);
         else

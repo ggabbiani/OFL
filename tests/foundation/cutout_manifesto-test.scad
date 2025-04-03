@@ -142,7 +142,7 @@ else if (CLASS=="hd") let(
 else if (CLASS=="heatsinks") let(
   all = all(FL_HS_DICT)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
-  fl_heatsink(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,octant=octant,direction=direction);
+  fl_heatsink(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,octant=octant,direction=direction);
 
 else if (CLASS=="pin header") let(
   all = all(FL_PHDR_DICT)

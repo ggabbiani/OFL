@@ -100,23 +100,17 @@ FL_HS_DICT  = [FL_HS_PIMORONI_TOP, FL_HS_PIMORONI_BOTTOM, FL_HS_KHADAS];
  *
  * Context variables:
  *
- * | Name           | Context   | Description
- * | ---            | ---       | ---
- * | $co_current    | Children  | current axis
+ * | Name           | Context   | Description                                 |
+ * | -------------  | -------   | ------------------------------------------- |
+ * | $fl_thickness  | Parameter | thickness in FL_CUTOUT (see variable FL_CUTOUT)
+ * | $fl_tolerance  | Parameter | tolerance in FL_CUTOUT and FL_FOOTPRINT (see variable FL_CUTOUT and variable FL_FOOTPRINT)
+ * | $co_current    | Children  | current cutout axis
  * | $co_preferred  | Children  | true if $co_current axis is a preferred one
  */
 module fl_heatsink(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_FOOTPRINT
   verbs       = FL_ADD,
   type,
-  //! thickness for FL_CUTOUT
-  cut_thick,
-  /*!
-   * tolerance used during FL_CUTOUT
-   *
-   * TODO: replace with $fl_tolerance
-   */
-  cut_tolerance=0,
   //! translation applied to cutout (default 0)
   cut_drift = 0,
   //! Cutout direction list in floating semi-axis list (see also fl_tt_isAxisList()).
@@ -128,8 +122,6 @@ module fl_heatsink(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  bbox      = fl_bb_corners(type);
-  size      = fl_bb_size(type);
   engine    = fl_engine(type);
   cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
 
@@ -146,13 +138,13 @@ module fl_heatsink(
     module do_add(fprint) {
 
       module bottom(fprint) {
-        translate(Z(bbox[0].z))
+        translate(Z($this_bbox[0].z))
         difference() {
           union() {
             // metal block
-            translate(bbox[0]+[corner_r,corner_r])
+            translate($this_bbox[0]+[corner_r,corner_r])
               minkowski() {
-                fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r, (fprint?holder_t:0)+base_t],octant=O0);
+                fl_cube(size=[$this_size.x-2*corner_r, $this_size.y-2*corner_r, (fprint?holder_t:0)+base_t],octant=O0);
                 fl_cylinder(r1=0, r2=corner_r, h=fluting_t);
               }
             if (!fprint) // add holders
@@ -182,9 +174,9 @@ module fl_heatsink(
             translate(+Z(fprint?0:holder_t)) {
               // metal block
               intersection() {
-                translate(bbox[0]+[corner_r,corner_r])
+                translate($this_bbox[0]+[corner_r,corner_r])
                   minkowski() {
-                    fl_cube(size=[size.x-2*corner_r, size.y-2*corner_r,(fprint?holder_t:0)+base_t+fluting_t-chamfer_t],octant=O0);
+                    fl_cube(size=[$this_size.x-2*corner_r, $this_size.y-2*corner_r,(fprint?holder_t:0)+base_t+fluting_t-chamfer_t],octant=O0);
                     fl_cylinder(r2=0, r1=corner_r, h=chamfer_t);
                   }
                 linear_extrude((fprint?holder_t:0)+base_t+fluting_t)
@@ -230,14 +222,14 @@ module fl_heatsink(
       do_add(false);
 
     } else if (verb==FL_BBOX) {
-      fl_bb_add(bbox,$FL_ADD=$FL_BBOX);
+      fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
     } else if (verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs, fl_cutout(type), $fl_thickness=cut_thick+(part=="top"?chamfer_t:corner_r))
+      fl_cutoutLoop(cut_dirs, fl_cutout(type), $fl_thickness=$fl_thickness+(part=="top"?chamfer_t:corner_r))
         if ($co_preferred)
-          fl_new_cutout(bbox,$co_current,
+          fl_new_cutout($this_bbox,$co_current,
             drift         = cut_drift-(part=="top"?chamfer_t:corner_r),
-            $fl_tolerance = cut_tolerance+2xNIL
+            $fl_tolerance = $fl_tolerance+2xNIL
           ) do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
     } else if (verb==FL_FOOTPRINT) {
@@ -294,14 +286,14 @@ module fl_heatsink(
         do_add(false);
 
     } else if (verb==FL_BBOX) {
-      fl_bb_add(bbox);
+      fl_bb_add($this_bbox);
 
     } else if (verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs, fl_cutout(type), $fl_thickness=cut_thick)
+      fl_cutoutLoop(cut_dirs, fl_cutout(type))
         if ($co_preferred)
-          fl_new_cutout(bbox,$co_current,
-            drift         = cut_drift,
-            $fl_tolerance = cut_tolerance+2xNIL
+          fl_new_cutout($this_bbox,$co_current,
+            drift         = cut_drift
+            // $fl_tolerance = cut_tolerance+2xNIL
           ) do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
     } else if (verb==FL_FOOTPRINT) {
@@ -313,13 +305,12 @@ module fl_heatsink(
     }
   }
 
-  fl_vloop(verbs,bbox,octant,direction)
-    fl_modifier($modifier)
-      if (engine=="Khadas")
-        khadas($verb, type, direction, octant)
-          children();
-      else if (engine=="Pimoroni")
-        pimoroni($verb, type, direction, octant)
-          children();
+  fl_vmanage(verbs,type,octant,direction)
+    if (engine=="Khadas")
+      khadas($verb, type, direction, octant)
+        children();
+    else if (engine=="Pimoroni")
+      pimoroni($verb, type, direction, octant)
+        children();
 
 }

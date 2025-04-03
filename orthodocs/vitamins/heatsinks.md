@@ -69,15 +69,17 @@ __Default:__
 
 __Syntax:__
 
-    fl_heatsink(verbs=FL_ADD,type,cut_thick,cut_tolerance=0,cut_drift=0,cut_dirs,octant,direction)
+    fl_heatsink(verbs=FL_ADD,type,cut_drift=0,cut_dirs,octant,direction)
 
 Common wrapper for different heat sink model engines.
 
 Context variables:
 
-| Name           | Context   | Description
-| ---            | ---       | ---
-| $co_current    | Children  | current axis
+| Name           | Context   | Description                                 |
+| -------------  | -------   | ------------------------------------------- |
+| $fl_thickness  | Parameter | thickness in FL_CUTOUT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout))
+| $fl_tolerance  | Parameter | tolerance in FL_CUTOUT and FL_FOOTPRINT (see [variable FL_CUTOUT](../foundation/core.md#variable-fl_cutout) and variable FL_FOOTPRINT)
+| $co_current    | Children  | current cutout axis
 | $co_preferred  | Children  | true if $co_current axis is a preferred one
 
 
@@ -85,15 +87,6 @@ __Parameters:__
 
 __verbs__  
 supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_FOOTPRINT
-
-__cut_thick__  
-thickness for FL_CUTOUT
-
-__cut_tolerance__  
-tolerance used during FL_CUTOUT
-
-TODO: replace with $fl_tolerance
-
 
 __cut_drift__  
 translation applied to cutout (default 0)
