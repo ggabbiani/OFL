@@ -261,8 +261,6 @@ module fl_screw(
   size    = fl_screw_size(type,length);
   hole_r  = dri_type=="clearance" ? screw_clearance_radius(type) : fl_screw_nominal(type)/2;
   hole_l  = length-(thick_washer+thick_xwasher);
-  D       = direction ? fl_direction(direction) : I;
-  M       = fl_octant(octant,bbox=bbox);
 
   module do_assembly() {
     if (washer!="no")
