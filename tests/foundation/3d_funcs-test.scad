@@ -275,7 +275,7 @@ let(
 
 let(
   rnd = function(value) round(value*100000)/100000,
-  res = function(expected,result) str("expected=",expected,"; ","result=",result,"; difference=",is_undef(expeced)||is_undef(result)?"undef":expected-result)
+  res = function(expected,result) str("expected=",expected,"; ","result=",result,"; difference=",is_undef(expected)||is_undef(result)?"undef":expected-result)
 ) {
 
   // empty 2d/3d point list
