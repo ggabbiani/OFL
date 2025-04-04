@@ -273,37 +273,64 @@ let(
 
 //**** closest points *********************************************************
 
-// closest points in an empty 2d/3d point list
 let(
-  points    = [],
-  result    = fl_2d_closest(points),
-  expected  = undef
-) echo(expected=expected) assert(result==expected,result);
+  rnd = function(value) round(value*100000)/100000,
+  res = function(expected,result) str("expected=",expected,"; ","result=",result,"; difference=",is_undef(expeced)||is_undef(result)?"undef":expected-result)
+) {
 
-// closest points in a single 2d/3d point list
-let(
-  points    = [[-2,4]],
-  result    = fl_2d_closest(points),
-  expected  = undef
-) echo(expected=expected) assert(result==expected,result);
+  // empty 2d/3d point list
+  let(
+    points    = [],
+    result    = fl_2d_closest(points),
+    expected  = undef
+  ) assert(result==expected,res(expected,result));
 
-// closest points in a odd unordered 2d/3d point list
-let(
-  points    = [[20,0],[-2,0],[-6,0]],
-  result    = fl_2d_closest(points),
-  expected  = 4
-) echo(expected=expected) assert(result==expected,result);
+  // single 2d/3d point list
+  let(
+    points    = [[-2,4]],
+    result    = fl_2d_closest(points),
+    expected  = undef
+  ) assert(result==expected,res(expected,result));
 
-// closest points in a even unordered 2d/3d point list
-let(
-  points    = [[-1,0],[20,0],[-2,0],[6,0]],
-  result    = fl_2d_closest(points),
-  expected  = 1
-) echo(expected=expected) assert(result==expected,result);
+  // two unordered 2d/3d point list
+  let(
+    points    = [[1, 1],[0, 0]],
+    result    = fl_2d_closest(points),
+    expected  = sqrt(2)
+    ) assert(rnd(result)==rnd(expected),res(expected,result));
 
-// closest points in a even unordered 2d/3d point list
-let(
-  points    = [[2, 3], [12, 30], [40, 50], [5, 1], [12, 10], [3, 4]],
-  result    = round(fl_2d_closest(points)*100000)/100000,
-  expected  = 1.41421
-) echo(expected=expected) assert(result==expected,result);
+  // three unordered 2d/3d point list
+  let(
+    points    = [[20,0],[-2,0],[-6,0]],
+    result    = fl_2d_closest(points),
+    expected  = 4
+  ) assert(rnd(result)==rnd(expected),res(expected,result));
+
+  // four unordered 2d/3d point list
+  let(
+    points    = [[-1,0],[20,0],[-2,0],[6,0]],
+    result    = fl_2d_closest(points),
+    expected  = 1
+  ) assert(rnd(result)==rnd(expected),res(expected,result));
+
+  // six unordered 2d/3d point list
+  let(
+    points    = [[2, 3], [12, 30], [40, 50], [5, 1], [12, 10], [3, 4]],
+    result    = fl_2d_closest(points),
+    expected  = sqrt(2)
+  ) assert(rnd(result)==rnd(expected),res(expected,result));
+
+  // unordered 2d/3d (near) point list
+  let(
+    points    = [[0, 0], [0.1, 0.1], [1, 1], [2, 2]],
+    result    = fl_2d_closest(points),
+    expected  = sqrt(0.02)
+  ) assert(rnd(result)==rnd(expected),res(expected,result));
+
+  // unordered 2d/3d point list with duplicates
+  let(
+    points    = [[0, 0], [0, 0], [1, 1], [2, 2]],
+    result    = round(fl_2d_closest(points)*100000)/100000,
+    expected  = 0
+  ) assert(rnd(result)==rnd(expected),res(expected,result));
+}
