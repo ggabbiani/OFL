@@ -659,7 +659,7 @@ in the format
 __Parameters:__
 
 __direction__  
-desired direction in axis-angle representation [axis,rotation about]
+desired direction in axis-angle representation [axis,rotation]
 
 __default__  
 returned matrix when «direction» is undef
@@ -1074,7 +1074,7 @@ See also [fl_direction()](#function-fl_direction) function comments.
 __Parameters:__
 
 __direction__  
-desired direction in axis-angle representation [axis,rotation about]
+desired direction in axis-angle representation [axis,rotation]
 
 
 ---
@@ -1207,7 +1207,7 @@ specifies a normal to the actual import plane and a rotation about it.
 __Parameters:__
 
 __direction__  
-direction in axis-angle representation
+direction in [axis,angle] representation
 
 
 ---

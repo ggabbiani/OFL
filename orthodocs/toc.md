@@ -11,7 +11,6 @@
 - [fl_2d_closest (function)](foundation/2d-engine.md#function-fl_2d_closest)
 - [fl_2d_dist (function)](foundation/2d-engine.md#function-fl_2d_dist)
 - [fl_2d_frame (module)](foundation/2d-engine.md#module-fl_2d_frame)
-- [fl_2d_frame_intCorners (function)](foundation/2d-engine.md#function-fl_2d_frame_intcorners)
 - [fl_2d_intersection (function)](foundation/2d-engine.md#function-fl_2d_intersection)
 - [fl_2d_Line (function)](foundation/2d-engine.md#function-fl_2d_line)
 - [fl_2d_place (module)](foundation/2d-engine.md#module-fl_2d_place)

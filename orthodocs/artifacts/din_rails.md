@@ -362,11 +362,11 @@ Performs a punch along the Z axis using children.
 
 Context variables:
 
-| Name         | Context   | Description                                 |
-| ------------ | --------- | ------------------------------------------- |
-| $punch       | Children  | the punch instance containing stepping data |
-| $punch_step  | Children  | punch stepping                              |
-| $punch_thick | Children  | thickness of the performed punch to be used by children |
+| Name         | Context   | Description
+| ---          | ---       | ---
+| $punch       | Children  | the punch instance containing stepping data
+| $punch_step  | Children  | punch stepping
+| $punch_thick | Children  | thickness of the performed punch to be used by children
 
 TODO: extend to other generic axes, move source into core library
 

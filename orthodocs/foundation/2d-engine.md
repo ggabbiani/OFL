@@ -139,32 +139,6 @@ fl_2d_dist(p1,p2)
 
 ---
 
-### function fl_2d_frame_intCorners
-
-__Syntax:__
-
-```text
-fl_2d_frame_intCorners(size=[1,1],corners=[0,0,0,0],thick)
-```
-
-__Parameters:__
-
-__size__  
-outer size
-
-__corners__  
-List of four radiuses, one for each quadrant's corners.
-Each zero means that the corresponding corner is squared.
-Defaults to a 'perfect' rectangle with four squared corners.
-One scalar value R means corners=[R,R,R,R]
-
-
-__thick__  
-subtracted to size defines the internal size
-
-
----
-
 ### function fl_2d_intersection
 
 __Syntax:__
@@ -810,10 +784,12 @@ Example:
 
 A frame with the following corners:
 
-- I quadrant: r=3
-- II quadrant: r=2
-- III quadrant: r=4
-- IV quadrant: r=0 (no roundness)
+| Quadrant | r
+| ---      | ---
+| I        | 3
+| II       | 2
+| III      | 4
+| IV       | 0 (no roundness)
 
 is produced by the following code
 
@@ -836,6 +812,7 @@ List of four radiuses, one for each quadrant's corners.
 Each zero means that the corresponding corner is squared.
 Defaults to a 'perfect' rectangle with four squared corners.
 One scalar value R means corners=[R,R,R,R]
+One ellipses value e=[a,b] means corners=[e,e,e,e]
 
 
 __thick__  
