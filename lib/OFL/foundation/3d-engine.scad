@@ -182,9 +182,6 @@ module fl_frame(
   size  = is_list(size) ? size : [size,size,size];
   bbox  = [[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,size.z]];
 
-  D     = direction ? fl_direction(direction) : I;
-  M     = fl_octant(octant,bbox=bbox);
-
   fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD)
       fl_modifier($modifier)
@@ -238,16 +235,14 @@ module fl_cube(
 ) {
   size  = size ? (is_list(size) ? size : assert(is_num(size)) [size,size,size]) : type ? fl_cube_size(type) : [1,1,1];
   bbox  = fl_bb_cube(size=size);
-  D     = direction ? fl_direction(direction) : I;
-  M     = fl_octant(octant,bbox=bbox);
 
-  fl_vloop(verbs, bbox, octant, direction) {
+  fl_vloop(verbs, bbox, octant, direction) fl_modifier($modifier) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) cube(size,true);
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      cube(size,true);
+
+    } else assert($verb==FL_BBOX,fl_error(["unimplemented verb",$verb])) {
+      fl_bb_add(corners=bbox);
+
     }
   }
 }
@@ -297,16 +292,14 @@ module fl_sphere(
   r     = fl_parse_radius(r,d=d,def=type?fl_radius(type):undef);
   bbox  = assert(r) fl_bb_sphere(r);
   size  = bbox[1] - bbox[0];
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
 
-  fl_vloop(verbs,bbox,octant,direction) {
+  fl_vloop(verbs,bbox,octant,direction) fl_modifier($modifier) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) resize(size) sphere();
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      resize(size)
+        sphere();
+
+    } else assert($verb==FL_BBOX,fl_error(["unimplemented verb",$verb])) {
+      fl_bb_add(corners=bbox);
     }
   }
 }
@@ -436,13 +429,13 @@ module fl_cylinder(
   step  = 360/$fn;
   R     = max(r_bot,r_top);
 
-  fl_vloop(verbs, bbox, octant, direction) {
+  fl_vloop(verbs, bbox, octant, direction) fl_modifier($modifier) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      cylinder(r1=r_bot,r2=r_top, h=h);   // center=default=false ⇒ +Z
+
+    } else assert($verb==FL_BBOX,fl_error(["unimplemented verb",$verb])) {
+      fl_bb_add(corners=bbox);
+
     }
   }
 }
@@ -556,16 +549,15 @@ module fl_prism(
   Rtop  = assert(l_top) l_top / (2 * sin(step/2));
   R     = max(Rbase,Rtop);
   size  = bbox[1]-bbox[0];
-  D     = direction ? fl_direction(direction): FL_I;
-  M     = fl_octant(octant,bbox=bbox);
 
-  fl_vloop(verbs,bbox,octant,direction)  {
+  fl_vloop(verbs,bbox,octant,direction) fl_modifier($modifier) {
+
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(corners=bbox, auto=true);
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      cylinder(r1=Rbase,r2=Rtop, h=h, $fn=n); // center=default=false ⇒ +Z
+
+    } else assert($verb==FL_BBOX,fl_error(["unimplemented verb",$verb])) {
+      fl_bb_add(corners=bbox, auto=true);
+
     }
   }
 }
@@ -611,17 +603,15 @@ module fl_pyramid(
   faces   = [[0,2,1],[0,3,2],[0,4,3],[0,1,4],[1,2,3,4]];
   bbox    = fl_bb_pyramid(base,apex);
   size    = bbox[1]-bbox[0];
-  D       = direction ? fl_direction(direction): I;
-  M       = fl_octant(octant,bbox=bbox);
 
-  fl_vloop(verbs,bbox,octant,direction)  {
+  fl_vloop(verbs,bbox,octant,direction) fl_modifier($modifier) {
+
     if ($verb==FL_ADD) {
-      fl_modifier($modifier)
-        polyhedron(points, faces);
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox,auto=true);
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      polyhedron(points, faces);
+
+    } else assert($verb==FL_BBOX,fl_error(["unimplemented verb",$verb])) {
+      fl_bb_add(bbox,auto=true);
+
     }
   }
 }
@@ -694,10 +684,8 @@ module fl_place(
   bbox  = bbox ? bbox : assert(type) fl_bb_corners(type);
   M     = octant  ? assert(!quadrant) fl_octant(octant,bbox=bbox)
                   : assert(quadrant)  fl_quadrant(quadrant,bbox=bbox);
-  fl_trace("M",M);
-  fl_trace("bbox",bbox);
-  fl_trace("octant",octant);
-  multmatrix(M) children();
+  multmatrix(M)
+    children();
 }
 
 module fl_placeIf(
@@ -711,11 +699,11 @@ module fl_placeIf(
   //! bounding box corners
   bbox
 ) {
-  fl_trace("type",type);
-  fl_trace("bbox",bbox);
-  fl_trace("condition",condition);
-  if (condition) fl_place(type,octant,quadrant,bbox) children();
-  else children();
+  if (condition)
+    fl_place(type,octant,quadrant,bbox)
+      children();
+  else
+    children();
 }
 
 /*!
@@ -733,7 +721,7 @@ module fl_placeIf(
  *
  */
 function fl_direction(
-  //! desired direction in axis-angle representation [axis,rotation about]
+  //! desired direction in axis-angle representation [axis,rotation]
   direction,
   //! returned matrix when «direction» is undef
   default=I
@@ -746,16 +734,16 @@ function fl_direction(
   ) R(Z_new,alpha)                          // rotate «alpha» degrees around new Z
   * fl_planeAlign(FL_Z,FL_X,Z_new,X_new) :  // align direction
   assert(default) default;
+
 /*!
  * Applies a direction matrix to its children.
  * See also fl_direction() function comments.
  */
 module fl_direct(
-  //! desired direction in axis-angle representation [axis,rotation about]
+  //! desired direction in axis-angle representation [axis,rotation]
   direction
-) {
-  multmatrix(fl_direction(direction)) children();
-}
+) multmatrix(fl_direction(direction))
+    children();
 
 /*!
  * From [Rotation matrix from plane A to B](https://math.stackexchange.com/questions/1876615/rotation-matrix-from-plane-a-to-b)
@@ -1519,7 +1507,7 @@ module fl_fillet_extrude(
 module fl_importDxf(
   file,
   layer,
-  //! direction in axis-angle representation
+  //! direction in [axis,angle] representation
   direction
 ) {
   D = direction ? fl_direction(direction) : FL_I;
@@ -1530,13 +1518,11 @@ module fl_importDxf(
 //*****************************************************************************
 // 3d symbols
 
-module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
+module fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5)
   fl_symbol(verbs,type,size,"plug");
-}
 
-module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5) {
+module fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5)
   fl_symbol(verbs,type,size,"socket");
-}
 
 /*!
  * provides the symbol required in its 'canonical' form:
@@ -1603,15 +1589,13 @@ module fl_symbol(
     context() children();
   }
 
-  fl_vloop(fl_list_filter(verbs,function(item) item!=FL_AXES)) {
+  fl_vloop(fl_list_filter(verbs,function(item) item!=FL_AXES)) fl_modifier($modifier) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+      do_add();
 
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout() children();
+    } else assert($verb==FL_LAYOUT,fl_error(["unimplemented verb",$verb])) {
+      do_layout() children();
 
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
     }
   }
 }
@@ -1666,7 +1650,6 @@ module fl_sym_hole(
     [+radius,+radius,0]
   ];
   size    = bbox[1]-bbox[0];
-  fl_trace("verbs",verbs);
 
   module do_add() {
     let(l=$hole_d*3/2,r=radius/20) {
@@ -1687,12 +1670,9 @@ module fl_sym_hole(
       fl_vector($hole_depth*Z);
   }
 
-  fl_vloop(verbs, bbox, direction=[$hole_n,0]) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
-
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+  fl_vloop(verbs, bbox, direction=[$hole_n,0]) fl_modifier($modifier) {
+    assert($verb==FL_ADD,fl_error(["unimplemented verb",$verb])) {
+      do_add();
     }
   }
 }
@@ -1927,21 +1907,19 @@ module fl_torus(
   a       = e[0];
   b       = e[1];
   size    = bbox[1]-bbox[0];
-  D       = direction ? fl_direction(direction) : I;
-  M       = fl_octant(octant,bbox=bbox);
 
   fn      = $fn;
 
-  fl_trace("D",D);
-  fl_trace("M",M);
+  fl_vloop(verbs,bbox,octant,direction) fl_modifier($modifier) {
 
-  fl_vloop(verbs,bbox,octant,direction) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) rotate_extrude($fn=$fn) translate(X(R-a)) fl_ellipse(e=e,quadrant=+X,$fn=fn);
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox);
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      rotate_extrude($fn=$fn)
+        translate(X(R-a))
+          fl_ellipse(e=e,quadrant=+X,$fn=fn);
+
+    } else assert($verb==FL_BBOX,fl_error(["unimplemented verb",$verb])) {
+      fl_bb_add(bbox);
+
     }
   }
 }
@@ -1988,15 +1966,16 @@ module fl_tube(
       fl_ellipse(e=obase);
   }
 
-  fl_vloop(verbs,bbox,octant,direction) {
+  fl_vloop(verbs,bbox,octant,direction) fl_modifier($modifier) {
+
     if ($verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+      do_add();
+
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox,auto=true);
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) do_fprint();
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      fl_bb_add(bbox,auto=true);
+
+    } else assert($verb==FL_FOOTPRINT,fl_error(["unimplemented verb",$verb])) {
+      do_fprint();
     }
   }
 }

@@ -1220,39 +1220,6 @@ module fl_square(
 
 //**** frame ******************************************************************
 
-function fl_2d_frame_intCorners(
-  //! outer size
-  size    = [1,1],
-  /*!
-   * List of four radiuses, one for each quadrant's corners.
-   * Each zero means that the corresponding corner is squared.
-   * Defaults to a 'perfect' rectangle with four squared corners.
-   * One scalar value R means corners=[R,R,R,R]
-   */
-  corners = [0,0,0,0],
-  //! subtracted to size defines the internal size
-  thick
-) = let(
-  delta = [thick,thick],
-  zero  = [0,0]
-) // corners==scalar
-  is_num(corners) ? let(
-    e = corners>thick ? [corners,corners]-delta : zero
-  ) [e,e,e,e]
-  // corners==ellipsis ([a,b])
-  : len(corners)==2 ? let(
-    e = min(corners)>thick ? corners-delta : zero
-  ) [e,e,e,e]
-  // corners==[scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,scalar|ellipsis]
-  : len(corners)==4 ? [
-    for(v=corners)
-      // scalar
-      is_num(v) ? v>thick ? [v,v]-delta : zero
-      // ellipsis
-      : min(v)>thick ? v-delta : zero
-  ]
-  : assert(false,corners) undef;
-
 /*!
  * Add a 2d square frame according to corners and thick specifications.
  *
@@ -1260,10 +1227,12 @@ function fl_2d_frame_intCorners(
  *
  * A frame with the following corners:
  *
- * - I quadrant: r=3
- * - II quadrant: r=2
- * - III quadrant: r=4
- * - IV quadrant: r=0 (no roundness)
+ * | Quadrant | r
+ * | ---      | ---
+ * | I        | 3
+ * | II       | 2
+ * | III      | 4
+ * | IV       | 0 (no roundness)
  *
  * is produced by the following code
  *
@@ -1284,31 +1253,52 @@ module fl_2d_frame(
    * Each zero means that the corresponding corner is squared.
    * Defaults to a 'perfect' rectangle with four squared corners.
    * One scalar value R means corners=[R,R,R,R]
+   * One ellipses value e=[a,b] means corners=[e,e,e,e]
    */
   corners = [0,0,0,0],
   //! subtracted to size defines the internal size
   thick,
   quadrant
 ) {
-  assert(is_num(thick));
+  assert(is_num(thick),thick);
+
+  function internal_corners(size,corners,thick) = let(
+    delta = [thick,thick],
+    zero  = [0,0]
+  ) // corners==scalar
+    is_num(corners) ? let(
+      e = corners>thick ? [corners,corners]-delta : zero
+    ) [e,e,e,e]
+    // corners==ellipsis ([a,b])
+    : len(corners)==2 ? let(
+      e = min(corners)>thick ? corners-delta : zero
+    ) [e,e,e,e]
+    // corners==[scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,scalar|ellipsis]
+    : assert(len(corners)==4) [
+      for(v=corners)
+        // scalar
+        is_num(v) ? v>thick ? [v,v]-delta : zero
+        // ellipsis
+        : min(v)>thick ? v-delta : zero
+    ];
 
   size        = is_num(size) ? [size,size] : size;
   size_int    = size - 2*[thick,thick];
-  corners_int = fl_2d_frame_intCorners(size,corners,thick);
+  corners_int = internal_corners(size,corners,thick);
+  bbox        = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
 
-  bbox    = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
+  fl_2d_vloop(verbs,bbox,quadrant=quadrant) fl_modifier($modifier) {
 
-  fl_2d_vloop(verbs,bbox,quadrant=quadrant) {
-    if ($verb==FL_ADD) {
-      fl_modifier($modifier) difference() {
+    if ($verb==FL_ADD)
+      difference() {
         fl_square($verb,size,corners);
         fl_square($verb,size_int,corners_int);
       }
-    } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_square(size=size);
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
-    }
+
+    else
+      assert($verb==FL_BBOX,fl_error(["unimplemented verb",$verb]))
+      fl_square(size=size);
+
   }
 }
 
