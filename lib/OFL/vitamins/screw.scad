@@ -296,23 +296,24 @@ module fl_screw(
         }
   }
 
-  fl_vloop(verbs,bbox,octant,direction) {
+  fl_vloop(verbs,bbox,octant,direction) fl_modifier($modifier) {
     if ($verb==FL_ADD) {
-      fl_modifier($modifier)
-        translate(Z(thick_washer+thick_xwasher))
-          screw(type, length, hob_point = 0, nylon = false);
+      translate(Z(thick_washer+thick_xwasher))
+        screw(type, length, hob_point = 0, nylon = false);
+
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add(bbox,$FL_ADD=$FL_BBOX,auto=true);
+      fl_bb_add(bbox,$FL_ADD=$FL_BBOX,auto=true);
+
     } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
+      do_assembly();
+
     } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier)
-        translate(Z(NIL))
-          fl_cylinder(FL_ADD,h=hole_l+2xNIL,r=hole_r,octant=-Z,$FL_ADD=$FL_DRILL);
-    } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) do_footprint();
-    } else {
-      fl_error(["unimplemented verb",$this_verb]);
+      translate(Z(NIL))
+        fl_cylinder(FL_ADD,h=hole_l+2xNIL,r=hole_r,octant=-Z,$FL_ADD=$FL_DRILL);
+
+    } else assert($verb==FL_FOOTPRINT,fl_error(["unimplemented verb",$verb])) {
+      do_footprint();
+
     }
   }
 }
