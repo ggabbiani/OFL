@@ -33,8 +33,8 @@ function fl_Dimension(
   label,
 )  = [
   fl_native(value=true),
-  assert(label) fl_dim_label(value=label),
-  assert(value) fl_dim_value(value=value),
+  assert(!is_undef(label)) fl_dim_label(value=label),
+  assert(!is_undef(value)) fl_dim_value(value=value),
 ];
 
 /*!
@@ -75,6 +75,7 @@ function fl_DimensionPack(dimension_list) = [
 module fl_dimension(
   //! supported verbs: FL_ADD
   verbs       = FL_ADD,
+  //! dimension geometry object as returned by fl_Dimension()
   geometry,
   /*!
    * Position of the measure line with respect to its distribute direction:
