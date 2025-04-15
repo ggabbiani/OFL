@@ -172,6 +172,7 @@ module fl_generic_vloop(
  * | $this_direction  | Children  | orientation in [director,rotation] format           |
  * | $this_octant     | Children  | positioning octant (for three-dimensional objects)  |
  * | $this_quadrant   | Children  | positioning quadrant (for two-dimensional objects)  |
+ * | $fl_clearance    | Children  | multi-verb parameter (see fl_parm_clearance())      |
  * | $fl_thickness    | Children  | multi-verb parameter (see fl_parm_thickness())      |
  * | $fl_tolerance    | Children  | multi-verb parameter (see fl_parm_tolerance())      |
  * |                  | Children  | see fl_generic_vloop{} Children context             |
@@ -195,6 +196,7 @@ module fl_generic_vmanage(
     $this_size      = size,
     $this_bbox      = bbox,
     $this_direction = direction,
+    $fl_clearance   = fl_parm_clearance(),
     $fl_tolerance   = fl_parm_tolerance(),
     $fl_thickness   = fl_parm_thickness()
   ) children();

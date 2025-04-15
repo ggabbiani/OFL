@@ -1227,7 +1227,7 @@ function fl_list_unique(dict) =
     // this lambda isolates the first list element (head) from the rest
     split     = function (list) let(
       len = len(list)
-    ) assert(len>1,"list must contain at least 2 items")
+    ) assert(len>1,str("list must contain at least 2 items (",len,")"))
       len==2 ? [list[0],[list[1]]]
       : let(
         head  = list[0],
@@ -1656,9 +1656,18 @@ function fl_parm_multiverb(
 //! Parameter context dump (mainly used for debug)
 module fl_parm_dump()
   echo(
+    $fl_clearance = $fl_clearance,
     $fl_thickness = $fl_thickness,
     $fl_tolerance = $fl_tolerance
   ) children();
+
+/*!
+ * Multi valued verb-dependent clearance parameter getter.
+ *
+ * See fl_parm_multiverb() for details.
+ */
+function fl_parm_clearance(default) =
+  fl_parm_multiverb(is_undef($fl_clearance)?undef:$fl_clearance,default);
 
 /*!
  * Multi valued verb-dependent tolerance parameter getter.
