@@ -147,7 +147,7 @@ module fl_vloop(
   ) assert($children==1)
     fl_generic_vloop(verbs,bbox,M=fl_octant(octant, bbox=bbox),D=fl_direction(direction)) {
       children();
-      fl_doAxes(size=1.2*(bbox[1]-bbox[0]), direction=direction);
+      fl_modifier($modifier) fl_doAxes(size=1.2*(bbox[1]-bbox[0]), direction=direction);
     }
 
 module fl_doAxes(size,direction) {
