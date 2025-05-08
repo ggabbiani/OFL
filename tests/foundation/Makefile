@@ -25,15 +25,18 @@ top:
 
 sources: $(SOURCES)
 
-runs: clean-results $(RESULTS)
+# clean-runs: clean-local $(RESULTS)
 
-clean: clean-results
-	$(call aggregate-prologue)
-	@for f in $(SOURCES) ; do rm -f $$f ; done
-	$(call aggregate-epilogue)
-#	@echo "$(SOURCES): DELETED"
+runs: $(RESULTS)
 
 clean-results:
 	$(call aggregate-prologue)
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
+	$(call aggregate-epilogue)
+
+clean-sources:
+	printf "$(COLOR_YELLOW)Cleaning tests/foundation sources? (Y/N):$(COLOR_RESET) "
+	read -p "" confirm && [[ $$confirm == [yY] ]] || exit 1
+	$(call aggregate-prologue)
+	@for f in $(SOURCES) ; do rm -f $$f ; done
 	$(call aggregate-epilogue)

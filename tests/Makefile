@@ -34,15 +34,20 @@ foundation/%:
 vitamins/%:
 	$(call make_sub)
 
-runs: clean-results $(RESULTS) artifacts/runs foundation/runs vitamins/runs
+# clean-runs: clean-local $(RESULTS) artifacts/clean-runs foundation/clean-runs vitamins/clean-runs
 
-clean-results:
+clean-runs: clean-results runs
+
+runs: $(RESULTS) artifacts/runs foundation/runs vitamins/runs
+
+clean-results: artifacts/clean-results foundation/clean-results vitamins/clean-results
 	$(call aggregate-prologue)
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
 	$(call aggregate-epilogue)
 
-clean: clean-results artifacts/clean foundation/clean vitamins/clean
+clean-sources:
+	printf "$(COLOR_YELLOW)Cleaning tests sources? (Y/N):$(COLOR_RESET) "
+	read -p "" confirm && [[ $$confirm == [yY] ]] || exit 1
 	$(call aggregate-prologue)
 	@for f in $(SOURCES) ; do rm -f $$f ; done
 	$(call aggregate-epilogue)
-#	@echo "$(SOURCES): DELETED"
