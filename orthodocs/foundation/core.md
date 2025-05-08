@@ -616,18 +616,15 @@ transforms 3D coords to homogeneous
 
 ---
 
-### function fl_OFL
+### function fl_Engine
 
 __Syntax:__
 
 ```text
-fl_OFL(type,value,default)
+fl_Engine(engine,domain)
 ```
 
-when present and true indicates the object is an OFL one
-
-TODO: duplicate of [fl_native()](#function-fl_native)?!
-
+Engine name constructor.
 
 ---
 
@@ -869,6 +866,26 @@ The base conversion of the number
 | 10     | for decimal (default) |
 | 16     | for hexadecimal       |
 
+
+
+---
+
+### function fl_chkEngineDomain
+
+__Syntax:__
+
+```text
+fl_chkEngineDomain(type,engine)
+```
+
+True if the «type» engine is a sub domain of «engine».
+
+Example: if «type» has the [fl_engine()](#function-fl_engine) attribute set to "jack/barrel", the
+following code
+
+    fl_chkEngineDomain(type,"jack")
+
+will return true.
 
 
 ---
@@ -1645,7 +1662,10 @@ __Syntax:__
 fl_native(type,value)
 ```
 
-TODO: duplicate of [fl_OFL()](#function-fl_ofl)?!
+When present and true indicates the object is an OFL one.
+
+:memo: **NOTE:** true for all the objects created by the OFL library. When used as a
+getter on OFL alien objects it returns 'false'.
 
 
 ---
@@ -1865,6 +1885,21 @@ Example 2:
 
 This type is used - for example - for specifying a thickness value along an
 axis.
+
+
+---
+
+### function fl_parm_clearance
+
+__Syntax:__
+
+```text
+fl_parm_clearance(default)
+```
+
+Multi valued verb-dependent clearance parameter getter.
+
+See [fl_parm_multiverb()](#function-fl_parm_multiverb) for details.
 
 
 ---

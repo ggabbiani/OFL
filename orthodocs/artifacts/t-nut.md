@@ -10,7 +10,7 @@ graph LR
     A1 --o|include| A5[vitamins/screw]
     A1 --o|use| A6[foundation/3d-engine]
     A1 --o|use| A7[foundation/bbox-engine]
-    A1 --o|use| A8[foundation/hole]
+    A1 --o|use| A8[foundation/hole-engine]
     A1 --o|use| A9[foundation/mngm-engine]
 ```
 
@@ -43,7 +43,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],screw=M3_cs_cap_screw)
+    fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw)
 
 ---
 
@@ -51,7 +51,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=6,size=[10,20],thickness=[2,1,2],screw=M3_cs_cap_screw)
+    fl_TNut(opening=6,size=[10,20],thickness=[2,1,2],nop_screw=M3_cs_cap_screw)
 
 ---
 
@@ -59,7 +59,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],screw=M4_cs_cap_screw)
+    fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_cs_cap_screw)
 
 ---
 
@@ -67,7 +67,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],screw=M5_cs_cap_screw)
+    fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw)
 
 ---
 
@@ -75,7 +75,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],screw=M6_cs_cap_screw)
+    fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw)
 
 ---
 
@@ -96,7 +96,7 @@ namespace
 __Syntax:__
 
 ```text
-fl_TNut(opening,size,thickness,screw,knut=false,holes)
+fl_TNut(opening,size,thickness,nop_screw,knut=false,holes)
 ```
 
 Constructor returning a T-slot nut.
@@ -126,7 +126,7 @@ __thickness__
 section heights passed as `[wall,base,cone]` thicknesses
 
 
-__screw__  
+__nop_screw__  
 an optional screw determining a hole
 
 __knut__  
@@ -193,7 +193,7 @@ __Syntax:__
 
 T-slot nut engine.
 
-See [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context) for context variables passed to children() during
+See [fl_hole_Context{}](../foundation/hole-engine.md#module-fl_hole_context) for context variables passed to children() during
 FL_LAYOUT.
 
 

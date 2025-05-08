@@ -129,8 +129,9 @@ Context variables:
 | $this_direction  | Children  | orientation in [director,rotation] format           |
 | $this_octant     | Children  | positioning octant (for three-dimensional objects)  |
 | $this_quadrant   | Children  | positioning quadrant (for two-dimensional objects)  |
+| $fl_clearance    | Children  | multi-verb parameter (see [fl_parm_clearance()](core.md#function-fl_parm_clearance))      |
 | $fl_thickness    | Children  | multi-verb parameter (see [fl_parm_thickness()](core.md#function-fl_parm_thickness))      |
-| $fl_tolerance    | Children  | multi-verb parameter (see [fl_parm_tolerance()](core.md#function-fl_parm_tolerance))      |
+| $fl_tolerance    | Children  | multi-verb parameter (see fl_parm_tolerance())      |
 |                  | Children  | see [fl_generic_vloop{}](#module-fl_generic_vloop) Children context             |
 
 

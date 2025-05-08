@@ -134,6 +134,9 @@ __Parameters:__
 __verbs__  
 supported verbs: FL_ADD
 
+__geometry__  
+dimension geometry object as returned by [fl_Dimension()](#function-fl_dimension)
+
 __align__  
 Position of the measure line with respect to its distribute direction:
 

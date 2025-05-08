@@ -1,10 +1,11 @@
-# package foundation/hole
+# package foundation/hole-engine
 
 ## Dependencies
 
 ```mermaid
 graph LR
-    A1[foundation/hole] --o|include| A2[foundation/label]
+    A1[foundation/hole-engine] --o|include| A2[foundation/label]
+    A1 --o|include| A3[vitamins/screw]
 ```
 
 Hole engine implementation.

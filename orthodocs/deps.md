@@ -52,22 +52,23 @@ graph TD
     A27 --o|use| A1
     A27 --o|use| A5
     A27 --o|use| A3
-    A27 --o|use| A28[foundation/hole]
+    A27 --o|use| A28[foundation/hole-engine]
     A27 --o|use| A4
     A29[foundation/grid] --o|include| A5
     A30[vitamins/hdmi] --o|include| A18
     A30 --o|use| A5
     A30 --o|use| A3
     A30 --o|use| A4
-    A31[vitamins/hds] --o|include| A28
-    A31 --o|include| A32[vitamins/sata]
+    A31[vitamins/hds] --o|include| A32[vitamins/sata]
     A31 --o|include| A15
+    A31 --o|use| A28
     A31 --o|use| A4
     A33[vitamins/heatsinks] --o|include| A10
     A33 --o|use| A5
     A33 --o|use| A3
     A33 --o|use| A4
     A28 --o|include| A24
+    A28 --o|include| A15
     A34[vitamins/iec] --o|include| A2
     A34 --o|include| A15
     A35[vitamins/jacks] --o|include| A5
@@ -102,7 +103,6 @@ graph TD
     A41 --o|use| A4
     A42 --o|include| A20
     A42 --o|include| A29
-    A42 --o|include| A28
     A42 --o|include| A24
     A42 --o|include| A25
     A42 --o|include| A27
@@ -116,6 +116,7 @@ graph TD
     A42 --o|include| A46[vitamins/trimpot]
     A42 --o|include| A47[vitamins/usbs]
     A42 --o|use| A6
+    A42 --o|use| A28
     A42 --o|use| A4
     A43 --o|include| A21
     A43 --o|include| A24
@@ -124,9 +125,9 @@ graph TD
     A43 --o|use| A18
     A16 --o|include| A24
     A48[vitamins/psus] --o|include| A29
-    A48 --o|include| A28
     A48 --o|include| A2
     A48 --o|include| A15
+    A48 --o|use| A28
     A48 --o|use| A4
     A48 --o|use| A18
     A49[foundation/quaternions]
@@ -136,20 +137,22 @@ graph TD
     A32 --o|use| A4
     A50[vitamins/sata-adapters] --o|include| A32
     A50 --o|use| A4
+    A15 --o|include| A22
     A15 --o|include| A2
     A15 --o|use| A5
     A15 --o|use| A3
     A15 --o|use| A28
     A15 --o|use| A4
+    A15 --o|use| A8
     A44 --o|use| A5
     A44 --o|use| A3
     A44 --o|use| A4
     A44 --o|use| A18
     A12 --o|include| A5
-    A12 --o|include| A28
     A12 --o|include| A2
     A12 --o|include| A14
     A12 --o|use| A17
+    A12 --o|use| A28
     A12 --o|use| A4
     A51[vitamins/spdts] --o|include| A10
     A51 --o|use| A5

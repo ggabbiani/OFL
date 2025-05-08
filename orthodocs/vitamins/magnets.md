@@ -41,7 +41,7 @@ __Default:__
 
 __Default:__
 
-    fl_Magnet(name="mag_M3_cs_d10x2",description="M3 countersink magnet d10x2mm 1.2kg",d=10,thick=2,cs=FL_CS_UNI_M3,csh=2,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B007UOXRY0/"],])
+    fl_Magnet(name="mag_M3_cs_d10x2",description="M3 countersink magnet d10x2mm 1.2kg",d=10,thick=2,cs=FL_CS_UNI_M3,csh=2,nop_screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B007UOXRY0/"],])
 
 ---
 
@@ -49,7 +49,7 @@ __Default:__
 
 __Default:__
 
-    fl_Magnet(name="mag_M3_cs_d10x5",description="M3 countersink magnet d10x5mm 2.0kg",d=10,thick=5,cs=FL_CS_UNI_M3,csh=3,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B001TOJESK/"],])
+    fl_Magnet(name="mag_M3_cs_d10x5",description="M3 countersink magnet d10x5mm 2.0kg",d=10,thick=5,cs=FL_CS_UNI_M3,csh=3,nop_screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B001TOJESK/"],])
 
 ---
 
@@ -57,7 +57,7 @@ __Default:__
 
 __Default:__
 
-    fl_Magnet(name="mag_M4_cs_d10x5",description="M4 countersink magnet d10x5mm",d=10,thick=5,cs=FL_CS_UNI_M4,csh=3,screw=M4_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B09QQJNYVN"],])
+    fl_Magnet(name="mag_M4_cs_d10x5",description="M4 countersink magnet d10x5mm",d=10,thick=5,cs=FL_CS_UNI_M4,csh=3,nop_screw=M4_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B09QQJNYVN"],])
 
 ---
 
@@ -65,7 +65,7 @@ __Default:__
 
 __Default:__
 
-    fl_Magnet(name="mag_M4_cs_d32x6",description="M4 countersink magnet d32x6mm 29.0kg",d=32,thick=6,cs=FL_CS_UNI_M3,csh=2,screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B07RQL2ZSS/"],])
+    fl_Magnet(name="mag_M4_cs_d32x6",description="M4 countersink magnet d32x6mm 29.0kg",d=32,thick=6,cs=FL_CS_UNI_M3,csh=2,nop_screw=M3_cs_cap_screw,vendors=[["Amazon","https://www.amazon.it/gp/product/B07RQL2ZSS/"],])
 
 ---
 
@@ -102,7 +102,7 @@ __Default:__
 __Syntax:__
 
 ```text
-fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors)
+fl_Magnet(name,description,d,thick,size,cs,csh,nop_screw,vendors)
 ```
 
 constructor
@@ -137,16 +137,6 @@ __Syntax:__
 fl_mag_d(type,value)
 ```
 
----
-
-### function fl_mag_engine
-
-__Syntax:__
-
-```text
-fl_mag_engine(type,value)
-```
-
 ## Modules
 
 ---
@@ -155,21 +145,19 @@ fl_mag_engine(type,value)
 
 __Syntax:__
 
-    fl_magnet(verbs=FL_ADD,type,screw,direction,octant)
+    fl_magnet(verbs=FL_ADD,type,nop_screw,direction,octant)
 
-Runtime environment:
+Context variables:
 
-| variable       | description                                       |
-| ----           | ---                                               |
-| $fl_tolerance  | modify the object size during FL_FOOTPRINT        |
-| $fl_thickness  | thickness for screws during FL_DRILL and FL_MOUNT |
+| Name           | Context   | Description
+| ----           | ---       | ---
+| $fl_tolerance  | Parameter | modify the object size during FL_FOOTPRINT
+| $fl_thickness  | Parameter | thickness for screws during FL_DRILL and FL_MOUNT
+| $mag_h         | Children  | magnet height
 
-Children environment:
-
-| variable | description   |
-| ----     | ---           |
-| $mag_h   | magnet height |
-
+TODO: the screw used during FL_MOUNT is built with a shaft length equal to
+the magnet height + $fl_thickness. A better solution would be to use an
+externally provided screw passed as a child.
 
 
 __Parameters:__
@@ -180,8 +168,8 @@ supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
 __type__  
 magnet object
 
-__screw__  
-nominal screw overloading
+__nop_screw__  
+nominal screw overloading from NopSCADlib specifications
 
 __direction__  
 desired direction [director,rotation], native direction when undef

@@ -6,20 +6,20 @@
 graph LR
     A1[vitamins/pcbs] --o|include| A2[foundation/components]
     A1 --o|include| A3[foundation/grid]
-    A1 --o|include| A4[foundation/hole]
-    A1 --o|include| A5[foundation/label]
-    A1 --o|include| A6[vitamins/ethers]
-    A1 --o|include| A7[vitamins/generic]
-    A1 --o|include| A8[vitamins/hdmi]
-    A1 --o|include| A9[vitamins/heatsinks]
-    A1 --o|include| A10[vitamins/jacks]
-    A1 --o|include| A11[vitamins/pin_headers]
-    A1 --o|include| A12[vitamins/screw]
-    A1 --o|include| A13[vitamins/sd]
-    A1 --o|include| A14[vitamins/switch]
-    A1 --o|include| A15[vitamins/trimpot]
-    A1 --o|include| A16[vitamins/usbs]
-    A1 --o|use| A17[dxf]
+    A1 --o|include| A4[foundation/label]
+    A1 --o|include| A5[vitamins/ethers]
+    A1 --o|include| A6[vitamins/generic]
+    A1 --o|include| A7[vitamins/hdmi]
+    A1 --o|include| A8[vitamins/heatsinks]
+    A1 --o|include| A9[vitamins/jacks]
+    A1 --o|include| A10[vitamins/pin_headers]
+    A1 --o|include| A11[vitamins/screw]
+    A1 --o|include| A12[vitamins/sd]
+    A1 --o|include| A13[vitamins/switch]
+    A1 --o|include| A14[vitamins/trimpot]
+    A1 --o|include| A15[vitamins/usbs]
+    A1 --o|use| A16[dxf]
+    A1 --o|use| A17[foundation/hole-engine]
     A1 --o|use| A18[foundation/mngm-engine]
 ```
 
@@ -64,7 +64,7 @@ __Default:__
 
 __Default:__
 
-    let(name="ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port",w=84,l=39,pcb_t=1.6,bare=[[-w/2,-l/2,-pcb_t],[+w/2,+l/2,0]],holes=[let(r=2)fl_Hole([-w/2+r+1,-l/2+r+2,0],2*r,+Z,pcb_t,loct=+Y),let(r=2)fl_Hole([+w/2-r-1,-l/2+r+2,0],2*r,+Z,pcb_t,loct=+Y),let(r=2)fl_Hole([-w/2+r+1,+l/2-r-2,0],2*r,+Z,pcb_t,loct=-Y),let(r=2)fl_Hole([+w/2-r-1,+l/2-r-2,0],2*r,+Z,pcb_t,loct=-Y),let(r=1.25)fl_Hole([-w/2+r+1,0,0],2*r,+Z,pcb_t,loct=+X,screw=M2p5_pan_screw),let(r=1.25)fl_Hole([+w/2-r-1,0,0],2*r,+Z,pcb_t,loct=-X,screw=M2p5_pan_screw),let(r=1.25)fl_Hole([-w/2+r+37.5+r,0,0],2*r,+Z,pcb_t,loct=+Y,screw=M2p5_pan_screw),],sz_A=fl_size(FL_USB_TYPE_Ax1),sz_uA=fl_size(FL_USB_TYPE_uA),tol=0.5,comps=[["USB3 IN",fl_Component(FL_USB_NS,[-w/2+13.5,+l/2-6,-(pcb_t+1)],[+Z,90],[+Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,0.5],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"OrangeRed"]])],["POWER IN",fl_Component(FL_USB_NS,[+w/2-10,+l/2-sz_uA.x/2+0.5,0],[+Z,90],[+Y],FL_USB_TYPE_uA_NF,[[FL_COMP_DRIFT,-0.5]])],["USB3-1",fl_Component(FL_USB_NS,[+w/2-(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],["USB3-2",fl_Component(FL_USB_NS,[+w/2-(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],["USB3-3",fl_Component(FL_USB_NS,[-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],["USB3-4",fl_Component(FL_USB_NS,[-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],],vendors=[["Amazon","https://www.amazon.it/gp/product/B07VQLXCTB"]])fl_PCB(name,bare,pcb_t,"DarkCyan",1,undef,holes,comps,undef,M3_cap_screw,vendors=vendors)
+    let(name="ORICO 4 Ports USB 3.0 Hub 5 Gbps with external power supply port",w=84,l=39,pcb_t=1.6,bare=[[-w/2,-l/2,-pcb_t],[+w/2,+l/2,0]],holes=[let(r=2)fl_Hole([-w/2+r+1,-l/2+r+2,0],2*r,+Z,pcb_t,loct=+Y),let(r=2)fl_Hole([+w/2-r-1,-l/2+r+2,0],2*r,+Z,pcb_t,loct=+Y),let(r=2)fl_Hole([-w/2+r+1,+l/2-r-2,0],2*r,+Z,pcb_t,loct=-Y),let(r=2)fl_Hole([+w/2-r-1,+l/2-r-2,0],2*r,+Z,pcb_t,loct=-Y),let(r=1.25)fl_Hole([-w/2+r+1,0,0],2*r,+Z,pcb_t,loct=+X,nop_screw=M2p5_pan_screw),let(r=1.25)fl_Hole([+w/2-r-1,0,0],2*r,+Z,pcb_t,loct=-X,nop_screw=M2p5_pan_screw),let(r=1.25)fl_Hole([-w/2+r+37.5+r,0,0],2*r,+Z,pcb_t,loct=+Y,nop_screw=M2p5_pan_screw),],sz_A=fl_size(FL_USB_TYPE_Ax1),sz_uA=fl_size(FL_USB_TYPE_uA),tol=0.5,comps=[["USB3 IN",fl_Component(FL_USB_NS,[-w/2+13.5,+l/2-6,-(pcb_t+1)],[+Z,90],[+Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,0.5],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"OrangeRed"]])],["POWER IN",fl_Component(FL_USB_NS,[+w/2-10,+l/2-sz_uA.x/2+0.5,0],[+Z,90],[+Y],FL_USB_TYPE_uA_NF,[[FL_COMP_DRIFT,-0.5]])],["USB3-1",fl_Component(FL_USB_NS,[+w/2-(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],["USB3-2",fl_Component(FL_USB_NS,[+w/2-(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],["USB3-3",fl_Component(FL_USB_NS,[-w/2+(6+3*tol+3/2*sz_A.y+5),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],["USB3-4",fl_Component(FL_USB_NS,[-w/2+(6+tol+sz_A.y/2),-l/2+6,-(pcb_t+1)],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF,[[FL_COMP_SUB,tol],[FL_COMP_DRIFT,-2.5],[FL_COMP_COLOR,"DodgerBlue"]])],],vendors=[["Amazon","https://www.amazon.it/gp/product/B07VQLXCTB"]])fl_PCB(name,bare,pcb_t,"DarkCyan",1,undef,holes,comps,undef,M3_cap_screw,vendors=vendors)
 
 ---
 
@@ -142,7 +142,7 @@ performing FL_CUTOUT:
 
 __Default:__
 
-    let(pcb_t=1.6,size=[65,30,pcb_t],bare=[[0,0,-pcb_t],[size.x,size.y,0]],hole_d=2.75,holes=[fl_Hole([3.5,size.y-3.5,0],hole_d,+Z,pcb_t,loct=-Y),fl_Hole([size.x-3.5,size.y-3.5,0],hole_d,+Z,pcb_t,loct=-Y),fl_Hole([size.x-3.5,3.5,0],hole_d,+Z,pcb_t,loct=+Y),],comps=[["RF IN",fl_Component(FL_JACK_NS,[0,15,0],[+Z,-90],[-X],FL_JACK_MCXJPHSTEM1)],["GPIO",fl_Component(FL_PHDR_NS,[32.5,size.y-3.5,0],[+Z,0],[+Z],FL_PHDR_GPIOHDR_F_SMT_LOW)],],vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],gpio_conn_pos=fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),rf_conn_pos=fl_conn_pos(fl_comp_connectors(comps[0][1])[0]),connectors=[conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t],octant=+X+Y,direction=[-Z,180]),conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4],octant=+X+Y,direction=[-Z,0]),conn_Socket("antenna",-Z,+Y,rf_conn_pos,octant=+X+Y,direction=[-Z,-90]),])fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,dxf="vitamins/tv-hat.dxf",screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,connectors=connectors)
+    let(pcb_t=1.6,size=[65,30,pcb_t],bare=[[0,0,-pcb_t],[size.x,size.y,0]],hole_d=2.75,holes=[fl_Hole([3.5,size.y-3.5,0],hole_d,+Z,pcb_t,loct=-Y),fl_Hole([size.x-3.5,size.y-3.5,0],hole_d,+Z,pcb_t,loct=-Y),fl_Hole([size.x-3.5,3.5,0],hole_d,+Z,pcb_t,loct=+Y),],comps=[["RF IN",fl_Component(FL_JACK_NS,[0,15,0],[+Z,-90],[-X],FL_JACK_MCXJPHSTEM1)],["GPIO",fl_Component(FL_PHDR_NS,[32.5,size.y-3.5,0],[+Z,0],[+Z],FL_PHDR_GPIOHDR_F_SMT_LOW)],],vendors=[["Amazon","https://www.amazon.it/gp/product/B07JKH36VR"]],gpio_conn_pos=fl_conn_pos(fl_comp_connectors(comps[1][1])[1]),rf_conn_pos=fl_conn_pos(fl_comp_connectors(comps[0][1])[0]),connectors=[conn_Socket(fl_phdr_cid(2p54header,[20,2]),+X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,-pcb_t],octant=+X+Y,direction=[-Z,180]),conn_Socket(fl_phdr_cid(2p54header,[20,2]),-X,+Y,[gpio_conn_pos.x,gpio_conn_pos.y,4],octant=+X+Y,direction=[-Z,0]),conn_Socket("antenna",-Z,+Y,rf_conn_pos,octant=+X+Y,direction=[-Z,-90]),])fl_PCB("Raspberry PI uHAT",bare,pcb_t,"green",radius=3,dxf="vitamins/tv-hat.dxf",nop_screw=M2p5_cap_screw,holes=holes,components=comps,vendors=vendors,connectors=connectors)
 
 PCB RF cutout taken from https://www.rfconnector.com/mcx/edge-mount-jack-pcb-connector
 
@@ -160,7 +160,7 @@ The following labels can be passed as **components** parameter to [fl_pcb{}](#mo
 
 __Default:__
 
-    let(screw=M2_cap_screw,d=screw_radius(screw)*2,pcb_t=1,comps=[["USB 2.0 900mA",fl_Component(FL_USB_NS,[0.63,-47.6,1.2],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]])],["USB-C",fl_Component(FL_USB_NS,[19,-48-2.15,0],[+Z,-90],[-Y],FL_USB_TYPE_C,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]])],["HDMI0",fl_Component(FL_HDMI_NS,[31,-45.3-0.2,1.1],[+Z,-90],[-Y],FL_HDMI_TYPE_A,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]])],["uSD",fl_Component(FL_SD_NS,[(31+fl_bb_size(FL_HDMI_TYPE_A).y/2-fl_bb_size(FL_SD_MOLEX_uSD_SOCKET).x/2),-44.5,-pcb_t],[-Z,0],[-Y],FL_SD_MOLEX_uSD_SOCKET,[[FL_COMP_OCTANT,-X-Y+Z],[FL_COMP_DRIFT,0*2]])],["ETHERNET",fl_Component(FL_ETHER_NS,[48.6+7.2,-44.9-11.1,0],[+Z,-90],[-Y],FL_ETHER_RJ45_SM,[[FL_COMP_DRIFT,-2*FL_ETHER_FRAME_T]])],["USB 2.0 500mA",fl_Component(FL_USB_NS,[68.23,-47.6,1.2],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]])],["POWER",fl_Component(FL_SWT_NS,[3.02,-9.96,0],[+Z,180],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5,[[FL_COMP_OCTANT,+X+Y+Z]])],["FUNCTION",fl_Component(FL_SWT_NS,[3.02,-19.99,0],[+Z,180],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5,[[FL_COMP_OCTANT,+X+Y+Z]])],["RESET",fl_Component(FL_SWT_NS,[3.02,-30.02,0],[+Z,180],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5,[[FL_COMP_OCTANT,+X+Y+Z]])],["GPIO",fl_Component(FL_PHDR_NS,[31.5,-3.2,0],[+Z,0],[+Z],FL_PHDR_GPIOHDR)],["LEDS",fl_Component(FL_GENERIC_NS,[73.3,-3.65,0],[+Z,0],[+Y],fl_generic_Vitamin(bbox=[O,[2,3.5,1]],cut_directions=[+Y]))],["2-CH INFRA",fl_Component(FL_GENERIC_NS,[65.5,-3.04,0],[+Z,0],[+Y],fl_generic_Vitamin(bbox=[O,[6.8,3,3.5]],cut_directions=[+Y]))],["HEAT SINK",fl_Component(FL_HS_NS,[0.5,-0.5,0],[+Z,0],[+Z],FL_HS_KHADAS,[[FL_COMP_OCTANT,+X-Y+Z]])],],gpio_c=fl_comp_connectors(comps[9][1])[0],conns=[fl_conn_clone(gpio_c,type="plug",direction=[+Z,-90],octant=-X-Y),])fl_PCB("KHADAS-SBC-VIM1",[[0,-56,-1],[82,0,0]],thick=pcb_t,holes=[fl_Hole([2.5,-2.5,0],d,+Z,pcb_t),fl_Hole([79.5,-2.5,0],d,+Z,pcb_t),fl_Hole([16.5,-48,0],d,+Z,pcb_t),fl_Hole([65.5,-48,0],d,+Z,pcb_t),],components=comps,screw=screw,dxf="vitamins/vim1.dxf",color="DarkOliveGreen",connectors=conns)
+    let(screw=M2_cap_screw,d=screw_radius(screw)*2,pcb_t=1,comps=[["USB 2.0 900mA",fl_Component(FL_USB_NS,[0.63,-47.6,1.2],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]])],["USB-C",fl_Component(FL_USB_NS,[19,-48-2.15,0],[+Z,-90],[-Y],FL_USB_TYPE_C,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]])],["HDMI0",fl_Component(FL_HDMI_NS,[31,-45.3-0.2,1.1],[+Z,-90],[-Y],FL_HDMI_TYPE_A,[[FL_COMP_DRIFT,-1.5],[FL_COMP_OCTANT,+X+Y+Z]])],["uSD",fl_Component(FL_SD_NS,[(31+fl_bb_size(FL_HDMI_TYPE_A).y/2-fl_bb_size(FL_SD_MOLEX_uSD_SOCKET).x/2),-44.5,-pcb_t],[-Z,0],[-Y],FL_SD_MOLEX_uSD_SOCKET,[[FL_COMP_OCTANT,-X-Y+Z],[FL_COMP_DRIFT,0*2]])],["ETHERNET",fl_Component(FL_ETHER_NS,[48.6+7.2,-44.9-11.1,0],[+Z,-90],[-Y],FL_ETHER_RJ45_SM,[[FL_COMP_DRIFT,-2*FL_ETHER_FRAME_T]])],["USB 2.0 500mA",fl_Component(FL_USB_NS,[68.23,-47.6,1.2],[+Z,-90],[-Y],FL_USB_TYPE_Ax1_NF_SM,[[FL_COMP_DRIFT,-2],[FL_COMP_COLOR,fl_grey(30)],[FL_COMP_OCTANT,+X+Y+Z]])],["POWER",fl_Component(FL_SWT_NS,[3.02,-9.96,0],[+Z,180],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5,[[FL_COMP_OCTANT,+X+Y+Z]])],["FUNCTION",fl_Component(FL_SWT_NS,[3.02,-19.99,0],[+Z,180],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5,[[FL_COMP_OCTANT,+X+Y+Z]])],["RESET",fl_Component(FL_SWT_NS,[3.02,-30.02,0],[+Z,180],[-X],FL_SWT_USWITCH_7p2x3p4x3x2p5,[[FL_COMP_OCTANT,+X+Y+Z]])],["GPIO",fl_Component(FL_PHDR_NS,[31.5,-3.2,0],[+Z,0],[+Z],FL_PHDR_GPIOHDR)],["LEDS",fl_Component(FL_GENERIC_NS,[73.3,-3.65,0],[+Z,0],[+Y],fl_generic_Vitamin(bbox=[O,[2,3.5,1]],cut_directions=[+Y]))],["2-CH INFRA",fl_Component(FL_GENERIC_NS,[65.5,-3.04,0],[+Z,0],[+Y],fl_generic_Vitamin(bbox=[O,[6.8,3,3.5]],cut_directions=[+Y]))],["HEAT SINK",fl_Component(FL_HS_NS,[0.5,-0.5,0],[+Z,0],[+Z],FL_HS_KHADAS,[[FL_COMP_OCTANT,+X-Y+Z]])],],gpio_c=fl_comp_connectors(comps[9][1])[0],conns=[fl_conn_clone(gpio_c,type="plug",direction=[+Z,-90],octant=-X-Y),])fl_PCB("KHADAS-SBC-VIM1",[[0,-56,-1],[82,0,0]],thick=pcb_t,holes=[fl_Hole([2.5,-2.5,0],d,+Z,pcb_t),fl_Hole([79.5,-2.5,0],d,+Z,pcb_t),fl_Hole([16.5,-48,0],d,+Z,pcb_t),fl_Hole([65.5,-48,0],d,+Z,pcb_t),],components=comps,nop_screw=screw,dxf="vitamins/vim1.dxf",color="DarkOliveGreen",connectors=conns)
 
 ## Functions
 
@@ -171,7 +171,7 @@ __Default:__
 __Syntax:__
 
 ```text
-fl_PCB(name,bare,thick=1.6,color="green",radius=0,payload,holes=[],components,grid,screw,dxf,vendors,connectors,director=+Z,rotor=+X)
+fl_PCB(name,bare,thick=1.6,color="green",radius=0,payload,holes=[],components,grid,nop_screw,dxf,vendors,connectors,director=+Z,rotor=+X)
 ```
 
 base constructor
@@ -199,7 +199,7 @@ When passed it concurs in pcb's bounding box calculations
 
 
 __holes__  
-each row represents a hole as returned from [fl_Hole()](../foundation/hole.md#function-fl_hole)
+each row represents a hole as returned from [fl_Hole()](../foundation/hole-engine.md#function-fl_hole)
 
 
 __components__  
@@ -408,7 +408,7 @@ fl_pcb_layoutArray(type,value)
 ```
 
 Translation matrices used during children() layout as returned by
-[fl_lay_holes()](../foundation/hole.md#function-fl_lay_holes).
+[fl_lay_holes()](../foundation/hole-engine.md#function-fl_lay_holes).
 
 TODO: remove if unused
 
@@ -474,7 +474,7 @@ __Children context:__
 
 | Name           | Description                         |
 | ---            | ---                                 |
-| Hole context   | see [fl_hole_Context{}](../foundation/hole.md#module-fl_hole_context) for details   |
+| Hole context   | see [fl_hole_Context{}](../foundation/hole-engine.md#module-fl_hole_context) for details   |
 | $pcb_radius    | pcb radius                          |
 | $pcb_thick     | pcb thickness                       |
 | $pcb_verb      | pcb invoked verb                    |

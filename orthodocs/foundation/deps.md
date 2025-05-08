@@ -18,7 +18,7 @@ graph TD
     A13 --o|use| A3
     A14[foundation/fillet] --o|include| A5
     A15[foundation/grid] --o|include| A5
-    A16[foundation/hole] --o|include| A17[foundation/label]
+    A16[foundation/hole-engine] --o|include| A17[foundation/label]
     A17 --o|include| A5
     A18[foundation/limits] --o|include| A9
     A4 --o|include| A2
