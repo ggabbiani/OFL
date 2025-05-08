@@ -135,6 +135,9 @@ FL_MAG_DICT = [
  * | $fl_thickness  | Parameter | thickness for screws during FL_DRILL and FL_MOUNT
  * | $mag_h         | Children  | magnet height
  *
+ * TODO: the screw used during FL_MOUNT is built with a shaft length equal to
+ * the magnet height + $fl_thickness. A better solution would be to use an
+ * externally provided screw passed as a child.
  */
 module fl_magnet(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
@@ -160,8 +163,6 @@ module fl_magnet(
   nop_screw     = nop_screw ? nop_screw : fl_screw_specs(type);
   screw_shaft   = h+fl_parm_thickness();
   screw         = nop_screw ? fl_Screw(nop_screw,screw_shaft) : undef;
-  screw_len     = screw ? screw_longer_than(h)   : undef;
-  screw_d       = screw ? fl_nominal(screw)  : undef;
   h_cs          = cs ? fl_mag_csH(type)       : undef;
   cs_offset     = h_cs ? h-h_cs : undef;
   screw_offset  = nop_screw ? h-(h_cs-screw_socket_af(nop_screw)) : undef;
