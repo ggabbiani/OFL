@@ -27,7 +27,7 @@ $fl_polyround  = true;
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES        = -2;     // [-2:10]
 DEBUG_ASSERTIONS  = false;
 DEBUG_COMPONENTS  = ["none"];
 DEBUG_COLOR       = false;
@@ -122,16 +122,14 @@ fl_status();
 
 $vpr  = fl_view(VIEW_TYPE);
 
-verbs = fl_verbList([
-  FL_ADD,
-  FL_AXES,
-  FL_BBOX,
-  FL_CUTOUT,
-  FL_FOOTPRINT,
-]);
+verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT]);
 
 function fl_custom_num(value) =
-  value=="undef" ? undef : is_num(value) ? value : assert(is_string(value),value) fl_atof(value);
+  value=="undef" ?
+    undef :
+    is_num(value) ?
+      value :
+      assert(is_string(value),value) fl_atof(value);
 
 fillet  = fl_custom_num(JOINT_FILLET);
 
