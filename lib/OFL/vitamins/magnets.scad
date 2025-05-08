@@ -24,36 +24,32 @@ FL_MAG_NS  = "mag";
 function fl_mag_d(type,value)       = fl_property(type,"mag/diameter",value);
 function fl_mag_csH(type,value)     = fl_property(type,"mag/counter sink height",value);
 function fl_mag_cs(type,value)      = fl_property(type,"mag/counter sink type",value);
-function fl_mag_engine(type,value)  = fl_property(type,"mag/__internal engine type__",value);
 
 //*****************************************************************************
 //! constructor
-function fl_Magnet(name,description,d,thick,size,cs,csh,screw,vendors) =
+function fl_Magnet(name,description,d,thick,size,cs,csh,nop_screw,vendors) =
   assert(thick!=undef || size!=undef)
+  assert(!nop_screw || !fl_native(nop_screw))
   let(
-    engine  = d!=undef ? "cyl" : "quad",
-    bbox    = engine=="cyl"
+    engine  = str(FL_MAG_NS,"/", d!=undef ? "cyl" : "quad"),
+    bbox    = engine==str(FL_MAG_NS,"/", "cyl")
               ? assert(size==undef) assert(thick!=undef) fl_bb_cylinder(d=d,h=thick)
               : assert(size!=undef) [[-size.x/2,-size.y/2,0],[size.x/2,size.y/2,size.z]]
-  ) [
-    fl_name(value=name),
-    fl_description(value=description),
-    fl_mag_engine(value=engine),
-    if (engine=="cyl") fl_mag_d(value=d),
+  ) fl_Object(bbox,name=name,description=description,engine=engine,others = [
+    if (engine==fl_Engine("cyl",FL_MAG_NS)) fl_mag_d(value=d),
     fl_mag_cs(value=cs),
     if (cs!=undef) fl_mag_csH(value=csh),
     fl_material(value=grey(80)),
-    fl_screw(value=screw),
-    fl_bb_corners(value=bbox),
+    fl_screw_specs(value=nop_screw),
     fl_vendor(value=vendors),
-  ];
+  ]);
 
 FL_MAG_M3_CS_D10x2 = fl_Magnet(
   name        = "mag_M3_cs_d10x2",
   description = "M3 countersink magnet d10x2mm 1.2kg",
   d           = 10, thick = 2,
   cs          = FL_CS_UNI_M3, csh = 2,
-  screw       = M3_cs_cap_screw,
+  nop_screw   = M3_cs_cap_screw,
   vendors     = [
       ["Amazon", "https://www.amazon.it/gp/product/B007UOXRY0/"],
     ]
@@ -73,7 +69,7 @@ FL_MAG_M3_CS_D10x5 = fl_Magnet(
   description = "M3 countersink magnet d10x5mm 2.0kg",
   d           = 10, thick = 5,
   cs          = FL_CS_UNI_M3, csh = 3,
-  screw       = M3_cs_cap_screw,
+  nop_screw   = M3_cs_cap_screw,
   vendors     = [
       ["Amazon", "https://www.amazon.it/gp/product/B001TOJESK/"],
     ]
@@ -84,7 +80,7 @@ FL_MAG_M4_CS_D10x5 = fl_Magnet(
   description = "M4 countersink magnet d10x5mm",
   d           = 10, thick = 5,
   cs          = FL_CS_UNI_M4, csh = 3,
-  screw       = M4_cs_cap_screw,
+  nop_screw   = M4_cs_cap_screw,
   vendors     = [
       ["Amazon", "https://www.amazon.it/gp/product/B09QQJNYVN"],
     ]
@@ -96,7 +92,7 @@ FL_MAG_M4_CS_D32x6  = fl_Magnet(
   d           = 32, // actual: 31.89 31.89 31.92 31.88 31.88 31.81 31.88 31.88  ⇒ average: 31.88mm ±0.04mm
   thick       = 6,
   cs          = FL_CS_UNI_M3, csh = 2,
-  screw       = M3_cs_cap_screw,
+  nop_screw   = M3_cs_cap_screw,
   vendors     = [
       ["Amazon", "https://www.amazon.it/gp/product/B07RQL2ZSS/"],
     ]
@@ -131,18 +127,13 @@ FL_MAG_DICT = [
 ];
 
 /*!
- * Runtime environment:
+ * Context variables:
  *
- * | variable       | description                                       |
- * | ----           | ---                                               |
- * | $fl_tolerance  | modify the object size during FL_FOOTPRINT        |
- * | $fl_thickness  | thickness for screws during FL_DRILL and FL_MOUNT |
- *
- * Children environment:
- *
- * | variable | description   |
- * | ----     | ---           |
- * | $mag_h   | magnet height |
+ * | Name           | Context   | Description
+ * | ----           | ---       | ---
+ * | $fl_tolerance  | Parameter | modify the object size during FL_FOOTPRINT
+ * | $fl_thickness  | Parameter | thickness for screws during FL_DRILL and FL_MOUNT
+ * | $mag_h         | Children  | magnet height
  *
  */
 module fl_magnet(
@@ -150,8 +141,8 @@ module fl_magnet(
   verbs       = FL_ADD,
   //! magnet object
   type,
-  //! nominal screw overloading
-  screw,
+  //! nominal screw overloading from NopSCADlib specifications
+  nop_screw,
   //! desired direction [director,rotation], native direction when undef
   direction,
   //! when undef native positioning is used (+Z)
@@ -160,16 +151,20 @@ module fl_magnet(
   assert(verbs!=undef);
   assert(type!=undef);
 
-  engine        = fl_mag_engine(type);
+  cyl_engine    = str(FL_MAG_NS,"/","cyl");
+  quad_engine   = str(FL_MAG_NS,"/","quad");
+  engine        = fl_engine(type);
   cs            = fl_mag_cs(type);
   color         = fl_material(type);
   h             = fl_thick(type);
-  screw         = screw ? screw : fl_screw(type);
-  screw_len     = screw!=undef  ? screw_longer_than(h)   : undef;
-  screw_d       = screw!=undef  ? 2*screw_radius(screw)  : undef;
-  h_cs          = cs!=undef     ? fl_mag_csH(type)       : undef;
-  cs_offset     = h_cs!=undef   ? h-h_cs : undef;
-  screw_offset  = screw!=undef  ? h-(h_cs-screw_socket_af(screw)) : undef;
+  nop_screw     = nop_screw ? nop_screw : fl_screw_specs(type);
+  screw_shaft   = h+fl_parm_thickness();
+  screw         = nop_screw ? fl_Screw(nop_screw,screw_shaft) : undef;
+  screw_len     = screw ? screw_longer_than(h)   : undef;
+  screw_d       = screw ? fl_nominal(screw)  : undef;
+  h_cs          = cs ? fl_mag_csH(type)       : undef;
+  cs_offset     = h_cs ? h-h_cs : undef;
+  screw_offset  = nop_screw ? h-(h_cs-screw_socket_af(nop_screw)) : undef;
   bbox          = fl_bb_corners(type);
   name          = fl_name(type);
   Mscrew        = T(+Z(h));
@@ -217,15 +212,15 @@ module fl_magnet(
         fl_color("silver") fl_cube(size=$this_size,octant=+Z);
       }
 
-      if (engine=="cyl") cyl_engine();
-      else if (engine=="quad") quad_engine();
+      if (engine==cyl_engine) cyl_engine();
+      else if (engine==quad_engine) quad_engine();
       else assert(false,str("Unknown engine '",engine,"'."));
     }
 
     module do_footprint() {
       translate(-Z(tolerance_z)) let($FL_ADD=$FL_FOOTPRINT)
-        if      (engine=="cyl"  ) let(d = fl_mag_d(type)) fl_cylinder(d=d+2*(tolerance_xy+NIL), h=h+2*(tolerance_z+NIL),octant=+Z);
-        else if (engine=="quad" ) fl_cube(size=$this_size+[tolerance_xy,tolerance_xy,2*tolerance_z],octant=+Z);
+        if      (engine==cyl_engine  ) let(d = fl_mag_d(type)) fl_cylinder(d=d+2*(tolerance_xy+NIL), h=h+2*(tolerance_z+NIL),octant=+Z);
+        else if (engine==quad_engine ) fl_cube(size=$this_size+[tolerance_xy,tolerance_xy,2*tolerance_z],octant=+Z);
     }
 
     module do_layout() let($mag_h=h)
@@ -238,25 +233,24 @@ module fl_magnet(
     tolerance_z   = is_list($fl_tolerance) ? $fl_tolerance[1] : $fl_tolerance;
 
     if ($verb==FL_ADD) {
-        fl_modifier($modifier) do_add();
+      do_add();
 
     } else if ($verb==FL_BBOX) {
-      fl_modifier($modifier) fl_bb_add($this_bbox, auto=true);
+      fl_bb_add($this_bbox);
 
     } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier)
-        do_layout() children();
+      do_layout() children();
 
     } else if ($verb==FL_FOOTPRINT) {
-      fl_modifier($modifier) do_footprint();
+      do_footprint();
 
     } else if ($verb==FL_MOUNT) {
-      fl_modifier($modifier)
-        do_layout() fl_screw(type=screw,$fl_thickness=screw_thick);
+      do_layout()
+        fl_screw(type=screw,$fl_thickness=screw_shaft,$FL_ADD=$FL_MOUNT);
 
     } else if ($verb==FL_DRILL) {
-      fl_modifier($modifier)
-        do_layout() fl_screw(FL_DRILL,screw,$fl_thickness=screw_thick);
+      do_layout()
+        fl_screw(FL_DRILL,screw,$fl_thickness=screw_shaft);
 
     } else {
       fl_error(["unimplemented verb",$this_verb]);

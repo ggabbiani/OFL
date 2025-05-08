@@ -8,6 +8,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 include <label.scad>
+include <../vitamins/screw.scad>
 
 //*****************************************************************************
 // Hole properties
@@ -18,7 +19,6 @@ function fl_hole_n(hole,value)              = fl_property(hole,"hole/normal",val
 function fl_hole_pos(hole,value)            = fl_property(hole,"hole/position",value);
 function fl_hole_ldir(hole,value)           = fl_optProperty(hole,"hole/label [direction,rotation]",value);
 function fl_hole_loct(hole,value)           = fl_optProperty(hole,"hole/label octant",value);
-function fl_hole_screw(hole,value,default)  = fl_optProperty(hole,"hole/screw",value,default);
 
 //**** type traits ************************************************************
 
@@ -36,7 +36,7 @@ function fl_tt_isHole(hole) = let(
     depth = fl_hole_depth(hole),
     ldir  = fl_hole_ldir(hole),
     loct  = fl_hole_loct(hole),
-    screw = fl_hole_screw(hole)
+    screw = fl_screw_specs(hole)
   ) fl_tt_isPointNormal([3d,n])
   && is_num(d)
   && is_num(depth)
@@ -52,7 +52,7 @@ function fl_Hole(
   position,
   //! hole diameter
   d,
-  //! normal vector __exiting__ the surface being drilled
+  //! normal vector __exiting__ the hole origin
   normal  = +Z,
   //! when depth is null hole is pass-through
   depth = 0,
@@ -60,9 +60,15 @@ function fl_Hole(
   ldir,
   //! OPTIONAL label octant
   loct,
-  //! OPTIONAL screw
-  screw
-) = let(
+  /*!
+   * OPTIONAL full screw specifications as returned from fl_screw_specs() property.
+   *
+   * **NOTE:** this is a NopSCADlib object.
+   *
+   * TODO: rename as screw_specs
+   */
+  nop_screw
+) = assert(!nop_screw || !fl_native(nop_screw)) let(
     hole  = assert(fl_tt_isPointNormal([position,normal]),[position,normal]) [
       fl_hole_pos(value=position),
       fl_hole_n(value=normal),
@@ -70,7 +76,7 @@ function fl_Hole(
       assert(is_num(depth)) fl_hole_depth(value=depth),
       if (ldir) fl_hole_ldir(value=ldir),
       if (loct) fl_hole_loct(value=loct),
-      if (screw) fl_hole_screw(value=screw),
+      fl_screw_specs(value=nop_screw),
     ]
   ) hole;
 
@@ -105,7 +111,7 @@ module fl_hole_Context(
   $hole_direction = [$hole_n,0];
   $hole_d         = fl_hole_d(hole);
   $hole_depth     = let(depth=fl_hole_depth(hole)) depth ? depth : thick;
-  $hole_screw     = fl_hole_screw(hole,default=screw);
+  $hole_screw     = fl_screw_specs(hole,default=screw);
   $hole_label     = is_num(ordinal) ? str("H",ordinal) : undef;
   $hole_ldir      = fl_hole_ldir(hole);
   $hole_loct      = fl_hole_loct(hole);

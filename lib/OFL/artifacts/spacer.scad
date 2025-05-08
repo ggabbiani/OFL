@@ -7,11 +7,11 @@
  */
 
 include <../foundation/3d-engine.scad>
-include <../foundation/hole.scad>
 include <../foundation/unsafe_defs.scad>
 include <../vitamins/knurl_nuts.scad>
 
 use <../foundation/fillet.scad>
+use <../foundation/hole-engine.scad>
 use <../foundation/mngm-engine.scad>
 
 //! namespace for spacer objects
@@ -71,15 +71,15 @@ function fl_Spacer(
   h     = max(h_min,kn_h)
 ) assert(d && h,"***OFL ERROR***: missing «h» or «d» parameters or «knut» and «screw_size» constrains")
   assert(!screw_size||d>screw_size,"***OFL ERROR***: minimum external ⌀ must be greater than screw size")
-  [
-  fl_OFL(value=true),
-  fl_name(value=str("Spacer ",d,"mm ⌀ x ",h,"mm length")),
-  fl_bb_corners(value=fl_bb_cylinder(h,d=d)),
-  fl_spc_d(value=d),
-  fl_spc_h(value=h),
-  if (screw_size) fl_spc_nominalScrew(value=screw_size),
-  if (knut) fl_spc_knut(value=knut),
-];
+  fl_Object(fl_bb_cylinder(h,d=d),
+    name  = str("Spacer ",d,"mm ⌀ x ",h,"mm length"),
+    others = [
+      fl_spc_d(value=d),
+      fl_spc_h(value=h),
+      if (screw_size) fl_spc_nominalScrew(value=screw_size),
+      if (knut) fl_spc_knut(value=knut),
+    ]
+  );
 
 /*!
  * Context variables:
@@ -138,7 +138,7 @@ module fl_spacer(
   direction
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(spacer && fl_OFL(spacer),spacer);
+  assert(spacer && fl_native(spacer),spacer);
 
   r         = fl_spc_d(spacer)/2;
   h         = fl_spc_h(spacer);

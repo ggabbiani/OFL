@@ -599,19 +599,16 @@ function fl_material(type,value,default)
                                     = fl_property(type,"material (actually a color)",value,default);
 function fl_name(type,value)        = fl_property(type,"name",value);
 /*!
- * TODO: duplicate of fl_OFL()?!
+ * When present and true indicates the object is an OFL one.
+ *
+ * **NOTE:** true for all the objects created by the OFL library. When used as a
+ * getter on OFL alien objects it returns 'false'.
  */
 function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,type!=undef?false:undef);
 function fl_nominal(type,value)     = fl_property(type,"Nominal property for «type»",value);
 //! Verbatim NopSCADlib definition
 function fl_nopSCADlib(type,value,default)
                                     = fl_property(type,"Verbatim NopSCADlib definition",value,default);
-/*!
- * when present and true indicates the object is an OFL one
- *
- * TODO: duplicate of fl_native()?!
- */
-function fl_OFL(type,value,default) = fl_property(type,"Naturally born OFL",value,default);
 function fl_pcb(type,value)         = fl_property(type,"embedded OFL pcb",value);
 //! pay-load bounding box, it contributes to the overall bounding box calculation
 function fl_payload(type,value)     = fl_property(type,"payload bounding box",value);
@@ -1223,7 +1220,7 @@ function fl_list_min(
 
 //! strips duplicates from a «dict»
 function fl_list_unique(dict) =
-  len(dict)==1 ? dict : let(
+  len(dict)<2 ? dict : let(
     // this lambda isolates the first list element (head) from the rest
     split     = function (list) let(
       len = len(list)
@@ -1823,3 +1820,20 @@ function fl_debug() = fl_dbg_dimensions()
   || fl_dbg_labels()
   || (is_undef($dbg_Components) ? false : len($dbg_Components)>0 && $dbg_Components[0]!="none")
   || fl_dbg_assert();
+
+//**** Engine name management *************************************************
+
+/*!
+ * True if the «type» engine is a sub domain of «engine».
+ *
+ * Example: if «type» has the fl_engine() attribute set to "jack/barrel", the
+ * following code
+ *
+ *     fl_chkEngineDomain(type,"jack")
+ *
+ * will return true.
+ */
+function fl_chkEngineDomain(type,engine)  = fl_substr(fl_engine(type),len=len(engine))==engine;
+//! Engine name constructor.
+function fl_Engine(engine,domain)         = domain ? str(domain,"/",engine) : engine;
+

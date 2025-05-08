@@ -13,7 +13,7 @@ include <../foundation/core.scad>
 use <../foundation/2d-engine.scad>
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
-use <../foundation/hole.scad>
+use <../foundation/hole-engine.scad>
 use <../foundation/mngm-engine.scad>
 
 FL_GENERIC_NS = "GENERIC";

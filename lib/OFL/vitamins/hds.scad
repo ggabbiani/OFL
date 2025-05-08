@@ -9,10 +9,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-include <../foundation/hole.scad>
-use <../foundation/mngm-engine.scad>
 include <sata.scad>
 include <screw.scad>
+
+use <../foundation/hole-engine.scad>
+use <../foundation/mngm-engine.scad>
 
 include <../../ext/NopSCADlib/core.scad>
 include <../../ext/NopSCADlib/vitamins/screws.scad>
@@ -23,8 +24,8 @@ FL_HD_EVO860 = let(
   size    = [69.85,100,7],
   plug    = FL_SATA_POWERDATAPLUG,
   cid     = fl_sata_powerDataCID(),
-  screw   = M3_cs_cap_screw,
-  screw_r = screw_radius(screw),
+  specs   = M3_cs_cap_screw,
+  screw_r = screw_radius(specs),
 
   Mpd     = T(-X(4.8)-Z(NIL)) * fl_direction([-Y,0]) * fl_octant(+Y-Z,type=plug),
 
@@ -41,7 +42,7 @@ FL_HD_EVO860 = let(
   others  = [
     ["offset",            [0,-size.y/2,-size.z/2]],
     ["corner radius",     3],
-    fl_screw(value=screw),
+    fl_screw_specs(value=specs),
     fl_sata_plug(value=plug),
     fl_connectors(value=[pc,dc]),
 
@@ -114,8 +115,8 @@ module fl_hd(
     is_num($fl_thickness) ?
       [[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness]] :
       assert(is_list($fl_thickness)) $fl_thickness;
-  screw       = fl_screw(type);
-  screw_r     = screw_radius(screw);
+  specs       = fl_screw_specs(type);
+  screw_r     = screw_radius(specs);
   corner_r    = fl_get(type,"corner radius");
   size        = fl_size(type);
   conns       = fl_connectors(type);
@@ -161,16 +162,16 @@ module fl_hd(
           fl_square(size=size,corners=corner_r,quadrant=+Y,$FL_ADD=$FL_FOOTPRINT);
 
   fl_vmanage(verbs,type,octant=octant,direction=direction)
-    if ($verb==FL_ADD)
+    if ($this_verb==FL_ADD)
       do_add();
 
-    else if ($verb==FL_ASSEMBLY)
+    else if ($this_verb==FL_ASSEMBLY)
       ; // intentionally a no-op
 
-    else if ($verb==FL_BBOX)
+    else if ($this_verb==FL_BBOX)
       fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
-    else if ($verb==FL_CUTOUT) {
+    else if ($this_verb==FL_CUTOUT) {
       fl_cutoutLoop(cut_dirs, fl_cutout($this))
         if ($co_preferred)
           multmatrix(Mpd) let(
@@ -181,22 +182,24 @@ module fl_hd(
         //   fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+2xNIL)
         //     do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
-    } else if ($verb==FL_DRILL)
+    } else if ($this_verb==FL_DRILL)
       assert(thick)
       do_layout()
-        fl_rail(fl_3d_axisValue($hole_n,dri_rails))
-          fl_screw(FL_FOOTPRINT,screw,len=$hd_screw_len,direction=$hole_direction,$FL_FOOTPRINT=$FL_DRILL);
+        fl_rail(fl_3d_axisValue($hole_n,dri_rails)) let(
+          screw = fl_Screw(specs, longer_than=$hd_screw_len)
+        ) fl_screw(FL_DRILL,screw,direction=$hole_direction);
 
-    else if ($verb==FL_FOOTPRINT)
+    else if ($this_verb==FL_FOOTPRINT)
       fl_bb_add($this_bbox, auto=true);
 
-    else if ($verb==FL_LAYOUT)
+    else if ($this_verb==FL_LAYOUT)
       do_layout($FL_ADD=$FL_LAYOUT)
         children();
 
-    else if ($verb==FL_MOUNT)
-      do_layout($FL_ADD=$FL_MOUNT)
-        fl_screw(type=screw,len=$hd_screw_len,direction=$hole_direction);
+    else if ($this_verb==FL_MOUNT)
+      do_layout($FL_ADD=$FL_MOUNT) let(
+          screw = fl_Screw(specs, longer_than=$hd_screw_len)
+        ) fl_screw(type=screw,direction=$hole_direction);
 
     else
       fl_error(["unimplemented verb",$this_verb]);

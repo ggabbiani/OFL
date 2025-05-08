@@ -135,31 +135,32 @@ module fl_caddy(
             translate([0,size.y-thick.y[1],thick.z[0]]) fl_fillet([FL_ADD],r=fillet,h=size.x,direction=[+FL_X,+180]);
         }
       }
-      context([FL_DRILL,FL_CUTOUT])  children();
+      context([FL_DRILL,FL_CUTOUT],$FL_DRILL="ON",$FL_CUTOUT="ON")
+        children();
     }
   }
 
   module engine()
     if ($verb==FL_ADD)
-      fl_modifier($modifier)
-        fl_color()
-          do_add() children();
+      fl_color()
+        do_add()
+          children();
     else if ($verb==FL_ASSEMBLY)
-      fl_modifier($modifier) context(FL_DRAW) children();
+      context(FL_DRAW) let($FL_ADD=$FL_ASSEMBLY) children();
     else if ($verb==FL_BBOX)
-      fl_modifier($modifier) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
+      fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
     else if ($verb==FL_CUTOUT)
-      fl_modifier($modifier) context([FL_CUTOUT]) children();
+      context([FL_CUTOUT]) children();
     else if ($verb==FL_DRILL)
-      fl_modifier($modifier) context([FL_DRILL]) children();
+      context([FL_DRILL]) children();
     else if ($verb==FL_FOOTPRINT)
-      fl_modifier($modifier) context(lay_verbs) fl_bb_add(corners=bbox,$FL_ADD=$FL_BBOX);
+      context(lay_verbs) fl_bb_add(corners=bbox,$FL_ADD=$FL_FOOTPRINT);
     else if ($verb==FL_LAYOUT)
-      fl_modifier($modifier) context(lay_verbs) children();
+      context(lay_verbs) children();
     else if ($verb==FL_MOUNT)
-      fl_modifier($modifier) context([FL_MOUNT]) children();
+      context([FL_MOUNT]) children();
     else if ($verb==FL_PAYLOAD)
-      fl_modifier($modifier) fl_bb_add(pload);
+      fl_modifier($modifier) fl_bb_add(pload,$FL_ADD=$FL_PAYLOAD);
     else
       fl_error(["unimplemented verb",$this_verb]);
 

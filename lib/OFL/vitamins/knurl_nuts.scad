@@ -344,7 +344,7 @@ function fl_knut_search(
    */
   best=FL_KNUT_LONGEST
 ) = let(
-  nominal = d ? d : screw ? fl_screw_nominal(screw) : undef,
+  nominal = d ? d : screw ? assert(!fl_native(screw),screw) 2*screw_radius(screw) : undef,
   result  = [
     for(nut=fl_knut_dict())
       if ( (is_undef(thick)   || fl_knut_thick(nut)<=thick)

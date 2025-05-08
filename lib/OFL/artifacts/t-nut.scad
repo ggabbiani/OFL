@@ -18,7 +18,7 @@ include <../foundation/unsafe_defs.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
-use <../foundation/hole.scad>
+use <../foundation/hole-engine.scad>
 use <../foundation/mngm-engine.scad>
 
 //! namespace
@@ -61,18 +61,19 @@ function fl_TNut(
    */
   thickness,
   //! an optional screw determining a hole
-  screw,
+  nop_screw,
   //! eventual knurl nut
   knut=false,
   //! list of user defined holes usually positioned on the 'opening' side
   holes
-) = let(
+) = assert(!nop_screw || !fl_native(nop_screw))
+let(
   wall  = thickness[0],
   base  = thickness[1],
   cone  = thickness[2],
   size  = [size.x, fl_accum(thickness), size.y],
   bbox  = [[-size.x/2,-base-cone,0],[+size.x/2,+wall,size.z]],
-  hole_d  = screw ? 2*screw_radius(screw) : undef,
+  hole_d  = nop_screw ? 2*screw_radius(nop_screw) : undef,
   points  = [
     [bbox[1].x-cone,bbox[0].y],
     [bbox[1].x,bbox[0].y+cone],
@@ -86,17 +87,16 @@ function fl_TNut(
     [bbox[0].x,bbox[0].y+cone],
     [bbox[0].x+cone,bbox[0].y],
   ]
-) [
+) fl_Object(bbox, others = [
   ["opening", opening],
   fl_tnut_thickness(value=thickness),
-  fl_bb_corners(value=bbox),
   ["section points", points],
-  if (screw)
-    fl_screw(value=screw),
-  if (screw)
-    fl_holes(value=holes ? holes : [fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,screw=screw)]),
-  if (knut)
-    let(kn=fl_knut_search(screw,size.y)) assert(kn,"No knurl nut found") ["knut",kn],
+  if (nop_screw)
+    fl_screw_specs(value=nop_screw),
+  if (nop_screw)
+    fl_holes(value=holes ? holes : [fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,nop_screw=nop_screw)]),
+  if (knut)  echo(nop_screw=nop_screw)
+    let(kn=fl_knut_search(nop_screw,size.y)) assert(kn,"No knurl nut found") ["knut",kn],
   fl_dimensions(value=fl_DimensionPack([
     fl_Dimension(opening, "opening" ),
     fl_Dimension(size.x,  "width"   ),
@@ -107,14 +107,14 @@ function fl_TNut(
     fl_Dimension(base,    "base"    ),
     fl_Dimension(cone,    "cone"    ),
   ]))
-];
+]);
 
-FL_TNUT_M3_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],screw=M3_cs_cap_screw);
+FL_TNUT_M3_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw);
 // T-slot nut usable with the Snapmaker enclosure for the AT series
-FL_TNUT_M3_SM = fl_TNut(opening=6,size=[10,20],thickness=[2,1,2],screw=M3_cs_cap_screw);
-FL_TNUT_M4_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],screw=M4_cs_cap_screw);
-FL_TNUT_M5_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],screw=M5_cs_cap_screw);
-FL_TNUT_M6_CS = fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],screw=M6_cs_cap_screw);
+FL_TNUT_M3_SM = fl_TNut(opening=6,size=[10,20],thickness=[2,1,2],nop_screw=M3_cs_cap_screw);
+FL_TNUT_M4_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_cs_cap_screw);
+FL_TNUT_M5_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw);
+FL_TNUT_M6_CS = fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw);
 
 FL_TNUT_DICT = [
   FL_TNUT_M3_CS,

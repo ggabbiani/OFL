@@ -45,11 +45,11 @@ function fl_PCBHolder(
 ) = let(
   pcb_bb    = fl_bb_corners(pcb),
   pcb_t     = fl_pcb_thick(pcb),
-  pcb_screw = fl_screw(pcb),
+  pcb_screw = fl_screw_specs(pcb),
   holes     = fl_holes(pcb),
   spacers   = [for(hole=holes) let(
-      screw   = let(screw = fl_hole_screw(hole)) screw ? screw : pcb_screw,
-      nominal = screw ? fl_screw_nominal(screw) : 0,
+      screw   = let(screw=fl_screw_specs(hole)) screw ? screw : pcb_screw,
+      nominal = screw ? screw_radius(screw) : 0,
       knut    = knut_type ? fl_knut_shortest(fl_knut_find(thread=knut_type,nominal=nominal)) : undef
     ) fl_Spacer(h_min=h_min,d_min=fl_hole_d(hole)+wall,screw_size=nominal,knut=knut)
   ],
@@ -86,15 +86,13 @@ function fl_PCBHolder(
   this_bb = [[min(xs),min(ys),0],[max(xs),max(ys),spc_height+pcb_t]],
   // sums pcb holder bare bounding block with the pcb one translated of +Z(spc_height+pcb_t)
   bbox  = fl_bb_calc([this_bb,[for(point=pcb_bb) fl_transform(T(+Z(spc_height+pcb_t+NIL)), point)]])
-) [
-  fl_OFL(value=true),
+) fl_Object(bbox, others = [
   fl_pcb(value=pcb),
-  fl_bb_corners(value=bbox),
   fl_pcbh_spacers(value=spacers),
   fl_spc_h(value=spc_height),
   // TODO: implement through [Module
   // Literals](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/WIP#Module_Literals_/_Module_References)
-];
+]);
 
 /*!
  * PCB holder engine.
@@ -164,7 +162,7 @@ module fl_pcbHolder(
   spc_height  = fl_spc_h(this);
   pcb         = fl_pcb(this);
   pcb_t       = fl_pcb_thick(pcb);
-  pcb_screw   = fl_screw(pcb);
+  pcb_screw   = fl_screw_specs(pcb);
   pcb_M       = T(+Z(spc_height+pcb_t));
   pcb_bb      = fl_bb_corners(pcb);
   spcs        = fl_pcbh_spacers(this);

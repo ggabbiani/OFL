@@ -11,9 +11,9 @@ include <../vitamins/countersinks.scad>
 include <../vitamins/knurl_nuts.scad>
 include <../vitamins/screw.scad>
 
+use <../artifacts/profiles-engine.scad>
 use <../foundation/fillet.scad>
 use <../foundation/mngm-engine.scad>
-use <../artifacts/profiles-engine.scad>
 use <../foundation/util.scad>
 
 /*!
@@ -68,11 +68,11 @@ module fl_box(
 ) {
   kn_type     = fastenings[0];
   scr_nominal = fastenings[1];
-  knut    = fl_knut_shortest(fl_knut_find(thread=kn_type,nominal=scr_nominal));
-  screw   = fl_screw_search(d=scr_nominal,head_type=hs_cs_cap)[0];
-  spacer  = fl_Spacer(knut=knut);
-  cs      = fl_cs_search(d=scr_nominal)[0];
-  assert(cs,cs);
+  knut        = fl_knut_shortest(fl_knut_find(thread=kn_type,nominal=scr_nominal));
+  spacer      = fl_Spacer(knut=knut);
+  // first countersink screw matching nominal ⌀
+  screw       = let(inventory=fl_ScrewInventory(nominal=scr_nominal, head_type=hs_cs_cap, shorter_then=fl_thick(spacer))) assert(inventory) inventory[0];
+  cs          = let(inventory=fl_cs_search(d=scr_nominal)) assert(inventory) inventory[0];
 
   T_real   = assert(thick) (thick + tolerance);
   // delta = «external bounding box» - «payload bounding box»
@@ -102,8 +102,6 @@ module fl_box(
 
   Mfront_knut = T([size.x/2,thick+tolerance-0*(size.y-thick-tolerance),sz_up.z+tolerance]);
   Mback_knut  = T([size.x/2,size.y-thick-tolerance,sz_up.z+tolerance]);
-  D       = direction ? fl_direction(direction)  : I;
-  M       = fl_octant(octant,bbox=bbox);
 
   module back_spacer(verbs=FL_ADD,direction=[+Y,0])
     fl_spacer(verbs,spacer,anchor=[-Y],fillet=fillet?T_real/2:undef,thick=[0,T_real],octant=+Y-Z,direction=direction,$fl_filament=undef)
