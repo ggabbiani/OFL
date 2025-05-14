@@ -164,7 +164,7 @@ __Syntax:__
 
     fl_rail(length)
 
-use children(0) for making a rail
+use children() for making a rail
 
 __Parameters:__
 

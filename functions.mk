@@ -104,6 +104,18 @@ define fix-target-dependencies
 sed '1s|.*:|$@:|' --in-place $@.deps
 endef
 
+# Creates the target without any scaling nor check.
+#
+# $(1)=target resolution in 'openscad' format i.e. 800x600
+# $(2)=camera view settings
+# $(3)=projection type ('ortho' or 'perspective')
+# $(4)=other parameter(s)
+# $(5)=if set, the produced picture is renamed to
+define make-native-picture
+	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
+	$(if $(5),mv unscaled-$@ $(5))
+endef
+
 # Creates the target and check the exact structural similarity with the one
 # committed on git. If similar keeps the original OTHERWISE keeps the new one
 # prefixed with 'new-' and rise an error. In the latter case if the new image is
@@ -120,7 +132,7 @@ endef
 # $(3)=projection type ('ortho' or 'perspective')
 # $(4)=other parameter(s)
 define check-picture
-	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
+	$(call make-native-picture,$(1),$(2),$(3),$(4))
 	# creation of new-$@
 	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null && rm unscaled-$@
 	# old creation from git or from current target when not existing
@@ -145,6 +157,7 @@ endef
 # $(3)=projection type ('ortho' or 'perspective')
 # $(4)=other parameter(s)
 define make-picture
+	$(call make-native-picture,$(1),$(2),$(3),$(4))
 	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
 	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
 	rm -f unscaled-$@

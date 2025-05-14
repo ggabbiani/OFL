@@ -18,7 +18,7 @@ include <../../lib/OFL/vitamins/knurl_nuts.scad>
 
 use <../../lib/OFL/foundation/2d-engine.scad>
 use <../../lib/OFL/foundation/3d-engine.scad>
-use <../../lib/OFL/foundation/hole.scad>
+use <../../lib/OFL/foundation/hole-engine.scad>
 
 include <../../lib/ext/NopSCADlib/utils/core/core.scad>
 use <../../lib/ext/NopSCADlib/utils/thread.scad>
@@ -65,23 +65,24 @@ base_sz = [30,2,20];
 nut_thick = wall_thick+base_thick+cone_thick;
 
 // screw
-screw = M3_cap_screw;
-scr_d = 2*screw_radius(screw);
-scr_head_d  = 2*screw_head_radius(screw);
-scr_len=base_sz.y*2+nut_thick;
+scr_nop     = M3_cap_screw;
+scr_len     = base_sz.y*2+nut_thick;
+screw       = fl_Screw(scr_nop,scr_len);
+scr_d       = fl_nominal(screw);
+scr_head_d  = fl_screw_headD(screw);
 
-washer  = screw_washer(screw);
+washer  = screw_washer(scr_nop);
 wsh_d   = washer_diameter(washer);
 
 // t-nut
 nut_holes = let(d=scr_d+1) [
-  fl_Hole([0,wall_thick,5],d,+Y,nut_thick,screw=screw),
-  fl_Hole([0,wall_thick,5+20],d,+Y,nut_thick,screw=screw)
+  fl_Hole([0,wall_thick,5],d,+Y,nut_thick,nop_screw=scr_nop),
+  fl_Hole([0,wall_thick,5+20],d,+Y,nut_thick,nop_screw=scr_nop)
 ];
-nut = fl_TNut(opening,[in_width,length],[wall_thick,base_thick,cone_thick],screw,true,nut_holes);
+nut = fl_TNut(opening,[in_width,length],[wall_thick,base_thick,cone_thick],scr_nop,true,nut_holes);
 
 // brass insert
-knut= fl_knut_search(screw,nut_thick);
+knut= fl_knut_search(scr_nop,nut_thick);
 
 // thread
 thr_pitch = 2;
@@ -141,4 +142,4 @@ if (VIEW_MODE=="MOUNTED"||VIEW_MODE=="FULL")
   translate(-Y(base_sz.y))
     fl_tnut([FL_LAYOUT],nut,direction=[X,0],octant=-Y)
       translate(Y(2*base_sz.y))
-        fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,len=scr_len,washer="nylon",direction=[+Y,0]);
+        fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,head_washer="default",direction=[+Y,0]);

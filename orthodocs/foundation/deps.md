@@ -13,18 +13,19 @@ graph TD
     A10[foundation/components] --o|include| A3
     A11[foundation/connect] --o|include| A12[foundation/util]
     A9
-    A13[foundation/dimensions] --o|include| A2
-    A13 --o|use| A5
-    A13 --o|use| A3
-    A14[foundation/fillet] --o|include| A5
-    A15[foundation/grid] --o|include| A5
-    A16[foundation/hole-engine] --o|include| A17[foundation/label]
-    A17 --o|include| A5
-    A18[foundation/limits] --o|include| A9
+    A13[foundation/customizer-engine] --o|include| A2
+    A14[foundation/dimensions] --o|include| A2
+    A14 --o|use| A5
+    A14 --o|use| A3
+    A15[foundation/fillet] --o|include| A5
+    A16[foundation/grid] --o|include| A5
+    A17[foundation/hole-engine] --o|include| A18[foundation/label]
+    A18 --o|include| A5
+    A19[foundation/limits] --o|include| A9
     A4 --o|include| A2
     A4 --o|use| A3
-    A19[foundation/quaternions]
-    A20[foundation/template] --o|include| A2
+    A20[foundation/quaternions]
+    A21[foundation/template] --o|include| A2
     A6 --o|include| A9
     A7 --o|include| A9
     A7 --o|use| A3

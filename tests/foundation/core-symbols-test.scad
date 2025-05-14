@@ -15,7 +15,7 @@
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 
 use <../../lib/OFL/foundation/3d-engine.scad>
-use <../../lib/OFL/foundation/hole.scad>
+use <../../lib/OFL/foundation/hole-engine.scad>
 use <../../lib/OFL/foundation/label.scad>
 
 

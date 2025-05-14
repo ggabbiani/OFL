@@ -18,7 +18,7 @@ include <../../lib/OFL/vitamins/knurl_nuts.scad>
 
 use <../../lib/OFL/foundation/2d-engine.scad>
 use <../../lib/OFL/foundation/3d-engine.scad>
-use <../../lib/OFL/foundation/hole.scad>
+use <../../lib/OFL/foundation/hole-engine.scad>
 
 include <../../lib/ext/NopSCADlib/utils/core/core.scad>
 use <../../lib/ext/NopSCADlib/utils/thread.scad>
@@ -104,8 +104,8 @@ wsh_d   = washer_diameter(washer);
 
 // t-nut
 nut_holes = let(d=scr_d) [
-  fl_Hole([0,wall_thick,5],d,+Y,nut_thick,screw=screw),
-  fl_Hole([0,wall_thick,5+20],d,+Y,nut_thick,screw=screw)
+  fl_Hole([0,wall_thick,5],d,+Y,nut_thick,nop_screw=screw),
+  fl_Hole([0,wall_thick,5+20],d,+Y,nut_thick,nop_screw=screw)
 ];
 nut = fl_TNut(opening,[in_width,length],[wall_thick,base_thick,cone_thick],screw,true,nut_holes);
 

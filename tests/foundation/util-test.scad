@@ -15,6 +15,7 @@
 include <../../lib/OFL/foundation/util.scad>
 include <../../lib/OFL/vitamins/screw.scad>
 
+use <../../lib/OFL/foundation/customizer-engine.scad>
 
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -42,16 +43,14 @@ DEBUG_SYMBOLS     = false;
 /* [Commons] */
 
 // select the utility to be tested
-UTIL        = "rail"; // [rail, plane align, cutout]
+UTIL        = "generic rail"; // [generic rail, screw rail, plane align, cutout]
 // thickness of the test plane to be 'railed'
 PLANE_T    = 2.5;
 
-/* [Meta screw test] */
+/* [Screw select] */
 
-// used if different test
-META_SCREW  = "M2_cap_screw"; // [No632_pan_screw,M2_cap_screw,M2_cs_cap_screw,M2_dome_screw,M2p5_cap_screw,M2p5_pan_screw,M3_cap_screw,M3_cs_cap_screw,M3_dome_screw,M3_grub_screw,M3_hex_screw,M3_low_cap_screw,M3_pan_screw,M4_cap_screw,M4_cs_cap_screw,M4_dome_screw,M4_grub_screw,M4_hex_screw,M4_pan_screw,M5_cap_screw,M5_cs_cap_screw,M5_dome_screw,M5_hex_screw,M5_pan_screw,M6_cap_screw,M6_cs_cap_screw,M6_hex_screw,M6_pan_screw,M8_cap_screw,M8_hex_screw,No2_screw,No4_screw,No6_cs_screw,No6_screw,No8_screw]
-// screw length
-META_LEN    = 10;
+SCREW_NAME  = "*";  // [*, M2_cap, M2p5_cap, M3_cap, M4_cap, M5_cap, M6_cap, M8_cap, M3_low_cap, M3_shoulder, M4_shoulder, M2_cs_cap, M3_cs_cap, M4_cs_cap, M5_cs_cap, M6_cs_cap, M8_cs_cap, M2_dome, M2p5_dome, M3_dome, M4_dome, M5_dome, M3_hex, M4_hex, M5_hex, M6_hex, M8_hex, M2p5_pan, M3_pan, M4_pan, M5_pan, M6_pan, No632_pan, No2, No4, No6, No8, No6_cs, M3_grub, M4_grub, M5_grub, M6_grub]
+SCREW_LEN   = 10;   // [0:0.1:25]
 
 /* [Rail test] */
 
@@ -79,162 +78,139 @@ CO_TRIM  = [0,0,0]; // [-5:0.1:5]
 // when true only the cutout plane is used for section
 CO_CUT    = false;
 
+/* [Context] */
+
+$fl_clearance = 0.1; // [0:0.1:1]
 
 /* [Hidden] */
 
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+fl_status();
+
 // end of automatically generated code
 
-module __test__() {
-  // customizer helper
-  function axis(s) =
-    assert(s=="X" || s=="-X" || s=="Y" || s=="-Y" || s=="Z" || s=="-Z")
-    s == "X" ? FL_X : s=="-X" ? -FL_X : s=="Y" ? FL_Y : s=="-Y" ? -FL_Y : s=="Z" ? FL_Z : -FL_Z;
-  screw = META_SCREW=="No632_pan_screw" ? No632_pan_screw
-        : META_SCREW=="M2_cap_screw"    ? M2_cap_screw
-        : META_SCREW=="M2_cs_cap_screw" ? M2_cs_cap_screw
-        : META_SCREW=="M2_dome_screw"   ? M2_dome_screw
-        : META_SCREW=="M2p5_cap_screw"  ? M2p5_cap_screw
-        : META_SCREW=="M2p5_pan_screw"  ? M2p5_pan_screw
-        : META_SCREW=="M3_cap_screw"    ? M3_cap_screw
-        : META_SCREW=="M3_cs_cap_screw" ? M3_cs_cap_screw
-        : META_SCREW=="M3_dome_screw"   ? M3_dome_screw
-        : META_SCREW=="M3_grub_screw"   ? M3_grub_screw
-        : META_SCREW=="M3_hex_screw"    ? M3_hex_screw
-        : META_SCREW=="M3_low_cap_screw"? M3_low_cap_screw
-        : META_SCREW=="M3_pan_screw"    ? M3_pan_screw
-        : META_SCREW=="M4_cap_screw"    ? M4_cap_screw
-        : META_SCREW=="M4_cs_cap_screw" ? M4_cs_cap_screw
-        : META_SCREW=="M4_dome_screw"   ? M4_dome_screw
-        : META_SCREW=="M4_grub_screw"   ? M4_grub_screw
-        : META_SCREW=="M4_hex_screw"    ? M4_hex_screw
-        : META_SCREW=="M4_pan_screw"    ? M4_pan_screw
-        : META_SCREW=="M5_cap_screw"    ? M5_cap_screw
-        : META_SCREW=="M5_cs_cap_screw" ? M5_cs_cap_screw
-        : META_SCREW=="M5_dome_screw"   ? M5_dome_screw
-        : META_SCREW=="M5_hex_screw"    ? M5_hex_screw
-        : META_SCREW=="M5_pan_screw"    ? M5_pan_screw
-        : META_SCREW=="M6_cap_screw"    ? M6_cap_screw
-        : META_SCREW=="M6_cs_cap_screw" ? M6_cs_cap_screw
-        : META_SCREW=="M6_hex_screw"    ? M6_hex_screw
-        : META_SCREW=="M6_pan_screw"    ? M6_pan_screw
-        : META_SCREW=="M8_cap_screw"    ? M8_cap_screw
-        : META_SCREW=="M8_hex_screw"    ? M8_hex_screw
-        : META_SCREW=="No2_screw"       ? No2_screw
-        : META_SCREW=="No4_screw"       ? No4_screw
-        : META_SCREW=="No6_cs_screw"    ? No6_cs_screw
-        : META_SCREW=="No6_screw"       ? No6_screw
-        : META_SCREW=="No8_screw"       ? No8_screw
-        : undef;
-  assert(screw!=undef);
+screw = fl_ScrewInventory(
+  name        = fl_cust_undef(SCREW_NAME,_when_=SCREW_NAME=="*"),
+  longer_than = SCREW_LEN
+)[0];
 
-  // module meta_screw_test() {
-  //   gap = 1.5 * 2 * screw_head_radius(screw);
-  //   translate(-X(gap))
-  //     screw(screw,META_LEN);
-  //   fl_color($fl_filament)
-  //     translate(X(gap))
-  //       fl_metaScrew(screw,META_LEN);
-  // }
+// customizer helper
+function axis(s) =
+  assert(s=="X" || s=="-X" || s=="Y" || s=="-Y" || s=="Z" || s=="-Z")
+  s == "X" ? FL_X : s=="-X" ? -FL_X : s=="Y" ? FL_Y : s=="-Y" ? -FL_Y : s=="Z" ? FL_Z : -FL_Z;
+assert(screw);
 
-  module rail_test() {
-    cs    = screw_head_depth(screw);
-    hh    = screw_head_height(screw);
-    fl_trace("countersink",cs);
-    size  = let(base=2*(screw_head_radius(screw)+PLANE_T)+RAIL_LEN) [base,base,cs ? PLANE_T : PLANE_T+hh];
-    if (ADD)
-      difference() {
-        fl_color($fl_filament) translate(Z(hh)) fl_cube(size=size,octant=-Z);
-        translate(+Z(NIL)) fl_color() fl_rail(RAIL_LEN) fl_screw(FL_FOOTPRINT,screw,META_LEN);
-      }
-    if (ASSEMBLY)
-      translate(+Z(NIL)) screw(screw,META_LEN);
-  }
-
-  module plane_align_test() {
-    size  = [4,4,0.1];
-    module plane(axis) {
-      color("red")   fl_vector(axis.x);
-      color("green") fl_vector(axis.y);
-      // color("blue")  fl_vector(cross(axis.x,axis.y));
-    }
-
-    module shapes() {
-      fl_color($fl_filament) translate(size/2)
-        fl_cylinder(r1=1,r2=0,h=1);
-    }
-
-    src  = [fl_versor(PLANE_SRC_AXIS_1),fl_versor(PLANE_SRC_AXIS_2)];
-    fl_trace("source plane",src);
-    src_R = fl_planeAlign(a=[X,Y],b=[PLANE_SRC_AXIS_1,PLANE_SRC_AXIS_2]);
-    translate(-X(2*size.x)) {
-      plane(max(size)*src);
-      multmatrix(src_R) {
-        %fl_cube(size=size,octant=+X+Y-Z);
-        shapes();
-      }
-    }
-
-    dst  = [fl_versor(PLANE_DST_AXIS_1),fl_versor(PLANE_DST_AXIS_2)];
-    fl_trace("destination plane",dst);
-    dst_R = fl_planeAlign(a=[PLANE_SRC_AXIS_1,PLANE_SRC_AXIS_2],b=[PLANE_DST_AXIS_1,PLANE_DST_AXIS_2]);
-    translate(+X(size.x)) {
-      plane(max(size)*dst);
-      multmatrix(dst_R * src_R) {
-        %fl_cube(size=size,octant=+X+Y-Z);
-        shapes();
-      }
-    }
-  }
-
-  module cutout_test() {
-    sz_cyl    = [2,3,7];
-    sz_plane  = [20,20,PLANE_T];
-    distance  = sz_cyl.z*3/2;
-    co_axes   = let(axis=axis(CO_AXIS)) [
-      axis,
-      axis==+Z ? +X : axis==-Z ? -X: axis==+X ? -Z: axis==-X ? +Z: +X
-    ];
-    co_len    = 1.5 * distance; // cutout length
-
-    module shapes() {
-      difference() {
-        union() {
-          fl_prism(n=5,l1=sz_cyl.x,l2=sz_cyl.y,h=sz_cyl.z,octant=O);
-          fl_cylinder(r1=sz_cyl.x/2,r2=sz_cyl.y/2,h=sz_cyl.z);
+module rail_test(mode) {
+  cs    = fl_screw_csh(screw);
+  hh    = fl_screw_headH(screw);
+  size  = let(
+    base  = 2*(fl_screw_headR(screw)+PLANE_T)+RAIL_LEN
+  ) [base,base,cs ? PLANE_T : PLANE_T+hh];
+  if (ADD)
+    fl_color()
+      render()
+        difference() {
+          translate(Z(hh))
+            fl_cube(size=size,octant=-Z);
+          if (mode=="generic")
+            translate(+Z(NIL))
+              fl_rail(RAIL_LEN)
+                fl_screw([FL_FOOTPRINT,FL_CUTOUT],screw,$fl_thickness=hh,$fl_tolerance=$fl_clearance);
+          else assert(mode=="screw")
+            fl_screw_rail(RAIL_LEN, screw);
         }
-        fl_cylinder(r=0.5,h=sz_cyl.z*2.5,octant=O);
-      }
-    }
-
-    module co() {
-      fl_cutout(len=co_len,z=co_axes[0],x=co_axes[1],trim=CO_TRIM,cut=CO_CUT,delta=CO_DELTA)
-        children();
-    }
-
-    module plane() {
-      fl_color($fl_filament) translate(distance*co_axes[0])
-        fl_cube(size=sz_plane,octant=+Z,direction=[co_axes[0],0]);
-    }
-
-    shapes();
-
-    difference() {
-      plane();
-      co() shapes();
-    }
-    // if ()
-      #co() shapes();
-  }
-
-  // if (UTIL=="meta screw")
-  //   meta_screw_test();
-  if (UTIL=="rail")
-    rail_test();
-  else if (UTIL=="plane align")
-    plane_align_test();
-  else if (UTIL=="cutout")
-    cutout_test();
+  if (ASSEMBLY)
+    translate(+Z(NIL))
+      fl_screw(type=screw);
 }
 
-__test__();
+module plane_align_test() {
+  size  = [4,4,0.1];
+  module plane(axis) {
+    color("red")   fl_vector(axis.x);
+    color("green") fl_vector(axis.y);
+    // color("blue")  fl_vector(cross(axis.x,axis.y));
+  }
 
+  module shapes() {
+    fl_color($fl_filament) translate(size/2)
+      fl_cylinder(r1=1,r2=0,h=1);
+  }
+
+  src  = [fl_versor(PLANE_SRC_AXIS_1),fl_versor(PLANE_SRC_AXIS_2)];
+  fl_trace("source plane",src);
+  src_R = fl_planeAlign(a=[X,Y],b=[PLANE_SRC_AXIS_1,PLANE_SRC_AXIS_2]);
+  translate(-X(2*size.x)) {
+    plane(max(size)*src);
+    multmatrix(src_R) {
+      %fl_cube(size=size,octant=+X+Y-Z);
+      shapes();
+    }
+  }
+
+  dst  = [fl_versor(PLANE_DST_AXIS_1),fl_versor(PLANE_DST_AXIS_2)];
+  fl_trace("destination plane",dst);
+  dst_R = fl_planeAlign(a=[PLANE_SRC_AXIS_1,PLANE_SRC_AXIS_2],b=[PLANE_DST_AXIS_1,PLANE_DST_AXIS_2]);
+  translate(+X(size.x)) {
+    plane(max(size)*dst);
+    multmatrix(dst_R * src_R) {
+      %fl_cube(size=size,octant=+X+Y-Z);
+      shapes();
+    }
+  }
+}
+
+module cutout_test() {
+  sz_cyl    = [2,3,7];
+  sz_plane  = [20,20,PLANE_T];
+  distance  = sz_cyl.z*3/2;
+  co_axes   = let(axis=axis(CO_AXIS)) [
+    axis,
+    axis==+Z ? +X : axis==-Z ? -X: axis==+X ? -Z: axis==-X ? +Z: +X
+  ];
+  co_len    = 1.5 * distance; // cutout length
+
+  module shapes() {
+    difference() {
+      union() {
+        fl_prism(n=5,l1=sz_cyl.x,l2=sz_cyl.y,h=sz_cyl.z,octant=O);
+        fl_cylinder(r1=sz_cyl.x/2,r2=sz_cyl.y/2,h=sz_cyl.z);
+      }
+      fl_cylinder(r=0.5,h=sz_cyl.z*2.5,octant=O);
+    }
+  }
+
+  module co() {
+    fl_cutout(len=co_len,z=co_axes[0],x=co_axes[1],trim=CO_TRIM,cut=CO_CUT,delta=CO_DELTA)
+      children();
+  }
+
+  module plane() {
+    fl_color($fl_filament) translate(distance*co_axes[0])
+      fl_cube(size=sz_plane,octant=+Z,direction=[co_axes[0],0]);
+  }
+
+  shapes();
+
+  difference() {
+    plane();
+    co() shapes();
+  }
+  // if ()
+    #co() shapes();
+}
+
+if (UTIL=="generic rail")
+  rail_test("generic");
+else if (UTIL=="screw rail")
+  rail_test("screw");
+else if (UTIL=="plane align")
+  plane_align_test();
+else if (UTIL=="cutout")
+  cutout_test();

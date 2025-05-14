@@ -31,12 +31,21 @@ function fl_screw_specs(type,value,default) = fl_optProperty(type,"screw specifi
 
 //! Returns the head style (hs_cap, hs_pan, hs_cs, hs_hex, hs_grub, hs_cs_cap or hs_dome)
 function fl_screw_headType(type)  = screw_head_type(fl_screw_specs(type));
+//! Returns the head radius
+function fl_screw_headR(type)     = screw_head_radius(fl_screw_specs(type));
 //! Returns the head ⌀
 function fl_screw_headD(type)     = 2*screw_head_radius(fl_screw_specs(type));
 //! Returns the head height
 function fl_screw_headH(type)     = screw_head_height(fl_screw_specs(type));
 //! Returns the default nut
 function fl_screw_nut(type)       = screw_nut(fl_screw_specs(type));
+/*!
+ * Screw counter sink height (i.e. how far a counter sink head will go into a
+ * straight hole ⌀ «d»). More concretely its an alias of the nopscadlib
+ * function screw_head_depth().
+*/
+function fl_screw_csh(type, hole_d=0) = screw_head_depth(fl_screw_specs(type),hole_d);
+
 /*!
  * Returns the hole ⌀ used during "clearance" FL_DRILL according to the
  * following formula:
@@ -109,6 +118,10 @@ FL_SCREW_SPECS_INVENTORY = [for(list = screw_lists, screw=list) if (screw) screw
  *
  * - without a prefixed length («shank» parameter set to 0 or undef)
  * - with a prefixed shank («shank» parameter ≠ 0)
+ *
+ * Below an example of a full assembly stack:
+ *
+ * ![full screw assembly stack](400x800/fig_SCREW_ASSEMBLED.png)
  */
 function fl_screw_AssemblyStack(
   //! NopSCADlib screw type
@@ -199,6 +212,7 @@ function fl_Screw(
       fl_screw_specs  (value  = nop       ),
       fl_nominal      (value  = nominal_d ),
       fl_screw_shaft  (value  = lens[0]   ),
+      fl_cutout       (value  = [+Z]      ),
       fl_dimensions   (value  = fl_DimensionPack([
         fl_Dimension(lens[0],     "shaft"       ),
         fl_Dimension(head_h,      "head"        ),
@@ -223,25 +237,25 @@ function fl_ScrewInventory(
   /*!
    * Either a scalar or a list with each element equal to one of the following:
    *
-   *  - hs_cap
-   *  - hs_pan
-   *  - hs_cs
-   *  - hs_hex
-   *  - hs_grub
-   *  - hs_cs_cap
-   *  - hs_dome
+   * - hs_cap
+   * - hs_pan
+   * - hs_cs
+   * - hs_hex
+   * - hs_grub
+   * - hs_cs_cap
+   * - hs_dome
    */
   head_type,
   /*!
    * head name is one of the following:
    *
-   *  - "cap"
-   *  - "pan"
-   *  - "cs"
-   *  - "hex"
-   *  - "grub"
-   *  - "cs_cap"
-   *  - "dome"
+   * - "cap"
+   * - "pan"
+   * - "cs"
+   * - "hex"
+   * - "grub"
+   * - "cs_cap"
+   * - "dome"
    */
   head_name,
   //! Shaft exact length
@@ -346,7 +360,8 @@ function fl_screw_specs_select(
     ) lst==[] ? true : chk_washer(lst[0]) ? chk_washer_list(screw, fl_pop(lst)) : false,
     head_type     = head_type ?
       assert(is_num(head_type)) head_type :
-      assert(is_string(head_name))
+      head_name ?
+      assert(is_string(head_name),head_name)
       fl_switch(head_name,[
         ["cap"    ,hs_cap     ],
         ["pan"    ,hs_pan     ],
@@ -355,7 +370,8 @@ function fl_screw_specs_select(
         ["grub"   ,hs_grub    ],
         ["cs cap" ,hs_cs_cap  ],
         ["dome"   ,hs_dome    ]
-      ])
+      ]) :
+      undef
 )
 assert(inventory)
 [
@@ -374,7 +390,7 @@ assert(inventory)
  * | name           | Context   | Description
  * | ---            | ---       | ---
  * | $fl_clearance  | Parameter | used during FL_DRILL. See also fl_parm_clearance()
- * | $fl_thickness  | Parameter | thickness during FL_ASSEMBLY. See also fl_parm_thickness()
+ * | $fl_thickness  | Parameter | thickness during FL_ASSEMBLY and FL_CUTOUT. See also fl_parm_thickness()
  * | $fl_tolerance  | Parameter | used during FL_FOOTPRINT. See also fl_parm_tolerance()
  */
 module fl_screw(
@@ -394,6 +410,13 @@ module fl_screw(
   nut,
   //! drill type: "clearance" or "tap"
   dri_type  = "clearance",
+  /*!
+   * FL_CUTOUT direction list, if undef then the preferred cutout direction
+   * attribute is used.
+   */
+  cut_dirs,
+  //! translation applied to cutout
+  cut_drift=0,
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
   direction,
   //! when undef native positioning is used
@@ -414,6 +437,7 @@ module fl_screw(
     nut_washer  = nut_washer,
     nut_spring  = nut_spring,
     nut         = nut);
+  head_h        = fl_screw_headH(type);
   head_spring_t = lens[2];
   head_washer_t = lens[3];
   nut_washer_t  = lens[5];
@@ -424,6 +448,8 @@ module fl_screw(
   hole_r        = dri_type=="clearance" ? clearance_d/2 : nominal_d/2;
   dims          = fl_dimensions(type);
   Z_delta       = head_washer_t+head_spring_t;
+  supported_co  = fl_cutout(type);
+  cut_dirs      = cut_dirs ? cut_dirs : supported_co;
 
   module do_assembly() {
 
@@ -459,6 +485,7 @@ module fl_screw(
   }
 
   module do_footprint() {
+    centroid = fl_centroid($this_bbox);
     translate(+Z(NIL))
       translate(Z(Z_delta))
         resize($this_size+2*$fl_tolerance*[1,1,1])
@@ -517,6 +544,18 @@ module fl_screw(
     } else if ($verb==FL_ASSEMBLY) {
       do_assembly();
 
+    } else if ($verb==FL_CUTOUT) {
+      fl_cutoutLoop(cut_dirs, fl_cutout($this))
+        if ($co_preferred) {
+          // $co_current contain the current supported cutout direction
+          // translate(NIL*$co_current)
+          fl_new_cutout($this_bbox,$co_current,
+            drift         = cut_drift-head_h-NIL,
+            $fl_thickness = $fl_thickness+head_h
+          )
+            do_footprint();
+        }
+
     } else if ($verb==FL_DRILL) {
       translate(Z(Z_delta+NIL))
         fl_cylinder(FL_ADD,h=shaft+2xNIL,r=hole_r,octant=-Z,$FL_ADD=$FL_DRILL);
@@ -574,4 +613,44 @@ module fl_screw_holes(
     ) resize((head_d+2*tolerance)*[1,1,0],auto=true)
         screw_countersink(nop);
   }
+}
+
+/*!
+ * Screw version of fl_rail{}.
+ *
+ * Differently from fl_rail{} this module automatically take care of the screw
+ * geometry for the creation of a proper rail.
+ *
+ * ![rail example](256x256/fig_DOME_SCREW_EXAMPLE.png)
+ *
+ * Context variables:
+ *
+ * | name           | Context   | Description
+ * | ---            | ---       | ---
+ * | $fl_clearance  | Parameter | defines the track clearance. See also fl_parm_clearance()
+ * | $fl_thickness  | Parameter | used for screw FL_CUTOUT. See also fl_parm_thickness()
+ */
+module fl_screw_rail(
+  //! when undef or 0 rail degenerates into children()
+  length,
+  //! OFL screw used for the rail
+  screw
+) {
+
+  module proxy()
+    fl_screw([FL_FOOTPRINT,FL_CUTOUT],screw,$fl_tolerance=$fl_clearance);
+
+  $fl_clearance = fl_parm_clearance();
+  // the default value of .01 is a workaround for the rounding error of the
+  // resulting screw head in case of dome screws. The NIL constant is used for
+  // eliminating z-fighting during preview.
+  $fl_thickness = fl_parm_thickness(0.01+NIL);
+  // central part of the track
+  translate(-Y(length/2))
+    fl_direction_extrude(direction=[+Y,0], length=length)
+      proxy();
+  // ends of the track
+  for(t=[-Y(length/2),+Y(length/2)])
+    translate(t)
+      proxy();
 }

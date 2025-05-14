@@ -99,18 +99,6 @@ verbs     = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,F
 dirs      = CUTOUT_DIRS==["undef"] ? undef : CUTOUT_DIRS==["empty"] ? [] : fl_3d_AxisList(CUTOUT_DIRS);
 gap       = 2*$fl_thickness;
 
-/*!
- * True if the «type» engine is a sub domain of «engine».
- *
- * Example: if «type» has the fl_engine() attribute set to "jack/barrel", the
- * following code
- *
- *     fl_typeIsEngine(type,"jack")
- *
- * will return true.
- */
-function fl_typeIsEngine(type,engine) = fl_substr(fl_engine(type),len=len(engine))==engine;
-
 function all(inventory,builder) = let(
 ) [for(i=[0:len(inventory)-1]) builder ? builder(i) : inventory[i]];
 

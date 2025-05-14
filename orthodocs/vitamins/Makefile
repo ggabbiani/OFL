@@ -16,9 +16,12 @@ top:
 
 include $(FUNCTIONS)
 
-all: 256x256/all
+all: 256x256/all 400x800/all
 
 256x256/%:
+	$(call make_sub)
+
+400x800/%:
 	$(call make_sub)
 
 clean:

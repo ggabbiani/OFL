@@ -118,25 +118,25 @@ nominal ⌀, when 0 or undef is ignored
 __head_type__  
 Either a scalar or a list with each element equal to one of the following:
 
- - hs_cap
- - hs_pan
- - hs_cs
- - hs_hex
- - hs_grub
- - hs_cs_cap
- - hs_dome
+- hs_cap
+- hs_pan
+- hs_cs
+- hs_hex
+- hs_grub
+- hs_cs_cap
+- hs_dome
 
 
 __head_name__  
 head name is one of the following:
 
- - "cap"
- - "pan"
- - "cs"
- - "hex"
- - "grub"
- - "cs_cap"
- - "dome"
+- "cap"
+- "pan"
+- "cs"
+- "hex"
+- "grub"
+- "cs_cap"
+- "dome"
 
 
 __length__  
@@ -209,6 +209,10 @@ The assembly stack can be built in two ways:
 - without a prefixed length («shank» parameter set to 0 or undef)
 - with a prefixed shank («shank» parameter ≠ 0)
 
+Below an example of a full assembly stack:
+
+![full screw assembly stack](400x800/fig_SCREW_ASSEMBLED.png)
+
 
 __Parameters:__
 
@@ -270,6 +274,21 @@ Context variables:
 
 ---
 
+### function fl_screw_csh
+
+__Syntax:__
+
+```text
+fl_screw_csh(type,hole_d=0)
+```
+
+Screw counter sink height (i.e. how far a counter sink head will go into a
+straight hole ⌀ «d»). More concretely its an alias of the nopscadlib
+function screw_head_depth().
+
+
+---
+
 ### function fl_screw_headD
 
 __Syntax:__
@@ -303,6 +322,18 @@ fl_screw_headH(type)
 ```
 
 Returns the head height
+
+---
+
+### function fl_screw_headR
+
+__Syntax:__
+
+```text
+fl_screw_headR(type)
+```
+
+Returns the head radius
 
 ---
 
@@ -456,14 +487,14 @@ Max screw thread length
 
 __Syntax:__
 
-    fl_screw(verbs=FL_ADD,type,head_spring,head_washer,nut_washer,nut_spring,nut,dri_type="clearance",direction,octant)
+    fl_screw(verbs=FL_ADD,type,head_spring,head_washer,nut_washer,nut_spring,nut,dri_type="clearance",cut_dirs,cut_drift=0,direction,octant)
 
 Context variables:
 
 | name           | Context   | Description
 | ---            | ---       | ---
 | $fl_clearance  | Parameter | used during FL_DRILL. See also [fl_parm_clearance()](../foundation/core.md#function-fl_parm_clearance)
-| $fl_thickness  | Parameter | thickness during FL_ASSEMBLY. See also [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness)
+| $fl_thickness  | Parameter | thickness during FL_ASSEMBLY and FL_CUTOUT. See also [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness)
 | $fl_tolerance  | Parameter | used during FL_FOOTPRINT. See also fl_parm_tolerance()
 
 
@@ -492,6 +523,14 @@ undef, "default" or "nyloc"
 
 __dri_type__  
 drill type: "clearance" or "tap"
+
+__cut_dirs__  
+FL_CUTOUT direction list, if undef then the preferred cutout direction
+attribute is used.
+
+
+__cut_drift__  
+translation applied to cutout
 
 __direction__  
 desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -537,5 +576,37 @@ fallback NopSCADlib screw specs
 
 __type__  
 drill type ("clearance" or "tap")
+
+
+---
+
+### module fl_screw_rail
+
+__Syntax:__
+
+    fl_screw_rail(length,screw)
+
+Screw version of [fl_rail{}](../foundation/util.md#module-fl_rail).
+
+Differently from [fl_rail{}](../foundation/util.md#module-fl_rail) this module automatically take care of the screw
+geometry for the creation of a proper rail.
+
+![rail example](256x256/fig_DOME_SCREW_EXAMPLE.png)
+
+Context variables:
+
+| name           | Context   | Description
+| ---            | ---       | ---
+| $fl_clearance  | Parameter | defines the track clearance. See also [fl_parm_clearance()](../foundation/core.md#function-fl_parm_clearance)
+| $fl_thickness  | Parameter | used for screw FL_CUTOUT. See also [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness)
+
+
+__Parameters:__
+
+__length__  
+when undef or 0 rail degenerates into children()
+
+__screw__  
+OFL screw used for the rail
 
 

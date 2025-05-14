@@ -11,7 +11,7 @@
 include <../../ext/NopSCADlib/lib.scad>
 include <3d-engine.scad>
 
-//! use children(0) for making a rail
+//! use children() for making a rail
 module fl_rail(
   //! when undef or 0 rail degenerates into children(0)
   length
@@ -21,10 +21,10 @@ module fl_rail(
     linear_extrude(height = len, center = true)
       projection()
         rotate(90,FL_X)
-          children(0);
+          children();
   for(i=[-1,1])
     translate(i*fl_Y(len/2))
-      children(0);
+      children();
 }
 
 /*!

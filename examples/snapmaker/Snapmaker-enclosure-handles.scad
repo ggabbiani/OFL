@@ -37,7 +37,7 @@ PART      = "Front";                            // [Front, Right]
 clearance = fl_techLimit(FL_LIMIT_CLEARANCE)/2;
 
 magnet      = MAGNET=="FL_MAG_M3_CS_D10x2" ? FL_MAG_M3_CS_D10x2 : FL_MAG_M3_CS_D10x5;
-screw       = fl_switch(SCREW,[["M2_cs_cap_screw",M2_cs_cap_screw],["M3_cs_cap_screw",M3_cs_cap_screw]],fl_screw(magnet));
+screw       = fl_switch(SCREW,[["M2_cs_cap_screw",M2_cs_cap_screw],["M3_cs_cap_screw",M3_cs_cap_screw]],fl_screw_specs(magnet));
 mag_sz      = fl_bb_size(magnet);
 T           = 2+clearance;
 // shortest linear threaded nut matching screw

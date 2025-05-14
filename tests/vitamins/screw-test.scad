@@ -15,6 +15,7 @@
 include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/vitamins/screw.scad>
 
+use <../../lib/OFL/foundation/customizer-engine.scad>
 
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_NIL
@@ -45,6 +46,8 @@ $FL_ASSEMBLY  = "ON";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
+// layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z)
+$FL_CUTOUT    = "OFF";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of predefined drill shapes (like holes with predefined screw diameter)
 $FL_DRILL     = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
@@ -95,7 +98,8 @@ DRILL_TYPE    = "clearance";  // [clearance,tap]
 
 /* [Context] */
 
-$fl_thickness = 10;     // [1:0.1:20]
+$fl_thickness = 10; // [1:0.1:20]
+$fl_tolerance = 0;  // [.1:0.1:1]
 
 /* [Hidden] */
 
@@ -114,29 +118,24 @@ fl_status();
 
 // end of automatically generated code
 
-function fl_cstz_undef(value,_if_="undef",_when_=false) =
-  value==_if_ || _when_ ?
-    undef :
-    value;
-
 $vpr        = fl_view(VIEW_TYPE);
 $dim_mode   = DIM_MODE;
 $dim_width  = DIM_W;
 
-verbs       = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL,FL_FOOTPRINT]);
+verbs       = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_FOOTPRINT]);
 // echo(labels=[for(s=FL_SCREW_SPECS_INVENTORY) s[0]]);
 echo(LENGTH_MODE=LENGTH_MODE);
 inventory = fl_ScrewInventory(
-  name          = fl_cstz_undef(SCREW_NAME,   _when_=SCREW_NAME=="*"        ),
-  length        = fl_cstz_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="exact"   ),
-  longer_than   = fl_cstz_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="longer"  ),
-  shorter_than  = fl_cstz_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="shorter" ),
+  name          = fl_cust_undef(SCREW_NAME,   _when_=SCREW_NAME=="*"        ),
+  length        = fl_cust_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="exact"   ),
+  longer_than   = fl_cust_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="longer"  ),
+  shorter_than  = fl_cust_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="shorter" ),
   head_name     = HEAD_TYPE,
-  head_spring   = fl_cstz_undef(HEAD_SPRING),
-  head_washer   = fl_cstz_undef(HEAD_WASHER),
-  nut_washer    = fl_cstz_undef(NUT_WASHER),
-  nut_spring    = fl_cstz_undef(NUT_SPRING),
-  nut           = fl_cstz_undef(NUT),
+  head_spring   = fl_cust_undef(HEAD_SPRING),
+  head_washer   = fl_cust_undef(HEAD_WASHER),
+  nut_washer    = fl_cust_undef(NUT_WASHER),
+  nut_spring    = fl_cust_undef(NUT_SPRING),
+  nut           = fl_cust_undef(NUT),
   thickness     = $fl_thickness
 );
 echo(inventory=[for(screw=inventory) fl_name(screw)]);
@@ -160,11 +159,11 @@ for(i=[0:len(dict)-1]) let(row=dict[i])
     // horizontal layout of row screws
     fl_layout(axis=+X,gap=3,types=row)
       fl_screw(verbs,$item,
-        head_spring = fl_cstz_undef(HEAD_SPRING),
-        head_washer = fl_cstz_undef(HEAD_WASHER),
-        nut_washer  = fl_cstz_undef(NUT_WASHER),
-        nut_spring  = fl_cstz_undef(NUT_SPRING),
-        nut         = fl_cstz_undef(NUT),
+        head_spring = fl_cust_undef(HEAD_SPRING),
+        head_washer = fl_cust_undef(HEAD_WASHER),
+        nut_washer  = fl_cust_undef(NUT_WASHER),
+        nut_spring  = fl_cust_undef(NUT_SPRING),
+        nut         = fl_cust_undef(NUT),
         octant=octant,direction=direction
       );
     }

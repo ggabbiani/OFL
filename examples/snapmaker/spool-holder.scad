@@ -1,10 +1,10 @@
-include <../../lib/OFL/foundation/hole.scad>
 include <../../lib/OFL/foundation/limits.scad>
 include <../../lib/OFL/vitamins/screw.scad>
 include <../../lib/OFL/artifacts/t-nut.scad>
 include <../../lib/OFL/artifacts/t-profiles.scad>
 
 use <../../lib/OFL/dxf.scad>
+use <../../lib/OFL/foundation/hole-engine.scad>
 
 $fn         = 50;           // [3:100]
 
@@ -23,6 +23,9 @@ SHOW_LABELS     = false;
 SHOW_SYMBOLS    = false;
 
 /* [Hidden] */
+
+$dbg_Labels     = SHOW_LABELS;
+$dbg_Symbols    = SHOW_SYMBOLS;
 
 PLEXI_SZ  = [463,605,2.5];
 
@@ -99,19 +102,19 @@ module central(verb="show") {
       [
         for(z=[-len_third,+len_third])
           let(normal=-X)
-            fl_Hole([-(BLK_wall+tolerance),0,z],d=d,normal=normal,depth=depth,screw=screw)
+            fl_Hole([-(BLK_wall+tolerance),0,z],d=d,normal=normal,depth=depth,nop_screw=screw)
       ],
       // holes on -Y surface
       [
         for(z=[-len_third,+len_third])
           let(normal=-Y)
-            fl_Hole([BLK_size.y/2-BLK_wall-tolerance,-BLK_size.y/2,z],d=d,normal=normal,depth=depth,screw=screw)
+            fl_Hole([BLK_size.y/2-BLK_wall-tolerance,-BLK_size.y/2,z],d=d,normal=normal,depth=depth,nop_screw=screw)
       ],
       // holes on +Y surface
       [
         for(z=[-len_third,+len_third])
           let(normal=+Y)
-            fl_Hole([BLK_size.y/2-BLK_wall-tolerance,+BLK_size.y/2,z],d=d,normal=normal,depth=depth,screw=screw)
+            fl_Hole([BLK_size.y/2-BLK_wall-tolerance,+BLK_size.y/2,z],d=d,normal=normal,depth=depth,nop_screw=screw)
       ]
     )
   ) holes;
@@ -157,10 +160,10 @@ module holding_arm(depth) {
 module side(verb="show",normal) {
   depth = SIDE_T;
   holes=let(d=scr_d) [
-    fl_Hole([-140,0,0]+SIDE_T/2*normal,d=scr_side_d,normal=normal,depth=depth,screw=screw_side),
-    fl_Hole([-BLK_wall/2,0,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,screw=screw),
-    fl_Hole([BLK_size.x/2-BLK_wall,(BLK_size.y-BLK_wall)/2,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,screw=screw),
-    fl_Hole([BLK_size.x/2-BLK_wall,-(BLK_size.y-BLK_wall)/2,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,screw=screw)
+    // fl_Hole([-140,0,0]+SIDE_T/2*normal,d=scr_side_d,normal=normal,depth=depth,nop_screw=screw_side),
+    fl_Hole([-BLK_wall/2,0,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,nop_screw=screw),
+    fl_Hole([BLK_size.x/2-BLK_wall,(BLK_size.y-BLK_wall)/2,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,nop_screw=screw),
+    fl_Hole([BLK_size.x/2-BLK_wall,-(BLK_size.y-BLK_wall)/2,0]+SIDE_T/2*normal,d=d,normal=normal,depth=depth,nop_screw=screw)
   ];
   if (verb=="show") {
   // fl_axes(size = 10, reverse = false);
@@ -203,10 +206,11 @@ show() {
         central();
 
     // - holes
-    if (PARTS=="central"||PARTS=="all")
+    if (PARTS=="central"||PARTS=="all") {
       central("drill");
-    translate(Z(-(BLK_size.z+SIDE_T)/2)) side("drill",normal=-Z);
-    translate(Z(+(BLK_size.z+SIDE_T)/2)) side("drill",normal=+Z);
+      translate(Z(-(BLK_size.z+SIDE_T)/2)) side("drill",normal=-Z);
+      translate(Z(+(BLK_size.z+SIDE_T)/2)) side("drill",normal=+Z);
+    }
   }
 
   fl_color(FILAMENT_SIDE) render() difference() {
