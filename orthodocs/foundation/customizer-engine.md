@@ -40,3 +40,19 @@ __Syntax:__
 fl_cust_undef(value,_if_="undef",_when_=false)
 ```
 
+Returns a value based on conditional logic, typically used for handling
+undefined or default values in customizer settings.
+
+
+__Parameters:__
+
+__value__  
+value to be checked
+
+___if___  
+value to be checked for returning «undef»
+
+___when___  
+condition to be checked for returning «undef»
+
+

@@ -13,7 +13,15 @@ include <../foundation/unsafe_defs.scad>
 //! prefix used for namespacing
 FL_CUST_NS  = "cust";
 
-function fl_cust_undef(value,_if_="undef",_when_=false) =
-  value==_if_ || _when_ ?
-    undef :
-    value;
+/*!
+ * Returns a value based on conditional logic, typically used for handling
+ * undefined or default values in customizer settings.
+ */
+function fl_cust_undef(
+  //! value to be checked
+  value,
+  //! value to be checked for returning «undef»
+  _if_  = "undef",
+  //! condition to be checked for returning «undef»
+  _when_= false
+) = value==_if_ || _when_ ? undef : value;

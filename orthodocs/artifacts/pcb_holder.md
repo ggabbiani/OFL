@@ -80,12 +80,14 @@ PCB holder engine.
 
 Context variables:
 
-| Name         | Context   | Description                     |
-| ------------ | --------- | ------------------------------- |
-| $pcb_*       | Children  | [fl_pcb{}](../vitamins/pcbs.md#module-fl_pcb) context                |
-| $spc_*       | Children  | [fl_spacer{}](spacer.md#module-fl_spacer) context             |
-| $pcbh_spacer | Children  | current processed spacer        |
-| $pcbh_verb   | Children  | current triggering verb         |
+| Name             | Context   | Description
+| ---              | ---       | ---
+| $pcb_*           | Children  | [fl_pcb{}](../vitamins/pcbs.md#module-fl_pcb) context
+| $spc_*           | Children  | [fl_spacer{}](spacer.md#module-fl_spacer) context
+| $pcbh_screw      | Children  | currently processed screw (equal to current $hole_screw)
+| $pcbh_spacer     | Children  | currently processed spacer
+| $pcbh_upperThick | Children  | overall thickness along +Z semi-axis
+| $pcbh_verb       | Children  | currently triggering verb
 
 
 __Parameters:__
@@ -132,7 +134,7 @@ is interpreted as a thickness of 2mm along +Z and -Z axes
 __lay_direction__  
 FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
 
-__NOTE__: only Z semi-axes are used
+FIXME: currently unused, only Z semi-axes will be supported
 
 
 __direction__  

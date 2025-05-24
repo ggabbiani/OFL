@@ -13,6 +13,7 @@ import argparse
 import dotenv
 import os
 import re
+import shutil
 import subprocess
 import sys
 
@@ -56,8 +57,8 @@ def run(title,test,parms,output,dry_run=False,case=None):
   rc = ofl.openscad(test,parms=parms,echo_f=output,hw=True,dry_run=dry_run)
   return ofl.rc_epilogue(rc) if not dry_run else rc
 
-def echo(path,base):
-  return os.path.join(path,base+'.echo')
+def echo(path,base,error=False):
+  return os.path.join(path,base+('.echo' if not error else '-failed.echo'))
 
 parser = argparse.ArgumentParser()
 parser.add_argument(      "--must-fail", action='store_true', help = "asserts command failure")
@@ -128,7 +129,17 @@ for i, cmd in enumerate(cmds):
     cprint(f'{case if case else "✝"}', 'red',  end=" ")
 
   if not args.must_fail and result.returncode!=0:
+    e_file = None
+    if (case):
+      e_dir = os.path.join(path,base+'-failed.echo')
+      if os.path.exists(e_dir):
+        shutil.rmtree(e_dir)
+      os.rename(o_dir, e_dir)
+      e_file = echo(e_dir,o_base)
+    else:
+      e_file = echo(o_dir,o_base,error=True)
+      os.rename(o_file, e_file)
     print("\n")
     cprint(f'{result}', 'red')
-    cat(echo(o_dir,o_base))
+    cat(e_file)
     exit(1)

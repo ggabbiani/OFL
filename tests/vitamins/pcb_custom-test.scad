@@ -130,7 +130,7 @@ pcb = let(
     // pcb thickness
     thick = pcb_t,
     color  = "DarkCyan",
-    holes = let(r=0.75,d=r*2) [for(i=[0:len(holes)-1]) fl_Hole(holes[i],d,+Z,0,screw=M2_cap_screw)],
+    holes = let(r=0.75,d=r*2) [for(i=[0:len(holes)-1]) fl_Hole(holes[i],d,+Z,0,nop_screw=M2_cap_screw)],
     components=comps
   );
 

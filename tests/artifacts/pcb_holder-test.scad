@@ -26,7 +26,7 @@ $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES        = -2;     // [-2:10]
 DEBUG_ASSERTIONS  = false;
 DEBUG_COMPONENTS  = ["none"];
 DEBUG_COLOR       = false;
@@ -126,13 +126,16 @@ thickness = let(t= [
 ]) t ? t : undef;
 
 pcb     = fl_pcb_select(PCB);
-pcb_scr = fl_screw(pcb);
+// pcb_scr = fl_screw_specs(pcb);
 dirs    = fl_3d_AxisList([LAYOUT_DIRS]);
 thread  = KNUT!="none" ? KNUT : undef;
 pcbh    = fl_PCBHolder(pcb,h_min=H_MIN,knut_type=thread);
+pcbh_t  = fl_thick(pcbh);
+pcb_t   = fl_thick(pcb);
 
+echo(thickness=thickness);
 fl_pcbHolder(verbs,pcbh,thick=thickness,lay_direction=dirs,fillet=FILLET,asm_all=ASSEMBLY_ALL,direction=direction,octant=octant)
-  if ($pcbh_verb==FL_LAYOUT) echo($spc_thick=$spc_thick) {
+  if ($pcbh_verb==FL_LAYOUT) {
     if ($spc_thick)
       translate($spc_director*($spc_thick))
         let(l=1.5*fl_spc_d($pcbh_spacer))
@@ -140,7 +143,8 @@ fl_pcbHolder(verbs,pcbh,thick=thickness,lay_direction=dirs,fillet=FILLET,asm_all
   } else if ($pcbh_verb==FL_MOUNT)
     let(
       htyp    = screw_head_type($pcbh_screw),
-      washer  = (htyp==hs_cs||htyp==hs_cs_cap) ? "no" : "nylon"
-    ) fl_screw(FL_DRAW,$pcbh_screw,$fl_thickness=$spc_thickness,washer=washer,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
+      washer  = (htyp==hs_cs||htyp==hs_cs_cap) ? "no" : "default",
+      screw   = fl_Screw($pcbh_screw,longer_than=$pcbh_upperThick)
+    ) fl_screw(FL_DRAW,screw,head_washer=washer,$FL_ADD=$FL_MOUNT,$FL_ASSEMBLY=$FL_MOUNT);
   else echo($pcbh_verb=$pcbh_verb);
 

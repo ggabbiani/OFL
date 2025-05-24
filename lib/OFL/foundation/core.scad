@@ -604,7 +604,7 @@ function fl_name(type,value)        = fl_property(type,"name",value);
  * **NOTE:** true for all the objects created by the OFL library. When used as a
  * getter on OFL alien objects it returns 'false'.
  */
-function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,type!=undef?false:undef);
+function fl_native(type,value)      = fl_property(type,"OFL native type (boolean)",value,is_undef(type)?undef:false);
 function fl_nominal(type,value)     = fl_property(type,"Nominal property for «type»",value);
 //! Verbatim NopSCADlib definition
 function fl_nopSCADlib(type,value,default)
@@ -1005,6 +1005,12 @@ function fl_split(
 	fl_split(str, sep, i+1, str(word, str[i]), v);
 
 //**** lists ******************************************************************
+
+module fl_kv_dump(kv_list,subject) let(
+  subject = subject ? subject : fl_name(kv_list)
+) echo("***SUBJECT***",subject)
+  for(kv=kv_list)
+    echo(str(kv[0],"=",kv[1]));
 
 /*!
  * calculates the median INDEX of a list

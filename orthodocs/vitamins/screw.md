@@ -52,7 +52,7 @@ Screw **specifications** inventory in NopSCADlib format.
 __Syntax:__
 
 ```text
-fl_Screw(nop,length,longer_than,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
+fl_Screw(nop,length,longer_than=0,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
 ```
 
 Screw constructor: build a screw object from specifications and length.
@@ -98,7 +98,7 @@ undef, "default" or "nyloc"
 __Syntax:__
 
 ```text
-fl_ScrewInventory(specs=FL_SCREW_SPECS_INVENTORY,name,nominal,head_type,head_name,length,longer_than,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
+fl_ScrewInventory(specs=FL_SCREW_SPECS_INVENTORY,name,nominal,head_type,head_name,length,longer_than=0,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
 ```
 
 Builds a screw object inventory from specifications selection and shaft length.
@@ -220,7 +220,7 @@ __type__
 NopSCADlib screw type
 
 __shaft__  
-screw length, when undef or 0 the length is calculated
+screw length, when undef or 0 the length is calculated programmatically
 
 __head_spring__  
 undef, "spring" or "star"

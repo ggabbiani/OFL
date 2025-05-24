@@ -69,6 +69,8 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
+
+
 /* [Dimension Lines] */
 
 VIEW_TYPE     = "other";    // [other,right,top,bottom,left,front,back]
@@ -111,6 +113,7 @@ $dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
 $dbg_Labels     = DEBUG_LABELS;
 $dbg_Symbols    = DEBUG_SYMBOLS;
 
+
 direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
@@ -127,9 +130,9 @@ verbs       = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL
 echo(LENGTH_MODE=LENGTH_MODE);
 inventory = fl_ScrewInventory(
   name          = fl_cust_undef(SCREW_NAME,   _when_=SCREW_NAME=="*"        ),
-  length        = fl_cust_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="exact"   ),
-  longer_than   = fl_cust_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="longer"  ),
-  shorter_than  = fl_cust_undef(SHAFT_LENGTH, _when_=LENGTH_MODE!="shorter" ),
+  length        = fl_cust_undef(SHAFT_LENGTH, _if_=0, _when_=LENGTH_MODE!="exact"   ),
+  longer_than   = fl_cust_undef(SHAFT_LENGTH, _if_=0, _when_=LENGTH_MODE!="longer"  ),
+  shorter_than  = fl_cust_undef(SHAFT_LENGTH, _if_=0, _when_=LENGTH_MODE!="shorter" ),
   head_name     = HEAD_TYPE,
   head_spring   = fl_cust_undef(HEAD_SPRING),
   head_washer   = fl_cust_undef(HEAD_WASHER),
@@ -175,4 +178,3 @@ module label(str, scale = 0.25, valign = "baseline", halign = "left")
       linear_extrude(NIL)
         scale(scale)
           text(str, valign = valign, halign = halign, font="Symbola:style=Regular");
-

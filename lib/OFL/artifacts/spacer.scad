@@ -84,15 +84,15 @@ function fl_Spacer(
 /*!
  * Context variables:
  *
- * | Name           | Type      | Description                                     |
- * | ---            | ---       | ---                                             |
- * | $spc_director  | Children  | layout direction                                |
- * | $spc_nominal   | Children  | OPTIONAL screw nominal ⌀                        |
- * | $spc_thick     | Children  | scalar thickness (always≥0) along $spc_director |
- * | $spc_thickness | Children  | overall thickness (spacer length + ∑thick[i])   |
- * | $spc_h         | Children  | spacer height                                   |
- * | $spc_holeR     | Children  | OPTIONAL internal hole radius                   |
- * | $spc_verb      | Children  | triggered verb                                  |
+ * | Name           | Type      | Description
+ * | ---            | ---       | ---
+ * | $spc_director  | Children  | layout direction
+ * | $spc_nominal   | Children  | OPTIONAL screw nominal ⌀
+ * | $spc_thick     | Children  | scalar thickness (always≥0) along current $spc_director
+ * | $spc_thickness | Children  | overall thickness (spacer length + ∑thick[i])
+ * | $spc_h         | Children  | spacer height
+ * | $spc_holeR     | Children  | OPTIONAL internal hole radius
+ * | $spc_verb      | Children  | triggered verb
  *
  */
 module fl_spacer(

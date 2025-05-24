@@ -49,7 +49,7 @@ function fl_PCBHolder(
   holes     = fl_holes(pcb),
   spacers   = [for(hole=holes) let(
       screw   = let(screw=fl_screw_specs(hole)) screw ? screw : pcb_screw,
-      nominal = screw ? screw_radius(screw) : 0,
+      nominal = screw ? 2*screw_radius(screw) : 0,
       knut    = knut_type ? fl_knut_shortest(fl_knut_find(thread=knut_type,nominal=nominal)) : undef
     ) fl_Spacer(h_min=h_min,d_min=fl_hole_d(hole)+wall,screw_size=nominal,knut=knut)
   ],
@@ -99,12 +99,14 @@ function fl_PCBHolder(
  *
  * Context variables:
  *
- * | Name         | Context   | Description                     |
- * | ------------ | --------- | ------------------------------- |
- * | $pcb_*       | Children  | fl_pcb{} context                |
- * | $spc_*       | Children  | fl_spacer{} context             |
- * | $pcbh_spacer | Children  | current processed spacer        |
- * | $pcbh_verb   | Children  | current triggering verb         |
+ * | Name             | Context   | Description
+ * | ---              | ---       | ---
+ * | $pcb_*           | Children  | fl_pcb{} context
+ * | $spc_*           | Children  | fl_spacer{} context
+ * | $pcbh_screw      | Children  | currently processed screw (equal to current $hole_screw)
+ * | $pcbh_spacer     | Children  | currently processed spacer
+ * | $pcbh_upperThick | Children  | overall thickness along +Z semi-axis
+ * | $pcbh_verb       | Children  | currently triggering verb
  */
 module fl_pcbHolder(
   /*!
@@ -148,7 +150,7 @@ module fl_pcbHolder(
   /*!
    * FL_DRILL and FL_LAYOUT directions in floating semi-axis list.
    *
-   * __NOTE__: only Z semi-axes are used
+   * FIXME: currently unused, only Z semi-axes will be supported
    */
   lay_direction=[+Z,-Z],
   //! desired direction [director,rotation], native direction when undef ([+X+Y+Z])
@@ -175,8 +177,9 @@ module fl_pcbHolder(
       $pcbh_verb  = $this_verb
     ) fl_pcb(FL_LAYOUT,pcb)
         let(
-          $pcbh_spacer= spcs[$hole_i],
-          $pcbh_screw = $hole_screw
+          $pcbh_spacer      = spcs[$hole_i],
+          $pcbh_screw       = $hole_screw,
+          $pcbh_upperThick  = pcb_t+thick[1]
         ) children();
   }
 
@@ -190,39 +193,32 @@ module fl_pcbHolder(
 
   fl_vmanage(verbs, this, octant, direction) {
     if ($this_verb==FL_ADD) {
-      fl_modifier($modifier)
-        contextualLayout($FL_LAYOUT=$FL_ADD)
-          fl_spacer(spacer=$pcbh_spacer,fillet=fillet,anchor=[-Z]);
+      contextualLayout($FL_LAYOUT=$FL_ADD)
+        fl_spacer(spacer=$pcbh_spacer,fillet=fillet,anchor=[-Z]);
 
     } else if ($this_verb==FL_ASSEMBLY) {
-      fl_modifier($modifier)
-        do_assembly();
+      do_assembly();
 
     } else if ($this_verb==FL_BBOX) {
-      fl_modifier($modifier)
-        fl_bb_add($this_bbox);
+      fl_bb_add($this_bbox);
 
     } else if ($this_verb==FL_DRILL) {
-      fl_modifier($modifier)
-        contextualLayout($FL_LAYOUT=$FL_DRILL)
-          fl_spacer(FL_DRILL,$pcbh_spacer,thick=thick);
+      contextualLayout($FL_LAYOUT=$FL_DRILL)
+        fl_spacer(FL_DRILL,$pcbh_spacer,thick=thick);
 
     } else if ($this_verb==FL_LAYOUT) {
-      fl_modifier($modifier)
-        contextualLayout()
-          fl_spacer(FL_LAYOUT,$pcbh_spacer,thick=thick)
-            children();
+      contextualLayout()
+        fl_spacer(FL_LAYOUT,$pcbh_spacer,thick=thick)
+          children();
 
     } else if ($this_verb==FL_MOUNT) {
-      fl_modifier($modifier)
-        contextualLayout($FL_LAYOUT=$FL_MOUNT)
-            fl_spacer(FL_MOUNT,$pcbh_spacer,thick=thick)
-              children();
+      contextualLayout($FL_LAYOUT=$FL_MOUNT)
+        fl_spacer(FL_MOUNT,$pcbh_spacer,thick=thick)
+            children();
 
     } else if ($this_verb==FL_PAYLOAD) {
-      fl_modifier($modifier)
-        multmatrix(pcb_M)
-          fl_bb_add(pcb_bb);
+      multmatrix(pcb_M)
+        fl_bb_add(pcb_bb);
 
     } else {
       fl_error(["Unimplemented verb",$this_verb]);

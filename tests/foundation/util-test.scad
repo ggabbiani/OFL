@@ -27,14 +27,13 @@ $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
-$FL_TRACES  = -2;     // [-2:10]
+$FL_TRACES        = -2;     // [-2:10]
 DEBUG_ASSERTIONS  = false;
 DEBUG_COMPONENTS  = ["none"];
 DEBUG_COLOR       = false;
 DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
-
 
 
 

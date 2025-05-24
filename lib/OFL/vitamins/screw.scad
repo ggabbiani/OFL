@@ -126,7 +126,7 @@ FL_SCREW_SPECS_INVENTORY = [for(list = screw_lists, screw=list) if (screw) screw
 function fl_screw_AssemblyStack(
   //! NopSCADlib screw type
   type,
-  //! screw length, when undef or 0 the length is calculated
+  //! screw length, when undef or 0 the length is calculated programmatically
   shaft,
   //! undef, "spring" or "star"
   head_spring,
@@ -142,6 +142,7 @@ function fl_screw_AssemblyStack(
   nut,
 ) =
   assert(type && !fl_native(type))
+  assert(shaft==0 || is_undef(shaft) || is_num(shaft),shaft)
 let(
   // nut_nyloc     = nut=="nyloc",
   screw_nut     = screw_nut(type),
@@ -162,7 +163,8 @@ let(
   nut_spring_t  = nut_spring ? thick_spring(nut_spring) : 0,
   nut_thick     = is_undef(nut) ? 0 : assert((nut=="default" || nut=="nyloc") && !is_undef(screw_nut) && screw_nut,fl_error(["No nut \"",nut,"\" found for screw \"",type[0],"\""])) nut_thickness(screw_nut, nut=="nyloc"),
   thick_all     = shaft ? shaft : thickness + head_spring_t + head_washer_t + nut_washer_t + nut_spring_t + nut_thick
-) [thick_all,screw_longer_than(thick_all),head_spring_t,head_washer_t,thickness,nut_washer_t,nut_spring_t,nut_thick];
+)
+[thick_all,screw_longer_than(thick_all),head_spring_t,head_washer_t,thickness,nut_washer_t,nut_spring_t,nut_thick];
 
 /*!
  * Screw constructor: build a screw object from specifications and length.
@@ -173,7 +175,7 @@ function fl_Screw(
   //! Shaft length
   length,
   //! Shaft length longer or equal than «longer_then»
-  longer_than,
+  longer_than=0,
   //! Shaft length shorter or equal than «shorter_then»
   shorter_than,
   //! undef, "spring" or "star"
@@ -192,8 +194,12 @@ function fl_Screw(
   assert(nop)
   let(
     lens    = let(
-      length  = length ? length : longer_than ? screw_longer_than(longer_than) : shorter_than ? screw_shorter_than(shorter_than) : undef
-    ) fl_screw_AssemblyStack(nop, length, head_spring, head_washer, thickness, nut_washer, nut_spring, nut),
+      length  = length ? length : is_num(shorter_than) ? screw_shorter_than(shorter_than) : is_num(longer_than) ? screw_longer_than(longer_than) : undef
+    )
+      // Constructor should not leverage on $fl_thickness (nor any runtime
+      // contetxt variable) to determine the length of the screw.
+      // assert(fl_parm_thickness(length),"Either one length,longer_than,shorter_than parameters or the $fl_thickness must be specified")
+      fl_screw_AssemblyStack(nop, length, head_spring, head_washer, thickness, nut_washer, nut_spring, nut),
     head_h  = screw_head_height(nop),
     bbox    = let(
       r         = max(screw_radius(nop),screw_head_radius(nop)),
@@ -261,7 +267,7 @@ function fl_ScrewInventory(
   //! Shaft exact length
   length,
   //! Shaft length longer or equal to «longer_then»
-  longer_than,
+  longer_than=0,
   //! Shaft length shorter or equal to «shorter_then»
   shorter_than,
   //! undef, "spring" or "star"
@@ -422,9 +428,7 @@ module fl_screw(
   //! when undef native positioning is used
   octant,
 ) {
-  assert(is_list(verbs)||is_string(verbs),verbs);
-  assert(fl_native(type),type);
-  nop           = fl_screw_specs(type);
+  nop           = assert(type) assert(fl_native(type),type) fl_screw_specs(type);
   screw_nut     = screw_nut(nop);
   screw_washer  = screw_washer(nop);
   shaft         = fl_screw_shaft(type);

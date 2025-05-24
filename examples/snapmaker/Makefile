@@ -6,6 +6,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+# explicit wildcard expansion suppresses errors when no files are found
+include $(wildcard *.deps) $(FUNCTIONS) $(DEF_RULES)
+
 # 'Lazy Set'
 T_LIST		= blob-mount camera-mount Snapmaker-enclosure-handles spool-holder
 

@@ -68,15 +68,15 @@ function fl_Hole(
    * TODO: rename as screw_specs
    */
   nop_screw
-) = assert(!nop_screw || !fl_native(nop_screw)) let(
+) = assert(is_undef(nop_screw) || !fl_native(nop_screw)) let(
     hole  = assert(fl_tt_isPointNormal([position,normal]),[position,normal]) [
       fl_hole_pos(value=position),
       fl_hole_n(value=normal),
-      assert(is_num(d)) fl_hole_d(value=d),
+      assert(is_num(d))     fl_hole_d(value=d),
       assert(is_num(depth)) fl_hole_depth(value=depth),
-      if (ldir) fl_hole_ldir(value=ldir),
-      if (loct) fl_hole_loct(value=loct),
-      fl_screw_specs(value=nop_screw),
+      if (ldir)             fl_hole_ldir(value=ldir),
+      if (loct)             fl_hole_loct(value=loct),
+      if (nop_screw)        fl_screw_specs(value=nop_screw),
     ]
   ) hole;
 

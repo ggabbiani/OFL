@@ -498,7 +498,6 @@ module fl_USB(
                 }
         }
     }
-
     if      (engine=="USB/A SM") usb_A_sm($verb);
     else if (engine=="USB/Ax1")  usb_Ax1(tongue=tongue,flange=flange);
     else if (engine=="USB/Ax2")  usb_Ax2(tongue=tongue);
@@ -558,7 +557,7 @@ module fl_USB(
       if (fl_isInAxisList(axis,fl_cutout(type)))
         let(
           sys = [axis.x ? -Z : X ,O,axis],
-          t   = (bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
+          t   = ($this_bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
         )
         translate(t)
           fl_cutout(cut_thick,sys.z,sys.x,delta=cut_tolerance)
@@ -573,7 +572,7 @@ module fl_USB(
         wrap();
 
     } else if ($verb==FL_BBOX) {
-      fl_bb_add(bbox);
+      fl_bb_add($this_bbox);
 
     } else if ($verb==FL_CUTOUT) {
       fl_cutoutLoop(cut_dirs,fl_cutout(type))
@@ -585,7 +584,7 @@ module fl_USB(
       // FIXME: re-implement «tolerance» parameter by $fl_tolerance special
       // variable
       // assert(tolerance!=undef);
-      fl_bb_add(bbox/* +tolerance*[[-1,-1,-1],[1,1,1]] */);
+      fl_bb_add($this_bbox/* +tolerance*[[-1,-1,-1],[1,1,1]] */);
 
     } else {
       fl_error(["unimplemented verb",$this_verb]);

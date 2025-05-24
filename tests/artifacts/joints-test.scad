@@ -122,14 +122,16 @@ fl_status();
 
 $vpr  = fl_view(VIEW_TYPE);
 
-verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT]);
+verbs = fl_verbList([
+  FL_ADD,
+  FL_AXES,
+  FL_BBOX,
+  FL_CUTOUT,
+  FL_FOOTPRINT,
+]);
 
 function fl_custom_num(value) =
-  value=="undef" ?
-    undef :
-    is_num(value) ?
-      value :
-      assert(is_string(value),value) fl_atof(value);
+  value=="undef" ? undef : is_num(value) ? value : assert(is_string(value),value) fl_atof(value);
 
 fillet  = fl_custom_num(JOINT_FILLET);
 

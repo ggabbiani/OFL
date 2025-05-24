@@ -2678,6 +2678,14 @@ __Syntax:__
 
 ---
 
+### module fl_kv_dump
+
+__Syntax:__
+
+    fl_kv_dump(kv_list,subject)
+
+---
+
 ### module fl_modifier
 
 __Syntax:__
