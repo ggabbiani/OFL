@@ -39,8 +39,7 @@ fig_3d_cylinder_defaults.png: $(call test-deps,foundation/3d)
 
 fig_2d_frame.png: $(call test-deps,foundation/square)
 	$(call target-prologue)
-	source $(TESTS)/foundation/square-test.conf && \
-	$(call make-picture,$(SIZE),,,$$CAMERA $$PROJECTION)
+	$(call make-picture,$(SIZE),$(call top-view,0,0,0,46.2),ortho)
 	$(call target-epilogue-success)
 
 %.png: %.scad
