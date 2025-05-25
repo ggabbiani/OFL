@@ -133,7 +133,6 @@ pcbh    = fl_PCBHolder(pcb,h_min=H_MIN,knut_type=thread);
 pcbh_t  = fl_thick(pcbh);
 pcb_t   = fl_thick(pcb);
 
-echo(thickness=thickness);
 fl_pcbHolder(verbs,pcbh,thick=thickness,lay_direction=dirs,fillet=FILLET,asm_all=ASSEMBLY_ALL,direction=direction,octant=octant)
   if ($pcbh_verb==FL_LAYOUT) {
     if ($spc_thick)

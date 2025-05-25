@@ -98,17 +98,17 @@ fl_status();
 
 // end of automatically generated code
 
-verbs=[
-  if ($FL_ADD!="OFF")       FL_ADD,
-  if ($FL_ASSEMBLY!="OFF")  FL_ASSEMBLY,
-  if ($FL_AXES!="OFF")      FL_AXES,
-  if ($FL_BBOX!="OFF")      FL_BBOX,
-  if ($FL_CUTOUT!="OFF")    FL_CUTOUT,
-  if ($FL_DRILL!="OFF")     FL_DRILL,
-  if ($FL_FOOTPRINT!="OFF") FL_FOOTPRINT,
-  if ($FL_LAYOUT!="OFF")    FL_LAYOUT,
-  if ($FL_PAYLOAD!="OFF")   FL_PAYLOAD,
-];
+verbs = fl_verbList([
+  FL_ADD,
+  FL_ASSEMBLY,
+  FL_AXES,
+  FL_BBOX,
+  FL_CUTOUT,
+  FL_DRILL,
+  FL_FOOTPRINT,
+  FL_LAYOUT,
+  FL_PAYLOAD
+]);
 
 pcb = let(
     pcb_t = 1.6,
@@ -135,4 +135,3 @@ pcb = let(
   );
 
 fl_pcb(verbs,pcb,direction=direction,octant=octant,thick=T);
-
