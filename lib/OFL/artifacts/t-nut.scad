@@ -29,12 +29,6 @@ FL_TNUT_NS  = "tnut";
 
 function fl_tnut_thickness(type,value) = fl_property(type,"tnut/[wall, base, cone] thickness",value);
 
-//*****************************************************************************
-// T-slot nut getters
-
-//! nominal size for a knurl nut is the nominal size of the screw
-function fl_tnut_nominal(tnut) = fl_screw_nominal(fl_screw(knut));
-
 /*!
  * Constructor returning a T-slot nut.
  *
@@ -68,11 +62,11 @@ function fl_TNut(
   holes
 ) = assert(!nop_screw || !fl_native(nop_screw))
 let(
-  wall  = thickness[0],
-  base  = thickness[1],
-  cone  = thickness[2],
-  size  = [size.x, fl_accum(thickness), size.y],
-  bbox  = [[-size.x/2,-base-cone,0],[+size.x/2,+wall,size.z]],
+  wall    = thickness[0],
+  base    = thickness[1],
+  cone    = thickness[2],
+  size    = [size.x, fl_accum(thickness), size.y],
+  bbox    = [[-size.x/2,-base-cone,0],[+size.x/2,+wall,size.z]],
   hole_d  = nop_screw ? 2*screw_radius(nop_screw) : undef,
   points  = [
     [bbox[1].x-cone,bbox[0].y],
@@ -91,12 +85,10 @@ let(
   ["opening", opening],
   fl_tnut_thickness(value=thickness),
   ["section points", points],
-  if (nop_screw)
-    fl_screw_specs(value=nop_screw),
-  if (nop_screw)
-    fl_holes(value=holes ? holes : [fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,nop_screw=nop_screw)]),
-  if (knut)  echo(nop_screw=nop_screw)
-    let(kn=fl_knut_search(nop_screw,size.y)) assert(kn,"No knurl nut found") ["knut",kn],
+  if (nop_screw) fl_screw_specs(value=nop_screw),
+  if (nop_screw) fl_nominal(value=hole_d),
+  if (nop_screw) fl_holes(value=holes ? holes : [fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,nop_screw=nop_screw)]),
+  if (knut) let(kn=fl_knut_search(nop_screw,size.y)) assert(kn,"No knurl nut found") ["knut",kn],
   fl_dimensions(value=fl_DimensionPack([
     fl_Dimension(opening, "opening" ),
     fl_Dimension(size.x,  "width"   ),
@@ -124,20 +116,31 @@ FL_TNUT_DICT = [
 ];
 
 /*!
- * Search into dictionary for the best matching T-slot nut (default behavior)
- * or all the matching T-lot nuts depending on the «best_match» parameter.
+ * Selects the T-slot nuts from a dictionary matching the screw or a generic
+ * nominal ⌀. When the «best» function literal is defined, it is applied to the
+ * result for further filtering.
  */
-function fl_tnut_search(
-  //! screw to fit into
-  screw,
-  //! nominal diameter
-  d,
-  best=function(matches) matches[0]
+function fl_tnut_select(
+  dictionary  = FL_TNUT_DICT,
+  //! screw specs to fit into
+  nop_screw,
+  //! nominal ⌀
+  nominal,
+  /*!
+   * function literal to select the best match (defaults to the first match)
+   *
+   * **NOTE:** when undefined the result is always a list of all matching T-slot
+   * nuts. Otherwise the result type (list or single nut) depends on the
+   * implementation of the provided function literal.
+   */
+  best    = function(matches) matches[0]
 ) = let(
-  nominal = d ? d : screw ? fl_screw_nominal(screw) : undef,
+  nominal = nominal ? assert(is_num(nominal)) nominal : nop_screw ? 2*screw_radius(nop_screw) : undef,
   result  = [
-    for(nut=FL_TNUT_DICT)
-      if (is_undef(nominal) || nominal==fl_knut_nominal(nut)) nut
+    for(nut=dictionary)
+      if (
+        is_undef(nominal) || nominal==fl_nominal(nut)
+      ) nut
   ]
 ) best ? best(result) : result;
 

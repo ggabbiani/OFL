@@ -398,7 +398,7 @@ module fl_cylinder(
   /*!
    * optional type as returned by fl_Cylinder().
    *
-   * __NOTE__: «type» attributes are always overridden by the following
+   * **NOTE:** «type» attributes are always overridden by the following
    * parameters (if any).
    */
   type,

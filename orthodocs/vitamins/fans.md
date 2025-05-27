@@ -173,7 +173,7 @@ fl_fan_screw(type)
 
 Unwraps the nop screw from the OFL fan instance.
 
-__NOTE__: the returned value is a **NopSCADlib** list.
+:memo: **NOTE:** the returned value is a **NopSCADlib** list.
 
 
 ## Modules

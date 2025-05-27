@@ -48,7 +48,7 @@ optional name, a default is created if 'undef'
 __holes__  
 optional hole list.
 
-**NOTE**: the hole list will drive FL_DRILL operations.
+:memo: **NOTE:** the hole list will drive FL_DRILL operations.
 
 
 __ghost__  

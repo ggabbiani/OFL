@@ -165,7 +165,7 @@ low-point==min(x),min(y),min(z) of the bounding box
 high-point==max(x),max(y),max(z) of the bounding box
 ```
 
-__NOTE__: 0-sized bounding box are allowed
+:memo: **NOTE:** 0-sized bounding box are allowed
 
 TODO: When using a 3D bounding box, the coordinates of the 3D object are
 often converted to coordinates local to the bounding box, making

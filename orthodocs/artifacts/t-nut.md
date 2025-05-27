@@ -138,37 +138,34 @@ list of user defined holes usually positioned on the 'opening' side
 
 ---
 
-### function fl_tnut_nominal
+### function fl_tnut_select
 
 __Syntax:__
 
 ```text
-fl_tnut_nominal(tnut)
+fl_tnut_select(dictionary=FL_TNUT_DICT,nop_screw,nominal,best=function(matches)matches[0])
 ```
 
-nominal size for a knurl nut is the nominal size of the screw
-
----
-
-### function fl_tnut_search
-
-__Syntax:__
-
-```text
-fl_tnut_search(screw,d,best=function(matches)matches[0])
-```
-
-Search into dictionary for the best matching T-slot nut (default behavior)
-or all the matching T-lot nuts depending on the «best_match» parameter.
+Selects the T-slot nuts from a dictionary matching the screw or a generic
+nominal ⌀. When the «best» function literal is defined, it is applied to the
+result for further filtering.
 
 
 __Parameters:__
 
-__screw__  
-screw to fit into
+__nop_screw__  
+screw specs to fit into
 
-__d__  
-nominal diameter
+__nominal__  
+nominal ⌀
+
+__best__  
+function literal to select the best match (defaults to the first match)
+
+:memo: **NOTE:** when undefined the result is always a list of all matching T-slot
+nuts. Otherwise the result type (list or single nut) depends on the
+implementation of the provided function literal.
+
 
 
 ---

@@ -26,7 +26,7 @@ FL_COMP_DRIFT = str(FL_COMP_NS,"/drift");
 /*!
  * [OPTIONAL string] color attribute passed to component.
  *
- * __NOTE__: the semantic is component specific.
+ * **NOTE:** the semantic is component specific.
  */
 FL_COMP_COLOR = str(FL_COMP_NS,"/color");
 /*!

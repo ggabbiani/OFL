@@ -293,7 +293,7 @@ function fl_bb_polygon(
    * list of x,y points of the polygon to be used with
    * [polygon](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#polygon)
    *
-   * **NOTE**: even if safe to be used for 3d points, the result will be
+   * **NOTE:** even if safe to be used for 3d points, the result will be
    * a 2d bounding box.
    */
   points
@@ -306,7 +306,7 @@ function fl_bb_polygon(
  * Calculates the exact bounding box of a polygon inscribed in a circumference.
  * See also fl_bb_polygon().
  *
- * __NOTE:__ «r» and «d» are mutually exclusive.
+ * **NOTE:** «r» and «d» are mutually exclusive.
  */
 function fl_bb_ipoly(
   //! radius of the circumference
@@ -327,7 +327,7 @@ function fl_bb_sector(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -412,7 +412,7 @@ function fl_sector(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -434,7 +434,7 @@ module fl_sector(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -474,7 +474,7 @@ function fl_bb_ellipticSector(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -547,7 +547,7 @@ function fl_ellipticSector(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -676,7 +676,7 @@ module fl_ellipticSector(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -718,7 +718,7 @@ function fl_bb_ellipticArc(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -766,7 +766,7 @@ module fl_ellipticArc(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf
@@ -885,7 +885,7 @@ function __step__(angle) = sin(angle+90)==0 ? -sign(sin(angle)) : sign(sin(angle
 /*!
  * Converts «θ» value to the corresponding ellipse «t» parameter
  *
- * __NOTE:__ we need to extend the theoretical function beyond ±π/2 codomain,
+ * **NOTE:** we need to extend the theoretical function beyond ±π/2 codomain,
  * for that we use __ramp__() and __step__() function accordingly.
  */
 function fl_ellipseT(e,angle) =
@@ -1017,7 +1017,7 @@ module fl_arc(
   /*!
    * list containing the start and ending angles for the sector.
    *
-   * __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+   * **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
    *
    *     sup ≥ inf
    *     distance = sup - inf

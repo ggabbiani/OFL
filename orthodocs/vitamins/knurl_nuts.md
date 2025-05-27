@@ -678,7 +678,7 @@ Children context for FL_ASSEMBLY and FL_DRILL:
     $knut_verb       - verb currently triggering children (FL_ASSEMBLY or
                        FL_LAYOUT)
 
-__NOTE__: FL_ASSEMBLY expects a child screw to be passed
+:memo: **NOTE:** FL_ASSEMBLY expects a child screw to be passed
 
 
 __Parameters:__

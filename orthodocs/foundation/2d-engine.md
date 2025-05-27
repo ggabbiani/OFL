@@ -316,7 +316,7 @@ outer ellipse in [a,b] form with
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf
@@ -349,7 +349,7 @@ ellipse in [a,b] form
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf
@@ -372,7 +372,7 @@ fl_bb_ipoly(r,d,n)
 Calculates the exact bounding box of a polygon inscribed in a circumference.
 See also [fl_bb_polygon()](#function-fl_bb_polygon).
 
-:memo: __NOTE:__ «r» and «d» are mutually exclusive.
+:memo: **NOTE:** «r» and «d» are mutually exclusive.
 
 
 __Parameters:__
@@ -407,7 +407,7 @@ __points__
 list of x,y points of the polygon to be used with
 [polygon](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#polygon)
 
-**NOTE**: even if safe to be used for 3d points, the result will be
+:memo: **NOTE:** even if safe to be used for 3d points, the result will be
 a 2d bounding box.
 
 
@@ -435,7 +435,7 @@ diameter of the sector
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf
@@ -542,7 +542,7 @@ fl_ellipseT(e,angle)
 
 Converts «θ» value to the corresponding ellipse «t» parameter
 
-:memo: __NOTE:__ we need to extend the theoretical function beyond ±π/2 codomain,
+:memo: **NOTE:** we need to extend the theoretical function beyond ±π/2 codomain,
 for that we use __ramp__() and __step__() function accordingly.
 
 
@@ -593,7 +593,7 @@ ellipses in [a,b] form
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf
@@ -720,7 +720,7 @@ __Parameters:__
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf
@@ -1039,7 +1039,7 @@ outer diameter
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf
@@ -1128,7 +1128,7 @@ outer ellipse in [a,b] form with
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf
@@ -1164,7 +1164,7 @@ ellipse in [a,b] form with
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf
@@ -1209,7 +1209,7 @@ __Parameters:__
 __angles__  
 list containing the start and ending angles for the sector.
 
-:memo: __NOTE:__ the provided angles are always reduced in the form [inf,sup] with:
+:memo: **NOTE:** the provided angles are always reduced in the form [inf,sup] with:
 
     sup ≥ inf
     distance = sup - inf

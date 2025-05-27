@@ -129,7 +129,7 @@ __cut_dirs__
 Cutout direction list in floating semi-axis list (see also
 [fl_tt_isAxisList()](../foundation/traits-engine.md#function-fl_tt_isaxislist)).
 
-**NOTE**: defaults to [fl_cutout()](../foundation/core.md#function-fl_cutout) when undef (so all the preferred cutout
+:memo: **NOTE:** defaults to [fl_cutout()](../foundation/core.md#function-fl_cutout) when undef (so all the preferred cutout
 directions are included)
 
 Example 1:

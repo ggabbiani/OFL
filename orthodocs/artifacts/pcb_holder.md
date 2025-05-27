@@ -42,7 +42,7 @@ PCB to be held
 __h_min__  
 Minimum spacer height.
 
-__NOTE__: the actual spacer height can be different depending on the knurl
+:memo: **NOTE:** the actual spacer height can be different depending on the knurl
 nut constrains
 
 

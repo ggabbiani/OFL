@@ -31,7 +31,7 @@ function fl_generic_Vitamin(
   /*!
    * optional hole list.
    *
-   * **NOTE**: the hole list will drive FL_DRILL operations.
+   * **NOTE:** the hole list will drive FL_DRILL operations.
    */
   holes,
   //! when true FL_ADD is a no-op.

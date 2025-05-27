@@ -26,7 +26,7 @@ __Default:__
 
 [OPTIONAL string] color attribute passed to component.
 
-__NOTE__: the semantic is component specific.
+:memo: **NOTE:** the semantic is component specific.
 
 
 ---

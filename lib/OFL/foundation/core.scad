@@ -592,7 +592,7 @@ function fl_holes(type,value)       = assert(is_undef(value)||fl_tt_isHoleList(v
  * fl_tt_isAxisList(). Represents the list of layout directions supported by the
  * passed type.
  *
- * **NOTE**: this property is generally setup automatically by constructors
+ * **NOTE:** this property is generally setup automatically by constructors
  * from normals to holes eventually defined.
  */
 // function fl_layouts(type,value)      = fl_property(type,"layout direction list",value);
@@ -772,7 +772,7 @@ function fl_grey(n) = [0.01, 0.01, 0.01] * n;
  *
  * or the corresponding color palette if invoked by «color»
  *
- * __NOTE__: «axis» and «color» are mutually exclusive.
+ * **NOTE:** «axis» and «color» are mutually exclusive.
  */
 function fl_palette(color,axis) = assert(
   (color!=undef && axis==undef)||color==undef && axis!=undef,str("color=",color,",axis=",axis)
@@ -1158,16 +1158,16 @@ function fl_list_pack(left,right) = let(
  * 1. is a number
  * 2. is positive
  *
- *         let(
- *           list      = ["a", 4, -1, false, 5, "a string"],
- *           expected  = [4,5],
- *           result    = fl_list_filter(list,[
- *             function(item) is_num(item),// check if number (first)
- *             function(item) item>0       // check if positive (last)
- *           ])
- *         ) assert(result==expected,result) echo(result=result);
+ *     let(
+ *       list      = ["a", 4, -1, false, 5, "a string"],
+ *       expected  = [4,5],
+ *       result    = fl_list_filter(list,[
+ *         function(item) is_num(item),// check if number (first)
+ *         function(item) item>0       // check if positive (last)
+ *       ])
+ *     ) assert(result==expected,result) echo(result=result);
  *
- * __NOTE__: filter execution order is the same of their occurrence in
+ * **NOTE:** filter execution order is the same of their occurrence in
  * «filters». In the example above the list is first reduced to just the
  * numbers, then each remaining item is checked for positiveness.
  */
@@ -1635,7 +1635,7 @@ function fl_parm_MultiVerb(value) =
  *
  * See fl_parm_MultiVerb() for details.
  *
- * __NOTE__: this function asserts «value» must well formed
+ * **NOTE:** this function asserts «value» must well formed
  */
 function fl_parm_multiverb(
   //! parameter value

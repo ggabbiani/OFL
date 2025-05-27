@@ -70,7 +70,7 @@ function fl_tt_isCompSpecList(specs) =
  * high-point==max(x),max(y),max(z) of the bounding box
  * ```
  *
- * __NOTE__: 0-sized bounding box are allowed
+ * **NOTE:** 0-sized bounding box are allowed
  *
  * TODO: When using a 3D bounding box, the coordinates of the 3D object are
  * often converted to coordinates local to the bounding box, making

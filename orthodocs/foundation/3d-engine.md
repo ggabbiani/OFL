@@ -1027,7 +1027,7 @@ FL_ADD,FL_AXES,FL_BBOX
 __type__  
 optional type as returned by [fl_Cylinder()](#function-fl_cylinder).
 
-__NOTE__: «type» attributes are always overridden by the following
+:memo: **NOTE:** «type» attributes are always overridden by the following
 parameters (if any).
 
 

@@ -1388,16 +1388,16 @@ example 2: include only items matching two conditions executed in sequence:
 1. is a number
 2. is positive
 
-        let(
-          list      = ["a", 4, -1, false, 5, "a string"],
-          expected  = [4,5],
-          result    = fl_list_filter(list,[
-            function(item) is_num(item),// check if number (first)
-            function(item) item>0       // check if positive (last)
-          ])
-        ) assert(result==expected,result) echo(result=result);
+    let(
+      list      = ["a", 4, -1, false, 5, "a string"],
+      expected  = [4,5],
+      result    = fl_list_filter(list,[
+        function(item) is_num(item),// check if number (first)
+        function(item) item>0       // check if positive (last)
+      ])
+    ) assert(result==expected,result) echo(result=result);
 
-__NOTE__: filter execution order is the same of their occurrence in
+:memo: **NOTE:** filter execution order is the same of their occurrence in
 «filters». In the example above the list is first reduced to just the
 numbers, then each remaining item is checked for positiveness.
 
@@ -1764,7 +1764,7 @@ returns the canonical axis color when invoked by «axis»
 
 or the corresponding color palette if invoked by «color»
 
-__NOTE__: «axis» and «color» are mutually exclusive.
+:memo: **NOTE:** «axis» and «color» are mutually exclusive.
 
 
 ---
@@ -1923,7 +1923,7 @@ Multi valued verb-dependent parameter getter.
 
 See [fl_parm_MultiVerb()](#function-fl_parm_multiverb) for details.
 
-__NOTE__: this function asserts «value» must well formed
+:memo: **NOTE:** this function asserts «value» must well formed
 
 
 __Parameters:__

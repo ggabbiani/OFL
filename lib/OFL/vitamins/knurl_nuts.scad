@@ -368,7 +368,7 @@ function fl_knut_search(
  *     $knut_verb       - verb currently triggering children (FL_ASSEMBLY or
  *                        FL_LAYOUT)
  *
- * __NOTE__: FL_ASSEMBLY expects a child screw to be passed
+ * **NOTE:** FL_ASSEMBLY expects a child screw to be passed
  */
 module fl_knut(
   /*!

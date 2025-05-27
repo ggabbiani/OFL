@@ -80,7 +80,7 @@ module fl_ether(
    * Cutout direction list in floating semi-axis list (see also
    * fl_tt_isAxisList()).
    *
-   * **NOTE**: defaults to fl_cutout() when undef (so all the preferred cutout
+   * **NOTE:** defaults to fl_cutout() when undef (so all the preferred cutout
    * directions are included)
    *
    * Example 1:

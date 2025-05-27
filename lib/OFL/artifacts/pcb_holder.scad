@@ -29,7 +29,7 @@ function fl_PCBHolder(
   /*!
    * Minimum spacer height.
    *
-   * __NOTE__: the actual spacer height can be different depending on the knurl
+   * **NOTE:** the actual spacer height can be different depending on the knurl
    * nut constrains
    */
   h_min = 0,
