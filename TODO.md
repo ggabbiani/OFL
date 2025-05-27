@@ -95,10 +95,8 @@
 - [X] integrate also the examples in tests;
 - [X] fixed z-fighting bug in fl_ellipticArc{} and fl_arc{};
 - [X] apply the FL_CUTOUT 'manifest'
-- [ ] implement everywhere the multi-verb global parameters (ex.
+- [X] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
-- [ ] modify FL_DRILL verb implementation according to the type of drill to be
-  performed: TAP drill vs CLEARANCE drill.
 - [ ] differentiate documentation by release
 - [X] fully wrap the NopSCADlib screw library
 - [X] renamed knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}

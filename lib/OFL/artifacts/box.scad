@@ -72,7 +72,7 @@ module fl_box(
   spacer      = fl_Spacer(knut=knut);
   // first countersink screw matching nominal ⌀
   screw       = let(inventory=fl_ScrewInventory(nominal=scr_nominal, head_type=hs_cs_cap, shorter_than=fl_thick(spacer))) assert(inventory) inventory[0];
-  cs          = let(inventory=fl_cs_search(d=scr_nominal)) assert(inventory) inventory[0];
+  cs          = let(inventory=fl_cs_select(nominal=scr_nominal)) assert(inventory) inventory[0];
 
   T_real   = assert(thick) (thick + tolerance);
   // delta = «external bounding box» - «payload bounding box»

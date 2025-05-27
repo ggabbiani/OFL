@@ -113,16 +113,17 @@ FL_CS_ISO_M20
  * return a countersink list fitting the passed properties or undef if no match
  * no match found.
  */
-function fl_cs_search(
+function fl_cs_select(
   dictionary=FL_CS_ISO_DICT,
+  //! countersink name, when undef all names are matched
   name,
-  //! nominal diameter
-  d
+  //! nominal , when undef all nominal are matched
+  nominal
 ) = [
   for(cs=dictionary)
     if (
-          (is_undef(name) || fl_name(cs)==name    )
-      &&  (is_undef(d)    || fl_nominal(cs)==d )
+          (is_undef(name)     || fl_name(cs)==name        )
+      &&  (is_undef(nominal)  || fl_nominal(cs)==nominal  )
     ) cs
 ];
 

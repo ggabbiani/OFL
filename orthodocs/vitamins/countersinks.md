@@ -280,12 +280,12 @@ fl_cs_k(type,value)
 
 ---
 
-### function fl_cs_search
+### function fl_cs_select
 
 __Syntax:__
 
 ```text
-fl_cs_search(dictionary=FL_CS_ISO_DICT,name,d)
+fl_cs_select(dictionary=FL_CS_ISO_DICT,name,nominal)
 ```
 
 return a countersink list fitting the passed properties or undef if no match
@@ -294,8 +294,11 @@ no match found.
 
 __Parameters:__
 
-__d__  
-nominal diameter
+__name__  
+countersink name, when undef all names are matched
+
+__nominal__  
+nominal , when undef all nominal are matched
 
 
 ## Modules

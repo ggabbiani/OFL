@@ -145,7 +145,7 @@ screw         = scr_size ? fl_ScrewInventory(nominal=scr_size)[0] : undef;
 knut          = KNUT_TYPE!="none" ? assert(scr_size,"***TEST ERROR***: specify a screw size for knut") fl_knut_shortest(fl_knut_find(thread=KNUT_TYPE,nominal=scr_size)) : undef;
 assert(KNUT_TYPE=="none"||knut,str("***TEST ERROR***: no M",SCREW_SIZE," ",KNUT_TYPE," knurl nut found in inventory"));
 cs            = let(d=knut?fl_nominal(knut):screw?fl_nominal(screw):undef)
-                d ? fl_cs_search(d=d)[0] : undef;
+                d ? fl_cs_select(nominal=d)[0] : undef;
 
 spacer = fl_Spacer(h_min=H_MIN,d_min=D_MIN,screw_size=scr_size,knut=knut);
 fl_spacer(verbs,spacer,thick=thickness,anchor=anchor,fillet=FILLET,octant=octant,direction=direction)

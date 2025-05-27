@@ -109,7 +109,7 @@ verbs       = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_DRILL,FL_FOOTPRINT]);
 gap         = 5;
 
 if (SIZE!="ALL") {
-  cs = fl_cs_search(dictionary=dictionary,d=fl_atof(SIZE))[0];
+  cs = fl_cs_select(dictionary=dictionary,nominal=fl_atof(SIZE))[0];
   assert(cs,str("No M",SIZE," ",TYPE," countersink found."))
     fl_countersink(verbs,cs,octant=octant,direction=direction);
 } else
