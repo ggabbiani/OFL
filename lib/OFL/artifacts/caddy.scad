@@ -31,7 +31,6 @@ FL_NS_CAD = "cad";
  * - $cad_tolerance : see tolerance
  * - $cad_verbs     : list of verbs to be executed by children()
  *
- * TODO: FL_DRILL implementation
  * TODO: implement $fl_tolerance and $fl_thickness
  */
 module fl_caddy(
@@ -71,9 +70,9 @@ module fl_caddy(
 
   // delta to add to children thicknesses
   t_deltas  = let(d=(tolerance+fillet)) [
-    [fl_isSet(-FL_X,faces)?d:0,fl_isSet(+FL_X,faces)?d:0],
-    [fl_isSet(-FL_Y,faces)?d:0,fl_isSet(+FL_Y,faces)?d:0],
-    [fl_isSet(-FL_Z,faces)?tolerance:0,fl_isSet(+FL_Z,faces)?tolerance:0]
+    [fl_isSet(-X,faces)?d:0,        fl_isSet(+X,faces)?d:0],
+    [fl_isSet(-Y,faces)?d:0,        fl_isSet(+Y,faces)?d:0],
+    [fl_isSet(-Z,faces)?tolerance:0,fl_isSet(+Z,faces)?tolerance:0]
   ];
   // thickness without tolerance and fillet
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]] : thick;
@@ -96,7 +95,8 @@ module fl_caddy(
   module context(verbs=[]) let(
     $cad_thick      = thick+t_deltas,
     $cad_tolerance  = tolerance,
-    $cad_verbs      = verbs
+    $cad_verbs      = verbs,
+    $fl_thickness   = thick+t_deltas
   ) children();
 
   module do_add() {

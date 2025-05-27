@@ -161,7 +161,7 @@ module fl_magnet(
   color         = fl_material(type);
   h             = fl_thick(type);
   nop_screw     = nop_screw ? nop_screw : fl_screw_specs(type);
-  screw_shaft   = h+fl_parm_thickness();
+  screw_shaft   = h+fl_thickness(-Z);
   screw         = nop_screw ? fl_Screw(nop_screw,screw_shaft) : undef;
   h_cs          = cs ? fl_mag_csH(type)       : undef;
   cs_offset     = h_cs ? h-h_cs : undef;
@@ -229,7 +229,7 @@ module fl_magnet(
         multmatrix(Mscrew) children();
 
 
-    screw_thick   = h+$fl_thickness;
+    screw_thick   = h+fl_thickness(-Z);
     tolerance_xy  = is_list($fl_tolerance) ? $fl_tolerance[0] : $fl_tolerance;
     tolerance_z   = is_list($fl_tolerance) ? $fl_tolerance[1] : $fl_tolerance;
 

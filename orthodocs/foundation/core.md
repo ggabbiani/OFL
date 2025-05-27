@@ -1,5 +1,12 @@
 # package foundation/core
 
+## Dependencies
+
+```mermaid
+graph LR
+    A1[foundation/core] --o|use| A2[foundation/traits-engine]
+```
+
 Base definitions for OpenSCAD.
 
 Each module should describe the execution context providing a similar table:
@@ -1940,7 +1947,25 @@ fl_parm_thickness(default=0)
 
 Multi valued verb-dependent thickness parameter getter.
 
-See [fl_parm_multiverb()](#function-fl_parm_multiverb) for details.
+The returned value is a full semi-axis number list reporting thickness along
+the six semi-axes directions. This returned value is built from the
+$fl_thickness variable multi-verb values expressed in two possible formats:
+
+1. simple scalar number
+2. full semi-axis number list
+
+In the first case, the returned values will be
+
+    [
+      [«scalar»,«scalar»], // -X and +X thickness
+      [«scalar»,«scalar»], // -Y and +Y thickness
+      [«scalar»,«scalar»]  // -Z and +Z thickness
+    ]
+
+In the second, the returned value will be the same full semi-axis number list
+provided by the variable value.
+
+See also [fl_parm_multiverb()](#function-fl_parm_multiverb) for verb-dependant syntax.
 
 
 ---
@@ -2331,6 +2356,30 @@ __Syntax:__
 ```text
 fl_thick(type)
 ```
+
+---
+
+### function fl_thickness
+
+__Syntax:__
+
+```text
+fl_thickness(axis,default=0)
+```
+
+Returns the thickness value along a given axis.
+
+
+__Parameters:__
+
+__axis__  
+The axis for which to retrieve the thickness (e.g., X, Y, Z or their
+equivalent form [1,0,0], [0,1,0], [0,0,1]).
+
+
+__default__  
+Default thickness when $fl_thickness is «undef».
+
 
 ---
 

@@ -833,6 +833,7 @@
 - [foundation/template (package)](foundation/template.md#package-foundationtemplate)
 - [vitamins/template (package)](vitamins/template.md#package-vitaminstemplate)
 - [fl_thick (function)](foundation/core.md#function-fl_thick)
+- [fl_thickness (function)](foundation/core.md#function-fl_thickness)
 - [fl_TNut (function)](artifacts/t-nut.md#function-fl_tnut)
 - [fl_tnut (module)](artifacts/t-nut.md#module-fl_tnut)
 - [FL_TNUT_DICT (variable)](artifacts/t-nut.md#variable-fl_tnut_dict)

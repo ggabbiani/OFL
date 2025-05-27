@@ -726,28 +726,26 @@ module fl_pcb(
         ],
         $FL_ADD   = selected ? "DEBUG" : $FL_ADD,
         $FL_AXES  = selected ? "ON"    : "OFF"
-      ) if ($comp_engine==FL_USB_NS)          // USB
+      ) if ($comp_engine==FL_USB_NS)              // USB
           fl_USB(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction,tongue=$comp_color);
-        else if ($comp_engine==FL_HDMI_NS)    // HDMI
+        else if ($comp_engine==FL_HDMI_NS)        // HDMI
           fl_hdmi(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-        else if ($comp_engine==FL_JACK_NS)    // JACK
+        else if ($comp_engine==FL_JACK_NS)        // JACK
           fl_jack(verbs,type=$comp_type,direction=$comp_direction,octant=$comp_octant);
-        else if ($comp_engine==FL_ETHER_NS)   // ETHERNET
+        else if ($comp_engine==FL_ETHER_NS)       // ETHERNET
           fl_ether(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-        else if ($comp_engine==FL_PHDR_NS)    // PIN HEADER
+        else if ($comp_engine==FL_PHDR_NS)        // PIN HEADER
           fl_pinHeader(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-        else if ($comp_engine==FL_TRIM_NS)    // TRIM POT
+        else if ($comp_engine==FL_TRIM_NS)        // TRIM POT
           fl_trimpot(verbs,type=$comp_type,direction=$comp_direction,octant=$comp_octant);
-        else if ($comp_engine==FL_SD_NS)      // SECURE DIGITAL
+        else if ($comp_engine==FL_SD_NS)          // SECURE DIGITAL
           fl_sd_usocket(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-        else if ($comp_engine==FL_SWT_NS) {   // SWITCH
+        else if ($comp_engine==FL_SWT_NS) {       // SWITCH
           fl_switch(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-        } else if ($comp_engine==FL_HS_NS)    // HEAT SINK
+        } else if ($comp_engine==FL_HS_NS)        // HEAT SINK
           fl_heatsink(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
-        else if ($comp_engine==FL_GENERIC_NS) // GENERIC VITAMIN
+        else assert($comp_engine==FL_GENERIC_NS)  // GENERIC VITAMIN
           fl_generic_vitamin(verbs,$comp_type,octant=$comp_octant,direction=$comp_direction);
-        else
-          assert(false,str("Unknown engine ",$comp_engine));
     }
 
     // FIXME: components should modify also the hole layout

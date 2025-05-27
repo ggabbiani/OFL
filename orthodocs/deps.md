@@ -25,7 +25,7 @@ graph TD
     A19 --o|use| A4
     A20[foundation/components] --o|include| A3
     A21[foundation/connect] --o|include| A18
-    A10
+    A10 --o|use| A7
     A13 --o|include| A10
     A13 --o|use| A3
     A22[foundation/customizer-engine] --o|include| A2

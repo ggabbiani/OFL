@@ -9,8 +9,6 @@ graph LR
 
 Type traits implementation file.
 
-TODO: rename as "type_traits-engine.scad"
-
 Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
 
 SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
@@ -113,7 +111,7 @@ fl_tt_isAxisString(s)
 __Syntax:__
 
 ```text
-fl_tt_isAxisVList(list)
+fl_tt_isAxisVList(list,element=function(x)is_num(x)||is_string(x)||is_bool(x))
 ```
 
 Full semi axis value list.

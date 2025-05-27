@@ -198,7 +198,6 @@ function fl_Screw(
     )
       // Constructor should not leverage on $fl_thickness (nor any runtime
       // contetxt variable) to determine the length of the screw.
-      // assert(fl_parm_thickness(length),"Either one length,longer_than,shorter_than parameters or the $fl_thickness must be specified")
       fl_screw_AssemblyStack(nop, length, head_spring, head_washer, thickness, nut_washer, nut_spring, nut),
     head_h  = screw_head_height(nop),
     bbox    = let(
@@ -213,7 +212,7 @@ function fl_Screw(
       head_d        = 2*screw_head_radius(nop),
       clearance_d   = function(type,key,value)  is_undef($fl_clearance) ? 2*screw_clearance_radius(nop) : nominal_d+$fl_clearance*2,
       thread_max    = screw_max_thread(nop),
-      thickness     = function(type,key,value)  $fl_thickness
+      thickness     = function(type,key,value)  fl_thickness(-Z)
     ) [
       fl_screw_specs  (value  = nop       ),
       fl_nominal      (value  = nominal_d ),
@@ -470,7 +469,7 @@ module fl_screw(
         if (head_spring=="spring") spring_washer(screw_washer); else star_washer(screw_washer);
 
     // negative Z below thickness
-    translate(-Z($fl_thickness)) {
+    translate(-Z(fl_thickness(-Z))) {
       if (nut_washer)
         rotate(180,X)
           my_washer(w_type = nut_washer);
@@ -551,11 +550,9 @@ module fl_screw(
     } else if ($verb==FL_CUTOUT) {
       fl_cutoutLoop(cut_dirs, fl_cutout($this))
         if ($co_preferred) {
-          // $co_current contain the current supported cutout direction
-          // translate(NIL*$co_current)
           fl_new_cutout($this_bbox,$co_current,
             drift         = cut_drift-head_h-NIL,
-            $fl_thickness = $fl_thickness+head_h
+            $fl_thickness = fl_thickness($co_current)+head_h
           )
             do_footprint();
         }

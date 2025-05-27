@@ -17,7 +17,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-use     <../../ext/scad-utils/spline.scad>  // scad-utils : Utility libraries for OpenSCAD
+use <../../ext/scad-utils/spline.scad>
+use <traits-engine.scad>
 
 //**** language extension *****************************************************
 
@@ -1683,10 +1684,56 @@ function fl_parm_tolerance(default=0) =
 /*!
  * Multi valued verb-dependent thickness parameter getter.
  *
- * See fl_parm_multiverb() for details.
+ * The returned value is a full semi-axis number list reporting thickness along
+ * the six semi-axes directions. This returned value is built from the
+ * $fl_thickness variable multi-verb values expressed in two possible formats:
+ *
+ * 1. simple scalar number
+ * 2. full semi-axis number list
+ *
+ * In the first case, the returned values will be
+ *
+ *     [
+ *       [«scalar»,«scalar»], // -X and +X thickness
+ *       [«scalar»,«scalar»], // -Y and +Y thickness
+ *       [«scalar»,«scalar»]  // -Z and +Z thickness
+ *     ]
+ *
+ * In the second, the returned value will be the same full semi-axis number list
+ * provided by the variable value.
+ *
+ * See also fl_parm_multiverb() for verb-dependant syntax.
  */
-function fl_parm_thickness(default=0) =
-  fl_parm_multiverb(is_undef($fl_thickness)?undef:$fl_thickness,default);
+function fl_parm_thickness(default=0) = let(
+  value = fl_parm_multiverb(is_undef($fl_thickness)?undef:$fl_thickness,default)
+) is_num(value) ?
+  [
+    [value,value],
+    [value,value],
+    [value,value]
+  ] :
+  assert(!fl_dbg_assert() || fl_tt_isAxisVList(value,element=function(x) is_num(x)),value)
+  value;
+
+/*!
+ * Returns the thickness value along a given axis.
+ */
+function fl_thickness(
+  /*!
+   * The axis for which to retrieve the thickness (e.g., X, Y, Z or their
+   * equivalent form [1,0,0], [0,1,0], [0,0,1]).
+   */
+  axis,
+  //! Default thickness when $fl_thickness is «undef».
+  default = 0
+) =
+  is_undef($fl_thickness) ? default                           :
+  is_num($fl_thickness)   ? $fl_thickness                     :
+  assert(axis) (
+    axis.x                ? $fl_thickness.x[axis.x<0 ? 0 : 1] :
+    axis.y                ? $fl_thickness.y[axis.y<0 ? 0 : 1] :
+    assert(axis.z)          $fl_thickness.z[axis.z<0 ? 0 : 1]
+  );
 
 //**** Cutout standard parameters *********************************************
 

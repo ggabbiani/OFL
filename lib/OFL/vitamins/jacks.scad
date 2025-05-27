@@ -137,17 +137,15 @@ module fl_jack_barrelEngine(
       jack();
     else if ($verb==FL_BBOX)
       fl_bb_add($this_bbox);
-    else if ($verb==FL_CUTOUT) {
+    else assert($verb==FL_CUTOUT,str("unimplemented verb",$this_verb))
       assert($fl_thickness!=undef)
-        fl_cutoutLoop(co_dirs, fl_cutout(type))
-          if ($co_preferred)
-            fl_new_cutout($this_bbox,$co_current,
-              drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
-              trim          = function() $co_preferred ? X(-$this_size.x/2) : undef,
-              $fl_tolerance = $fl_tolerance+2xNIL
-            ) jack();
-    } else
-      fl_error(["unimplemented verb",$this_verb]);
+      fl_cutoutLoop(co_dirs, fl_cutout(type))
+        if ($co_preferred)
+          fl_new_cutout($this_bbox,$co_current,
+            drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
+            trim          = function() $co_preferred ? X(-$this_size.x/2) : undef,
+            $fl_tolerance = $fl_tolerance+2xNIL
+          ) jack();
 
 // FIXME: issue when directing, likely to be related to the 'D' matrix when director is not +Z
 /*!
@@ -217,9 +215,7 @@ module fl_jack_mcxjphstem1Engine(
         if ($co_preferred)
           multmatrix(Mshape)
             translate([0,axis.z,size.y])
-              fl_cylinder(d=3.45+$fl_tolerance*2,h=$fl_thickness);
-        // else
-        //   do_add($FL_ADD=$FL_CUTOUT);
+              fl_cylinder(d=3.45+$fl_tolerance*2,h=fl_thickness($co_current));
   }
 
   module fprint() {

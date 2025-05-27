@@ -13,8 +13,9 @@
 
 // **** TEST_INCLUDES *********************************************************
 
-include <../../lib/OFL/foundation/traits-engine.scad>
 include <../../lib/OFL/foundation/unsafe_defs.scad>
+
+use <../../lib/OFL/foundation/traits-engine.scad>
 
 // **** TAB_Debug *************************************************************
 

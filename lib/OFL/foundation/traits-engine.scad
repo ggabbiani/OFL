@@ -1,8 +1,6 @@
 /*!
  * Type traits implementation file.
  *
- * TODO: rename as "type_traits-engine.scad"
- *
  * Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -197,12 +195,15 @@ function fl_tt_isAxisKVList(list) =
  *
  * indicates a value of 3 along +X, 1.5 along -Z and 0 otherwise.
  */
-function fl_tt_isAxisVList(list) =
+function fl_tt_isAxisVList(
+  list,
+  element=function(x) is_num(x)||is_string(x)||is_bool(x)
+) =
   fl_tt_isList(
     list,size=3,
     f=function(x) fl_tt_isList(
       x,size=2,
-      f=function(x) is_num(x)||is_string(x)||is_bool(x)
+      f=element
       )
     );
 

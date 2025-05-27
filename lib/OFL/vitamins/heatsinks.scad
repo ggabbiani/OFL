@@ -225,11 +225,12 @@ module fl_heatsink(
       fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
     } else if (verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs, fl_cutout(type), $fl_thickness=$fl_thickness+(part=="top"?chamfer_t:corner_r))
+      fl_cutoutLoop(cut_dirs, fl_cutout(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,
             drift         = cut_drift-(part=="top"?chamfer_t:corner_r),
-            $fl_tolerance = $fl_tolerance+2xNIL
+            $fl_tolerance = $fl_tolerance+2xNIL,
+            $fl_thickness = $fl_thickness+(part=="top"?[[0,0],[0,0],[0,chamfer_t]]:assert(part=="bottom",part)[[0,0],[0,corner_r],[0,0]])
           ) do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
     } else if (verb==FL_FOOTPRINT) {

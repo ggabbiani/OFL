@@ -100,7 +100,7 @@
 - [ ] modify FL_DRILL verb implementation according to the type of drill to be
   performed: TAP drill vs CLEARANCE drill.
 - [ ] differentiate documentation by release
-- [ ] fully wrap the NopSCADlib screw library
+- [X] fully wrap the NopSCADlib screw library
 - [X] renamed knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}
 - [ ] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name
   space»_find/select() (see fl_pcb_select{}). Eliminate fl_«name
@@ -117,7 +117,7 @@
 - [ ] review and apply everywhere the new generalized cutout algorithm. Use
   vitamins/{ethers,heatsink,usbs}.scad as implementation example/reference.
 - [X] implemented new PCB component filtering.
-- [X] fix documentation generation under Ubuntu
+- [X] fixed documentation generation under Ubuntu
 - [X] fixed regression after the generic cutout algorithm implementation in pcb
   engine
 - [ ] create template tests

@@ -423,7 +423,7 @@ module fl_cylinder(
 ) {
   r_bot = fl_parse_radius(r,r1,d,d1,type ? fl_cyl_botRadius(type) : undef);
   r_top = fl_parse_radius(r,r2,d,d2,type ? fl_cyl_topRadius(type) : undef);
-  h     = h ? assert(is_num(h)) h : assert(type) fl_cyl_h(type);
+  h     = h ? assert(is_num(h),h) h : assert(type) fl_cyl_h(type);
   bbox  = fl_bb_cylinder(h,r1=r_bot,r2=r_top);
   size  = bbox[1]-bbox[0];
   step  = 360/$fn;
@@ -1400,7 +1400,7 @@ module fl_new_cutout(
     drift = is_function(drift)  ? drift() : drift,
     trim  = is_function(trim)   ? trim()  : trim
   ) translate((drift+d)*fl_versor(director))
-      fl_direction_extrude([director,0],$fl_thickness,r=$fl_tolerance,trim=trim)
+      fl_direction_extrude([director,0],fl_thickness(director),r=$fl_tolerance,trim=trim)
         children();
 }
 

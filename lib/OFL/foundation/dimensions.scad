@@ -136,8 +136,8 @@ module fl_dimension(
 
   $dim_level = is_undef($dim_level) ? 1 : $dim_level+1;
 
-  value         = assert(is_list(geometry),str("geometry=",geometry)) fl_dim_value(geometry);
-  label         = fl_dim_label(geometry);
+  value      = assert(is_list(geometry),str("geometry=",geometry)) fl_dim_value(geometry);
+  label      = fl_dim_label(geometry);
 
   // eventual attribute inheritance from context variables
   align       = align ? align : is_undef($dim_align) ? "centered" : $dim_align;

@@ -12,7 +12,7 @@ graph TD
     A3 --o|include| A9[foundation/core]
     A10[foundation/components] --o|include| A3
     A11[foundation/connect] --o|include| A12[foundation/util]
-    A9
+    A9 --o|use| A6
     A13[foundation/customizer-engine] --o|include| A2
     A14[foundation/dimensions] --o|include| A2
     A14 --o|use| A5

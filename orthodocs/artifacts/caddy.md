@@ -54,7 +54,6 @@ Context variables:
 - $cad_tolerance : see tolerance
 - $cad_verbs     : list of verbs to be executed by children()
 
-TODO: FL_DRILL implementation
 TODO: implement $fl_tolerance and $fl_thickness
 
 
