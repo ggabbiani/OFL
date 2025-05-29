@@ -17,7 +17,7 @@ graph LR
 __Syntax:__
 
 ```text
-fl_Object(bbox,pload,name,description,engine,others=[])
+fl_Object(bbox,pload,name,description,engine,nominal,others=[])
 ```
 
 Base constructor for OFL pseudo-objects.
@@ -39,6 +39,9 @@ optional description
 
 __engine__  
 optional engine string
+
+__nominal__  
+nominal value
 
 __others__  
 optional other key/value list to be concatenated.

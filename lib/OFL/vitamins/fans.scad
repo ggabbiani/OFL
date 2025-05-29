@@ -74,14 +74,14 @@ function fl_Fan(
   description = str(w,"mm fan (",d,"mm depth)"),
   name        = str(w,"x",w,"x",d,"mm fan"),
   bbox        = [[-w/2,-w/2,-d],[+w/2,+w/2,0]]+NIL*[-[1,1,1],[1,1,1]]
-) [
-  fl_native(value=true),
-  fl_bb_corners(value=bbox),
-  fl_name(value=name),
-  fl_description(value=description),
-  fl_nominal(value=w),
-  assert(nop) fl_nopSCADlib(value=nop)
-];
+) fl_Object(bbox,
+  name        = name,
+  description = description,
+  nominal     = w,
+  others      = [
+    assert(nop) fl_nopSCADlib(value=nop)
+  ]
+);
 
 /*!
  * OFL fan module.

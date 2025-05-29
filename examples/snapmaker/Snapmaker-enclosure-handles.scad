@@ -37,12 +37,12 @@ PART      = "Front";                            // [Front, Right]
 clearance = fl_techLimit(FL_LIMIT_CLEARANCE)/2;
 
 magnet      = MAGNET=="FL_MAG_M3_CS_D10x2" ? FL_MAG_M3_CS_D10x2 : FL_MAG_M3_CS_D10x5;
-screw       = fl_switch(SCREW,[["M2_cs_cap_screw",M2_cs_cap_screw],["M3_cs_cap_screw",M3_cs_cap_screw]],fl_screw_specs(magnet));
+screw       = fl_switch(SCREW,[["M2_cs_cap_screw",M2_cs_cap_screw],["M3_cs_cap_screw",M3_cs_cap_screw]],fl_screw_specs(magnet,mandatory=false));
 mag_sz      = fl_bb_size(magnet);
 T           = 2+clearance;
 // shortest linear threaded nut matching screw
 knut        = fl_knut_search(screw,thread="linear",best=FL_KNUT_SHORTEST);
-knut_thick  = fl_knut_thick(knut);
+knut_thick  = fl_thick(knut);
 tube_thick  = 1.6; // from brass insert producer data it should be at least 1.6mm
 tube_d      = mag_sz.x+(tube_thick+clearance)*2;
 emi_d       = tube_d;
@@ -106,7 +106,7 @@ fl_color() render() difference() {
   translate(M_magnet)
     fl_magnet([FL_FOOTPRINT,FL_LAYOUT],type=magnet,$fl_tolerance=clearance,$fl_thickness=emi_d/2,octant=-Z,direction=[-X,90])
       translate(-Z(mag_sz.z+clearance-NIL))
-        fl_knut(FL_DRILL,type=knut,dri_thick=T+emi_d/2+tube_h-mag_sz.z-clearance-fl_knut_thick(knut)+NIL,$FL_DRILL="ON");
+        fl_knut(FL_DRILL,type=knut,dri_thick=T+emi_d/2+tube_h-mag_sz.z-clearance-fl_thick(knut)+NIL,$FL_DRILL="ON");
 }
 
 

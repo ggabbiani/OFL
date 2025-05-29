@@ -27,7 +27,14 @@ FL_TNUT_NS  = "tnut";
 //*****************************************************************************
 // T-slot nut properties
 
-function fl_tnut_thickness(type,value) = fl_property(type,"tnut/[wall, base, cone] thickness",value);
+/*!
+ * The height of a t-nut decomposed in its three components: wall, base, cone.
+ *
+ * The sum of the three components is always equal to the fl_height() of the
+ * t-nut, so conforming to the following assertion
+ * `assert(fl_accum(fl_tnut_height(tnut))==fl_height(tnut))`
+ */
+function fl_tnut_height(type,value) = fl_property(type,"tnut/[wall, base, cone] heights",value);
 
 /*!
  * Constructor returning a T-slot nut.
@@ -81,25 +88,27 @@ let(
     [bbox[0].x,bbox[0].y+cone],
     [bbox[0].x+cone,bbox[0].y],
   ]
-) fl_Object(bbox, others = [
-  ["opening", opening],
-  fl_tnut_thickness(value=thickness),
-  ["section points", points],
-  if (nop_screw) fl_screw_specs(value=nop_screw),
-  if (nop_screw) fl_nominal(value=hole_d),
-  if (nop_screw) fl_holes(value=holes ? holes : [fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,nop_screw=nop_screw)]),
-  if (knut) let(kn=fl_knut_search(nop_screw,size.y)) assert(kn,"No knurl nut found") ["knut",kn],
-  fl_dimensions(value=fl_DimensionPack([
-    fl_Dimension(opening, "opening" ),
-    fl_Dimension(size.x,  "width"   ),
-    fl_Dimension(size.y,  "height"  ),
-    fl_Dimension(size.z,  "length"  ),
-    if (hole_d) fl_Dimension(hole_d,  "screw d" ),
-    fl_Dimension(wall,    "wall"    ),
-    fl_Dimension(base,    "base"    ),
-    fl_Dimension(cone,    "cone"    ),
-  ]))
-]);
+) fl_Object(bbox,
+  nominal = hole_d,
+  others  = [
+    ["opening", opening],
+    fl_tnut_height(value=thickness),
+    ["section points", points],
+    if (nop_screw) fl_screw_specs(value=nop_screw),
+    if (nop_screw) fl_holes(value=holes ? holes : [fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,nop_screw=nop_screw)]),
+    if (knut) let(kn=fl_knut_search(nop_screw,size.y)) assert(kn,"No knurl nut found") ["knut",kn],
+    fl_dimensions(value=fl_DimensionPack([
+      fl_Dimension(opening, "opening" ),
+      fl_Dimension(size.x,  "width"   ),
+      fl_Dimension(size.y,  "height"  ),
+      fl_Dimension(size.z,  "length"  ),
+      if (hole_d) fl_Dimension(hole_d,  "screw d" ),
+      fl_Dimension(wall,    "wall"    ),
+      fl_Dimension(base,    "base"    ),
+      fl_Dimension(cone,    "cone"    ),
+    ]))
+  ]
+);
 
 FL_TNUT_M3_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw);
 // T-slot nut usable with the Snapmaker enclosure for the AT series
@@ -135,7 +144,10 @@ function fl_tnut_select(
    */
   best    = function(matches) matches[0]
 ) = let(
-  nominal = nominal ? assert(is_num(nominal)) nominal : nop_screw ? 2*screw_radius(nop_screw) : undef,
+  nominal =
+    nominal   ? assert(is_num(nominal)) nominal :
+    nop_screw ? 2*screw_radius(nop_screw) :
+    undef,
   result  = [
     for(nut=dictionary)
       if (
@@ -163,7 +175,7 @@ module fl_tnut(
   tolerance=0,
   countersink=false,
   //! scalar thickness for FL_DRILL
-  dri_thick,
+  dri_thick=0,
   //! when undef native positioning is used
   octant,
   //! desired direction [director,rotation], native direction when undef ([+Z,0])
@@ -171,18 +183,15 @@ module fl_tnut(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  bbox  = fl_bb_corners(type);
-  size  = fl_bb_size(type);
-  D     = direction ? fl_direction(direction) : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
-
-  thickness = fl_tnut_thickness(type);
+  thickness = fl_tnut_height(type);
   wall      = thickness[0];
   base      = thickness[1];
   cone      = thickness[2];
   points    = fl_property(type,"section points");
-  screw     = fl_optional(type,fl_screw()[0]);
-  d         = screw ? 2*screw_radius(screw) : undef;
+  screw     = fl_opt_Screw(
+    fl_screw_specs(type),
+    shorter_than  = (dri_thick+fl_size(type).y)
+  );
   tolerance = is_undef(tolerance) ? [0,0,0] : is_num(tolerance) ? [tolerance,tolerance,tolerance] : tolerance;
   nut_t     = tolerance[0];
   hole_t    = tolerance[1];
@@ -193,7 +202,7 @@ module fl_tnut(
   dims      = fl_dimensions(type);
 
   module section_extrusion() {
-    linear_extrude(size.z)
+    linear_extrude($this_size.z)
       offset(r=-nut_t)
         polygon(points);
   }
@@ -212,15 +221,15 @@ module fl_tnut(
             fl_holes(holes,tolerance=hole_t);
           if (countersink)
             do_layout()
-              translate(-Y(size.y+NIL))
+              translate(-Y($this_size.y+NIL))
                 fl_countersink(type=FL_CS_ISO_M3,$fl_tolerance=cs_t,direction=[-$hole_n,0],octant=-Z);
         }
         // subtract the cylinder guide for insert
         if (knut)
-          let(h=size.y-fl_knut_thick(knut))
+          let(h=$this_size.y-fl_thick(knut))
           if (h>0)
             do_layout()
-              translate(-Y(size.y+NIL))
+              translate(-Y($this_size.y+NIL))
                 fl_cylinder(h=h+2xNIL,r=ext_r,direction=[-$hole_n,0],octant=-Z);
       }
     if (fl_dbg_symbols() && holes)
@@ -289,44 +298,37 @@ module fl_tnut(
   }
 
   module do_mount() {
-    if (screw){
+    if (screw) {
       assert(!is_undef(dri_thick),"FL_MOUNT without thickness parameter");
       do_layout()
         translate($hole_n*dri_thick)
-          fl_screw(FL_ADD,screw,len=dri_thick+size.y,direction=[$hole_n,0]);
+          fl_screw(FL_ADD,screw,direction=[$hole_n,0],$FL_ADD=$FL_MOUNT);
     }
   }
 
   fl_vmanage(verbs, type, octant=octant, direction=direction) {
     if ($this_verb==FL_ADD)
-      fl_modifier($modifier)
-        do_add();
+      do_add();
 
     else if ($this_verb==FL_ASSEMBLY)
-      fl_modifier($modifier)
-        do_assembly()
-          children();
+      do_assembly()
+        children();
 
     else if ($this_verb==FL_BBOX)
-      fl_modifier($modifier)
-        fl_bb_add(bbox);
+      fl_bb_add($this_bbox);
 
     else if ($this_verb==FL_DRILL)
-      fl_modifier($modifier)
-        do_drill();
+      do_drill();
 
     else if ($this_verb==FL_FOOTPRINT)
-      fl_modifier($modifier)
-        section_extrusion();
+      section_extrusion();
 
     else if ($this_verb==FL_LAYOUT)
-      fl_modifier($modifier)
-        do_layout()
-          children();
+      do_layout()
+        children();
 
     else if ($this_verb==FL_MOUNT)
-      fl_modifier($modifier)
-        do_mount();
+      do_mount();
 
     else
       fl_error(["unimplemented verb",$this_verb]);

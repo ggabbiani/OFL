@@ -14,6 +14,7 @@
 
 include <../../lib/OFL/vitamins/knurl_nuts.scad>
 
+use <../../lib/OFL/foundation/customizer-engine.scad>
 use <../../lib/OFL/foundation/label.scad>
 
 
@@ -71,7 +72,7 @@ DIR_R       = 0;        // [-360:360]
 
 /* [Knurl nut] */
 
-SHOW        = "ALL";  // [ALL, Linear M2x4mm,Linear M2x6mm,Linear M2x8mm,Linear M2x10mm,Linear M3x4mm,Linear M3x6mm,Linear M3x8mm,Linear M3x10mm,Linear M4x4mm,Linear M4x6mm,Linear M4x8mm,Linear M4x10mm,Linear M5x6mm,Linear M5x8mm,Linear M5x10mm,Spiral M2x4mm,Spiral M2p5x5.7mm,Spiral M3x5.7mm,Spiral M4x8.1mm,Spiral M5x9.5mm,Spiral M6x12.7mm,Spiral M8x12.7mm]
+SHOW        = "ALL";  // [ALL, Linear M2x4mm,Linear M2x6mm,Linear M2x8mm,Linear M2x10mm,Linear M3x4mm,Linear M3x6mm,Linear M3x8mm,Linear M3x10mm,Linear M4x4mm,Linear M4x6mm,Linear M4x8mm,Linear M4x10mm,Linear M5x6mm,Linear M5x8mm,Linear M5x10mm,Spiral M2x4mm,Spiral M2.5x5.7mm,Spiral M3x5.7mm,Spiral M4x8.1mm,Spiral M5x9.5mm,Spiral M6x12.7mm,Spiral M8x12.7mm]
 THREAD_TYPE = "ANY";  // [ANY,linear,spiral]
 // thickness on +Z axis
 THICK_POSITIVE = 1.6;      // [0:0.1:10]
@@ -105,7 +106,7 @@ thickness = let(t= [
   if (THICK_NEGATIVE) -THICK_NEGATIVE,
   if (THICK_POSITIVE) +THICK_POSITIVE
 ]) t ? t : undef;
-thread_type   = THREAD_TYPE!="ANY" ? THREAD_TYPE : undef;
+thread_type   = fl_cust_undef(THREAD_TYPE, _if_="ANY");
 
 if (one) {
   fl_knut(verbs,one,dri_thick=thickness,octant=octant,direction=direction) {
@@ -118,7 +119,7 @@ if (one) {
   }
 } else {
   // filter items by the thread type
-  items = fl_knut_find(thread=thread_type);
+  items = fl_knut_select(thread=thread_type);
   // organize items by rows with same nominal size
   dict  = fl_dict_organize(items,[2:0.5:8],function(nut) fl_nominal(nut));
   // for each not empty row calculates the offsets along Y axis

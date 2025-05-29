@@ -22,6 +22,16 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
+### variable FL_KNUT_FIRST
+
+__Default:__
+
+    function(nuts)assert(len(nuts))nuts[0]
+
+in a list of knurl nuts find out the __first__ one
+
+---
+
 ### variable FL_KNUT_LINEAR_M2p5x10
 
 __Default:__
@@ -216,7 +226,7 @@ Linear thread knurled nut M5x8mm
 
 __Default:__
 
-    function(nuts)fl_list_max(nuts,function(item)fl_knut_thick(item))
+    function(nuts)fl_list_max(nuts,function(item)fl_thick(item))
 
 in a list of knurl nuts find out the __longest__ one
 
@@ -260,7 +270,7 @@ namespace
 
 __Default:__
 
-    function(nuts)fl_list_min(nuts,function(item)fl_knut_thick(item))
+    function(nuts)fl_list_min(nuts,function(item)fl_thick(item))
 
 in a list of knurl nuts find out the __shortest__ one
 
@@ -459,29 +469,6 @@ diameter for FL_DRILL
 
 ---
 
-### function fl_knut_find
-
-__Syntax:__
-
-```text
-fl_knut_find(inventory=fl_knut_dict(),nominal,thread,length_less,length_greater,length_equal,length_less_equal,length_greater_equal)
-```
-
-returns a list of knurl nuts fitting requirements (empty list if none was
-found)
-
-
-__Parameters:__
-
-__nominal__  
-nominal ⌀ in mm
-
-__thread__  
-selector by thread type ("linear" or "spiral")
-
-
----
-
 ### function fl_knut_linearDict
 
 __Syntax:__
@@ -489,18 +476,6 @@ __Syntax:__
 ```text
 fl_knut_linearDict()
 ```
-
----
-
-### function fl_knut_longest
-
-__Syntax:__
-
-```text
-fl_knut_longest(inventory)
-```
-
-return the longest knurl nut in «inventory»
 
 ---
 
@@ -561,7 +536,7 @@ Search into dictionary for the best matching knut (default behavior) or all
 the matching knurl nuts.
 
 This function is **DEPRECATED** and is going to be removed: use
-function [fl_knut_find()](#function-fl_knut_find) instead.
+function [fl_knut_select()](#function-fl_knut_select) instead.
 
 
 __Parameters:__
@@ -587,15 +562,89 @@ The default returns the longest knurl nut.
 
 ---
 
-### function fl_knut_shortest
+### function fl_knut_select
 
 __Syntax:__
 
 ```text
-fl_knut_shortest(inventory)
+fl_knut_select(inventory=fl_knut_dict(),nominal,thread,less_than,greater_than,equal_to,best)
 ```
 
-return the shortest knurl nut in «inventory»
+Returns a list of knurl nuts fitting requirements (empty list if none was
+found) or a sigle best matching knurl nut when the `best` function literal
+is provided.
+
+
+__Parameters:__
+
+__nominal__  
+nominal ⌀ in mm
+
+__thread__  
+selector by thread type ("linear" or "spiral")
+
+__less_than__  
+length less than this value
+
+__greater_than__  
+length greater than this value
+
+__equal_to__  
+length equal to this value
+
+__best__  
+Function literal restricting the selection to a **unique** best matching knurl
+nut or to «undef» in the selection result is empty.
+By default the parameter is a no-operation, when implemented it must have
+the following signature:
+
+    function(matches)
+
+
+
+---
+
+### function fl_knut_selectBest
+
+__Syntax:__
+
+```text
+fl_knut_selectBest(inventory=fl_knut_dict(),nominal,thread,less_than,greater_than,equal_to,best=FL_KNUT_FIRST)
+```
+
+Returns a list of knurl nuts fitting requirements (empty list if none was
+found) or a sigle best matching knurl nut when the `best` function literal
+is provided.
+
+The default behavior is to return the **first** matching knurl nut.
+
+
+__Parameters:__
+
+__nominal__  
+nominal ⌀ in mm
+
+__thread__  
+selector by thread type ("linear" or "spiral")
+
+__less_than__  
+length less than this value
+
+__greater_than__  
+length greater than this value
+
+__equal_to__  
+length equal to this value
+
+__best__  
+Function literal restricting the selection to a **unique** best matching knurl
+nut or to «undef» in the selection result is empty.
+By default the parameter is take-first operation, when implemented it must have
+the following signature:
+
+    function(matches)
+
+
 
 ---
 
@@ -618,18 +667,6 @@ fl_knut_teeth(type,value)
 ```
 
 teeth number
-
----
-
-### function fl_knut_thick
-
-__Syntax:__
-
-```text
-fl_knut_thick(type,value)
-```
-
-Z axis length
 
 ---
 

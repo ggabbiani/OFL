@@ -829,6 +829,7 @@ function fl_isOdd(n) = !fl_isEven(n);
 //**** math utils *************************************************************
 
 function fl_XOR(c1,c2)        = (c1 && !c2) || (!c1 && c2);
+//! returns the arithmetical sum of the «v» components
 function fl_accum(v)          = [for(p=v) 1]*v;
 
 //! returns a vector in which each item is the sum of the previous ones
@@ -1360,9 +1361,46 @@ function fl_get(type,key,default) =
 //**** key/values *************************************************************
 
 /*!
+ * Property getter with default value when not found. Depending on the stored
+ * or default value it can return undef. When acting as a getter, a default
+ * value == undef means that the property is mandatory (so error is returned
+ * when key is not found).
+ *
+ * | type    | key      | new     | mandatory   | key found | result    | semantic
+ * | ---     | ---      | ---     | ---         | ---       | ---       | ---
+ * | undef   | defined  | undef   | *           | *         | key       | OTHER
+ * | undef   | defined  | defined | *           | *         | [key,new] | SETTER
+ * | defined | defined  | *       | *           | true      | value     | GETTER
+ * | defined | defined  | *       | undef/false | false     | default   | GETTER
+ *
+ * **ERROR** in all the other cases
+ */
+function fl_new_property(type,key,new,default,mandatory) = let(
+  mandatory = default!=undef ? false : mandatory
+) assert(key!=undef)
+  type ? (
+    // getter
+    let(
+      index_list  = search([key],type)
+    ) index_list != [[]] ?
+        // key found
+        (
+          let(
+            current = type[index_list[0]][1]
+          ) is_function(current) ? current(type,key,default) : current
+        ) :
+        // key not found
+        assert(!mandatory) default) :
+  is_undef(new) ?
+    // key retrieval
+    key :
+    // setter
+    [key,new];
+
+/*!
  * 'bipolar' property helper:
  *
- * - type/key{/default} ↦ returns the property value (error if property not found)
+ * - type/key{/default} ↦ returns the property value (error if key not found)
  * - key{/value}        ↦ returns the property [key,value] (acts as a property constructor)
  *
  * It concentrates property key definition reducing possible mismatch when
@@ -1888,5 +1926,8 @@ function fl_debug() = fl_dbg_dimensions()
  */
 function fl_chkEngineDomain(type,engine)  = fl_substr(fl_engine(type),len=len(engine))==engine;
 //! Engine name constructor.
-function fl_Engine(engine,domain)         = domain ? str(domain,"/",engine) : engine;
+function fl_Engine(engine,domain)         =
+  assert(is_string(engine))
+  assert(is_string(domain))
+  domain ? str(domain,"/",engine) : engine;
 

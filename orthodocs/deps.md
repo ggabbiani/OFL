@@ -28,6 +28,7 @@ graph TD
     A10 --o|use| A7
     A13 --o|include| A10
     A13 --o|use| A3
+    A13 --o|use| A4
     A22[foundation/customizer-engine] --o|include| A2
     A23[foundation/dimensions] --o|include| A2
     A23 --o|use| A5

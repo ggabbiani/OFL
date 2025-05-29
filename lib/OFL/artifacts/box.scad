@@ -68,7 +68,7 @@ module fl_box(
 ) {
   kn_type     = fastenings[0];
   scr_nominal = fastenings[1];
-  knut        = fl_knut_shortest(fl_knut_find(thread=kn_type,nominal=scr_nominal));
+  knut        = fl_knut_select(thread=kn_type,nominal=scr_nominal,best=FL_KNUT_SHORTEST);
   spacer      = fl_Spacer(knut=knut);
   // first countersink screw matching nominal ⌀
   screw       = let(inventory=fl_ScrewInventory(nominal=scr_nominal, head_type=hs_cs_cap, shorter_than=fl_thick(spacer))) assert(inventory) inventory[0];

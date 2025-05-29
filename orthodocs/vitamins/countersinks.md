@@ -6,6 +6,7 @@
 graph LR
     A1[vitamins/countersinks] --o|include| A2[foundation/core]
     A1 --o|use| A3[foundation/bbox-engine]
+    A1 --o|use| A4[foundation/mngm-engine]
 ```
 
 Countersink definitions based on UNI 5933 and ISO 10642

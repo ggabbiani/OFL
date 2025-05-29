@@ -67,7 +67,7 @@ function fl_Spacer(
 ) = let(
   wall  = knut ? let(nominal=fl_nominal(knut)) fl_switch(nominal, FL_KNUT_NOMINAL_DRILL)[2] : undef,
   d     = max(knut ? fl_knut_drillD(knut)+2*wall : 0,d_min),
-  kn_h  = knut ? fl_knut_thick(knut)+1 : 0,
+  kn_h  = knut ? fl_thick(knut)+1 : 0,
   h     = max(h_min,kn_h)
 ) assert(d && h,"***OFL ERROR***: missing «h» or «d» parameters or «knut» and «screw_size» constrains")
   assert(!screw_size||d>screw_size,"***OFL ERROR***: minimum external ⌀ must be greater than screw size")

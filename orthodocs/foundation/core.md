@@ -796,6 +796,8 @@ __Syntax:__
 fl_accum(v)
 ```
 
+returns the arithmetical sum of the «v» components
+
 ---
 
 ### function fl_align
@@ -1677,6 +1679,31 @@ getter on OFL alien objects it returns 'false'.
 
 ---
 
+### function fl_new_property
+
+__Syntax:__
+
+```text
+fl_new_property(type,key,new,default,mandatory)
+```
+
+Property getter with default value when not found. Depending on the stored
+or default value it can return undef. When acting as a getter, a default
+value == undef means that the property is mandatory (so error is returned
+when key is not found).
+
+| type    | key      | new     | mandatory   | key found | result    | semantic
+| ---     | ---      | ---     | ---         | ---       | ---       | ---
+| undef   | defined  | undef   | *           | *         | key       | OTHER
+| undef   | defined  | defined | *           | *         | [key,new] | SETTER
+| defined | defined  | *       | *           | true      | value     | GETTER
+| defined | defined  | *       | undef/false | false     | default   | GETTER
+
+**ERROR** in all the other cases
+
+
+---
+
 ### function fl_nominal
 
 __Syntax:__
@@ -2059,7 +2086,7 @@ fl_property(type,key,value,default)
 
 'bipolar' property helper:
 
-- type/key{/default} ↦ returns the property value (error if property not found)
+- type/key{/default} ↦ returns the property value (error if key not found)
 - key{/value}        ↦ returns the property [key,value] (acts as a property constructor)
 
 It concentrates property key definition reducing possible mismatch when

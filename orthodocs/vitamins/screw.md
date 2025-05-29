@@ -169,6 +169,49 @@ undef, "default" or "nyloc"
 
 ---
 
+### function fl_opt_Screw
+
+__Syntax:__
+
+```text
+fl_opt_Screw(nop,length,longer_than=0,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
+```
+
+__Parameters:__
+
+__nop__  
+NopSCADlib screw specifications
+
+__length__  
+Shaft length
+
+__longer_than__  
+Shaft length longer or equal than «longer_then»
+
+__shorter_than__  
+Shaft length shorter or equal than «shorter_then»
+
+__head_spring__  
+undef, "spring" or "star"
+
+__head_washer__  
+undef, "default" or "penny"
+
+__thickness__  
+material thickness
+
+__nut_washer__  
+undef, "default" or "penny"
+
+__nut_spring__  
+undef, "spring" or "star"
+
+__nut__  
+undef, "default" or "nyloc"
+
+
+---
+
 ### function fl_screw_AssemblyStack
 
 __Syntax:__
@@ -378,7 +421,7 @@ Screw shaft length (i.e. the length of the screw without the head)
 __Syntax:__
 
 ```text
-fl_screw_specs(type,value,default)
+fl_screw_specs(type,value,default,mandatory=false)
 ```
 
 screw specifications in NopSCADlib format

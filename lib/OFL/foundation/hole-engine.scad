@@ -36,7 +36,7 @@ function fl_tt_isHole(hole) = let(
     depth = fl_hole_depth(hole),
     ldir  = fl_hole_ldir(hole),
     loct  = fl_hole_loct(hole),
-    screw = fl_screw_specs(hole)
+    screw = fl_screw_specs(hole) // not really needed since optional
   ) fl_tt_isPointNormal([3d,n])
   && is_num(d)
   && is_num(depth)

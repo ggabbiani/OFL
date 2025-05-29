@@ -26,6 +26,8 @@ function fl_Object(
   description,
   //! optional engine string
   engine,
+  //! nominal value
+  nominal,
   //! optional other key/value list to be concatenated.
   others=[]
 ) = concat( [
@@ -35,4 +37,5 @@ function fl_Object(
   if (description)  fl_description(value=description),
   if (engine)       fl_engine(value=engine),
   if (pload)        fl_payload(value=pload),
+  if (nominal)      fl_nominal(value=nominal)
 ], others);

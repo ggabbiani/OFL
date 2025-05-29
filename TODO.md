@@ -152,3 +152,4 @@
   fl_vmanage{} since verb attributes are already managed;
 - [ ] add a global modifier of the main loop establishing when/if ignoring the
   not implemented verb(s;)
+- [ ] replace bipolar getters with fl_new_property();

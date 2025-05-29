@@ -109,9 +109,6 @@ nut_holes = let(d=scr_d) [
 ];
 nut = fl_TNut(opening,[in_width,length],[wall_thick,base_thick,cone_thick],screw,true,nut_holes);
 
-// brass insert
-knut  = fl_knut_search(screw=screw,thick=nut_thick);
-
 if (VIEW_BLOCK)
   fl_color()
     render()

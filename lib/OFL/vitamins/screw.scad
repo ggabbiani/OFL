@@ -25,26 +25,27 @@ FL_SCREW_NS  = "screw";
 function fl_screw_shaft(type,value)         = fl_property(type,str(FL_SCREW_NS,"/shaft length"),value);
 
 //! screw specifications in NopSCADlib format
-function fl_screw_specs(type,value,default) = fl_optProperty(type,"screw specifications",value,default);
+// function fl_screw_specs(type,value,default) = fl_optProperty(type,"screw specifications",value,default);
+function fl_screw_specs(type,value,default,mandatory=false) = fl_new_property(type,"screw specifications",value,default,mandatory);
 
 // **** getters ***************************************************************
 
 //! Returns the head style (hs_cap, hs_pan, hs_cs, hs_hex, hs_grub, hs_cs_cap or hs_dome)
-function fl_screw_headType(type)  = screw_head_type(fl_screw_specs(type));
+function fl_screw_headType(type)  = screw_head_type(fl_screw_specs(type,mandatory=true));
 //! Returns the head radius
-function fl_screw_headR(type)     = screw_head_radius(fl_screw_specs(type));
+function fl_screw_headR(type)     = screw_head_radius(fl_screw_specs(type,mandatory=true));
 //! Returns the head ⌀
-function fl_screw_headD(type)     = 2*screw_head_radius(fl_screw_specs(type));
+function fl_screw_headD(type)     = 2*screw_head_radius(fl_screw_specs(type,mandatory=true));
 //! Returns the head height
-function fl_screw_headH(type)     = screw_head_height(fl_screw_specs(type));
+function fl_screw_headH(type)     = screw_head_height(fl_screw_specs(type,mandatory=true));
 //! Returns the default nut
-function fl_screw_nut(type)       = screw_nut(fl_screw_specs(type));
+function fl_screw_nut(type)       = screw_nut(fl_screw_specs(type,mandatory=true));
 /*!
  * Screw counter sink height (i.e. how far a counter sink head will go into a
  * straight hole ⌀ «d»). More concretely its an alias of the nopscadlib
  * function screw_head_depth().
 */
-function fl_screw_csh(type, hole_d=0) = screw_head_depth(fl_screw_specs(type),hole_d);
+function fl_screw_csh(type, hole_d=0) = screw_head_depth(fl_screw_specs(type,mandatory=true),hole_d);
 
 /*!
  * Returns the hole ⌀ used during "clearance" FL_DRILL according to the
@@ -69,17 +70,17 @@ function fl_screw_csh(type, hole_d=0) = screw_head_depth(fl_screw_specs(type),ho
  */
 function fl_screw_clearanceD(type) =
   is_undef($fl_clearance) ?
-    2*screw_clearance_radius(fl_screw_specs(type)) :
+    2*screw_clearance_radius(fl_screw_specs(type,mandatory=true)) :
     fl_nominal(type)+$fl_clearance*2;
 //! Screw thread ⌀
-function fl_screw_threadD(type)    = let(nop=fl_screw_specs(type)) screw_thread_diameter(nop);
+function fl_screw_threadD(type)    = screw_thread_diameter(fl_screw_specs(type,mandatory=true));
 //! Max screw thread length
-function fl_screw_threadMax(type)  = let(nop=fl_screw_specs(type)) screw_max_thread(nop);
+function fl_screw_threadMax(type)  = screw_max_thread(fl_screw_specs(type,mandatory=true));
 
 // **** helpers ***************************************************************
 
 //! How far a counter sink head will go into a straight hole ⌀ «d»
-function fl_screw_headDepth(type, d=0) = screw_head_depth(fl_screw_specs(type),d);
+function fl_screw_headDepth(type, d=0) = screw_head_depth(fl_screw_specs(type,mandatory=true),d);
 
 /*!
  * Screw **specifications** inventory in NopSCADlib format.
@@ -207,15 +208,14 @@ function fl_Screw(
       [-r,-r,-lens[0] + positive],
       [+r,+r,+head_h  + positive]
     ],
-    props = let(
-      nominal_d     = 2*screw_radius(nop),
+    nominal_d = 2*screw_radius(nop),
+    props     = let(
       head_d        = 2*screw_head_radius(nop),
       clearance_d   = function(type,key,value)  is_undef($fl_clearance) ? 2*screw_clearance_radius(nop) : nominal_d+$fl_clearance*2,
       thread_max    = screw_max_thread(nop),
       thickness     = function(type,key,value)  fl_thickness(-Z)
     ) [
       fl_screw_specs  (value  = nop       ),
-      fl_nominal      (value  = nominal_d ),
       fl_screw_shaft  (value  = lens[0]   ),
       fl_cutout       (value  = [+Z]      ),
       fl_dimensions   (value  = fl_DimensionPack([
@@ -227,7 +227,32 @@ function fl_Screw(
         fl_Dimension(thickness,   "thickness"   ),
       ])),
     ]
-  ) fl_Object(bbox, name=nop[0], description=nop[1], others=props);
+  ) fl_Object(bbox, name=nop[0], description=nop[1], nominal=nominal_d, others=props);
+
+function fl_opt_Screw(
+  //! NopSCADlib screw specifications
+  nop,
+  //! Shaft length
+  length,
+  //! Shaft length longer or equal than «longer_then»
+  longer_than=0,
+  //! Shaft length shorter or equal than «shorter_then»
+  shorter_than,
+  //! undef, "spring" or "star"
+  head_spring,
+  //! undef, "default" or "penny"
+  head_washer,
+  //! material thickness
+  thickness,
+  //! undef, "default" or "penny"
+  nut_washer,
+  //! undef, "spring" or "star"
+  nut_spring,
+  //! undef, "default" or "nyloc"
+  nut
+) = nop ?
+  fl_Screw(nop,length,longer_than,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut) :
+  undef;
 
 /*!
  * Builds a screw object inventory from specifications selection and shaft length.
@@ -363,19 +388,20 @@ function fl_screw_specs_select(
         )
       )
     ) lst==[] ? true : chk_washer(lst[0]) ? chk_washer_list(screw, fl_pop(lst)) : false,
-    head_type     = head_type ?
-      assert(is_num(head_type)) head_type :
+    head_type     =
+      head_type ?
+        assert(is_num(head_type)) head_type :
       head_name ?
-      assert(is_string(head_name),head_name)
-      fl_switch(head_name,[
-        ["cap"    ,hs_cap     ],
-        ["pan"    ,hs_pan     ],
-        ["cs"     ,hs_cs      ],
-        ["hex"    ,hs_hex     ],
-        ["grub"   ,hs_grub    ],
-        ["cs cap" ,hs_cs_cap  ],
-        ["dome"   ,hs_dome    ]
-      ]) :
+        assert(is_string(head_name),head_name)
+        fl_switch(head_name,[
+          ["cap"    ,hs_cap     ],
+          ["pan"    ,hs_pan     ],
+          ["cs"     ,hs_cs      ],
+          ["hex"    ,hs_hex     ],
+          ["grub"   ,hs_grub    ],
+          ["cs cap" ,hs_cs_cap  ],
+          ["dome"   ,hs_dome    ]
+        ]) :
       undef
 )
 assert(inventory)

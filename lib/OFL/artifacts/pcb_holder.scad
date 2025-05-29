@@ -48,9 +48,9 @@ function fl_PCBHolder(
   pcb_screw = fl_screw_specs(pcb),
   holes     = fl_holes(pcb),
   spacers   = [for(hole=holes) let(
-      screw   = let(screw=fl_screw_specs(hole)) screw ? screw : pcb_screw,
+      screw   = fl_screw_specs(hole,default=pcb_screw),
       nominal = screw ? 2*screw_radius(screw) : 0,
-      knut    = knut_type ? fl_knut_shortest(fl_knut_find(thread=knut_type,nominal=nominal)) : undef
+      knut    = knut_type ? fl_knut_select(thread=knut_type,nominal=nominal,best=FL_KNUT_SHORTEST) : undef
     ) fl_Spacer(h_min=h_min,d_min=fl_hole_d(hole)+wall,screw_size=nominal,knut=knut)
   ],
   xs = concat(
@@ -160,7 +160,7 @@ module fl_pcbHolder(
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
 
-  // resulting spacers' height
+  // resulting spacer height
   spc_height  = fl_spc_h(this);
   pcb         = fl_pcb(this);
   pcb_t       = fl_pcb_thick(pcb);

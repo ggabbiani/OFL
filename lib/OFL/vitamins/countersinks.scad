@@ -12,6 +12,7 @@ include <../../ext/NopSCADlib/vitamins/screws.scad>
 include <../foundation/core.scad>
 
 use <../foundation/bbox-engine.scad>
+use <../foundation/mngm-engine.scad>
 
 //! countersinks namespace
 FL_CS_NS  = "cs";
@@ -49,15 +50,16 @@ function fl_Countersink(
   assert(k>0,k)
   let(
     rk  = dk/2
-  ) [
-    fl_name(value=name),
-    fl_description(value=str("M",nominal," countersink")),
+  ) fl_Object([[-rk,-rk,-k],[rk,rk,0]],
+    name        = name,
+    description = str("M",nominal," countersink"),
+    nominal     = nominal,
+    others      = [
     fl_cs_dk(value=dk),
     fl_cs_angle(value=alpha),
-    fl_bb_corners(value=[[-rk,-rk,-k],[rk,rk,0]]),
-    fl_nominal(value=nominal),
     fl_cs_k(value=k),
-  ];
+    ]
+  ) ;
 
 FL_CS_UNI_M3    = fl_Countersink("Countersink UNI 5933 M3",3,6,1.7);
 FL_CS_UNI_M4    = fl_Countersink("Countersink UNI 5933 M4",4,8,2.3);

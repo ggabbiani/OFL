@@ -40,7 +40,7 @@ function fl_Magnet(name,description,d,thick,size,cs,csh,nop_screw,vendors) =
     fl_mag_cs(value=cs),
     if (cs!=undef) fl_mag_csH(value=csh),
     fl_material(value=grey(80)),
-    fl_screw_specs(value=nop_screw),
+    if (nop_screw) fl_screw_specs(value=nop_screw),
     fl_vendor(value=vendors),
   ]);
 

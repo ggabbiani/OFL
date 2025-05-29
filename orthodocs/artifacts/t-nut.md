@@ -138,6 +138,23 @@ list of user defined holes usually positioned on the 'opening' side
 
 ---
 
+### function fl_tnut_height
+
+__Syntax:__
+
+```text
+fl_tnut_height(type,value)
+```
+
+The height of a t-nut decomposed in its three components: wall, base, cone.
+
+The sum of the three components is always equal to the [fl_height()](../foundation/core.md#function-fl_height) of the
+t-nut, so conforming to the following assertion
+`assert(fl_accum(fl_tnut_height(tnut))==fl_height(tnut))`
+
+
+---
+
 ### function fl_tnut_select
 
 __Syntax:__
@@ -168,16 +185,6 @@ implementation of the provided function literal.
 
 
 
----
-
-### function fl_tnut_thickness
-
-__Syntax:__
-
-```text
-fl_tnut_thickness(type,value)
-```
-
 ## Modules
 
 ---
@@ -186,7 +193,7 @@ fl_tnut_thickness(type,value)
 
 __Syntax:__
 
-    fl_tnut(verbs=FL_ADD,type,tolerance=0,countersink=false,dri_thick,octant,direction)
+    fl_tnut(verbs=FL_ADD,type,tolerance=0,countersink=false,dri_thick=0,octant,direction)
 
 T-slot nut engine.
 

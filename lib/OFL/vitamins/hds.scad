@@ -116,7 +116,7 @@ module fl_hd(
       [[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness]] :
       assert(is_list($fl_thickness)) $fl_thickness;
   specs       = fl_screw_specs(type);
-  screw_r     = screw_radius(specs);
+  screw_r     = specs ? screw_radius(specs) : undef;
   corner_r    = fl_get(type,"corner radius");
   size        = fl_size(type);
   conns       = fl_connectors(type);

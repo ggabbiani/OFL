@@ -47,8 +47,6 @@ FL_KNUT_NOMINAL_DRILL = [
 
 //**** Knurl nuts properties **************************************************
 
-//! Z axis length
-function fl_knut_thick(type,value)  = fl_property(type,"knut/Z axis length",value);
 //! diameter for FL_DRILL
 function fl_knut_drillD(type,value)  = fl_property(type,"knut/drill hole diameter",value);
 //! tooth height
@@ -78,29 +76,30 @@ function fl_knut_Spiral(
   //! stl geometry file from Ruthex
   stl_file
 ) = assert(nominal) let(
-  name    = str("Spiral M",nominal,"x",length,"mm"),
-  specs   = fl_switch(nominal, FL_KNUT_NOMINAL_DRILL)
+  name  = str("Spiral M",nominal,"x",length,"mm"),
+  specs = fl_switch(nominal, FL_KNUT_NOMINAL_DRILL),
+  bbox  = [
+    [-diameter/2, -diameter/2,  -length-NIL], // negative corner
+    [+diameter/2, +diameter/2,  0-NIL],       // positive corner
+  ]
 )
 assert(is_num(length),str("length=",length))
 assert(is_num(diameter),str("diameter=",diameter))
-[
-  fl_name(value=name),
-  fl_nominal(value=nominal),
-  fl_knut_thick(value=length),
-  fl_knut_r(value=diameter/2),
-  fl_knut_drillD(value=assert(specs,str("Missing specs for '",name,"'")) specs[0]),
-  fl_stl(value=stl_file),
-  fl_knut_thread(value="spiral"),
-  fl_vendor(value=
-    [
-      ["Amazon",  "https://www.amazon.it/dp/B08K1BVGN9"],
-    ]
-  ),
-  fl_bb_corners(value=[
-    [-diameter/2, -diameter/2,  -length-NIL], // negative corner
-    [+diameter/2, +diameter/2,  0-NIL],       // positive corner
-  ]),
-];
+fl_Object(bbox,
+  name    = name,
+  engine  = fl_Engine("spiral",FL_KNUT_NS),
+  nominal = nominal,
+  others  = [
+    fl_knut_r(value=diameter/2),
+    fl_knut_drillD(value=assert(specs,str("Missing specs for '",name,"'")) specs[0]),
+    fl_stl(value=stl_file),
+    fl_knut_thread(value="spiral"),
+    fl_vendor(value=[
+        ["Amazon",  "https://www.amazon.it/dp/B08K1BVGN9"],
+      ]
+    )
+  ]
+);
 
 //! Double spiral thread knurled nut M2x4mm
 FL_KNUT_SPIRAL_M2x4p0     = fl_knut_Spiral(2,4.0,3.6,"vitamins/ruthex/m2x4p0.stl");
@@ -155,35 +154,36 @@ function fl_knut_Linear(
   //! ring specification as a list of ring lengths
   rings
 ) = assert(nominal) let(
-  rlen    = len(rings),
-  delta   = length/(rlen-1),
-  name    = str("Linear M",nominal,"x",length,"mm")
+  rlen  = len(rings),
+  delta = length/(rlen-1),
+  name  = str("Linear M",nominal,"x",length,"mm"),
+  bbox  = [
+    [-diameter/2, -diameter/2,  -length-NIL], // negative corner
+    [+diameter/2, +diameter/2,  0-NIL],       // positive corner
+  ]
 )
 assert(is_num(length),str("length=",length))
 assert(is_num(diameter),str("diameter=",diameter))
 assert(is_num(tooth),str("tooth=",tooth))
-[
-  fl_name(value=name),
-  fl_nominal(value=nominal),
-  fl_knut_drillD(value=diameter-2*tooth+0.2),
-  fl_knut_thick(value=length),
-  fl_knut_r(value=diameter/2),
-  fl_knut_tooth(value=tooth),
-  fl_knut_teeth(value=30),
-  fl_knut_rings(value=
-    [for(i=[0:rlen-1]) [rings[i],(i<(rlen-1)/2 ? -rings[i]/2 : (i==(rlen-1)/2 ? 0 : rings[i]/2))-i*delta-rings[i]/2]]
-  ),
-  fl_bb_corners(value=[
-    [-diameter/2, -diameter/2,  -length-NIL], // negative corner
-    [+diameter/2, +diameter/2,  0-NIL],       // positive corner
-  ]),
-  fl_knut_thread(value="linear"),
-  fl_vendor(value=
-    [
-      ["Amazon",  "https://www.amazon.it/gp/product/B07QR6GVFJ"],
-    ]
-  ),
-];
+fl_Object(bbox,
+  name    = name,
+  engine  = fl_Engine("linear",FL_KNUT_NS),
+  nominal = nominal,
+  others = [
+    fl_knut_drillD(value=diameter-2*tooth+0.2),
+    fl_knut_r(value=diameter/2),
+    fl_knut_tooth(value=tooth),
+    fl_knut_teeth(value=30),
+    fl_knut_rings(value=
+      [for(i=[0:rlen-1]) [rings[i],(i<(rlen-1)/2 ? -rings[i]/2 : (i==(rlen-1)/2 ? 0 : rings[i]/2))-i*delta-rings[i]/2]]
+    ),
+    fl_knut_thread(value="linear"),
+    fl_vendor(value=
+      [
+        ["Amazon",  "https://www.amazon.it/gp/product/B07QR6GVFJ"],
+      ]
+    ),
+  ]);
 
 //! Linear thread knurled nut M2x4mm
 FL_KNUT_LINEAR_M2x4     = fl_knut_Linear(2,4,3.5,0.6, [1.15,  1.15      ]);
@@ -251,24 +251,81 @@ function fl_knut_linearDict() = [
  */
 function fl_knut_dict() = concat(fl_knut_spiralDict(),fl_knut_linearDict());
 
+//! in a list of knurl nuts find out the __shortest__ one
+FL_KNUT_SHORTEST  = function(nuts) fl_list_min(nuts,function(item) fl_thick(item));
+//! in a list of knurl nuts find out the __longest__ one
+FL_KNUT_LONGEST   = function(nuts) fl_list_max(nuts,function(item) fl_thick(item));
+//! in a list of knurl nuts find out the __first__ one
+FL_KNUT_FIRST     = function(nuts) assert(len(nuts)) nuts[0];
+
 /*!
- * returns a list of knurl nuts fitting requirements (empty list if none was
- * found)
+ * Returns a list of knurl nuts fitting requirements (empty list if none was
+ * found) or a sigle best matching knurl nut when the `best` function literal
+ * is provided.
+ *
+ * The default behavior is to return the **first** matching knurl nut.
  */
-function fl_knut_find(
+function fl_knut_selectBest(
   inventory = fl_knut_dict(),
   //! nominal ⌀ in mm
   nominal,
   //! selector by thread type ("linear" or "spiral")
   thread,
-  length_less,
-  length_greater,
-  length_equal,
-  length_less_equal,
-  length_greater_equal
+  //! length less than this value
+  less_than,
+  //! length greater than this value
+  greater_than,
+  //! length equal to this value
+  equal_to,
+  /*!
+   * Function literal restricting the selection to a **unique** best matching knurl
+   * nut or to «undef» in the selection result is empty.
+   * By default the parameter is take-first operation, when implemented it must have
+   * the following signature:
+   *
+   *     function(matches)
+   */
+  best = FL_KNUT_FIRST
+) = fl_knut_select(
+  inventory     = inventory,
+  nominal       = nominal,
+  thread        = thread,
+  less_than     = less_than,
+  greater_than  = greater_than,
+  equal_to      = equal_to,
+  best          = best
+);
+
+/*!
+ * Returns a list of knurl nuts fitting requirements (empty list if none was
+ * found) or a sigle best matching knurl nut when the `best` function literal
+ * is provided.
+ */
+function fl_knut_select(
+  inventory = fl_knut_dict(),
+  //! nominal ⌀ in mm
+  nominal,
+  //! selector by thread type ("linear" or "spiral")
+  thread,
+  //! length less than this value
+  less_than,
+  //! length greater than this value
+  greater_than,
+  //! length equal to this value
+  equal_to,
+  /*!
+   * Function literal restricting the selection to a **unique** best matching knurl
+   * nut or to «undef» in the selection result is empty.
+   * By default the parameter is a no-operation, when implemented it must have
+   * the following signature:
+   *
+   *     function(matches)
+   */
+  best
 ) =
 assert(is_undef(thread) || thread=="linear" || thread=="spiral",thread)
 let(
+  best = is_undef(best) ? function(matches) matches : best,
   // nominal «value» filter factory
   byNominal = function(value) let(
     nominal = is_num(value) ? value : assert(is_string(value),value) fl_atof(value)
@@ -278,17 +335,13 @@ let(
   byLength  = function(
     less,
     greater,
-    equal,
-    less_equal,
-    greater_equal
+    equal
   ) function (item) let(
-      l=fl_knut_thick(item)
+      l = fl_thick(item)
     ) (
           (!less          || l<less)
       &&  (!greater       || l>greater)
       &&  (!equal         || l==equal)
-      &&  (!less_equal    || l<=less_equal)
-      &&  (!greater_equal || l>=greater_equal)
     ),
   // thread type ("linear" or "spiral") filter factory
   byThread  = function(value) function(knut) fl_knut_thread(knut)==value,
@@ -298,15 +351,10 @@ let(
       byNominal(nominal),
     if (!is_undef(thread))
       byThread(thread),
-    if (!is_undef(length_less) || !is_undef(length_greater) || !is_undef(length_equal) || !is_undef(length_less_equal) || !is_undef(length_greater_equal))
-      byLength(length_less,length_greater,length_equal,length_less_equal,length_greater_equal)
+    if (!is_undef(less_than) || !is_undef(greater_than) || !is_undef(equal_to))
+      byLength(less_than,greater_than,equal_to)
   ]
-) fl_list_filter(inventory,filters);
-
-//! return the shortest knurl nut in «inventory»
-function fl_knut_shortest(inventory)  = fl_list_min(inventory,function(knut) fl_knut_thick(knut));
-//! return the longest knurl nut in «inventory»
-function fl_knut_longest(inventory)   = fl_list_max(inventory,function(knut) fl_knut_thick(knut));
+) best(fl_list_filter(inventory,filters));
 
 //! filter the passed inventory with «knut» feasible screws
 function fl_knut_screws(
@@ -316,17 +364,12 @@ function fl_knut_screws(
   nops
 ) = fl_list_filter(nops,fl_screw_byNominal(fl_nominal(knut)));
 
-//! in a list of knurl nuts find out the __shortest__ one
-FL_KNUT_SHORTEST  = function(nuts) fl_list_min(nuts,function(item) fl_knut_thick(item));
-//! in a list of knurl nuts find out the __longest__ one
-FL_KNUT_LONGEST   = function(nuts) fl_list_max(nuts,function(item) fl_knut_thick(item));
-
 /*!
  * Search into dictionary for the best matching knut (default behavior) or all
  * the matching knurl nuts.
  *
  * This function is **DEPRECATED** and is going to be removed: use
- * function fl_knut_find() instead.
+ * function fl_knut_select() instead.
  */
 function fl_knut_search(
   //! screw to fit into: ignored if undef
@@ -347,7 +390,7 @@ function fl_knut_search(
   nominal = d ? d : screw ? assert(!fl_native(screw),screw) 2*screw_radius(screw) : undef,
   result  = [
     for(nut=fl_knut_dict())
-      if ( (is_undef(thick)   || fl_knut_thick(nut)<=thick)
+      if ( (is_undef(thick)   || fl_thick(nut)<=thick)
         && (is_undef(nominal) || nominal==fl_nominal(nut))
         && (is_undef(thread)  || thread==fl_knut_thread(nut))
       ) nut
@@ -424,7 +467,7 @@ module fl_knut(
 
   dri_thick = fl_parm_SignedPair(dri_thick);
   r       = fl_knut_r(type);
-  l       = fl_knut_thick(type);
+  l       = fl_thick(type);
   thickness = abs(dri_thick[0])+dri_thick[1]+l;
   // screw   = fl_screw(type);
   // screw_r = screw_radius(screw);
@@ -440,11 +483,6 @@ module fl_knut(
 
   bbox    = fl_bb_corners(type);
   size    = fl_bb_size(type);
-  D       = direction ? fl_direction(direction)  : I;
-  M       = fl_octant(octant,bbox=bbox);
-
-  fl_trace("bbox",bbox);
-  fl_trace("size",size);
 
   module tooth(r,h) {
     assert(r!=undef||h!=undef);
