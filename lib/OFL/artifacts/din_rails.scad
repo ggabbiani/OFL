@@ -214,7 +214,7 @@ function fl_DIN_Rail(
   //! optional parameter as returned from fl_Punch()
   punch
 ) = let(
-  bbox  = let(2d = fl_bb_corners(profile)) [[2d[0].x,2d[0].y,0],[2d[1].x,2d[1].y,length]]
+  bbox  = let(_2d = fl_bb_corners(profile)) [[_2d[0].x,_2d[0].y,0],[_2d[1].x,_2d[1].y,length]]
 ) fl_Object(bbox, engine=FL_DIN_NS, others = [
   assert(profile) fl_DIN_railProfile(value=profile),
   assert(length)  [str(FL_DIN_NS,"/rail/length"), length],

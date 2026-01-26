@@ -24,20 +24,20 @@ function fl_hole_loct(hole,value)           = fl_optProperty(hole,"hole/label oc
 
 /*!
  * Hole representation as mandatory properties check:
- * - 3d   : hole position
+ * - pos  : 3d hole position
  * - n    : applied surface normal
  * - d    : hole diameter
  * - depth: hole depth (0 means pass-thru hole)
  */
 function fl_tt_isHole(hole) = let(
-    3d    = fl_hole_pos(hole),
+    pos   = fl_hole_pos(hole),
     d     = fl_hole_d(hole),
     n     = fl_hole_n(hole),
     depth = fl_hole_depth(hole),
     ldir  = fl_hole_ldir(hole),
     loct  = fl_hole_loct(hole),
     screw = fl_screw_specs(hole) // not really needed since optional
-  ) fl_tt_isPointNormal([3d,n])
+  ) fl_tt_isPointNormal([pos,n])
   && is_num(d)
   && is_num(depth)
   && (is_undef(ldir) || fl_tt_isDirectionRotation(ldir))

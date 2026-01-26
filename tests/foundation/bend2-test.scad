@@ -21,7 +21,7 @@ use <../../lib/OFL/foundation/util.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -128,7 +128,7 @@ fl_bend(verbs,type=folding,flat=FLAT,octant=octant,direction=direction,$FL_ADD=A
   // bending algorithm requires a 3d shape
   linear_extrude(fl_bb_size($sheet).z)
     difference() {
-      fl_bb_add(corners=fl_bb_corners($sheet),twod=true);
+      fl_bb_add(fl_bb_corners($sheet),true);
       let(thick=BREAK+T) {
         let(size=$size[3]) translate($H-Y(thick)) fl_square(size=[size.y,thick,size.z],quadrant=+X+Y);
         let(size=$size[4]) translate($F-X(thick)) fl_square(size=[thick,size.y,size.z],quadrant=+X+Y);

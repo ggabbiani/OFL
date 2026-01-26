@@ -72,13 +72,13 @@ sheet_metal = [[0,0],GRID_SIZE];
 grid_bbox   = sheet_metal+[BORDER,-BORDER];
 
 if (GRID_BBOX)
-  translate(Z(EPS)) #fl_bb_add(grid_bbox,twod=true);
+  translate(Z(EPS)) #fl_bb_add(grid_bbox,true);
 
 fl_color("silver")
   linear_extrude(0.5)
     difference() {
       // sheet metal
-      fl_bb_add(sheet_metal,twod=true);
+      fl_bb_add(sheet_metal,true);
       // grid holes
       fl_grid_layout(
         origin  = TRIM_ORIGIN,

@@ -17,7 +17,7 @@ include <../../lib/OFL/foundation/util.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -114,7 +114,7 @@ test()
       // grid algorithm operates on 2d surfaces
       difference() {
         // 2d surface fitting the calculated $sheet size
-        fl_bb_add(corners=fl_bb_corners($sheet),twod=true);
+        fl_bb_add(fl_bb_corners($sheet),true);
         // grid on face 4 (normal +Y) and part of face 1 (normal +Z)
         if (search($fid,[4,1])) fl_grid_layout(
           origin  = [0,D],

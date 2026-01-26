@@ -1,6 +1,5 @@
 /*
  *
- *
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.
  *
