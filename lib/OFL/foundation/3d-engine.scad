@@ -188,7 +188,7 @@ module fl_frame(
 
     else if ($verb==FL_BBOX)
       fl_modifier($modifier)
-        fl_bb_add(bbox+FL_NIL*([[-1,-1,-1],[1,1,1]]));
+        fl_bb_add(bbox+FL_EPS*([[-1,-1,-1],[1,1,1]]));
 
     else
       assert(false,str("***OFL ERROR***: unimplemented verb ",$verb));
@@ -1012,19 +1012,19 @@ module fl_bb_add(
    */
   corners,
   //! 2d switch
-  2d=false,
+  twod=false,
   //! when true, z-fight correction is applied
   auto=true
 ) {
-  assert(fl_tt_isBoundingBox(corners,2d),corners);
-  if (2d)
+  assert(fl_tt_isBoundingBox(corners,twod),corners);
+  if (twod)
     let(
-      bbox = auto ? corners+NIL*[[-1,-1],[1,1]] : corners
+      bbox = auto ? corners+EPS*[[-1,-1],[1,1]] : corners
     ) translate(bbox[0])
       fl_square(size=bbox[1]-bbox[0],quadrant=QI);
   else
     let(
-      bbox = auto ? corners+NIL*[[-1,-1,-1],[1,1,1]] : corners
+      bbox = auto ? corners+EPS*[[-1,-1,-1],[1,1,1]] : corners
     ) translate(bbox[0])
       fl_cube(size=bbox[1]-bbox[0],octant=O0);
 }
@@ -1778,7 +1778,7 @@ module fl_sym_direction(
   old_rotor     = fl_3(m * fl_4(curr_rotor));
   // old_axis      = cross(old_director,old_rotor);
 
-  // assert(!fl_dbg_assert() || (old_director*old_rotor<=FL_NIL),old_director*old_rotor);
+  // assert(!fl_dbg_assert() || (old_director*old_rotor<=FL_EPS),old_director*old_rotor);
 
   // Native Coordinate System DIRECTOR
   color(dir_color) rotate(-angle,curr_director) {
@@ -1787,14 +1787,14 @@ module fl_sym_direction(
 
     // angle between [new director, old director]
     dir_rotation  = angle(curr_director,old_director);
-    2d            = fl_circleXY(norm(curr_director),dir_rotation);
+    twod          = fl_circleXY(norm(curr_director),dir_rotation);
 
     // projection matrix the XY plane to the rotation plane of the DIRECTOR
     m = (fl_isParallel(old_director,curr_director,false))
       ? (fl_versor(old_director)==fl_versor(curr_director) // parallel
         ? FL_I  // equality
         : fl_R(curr_director,angle)*fl_Ry(180)*fl_Rx(90)*fl_Rz(90)*fl_Rx(90))  // opposite
-      : fl_planeAlign(FL_X,[2d.x,2d.y,0],old_director,curr_director); // parallel
+      : fl_planeAlign(FL_X,[twod.x,twod.y,0],old_director,curr_director); // parallel
 
     // rotation angle visualization
     multmatrix(m) {
@@ -1837,7 +1837,7 @@ module fl_sym_direction(
     m_tangent   = -b*b/(a*a)*C.x/C.y; // slope of the tangent to e in C
     echo(m_tangent=m_tangent);
 
-    // gamma = abs(angle%180)<=FL_NIL ? 0 : atan(m_tangent);  // atan2(C.y,C.x)
+    // gamma = abs(angle%180)<=FL_EPS ? 0 : atan(m_tangent);  // atan2(C.y,C.x)
     gamma = atan(m_tangent);  // atan2(C.y,C.x)
     echo(str("atan(m_tangent)=",atan(m_tangent)));
 

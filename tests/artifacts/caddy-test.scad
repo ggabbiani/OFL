@@ -19,7 +19,7 @@ include <../../lib/OFL/artifacts/caddy.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -133,8 +133,8 @@ faces     = fl_3d_AxisList(FACES);
 medium    = MEDIUM=="Raspberry PI4" ? FL_PCB_RPI4 : MEDIUM=="Hard Disk" ? FL_HD_EVO860 : FL_PSU_MeanWell_RS_25_5;
 // thickness list built from customizer values
 T         = [T_x,T_y,T_z];
-// 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
-T_NIL     = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
+// 'EPS' list to be added to children thickness in order to avoid 'z' fighting problem during preview
+T_NIL     = [[EPS,EPS],[EPS,EPS],[EPS,EPS]];
 
 module medium() {
   if (medium==FL_PCB_RPI4)

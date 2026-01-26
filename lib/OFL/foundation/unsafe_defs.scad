@@ -46,10 +46,10 @@ QIII  = FL_QIV;
 QIV   = FL_QIV;
 
 
-//! see variable NIL
-NIL     = FL_NIL;
-//! see variable FL_2xNIL
-2xNIL   = FL_2xNIL;
+//! see variable EPS
+EPS     = FL_EPS;
+//! see variable FL_EPSx2
+EPSx2   = FL_EPSx2;
 
 //! see fl_T()
 function T(t)       = fl_T(t);

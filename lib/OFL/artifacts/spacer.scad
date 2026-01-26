@@ -259,8 +259,8 @@ module fl_spacer(
         }
       }
       if (hole_r)
-        translate(-Z(NIL))
-          fl_cylinder(h=h+2xNIL,r=hole_r);
+        translate(-Z(EPS))
+          fl_cylinder(h=h+EPSx2,r=hole_r);
     }
   }
 
@@ -322,7 +322,7 @@ module fl_spacer(
 
     } else if ($this_verb==FL_BBOX) {
       fl_modifier($modifier)
-        fl_bb_add(bbox+[[0,0,-NIL],[0,0,NIL]]);
+        fl_bb_add(bbox+[[0,0,-EPS],[0,0,EPS]]);
 
     } else if ($this_verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();

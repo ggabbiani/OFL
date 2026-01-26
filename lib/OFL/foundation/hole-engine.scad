@@ -183,7 +183,7 @@ module fl_holes(
   //! fallback screw
   screw,
   //! tolerance ⌀
-  tolerance=2xNIL
+  tolerance=EPSx2
 ) fl_lay_holes(holes,enable,thick,screw)
     translate(tolerance/2*$hole_n)
       fl_cylinder(h=$hole_depth+tolerance,d=$hole_d+tolerance,direction=[-$hole_n,0]);
@@ -205,7 +205,7 @@ module fl_hole_debug(
 ) {
     fl_lay_holes(holes,enable,thick,screw) union() {
       if (fl_dbg_symbols())
-        translate(NIL*$hole_n)
+        translate(EPS*$hole_n)
           fl_sym_hole($FL_ADD="ON");
       if (fl_dbg_labels())
         fl_label(FL_ADD,$hole_label,size=0.6*$hole_d,thick=0.1,octant=$hole_loct,direction=$hole_ldir,extra=$hole_d,$FL_ADD="ON");

@@ -20,7 +20,7 @@ use <../../lib/OFL/foundation/3d-engine.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -100,7 +100,7 @@ fl_status();
 module label(str, scale = 0.25, valign = "baseline", halign = "left")
   color("black")
     rotate($vpr != [0, 0, 0] ? $vpr : [70, 0, 315])
-      linear_extrude(NIL)
+      linear_extrude(EPS)
         scale(scale)
           text(str, valign = valign, halign = halign, font="Symbola:style=Regular");
 

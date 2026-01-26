@@ -21,6 +21,10 @@
 //! Default is steel but can be drawn as brass or nylon. A utility for making nut traps included.
 //!
 //! If a nut is given a child then it gets placed on its top surface.
+//!
+//! The following diagram shows you the parameters for drawing a sliding_t_nut:
+//!
+//! ![](docs/sliding_t_nut.png)
 //
 include <../utils/core/core.scad>
 use <washer.scad>
@@ -37,43 +41,95 @@ function nut_thickness(type, nyloc = false) = nyloc ? type[4] : type[3]; //! Thi
 function nut_washer(type)     = type[5];        //! Corresponding washer
 function nut_trap_depth(type) = type[6];        //! Depth of nut trap
 function nut_pitch(type)      = type[7];        //! Pitch if not standard metric course thread
+function nut_dome(type)       = type[8];        //! Dome height and max thread depth if a domed acorn nut
 
 function nut_flat_radius(type) = nut_radius(type) * cos(30); //! Radius across the flats
 
-function nut_square_size(type)      = type[1]; //! Diameter of the corresponding screw
-function nut_square_width(type)     = type[2]; //! Width of the square nut
-function nut_square_thickness(type) = type[3]; //! Thickness of the square nut
+function nut_square_size(type)      = type[1];  //! Diameter of the corresponding screw
+function nut_square_width(type)     = type[2];  //! Width of the square nut
+function nut_square_thickness(type) = type[3];  //! Thickness of the square nut
 
-module nut(type, nyloc = false, brass = false, nylon = false) { //! Draw specified nut
+function nut_weld_base_r(type) = type[7] / 2;   //! Weld nut base radius
+function nut_weld_base_t(type) = type[8];       //! Weld nut base thickness
+
+function nut_dome_height(type)  = let(d = nut_dome(type)) d ? d[0] : nut_thickness(type); //! Height of the domed version
+function nut_thread_depth(type) = let(d = nut_dome(type)) d ? d[1] : nut_thickness(type); //! Max thread depth in domed version
+
+module draw_nut(od, id, t, pitch, colour, show_thread, thread_h = undef ) {
+    th = is_undef(thread_h) ? t : thread_h;
+
+    color(colour) {
+        or = od / 2;
+        fr = or * cos(30);
+
+        render_if(manifold) intersection() {
+            linear_extrude(t, convexity = 5)
+                difference() {
+                    circle(or, $fn = 6);
+
+                    if(id)
+                        circle(d = id);
+                }
+
+            if(manifold)
+                rotate_extrude()
+                    hull() {
+                        h = (or - fr) * tan(30);
+
+                        translate([0, -eps])
+                            square([fr, t + eps]);
+
+                        translate([or, h])
+                            square([eps, t - 2 * h]);
+                    }
+        }
+    }
+    if(show_thread && id)
+        female_metric_thread(id, pitch,
+            th,
+            top = th > t ? 0 : manifold ? 1 : -1,
+            bot = manifold ? 1 : -1,
+            center = false, colour = colour);
+}
+
+module nut(type, nyloc = false, brass = false, nylon = false, dome = false) { //! Draw specified nut
     thread_d = nut_size(type);
     thread_p = nut_pitch(type) ? nut_pitch(type) : metric_coarse_pitch(thread_d);
     hole_rad  = thread_d / 2;
     outer_rad = nut_radius(type);
     thickness = nut_thickness(type);
     nyloc_thickness = nut_thickness(type, true);
-    desc = nyloc ? "nyloc" : brass ? "brass" : nylon ? "nylon" : "";
-    vitamin(str("nut(", type[0], arg(nyloc, false, "nyloc"), arg(brass, false, "brass"), arg(nylon, false, "nylon"),
+    desc = nyloc ? "nyloc" : brass ? "brass" : nylon ? "nylon" : dome ? "domed" : "";
+    vitamin(str("nut(", type[0],
+                        arg(nyloc, false, "nyloc"),
+                        arg(brass, false, "brass"),
+                        arg(nylon, false, "nylon"),
+                        arg(dome,  false, "dome"),
                    "): Nut M", nut_size(type), " x ", thickness, "mm ", desc));
 
     $fs = fs; $fa = fa;
 
     colour = brass ? brass_colour : nylon ? grey(30): grey(70);
     explode(nyloc ? 10 : 0) {
+        draw_nut(outer_rad * 2, thread_d, thickness, thread_p, colour, show_threads, dome ? nut_thread_depth(type) : thickness);
+
+        fr = nut_flat_radius(type);
         color(colour) {
-            linear_extrude(thickness)
-                difference() {
-                    circle(outer_rad, $fn = 6);
-
-                    circle(hole_rad);
-                }
-
             if(nyloc)
-                translate_z(-eps)
-                    rounded_cylinder(r = outer_rad * cos(30) , h = nyloc_thickness, r2 = (nyloc_thickness - thickness) / 2, ir = hole_rad);
-        }
+                translate_z(eps)
+                    rounded_cylinder(r = outer_rad * cos(30), h = nyloc_thickness - eps, r2 = (nyloc_thickness - thickness) / 2, ir = hole_rad);
 
-        if(show_threads)
-            female_metric_thread(thread_d, thread_p, thickness, center = false, colour = colour);
+            if(dome)
+                translate_z(thickness)
+                    rotate_extrude()
+                        difference() {
+                            h = nut_dome_height(type) - thickness;
+                            r = fr - eps;
+                            rounded_corner(r, h, r);
+
+                            square([thread_d / 2, nut_thread_depth(type) - thickness]);
+                        }
+        }
 
         if(nyloc)
             translate_z(thickness)
@@ -141,7 +197,7 @@ module wingnut(type) { //! Draw a wingnut
 
 function t_nut_tab(type) = [type[8], type[9]]; //! Sliding t-nut T dimensions
 
-module sliding_ball_t_nut(size, w, h, r) {
+module sliding_ball_t_nut(size, w, h, r) { //! Draw a sliding ball t nut
     rad = 0.5;
     stem = size.z - h;
     ball_d = 4;
@@ -194,6 +250,38 @@ module sliding_t_nut(type) { //! Draw a sliding T nut, T nut with a spring loade
             sliding_ball_t_nut(size, tab[0], tabSizeZ, holeRadius);
         else
             extrusionSlidingNut(size, tab[0], tab[1], tabSizeZ, holeRadius, 0, hammerNut);
+}
+
+module weld_nut(type) { //! draw a weld nut
+    thread_d = nut_size(type);
+    hole_rad  = thread_d / 2;
+    nut_neck_rad = nut_radius(type);
+    thickness = nut_thickness(type);
+    base_rad = nut_weld_base_r(type);
+    base_thickness = nut_weld_base_t(type);
+
+
+    vitamin(str("weld nut(", type[0], "): Weld Nut M", nut_size(type)));
+    colour = silver;
+    explode(-20) {
+        color(colour) {
+
+            rotate_extrude()
+                polygon([
+                    [hole_rad, -base_thickness],
+                    [base_rad, -base_thickness],
+                    [base_rad, 0],
+                    [hole_rad, 0],
+                    [nut_neck_rad, 0],
+                    [nut_neck_rad, thickness],
+                    [hole_rad, thickness]
+                ]);
+        }
+
+        if(show_threads)
+            female_metric_thread(thread_d, metric_coarse_pitch(thread_d), thickness, center = false, colour = colour);
+    }
+
 }
 
 module extrusionSlidingNut(size, tabSizeY1, tabSizeY2, tabSizeZ, holeRadius, holeOffset = 0, hammerNut = false) {

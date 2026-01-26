@@ -124,7 +124,7 @@ module fl_iec(
       fl_bb_add(corners=$this_bbox, auto=true, $FL_ADD=$FL_BBOX);
 
     else if ($this_verb==FL_CUTOUT) assert($fl_thickness>=0) assert($fl_tolerance>=0)
-      fl_linear_extrude(direction=[-Z,0], length=iec_depth(nop)+$fl_thickness+NIL)
+      fl_linear_extrude(direction=[-Z,0], length=iec_depth(nop)+$fl_thickness+EPS)
         fl_square(size=[iec_body_w(nop)+2*$fl_tolerance,iec_body_h(nop)+2*$fl_tolerance], corners=iec_body_r(nop)+$fl_tolerance, $FL_ADD=$FL_CUTOUT);
 
     else if ($this_verb==FL_DRILL) assert(is_num($fl_thickness)) {

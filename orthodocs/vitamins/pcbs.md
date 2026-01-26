@@ -7,20 +7,21 @@ graph LR
     A1[vitamins/pcbs] --o|include| A2[foundation/components]
     A1 --o|include| A3[foundation/grid]
     A1 --o|include| A4[foundation/label]
-    A1 --o|include| A5[vitamins/ethers]
-    A1 --o|include| A6[vitamins/generic]
-    A1 --o|include| A7[vitamins/hdmi]
-    A1 --o|include| A8[vitamins/heatsinks]
-    A1 --o|include| A9[vitamins/jacks]
-    A1 --o|include| A10[vitamins/pin_headers]
-    A1 --o|include| A11[vitamins/screw]
-    A1 --o|include| A12[vitamins/sd]
-    A1 --o|include| A13[vitamins/switch]
-    A1 --o|include| A14[vitamins/trimpot]
-    A1 --o|include| A15[vitamins/usbs]
-    A1 --o|use| A16[dxf]
-    A1 --o|use| A17[foundation/hole-engine]
-    A1 --o|use| A18[foundation/mngm-engine]
+    A1 --o|include| A5[vitamins/chips]
+    A1 --o|include| A6[vitamins/ethers]
+    A1 --o|include| A7[vitamins/generic]
+    A1 --o|include| A8[vitamins/hdmi]
+    A1 --o|include| A9[vitamins/heatsinks]
+    A1 --o|include| A10[vitamins/jacks]
+    A1 --o|include| A11[vitamins/pin_headers]
+    A1 --o|include| A12[vitamins/screw]
+    A1 --o|include| A13[vitamins/sd]
+    A1 --o|include| A14[vitamins/switch]
+    A1 --o|include| A15[vitamins/trimpot]
+    A1 --o|include| A16[vitamins/usbs]
+    A1 --o|use| A17[dxf]
+    A1 --o|use| A18[foundation/hole-engine]
+    A1 --o|use| A19[foundation/mngm-engine]
 ```
 
 PCB definition file.
@@ -171,7 +172,7 @@ __Default:__
 __Syntax:__
 
 ```text
-fl_PCB(name,bare,thick=1.6,color="green",radius=0,payload,holes=[],components,grid,nop_screw,dxf,vendors,connectors,director=+Z,rotor=+X)
+fl_PCB(name,bare,thick=1.6,color="green",radius=0,payload,holes=[],components,grid,nop_screw,dxf,vendors,connectors)
 ```
 
 base constructor

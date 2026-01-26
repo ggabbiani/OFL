@@ -67,10 +67,10 @@ __length__
 Shaft length
 
 __longer_than__  
-Shaft length longer or equal than «longer_then»
+Shaft length longer or equal than «longer_than»
 
 __shorter_than__  
-Shaft length shorter or equal than «shorter_then»
+Shaft length shorter or equal than «shorter_than»
 
 __head_spring__  
 undef, "spring" or "star"

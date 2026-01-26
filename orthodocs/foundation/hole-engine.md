@@ -239,7 +239,7 @@ fallback screw
 
 __Syntax:__
 
-    fl_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,tolerance=2xNIL)
+    fl_holes(holes,enable=[-X,+X,-Y,+Y,-Z,+Z],thick=0,screw,tolerance=EPSx2)
 
 Layouts holes according to their defined positions, depth and enabled normals.
 

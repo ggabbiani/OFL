@@ -23,6 +23,7 @@
 include <../utils/core/core.scad>
 use <../utils/thread.scad>
 use <../utils/pcb_utils.scad>
+use <nut.scad>
 
 d_pillar_colour                   = grey(90);
 d_plug_shell_colour               = grey(80);
@@ -62,16 +63,12 @@ module d_pillar() { //! Draw a pillar for a D-connector
             color(d_pillar_colour)
                 cylinder(d = screw, h = screw_length + 1);
 
-    color(d_pillar_colour) {
-        linear_extrude(height)
-            difference() {
-                circle(r = rad, $fn = 6);
-                circle(d = screw);
-            }
-        }
-    if(show_threads)
-        female_metric_thread(screw, pitch, height, false, colour = d_pillar_colour);
+    draw_nut(rad * 2, screw, height, pitch, d_pillar_colour, show_threads);
+
+    color(d_pillar_colour)
+        cylinder(d = screw + eps, h = 1);
 }
+
 
 module d_plug_D(length, width, rad) { //! D plug D shape
     d = width / 2 - rad;
@@ -81,6 +78,13 @@ module d_plug_D(length, width, rad) { //! D plug D shape
         for(x = [-1, 1], y = [-1, 1])
             translate([x * (length / 2 - rad) + y * x * offset, y * (width / 2 - rad)])
                 circle(rad);
+}
+
+module d_hole(type, h = 0, center = true, clearance = 0.2) { //! Make a hole to clear the back of d-connector
+    dwall = 0.5 + clearance;
+
+    extrude_if(h, center)
+        d_plug_D(d_lengths(type)[0] + 2 * dwall, d_widths(type)[0] + 2 * dwall, 2.5 + dwall);
 }
 
 module d_plug(type, socket = false, pcb = false, idc = false) { //! Draw specified D plug, which can be IDC, PCB or plain solder bucket
@@ -109,7 +113,7 @@ module d_plug(type, socket = false, pcb = false, idc = false) { //! Draw specifi
     // Shell
     //
     color(d_plug_shell_colour)  {
-        linear_extrude( d_flange_thickness(type))
+        linear_extrude(d_flange_thickness(type))
             difference() {
                 rounded_square([flange_length, flange_width], 2);
 

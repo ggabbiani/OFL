@@ -17,7 +17,7 @@ use <../lib/OFL/foundation/bbox-engine.scad>
 use <../lib/OFL/artifacts/box.scad>
 
 $fn           = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER    = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -89,7 +89,7 @@ module sbcBox(mode)
   ) if (mode=="add") // echo("***ADD***")
         let(
           verbs = LOWER_PART?FL_ADD:[],
-          thick   = [-(T+NIL),fl_pcb_thick(sbc)],
+          thick   = [-(T+EPS),fl_pcb_thick(sbc)],
           fillet  = FILLET?0.5:undef
         ) fl_pcbHolder(
           verbs,
@@ -101,7 +101,7 @@ module sbcBox(mode)
     else if (mode=="assembly") // echo("***ASSEMBLY***")
       let(
         verbs = LOWER_PART?FL_ASSEMBLY:[],
-        thick   = [-(T+NIL),fl_pcb_thick(sbc)],
+        thick   = [-(T+EPS),fl_pcb_thick(sbc)],
         fillet  = FILLET?0.5:undef
       ) fl_pcbHolder(
         verbs,

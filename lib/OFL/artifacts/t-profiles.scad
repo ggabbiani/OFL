@@ -205,8 +205,8 @@ module fl_tProfile(
   corner_hole = fl_property(type,"corner hole");
 
   module do_fprint()
-    translate(-Z($this_size.z/2+NIL))
-      linear_extrude($this_size.z+2*NIL)
+    translate(-Z($this_size.z/2+EPS))
+      linear_extrude($this_size.z+2*EPS)
         fl_square(size=fl_2($this_size)+2*$fl_tolerance*[1,1],corners=extrusion_fillet(nop),$FL_ADD=$FL_FOOTPRINT);
 
   module do_layout() {

@@ -35,7 +35,7 @@ fl_linear_extrude([-Y,0],T) {
 beta=alpha/2;
 e=sqrt(2)*(size+[T,T]);
 
-translate(X(delta-FL_NIL)) {
+translate(X(delta-FL_EPS)) {
 fl_color("red")
     fl_linear_extrude([-Y,0],T) {
     translate(fl_ellipseXY(e-[T,T]/2,angle=90-beta))
@@ -44,7 +44,7 @@ fl_color("red")
     fl_ellipticArc(e=e,angles=[90,90-alpha],thick=T,$fn=100);
     }
 }
-#translate(X(delta-FL_NIL))
+#translate(X(delta-FL_EPS))
 fl_linear_extrude([-Y,0],T)
     fl_ellipticSector(e=e-T*[1,1],angles=[90,90-alpha]);
 echo(

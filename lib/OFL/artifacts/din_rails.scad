@@ -112,11 +112,11 @@ module fl_DIN_puncher() {
   len = fl_property($punch,"DIN/rail/punch_len");
   dir = [+Y,0];
   translate(+Z($punch_step-len)/2)
-    translate(+Z(d/2)-Y(NIL))
+    translate(+Z(d/2)-Y(EPS))
       hull() {
-        fl_cylinder(h=$punch_thick+2xNIL, d=d, direction=dir);
+        fl_cylinder(h=$punch_thick+EPSx2, d=d, direction=dir);
         translate(+Z(len-d))
-          fl_cylinder(h=$punch_thick+2xNIL, d=d, direction=dir);
+          fl_cylinder(h=$punch_thick+EPSx2, d=d, direction=dir);
       }
 }
 

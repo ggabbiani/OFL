@@ -18,7 +18,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable 2xNIL
+### variable EPSx2
 
 __Default:__
 

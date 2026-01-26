@@ -18,7 +18,7 @@ include <../../lib/OFL/vitamins/screw.scad>
 use <../../lib/OFL/foundation/customizer-engine.scad>
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -118,14 +118,14 @@ module rail_test(mode) {
           translate(Z(hh))
             fl_cube(size=size,octant=-Z);
           if (mode=="generic")
-            translate(+Z(NIL))
+            translate(+Z(EPS))
               fl_rail(RAIL_LEN)
                 fl_screw([FL_FOOTPRINT,FL_CUTOUT],screw,$fl_thickness=hh,$fl_tolerance=$fl_clearance);
           else assert(mode=="screw")
             fl_screw_rail(RAIL_LEN, screw);
         }
   if (ASSEMBLY)
-    translate(+Z(NIL))
+    translate(+Z(EPS))
       fl_screw(type=screw);
 }
 

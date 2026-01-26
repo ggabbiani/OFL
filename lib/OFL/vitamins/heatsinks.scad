@@ -154,11 +154,11 @@ module fl_heatsink(
           }
           if (!fprint) {
             // subtracts holes
-            translate(-Z(NIL))
-              linear_extrude(base_t+fluting_t+2xNIL)
+            translate(-Z(EPS))
+              linear_extrude(base_t+fluting_t+EPSx2)
                 __dxf__(file=dxf,layer="0 holes");
             // subtracts fluting
-            translate(-Z(NIL))
+            translate(-Z(EPS))
               linear_extrude(fluting_t)
                 __dxf__(file=dxf,layer="0 fluting");
           }
@@ -187,21 +187,21 @@ module fl_heatsink(
           if (!fprint) {
             // subtracts fluting
             translate(+Z(holder_t)) {
-              resize(newsize=[0,70+NIL,0])
-                translate(Z(base_t+NIL))
+              resize(newsize=[0,70+EPS,0])
+                translate(Z(base_t+EPS))
                   linear_extrude(fluting_t)
                     __dxf__(file=dxf,layer="1 fluting");
             }
             // subtracts GPIO and VIDEO bus
-            translate(+Z(holder_t-NIL)) {
-              linear_extrude(base_t+fluting_t+2xNIL)
+            translate(+Z(holder_t-EPS)) {
+              linear_extrude(base_t+fluting_t+EPSx2)
                 offset(1)
                   fl_importDxf(dxf,"gpio");
-              linear_extrude(base_t+3*NIL)
+              linear_extrude(base_t+3*EPS)
                 offset(0.5)
                   fl_importDxf(dxf,"video");
               translate(+Z(base_t))
-                linear_extrude(fluting_t+2xNIL)
+                linear_extrude(fluting_t+EPSx2)
                   offset(0.5)
                     fl_importDxf(dxf,"video2");
             }
@@ -229,7 +229,7 @@ module fl_heatsink(
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,
             drift         = cut_drift-(part=="top"?chamfer_t:corner_r),
-            $fl_tolerance = $fl_tolerance+2xNIL,
+            $fl_tolerance = $fl_tolerance+EPSx2,
             $fl_thickness = $fl_thickness+(part=="top"?[[0,0],[0,0],[0,chamfer_t]]:assert(part=="bottom",part)[[0,0],[0,corner_r],[0,0]])
           ) do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
@@ -294,7 +294,7 @@ module fl_heatsink(
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,
             drift         = cut_drift
-            // $fl_tolerance = cut_tolerance+2xNIL
+            // $fl_tolerance = cut_tolerance+EPSx2
           ) do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
     } else if (verb==FL_FOOTPRINT) {

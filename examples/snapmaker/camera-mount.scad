@@ -25,7 +25,7 @@ use <../../lib/ext/NopSCADlib/utils/thread.scad>
 
 $fl_print_tech   = "Selective Laser sintering"; // [Selective Laser sintering,Fused deposition modeling,Stereo lithography,Material jetting,Binder jetting,Direct metal Laser sintering]
 $fn         = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER  = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament  = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -127,7 +127,7 @@ difference() {
   }
 
   // holes subtraction
-  translate(-Y(FL_NIL))
+  translate(-Y(FL_EPS))
     fl_tnut(FL_LAYOUT,nut,direction=[X,0],octant=-Y) {
       // screw holes
       fl_cylinder(h=30,d=scr_d+0.4,direction=[+Y,0],octant=+Z);

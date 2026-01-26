@@ -200,12 +200,12 @@ function fl_currentView() =
 //*****************************************************************************
 // OFL GLOBALS
 
-//! When true, disables PREVIEW corrections (see variable FL_NIL)
+//! When true, disables PREVIEW corrections (see variable FL_EPS)
 $FL_RENDER  = is_undef($FL_RENDER) ? !$preview : $FL_RENDER;
 
 //! simple workaround for the z-fighting problem during preview
-FL_NIL    = ($preview && !$FL_RENDER ? 0.01 : 0);
-FL_2xNIL  = 2*FL_NIL;
+FL_EPS    = ($preview && !$FL_RENDER ? 0.01 : 0);
+FL_EPSx2  = 2*FL_EPS;
 
 //! PER SURFACE distance in case of movable parts to be doubled when applied to a diameter
 fl_MVgauge  = 0.6;
@@ -221,14 +221,14 @@ fl_FDMtolerance = 0.5;
  *
  * NOTE: it's safe to be used as function literal parameter in fl_list_transform()
  */
-FL_3D = function(2d) [2d.x,2d.y,0];
+FL_3D = function(p) [p.x,p.y,0];
 
 /*!
  * function literal converting 3D to 2D coords by clipping Z plane
  *
  * NOTE: it's safe to be used as function literal parameter in fl_list_transform()
  */
-FL_2D = function(3d) fl_2(3d);
+FL_2D = function(p) fl_2(p);
 
 //! X axis
 FL_X = [1,0,0];
@@ -839,7 +839,7 @@ function fl_cumulativeSum(v) = [
 ];
 
 //! solves a quadratic equation ax^2+bx+c=0 through the Quadratic Formula.
-function fl_quadraticSolve(a,b,c,epsilon=NIL) = let(
+function fl_quadraticSolve(a,b,c,epsilon=EPS) = let(
   delta = b*b-4*a*c
 ) delta>epsilon ?
   let(sqrt = sqrt(delta)) [(-b+sqrt)/2/a,(-b-sqrt)/2/a] :
@@ -1117,7 +1117,7 @@ function fl_list_tail(list,n) = let(
  *     assert(result==expected);
  *
  */
-function fl_list_transform(list,M,in=function(3d) 3d,out=function(3d) 3d)  = [
+function fl_list_transform(list,M,in=function(p) p,out=function(p) p)  = [
   for(p=[for(p=list) fl_transform(M,in(p))]) out(p)
 ];
 

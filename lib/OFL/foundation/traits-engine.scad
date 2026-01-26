@@ -14,11 +14,11 @@ function fl_tt_is3d(p) = len(p)==3 && is_num(p.x) && is_num(p.y) && is_num(p.z);
 
 function fl_tt_isPosition(p) = fl_tt_is2d(p) || fl_tt_is3d(p);
 
-function fl_tt_isOctant(3d) =
-  fl_tt_is3d(3d)
-  && (3d.x==0 || abs(3d.x)==1)
-  && (3d.y==0 || abs(3d.y)==1)
-  && (3d.z==0 || abs(3d.z)==1);
+function fl_tt_isOctant(threed) =
+  fl_tt_is3d(threed)
+  && (threed.x==0 || abs(threed.x)==1)
+  && (threed.y==0 || abs(threed.y)==1)
+  && (threed.z==0 || abs(threed.z)==1);
 
 /*!
  * check whether «value» is a valid [axis,rotation angle] format:
@@ -79,7 +79,7 @@ function fl_tt_isCompSpecList(specs) =
 function fl_tt_isBoundingBox(
   //! bounding box to be verified
   bbox,
-  2d=false
+  twod=false
 ) = let(
   l1  = len(bbox[0]),
   l2  = len(bbox[1])
@@ -90,7 +90,7 @@ function fl_tt_isBoundingBox(
   && (l1==l2)
   && (bbox[0].x<=bbox[1].x)
   && (bbox[0].y<=bbox[1].y)
-  && (l1==2 ? 2d : (bbox[0].z<=bbox[1].z))
+  && (l1==2 ? twod : (bbox[0].z<=bbox[1].z))
 );
 
 /*!

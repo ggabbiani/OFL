@@ -18,7 +18,7 @@ include <../../lib/OFL/vitamins/screw.scad>
 use <../../lib/OFL/foundation/customizer-engine.scad>
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -175,6 +175,6 @@ for(i=[0:len(dict)-1]) let(row=dict[i])
 module label(str, scale = 0.25, valign = "baseline", halign = "left")
   color("black")
     fl_lookAtMe()
-      linear_extrude(NIL)
+      linear_extrude(EPS)
         scale(scale)
           text(str, valign = valign, halign = halign, font="Symbola:style=Regular");

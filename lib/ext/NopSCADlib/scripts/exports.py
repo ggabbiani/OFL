@@ -39,7 +39,7 @@ def bom_to_parts(bom_dir, part_type, assembly = None):
     #
     part_files = []
     bom = assembly + '.txt' if assembly else "bom.txt"
-    suffix = ".dxf" if part_type == 'svg' else '.' + part_type
+    suffix = '.' + part_type
     with open(bom_dir + '/' + bom, "rt") as f:
         for line in f.readlines():
             words = line.split()
@@ -66,9 +66,16 @@ def make_parts(target, part_type, parts = None):
     top_dir = set_config(target, lambda: usage(part_type))
     target_dir = top_dir + part_type + 's'
     deps_dir = target_dir + "/deps"
-    bom_dir = top_dir + "bom"
-    tmp_dir = mktmpdir(top_dir)
 
+    #
+    # Check we have some of this type
+    #
+    bom_dir = top_dir + "bom"
+    all_parts = bom_to_parts(bom_dir, part_type)
+    if not all_parts:
+        return
+
+    tmp_dir = mktmpdir(top_dir)
     if not os.path.isdir(target_dir):
         os.makedirs(target_dir)
 
@@ -83,7 +90,6 @@ def make_parts(target, part_type, parts = None):
     #
     # Decide which files to make
     #
-    all_parts = bom_to_parts(bom_dir, part_type)
     if parts:
         targets = list(parts)           #copy the list so we dont modify the list passed in
     else:
@@ -106,7 +112,7 @@ def make_parts(target, part_type, parts = None):
     #
     # Find all the scad files
     #
-    module_suffix = '_dxf' if part_type == 'svg' else '_' + part_type
+    module_suffix = '_' + part_type
     for dir in source_dirs(bom_dir):
         if targets and os.path.isdir(dir):
             for filename in os.listdir(dir):
@@ -141,7 +147,7 @@ def make_parts(target, part_type, parts = None):
                                             with open(part_maker_name, "w") as f:
                                                 f.write("include <NopSCADlib/global_defs.scad>\n")
                                                 f.write("use <%s/%s>\n" % (reltmp(dir, target), filename))
-                                                f.write("%s();\n" % module);
+                                                f.write("%s();\n" % module)
                                             t = time.time()
                                             openscad.run("-o", part_file, part_maker_name, "-D$bom=1", "-d", dname)
                                             times.add_time(part, t)

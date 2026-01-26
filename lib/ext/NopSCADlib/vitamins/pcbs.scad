@@ -535,6 +535,95 @@ BTT_SKR_V1_4_TURBO = [
     [] // accessories
 ];
 
+MELLOW_FLY_D5 = [
+    "MELLOW_FLY_D5", "Mellow FLY D5",
+    89.37, 63.75, 1.6, // size
+    1, // corner radius
+    3, // mounting hole diameter
+    5, // pad around mounting hole
+    grey(30), // color
+    false, // true if parts should be separate BOM items
+    [ // hole positions
+      [3.185,3.375],
+      [-3.185,3.375],
+      [3.185,-3.375],
+      [-3.185,-3.375],
+    ],
+    [ // components
+        // motor connections, stepper sockets
+        [  0*15.8+7+12.5/2, 7/2,      180, "jst_xh",     4, false, grey(20) ],
+        [  0*15.8+18+2.5/2, 5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef, "RoyalBlue" ],
+        [  0*15.8+12.5+5.4/2, 5.8+2.6/2,  0, "2p54socket", 2, 1],
+        [  0*15.8+5.5+2.5/2,  5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef],
+        [  0*15.8+5.1+2.5/2+6.5,  5.8+21/2,  90, "pcb", 11, TMC2130],
+
+        [  1*15.8+7+12.5/2, 7/2,      180, "jst_xh",     4, false, grey(20) ],
+        [  1*15.8+18+2.5/2, 5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef, "RoyalBlue" ],
+        [  1*15.8+12.5+5.4/2, 5.8+2.6/2,  0, "2p54socket", 2, 1],
+        [  1*15.8+5.5+2.5/2,  5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef],
+        [  1*15.8+5.1+2.5/2+6.5,  5.8+21/2,  90, "pcb", 11, TMC2130],
+
+        [  2*15.8+7+12.5/2, 7/2,      180, "jst_xh",     4, false, grey(20) ],
+        [  2*15.8+18+2.5/2, 5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef, "RoyalBlue" ],
+        [  2*15.8+12.5+5.4/2, 5.8+2.6/2,  0, "2p54socket", 2, 1],
+        [  2*15.8+5.5+2.5/2,  5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef],
+        [  2*15.8+5.1+2.5/2+6.5,  5.8+21/2,  90, "pcb", 11, TMC2130],
+
+        [  3*15.8+7+12.5/2, 7/2,      180, "jst_xh",     4, false, grey(20) ],
+        [  3*15.8+18+2.5/2, 5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef, "RoyalBlue" ],
+        [  3*15.8+12.5+5.4/2, 5.8+2.6/2,  0, "2p54socket", 2, 1],
+        [  3*15.8+5.5+2.5/2,  5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef],
+        [  3*15.8+5.1+2.5/2+6.5,  5.8+21/2,  90, "pcb", 11, TMC2130],
+
+        [  4*15.8+7+12.5/2, 7/2,      180, "jst_xh",     4, false, grey(20) ],
+        [  4*15.8+18+2.5/2, 5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef, "RoyalBlue" ],
+        [  4*15.8+12.5+5.4/2, 5.8+2.6/2,  0, "2p54socket", 2, 1],
+        [  4*15.8+5.5+2.5/2,  5.8+21/2,  90, "2p54socket", 8, 1, undef, undef, undef],
+
+        // thermistors
+        [  0*8+7.8+7.4/2,  -(0*6+5.7/2),  180, "jst_xh", 2, false, grey(20) ],
+        [  1*8+7.8+7.4/2,  -(0*6+5.7/2),  180, "jst_xh", 2, false, grey(20) ],
+
+        // fans
+        [  2*8+7.8+7.4/2,  -(0*6+5.7/2),  180, "jst_xh", 2, false, grey(20) ],
+        [  3*8+7.8+7.4/2,  -(0*6+5.7/2),  180, "jst_xh", 2, false, grey(20) ],
+        [  4*8+7.8+7.4/2,  -(0*6+5.7/2),  180, "jst_xh", 2, false, grey(20) ],
+        [  2*8+7.8+7.4/2,  -(1*6+5.7/2),  180, "jst_xh", 2, false, grey(20) ],
+        [  3*8+7.8+7.4/2,  -(1*6+5.7/2),  180, "jst_xh", 2, false, grey(20) ],
+        [  4*8+7.8+7.4/2,  -(1*6+5.7/2),  180, "jst_xh", 2, false, grey(20) ],
+
+        // endstops
+        [  0*10.5+5*8+7.8+10/2,  -(0*6+5.7/2),  180, "jst_xh", 3, false, grey(20) ],
+        [  1*10.5+5*8+7.8+10/2,  -(0*6+5.7/2),  180, "jst_xh", 3, false, grey(20) ],
+        [  2*10.5+5*8+7.8+10/2,  -(0*6+5.7/2),  180, "jst_xh", 3, false, grey(20) ],
+
+        // bltouch/probe
+        [  5*8+7.8+15/2,  -(1*6+5.7/2),  180, "jst_xh", 5, false, grey(20) ],
+
+        // uart/screen
+        [  5*8+7.8+15.5+12.5/2,  -(1*6+5.7/2),  180, "jst_xh", 4, false, grey(20) ],
+
+        // terminals
+        [  5.25, -(7+30/2), 180, "gterm", gt_5x17, 6, undef, grey(20) ],
+
+        // cpu
+        [  -26-10/2,    -20-10/2,      0, "chip", 10, 10,   1,   grey(15) ],
+
+        // EXP1 & EXP2
+        [  -20/2, -17-9/2,  180, "2p54boxhdr", 5, 2 ],
+        [  -20/2, -26-9/2,  180, "2p54boxhdr", 5, 2 ],
+
+        // USB connection
+        [-3, -7-9/2, 0, "usb_C"],
+
+        // boot button
+        //[-36, -16, 0, "button_4p5mm"], // button is super tiny, not like button_4p5mm
+        // reset button
+        //[-38, -16, 0, "button_4p5mm"], // button is super tiny, not like button_4p5mm
+    ],
+    [] // accessories
+];
+
 Melzi = ["Melzi", "Melzi electronics", 203.2, 49.53, 1.6, 3.81, 3.1,  6, "green", false, [[3.81,  3.81], [-3.81, 3.81], [-3.81, -3.81], [3.81, -3.81]],
                                                                     [],
                                                                     [": USB A to Mini B lead", ": Micro SD card"]];
@@ -730,7 +819,6 @@ Keyes5p1 = ["Keyes5p1", "Keyes5.1 Arduino Uno expansion board", 68.58, 53.34, 1.
     M2p5_pan_screw
    ];
 
-
 ExtruderPCB = ["ExtruderPCB", "Extruder connection PCB",
                                     33.02, 24.13, 1.6, 0,   0,   0, "green", true, [],
     [[3 * 1.27, 24.13 / 2, 90, "D_plug", DCONN15],
@@ -751,7 +839,7 @@ ZC_A0591 = ["ZC_A0591", "ZC-A0591 ULN2003 driver PCB", 35, 32, 1.6, 0, 2.5, 0, "
     [ [ 11.725, 8.3,  -90, "jst_xh", 5],
       [ -6.5,  10,      0, "2p54header", 1, 4],
       [ 20.4,  -4.5,    0, "2p54header", 4, 1],
-      [ 20.4,  11,  180, "pdip", 16, "ULN2803AN", true],
+      [ 20.4,  11,  180, "pdip", 16, "ULN2003AN", true],
       [  5.5,  6,       0, "led", LED3mm, [1,1,1, 0.5]],
       [  5.5,  10.5,    0, "led", LED3mm, [1,1,1, 0.5]],
       [  5.5,  15,      0, "led", LED3mm, [1,1,1, 0.5]],
@@ -761,9 +849,36 @@ ZC_A0591 = ["ZC_A0591", "ZC-A0591 ULN2003 driver PCB", 35, 32, 1.6, 0, 2.5, 0, "
     ], [], [], [], M2p5_pan_screw];
 
 
-MT3608 = ["MT3608", "MT3608 boost converter module",        37, 17, 1.2, 2, 1.5, [5, 3], "#2140BE", false, [[3.0725, 5.095], [3.0725, -5.095], [-3.0725, 5.095], [-3.0725, -5.095]],
-    [ [-12.05 , -6.8, 180, "trimpot10"]
-    ]];
+MT3608 = ["MT3608", "MT3608 boost converter module",        37, 17, 1.2, 2, 1.5, [5, 3], "#2140BE", false,
+      [[3.0725, 5.095], [3.0725, -5.095], [-3.0725, 5.095], [-3.0725, -5.095]],
+      [[-12.05 , -6.8, 180, "trimpot10"],
+       [-24.05 , 13.8, 90, "smd_soic", SOT23_6, "B628"],
+        [-12.3, -14.4, 0, "smd_diode",DO214AC, "SS34"],
+        [-28.5, 13.2, 90,"smd_cap", CAP1206, 0.5],
+        [-20, 13.2, 90,"smd_cap", CAP1206, 0.5],
+        [-24.05 , -11.8, 180, "smd_inductor", CDRH104, "220"]]
+      ];
+
+HW803_1WAY_RELAY = [
+    "HW803_1WAY_RELAY", "HW-803 5V 1 way relay module",
+    50, 26, 1.6, // size
+    2, // corner radius
+    3, // mounting hole diameter
+    4, // pad around mounting hole
+    "red", // color
+    false, // true if parts should be separate BOM items
+    [ // hole positions
+        [3, 3], [-3, 3], [3, -3], [-3, -3]
+    ],
+    [ // components
+        [ 10.5 + 19/2, 26/2, 0,   "block", 19, 15, 15.5, "SkyBlue" ],
+        [ 50-5,        26/2, 0,   "term35", 3],
+        [ 5,           26/2, 180, "term35", 3],
+        [ 34,             2, 0,   "2p54header", 3, 1 ],
+    ],
+    [], // accessories
+    [], // grid
+];
 
 TP4056 = ["TP4056", "TP4056 Li-lon Battery charger module", 26.2, 17.5, 1.0, 0, 1.0, [2.4, 2.4], "#2140BE", false,
     [[1.67, 1.8], [1.67, -1.8], [-1.67, 1.8], [-1.67, -1.8], [-1.67, -4.98], [-1.67, 4.98]],
@@ -994,6 +1109,39 @@ ArduinoNano = let(l = 43.18, w = 17.78, pitch = inch(0.6), pins = 15, poffset = 
     [(l - inch(pins - 1) / 10) / 2 + poffset, (w - pitch) / 2, pins, 2, silver, 2.54, pitch], // 15x2 grid of holes
 ];
 
+BlackPill = let(l = 52.81, w = 20.78, pitch = inch(0.6), pins = 20, poffset = inch(-0.05), led_spacing = [0, 9.93/2], btn_spacing = [0, 4.3/2]) [
+    "BlackPill", "Black Pill",
+    l, w, 1.6, // Size
+    0, // corner radius
+    0, // mounting hole diameter
+    0, // pad around mounting hole
+    "#101010", // color
+    false, // true if parts should be separate BOM items
+    [],
+    [ // components
+      [l / 2 + poffset, w / 2 - pitch / 2,  0, "-2p54joiner", pins, 1, undef, "yellow"],
+      [l / 2 + poffset, w / 2 + pitch / 2,  0, "-2p54joiner", pins, 1, undef, "yellow"],
+      [l - inch(0.27), w / 2, 90, "2p54header",  4,    1, undef, undef, true],
+      [ l -26.75, w / 2, 45, "chip", 7, 7, 1.3],
+      [ 3.6, w / 2, 180, "usb_C" ],
+      [ 15,                       5.3,   0, "text",    4, 1.27, "BOOT0"],
+      [ 15,                     w-5.3,   0, "text",    4, 1.27, "NRST"],
+      [ l - 16,     w/2-led_spacing.y,   0, "text",    4, 1.27, "PWR"],
+      [ l - 16,     w/2+led_spacing.y,   0, "text",    4, 1.27, "C13"],
+      [ 15,     w / 2 - btn_spacing.y,  90, "chip",  3.5,    6, 1.8, silver ], // mock button boot0
+      [ 15,     w / 2 - btn_spacing.y,  90, "chip",  1.3,  2.6, 2.6, grey(90) ], // mock button boot0
+      [ 15,     w / 2 + btn_spacing.y,  90, "chip",  3.5,    6, 1.8, silver ], // mock button nrst
+      [ 15,     w / 2 + btn_spacing.y,  90, "chip",  1.3,  2.6, 2.6, grey(90) ], // mock button nrst
+      [ l - 12,                   8.5,  90, "chip",  3.5,    6, 1.8, silver ], // mock button user
+      [ l - 12,                   8.5,  90, "chip",  1.3,  2.6, 2.6, grey(90) ], // mock button user
+      [ l - 17,                  12.5,  90, "chip",  3.2,  2.5, 0.6, brass ], // xtal
+      [ l - 12,                  12.5,  90, "smd_sot", SOT23],
+      [ l - 12, w / 2 - led_spacing.y,   0, "smd_led", LED0603, "red"],
+      [ l - 12, w / 2 + led_spacing.y,   0, "smd_led", LED0603, "blue"]],
+    [], // accessories
+    [(l - inch(pins - 1) / 10) / 2 + poffset, (w - pitch) / 2, pins, 2, silver, 2.54, pitch], // 15x2 grid of holes
+];
+
 KY_040 = ["KY_040", "KY-040 rotart encoder breakout",
     26.3, 19.5, 1.6, 0, 3, 0, grey(20),  false,
     [
@@ -1176,6 +1324,27 @@ ESP_12F = pcb("ESP_12F", "ESP-12F ESP8266 WiFi module", [24, 16, 0.8],
     ]
 );
 
+RCWL0516 = pcb(
+    "RCWL-0516", "Microwave Radar Sensor",
+    size = [36, 17.3, 1.2],
+    colour = "#17682d",
+    hole_d = 1.7,
+    holes = [
+          [  inch(0.05),  inch(0.05) ],
+          [ -inch(0.05),  inch(0.05) ],
+          [ -inch(0.05), -inch(0.05) ],
+          [  inch(0.05), -inch(0.05) ],
+          [ -inch(0.65), -inch(0.05) ],
+          [ -inch(0.65),  inch(0.05) ],
+    ],
+    grid = [inch(0.05), inch(0.13), 1,  5, silver, inch(0.1), inch(0.1)],
+  components = [
+        [inch(0.18), inch(0.13), 90,"smd_cap", CAP1206, 0.5],
+        [inch(0.18), inch(0.32), 90,"smd_cap", CAP1206, 0.5],
+        [inch(0.18), inch(0.54), 90,"smd_cap", CAP1206, 0.5],
+        [inch(0.45), inch(0.34),  0,"smd_soic", SOIC16, "RCWL9196"],
+            ]
+);
 
 tiny_buck = pcb("tiny_buck", "Ultra Small 3A buck regulator", [20, 11, 1.6],
     hole_d = 1.2,
@@ -1197,11 +1366,48 @@ tiny_buck = pcb("tiny_buck", "Ultra Small 3A buck regulator", [20, 11, 1.6],
     ]
 );
 
-tiny_pcbs = [ESP_201, ESP_12F, XIAO, MP1584EN, ESP_01, ESP_01M, tiny_buck, LIPO_fuel_gauge];
+9DOF_stick = pcb("9DOF_stick", "Sparkfun 9 degrees of freedom IMU", [24, 11, 0.8],
+    colour = "red",
+    hole_d = 3.3,
+    holes = [[-1.2 - 3.3 / 2, 11 / 2]],
+    components = [
+        [9.7, 11/ 2, 0, "chip", 3, 3.5, 1],
+        [9.7, 8.5, 0, "smd_cap",  CAP0603, 0.8],
+        for(i = [0 : 3])
+            [5.27, 2.5 + i * 2, 0, "smd_cap", CAP0603, 0.8],
+        [12.8, 4, 90, "smd_res", RES0603, "472"],
+        [14.1, 4, 90, "smd_res", RES0603, "472"],
 
-big_pcbs = [BTT_RELAY_V1_2, BTT_SKR_MINI_E3_V2_0, BTT_SKR_E3_TURBO, BTT_SKR_V1_4_TURBO, DuetE, Duex5];
+        // Silkscreen
+        [17.75, 1.4,   0,"text", 11, 1.4, "9DOF Stick",     "Liberation Sans:style=Bold"],
+        [3,  11/2, 90, "text", 10, 1, "SCL SDA VDD GND", "Liberation Sans:style=Bold"],
+    ],
+    grid = [inch(0.05), 11 / 2 - inch(0.15), 1, 4, "silver", 0, inch(0.1)]
+);
 
-pcbs = [KY_040, TP4056, L9110S, ZC_A0591, RAMPSEndstop, MT3608, ArduinoNano, Feather405, RPI_Pico, ESP32_DOIT_V1, RPI0, EnviroPlus, ArduinoUno3, ArduinoLeonardo, WD2002SJ, OPZ2, PanelDue_v3, RPI3A, RPI3, RPI4];
+I2C_LCD_Backpack = let(size=[42, 19, 1.2])
+  pcb("I2C_LCD_Backpack", "I2C / SPI character LCD backpack",
+      size = size, //size
+      colour = "black",
+      components = [[size[0]-2, -size[1]/2, 90, "2p54header", 4, 1, false, undef, true],
+                    [2, size[1]-8.5, 270, "2p54header", 2, 1, false, false, true],
+                    [size[0]/2,  size[1]/2,  90, "smd_soic", SOIC16, "PCF8574"],
+                    [size[0]*3/4,  11,  0, "trimpot3362"],
+                    // Silkscreen
+                    [size[0]*3/4+6, size[1]-5.8, 0, "text", 3, 1, "GND", "Liberation Sans:style=Bold"],
+                    [size[0]*3/4+6, size[1]-5.8-2.54, 0, "text", 3, 1, "VCC", "Liberation Sans:style=Bold"],
+                    [size[0]*3/4+6, size[1]-5.8-2.54*2, 0, "text", 3, 1, "SDA", "Liberation Sans:style=Bold"],
+                    [size[0]*3/4+6, size[1]-5.8-2.54*3, 0, "text", 3, 1, "SCL", "Liberation Sans:style=Bold"]
+                    ],
+      grid = [2, size[1]-2, 16, 1, silver, inch(0.1), inch(0.9)]
+      );
+
+tiny_pcbs = [ESP_201, ESP_01M, XIAO, ESP_12F, MP1584EN, ESP_01,tiny_buck, LIPO_fuel_gauge, 9DOF_stick];
+
+big_pcbs = [BTT_RELAY_V1_2, MELLOW_FLY_D5, BTT_SKR_MINI_E3_V2_0, BTT_SKR_E3_TURBO, BTT_SKR_V1_4_TURBO, DuetE, Duex5];
+
+pcbs = [KY_040, TP4056, L9110S, ZC_A0591, RCWL0516, MT3608,RAMPSEndstop, ArduinoNano, I2C_LCD_Backpack, HW803_1WAY_RELAY, Feather405, RPI_Pico,
+        ESP32_DOIT_V1, BlackPill, RPI0, EnviroPlus, ArduinoUno3, ArduinoLeonardo, WD2002SJ, OPZ2, PanelDue_v3, RPI3A, RPI3, RPI4];
 
 pcbs_not_shown = [Melzi, Duex2, PSU12V1A, Keyes5p1, PI_IO, ExtruderPCB];
 

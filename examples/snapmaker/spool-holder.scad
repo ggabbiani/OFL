@@ -126,7 +126,7 @@ module central(verb="show") {
   } else if (verb=="drill") {
     fl_holes(holes);
     fl_lay_holes(holes)
-      translate(NIL*$hole_n)
+      translate(EPS*$hole_n)
         fl_cylinder(h=scr_head_h,d=scr_head_d+tolerance,direction=[-$hole_n,0]);
   } else if (verb=="debug") {
     fl_hole_debug(holes);
@@ -173,7 +173,7 @@ module side(verb="show",normal) {
     fl_holes(holes,tolerance=2*tolerance);
     fl_lay_holes(holes) {
       // inserts hole
-      translate(-(SIDE_T-NIL)*$hole_n)
+      translate(-(SIDE_T-EPS)*$hole_n)
         fl_cylinder(h=2*SIDE_T,d=knut_hole_d,direction=[-$hole_n,0]);
     }
   } else if (verb=="debug") {

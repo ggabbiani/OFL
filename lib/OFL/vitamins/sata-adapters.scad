@@ -17,7 +17,7 @@ let(
   handle_size = [47,37,11.6],
   socket_size = fl_size(socket),
   size        = [handle_size.x,handle_size.y+socket_size.z,handle_size.z],
-  Mpd         = T(-Y(FL_NIL)) * Ry(180) * Rx(-90) * fl_octant(+Z-Y,type=socket)
+  Mpd         = T(-Y(FL_EPS)) * Ry(180) * Rx(-90) * fl_octant(+Z-Y,type=socket)
 )
 [
   fl_name(value="ELUTENG USB 3.0 TO SATA ADAPTER"),

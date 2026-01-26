@@ -240,7 +240,7 @@ module fl_psu(
         linear_extrude(fl_bb_size($sheet).z)
           difference() {
             // 2d surface fitting the calculated $sheet size
-            fl_bb_add(corners=fl_bb_corners($sheet),2d=true);
+            fl_bb_add(corners=fl_bb_corners($sheet),twod=true);
             // grid on face 4 (normal +Y) and part of face 1 (normal +Z)
             if (search($fid,[4,1]))
               fl_grid_layout(origin=[0,grid_d],r_step=grid_shift,bbox=[$C,$M] + [[grid_shift,-grid_shift],-[5,9]],clip=false)
@@ -270,7 +270,7 @@ module fl_psu(
     do_layout() let(
         t   = fl_3d_axisValue($hole_n,thick),
         len = screw_longer_than(t+grid_t)
-      ) translate((t+NIL)*$hole_n)
+      ) translate((t+EPS)*$hole_n)
         fl_screw(type=screw,len=len,direction=[$hole_n,0],$FL_ADD="ON");
   }
 
@@ -278,7 +278,7 @@ module fl_psu(
     do_layout() let(
         t = fl_3d_axisValue($hole_n,thick)
       ) translate(-grid_t*$hole_n)
-        fl_cylinder(d=$hole_d,h=t+grid_t+NIL,octant=+Z,direction=[$hole_n,0]);
+        fl_cylinder(d=$hole_d,h=t+grid_t+EPS,octant=+Z,direction=[$hole_n,0]);
   }
 
   module do_layout() {

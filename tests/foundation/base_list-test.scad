@@ -260,7 +260,7 @@ let(
   list    = [[1,2],[3,4],[5,6]],
   t       = [1,2],
   M       = fl_T(t),
-  result  = fl_list_transform(list,M,function(2d) [2d.x,2d.y,0],function(3d) [3d.x,3d.y]),
+  result  = fl_list_transform(list,M,function(p2d) [p2d.x,p2d.y,0],function(p3d) [p3d.x,p3d.y]),
   expected = [for(item=list) item+t]
 ) assert(result==expected,result);
 

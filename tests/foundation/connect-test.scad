@@ -16,7 +16,7 @@ include <../../lib/OFL/foundation/connect.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -139,7 +139,7 @@ module __test__() {
     if (!connectors || !only) {
       difference() {
         fl_color("DarkSlateGray") fl_cube(size=size,octant=-Z);
-        fl_color("gold") translate(Z(FL_NIL)) multmatrix(M) spine();
+        fl_color("gold") translate(Z(FL_EPS)) multmatrix(M) spine();
       }
     }
     if (connectors)

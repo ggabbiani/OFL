@@ -71,7 +71,7 @@ module fl_label(
   valign  = is_undef(octant) || octant.y==1 ? "bottom"  : !octant.y ? "center" : "top";
 
   module do_add() {
-    // translate(+Z(NIL))
+    // translate(+Z(EPS))
       fl_color(fg)
         resize([0,size,thick],auto=true)
           linear_extrude(thick)

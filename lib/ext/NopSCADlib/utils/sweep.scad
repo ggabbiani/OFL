@@ -111,7 +111,7 @@ function helical_twist_per_segment(r, pitch, sides) = //! Calculate the twist ar
 //
 // Generate all the transforms for the profile of the swept volume.
 //
-function sweep_transforms(path, loop = false, twist = 0) =
+function sweep_transforms(path, loop = false, twist = 0, initial_rotation = undef) =
     let(len = len(path),
         last = len - 1,
 
@@ -122,7 +122,7 @@ function sweep_transforms(path, loop = false, twist = 0) =
         lengths = [for(i = 0, t = 0; i < len; t = t + norm(path[min(i + 1, last)] - path[i]), i = i + 1) t],
         length = lengths[last],
 
-        rotations = [for(i = 0, rot = fs_frame(tangents);
+        rotations = [for(i = 0, rot = is_undef(initial_rotation) ? fs_frame(tangents) : rot3_z(initial_rotation);
                          i < len;
                          i = i + 1,
                          rot = i < len ? rotate_from_to(tangents[i - 1], tangents[i]) * rot : undef) rot],
@@ -169,7 +169,7 @@ function sweep(path, profile, loop = false, twist = 0) = //! Generate the point 
         points = skin_points(profile, path, loop, twist),
         skin_faces = skin_faces(points, npoints, facets, loop),
         faces = loop ? skin_faces : concat([cap(facets)], skin_faces, [cap(facets, npoints - 1)])
-        ) [points, faces];
+    ) [points, faces];
 
 module sweep(path, profile, loop = false, twist = 0, convexity = 1) { //! Draw a polyhedron that is the swept volume
     mesh = sweep(path, profile, loop, twist);
@@ -229,15 +229,19 @@ function rounded_path(path) = //! Convert a rounded_path, consisting of a start 
 
 function segmented_path(path, min_segment) = [  //! Add points to a path to enforce a minimum segment length
     for(i = [0 : len(path) - 2])
-            let(delta =
-                    assert(path[i] != path[i + 1], str("Coincident points at path[", i, "] = ", path[i]))
-                    path[i+1] - path[i],
-                segs = ceil(norm(delta) / min_segment)
-            )
-            for(j = [0 : segs - 1])
-                path[i] + delta * j / segs, // Linear interpolation
-            path[len(path) - 1]
+        let(delta =
+            assert(path[i] != path[i + 1], str("Coincident points at path[", i, "] = ", path[i]))
+            path[i+1] - path[i],
+            segs = ceil(norm(delta) / min_segment)
+        )
+        for(j = [0 : segs - 1])
+            path[i] + delta * j / segs, // Linear interpolation
+        path[len(path) - 1]
 ];
+
+function offset_paths(path, offsets, twists = 0) = let( //! Create new paths offset from the original, optionally spiralling around it
+        transforms = sweep_transforms(path, twist = 360 * twists, initial_rotation = 0)
+    ) [for(o = offsets) let(initial = [o.x, o.y, o.z, 1]) [for(t = transforms) initial * t]];
 
 function spiral_paths(path, n, r, twists, start_angle) = let( //! Create a new paths which spiral around the given path. Use for making twisted cables
         segment = twists ? path_length(path) / twists / r2sides(2 * r) : inf,
@@ -246,16 +250,41 @@ function spiral_paths(path, n, r, twists, start_angle) = let( //! Create a new p
 
 function rounded_path_vertices(path) = [path[0], for(i = [1 : 2 : len(path) - 1]) path[i]]; //! Show the unrounded version of a rounded_path for debug
 
-module show_path(path) //! Show a path using a chain of hulls for debugging, duplicate points are highlighted.
+module show_path(path, r = 0.1) //! Show a path using a chain of hulls for debugging, duplicate points are highlighted.
     for(i = [0 : len(path) - 2]) {
         hull($fn = 16) {
             translate(path[i])
-                sphere(0.1);
+                sphere(r);
 
             translate(path[i + 1])
-                sphere(0.1);
+                sphere(r);
         }
         if(path[i] == path[i + 1])
             translate(path[i])
-                color("red") sphere(1);
+                color("red") sphere($fn = 16, r * 4);
     }
+
+function move_along(j, z, path_S) =
+     j >= len(path_S) - 1 || z <= path_S[j] ? j : move_along(j + 1, z, path_S);
+
+function spiral_wrap(path, profile, pitch, turns) = //! Create a path that spirals around the specified profile with the given pitch.
+    let(
+        transforms = sweep_transforms(path, loop = false, twist = 0),
+        plen = len(profile),
+        S = path_length(profile),
+        profile = [
+            for(i = 0, s = 0; i < plen; s = s + norm(profile[(i + 1) % plen] - profile[i]), i = i + 1)
+                let(p = profile[i]) [p.x, p.y, p.z + pitch * s / S, 1]
+        ],
+        path_len = len(path),
+        path_S = [for(i = 0, s = 0; i < path_len; s = s + norm(path[(i + 1) % path_len] - path[i]), i = i + 1) s],
+        n = turns * plen
+    ) [
+        for(i = 0, j = 0, k = 0, zstep = 0;
+            i < n;
+            i = i + 1,
+            k = i % plen,
+            zstep = floor(i / plen) * pitch,
+            j = move_along(j, zstep + profile[k].z, path_S))
+                if(!i || k) (profile[k] + [0, 0, zstep - path_S[j], 0]) * transforms[j]
+    ];

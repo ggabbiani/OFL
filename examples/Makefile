@@ -17,6 +17,8 @@ PICS		= pic-bit-holder.png pic-magnetic-key-holder.png
 
 export DEF_RULES
 
+.DEFAULT_GOAL := help
+
 runs: $(PICS) snapmaker/runs
 
 snapmaker/%:
@@ -27,3 +29,6 @@ clean: snapmaker/clean
 	@for f in $(PICS) ; do rm -fr $$f ; done
 	@rm -f *.deps
 	$(call aggregate-epilogue)
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

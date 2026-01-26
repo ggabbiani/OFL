@@ -23,7 +23,7 @@
 include <core.scad>
 
 include <vitamins/psus.scad>
-include <vitamins/pcbs.scad>
+include <vitamins/displays.scad> // Includes pcbs.scad
 
 include <vitamins/antennas.scad>
 include <vitamins/batteries.scad>
@@ -34,13 +34,13 @@ include <vitamins/box_sections.scad>
 include <vitamins/bulldogs.scad>
 include <vitamins/cameras.scad>
 include <vitamins/components.scad>
-include <vitamins/displays.scad>
 include <vitamins/extrusions.scad>
 include <vitamins/extrusion_brackets.scad>
 include <vitamins/fastons.scad>
 include <vitamins/gear_motors.scad>
 include <vitamins/geared_steppers.scad>
 include <vitamins/hot_ends.scad>
+include <vitamins/ht_pipes.scad>
 include <vitamins/inserts.scad>
 include <vitamins/ldrs.scad>
 include <vitamins/leadnuts.scad>
@@ -58,6 +58,7 @@ include <vitamins/pulleys.scad>
 include <vitamins/ring_terminals.scad>
 include <vitamins/rails.scad>
 include <vitamins/rod.scad>
+include <vitamins/rod_ends.scad>
 include <vitamins/servo_motors.scad>
 include <vitamins/shaft_couplings.scad>
 include <vitamins/sheets.scad>
@@ -97,6 +98,7 @@ use <utils/hanging_hole.scad>
 use <utils/fillet.scad>
 use <utils/rounded_polygon.scad>
 use <utils/rounded_triangle.scad>
+use <utils/splines.scad>
 use <utils/layout.scad>
 use <utils/round.scad>
 use <utils/offset.scad>

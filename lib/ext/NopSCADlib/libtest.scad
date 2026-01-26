@@ -25,7 +25,7 @@
 //! STL files for all the printed parts, DXF files for CNC routed parts in a project and a manual containing assembly
 //! instructions and exploded views by scraping markdown embedded in OpenSCAD comments, [see scripts](scripts/readme.md).
 //!
-//! A simple example project can be found [here](examples/MainsBreakOutBox/readme.md).
+//! A simple example project can be found [here](examples/MainsBreakOutBox/readme.md) and more complex examples [here](examples).
 //!
 //! For more examples of what it can make see the [gallery](gallery/readme.md).
 //!
@@ -68,6 +68,7 @@ use <tests/fastons.scad>
 use <tests/fuseholder.scad>
 use <tests/gear_motors.scad>
 use <tests/geared_steppers.scad>
+use <tests/gridfinity.scad>
 use <tests/hot_ends.scad>
 use <tests/IECs.scad>
 use <tests/inserts.scad>
@@ -98,6 +99,7 @@ use <tests/rails.scad>
 use <tests/ring_terminals.scad>
 use <tests/rockers.scad>
 use <tests/rod.scad>
+use <tests/rod_ends.scad>
 use <tests/SBR_rails.scad>
 use <tests/screws.scad>
 use <tests/sealing_strip.scad>
@@ -112,6 +114,7 @@ use <tests/stepper_motors.scad>
 use <tests/Swiss_clips.scad>
 use <tests/toggles.scad>
 use <tests/transformers.scad>
+use <tests/ttracks.scad>
 use <tests/tubings.scad>
 use <tests/veroboard.scad>
 use <tests/washers.scad>
@@ -155,7 +158,7 @@ cable_grommets_y = 0;
 translate([x5, cable_grommets_y])
     cable_grommets();
 
-translate([x5, cable_grommets_y + 30])
+translate([x5, cable_grommets_y + 45])
     led_bezels();
 
 translate([x5 + 50, cable_grommets_y])
@@ -177,7 +180,7 @@ translate([x5, screw_knobs_y])
     screw_knobs();
 
 knobs_y = screw_knobs_y + 40;
-translate([640, knobs_y])
+translate([660, knobs_y])
     printed_pulley_test();
 
 translate([x5, knobs_y])
@@ -202,7 +205,11 @@ pocket_y = handle_y + 70;
 translate([x5 + 65, pocket_y])
     pocket_handles();
 
-hinge_y = pocket_y + 100;
+gridfinity_y = pocket_y + 100;
+translate([950, gridfinity_y])
+    gridfinity_test();
+
+hinge_y = gridfinity_y + 100;
 translate([x5, hinge_y]) {
     door_hinges()
         door_latches();
@@ -219,16 +226,12 @@ box_y = pbox_y + 150;
 translate([950, box_y])
     box_test();
 
-
-translate([950, 1525])
-    rotate(-90)
-        bbox_test();
-
 inserts_y = 0;
 nuts_y = inserts_y + 20;
-washers_y = nuts_y + 120;
+washers_y = nuts_y + 160;
 screws_y = washers_y + 120;
-circlips_y = screws_y + 180;
+threaded_inserts_y = screws_y + 180;
+circlips_y = threaded_inserts_y + 30;
 springs_y = circlips_y + 20;
 o_rings_y = springs_y;
 sealing_strip_y = springs_y + 20;
@@ -246,6 +249,10 @@ fans_y = displays_y + 110;
 transformers_y = fans_y + 120;
 psus_y = transformers_y + 190;
 
+ttracks_y = pcbs_y + 150;
+translate([840, ttracks_y])
+    ttracks();
+
 translate([x0 + 35, inserts_y])
     inserts();
 
@@ -257,6 +264,9 @@ translate([x0, nuts_y])
 
 translate([x0, washers_y])
     washers();
+
+translate([x0, threaded_inserts_y])
+    threaded_inserts();
 
 translate([x0, screws_y])
     screws();
@@ -288,6 +298,9 @@ translate([x0, pulleys_y])
 translate([x0, leadnuts_y])
     leadnuts();
 
+translate([x0 + 170, leadnuts_y])
+    rod_ends();
+
 translate([x0 + 120, leadnuts_y])
     leadnuthousings();
 
@@ -301,7 +314,7 @@ translate([x0, linear_bearings_y]) {
 translate([x0, steppers_y])
     stepper_motors();
 
-translate([x0 + 400, steppers_y])
+translate([x0 + 450, steppers_y])
     gear_motors();
 
 translate([x0, sheets_y])
@@ -357,8 +370,11 @@ components_y = toggles_y + 40;
 translate([x2, leds_y])
     leds();
 
-translate([x2 + 35, leds_y])
+translate([x2 + 55, leds_y])
     ldrs();
+
+translate([x2 + 87, leds_y])
+    fuseholders();
 
 translate([x2 + 8, carriers_y])
     carriers();
@@ -368,9 +384,6 @@ translate([x2, magnets_y])
 
 translate([x2 + 20, carriers_y])
     led_meters();
-
-translate([x2 + 70, leds_y])
-    fuseholders();
 
 translate([x2, spades_y])
     spades();
@@ -397,15 +410,17 @@ translate([x2, components_y])
     components();
 
 veroboard_y = 0;
-d_connectors_y = veroboard_y + 110;
-iecs_y = d_connectors_y + 80;
+d_connectors_y = veroboard_y + 120;
+iecs_y = d_connectors_y + 70;
 modules_y = iecs_y + 60;
 ssrs_y = modules_y + 80;
 blowers_y = ssrs_y + 60;
-hot_ends_y = blowers_y + 100;
-batteries_y = hot_ends_y + 55;
+hot_ends_y = blowers_y + 90;
+batteries_y = hot_ends_y + 65;
 panel_meters_y = batteries_y + 70;
-extrusions_y = panel_meters_y + 100;
+extrusions_y = panel_meters_y + 130;
+box_sections_y = extrusions_y + 70;
+
 
 translate([x3, veroboard_y])
     veroboard_test();
@@ -416,10 +431,10 @@ translate([x3 + 50, veroboard_y + 20])
 translate([x3 + 160, ssrs_y])
     pcb_mounts();
 
-translate([x3 + 145, veroboard_y + 16])
+translate([x3 + 145, veroboard_y])
     cameras();
 
-translate([x3 + 145, d_connectors_y - 10])
+translate([x3 + 145, veroboard_y + 45])
     camera_housings();
 
 translate([x3, d_connectors_y])
@@ -449,7 +464,7 @@ translate([x3, ssrs_y]) {
 translate([x3, blowers_y])
     blowers();
 
-translate([x3, batteries_y])
+translate([x2, batteries_y])
     batteries();
 
 translate([x3 + 10, hot_ends_y])
@@ -458,8 +473,11 @@ translate([x3 + 10, hot_ends_y])
 translate([x2, panel_meters_y])
     panel_meters();
 
-translate([x2, extrusions_y])
+translate([x2 - 15, extrusions_y])
     extrusions();
+
+translate([x2, box_sections_y])
+    box_sections();
 
 translate([370, transformers_y])
     transformers();
@@ -467,6 +485,9 @@ translate([370, transformers_y])
 translate([x4, transformers_y])
     no_explode() socket_boxes();
 
+translate([950, transformers_y + 110])
+    rotate(-90)
+        bbox_test();
 
 belts_y = 0;
 rails_y = belts_y + 200;
@@ -474,7 +495,6 @@ extrusion_brackets_y = rails_y + 250;
 sk_brackets_y = extrusion_brackets_y + 80;
 kp_pillow_blocks_y = sk_brackets_y + 60;
 bearing_blocks_y = kp_pillow_blocks_y + 60;
-box_sections_y = batteries_y;
 BLDC_y = bearing_blocks_y + 180;
 pot_y = bearing_blocks_y;
 cable_strip_y = sheets_y + 30;
@@ -482,7 +502,7 @@ cable_strip_y = sheets_y + 30;
 translate([0, transformers_y])
     servo_motors();
 
-translate([x4 + 200, belts_y + 58]) {
+translate([x4 + 200 + 16, belts_y + 58]) {
     belt_test();
 
     translate([0, 60])
@@ -525,9 +545,6 @@ translate([x4, BLDC_y])
 
 translate([x4, pot_y])
     potentiometers();
-
-translate([x2, box_sections_y])
-    box_sections();
 
 translate([x6, 125])
     light_strips();

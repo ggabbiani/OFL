@@ -16,7 +16,7 @@ include <../../lib/OFL/vitamins/magnets.scad>
 include <../../lib/OFL/vitamins/screw.scad>
 include <../../lib/OFL/vitamins/knurl_nuts.scad>
 
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER  = false;
 $fn=100;
 // the height NOT counting top surface
@@ -105,8 +105,8 @@ fl_color() render() difference() {
 
   translate(M_magnet)
     fl_magnet([FL_FOOTPRINT,FL_LAYOUT],type=magnet,$fl_tolerance=clearance,$fl_thickness=emi_d/2,octant=-Z,direction=[-X,90])
-      translate(-Z(mag_sz.z+clearance-NIL))
-        fl_knut(FL_DRILL,type=knut,dri_thick=T+emi_d/2+tube_h-mag_sz.z-clearance-fl_thick(knut)+NIL,$FL_DRILL="ON");
+      translate(-Z(mag_sz.z+clearance-EPS))
+        fl_knut(FL_DRILL,type=knut,dri_thick=T+emi_d/2+tube_h-mag_sz.z-clearance-fl_thick(knut)+EPS,$FL_DRILL="ON");
 }
 
 

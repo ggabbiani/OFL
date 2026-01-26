@@ -34,7 +34,7 @@ module threads()
 
         color(colour)
             translate([20, 0])
-                #thread(dia, starts * pitch, length, profile, starts = starts, top = 0, bot = 0, female = female);
+                thread(dia, starts * pitch, length, profile, starts = starts, top = 0, bot = 0, female = female);
 
         translate([40, 0])
             thread(dia, starts * pitch, length, profile, starts = starts, top = -1, bot = -1, female = female, colour = colour);

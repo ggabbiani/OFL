@@ -14,7 +14,7 @@ include <../../lib/OFL/artifacts/din_rails.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -90,13 +90,13 @@ verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT,FL_LAYOUT,FL_
 
 module din_mount(rail) {
   delta = 2;
-  bbox  = fl_bb_corners(rail)+[[-delta,0,-NIL],[+delta,+delta,+NIL]];
+  bbox  = fl_bb_corners(rail)+[[-delta,0,-EPS],[+delta,+delta,+EPS]];
   size  = bbox[1]-bbox[0];
   thick = fl_thick(rail);
   echo(thick=thick);
 
   difference() {
-    translate(-Z(NIL)+Y(0*thick+delta))
+    translate(-Z(EPS)+Y(0*thick+delta))
     fl_cube(size=size,octant=-Y+Z,$FL_ADD="ON");
     fl_DIN_rail(
       [FL_CUTOUT],rail,

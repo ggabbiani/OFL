@@ -33,23 +33,25 @@ import json
 from tmpdir import *
 
 def usage():
-    print("\nusage:\n\trender [target_config] - Render images of the stl and dxf files.");
+    print("\nusage:\n\trender [target_config] - Render images of the stl, dxf and svg files.");
     sys.exit(1)
 
 def render(target, type):
-    #
-    # Make the target directory
-    #
     top_dir = set_config(target, usage)
-    tmp_dir = mktmpdir(top_dir)
-    target_dir = top_dir + type + 's'
     bom_dir = top_dir + 'bom'
-    if not os.path.isdir(target_dir):
-        os.makedirs(target_dir)
     #
     # Find all the parts
     #
     parts = bom_to_parts(bom_dir, type)
+    if not parts:
+        return
+    #
+    # Make the target directory
+    #
+    tmp_dir = mktmpdir(top_dir)
+    target_dir = top_dir + type + 's'
+    if not os.path.isdir(target_dir):
+        os.makedirs(target_dir)
     #
     # Read the json bom to get the colours
     #
@@ -57,13 +59,16 @@ def render(target, type):
     with open(bom_file) as json_file:
         flat_bom = json.load(json_file)
 
-    things = { 'stl' : 'printed', 'dxf' : 'routed' }[type]
+    things = { 'stl' : 'printed', 'dxf' : 'routed', 'svg' : 'routed' }[type]
     colours = {}
+    cameras = {}
     for ass in flat_bom:
         for part in ass[things]:
              obj = ass[things][part]
              if "colour" in obj:
                 colours[part] = obj["colour"]
+             if "camera" in obj:
+                cameras[part] = obj["camera"]
     #
     # Remove unused png files
     #
@@ -85,13 +90,16 @@ def render(target, type):
             png_maker_name = tmp_dir + "/png.scad"
             pp1 = [0, 146/255, 0]
             colour = pp1
+            camera = "0,0,0,70,0,315,500"
+            if part in cameras:
+                camera = cameras[part]
             if part in colours:
                 colour = colours[part]
                 if not '[' in colour:
                     colour = '"' + colour + '"'
             with open(png_maker_name, "w") as f:
                 f.write('color(%s) import("%s");\n' % (colour, reltmp(part_file, target)))
-            cam = "--camera=0,0,0,70,0,315,500" if type == 'stl' else "--camera=0,0,0,0,0,0,500"
+            cam = "--camera=" + camera if type == 'stl' else "--camera=0,0,0,0,0,0,500"
             render = "--preview" if type == 'stl' or colour != pp1 else "--render"
             tmp_name = tmp_dir + '/' + part[:-4] + '.png'
             dummy_deps_name = tmp_dir + '/tmp.deps' # work around for OpenSCAD issue #3879
@@ -112,3 +120,4 @@ if __name__ == '__main__':
     target =  sys.argv[1] if len(sys.argv) > 1 else None
     render(target, 'stl')
     render(target, 'dxf')
+    render(target, 'svg')

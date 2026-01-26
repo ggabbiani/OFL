@@ -131,7 +131,7 @@ When true, disables PREVIEW corrections (see [variable FL_NIL](#variable-fl_nil)
 
 __Default:__
 
-    function(3d)fl_2(3d)
+    function(p)fl_2(p)
 
 function literal converting 3D to 2D coords by clipping Z plane
 
@@ -152,7 +152,7 @@ __Default:__
 
 __Default:__
 
-    function(2d)[2d.x,2d.y,0]
+    function(p)[p.x,p.y,0]
 
 function literal converting from 2d to 3d by projection on plane Z==0
 
@@ -1601,7 +1601,7 @@ example:
 __Syntax:__
 
 ```text
-fl_list_transform(list,M,in=function(3d)3d,out=function(3d)3d)
+fl_list_transform(list,M,in=function(p)p,out=function(p)p)
 ```
 
 Transforms each item in «list» applying the homogeneous transformation matrix

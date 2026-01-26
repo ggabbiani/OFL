@@ -149,11 +149,11 @@ module fl_box(
         }
         multmatrix(Mback_knut)
           back_spacer([FL_DRILL,FL_LAYOUT],$FL_LAYOUT="ON")
-            translate($spc_director*($spc_thick+NIL))
+            translate($spc_director*($spc_thick+EPS))
               fl_countersink(type=cs);
         multmatrix(Mfront_knut)
           front_spacer([FL_DRILL,FL_LAYOUT],$FL_LAYOUT="ON")
-            translate($spc_director*($spc_thick+NIL))
+            translate($spc_director*($spc_thick+EPS))
               fl_countersink(type=cs);
       }
   }

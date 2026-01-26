@@ -515,7 +515,7 @@ module fl_screw(
 
   module do_footprint() {
     centroid = fl_centroid($this_bbox);
-    translate(+Z(NIL))
+    translate(+Z(EPS))
       translate(Z(Z_delta))
         resize($this_size+2*$fl_tolerance*[1,1,1])
           rotate(180,Y)
@@ -577,15 +577,15 @@ module fl_screw(
       fl_cutoutLoop(cut_dirs, fl_cutout($this))
         if ($co_preferred) {
           fl_new_cutout($this_bbox,$co_current,
-            drift         = cut_drift-head_h-NIL,
+            drift         = cut_drift-head_h-EPS,
             $fl_thickness = fl_thickness($co_current)+head_h
           )
             do_footprint();
         }
 
     } else if ($verb==FL_DRILL) {
-      translate(Z(Z_delta+NIL))
-        fl_cylinder(FL_ADD,h=shaft+2xNIL,r=hole_r,octant=-Z,$FL_ADD=$FL_DRILL);
+      translate(Z(Z_delta+EPS))
+        fl_cylinder(FL_ADD,h=shaft+EPSx2,r=hole_r,octant=-Z,$FL_ADD=$FL_DRILL);
 
     } else assert($verb==FL_FOOTPRINT,fl_error(["unimplemented verb",$verb])) {
       do_footprint();
@@ -632,8 +632,8 @@ module fl_screw_holes(
     len     = ($hole_depth ? $hole_depth : depth)+$fl_thickness,
     screw   = fl_Screw(nop,len)
   )  {
-    translate(+Z(NIL))
-      resize([0,0,len+tolerance+2xNIL],auto=true)
+    translate(+Z(EPS))
+      resize([0,0,len+tolerance+EPSx2],auto=true)
         fl_screw([FL_DRILL],screw,dri_type=type,$FL_DRILL="ON");
     if (countersunk) let(
       head_d  = fl_screw_headD(screw)
@@ -669,9 +669,9 @@ module fl_screw_rail(
 
   $fl_clearance = fl_parm_clearance();
   // the default value of .01 is a workaround for the rounding error of the
-  // resulting screw head in case of dome screws. The NIL constant is used for
+  // resulting screw head in case of dome screws. The EPS constant is used for
   // eliminating z-fighting during preview.
-  $fl_thickness = fl_parm_thickness(0.01+NIL);
+  $fl_thickness = fl_parm_thickness(0.01+EPS);
   // central part of the track
   translate(-Y(length/2))
     fl_direction_extrude(direction=[+Y,0], length=length)

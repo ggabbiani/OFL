@@ -215,13 +215,13 @@ module fl_tnut(
         if (screw) { // subtract holes and countersink
           if (knut)
             fl_lay_holes(holes)
-              translate(Y(NIL)) // resize([0,fl_bb_size(knut).y+2xNIL],0)
+              translate(Y(EPS)) // resize([0,fl_bb_size(knut).y+EPSx2],0)
                 fl_knut(FL_DRILL,dri_thick=[$hole_depth],type=knut,direction=[-$hole_n,0],octant=+Z,$FL_DRILL=$FL_ADD);
           else
             fl_holes(holes,tolerance=hole_t);
           if (countersink)
             do_layout()
-              translate(-Y($this_size.y+NIL))
+              translate(-Y($this_size.y+EPS))
                 fl_countersink(type=FL_CS_ISO_M3,$fl_tolerance=cs_t,direction=[-$hole_n,0],octant=-Z);
         }
         // subtract the cylinder guide for insert
@@ -229,8 +229,8 @@ module fl_tnut(
           let(h=$this_size.y-fl_thick(knut))
           if (h>0)
             do_layout()
-              translate(-Y($this_size.y+NIL))
-                fl_cylinder(h=h+2xNIL,r=ext_r,direction=[-$hole_n,0],octant=-Z);
+              translate(-Y($this_size.y+EPS))
+                fl_cylinder(h=h+EPSx2,r=ext_r,direction=[-$hole_n,0],octant=-Z);
       }
     if (fl_dbg_symbols() && holes)
       fl_hole_debug(holes);

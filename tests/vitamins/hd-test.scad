@@ -16,7 +16,7 @@ include <../../lib/OFL/vitamins/hds.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -122,8 +122,8 @@ verbs   = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL,FL_
 hd      = FL_HD_EVO860;
 // thickness matrix built from customizer values
 T       = [T_x,T_y,T_z];
-// 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
-T_NIL   = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
+// 'EPS' list to be added to children thickness in order to avoid 'z' fighting problem during preview
+T_NIL   = [[EPS,EPS],[EPS,EPS],[EPS,EPS]];
 // thickness list built from customizer values
 rail    = [Rail_x,Rail_y,Rail_z];
 

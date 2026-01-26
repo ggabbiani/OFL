@@ -144,7 +144,7 @@ module fl_jack_barrelEngine(
           fl_new_cutout($this_bbox,$co_current,
             drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
             trim          = function() $co_preferred ? X(-$this_size.x/2) : undef,
-            $fl_tolerance = $fl_tolerance+2xNIL
+            $fl_tolerance = $fl_tolerance+EPSx2
           ) jack();
 
 // FIXME: issue when directing, likely to be related to the 'D' matrix when director is not +Z
@@ -189,29 +189,29 @@ module fl_jack_mcxjphstem1Engine(
       fl_color("gold") {
         difference() {
           fprint();
-          translate([0,axis.z,-NIL])
-            fl_cylinder(d=3.45,h=size.y+NIL);
-          translate([0,0,-NIL])
-            fl_cube(size=[size.x,size.z,size.y-head+2xNIL],octant=-FL_Y+FL_Z);
-          translate([0,axis.z,-NIL])
-            fl_cube(size=[size.x,size.z,size.y-head+2xNIL],octant=+FL_Y+FL_Z);
+          translate([0,axis.z,-EPS])
+            fl_cylinder(d=3.45,h=size.y+EPS);
+          translate([0,0,-EPS])
+            fl_cube(size=[size.x,size.z,size.y-head+EPSx2],octant=-FL_Y+FL_Z);
+          translate([0,axis.z,-EPS])
+            fl_cube(size=[size.x,size.z,size.y-head+EPSx2],octant=+FL_Y+FL_Z);
         }
         // female jack
         let(l=jack)
         translate([0,axis.z,0])
-          fl_tube(d=0.95+2xNIL,thick=0.1,h=l);
+          fl_tube(d=0.95+EPSx2,thick=0.1,h=l);
         // closing bottom
-        translate([0,axis.z,size.y-head+NIL])
-          fl_tube(d=3.45+2xNIL,thick=(3.45-1.88)/2,h=1);
+        translate([0,axis.z,size.y-head+EPS])
+          fl_tube(d=3.45+EPSx2,thick=(3.45-1.88)/2,h=1);
       }
-      fl_color("white") translate([0,axis.z,size.y-head+NIL])
-        fl_tube(d=1.88+2xNIL,thick=(1.88-0.95)/2,h=1);
+      fl_color("white") translate([0,axis.z,size.y-head+EPS])
+        fl_tube(d=1.88+EPSx2,thick=(1.88-0.95)/2,h=1);
     }
   }
 
   module do_cutout() {
     fl_cutoutLoop(co_dirs, fl_cutout(type))
-      fl_new_cutout(bbox,$co_current,drift=cut_drift, $fl_tolerance=$fl_tolerance+2xNIL)
+      fl_new_cutout(bbox,$co_current,drift=cut_drift, $fl_tolerance=$fl_tolerance+EPSx2)
         if ($co_preferred)
           multmatrix(Mshape)
             translate([0,axis.z,size.y])
@@ -221,14 +221,14 @@ module fl_jack_mcxjphstem1Engine(
   module fprint() {
     difference() {
       translate(+fl_Y(axis.z))
-        fl_cylinder(d=d_ext,h=size.y-NIL);
+        fl_cylinder(d=d_ext,h=size.y-EPS);
       // lower cut
-      fl_cube(size=[size.x,size.z,size.y+0*NIL],octant=-FL_Y+FL_Z);
+      fl_cube(size=[size.x,size.z,size.y+0*EPS],octant=-FL_Y+FL_Z);
       // upper cut
       translate([0,size.z/2+axis.z,0])
-        fl_cube(size=[size.x,size.z,size.y+2xNIL],octant=+FL_Y+FL_Z);
+        fl_cube(size=[size.x,size.z,size.y+EPSx2],octant=+FL_Y+FL_Z);
     }
-    fl_cube(size=[4.8,size.z/2-axis.z,size.y-NIL],octant=-FL_Y+FL_Z);
+    fl_cube(size=[4.8,size.z/2-axis.z,size.y-EPS],octant=-FL_Y+FL_Z);
   }
 
   module do_footprint() {

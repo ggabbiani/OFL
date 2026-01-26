@@ -135,7 +135,7 @@ module fl_ether(
       if ($co_preferred)
         fl_new_cutout($this_bbox,$co_current,
           drift         = cut_drift,
-          $fl_tolerance = $fl_tolerance+2xNIL
+          $fl_tolerance = $fl_tolerance+EPSx2
         ) do_footprint();
 
   module do_add() {

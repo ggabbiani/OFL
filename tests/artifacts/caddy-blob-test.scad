@@ -198,8 +198,8 @@ blob  = [
 ];
 // thickness list built from customizer values
 T     = [T_x,T_y,T_z];
-// 'NIL' list to be added to children thickness in order to avoid 'z' fighting problem during preview
-T_NIL = [[NIL,NIL],[NIL,NIL],[NIL,NIL]];
+// 'EPS' list to be added to children thickness in order to avoid 'z' fighting problem during preview
+T_NIL = [[EPS,EPS],[EPS,EPS],[EPS,EPS]];
 
 fl_caddy(verbs,blob,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,direction=direction,octant=octant)
   // the children is called with the following special variables set:

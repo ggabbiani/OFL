@@ -85,7 +85,7 @@ function fl_PCBHolder(
   spc_height  = fl_spc_h(spacers[0]),
   this_bb = [[min(xs),min(ys),0],[max(xs),max(ys),spc_height+pcb_t]],
   // sums pcb holder bare bounding block with the pcb one translated of +Z(spc_height+pcb_t)
-  bbox  = fl_bb_calc([this_bb,[for(point=pcb_bb) fl_transform(T(+Z(spc_height+pcb_t+NIL)), point)]])
+  bbox  = fl_bb_calc([this_bb,[for(point=pcb_bb) fl_transform(T(+Z(spc_height+pcb_t+EPS)), point)]])
 ) fl_Object(bbox, others = [
   fl_pcb(value=pcb),
   fl_pcbh_spacers(value=spacers),

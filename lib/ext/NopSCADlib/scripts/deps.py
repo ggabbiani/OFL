@@ -35,7 +35,7 @@ def read_deps(dname):
     for line in lines:
         if line.startswith('\t'):
             dep = line[1 : -1].rstrip(' \\').replace('\\ ', ' ')
-            if not os.path.basename(dep) in ['stl.scad', 'dxf.scad', 'svf.scad', 'png.scad', 'target.scad']:
+            if not os.path.basename(dep) in ['stl.scad', 'dxf.scad', 'svg.scad', 'png.scad', 'target.scad']:
                 deps.append(dep)
     return deps
 
@@ -63,5 +63,5 @@ def source_dirs(bom_dir):
         else:
             if dir.endswith('/printed'):
                 lib_dirs.add(dir)
-    dirs.remove(source_dir)
+    dirs.discard(source_dir)
     return [source_dir] + sorted(dirs) + sorted(lib_dirs)

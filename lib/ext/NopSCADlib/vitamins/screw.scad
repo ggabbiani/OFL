@@ -49,6 +49,12 @@ function screw_head_depth(type, d = 0) =             //! How far a counter sink 
         ? 0
         : let(r = screw_radius(type)) screw_head_radius(type) - max(r, d / 2) + r / 5;
 
+function screw_thread_radius(type)  = //! Thread radius
+    let(d = screw_thread_diameter(type)) is_undef(d) ? screw_radius(type) : d / 2;
+
+function screw_angle(type, length, nut_distance) = //! How much to rotate the screw to align it with a nut at the specified `distance` from the head
+    -360 * (length - nut_distance) /  metric_coarse_pitch(screw_thread_radius(type) * 2);
+
 function screw_longer_than(x) = x <=  5 ?  5 : //! Returns the length of the shortest screw length longer or equal to x
                                 x <=  6 ?  6 :
                                 x <=  8 ?  8 :
@@ -96,7 +102,7 @@ module screw(type, length, hob_point = 0, nylon = false) { //! Draw specified sc
     socket_rad  = socket_af / cos(30) / 2;
     max_thread  = screw_max_thread(type);
     has_shoulder = !is_undef(screw_thread_diameter(type));
-    thread_rad = has_shoulder ? screw_thread_diameter(type) / 2 : screw_radius(type);
+    thread_rad = screw_thread_radius(type);
     thread = max_thread ? length >= max_thread + 5 ? max_thread
                                                    : length
                         : length;
@@ -199,8 +205,7 @@ module screw(type, length, hob_point = 0, nylon = false) { //! Draw specified sc
                     cylinder(h=2 * eps, r=socket_rad, $fn = 6);
         }
         if(head_type == hs_hex) {
-            color(colour)
-                cylinder(r = head_rad, h = head_height, $fn = 6);
+            draw_nut(head_rad * 2, 0, head_height, 0, colour, false);
 
             shaft();
         }
@@ -230,20 +235,32 @@ module screw(type, length, hob_point = 0, nylon = false) { //! Draw specified sc
                     cylinder(h=2 * eps, r=socket_rad + eps);
             shaft();
         }
-
         if(head_type == hs_dome) {
-            lift = 0.38;
-            h = head_height - lift;
-            r = min(2 * head_height, (sqr(head_rad) + sqr(h)) / 2 * h); // Special case for M2
-            y = sqrt(sqr(r) - sqr(head_rad));
+            edge_height = head_rad / 7.5;
+            head_chamfer_angle= 15; // degrees
+            head_chamfer_x=edge_height*tan(head_chamfer_angle);
+            head_fillet_radius= 0.3;
+            p0 = [head_rad, edge_height];                   // Lowest point on the arc
+            p1 = [1.3 * socket_rad / cos(30), head_height]; // Highest point on the arc
+            p = (p0 + p1) / 2;                              // Start of bisector
+            gradient = (p0.x - p1.x) / (p1.y - p0.y);       // Gradient of perpendicular bisector = -1 / gradient of the line between p10 and p1
+            c = p.y - gradient * p.x;                       // Y ordinate of the centre of the dome
+            r = norm(p1 - [0, c]);                          // Dome radius is distance from centre
             color(colour) {
                 rotate_extrude() {
                     difference() {
                         intersection() {
-                            translate([0, -y + lift])
+                            translate([0, c])
                                 circle(r);
 
-                            square([head_rad, head_height]);
+                            // offset(head_fillet_radius) offset(-head_fillet_radius)
+                            polygon(points = [
+                                [0,0],
+                                [head_rad-head_chamfer_x,0],
+                                [head_rad, edge_height],
+                                [head_rad,head_height],
+                                [0,head_height],
+                                ]);
                         }
                         translate([0, head_height - socket_depth])
                             square([socket_rad, 10]);

@@ -13,7 +13,7 @@ use <../lib/OFL/foundation/fillet.scad>
 use <../lib/OFL/foundation/mngm-engine.scad>
 
 $fn         = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER  = false;
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
 $FL_TRACES  = -2;     // [-2:10]
@@ -124,8 +124,8 @@ module element(
           fl_90DegFillet(r=fill_r,n=fill_n,child_bbox=child_bbox)
             fl_circle(d=cyl_d);
         }
-        translate(-Z(NIL))
-          fl_magnet([FL_FOOTPRINT,FL_DRILL],magnet,$fl_thickness=base_thick+NIL,$fl_tolerance=tolerance);
+        translate(-Z(EPS))
+          fl_magnet([FL_FOOTPRINT,FL_DRILL],magnet,$fl_thickness=base_thick+EPS,$fl_tolerance=tolerance);
       }
       // base
       difference() {
@@ -142,7 +142,7 @@ module element(
   }
 
   module do_drill() {
-    fl_magnet(FL_DRILL,magnet,$fl_thickness=base_thick+NIL,$fl_tolerance=tolerance);
+    fl_magnet(FL_DRILL,magnet,$fl_thickness=base_thick+EPS,$fl_tolerance=tolerance);
   }
 
   module do_layout() {

@@ -74,7 +74,7 @@ function fl_Fan(
   d           = fan_depth(nop),
   description = str(w,"mm fan (",d,"mm depth)"),
   name        = str(w,"x",w,"x",d,"mm fan"),
-  bbox        = [[-w/2,-w/2,-d],[+w/2,+w/2,0]]+NIL*[-[1,1,1],[1,1,1]]
+  bbox        = [[-w/2,-w/2,-d],[+w/2,+w/2,0]]+EPS*[-[1,1,1],[1,1,1]]
 ) fl_Object(bbox,
   name        = name,
   description = description,
@@ -219,7 +219,7 @@ module fl_fan(
       //   translate(-Z(-thick[0]+depth))
       //     bore(h);
       translate(-Z(depth))
-        resize([fan_width(nop)+2xNIL,0,0],auto=[true,true,false])
+        resize([fan_width(nop)+EPSx2,0,0],auto=[true,true,false])
           body();
 
     } else if ($this_verb==FL_FOOTPRINT) {

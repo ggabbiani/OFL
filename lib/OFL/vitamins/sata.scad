@@ -62,7 +62,7 @@ FL_SATA_POWERDATASOCKET = let(
   side_sz       = side_blk_sz + [0,0,side_prism_h],
   blk_sz        = [36.5,3.5,5],
 
-  data_sz       = [10.7,2.3,blk_sz.z+2*FL_NIL],
+  data_sz       = [10.7,2.3,blk_sz.z+2*FL_EPS],
   power_sz      = [20.9,2.3,data_sz.z],
   Mconn         = fl_T(fl_X((data_sz.x-power_sz.x)/2)),
 

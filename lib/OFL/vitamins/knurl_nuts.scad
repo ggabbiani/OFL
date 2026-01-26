@@ -79,8 +79,8 @@ function fl_knut_Spiral(
   name  = str("Spiral M",nominal,"x",length,"mm"),
   specs = fl_switch(nominal, FL_KNUT_NOMINAL_DRILL),
   bbox  = [
-    [-diameter/2, -diameter/2,  -length-NIL], // negative corner
-    [+diameter/2, +diameter/2,  0-NIL],       // positive corner
+    [-diameter/2, -diameter/2,  -length-EPS], // negative corner
+    [+diameter/2, +diameter/2,  0-EPS],       // positive corner
   ]
 )
 assert(is_num(length),str("length=",length))
@@ -158,8 +158,8 @@ function fl_knut_Linear(
   delta = length/(rlen-1),
   name  = str("Linear M",nominal,"x",length,"mm"),
   bbox  = [
-    [-diameter/2, -diameter/2,  -length-NIL], // negative corner
-    [+diameter/2, +diameter/2,  0-NIL],       // positive corner
+    [-diameter/2, -diameter/2,  -length-EPS], // negative corner
+    [+diameter/2, +diameter/2,  0-EPS],       // positive corner
   ]
 )
 assert(is_num(length),str("length=",length))
@@ -569,7 +569,7 @@ module fl_knut(
     ) if (z)
         fl_cylinder(d=nominal,h=z,octant=+Z,$FL_ADD=$FL_DRILL);
     // knurl nut carving
-    translate(-Z(NIL))
+    translate(-Z(EPS))
       fl_cylinder(d=drill_d, h=l,octant=-Z,$FL_ADD=$FL_DRILL);
   }
 

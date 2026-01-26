@@ -22,7 +22,6 @@
 - [fl_2d_slopeAngle (function)](foundation/2d-engine.md#function-fl_2d_slopeangle)
 - [fl_2d_vloop (module)](foundation/2d-engine.md#module-fl_2d_vloop)
 - [fl_2d_vmanage (module)](foundation/2d-engine.md#module-fl_2d_vmanage)
-- [2xNIL (variable)](foundation/unsafe_defs.md#variable-2xnil)
 - [FL_2xNIL (variable)](foundation/core.md#variable-fl_2xnil)
 
 ## 3
@@ -116,6 +115,11 @@
 - [fl_caddy (module)](artifacts/caddy.md#module-fl_caddy)
 - [artifacts/caddy (package)](artifacts/caddy.md#package-artifactscaddy)
 - [fl_centroid (function)](foundation/3d-engine.md#function-fl_centroid)
+- [fl_Chip (function)](vitamins/chips.md#function-fl_chip)
+- [fl_chip (module)](vitamins/chips.md#module-fl_chip)
+- [FL_CHIP_INVENTORY (variable)](vitamins/chips.md#variable-fl_chip_inventory)
+- [FL_CHIP_NS (variable)](vitamins/chips.md#variable-fl_chip_ns)
+- [vitamins/chips (package)](vitamins/chips.md#package-vitaminschips)
 - [fl_chkEngineDomain (function)](foundation/core.md#function-fl_chkenginedomain)
 - [fl_circle (function)](foundation/2d-engine.md#function-fl_circle)
 - [fl_circle (module)](foundation/2d-engine.md#module-fl_circle)
@@ -277,6 +281,7 @@
 - [fl_ellipticSector (module)](foundation/2d-engine.md#module-fl_ellipticsector)
 - [fl_Engine (function)](foundation/core.md#function-fl_engine)
 - [fl_engine (function)](foundation/core.md#function-fl_engine)
+- [EPSx2 (variable)](foundation/unsafe_defs.md#variable-epsx2)
 - [fl_error (function)](foundation/core.md#function-fl_error)
 - [fl_error (module)](foundation/core.md#module-fl_error)
 - [fl_ether (module)](vitamins/ethers.md#module-fl_ether)

@@ -805,7 +805,9 @@ and will result as in the following picture:
 __Parameters:__
 
 __size__  
-outer size
+Outer size as scalar or list. In the latter case only the first
+two values are considered.
+
 
 __corners__  
 List of four radiuses, one for each quadrant's corners.

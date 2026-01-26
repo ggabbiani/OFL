@@ -16,7 +16,7 @@ include <../../lib/OFL/artifacts/joints.scad>
 
 
 $fn            = 50;           // [3:100]
-// When true, disables PREVIEW corrections like FL_NIL
+// When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
@@ -166,7 +166,7 @@ fl_jnt_joint(verbs, joint, octant=octant, direction=direction,
   cut_clearance = CUT_CLEARANCE,
   fillet        = fillet,
   $fl_tolerance = TOLERANCE,
-  $fl_thickness = THICKNESS+NIL
+  $fl_thickness = THICKNESS+EPS
 );
 
 let(
@@ -178,13 +178,13 @@ let(
     intersection() {
       fl_cube(size=SZ_cutting,octant=-X, $FL_ADD="ON");
       difference() {
-        // translate(+Z(bbox[1].z+NIL))
+        // translate(+Z(bbox[1].z+EPS))
           fl_cube(size=SZ_surface, $FL_ADD="ON");
         fl_jnt_joint(FL_CUTOUT, joint, octant=octant, direction=direction,
           cut_drift     = CUT_DRIFT,
           cut_clearance = CUT_CLEARANCE,
           $fl_tolerance = TOLERANCE,
-          $fl_thickness = THICKNESS+NIL,
+          $fl_thickness = THICKNESS+EPS,
           $FL_CUTOUT="ON"
         );
       }

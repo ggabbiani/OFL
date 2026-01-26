@@ -27,7 +27,7 @@ FL_HD_EVO860 = let(
   specs   = M3_cs_cap_screw,
   screw_r = screw_radius(specs),
 
-  Mpd     = T(-X(4.8)-Z(NIL)) * fl_direction([-Y,0]) * fl_octant(+Y-Z,type=plug),
+  Mpd     = T(-X(4.8)-Z(EPS)) * fl_direction([-Y,0]) * fl_octant(+Y-Z,type=plug),
 
   conns   = fl_connectors(plug),
   pc      = fl_conn_clone(conns[0],M=Mpd),
@@ -179,7 +179,7 @@ module fl_hd(
             $fl_thickness = fl_3d_axisValue(-Y, values=thick)
           ) fl_sata(FL_CUTOUT,plug,$dbg_Symbols=false,cut_drift=cut_drift);
         // else
-        //   fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+2xNIL)
+        //   fl_new_cutout($this_bbox,$co_current,drift=drift,$fl_tolerance=$fl_tolerance+EPSx2)
         //     do_footprint($FL_FOOTPRINT=$FL_CUTOUT);
 
     } else if ($this_verb==FL_DRILL)

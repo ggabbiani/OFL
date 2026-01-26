@@ -190,7 +190,7 @@ module fl_magnet(
               translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d);
               fl_cylinder(h=cyl_h,d=d-2*shell_r);
             }
-            translate(+Z(cyl_h+NIL)) fl_cylinder(h=cyl_h,d=d-2*shell_t);
+            translate(+Z(cyl_h+EPS)) fl_cylinder(h=cyl_h,d=d-2*shell_t);
           }
           translate(+Z(cyl_h)) fl_cylinder(h=cyl_h,d=d-2*shell_t-2*little);
         }
@@ -202,10 +202,10 @@ module fl_magnet(
             fl_cylinder(d=d, h=h, octant=+Z);
 
           if (cs)
-            translate(+Z(h+NIL)) fl_countersink(FL_FOOTPRINT,type=cs,$fl_tolerance=0.1,$FL_FOOTPRINT=$FL_ADD);
+            translate(+Z(h+EPS)) fl_countersink(FL_FOOTPRINT,type=cs,$fl_tolerance=0.1,$FL_FOOTPRINT=$FL_ADD);
 
           if (screw)
-            do_layout() fl_screw(FL_DRILL,screw,$fl_thickness=h+NIL,$FL_DRILL=$FL_ADD);
+            do_layout() fl_screw(FL_DRILL,screw,$fl_thickness=h+EPS,$FL_DRILL=$FL_ADD);
         }
       }
 
@@ -220,7 +220,7 @@ module fl_magnet(
 
     module do_footprint() {
       translate(-Z(tolerance_z)) let($FL_ADD=$FL_FOOTPRINT)
-        if      (engine==cyl_engine  ) let(d = fl_mag_d(type)) fl_cylinder(d=d+2*(tolerance_xy+NIL), h=h+2*(tolerance_z+NIL),octant=+Z);
+        if      (engine==cyl_engine  ) let(d = fl_mag_d(type)) fl_cylinder(d=d+2*(tolerance_xy+EPS), h=h+2*(tolerance_z+EPS),octant=+Z);
         else if (engine==quad_engine ) fl_cube(size=$this_size+[tolerance_xy,tolerance_xy,2*tolerance_z],octant=+Z);
     }
 
