@@ -33,7 +33,7 @@ Every library component is accessed through a set of verb-based APIs (Common API
 The following libraries, used and distributed internally this project, are not
 part of OFL:
 
-* [NopSCADlib Release v21.10.0](https://github.com/nophead/NopSCADlib/releases/tag/v21.10.0)
+* [NopSCADlib Release v21.41.1](https://github.com/nophead/NopSCADlib/releases/tag/v21.41.1)
 * [Round-Anything v1.0.4](https://github.com/Irev-Dev/Round-Anything/releases/tag/1.0.4)
 * [scad-utils](https://github.com/openscad/scad-utils)
 
