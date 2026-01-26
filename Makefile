@@ -39,37 +39,41 @@ export IMCMD 	:= $(if $(findstring deprecated,$(IMVER)),$(shell $(WHICH) magick 
 export WGET		:= $(shell $(call which) $(if $(call is-mac), curl,wget))
 
 .PHONY: lib
+.DEFAULT_GOAL := help
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
 all: check lib tests/sources docs/all orthodocs/all
 
-clean: docs/clean examples/clean orthodocs/clean tests/clean docker/clean
+clean: docs/clean examples/clean orthodocs/clean tests/clean docker/clean ## general cleanup, pre-req for docker test execution
 
-check:
+check: ## ImageMagick version check
 ifdef IMVER
 	$(call msg-info,ImageMagick command found '$(IMCMD)')
 else
 	$(call msg-error,ImageMagick not found, please install)
 endif
 
-orthodocs/%: $(LIB_SOURCES)
+orthodocs/%: $(LIB_SOURCES) ## type `make -s orthodocs/help`
 	$(call make_sub)
 
-docs/%:
+docs/%:	## type `make -s docs/help`
 	$(call make_sub)
 
-examples/%:
+examples/%: ## type `make -s examples/help`
 	$(call make_sub)
 
-tests/%:
+tests/%: ## type `make -s tests/help`
 	$(call make_sub)
 
-docker/%: ALWAYS
+docker/%: ALWAYS ## type `make -s docker/help`
 	$(call make_sub)
 
-lib: ALWAYS
+lib: ALWAYS ## builds some library components dependent on third-party artifacts
 	make -C lib/OFL/vitamins/ruthex
 
 # fake target forcing pattern rules that cannot be '.PHONY'
 ALWAYS:
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

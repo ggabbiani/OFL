@@ -6,7 +6,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-
 SHELL			:= /bin/bash
 # depending on the installed docker engine (docker vs podman) the image removal
 # command could differ
@@ -21,41 +20,40 @@ DOCKER_BUILD	= docker build
 FEDORA_BUILD	= $(DOCKER_BUILD) -t ofl:fedora
 UBUNTU_BUILD	= $(DOCKER_BUILD) -t ofl:ubuntu
 
-all: fedora ubuntu
+.DEFAULT_GOAL := help
+
+all: fedora ubuntu	## Build images for all the supported platforms
 
 clean:
 	$(call aggregate-prologue)
 	$(DOCKER_RMI) ofl:fedora ofl:ubuntu || true
 	$(call aggregate-epilogue)
 
-# build docker image: pre-requisite for all fedora targets
-fedora-build:
+fedora-build:	## build docker image: pre-requisite for all fedora targets
 	$(call target-prologue)
 	cd $(word 1,$(subst -, ,$@)) && $(FEDORA_BUILD) .
 	$(call target-epilogue-success)
 
-# Fedora make "all"
-fedora: fedora-build
+fedora: fedora-build	## Fedora make "all"
 	$(FEDORA_MAKE)
 
-# Fedora make "tests/runs"
-fedora-tests: fedora-build
+fedora-tests: fedora-build	## Fedora make "tests/runs"
 	$(call section-prologue,$@)
 	$(FEDORA_MAKE) tests/runs
 	$(call section-epilogue,$@)
 
-# build docker image: pre-requisite for all ubuntu targets
-ubuntu-build:
+ubuntu-build:	## build docker image: pre-requisite for all ubuntu targets
 	$(call section-prologue,$@)
 	cd $(word 1,$(subst -, ,$@)) && $(UBUNTU_BUILD) .
 	$(call section-epilogue,$@)
 
-# Ubuntu make "all"
-ubuntu: ubuntu-build
+ubuntu: ubuntu-build	## Ubuntu make "all"
 	$(UBUNTU_MAKE)
 
-# Ubuntu make "tests/runs"
-ubuntu-tests: ubuntu-build
+ubuntu-tests: ubuntu-build	## Ubuntu make "tests/runs"
 	$(call section-prologue,$@)
 	$(UBUNTU_MAKE) tests/runs
 	$(call section-epilogue,$@)
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

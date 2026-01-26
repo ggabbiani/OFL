@@ -15,6 +15,7 @@ include <../foundation/grid.scad>
 use <../foundation/hole-engine.scad>
 include <../foundation/label.scad>
 
+include <chips.scad>
 include <ethers.scad>
 include <generic.scad>
 include <hdmi.scad>
@@ -94,9 +95,7 @@ function fl_PCB(
      */
     dxf,
     vendors,
-    connectors,
-    director=+Z,
-    rotor=+X
+    connectors
   ) =
     assert(!fl_dbg_assert() || fl_tt_isBoundingBox(bare),"«bare» must be a bounding box in low-high format")
   let(
@@ -744,6 +743,8 @@ module fl_pcb(
           fl_switch(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
         } else if ($comp_engine==FL_HS_NS)        // HEAT SINK
           fl_heatsink(verbs,type=$comp_type,octant=$comp_octant,direction=$comp_direction);
+        else if ($comp_engine==FL_CHIP_NS)        // CHIPS
+          fl_chip(verbs,$comp_type,octant=$comp_octant,direction=$comp_direction);
         else assert($comp_engine==FL_GENERIC_NS)  // GENERIC VITAMIN
           fl_generic_vitamin(verbs,$comp_type,octant=$comp_octant,direction=$comp_direction);
     }
@@ -754,7 +755,7 @@ module fl_pcb(
         fl_lay_holes(holes,lay_direction)
           let(specs = is_undef($hole_screw) ? screw : $hole_screw)
             if (specs)
-              fl_screw([FL_ADD,FL_ASSEMBLY],fl_Screw(specs,dr_thick));
+              fl_screw([FL_ADD,FL_ASSEMBLY],fl_Screw(specs,dr_thick),direction=[$hole_n,0]);
     }
 
     module do_drill() {
@@ -918,8 +919,6 @@ module fl_pcb_adapter(
 ) {
   assert(!fl_dbg_assert() || is_list(verbs)||is_string(verbs),verbs);
 
-  fl_trace("thick",thick);
-
   pcb_t     = pcb_thickness(type);
   comps     = pcb_components(type);
   size      = pcb_size(type);
@@ -934,16 +933,6 @@ module fl_pcb_adapter(
   radius    = pcb_radius(type);
   grid      = pcb_grid(type);
 
-  D         = direction ? fl_direction(direction)  : I;
-  M         = fl_octant(octant,bbox=bbox);
-
-  fl_trace("screw",screw);
-  fl_trace("components",comps);
-  fl_trace("type",type);
-  fl_trace("holes",holes);
-  fl_trace("bbox",bbox);
-  fl_trace("grid",grid);
-
   module do_add() {
     pcb(type) children();
   }
@@ -957,7 +946,7 @@ module fl_pcb_adapter(
   module do_assembly() {
     if (holes)
       fl_lay_holes(holes,[+Z])
-        fl_screw([FL_ADD,FL_ASSEMBLY],type=screw,nut="default",$fl_thickness=dr_thick+pcb_t,nwasher=true);
+        fl_screw([FL_ADD,FL_ASSEMBLY],type=fl_Screw(screw),nut="default",$fl_thickness=dr_thick+pcb_t,nut_washer="default");
   }
 
   module do_drill() {
@@ -979,21 +968,21 @@ module fl_pcb_adapter(
     if ($verb==FL_ADD) {
       fl_modifier($modifier) do_add();
 
+    } else if ($verb==FL_ASSEMBLY) {
+      fl_modifier($modifier) do_assembly();
+
     } else if ($verb==FL_BBOX) {
       fl_modifier($modifier) fl_bb_add(bbox);
 
-    } else if ($verb==FL_LAYOUT) {
-      fl_modifier($modifier) do_layout()
-        children();
-
-    } else if ($verb==FL_ASSEMBLY) {
-      fl_modifier($modifier) do_assembly();
+    } else if ($verb==FL_CUTOUT) {
+      fl_modifier($modifier) do_cutout();
 
     } else if ($verb==FL_DRILL) {
       fl_modifier($modifier) do_drill();
 
-    } else if ($verb==FL_CUTOUT) {
-      fl_modifier($modifier) do_cutout();
+    } else if ($verb==FL_LAYOUT) {
+      fl_modifier($modifier) do_layout()
+        children();
 
     } else if ($verb==FL_PAYLOAD) {
       fl_modifier($modifier) do_payload();

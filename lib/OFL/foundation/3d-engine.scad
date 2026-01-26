@@ -70,8 +70,7 @@ module fl_vmanage(
   octant,
   //! desired direction [director,rotation], native direction when undef
   direction
-) {
-  fl_generic_vmanage(
+) assert(this) fl_generic_vmanage(
     verbs,
     this,
     positioning = octant,
@@ -82,7 +81,6 @@ module fl_vmanage(
     children();
     fl_doAxes(size=1.2*$this_size, direction=direction);
   }
-}
 
 /*!
  * Low-level verb-driven OFL API management.

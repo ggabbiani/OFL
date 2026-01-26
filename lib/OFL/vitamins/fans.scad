@@ -17,6 +17,7 @@ include <../foundation/unsafe_defs.scad>
 
 use <../foundation/3d-engine.scad>
 use <../foundation/bbox-engine.scad>
+use <../foundation/type-engine.scad>
 
 //! prefix used for namespacing
 FL_FAN_NS  = "fan";

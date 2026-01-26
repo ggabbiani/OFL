@@ -175,9 +175,9 @@ function fl_Screw(
   nop,
   //! Shaft length
   length,
-  //! Shaft length longer or equal than «longer_then»
+  //! Shaft length longer or equal than «longer_than»
   longer_than=0,
-  //! Shaft length shorter or equal than «shorter_then»
+  //! Shaft length shorter or equal than «shorter_than»
   shorter_than,
   //! undef, "spring" or "star"
   head_spring,

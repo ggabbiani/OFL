@@ -19,24 +19,23 @@ RESULTS			= $(foreach t,$(T_LIST),$(t)-test.echo)
 include $(FUNCTIONS) $(DEF_RULES)
 
 .PRECIOUS: $(SOURCES)
+.DEFAULT_GOAL := help
 
-top:
-	@$(MAKE) -C $(realpath ../..) tests/foundation/sources
+sources: $(SOURCES)	## create test sources
 
-sources: $(SOURCES)
+runs: $(RESULTS)	## trigger tests
 
-# clean-runs: clean-local $(RESULTS)
-
-runs: $(RESULTS)
-
-clean-results:
+clean-results:		## delete a test run result files
 	$(call aggregate-prologue)
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
 	$(call aggregate-epilogue)
 
-clean-sources:
+clean-sources:	## delete test sources, sources will be rebuilt at first test run
 	printf "$(COLOR_YELLOW)Cleaning tests/foundation sources? (Y/N):$(COLOR_RESET) "
 	read -p "" confirm && [[ $$confirm == [yY] ]] || exit 1
 	$(call aggregate-prologue)
 	@for f in $(SOURCES) ; do rm -f $$f ; done
 	$(call aggregate-epilogue)
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

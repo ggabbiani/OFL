@@ -175,22 +175,18 @@ module fl_countersink(
     assert($fl_tolerance>=0,$fl_tolerance)
 
     if ($this_verb==FL_ADD)
-      fl_modifier($modifier)
-        doAdd();
+      doAdd();
 
     else if ($this_verb==FL_BBOX)
-      fl_modifier($modifier)
-        fl_bb_add(bbox,auto=true,$FL_ADD=$FL_BBOX);
+      fl_bb_add(bbox,auto=true,$FL_ADD=$FL_BBOX);
 
     else if ($this_verb==FL_DRILL) {
-      fl_modifier($modifier)
-        if ($fl_thickness)
-          fl_cylinder(d=dk+2*$fl_tolerance,h=$fl_thickness+$fl_tolerance,octant=+Z,$FL_ADD=$FL_DRILL);
+      if ($fl_thickness.z[1])
+        fl_cylinder(d=dk+2*$fl_tolerance,h=$fl_thickness.z[1]+$fl_tolerance,octant=+Z,$FL_ADD=$FL_DRILL);
 
     } else if ($this_verb==FL_FOOTPRINT)
-      fl_modifier($modifier)
-        tolerant()
-          doAdd($FL_ADD=$FL_FOOTPRINT);
+      tolerant()
+        doAdd($FL_ADD=$FL_FOOTPRINT);
 
     else
       assert(false,str("***UNIMPLEMENTED VERB***: ",$this_verb));

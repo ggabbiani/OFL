@@ -141,7 +141,7 @@ module fl_dimension(
 
   // eventual attribute inheritance from context variables
   align       = align ? align : is_undef($dim_align) ? "centered" : $dim_align;
-  view        = view ? view : $dim_view;
+  view        = assert(view || !is_undef($dim_view),"Missing projection plane view (right,top,bottom,left,front,back)") view ? view : $dim_view;
   mode        = mode ? mode : is_undef($dim_mode) ? "full" : $dim_mode;
   distr       = distr ? distr : $dim_distr;
   object      = object  ? object  : $dim_object;

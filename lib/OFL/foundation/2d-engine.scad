@@ -1246,7 +1246,10 @@ module fl_square(
  */
 module fl_2d_frame(
   verbs   = FL_ADD,
-  //! outer size
+  /*!
+   * Outer size as scalar or list. In the latter case only the first
+   * two values are considered.
+   */
   size    = [1,1],
   /*!
    * List of four radiuses, one for each quadrant's corners.

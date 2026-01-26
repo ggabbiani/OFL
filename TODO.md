@@ -101,7 +101,7 @@
 - [X] fully wrap the NopSCADlib screw library
 - [X] renamed knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}
 - [ ] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name
-  space»_find/select() (see fl_pcb_select{}). Eliminate fl_«name
+  space»_find/select() (see fl_pcb_select()). Eliminate fl_«name
   space»_search(). Involved libraries (not exhaustive list):
   - countersinks
   - screw (after wrapper setup)
