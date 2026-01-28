@@ -79,7 +79,8 @@ function fl_tt_isCompSpecList(specs) =
 function fl_tt_isBoundingBox(
   //! bounding box to be verified
   bbox,
-  twod=false
+  //! 2d switch, can be either "2d" or "3d"
+  mode="3d"
 ) = let(
   l1  = len(bbox[0]),
   l2  = len(bbox[1])
@@ -90,7 +91,7 @@ function fl_tt_isBoundingBox(
   && (l1==l2)
   && (bbox[0].x<=bbox[1].x)
   && (bbox[0].y<=bbox[1].y)
-  && (l1==2 ? twod : (bbox[0].z<=bbox[1].z))
+  && (l1==2 ? mode=="2d" : (bbox[0].z<=bbox[1].z))
 );
 
 /*!

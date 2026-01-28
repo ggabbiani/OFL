@@ -123,7 +123,7 @@ __Default:__
 
     is_undef($FL_RENDER)?!$preview:$FL_RENDER
 
-When true, disables PREVIEW corrections (see [variable FL_NIL](#variable-fl_nil))
+When true, disables PREVIEW corrections (see [variable FL_EPS](#variable-fl_eps))
 
 ---
 
@@ -137,14 +137,6 @@ function literal converting 3D to 2D coords by clipping Z plane
 
 NOTE: it's safe to be used as function literal parameter in [fl_list_transform()](#function-fl_list_transform)
 
-
----
-
-### variable FL_2xNIL
-
-__Default:__
-
-    2*FL_NIL
 
 ---
 
@@ -315,6 +307,24 @@ Context parameters used:
 
 ---
 
+### variable FL_EPS
+
+__Default:__
+
+    ($preview&&!$FL_RENDER?0.01:0)
+
+simple workaround for the z-fighting problem during preview
+
+---
+
+### variable FL_EPSx2
+
+__Default:__
+
+    2*FL_EPS
+
+---
+
 ### variable FL_FOOTPRINT
 
 __Default:__
@@ -362,16 +372,6 @@ __Default:__
     "FL_MOUNT mount shape through predefined screws"
 
 mount shape through predefined screws
-
----
-
-### variable FL_NIL
-
-__Default:__
-
-    ($preview&&!$FL_RENDER?0.01:0)
-
-simple workaround for the z-fighting problem during preview
 
 ---
 
@@ -2122,7 +2122,7 @@ push «item» on tail of list «l»
 __Syntax:__
 
 ```text
-fl_quadraticSolve(a,b,c,epsilon=NIL)
+fl_quadraticSolve(a,b,c,epsilon=EPS)
 ```
 
 solves a quadratic equation ax^2+bx+c=0 through the Quadratic Formula.

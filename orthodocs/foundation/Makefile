@@ -11,8 +11,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-top:
-	@$(MAKE) -C $(realpath ../..) orthodocs/foundation/all
+.DEFAULT_GOAL := help
 
 include $(FUNCTIONS)
 
@@ -24,3 +23,6 @@ all: 256x256/all
 clean:
 	@rm -f *.md
 	@$(MAKE) -C 256x256 $@
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

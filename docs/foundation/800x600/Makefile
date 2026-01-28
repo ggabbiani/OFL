@@ -15,8 +15,7 @@ SIZE		:= $(notdir $(CURDIR))
 FOUNDATION	:= $(LIB_ROOT)/foundation
 PICTURES	:= pic-0.png pic-1.png pic-2.png pic-3.png pic-4.png pic-5.png pic-6.png pic-7.png pic-8.png pic-9.png torus.png
 
-top:
-	@$(MAKE) -C $(realpath ../../..) docs/foundation/800x600/all
+.DEFAULT_GOAL := help
 
 all:	$(PICTURES)
 
@@ -77,3 +76,6 @@ torus.png: $(TESTS)/foundation/torus-test.scad $(TESTS)/foundation/torus-test.js
 	$(call target-prologue)
 	$(call make-picture,$(SIZE),,,--view axes)
 	$(call target-epilogue-success)
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

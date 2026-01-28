@@ -240,7 +240,7 @@ module fl_psu(
         linear_extrude(fl_bb_size($sheet).z)
           difference() {
             // 2d surface fitting the calculated $sheet size
-            fl_bb_add(corners=fl_bb_corners($sheet),twod=true);
+            fl_bb_add(corners=fl_bb_corners($sheet),mode="2d");
             // grid on face 4 (normal +Y) and part of face 1 (normal +Z)
             if (search($fid,[4,1]))
               fl_grid_layout(origin=[0,grid_d],r_step=grid_shift,bbox=[$C,$M] + [[grid_shift,-grid_shift],-[5,9]],clip=false)

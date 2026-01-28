@@ -153,3 +153,4 @@
 - [ ] add a global modifier of the main loop establishing when/if ignoring the
   not implemented verb(s;)
 - [ ] replace bipolar getters with fl_new_property();
+- [ ] add magnet holders from ('super-pipe' project)

@@ -8,8 +8,7 @@
 
 include $(FUNCTIONS)
 
-top:
-	@$(MAKE) -C $(realpath ../..) docs/vitamins/all
+.DEFAULT_GOAL := help
 
 all: dependencies.svg
 
@@ -20,3 +19,6 @@ dependencies.svg: $(VITAMINS_SOURCES)
 
 clean:
 	@rm -f dependencies.svg
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

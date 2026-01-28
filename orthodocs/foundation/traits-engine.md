@@ -146,7 +146,7 @@ indicates a value of 3 along +X, 1.5 along -Z and 0 otherwise.
 __Syntax:__
 
 ```text
-fl_tt_isBoundingBox(bbox,2d=false)
+fl_tt_isBoundingBox(bbox,mode="3d")
 ```
 
 return true when «bbox» is a bounding box in [low,high] format.
@@ -176,6 +176,9 @@ __Parameters:__
 
 __bbox__  
 bounding box to be verified
+
+__mode__  
+2d switch, can be either "2d" or "3d"
 
 
 ---
@@ -302,7 +305,7 @@ optional list size
 __Syntax:__
 
 ```text
-fl_tt_isOctant(3d)
+fl_tt_isOctant(threed)
 ```
 
 ---

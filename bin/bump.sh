@@ -177,7 +177,7 @@ warn_read "press «RETURN» to continue or «CTRL-C» to exit"
 # update core.scad
 sed -i.bak -e "s/function fl_version() = \[[[:digit:]]\+,[[:digit:]]\+,[[:digit:]]\+\];/function fl_version() = \[${V[0]},${V[1]},${V[2]}\];/g" "$DEFS"
 # update Documentation & Tests
-cd $OFL && make docs api-docs && cd -
+cd $OFL && make docs/all orthodocs/all && cd -
 
 git commit -m "Version $VERSION bumped" -a
 git tag -m "Version $VERSION bumped" $TAG $BRANCH

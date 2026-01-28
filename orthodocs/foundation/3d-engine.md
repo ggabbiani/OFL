@@ -934,7 +934,7 @@ __Syntax:__
 
 __Syntax:__
 
-    fl_bb_add(corners,2d=false,auto=true)
+    fl_bb_add(corners,mode="3d",auto=true)
 
 add a bounding box shape to the scene
 
@@ -946,8 +946,8 @@ Bounding box corners in [Low,High] format.
 see also [fl_tt_isBoundingBox()](traits-engine.md#function-fl_tt_isboundingbox)
 
 
-__2d__  
-2d switch
+__mode__  
+2d switch, can be either "2d" or "3d"
 
 __auto__  
 when true, z-fight correction is applied

@@ -28,6 +28,7 @@ export COMMA				:= ,
 export IMG_DIFF				:= $(BIN)/image-diff.py --threshold 99
 
 include $(FUNCTIONS)
+MAKEFLAGS += -s
 
 # function dependant variables
 # $(info SCAD path: $(call scad-path))
@@ -43,15 +44,18 @@ export WGET		:= $(shell $(call which) $(if $(call is-mac), curl,wget))
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
-all: check lib tests/sources docs/all orthodocs/all
+all: check lib tests/sources docs/all orthodocs/all	## build lib prerequisites, test sources and the full documentation
 
 clean: docs/clean examples/clean orthodocs/clean tests/clean-results docker/clean ## general cleanup, pre-req for docker test execution
 
-check: ## ImageMagick version check
+check: ## preliminary checks
 ifdef IMVER
 	$(call msg-info,ImageMagick command found '$(IMCMD)')
 else
 	$(call msg-error,ImageMagick not found, please install)
+endif
+ifndef VIRTUAL_ENV
+	$(call msg-error,Python Virtual Environment not active: type 'source .venv/bin/activate')
 endif
 
 orthodocs/%: $(LIB_SOURCES) ## type `make -s orthodocs/help`

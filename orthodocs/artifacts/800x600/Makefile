@@ -6,6 +6,8 @@ PICTURES	:= fig_joints_front_view.png fig_joints_right_view.png fig_joints_top_v
 	fig-TS15_section.png fig-TS35_section.png fig-TS35D_section.png fig-din_rails.png \
 	fig_tnut_right_view.png fig_tnut_top_view.png
 
+.DEFAULT_GOAL := help
+
 all:	$(PICTURES)
 
 clean:
@@ -61,3 +63,6 @@ fig_tnut_right_view.png: $(call test-deps,artifacts/tnut)
 	$(call target-prologue)
 	$(call make-picture,$(SIZE),$(call right-view,0,0.05,6.65,49.99),ortho)
 	$(call target-epilogue-success)
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

@@ -18,13 +18,23 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
+### variable EPS
+
+__Default:__
+
+    FL_EPS
+
+see [variable EPS](#variable-eps)
+
+---
+
 ### variable EPSx2
 
 __Default:__
 
-    FL_2xNIL
+    FL_EPSx2
 
-see [variable FL_2xNIL](core.md#variable-fl_2xnil)
+see [variable FL_EPSx2](core.md#variable-fl_epsx2)
 
 ---
 
@@ -35,16 +45,6 @@ __Default:__
     FL_I
 
 see [variable FL_I](core.md#variable-fl_i)
-
----
-
-### variable NIL
-
-__Default:__
-
-    FL_NIL
-
-see [variable NIL](#variable-nil)
 
 ---
 

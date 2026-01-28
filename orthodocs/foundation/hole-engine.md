@@ -148,7 +148,7 @@ fl_tt_isHole(hole)
 ```
 
 Hole representation as mandatory properties check:
-- 3d   : hole position
+- pos  : 3d hole position
 - n    : applied surface normal
 - d    : hole diameter
 - depth: hole depth (0 means pass-thru hole)

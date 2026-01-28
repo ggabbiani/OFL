@@ -1011,13 +1011,13 @@ module fl_bb_add(
    * see also fl_tt_isBoundingBox()
    */
   corners,
-  //! 2d switch
-  twod=false,
+  //! 2d switch, can be either "2d" or "3d"
+  mode="3d",
   //! when true, z-fight correction is applied
   auto=true
 ) {
-  assert(fl_tt_isBoundingBox(corners,twod),corners);
-  if (twod)
+  assert(fl_tt_isBoundingBox(corners,mode),corners);
+  if (mode=="2d")
     let(
       bbox = auto ? corners+EPS*[[-1,-1],[1,1]] : corners
     ) translate(bbox[0])
@@ -1787,14 +1787,14 @@ module fl_sym_direction(
 
     // angle between [new director, old director]
     dir_rotation  = angle(curr_director,old_director);
-    twod          = fl_circleXY(norm(curr_director),dir_rotation);
+    _2d           = fl_circleXY(norm(curr_director),dir_rotation);
 
     // projection matrix the XY plane to the rotation plane of the DIRECTOR
     m = (fl_isParallel(old_director,curr_director,false))
       ? (fl_versor(old_director)==fl_versor(curr_director) // parallel
         ? FL_I  // equality
         : fl_R(curr_director,angle)*fl_Ry(180)*fl_Rx(90)*fl_Rz(90)*fl_Rx(90))  // opposite
-      : fl_planeAlign(FL_X,[twod.x,twod.y,0],old_director,curr_director); // parallel
+      : fl_planeAlign(FL_X,[_2d.x,_2d.y,0],old_director,curr_director); // parallel
 
     // rotation angle visualization
     multmatrix(m) {

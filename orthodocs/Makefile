@@ -9,6 +9,8 @@ DOC_ROOT	:= $(CURDIR)
 
 include $(FUNCTIONS)
 
+.DEFAULT_GOAL := help
+
 all: api-docs artifacts/all foundation/all vitamins/all
 
 api-docs: $(LIB_SOURCES)
@@ -29,3 +31,6 @@ vitamins/%:
 clean: artifacts/clean foundation/clean vitamins/clean
 	@rm -f *.md
 	@rm -f api-docs
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

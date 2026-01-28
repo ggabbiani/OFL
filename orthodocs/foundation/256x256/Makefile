@@ -10,6 +10,8 @@ fig_3d_sphere_defaults.png fig_3d_pyramid_defaults.png
 
 include $(FUNCTIONS)
 
+.DEFAULT_GOAL := help
+
 all: $(TARGETS)
 
 fig_3d_pyramid_defaults.png: $(call test-deps,foundation/3d)
@@ -49,3 +51,6 @@ fig_2d_frame.png: $(call test-deps,foundation/square)
 
 clean:
 	@rm -f *.png *.deps
+
+help: ## Shows this help
+	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

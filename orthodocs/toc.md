@@ -22,7 +22,6 @@
 - [fl_2d_slopeAngle (function)](foundation/2d-engine.md#function-fl_2d_slopeangle)
 - [fl_2d_vloop (module)](foundation/2d-engine.md#module-fl_2d_vloop)
 - [fl_2d_vmanage (module)](foundation/2d-engine.md#module-fl_2d_vmanage)
-- [FL_2xNIL (variable)](foundation/core.md#variable-fl_2xnil)
 
 ## 3
 
@@ -281,7 +280,10 @@
 - [fl_ellipticSector (module)](foundation/2d-engine.md#module-fl_ellipticsector)
 - [fl_Engine (function)](foundation/core.md#function-fl_engine)
 - [fl_engine (function)](foundation/core.md#function-fl_engine)
+- [EPS (variable)](foundation/unsafe_defs.md#variable-eps)
+- [FL_EPS (variable)](foundation/core.md#variable-fl_eps)
 - [EPSx2 (variable)](foundation/unsafe_defs.md#variable-epsx2)
+- [FL_EPSx2 (variable)](foundation/core.md#variable-fl_epsx2)
 - [fl_error (function)](foundation/core.md#function-fl_error)
 - [fl_error (module)](foundation/core.md#module-fl_error)
 - [fl_ether (module)](vitamins/ethers.md#module-fl_ether)
@@ -560,8 +562,6 @@
 - [fl_native (function)](foundation/core.md#function-fl_native)
 - [fl_new_cutout (module)](foundation/3d-engine.md#module-fl_new_cutout)
 - [fl_new_property (function)](foundation/core.md#function-fl_new_property)
-- [NIL (variable)](foundation/unsafe_defs.md#variable-nil)
-- [FL_NIL (variable)](foundation/core.md#variable-fl_nil)
 - [fl_nominal (function)](foundation/core.md#function-fl_nominal)
 - [fl_nopSCADlib (function)](foundation/core.md#function-fl_nopscadlib)
 - [FL_NS_CAD (variable)](artifacts/caddy.md#variable-fl_ns_cad)
