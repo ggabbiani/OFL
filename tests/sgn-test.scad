@@ -1,4 +1,5 @@
 /*
+ * Configuration for fl_vector_sign() tests
  *
  * NOTE: this file is generated automatically from 'template-3d.scad', any
  * change will be lost.

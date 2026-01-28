@@ -159,7 +159,7 @@ let(
 
 let(
   bbox = [[0, 0], [100, 100]]
-) assert(fl_tt_isBoundingBox(bbox,mode="2d"),bbox);
+) assert(fl_tt_isBoundingBox(bbox,"2d"),bbox);
 
 let(
   p = [1]

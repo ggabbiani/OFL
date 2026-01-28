@@ -46,7 +46,7 @@ clean-results: artifacts/clean-results foundation/clean-results vitamins/clean-r
 	@for f in $(RESULTS) ; do rm -fr $$f ; done
 	$(call aggregate-epilogue)
 
-clean-sources:	## delete test sources, sources will be rebuilt at first test run
+clean-sources: artifacts/clean-sources foundation/clean-sources vitamins/clean-sources	## delete test sources, sources will be rebuilt at first test run
 	printf "$(COLOR_YELLOW)Cleaning tests sources? (Y/N):$(COLOR_RESET) "
 	read -p "" confirm && [[ $$confirm == [yY] ]] || exit 1
 	$(call aggregate-prologue)
