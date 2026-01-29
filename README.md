@@ -6,15 +6,15 @@
 
 **O**penSCAD **F**oundation **L**ibrary (OFL) is a foundation library for OpenSCAD integrating concepts not included natively in the OpenSCAD language and providing an extendible standardized API base.
 
-## Usage
+## Install
 
 1. download and expand the library
 2. modify the OPENSCADPATH Environment Variable to point the __lib/__ directory of this repo as described in [OpenSCAD Library Folder](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations)
 3. include the needed library file(s) in your OpenSCAD code like in the following example:
 
-    include \<OFL/foundation/core.scad\>
+    include <OFL/foundation/core.scad>
 
-## Library documentation
+## Documentation
 
 OFL comes with three major components:
 
