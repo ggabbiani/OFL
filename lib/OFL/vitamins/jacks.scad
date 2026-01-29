@@ -22,7 +22,7 @@ FL_JACK_NS = "jack";
  * The supported cutout direction on +X is circular allowing the carving for
  * jack plug insertion:
  *
- * ![preferred cutouts on +x](256x256/fig_jack_barrel_preferred_cutouts.png)
+ * ![preferred cutouts on +x](256x256/fig_jack_barrel_supported_cutouts.png)
  *
  */
 FL_JACK_BARREL = let(
