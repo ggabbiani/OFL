@@ -1,0 +1,29 @@
+{
+    "parameterSets": {
+        "fig_FL_IEC_FUSED_INLET": {
+            "IEC": "FL_IEC_FUSED_INLET"
+        },
+        "fig_FL_IEC_FUSED_INLET2": {
+            "IEC": "FL_IEC_FUSED_INLET2"
+        },
+        "fig_FL_IEC_320_C14_SWITCHED_FUSED_INLET": {
+            "IEC": "FL_IEC_320_C14_SWITCHED_FUSED_INLET"
+        },
+        "fig_FL_IEC_INLET": {
+            "IEC": "FL_IEC_INLET"
+        },
+        "fig_FL_IEC_INLET_ATX": {
+            "IEC": "FL_IEC_INLET_ATX"
+        },
+        "fig_FL_IEC_INLET_ATX2": {
+            "IEC": "FL_IEC_INLET_ATX2"
+        },
+        "fig_FL_IEC_YUNPEN": {
+            "IEC": "FL_IEC_YUNPEN"
+        },
+        "fig_FL_IEC_OUTLET": {
+            "IEC": "FL_IEC_OUTLET"
+        }
+    },
+    "fileFormatVersion": "1"
+}
