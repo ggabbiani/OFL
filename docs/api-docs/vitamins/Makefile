@@ -11,9 +11,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-top:
-	@$(MAKE) -C $(realpath ../..) orthodocs/vitamins/all
-
 include $(FUNCTIONS)
 
 all: 256x256/all 400x800/all

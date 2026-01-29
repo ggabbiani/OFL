@@ -10,11 +10,11 @@ include $(FUNCTIONS)
 
 .DEFAULT_GOAL := help
 
-all: 800x600/all artifacts/all foundation/all vitamins/all api-docs	## create new documentation
+all: 	800x600/all 	artifacts/all	foundation/all		vitamins/all	api-docs/all	## create new documentation
 
-clean: 800x600/clean artifacts/clean foundation/clean vitamins/clean ## clean current documentation
+clean:	800x600/clean	artifacts/clean foundation/clean	vitamins/clean	api-docs/clean	## clean current documentation
 
-800x600/%:	## creates images 800x600 resolution
+800x600/%:		## creates images 800x600 resolution
 	$(call make_sub,800x600,"OFL/docs")
 
 artifacts/%:	## create artifacts documentation
