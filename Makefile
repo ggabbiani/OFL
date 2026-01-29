@@ -44,7 +44,7 @@ export WGET		:= $(shell $(call which) $(if $(call is-mac), curl,wget))
 
 # docs uses generated test scad files, so it's important to be executed AFTER
 # tests creation
-all: check lib tests/sources docs/all orthodocs/all	## build lib prerequisites, test sources and the full documentation
+all: check lib tests/sources docs/all	## build lib prerequisites, test sources and the full documentation
 
 clean: docs/clean examples/clean orthodocs/clean tests/clean-results docker/clean ## general cleanup, pre-req for docker test execution
 
@@ -57,9 +57,6 @@ endif
 ifndef VIRTUAL_ENV
 	$(call msg-error,Python Virtual Environment not active: type 'source .venv/bin/activate')
 endif
-
-orthodocs/%: $(LIB_SOURCES) ## type `make -s orthodocs/help`
-	$(call make_sub)
 
 docs/%:	## type `make -s docs/help`
 	$(call make_sub)

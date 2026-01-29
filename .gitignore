@@ -9,3 +9,4 @@ orthodocs/api-docs
 __pycache__
 .venv
 lib/OFL/vitamins/ruthex/*.stl
+site

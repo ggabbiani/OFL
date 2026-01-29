@@ -1,0 +1,32 @@
+site_name: OpenSCAD Foundation Library
+docs_dir: docs
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+
+extra:
+  version:
+    provider: mike
+
+markdown_extensions:
+  - tables
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format # Sintassi universale
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - toc:
+      permalink: false
+
+exclude_docs: |
+  **/*.drawio
+  **/*.kig
+  **/*.dxf
+  **/*.deps
+  **/Makefile

@@ -10,7 +10,7 @@ include $(FUNCTIONS)
 
 .DEFAULT_GOAL := help
 
-all: 800x600/all artifacts/all foundation/all vitamins/all	## create new documentation
+all: 800x600/all artifacts/all foundation/all vitamins/all api-docs	## create new documentation
 
 clean: 800x600/clean artifacts/clean foundation/clean vitamins/clean ## clean current documentation
 
@@ -25,6 +25,9 @@ foundation/%:	## create foundation documentation
 
 vitamins/%:		## create vitamins documentation
 	$(call make_sub,vitamins,"OFL/docs")
+
+api-docs/%:		## create api documentation
+	$(call make_sub)
 
 help: ## Shows this help
 	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
