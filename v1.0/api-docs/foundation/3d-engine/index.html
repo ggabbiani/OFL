@@ -1,0 +1,5541 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../2d-engine/">
+      
+      
+        <link rel="next" href="../algo-engine/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>package foundation/3d-engine - OpenSCAD Foundation Library</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#package-foundation3d-engine" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OpenSCAD Foundation Library" class="md-header__button md-logo" aria-label="OpenSCAD Foundation Library" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OpenSCAD Foundation Library
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              package foundation/3d-engine
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OpenSCAD Foundation Library" class="md-nav__button md-logo" aria-label="OpenSCAD Foundation Library" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    OpenSCAD Foundation Library
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Api docs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Api docs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dependencies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dxf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package dxf
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../toc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Table of Contents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Artifacts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Artifacts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/box/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/box
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/caddy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/caddy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/deps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dependencies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/din_rails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/din_rails
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/joints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/joints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/pcb_holder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/pcb_holder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/profiles-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/profiles-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/spacer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/spacer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/t-nut/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/t-nut
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/t-profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/t-profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../artifacts/template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package artifacts/template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/2d-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/3d-engine
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/3d-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_axislist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_AxisList
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_axisvlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_AxisVList
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_abs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_abs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_axisisset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_axisIsSet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_axisvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_axisValue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_max" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_max
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_medianvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_medianValue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_min
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_orthoplane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_orthoPlane
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_planarprojection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_planarProjection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_sign" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_sign
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_vectorialprojection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_vectorialProjection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cube" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Cube
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Cylinder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Prism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_pyramid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Pyramid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_sphere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Sphere
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_accum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_accum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_cube" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_cube
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_cylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_cylinder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_prism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_prism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_pyramid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_pyramid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_sphere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_sphere
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_torus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_torus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_centroid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_centroid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cube_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cube_size
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cyl_botradius" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cyl_botRadius
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cyl_h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cyl_h
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cyl_topradius" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cyl_topRadius
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cylinder_defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cylinder_defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_isinaxislist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_isInAxisList
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_octant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_octant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_planealign" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_planeAlign
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prism_defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prism_defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prsm_botedgel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prsm_botEdgeL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prsm_h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prsm_h
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prsm_n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prsm_n
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prsm_topedgel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prsm_topEdgeL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_pyr_apex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_pyr_apex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_pyr_base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_pyr_base
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_sphere_defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_sphere_defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-lay_bb_corners" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function lay_bb_corners
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-lay_bb_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function lay_bb_size
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-lay_group" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function lay_group
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_3d_polyhedronlabels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_3d_polyhedronLabels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_3d_polyhedronsymbols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_3d_polyhedronSymbols
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_bb_add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_bb_add
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_cube" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_cube
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_cutoutloop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_cutoutLoop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_cylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_cylinder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_direct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_direct
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_direction_extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_direction_extrude
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_doaxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_doAxes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_fillet_extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_fillet_extrude
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_importdxf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_importDxf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_linear_extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_linear_extrude
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_lookatme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_lookAtMe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_new_cutout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_new_cutout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_place" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_place
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_placeif" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_placeIf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_planealign" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_planeAlign
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_prism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_prism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_pyramid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_pyramid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sphere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sphere
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_hole" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_hole
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_plug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_plug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_socket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_socket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_symbol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_symbol
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_torus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_torus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_tube" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_tube
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_vloop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_vloop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_vmanage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_vmanage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../algo-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/algo-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bbox-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/bbox-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connect/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/connect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customizer-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/customizer-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dependencies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fillet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/fillet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/grid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hole-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/hole-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../label/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/label
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mngm-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/mngm-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quaternions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/quaternions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../traits-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/traits-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../type-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/type-engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unsafe_defs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/unsafe_defs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../util/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package foundation/util
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vitamins
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vitamins
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/chips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/chips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/countersinks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/countersinks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/deps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dependencies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/ethers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/ethers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/fans/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/fans
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/generic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/generic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/hdmi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/hdmi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/hds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/hds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/heatsinks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/heatsinks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/iec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/iec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/jacks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/jacks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/knurl_nuts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/knurl_nuts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/magnets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/magnets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/pcbs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/pcbs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/pin_headers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/pin_headers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/psus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/psus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/sata-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/sata-adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/sata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/sata
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/screw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/screw
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/sd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/sd
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/spdts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/spdts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/switch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/switch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/template/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/template
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/trimpot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/trimpot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vitamins/usbs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    package vitamins/usbs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Artifacts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Artifacts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../artifacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OFL Artifacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OFL Foundation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../foundation/root-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Root context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vitamins
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vitamins
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../vitamins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OFL Vitamins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_axislist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_AxisList
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_axisvlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_AxisVList
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_abs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_abs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_axisisset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_axisIsSet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_axisvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_axisValue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_max" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_max
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_medianvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_medianValue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_min
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_orthoplane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_orthoPlane
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_planarprojection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_planarProjection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_sign" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_sign
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_3d_vectorialprojection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_3d_vectorialProjection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cube" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Cube
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Cylinder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Prism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_pyramid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Pyramid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_sphere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_Sphere
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_accum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_accum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_cube" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_cube
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_cylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_cylinder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_prism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_prism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_pyramid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_pyramid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_sphere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_sphere
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_bb_torus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_bb_torus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_centroid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_centroid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cube_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cube_size
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cyl_botradius" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cyl_botRadius
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cyl_h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cyl_h
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cyl_topradius" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cyl_topRadius
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_cylinder_defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_cylinder_defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_isinaxislist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_isInAxisList
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_octant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_octant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_planealign" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_planeAlign
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prism_defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prism_defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prsm_botedgel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prsm_botEdgeL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prsm_h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prsm_h
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prsm_n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prsm_n
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_prsm_topedgel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_prsm_topEdgeL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_pyr_apex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_pyr_apex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_pyr_base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_pyr_base
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_sphere_defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_sphere_defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-lay_bb_corners" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function lay_bb_corners
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-lay_bb_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function lay_bb_size
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-lay_group" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function lay_group
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_3d_polyhedronlabels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_3d_polyhedronLabels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_3d_polyhedronsymbols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_3d_polyhedronSymbols
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_bb_add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_bb_add
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_cube" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_cube
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_cutoutloop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_cutoutLoop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_cylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_cylinder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_direct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_direct
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_direction_extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_direction_extrude
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_doaxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_doAxes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_fillet_extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_fillet_extrude
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_importdxf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_importDxf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_linear_extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_linear_extrude
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_lookatme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_lookAtMe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_new_cutout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_new_cutout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_place" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_place
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_placeif" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_placeIf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_planealign" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_planeAlign
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_prism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_prism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_pyramid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_pyramid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sphere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sphere
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_hole" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_hole
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_plug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_plug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_sym_socket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_sym_socket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_symbol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_symbol
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_torus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_torus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_tube" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_tube
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_vloop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_vloop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-fl_vmanage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module fl_vmanage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="package-foundation3d-engine">package foundation/3d-engine</h1>
+<h2 id="dependencies">Dependencies</h2>
+<pre class="mermaid"><code>graph LR
+    A1[foundation/3d-engine] --o|include| A2[foundation/2d-engine]
+    A1 --o|use| A3[dxf]
+    A1 --o|use| A4[foundation/traits-engine]
+    A1 --o|use| A5[foundation/type-engine]</code></pre>
+<p>3d primitives</p>
+<p>Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)</p>
+<p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</a></p>
+<h2 id="functions">Functions</h2>
+<hr />
+<h3 id="function-fl_3d_axislist">function fl_3d_AxisList</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>fl_3d_AxisList(axes)
+</code></pre></div>
+<p>Build a floating semi-axis list from literal semi-axis list.</p>
+<p>example:</p>
+<div class="highlight"><pre><span></span><code>list = fl_3d_AxisList(axes=[&quot;-x&quot;,&quot;±Z&quot;]);
+</code></pre></div>
+<p>is equivalent to:</p>
+<div class="highlight"><pre><span></span><code>list =
+[
+ [-1, 0,  0],  // -X semi-axis
+ [ 0, 0, -1],  // -Z semi-axis
+ [ 0, 0, +1],  // +Z semi-axis
+];
+</code></pre></div>
+<p>:memo: <strong>NOTE:</strong> the negative ('-') or positive ('+') sign must always be set.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>axes</strong><br />
+semi-axis literals list (es.["-x","±Z"])</p>
+<hr />
+<h3 id="function-fl_3d_axisvlist">function fl_3d_AxisVList</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>fl_3d_AxisVList(kvs,axes)
+</code></pre></div>
+<p>Constructor for a full semi-axis value list. The returned value can be built
+from a list of pairs ("string", value) or from a list of semi-axes name
+strings</p>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kvs</td>
+<td>full semi-axis value list initialized from the passed axis/value pair list</td>
+</tr>
+<tr>
+<td>values</td>
+<td>full boolean semi-axis value list from semi-axis literal</td>
+</tr>
+</tbody>
+</table>
+<p>See also function <a href="../traits-engine/#function-fl_tt_isaxisvlist">fl_tt_isAxisVList()</a></p>
+<p>example 1:</p>
+<div class="highlight"><pre><span></span><code>thick = fl_3d_AxisVList(kvs=[[&quot;-x&quot;,3],[&quot;±Z&quot;,4]]);
+</code></pre></div>
+<p>is equivalent to:</p>
+<div class="highlight"><pre><span></span><code>thick =
+[
+ [3,0],  // -x and +x value pair
+ [0,0],  // -y and +y value pair
+ [4,4]   // -z and +z value pair
+];
+</code></pre></div>
+<p>example 2:</p>
+<div class="highlight"><pre><span></span><code>values = fl_3d_AxisVList(axes=[&quot;-x&quot;,&quot;±Z&quot;]);
+</code></pre></div>
+<p>is equivalent to:</p>
+<div class="highlight"><pre><span></span><code>values =
+[
+ [true,  false], // -x and +x boolean
+ [false, false], // -y and +y boolean
+ [true,  true]   // -z and +z boolean
+];
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>kvs</strong><br />
+semi-axis key/value list (es. [["-x",3],["±Z",4]])</p>
+<p><strong>axes</strong><br />
+semi-axis list (es.["-x","±Z"])</p>
+<hr />
+<h3 id="function-fl_3d_abs">function fl_3d_abs</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fl_3d_abs(a)
+</code></pre></div>
+<p>Transforms a vector inside the +X+Y+Z octant</p>
+<hr />
+<h3 id="function-fl_3d_axisisset">function fl_3d_axisIsSet</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>fl_3d_axisIsSet(axis,list)
+</code></pre></div>
+<p>Wether «axis» is present in floating semi-axis «list».</p>
+<p>TODO: this is a recursive solution that could be more quickly solved by a
+mere call to the OpenSCAD builtin search() function like in the example
+below:</p>
+<div class="highlight"><pre><span></span><code>function fl_3d_axisIsSet(axis,list) = search([axis],list)!=[[]]
+</code></pre></div>
+<p>TODO: eventually replace it with <a href="#function-fl_isinaxislist">fl_isInAxisList()</a></p>
+<hr />
+<h3 id="function-fl_3d_axisvalue">function fl_3d_axisValue</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>fl_3d_axisValue(axis,values)
+</code></pre></div>
+<p>returns the «axis» value from a full semi-axis value list</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>axis</strong><br />
+axis to retrieve corresponding value</p>
+<p><strong>values</strong><br />
+full semi-axis value list (see also function <a href="../traits-engine/#function-fl_tt_isaxisvlist">fl_tt_isAxisVList()</a>)</p>
+<hr />
+<h3 id="function-fl_3d_max">function fl_3d_max</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>fl_3d_max(a,b)
+</code></pre></div>
+<p>Builds a max vector</p>
+<hr />
+<h3 id="function-fl_3d_medianvalue">function fl_3d_medianValue</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>fl_3d_medianValue(list,axis,pre_ordered=false)
+</code></pre></div>
+<p>calculates the median VALUE of a 2d/3d point list</p>
+<hr />
+<h3 id="function-fl_3d_min">function fl_3d_min</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>fl_3d_min(a,b)
+</code></pre></div>
+<p>Builds a minor vector</p>
+<hr />
+<h3 id="function-fl_3d_orthoplane">function fl_3d_orthoPlane</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>fl_3d_orthoPlane(axis)
+</code></pre></div>
+<p>Cartesian plane from axis</p>
+<hr />
+<h3 id="function-fl_3d_planarprojection">function fl_3d_planarProjection</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>fl_3d_planarProjection(vector,plane)
+</code></pre></div>
+<p>Projection of «vector» onto a cartesian «plane»</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>vector</strong><br />
+3D vector</p>
+<p><strong>plane</strong><br />
+cartesian plane by vector with ([-1,+1,0]==[1,1,0]==XY)</p>
+<hr />
+<h3 id="function-fl_3d_sign">function fl_3d_sign</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>fl_3d_sign(axis)
+</code></pre></div>
+<p>returns the sign of a semi-axis (-1,+1)</p>
+<hr />
+<h3 id="function-fl_3d_vectorialprojection">function fl_3d_vectorialProjection</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>fl_3d_vectorialProjection(vector,axis)
+</code></pre></div>
+<p>Projection of «vector» onto a cartesian «axis»</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>vector</strong><br />
+3D vector</p>
+<p><strong>axis</strong><br />
+cartesian axis ([-1,0,0]==[1,0,0]==X)</p>
+<hr />
+<h3 id="function-fl_cube">function fl_Cube</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>fl_Cube(size=[1,1,1])
+</code></pre></div>
+<hr />
+<h3 id="function-fl_cylinder">function fl_Cylinder</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>fl_Cylinder(h,r,r1,r2,d,d1,d2)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>h</strong><br />
+height of the cylinder or cone</p>
+<p><strong>r</strong><br />
+radius of cylinder. r1 = r2 = r.</p>
+<p><strong>r1</strong><br />
+radius, bottom of cone.</p>
+<p><strong>r2</strong><br />
+radius, top of cone.</p>
+<p><strong>d</strong><br />
+diameter of cylinder. r1 = r2 = d / 2.</p>
+<p><strong>d1</strong><br />
+diameter, bottom of cone. r1 = d1 / 2.</p>
+<p><strong>d2</strong><br />
+diameter, top of cone. r2 = d2 / 2.</p>
+<hr />
+<h3 id="function-fl_prism">function fl_Prism</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>fl_Prism(n,l,l1,l2,h)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>n</strong><br />
+edge number</p>
+<p><strong>l</strong><br />
+edge length</p>
+<p><strong>l1</strong><br />
+edge length, bottom</p>
+<p><strong>l2</strong><br />
+edge length, top</p>
+<p><strong>h</strong><br />
+height of the prism</p>
+<hr />
+<h3 id="function-fl_pyramid">function fl_Pyramid</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>fl_Pyramid(base,apex)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>base</strong><br />
+2d point list defining the polygonal base on plane XY</p>
+<p><strong>apex</strong><br />
+3d point defining the apex</p>
+<hr />
+<h3 id="function-fl_sphere">function fl_Sphere</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>fl_Sphere(r=[1,1,1],d)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_bb_accum">function fl_bb_accum</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>fl_bb_accum(axis,gap=0,bbcs)
+</code></pre></div>
+<p>Accumulates a list of bounding boxes along a direction.</p>
+<p>Recursive algorithm, at each call a bounding box is extracted from «bbcs»
+and decomposed into axial and planar components. The last bounding box in
+the list ended up the recursion and is returned as result.
+If there are still bounding boxes left, a new call is made and its
+result, decomposed into the axial and planar components, used to produce a
+new bounding box as follows:</p>
+<ul>
+<li>for planar component, the new negative and positive corners are calculated
+  with the minimum dimensions between the current one and the result of the
+  recursive call;</li>
+<li>for the axial component when «axis» is positive:</li>
+<li>negative corner is equal to the current corner;</li>
+<li>positive corner is equal to the current positive corner PLUS the gap and
+    the axial dimension of the result;</li>
+<li>when «axis» is negative:<ul>
+<li>negative corner is equal to the current one MINUS the gap and the
+  axial dimension of the result</li>
+<li>the positive corner is equal to the current corner.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Parameters:</strong></p>
+<p><strong>axis</strong><br />
+layout direction</p>
+<p><strong>gap</strong><br />
+gap to be inserted between bounding boxes along axis</p>
+<p><strong>bbcs</strong><br />
+bounding box corners</p>
+<hr />
+<h3 id="function-fl_bb_cube">function fl_bb_cube</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>fl_bb_cube(size=[1,1,1])
+</code></pre></div>
+<hr />
+<h3 id="function-fl_bb_cylinder">function fl_bb_cylinder</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>fl_bb_cylinder(h,r,r1,r2,d,d1,d2)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>h</strong><br />
+height of the cylinder or cone</p>
+<p><strong>r</strong><br />
+radius of cylinder. r1 = r2 = r.</p>
+<p><strong>r1</strong><br />
+radius, bottom of cone.</p>
+<p><strong>r2</strong><br />
+radius, top of cone.</p>
+<p><strong>d</strong><br />
+diameter of cylinder. r1 = r2 = d / 2.</p>
+<p><strong>d1</strong><br />
+diameter, bottom of cone. r1 = d1 / 2.</p>
+<p><strong>d2</strong><br />
+diameter, top of cone. r2 = d2 / 2.</p>
+<hr />
+<h3 id="function-fl_bb_prism">function fl_bb_prism</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>fl_bb_prism(n,l,l1,l2,h)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>n</strong><br />
+edge number</p>
+<p><strong>l</strong><br />
+edge length</p>
+<p><strong>l1</strong><br />
+edge length, bottom</p>
+<p><strong>l2</strong><br />
+edge length, top</p>
+<p><strong>h</strong><br />
+height of the prism</p>
+<hr />
+<h3 id="function-fl_bb_pyramid">function fl_bb_pyramid</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>fl_bb_pyramid(base,apex)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_bb_sphere">function fl_bb_sphere</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>fl_bb_sphere(r=[1,1,1],d)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_bb_torus">function fl_bb_torus</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>fl_bb_torus(r,d,e,R)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>r</strong><br />
+radius of the circular tube.</p>
+<p><strong>d</strong><br />
+diameter of the circular tube.</p>
+<p><strong>e</strong><br />
+elliptic tube [a,b] form</p>
+<p><strong>R</strong><br />
+distance from the center of the tube to the center of the torus</p>
+<hr />
+<h3 id="function-fl_centroid">function fl_centroid</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>fl_centroid(pts)
+</code></pre></div>
+<p>Calculates the <a href="https://en.wikipedia.org/wiki/Centroid">geometric center</a> of
+the passed points.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>pts</strong><br />
+Point list defining a polygon/polyhedron with each element p | p∈ℝ^n^</p>
+<hr />
+<h3 id="function-fl_cube_size">function fl_cube_size</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>fl_cube_size(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_cyl_botradius">function fl_cyl_botRadius</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>fl_cyl_botRadius(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_cyl_h">function fl_cyl_h</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>fl_cyl_h(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_cyl_topradius">function fl_cyl_topRadius</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>fl_cyl_topRadius(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_cylinder_defaults">function fl_cylinder_defaults</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>fl_cylinder_defaults(h,r,r1,r2,d,d1,d2)
+</code></pre></div>
+<p>cylinder defaults for positioning (fl_bb_cornersKV).</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>h</strong><br />
+height of the cylinder or cone</p>
+<p><strong>r</strong><br />
+radius of cylinder. r1 = r2 = r.</p>
+<p><strong>r1</strong><br />
+radius, bottom of cone.</p>
+<p><strong>r2</strong><br />
+radius, top of cone.</p>
+<p><strong>d</strong><br />
+diameter of cylinder. r1 = r2 = d / 2.</p>
+<p><strong>d1</strong><br />
+diameter, bottom of cone. r1 = d1 / 2.</p>
+<p><strong>d2</strong><br />
+diameter, top of cone. r2 = d2 / 2.</p>
+<hr />
+<h3 id="function-fl_direction">function fl_direction</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>fl_direction(direction,default=I)
+</code></pre></div>
+<p>Return the direction matrix transforming native coordinates along new
+direction.</p>
+<p>Native coordinate system is represented by two vectors: +Z and +X. +Y axis
+is the cross product between +Z and +X. So with two vector (+Z,+X) we can
+represent the native coordinate system +X,+Y,+Z.</p>
+<p>New direction is expected in <a href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">Axis–angle representation</a>
+in the format</p>
+<div class="highlight"><pre><span></span><code>[axis,rotation angle]
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>direction</strong><br />
+desired direction in axis-angle representation [axis,rotation]</p>
+<p><strong>default</strong><br />
+returned matrix when «direction» is undef</p>
+<hr />
+<h3 id="function-fl_isinaxislist">function fl_isInAxisList</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>fl_isInAxisList(axis,list)
+</code></pre></div>
+<p>True when «axis» is contained in the floating semi-axis «list», false
+otherwise.</p>
+<p>TODO: let the function name follow the order of parameters (i.e. rename as
+fl_isAxisInList(axis,list))</p>
+<hr />
+<h3 id="function-fl_octant">function fl_octant</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>fl_octant(octant,type,bbox,default=FL_I)
+</code></pre></div>
+<p>Calculates the translation matrix needed for moving a shape in the provided
+3d octant.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>octant</strong><br />
+3d octant vector, each component can assume one out of four values
+modifying the corresponding x,y or z position in the following manner:</p>
+<ul>
+<li>undef: translation invariant (no translation)</li>
+<li>-1: object on negative semi-axis</li>
+<li>0: object midpoint on origin</li>
+<li>+1: object on positive semi-axis</li>
+</ul>
+<p>Example 1:</p>
+<div class="highlight"><pre><span></span><code>octant=[undef,undef,undef]
+</code></pre></div>
+<p>no translation in any dimension</p>
+<p>Example 2:</p>
+<div class="highlight"><pre><span></span><code>octant=[0,0,0]
+</code></pre></div>
+<p>object center [midpoint x, midpoint y, midpoint z] on origin</p>
+<p>Example 3:</p>
+<div class="highlight"><pre><span></span><code>octant=[+1,undef,-1]
+</code></pre></div>
+<p>object on X positive semi-space, no Y translated, on negative Z semi-space</p>
+<p><strong>type</strong><br />
+type with embedded "bounding corners" property (see <a href="../bbox-engine/#function-fl_bb_corners">fl_bb_corners()</a>)</p>
+<p><strong>bbox</strong><br />
+explicit bounding box corners: overrides «type» settings</p>
+<p><strong>default</strong><br />
+returned matrix when «octant» is undef</p>
+<hr />
+<h3 id="function-fl_planealign">function fl_planeAlign</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>fl_planeAlign(ax,ay,bx,by,a,b)
+</code></pre></div>
+<p>From <a href="https://math.stackexchange.com/questions/1876615/rotation-matrix-from-plane-a-to-b">Rotation matrix from plane A to B</a></p>
+<p>Returns the rotation matrix R aligning the plane A(ax,ay),to plane B(bx,by)
+When ax and bx are orthogonal to ay and by respectively calculation are simplified.</p>
+<hr />
+<h3 id="function-fl_prism_defaults">function fl_prism_defaults</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>fl_prism_defaults(n,l,l1,l2,h)
+</code></pre></div>
+<p>prism defaults for positioning (fl_bb_cornersKV).</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>n</strong><br />
+edge number</p>
+<p><strong>l</strong><br />
+edge length</p>
+<p><strong>l1</strong><br />
+edge length, bottom</p>
+<p><strong>l2</strong><br />
+edge length, top</p>
+<p><strong>h</strong><br />
+height of the prism</p>
+<hr />
+<h3 id="function-fl_prsm_botedgel">function fl_prsm_botEdgeL</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>fl_prsm_botEdgeL(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_prsm_h">function fl_prsm_h</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>fl_prsm_h(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_prsm_n">function fl_prsm_n</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>fl_prsm_n(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_prsm_topedgel">function fl_prsm_topEdgeL</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>fl_prsm_topEdgeL(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_pyr_apex">function fl_pyr_apex</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>fl_pyr_apex(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_pyr_base">function fl_pyr_base</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>fl_pyr_base(type,value)
+</code></pre></div>
+<hr />
+<h3 id="function-fl_sphere_defaults">function fl_sphere_defaults</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>fl_sphere_defaults(r=[1,1,1],d)
+</code></pre></div>
+<p>sphere defaults for positioning (fl_bb_cornersKV).</p>
+<hr />
+<h3 id="function-lay_bb_corners">function lay_bb_corners</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>lay_bb_corners(axis,gap=0,types)
+</code></pre></div>
+<p>returns the bounding box corners of a layout.</p>
+<p>See also <a href="#function-fl_bb_accum">fl_bb_accum()</a>.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>axis</strong><br />
+layout direction</p>
+<p><strong>gap</strong><br />
+gap to be inserted between bounding boxes along axis</p>
+<p><strong>types</strong><br />
+list of types</p>
+<hr />
+<h3 id="function-lay_bb_size">function lay_bb_size</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>lay_bb_size(axis,gap,types)
+</code></pre></div>
+<p>calculates the overall bounding box size of a layout</p>
+<hr />
+<h3 id="function-lay_group">function lay_group</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>lay_group(axis,gap,types)
+</code></pre></div>
+<p>creates a group with the resulting bounding box corners of a layout</p>
+<h2 id="modules">Modules</h2>
+<hr />
+<h3 id="module-fl_3d_polyhedronlabels">module fl_3d_polyhedronLabels</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_3d_polyhedronLabels(poly,size,label=&quot;P&quot;)
+</code></pre></div>
+<hr />
+<h3 id="module-fl_3d_polyhedronsymbols">module fl_3d_polyhedronSymbols</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_3d_polyhedronSymbols(poly,size,color=&quot;black&quot;)
+</code></pre></div>
+<hr />
+<h3 id="module-fl_bb_add">module fl_bb_add</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_bb_add(corners,mode=&quot;3d&quot;,auto=true)
+</code></pre></div>
+<p>add a bounding box shape to the scene</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>corners</strong><br />
+Bounding box corners in [Low,High] format.
+see also <a href="../traits-engine/#function-fl_tt_isboundingbox">fl_tt_isBoundingBox()</a></p>
+<p><strong>mode</strong><br />
+2d switch, can be either "2d" or "3d"</p>
+<p><strong>auto</strong><br />
+when true, z-fight correction is applied</p>
+<hr />
+<h3 id="module-fl_cube">module fl_cube</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_cube(verbs=FL_ADD,type,size,octant,direction)
+</code></pre></div>
+<p>Cube replacement: if not specified otherwise, the cube has its midpoint centered at origin O</p>
+<p><img alt="default positioning" src="../256x256/fig_3d_cube_defaults.png" /></p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+FL_ADD,FL_AXES,FL_BBOX</p>
+<p><strong>octant</strong><br />
+when undef, native positioning is used with cube midpoint centered at origin O</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation] or native direction if undef</p>
+<hr />
+<h3 id="module-fl_cutoutloop">module fl_cutoutLoop</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_cutoutLoop(list,preferred)
+</code></pre></div>
+<p>Cutout helper: loops over passed axes initializing a children context as
+follow:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Context</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$co_current</td>
+<td>Children</td>
+<td>Current axis</td>
+</tr>
+<tr>
+<td>$co_preferred</td>
+<td>Children</td>
+<td>true if $co_current axis is a preferred one</td>
+</tr>
+</tbody>
+</table>
+<p>This facility is meant to be used with fl_new_cutout() like in the following
+example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>fl_cutoutLoop(cut_dirs, fl_cutout($this))
+<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>  if ($co_preferred) {
+<a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a>    fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_thickness=...,$fl_tolerance=..)
+<a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a>      do_footprint();
+<a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a>  }
+</code></pre></div>
+<hr />
+<h3 id="module-fl_cylinder">module fl_cylinder</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_cylinder(verbs=FL_ADD,type,h,r,r1,r2,d,d1,d2,octant,direction)
+</code></pre></div>
+<p>Cylinder replacement.</p>
+<p><img alt="default positioning" src="../256x256/fig_3d_cylinder_defaults.png" /></p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+FL_ADD,FL_AXES,FL_BBOX</p>
+<p><strong>type</strong><br />
+optional type as returned by <a href="#function-fl_cylinder">fl_Cylinder()</a>.</p>
+<p>:memo: <strong>NOTE:</strong> «type» attributes are always overridden by the following
+parameters (if any).</p>
+<p><strong>h</strong><br />
+height of the cylinder or cone</p>
+<p><strong>r</strong><br />
+radius of cylinder. r1 = r2 = r.</p>
+<p><strong>r1</strong><br />
+radius, bottom of cone.</p>
+<p><strong>r2</strong><br />
+radius, top of cone.</p>
+<p><strong>d</strong><br />
+diameter of cylinder. r1 = r2 = d / 2.</p>
+<p><strong>d1</strong><br />
+diameter, bottom of cone. r1 = d1 / 2.</p>
+<p><strong>d2</strong><br />
+diameter, top of cone. r2 = d2 / 2.</p>
+<p><strong>octant</strong><br />
+when undef native positioning is used</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])</p>
+<hr />
+<h3 id="module-fl_direct">module fl_direct</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_direct(direction)
+</code></pre></div>
+<p>Applies a direction matrix to its children.
+See also <a href="#function-fl_direction">fl_direction()</a> function comments.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>direction</strong><br />
+desired direction in axis-angle representation [axis,rotation]</p>
+<hr />
+<h3 id="module-fl_direction_extrude">module fl_direction_extrude</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_direction_extrude(direction,length,convexity=10,r,delta,chamfer,trim)
+</code></pre></div>
+<p>Extrusion along arbitrary direction.</p>
+<p>Children are projected on the plane orthogonal to «direction» then extruded
+by «length» along «direction».</p>
+<p>See also the corresponding test: tests/foundation/extrusion-test.scad</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>direction</strong><br />
+direction in [axis,angle] representation</p>
+<p><strong>r</strong><br />
+offset() radius</p>
+<p><strong>delta</strong><br />
+offset() delta (ignored when r!=0)</p>
+<p><strong>chamfer</strong><br />
+offset() chamfer (ignored when r!=0)</p>
+<p><strong>trim</strong><br />
+Translation list applied BEFORE projection().</p>
+<p>:memo: <strong>NOTE:</strong> trimming modify projection() behavior, enabling its «cut»
+parameter to true.</p>
+<hr />
+<h3 id="module-fl_doaxes">module fl_doAxes</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_doAxes(size,direction)
+</code></pre></div>
+<hr />
+<h3 id="module-fl_fillet_extrude">module fl_fillet_extrude</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_fillet_extrude(height=100,r1=0,r2=0)
+</code></pre></div>
+<p>linear_extrude{} with optional fillet radius on each end.</p>
+<p>Positive radii will expand outward towards their end, negative will shrink
+inward towards their end</p>
+<p>Limitations:</p>
+<ul>
+<li>individual children of fillet_extrude should be convex</li>
+<li>only straight extrudes with no twist or scaling supported</li>
+<li>fillets only for 90 degrees between Z axis and top/bottom surface</li>
+</ul>
+<p><strong>Parameters:</strong></p>
+<p><strong>height</strong><br />
+total extrusion length including radii</p>
+<p><strong>r1</strong><br />
+bottom radius</p>
+<p><strong>r2</strong><br />
+top radius</p>
+<hr />
+<h3 id="module-fl_frame">module fl_frame</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_frame(verbs=FL_ADD,size=[1,1,1],corners=[0,0,0,0],thick,octant,direction)
+</code></pre></div>
+<p>3d extension of <a href="../2d-engine/#module-fl_2d_frame">fl_2d_frame{}</a>.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+supported verbs: FL_ADD, FL_AXES, FL_BBOX</p>
+<p><strong>size</strong><br />
+outer size</p>
+<p><strong>corners</strong><br />
+List of four radiuses, one for each base quadrant's corners.
+Each zero means that the corresponding corner is squared.
+Defaults to a 'perfect' rectangle with four squared corners.
+One scalar value R means corners=[R,R,R,R]</p>
+<p><strong>thick</strong><br />
+subtracted to size defines the internal size</p>
+<p><strong>octant</strong><br />
+when undef, native positioning is used with cube midpoint centered at origin O</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation] or native direction if undef</p>
+<hr />
+<h3 id="module-fl_importdxf">module fl_importDxf</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_importDxf(file,layer,direction)
+</code></pre></div>
+<p>DXF files import with direction and rotation. By default DXF files are
+imported in the XY plane with no rotation. The «direction» parameter
+specifies a normal to the actual import plane and a rotation about it.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>direction</strong><br />
+direction in [axis,angle] representation</p>
+<hr />
+<h3 id="module-fl_layout">module fl_layout</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_layout(verbs=FL_LAYOUT,axis,gap=0,types,align=0,direction,octant)
+</code></pre></div>
+<p>Layout of types along a direction.</p>
+<p>There are basically two methods of invocation call:</p>
+<ul>
+<li>with as many children as the length of types: in this case each children will
+  be called explicitly in turn with children($i)</li>
+<li>with one child only called repetitively through children(0) with $i equal to the
+  current execution number.</li>
+</ul>
+<p>Called children can use the following special variables:</p>
+<div class="highlight"><pre><span></span><code>$i      - current item index
+$first  - true when $i==0
+$last   - true when $i==len(types)-1
+$item   - equal to types[$i]
+$len    - equal to len(types)
+$size   - equal to bounding box size of $item
+</code></pre></div>
+<p>TODO: add namespace to children context variables.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT</p>
+<p><strong>axis</strong><br />
+layout direction vector</p>
+<p><strong>gap</strong><br />
+gap inserted along «axis»</p>
+<p><strong>types</strong><br />
+list of types to be arranged</p>
+<p><strong>align</strong><br />
+Internal type alignment into the resulting bounding box surfaces.</p>
+<p>Is managed through a vector whose x,y,z components can assume -1,0 or +1 values.</p>
+<p>[-1,0,+1] means aligned to the -X and +Z surfaces, centered on y axis.</p>
+<p>Passing a scalar means [scalar,scalar,scalar]</p>
+<p><strong>direction</strong><br />
+desired direction in [vector,rotation] form, native direction when undef ([+X+Y+Z])</p>
+<p><strong>octant</strong><br />
+when undef native positioning is used</p>
+<hr />
+<h3 id="module-fl_linear_extrude">module fl_linear_extrude</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_linear_extrude(direction,length,convexity=10)
+</code></pre></div>
+<p>Z-Axis extrusion is oriented along arbitrary axis/rotation</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>direction</strong><br />
+direction in [axis,angle] representation</p>
+<hr />
+<h3 id="module-fl_lookatme">module fl_lookAtMe</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_lookAtMe()
+</code></pre></div>
+<p>rotates children to face camera</p>
+<hr />
+<h3 id="module-fl_new_cutout">module fl_new_cutout</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_new_cutout(bbox,director,drift=0,trim)
+</code></pre></div>
+<p>Cutout along arbitrary direction of children shapes.</p>
+<p>Context variables:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Context</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$fl_thickness</td>
+<td>Parameter</td>
+<td>multi-verb parameter (see <a href="../core/#function-fl_parm_thickness">fl_parm_thickness()</a>)</td>
+</tr>
+<tr>
+<td>$fl_tolerance</td>
+<td>Parameter</td>
+<td>multi-verb parameter (see <a href="../core/#function-fl_parm_tolerance">fl_parm_tolerance()</a>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parameters:</strong></p>
+<p><strong>bbox</strong><br />
+bounding box delimiting children shape(s)</p>
+<p><strong>director</strong><br />
+direction vector (3d vector format)</p>
+<p><strong>drift</strong><br />
+Scalar or function literal (with signature <code>drift()</code>) returning a scalar
+value, adding space from children boundaries (if negative this value is
+actually subtracted).</p>
+<p><strong>trim</strong><br />
+3d translation or function literal (signature <code>trim()</code>) returning a 3d
+translation that is applied BEFORE projection().</p>
+<p>:memo: <strong>NOTE:</strong> trimming modify the OpenSCAD projection module behavior, enabling
+its «cut» parameter.</p>
+<hr />
+<h3 id="module-fl_place">module fl_place</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_place(type,octant,quadrant,bbox)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>octant</strong><br />
+3d octant</p>
+<p><strong>quadrant</strong><br />
+2d quadrant</p>
+<p><strong>bbox</strong><br />
+bounding box corners</p>
+<hr />
+<h3 id="module-fl_placeif">module fl_placeIf</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_placeIf(condition,type,octant,quadrant,bbox)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>condition</strong><br />
+when true placement is ignored</p>
+<p><strong>octant</strong><br />
+3d octant</p>
+<p><strong>quadrant</strong><br />
+2d quadrant</p>
+<p><strong>bbox</strong><br />
+bounding box corners</p>
+<hr />
+<h3 id="module-fl_planealign">module fl_planeAlign</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_planeAlign(ax,ay,bx,by,ech=false)
+</code></pre></div>
+<hr />
+<h3 id="module-fl_prism">module fl_prism</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_prism(verbs=FL_ADD,type,n,l,l1,l2,h,octant,direction)
+</code></pre></div>
+<p>Right prism.</p>
+<p><img alt="default positioning" src="../256x256/fig_3d_prism_defaults.png" /></p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+FL_ADD,FL_AXES,FL_BBOX</p>
+<p><strong>n</strong><br />
+edge number</p>
+<p><strong>l</strong><br />
+edge length</p>
+<p><strong>l1</strong><br />
+edge length, bottom</p>
+<p><strong>l2</strong><br />
+edge length, top</p>
+<p><strong>h</strong><br />
+height</p>
+<p><strong>octant</strong><br />
+when undef native positioning is used</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])</p>
+<hr />
+<h3 id="module-fl_pyramid">module fl_pyramid</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_pyramid(verbs=FL_ADD,type,base,apex,octant,direction)
+</code></pre></div>
+<p>Right pyramid.</p>
+<p><img alt="default positioning" src="../256x256/fig_3d_pyramid_defaults.png" /></p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+FL_ADD,FL_AXES,FL_BBOX</p>
+<p><strong>octant</strong><br />
+when undef native positioning is used</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])</p>
+<hr />
+<h3 id="module-fl_sphere">module fl_sphere</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_sphere(verbs=FL_ADD,type,r,d,octant,direction)
+</code></pre></div>
+<p>Sphere replacement.</p>
+<p><img alt="default positioning" src="../256x256/fig_3d_sphere_defaults.png" /></p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+FL_ADD,FL_AXES,FL_BBOX</p>
+<p><strong>octant</strong><br />
+when undef default positioning is used</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation], default direction if undef</p>
+<hr />
+<h3 id="module-fl_sym_direction">module fl_sym_direction</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_sym_direction(verbs=FL_ADD,direction,size=0.5)
+</code></pre></div>
+<p>display the direction change from a native coordinate system and a new
+direction specification in [direction,rotation] format.</p>
+<p>:memo: <strong>NOTE:</strong> the native coordinate system (ncs) is now meant to be the standard
++X+Y+Z (with direction set by +Z)</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+supported verbs: FL_ADD</p>
+<p><strong>direction</strong><br />
+direction in <a href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">Axis–angle representation</a>
+in the format</p>
+<div class="highlight"><pre><span></span><code>[axis,rotation angle]
+</code></pre></div>
+<p><strong>size</strong><br />
+default size given as a scalar</p>
+<hr />
+<h3 id="module-fl_sym_hole">module fl_sym_hole</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_sym_hole(verbs=FL_ADD)
+</code></pre></div>
+<p>this symbol uses as input a complete node context.</p>
+<p>The symbol is oriented according to the hole normal.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+supported verbs: FL_ADD</p>
+<hr />
+<h3 id="module-fl_sym_plug">module fl_sym_plug</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_sym_plug(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5)
+</code></pre></div>
+<hr />
+<h3 id="module-fl_sym_point">module fl_sym_point</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_sym_point(verbs=FL_ADD,point=FL_O,size,color=&quot;black&quot;)
+</code></pre></div>
+<p>Point symbol.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+supported verbs: FL_ADD</p>
+<p><strong>size</strong><br />
+synonymous of point diameter</p>
+<hr />
+<h3 id="module-fl_sym_socket">module fl_sym_socket</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_sym_socket(verbs=[FL_ADD,FL_AXES],type=undef,size=0.5)
+</code></pre></div>
+<hr />
+<h3 id="module-fl_symbol">module fl_symbol</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_symbol(verbs=FL_ADD,type=undef,size=0.5,symbol)
+</code></pre></div>
+<p>provides the symbol required in its 'canonical' form:
+- "plug": 'a piece that fits into a hole in order to close it'
+         Its canonical form implies an orientation of the piece coherent
+         with its insertion movement along +Z axis.
+- "socket": 'a part of the body into which another part fits'
+         Its canonical form implies an orientation of the piece coherent
+         with its fitting movement along -Z axis.</p>
+<p><a href="../core/#variable-fl_layout">variable FL_LAYOUT</a> is used for proper label orientation</p>
+<p>Children context:</p>
+<ul>
+<li>$sym_ldir: [axis,angle]</li>
+<li>$sym_size: size in 3d format</li>
+</ul>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+supported verbs: FL_ADD, FL_LAYOUT</p>
+<p><strong>size</strong><br />
+default size given as a scalar</p>
+<p><strong>symbol</strong><br />
+currently "plug" or "socket"</p>
+<hr />
+<h3 id="module-fl_torus">module fl_torus</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_torus(verbs=FL_ADD,r,d,e,R,direction,octant)
+</code></pre></div>
+<p>«e» and «R» are mutually exclusive parameters</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+supported verbs: FL_ADD, FL_AXES, FL_BBOX</p>
+<p><strong>r</strong><br />
+radius of the circular tube.</p>
+<p><strong>d</strong><br />
+diameter of the circular tube.</p>
+<p><strong>e</strong><br />
+elliptic tube [a,b] form</p>
+<p><strong>R</strong><br />
+distance from the center of the tube to the center of the torus</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])</p>
+<p><strong>octant</strong><br />
+when undef native positioning is used</p>
+<hr />
+<h3 id="module-fl_tube">module fl_tube</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_tube(verbs=FL_ADD,base,r,d,h,thick,direction,octant)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT</p>
+<p><strong>base</strong><br />
+base ellipse in [a,b] form</p>
+<p><strong>r</strong><br />
+«base» alternative radius for circular tubes</p>
+<p><strong>d</strong><br />
+«base» alternative diameter for circular tubes</p>
+<p><strong>h</strong><br />
+pipe height</p>
+<p><strong>thick</strong><br />
+tube thickness</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation], native direction when undef ([+X+Y+Z])</p>
+<p><strong>octant</strong><br />
+when undef native positioning is used</p>
+<hr />
+<h3 id="module-fl_vloop">module fl_vloop</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_vloop(verbs,bbox,octant,direction)
+</code></pre></div>
+<p>Low-level verb-driven OFL API management.</p>
+<p>Three-dimensional steps:</p>
+<ol>
+<li>verb looping</li>
+<li>octant translation («octant» parameter)</li>
+<li>orientation along a given direction / angle («direction» parameter)</li>
+</ol>
+<p><strong>1. Verb looping:</strong></p>
+<p>Each passed verb triggers in turn the children modules with an execution
+context describing:</p>
+<ul>
+<li>the verb actually triggered;</li>
+<li>the OpenSCAD character modifier descriptor (see also <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Modifier_Characters">OpenSCAD User Manual/Modifier
+  Characters</a>)</li>
+</ul>
+<p>Verb list like <code>[FL_ADD, FL_DRILL]</code> will loop children modules two times,
+once for the FL_ADD implementation and once for the FL_DRILL.</p>
+<p>The only exception to this is the FL_AXES verb, that needs to be executed
+outside the canonical transformation pipeline (without applying «octant» translations).
+FL_AXES implementation - when passed in the verb list - is provided
+automatically by the library.</p>
+<p>So a verb list like <code>[FL_ADD, FL_AXES, FL_DRILL]</code> will trigger the children
+modules twice: once for FL_ADD and once for FL_DRILL. OFL will trigger an
+internal FL_AXES implementation.</p>
+<p><strong>2. Octant translation</strong></p>
+<p>A coordinate system divides three-dimensional spaces in eight
+<a href="https://en.wikipedia.org/wiki/Octant_(solid_geometry)">octants</a>.</p>
+<p>Using the bounding-box information provided by the «bbox» parameter, we can
+fit the shapes defined by children modules exactly in one octant.</p>
+<p><strong>3. Orientation</strong></p>
+<p>OFL can also orient shapes defined by children modules along arbitrary axis
+and additionally rotate around it.</p>
+<p>Context variables:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Context</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>Children</td>
+<td>see <a href="../mngm-engine/#module-fl_generic_vloop">fl_generic_vloop{}</a> context variables</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parameters:</strong></p>
+<p><strong>verbs</strong><br />
+verb list</p>
+<p><strong>bbox</strong><br />
+mandatory bounding box</p>
+<p><strong>octant</strong><br />
+when undef native positioning is used</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation], native direction when undef</p>
+<hr />
+<h3 id="module-fl_vmanage">module fl_vmanage</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_vmanage(verbs,this,octant,direction)
+</code></pre></div>
+<p>High-level (OFL 'objects' only) verb-driven OFL API management.</p>
+<p>It does pretty much the same things like <a href="#module-fl_vloop">fl_vloop{}</a> but with a different
+interface and enriching the children context with new context variables.</p>
+<p><strong>Usage:</strong></p>
+<div class="highlight"><pre><span></span><code>// An OFL object is a list of [key,values] items
+object = fl_Object(...);
+
+...
+
+// this engine is called once for every verb passed to module fl_vmanage
+module engine() let(
+  ...
+) if ($this_verb==FL_ADD)
+  ; // verb implementation code
+
+  else if ($this_verb==FL_BBOX)
+  ; // verb implementation code
+
+  else if ($this_verb==FL_CUTOUT)
+  ; // verb implementation code
+
+  else if ($this_verb==FL_DRILL)
+  ; // verb implementation code
+
+  else if ($this_verb==FL_LAYOUT)
+  ; // verb implementation code
+
+  else if ($this_verb==FL_MOUNT)
+  ; // verb implementation code
+
+  else
+    fl_error([&quot;unimplemented verb&quot;,$this_verb]);
+
+...
+
+fl_vmanage(verbs,object,octant=octant,direction=direction)
+  engine();
+</code></pre></div>
+<p>Context variables:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Context</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>Children</td>
+<td>see <a href="../mngm-engine/#module-fl_generic_vmanage">fl_generic_vmanage{}</a> Children context</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parameters:</strong></p>
+<p><strong>octant</strong><br />
+when undef native positioning is used</p>
+<p><strong>direction</strong><br />
+desired direction [director,rotation], native direction when undef</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
