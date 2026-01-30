@@ -1,4 +1,41 @@
-# Library reference
+# OpenSCAD Foundation Library
 
-On this page you can find the APIs for developer and some more general information about the three main components of the library.
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ggabbiani/OFL/tests.yml?label=tests&style=square)
 
+![Cover](800x600/cover.png)
+
+**O**penSCAD **F**oundation **L**ibrary (OFL) is a foundation library for OpenSCAD integrating concepts not included natively in the OpenSCAD language and providing an extendible standardized API base.
+
+## Install
+
+1. download and expand the library
+2. modify the OPENSCADPATH Environment Variable to point the __lib/__ directory of this repo as described in [OpenSCAD Library Folder](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations)
+3. include the needed library file(s) in your OpenSCAD code like in the following example:
+
+    include <OFL/foundation/core.scad>
+
+## Documentation
+
+OFL comes with three major components:
+
+* [foundation](foundation/README.md) - the core part re-implementing some of the OpenSCAD native 2d/3d modules while adding new ones;
+* [vitamins](vitamins/README.md) - client vitamin modules leveraging the foundation.
+* [artifacts](artifacts/README.md) - printable artifacts built on top of [foundation components](foundation/README.md) and [vitamins parts](vitamins/README.md);
+
+## Architecture
+
+Every library component is accessed through a set of verb-based APIs (Common API Template), even third part libraries eventually used internally.
+
+![OFL architecture](architecture.png)
+
+## Disclaimer
+
+The following libraries, used and distributed internally this project, are not
+part of OFL:
+
+* [NopSCADlib Release v21.41.1](https://github.com/nophead/NopSCADlib/releases/tag/v21.41.1)
+* [Round-Anything v1.0.4](https://github.com/Irev-Dev/Round-Anything/releases/tag/1.0.4)
+* [scad-utils](https://github.com/openscad/scad-utils)
+
+Each of them can be found in the __lib/__ project directory together with the
+release and LICENSE notes provided originally.
