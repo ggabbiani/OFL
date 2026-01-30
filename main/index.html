@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#library-reference" class="md-skip">
+        <a href="#openscad-foundation-library" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Library reference
+              OpenSCAD Foundation Library
             
           </span>
         </div>
@@ -215,6 +215,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenSCAD Foundation Library
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         
   
@@ -222,7 +240,7 @@
   <span class="md-ellipsis">
     
   
-    Library reference
+    OpenSCAD Foundation Library
   
 
     
@@ -231,6 +249,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disclaimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disclaimer
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2485,6 +2566,58 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disclaimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disclaimer
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2500,8 +2633,39 @@
 
 
 
-<h1 id="library-reference">Library reference</h1>
-<p>On this page you can find the APIs for developer and some more general information about the three main components of the library.</p>
+<h1 id="openscad-foundation-library">OpenSCAD Foundation Library</h1>
+<p><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/ggabbiani/OFL/tests.yml?label=tests&amp;style=square" /></p>
+<p><img alt="Cover" src="800x600/cover.png" /></p>
+<p><strong>O</strong>penSCAD <strong>F</strong>oundation <strong>L</strong>ibrary (OFL) is a foundation library for OpenSCAD integrating concepts not included natively in the OpenSCAD language and providing an extendible standardized API base.</p>
+<h2 id="install">Install</h2>
+<ol>
+<li>download and expand the library</li>
+<li>modify the OPENSCADPATH Environment Variable to point the <strong>lib/</strong> directory of this repo as described in <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries#Library_Locations">OpenSCAD Library Folder</a></li>
+<li>
+<p>include the needed library file(s) in your OpenSCAD code like in the following example:</p>
+<p>include <OFL/foundation/core.scad></p>
+</li>
+</ol>
+<h2 id="documentation">Documentation</h2>
+<p>OFL comes with three major components:</p>
+<ul>
+<li><a href="foundation/">foundation</a> - the core part re-implementing some of the OpenSCAD native 2d/3d modules while adding new ones;</li>
+<li><a href="vitamins/">vitamins</a> - client vitamin modules leveraging the foundation.</li>
+<li><a href="artifacts/">artifacts</a> - printable artifacts built on top of <a href="foundation/">foundation components</a> and <a href="vitamins/">vitamins parts</a>;</li>
+</ul>
+<h2 id="architecture">Architecture</h2>
+<p>Every library component is accessed through a set of verb-based APIs (Common API Template), even third part libraries eventually used internally.</p>
+<p><img alt="OFL architecture" src="architecture.png" /></p>
+<h2 id="disclaimer">Disclaimer</h2>
+<p>The following libraries, used and distributed internally this project, are not
+part of OFL:</p>
+<ul>
+<li><a href="https://github.com/nophead/NopSCADlib/releases/tag/v21.41.1">NopSCADlib Release v21.41.1</a></li>
+<li><a href="https://github.com/Irev-Dev/Round-Anything/releases/tag/1.0.4">Round-Anything v1.0.4</a></li>
+<li><a href="https://github.com/openscad/scad-utils">scad-utils</a></li>
+</ul>
+<p>Each of them can be found in the <strong>lib/</strong> project directory together with the
+release and LICENSE notes provided originally.</p>
 
 
 
