@@ -34,7 +34,7 @@ RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSIO
 
 COPY pyreqs.txt .
 RUN python3 -m venv /venv \
-    && source /venv/bin/activate \
+    && . /venv/bin/activate \
     && pip install --upgrade pip \
     && pip install -r pyreqs.txt
 COPY make-import.sh /usr/local/sbin/
