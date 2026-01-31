@@ -34,7 +34,7 @@ COPY pyreqs.txt .
 RUN python -m ensurepip --upgrade \
     && python -m pip install --upgrade pip \
     && pip install --upgrade pip \
-    && pip install -r pyreqs.txt \
+    && pip install -r pyreqs.txt
 COPY make-import.sh /usr/local/sbin/
 # this command is mandatory for the 'git checkout' from inside the container
 RUN git config --global --add safe.directory /import
