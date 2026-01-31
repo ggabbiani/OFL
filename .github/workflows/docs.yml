@@ -31,9 +31,11 @@ jobs:
       - name: Generate Documentation
         shell: bash
         run: |
+          whoami
+          pwd
           ls -a
           source $HOME/.venv/bin/activate
-          xvfb-run -d make SHELL="$(which bash)" -s docs/all
+          xvfb-run -a make SHELL="$(which bash)" -s docs/all
 
       - name: Deploy with Mike
         run: |

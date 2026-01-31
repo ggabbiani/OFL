@@ -31,8 +31,8 @@ RUN apt update \
 RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSION}/${ODOX_PACKAGE} \
     && apt install -y ./${ODOX_PACKAGE}
 COPY pyreqs.txt .
-RUN python -m ensurepip --upgrade \
-    && python -m pip install --upgrade pip \
+RUN python3 -m venv .venv \
+    && . .venv/bin/activate \
     && pip install --upgrade pip \
     && pip install -r pyreqs.txt
 COPY make-import.sh /usr/local/sbin/
