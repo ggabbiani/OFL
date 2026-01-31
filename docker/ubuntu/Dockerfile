@@ -31,7 +31,10 @@ RUN apt update \
 RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSION}/${ODOX_PACKAGE} \
     && apt install -y ./${ODOX_PACKAGE}
 COPY pyreqs.txt .
-RUN pip install --upgrade pip && pip install -r pyreqs.txt
+RUN python -m ensurepip --upgrade
+    && python -m pip install --upgrade pip
+    && pip install --upgrade pip
+    && pip install -r pyreqs.txt
 COPY make-import.sh /usr/local/sbin/
 # this command is mandatory for the 'git checkout' from inside the container
 RUN git config --global --add safe.directory /import
