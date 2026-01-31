@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ggabbiani/ofl:ubuntu
+      # Simuliamo il mount del tuo comando docker -v .:/import
+      # options: --workdir /import
 
     steps:
       - name: Checkout code
@@ -29,8 +31,8 @@ jobs:
       - name: Generate Documentation
         shell: bash
         run: |
-          ls -a
-          source .venv/bin/activate
+          ls -azz
+          source $HOME/.venv/bin/activate
           xvfb-run -d make SHELL="$(which bash)" -s docs/all
 
       - name: Deploy with Mike
