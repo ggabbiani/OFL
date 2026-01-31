@@ -1,5 +1,6 @@
 #
 # Dockerfile for testing project development and tests under Fedora distros.
+# The built image runs in a python3 virtual environment
 #
 # This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 #
