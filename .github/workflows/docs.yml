@@ -12,7 +12,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:ubuntu
+      image: ggabbiani/ofl:ubuntu
       # Simuliamo il mount del tuo comando docker -v .:/import
       options: --workdir /import
 
