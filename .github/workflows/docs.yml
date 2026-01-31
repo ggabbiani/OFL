@@ -29,14 +29,9 @@ jobs:
       - name: Generate Documentation
         shell: bash
         run: |
-          # Qui eseguiamo quello che il tuo container fa all'avvio.
-          # Se il container ha un ENTRYPOINT che genera i file,
-          # GitHub Actions lo ignora, quindi lanciamo il comando esplicito.
-          # Assumendo che il comando sia 'make' o lo script di orthodocs:
-          # orthodocs --input ./src --output ./docs/api-docs
+          ls -R
           source .venv/bin/activate
           xvfb-run -d make SHELL="$(which bash)" -s docs/all
-          # Aggiungi qui eventuali altri comandi necessari per i Markdown non-API
 
       - name: Deploy with Mike
         run: |
