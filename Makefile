@@ -54,6 +54,8 @@ ifdef IMVER
 else
 	$(call msg-error,ImageMagick not found, please install)
 endif
+
+check-virtual:	## fails if not running in a python virtual environment
 ifndef VIRTUAL_ENV
 	$(call msg-error,Python Virtual Environment not active: type 'source .venv/bin/activate')
 endif
