@@ -8,5 +8,4 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-source .venv/bin/activate
 xvfb-run -a make SHELL="$(which bash)" -s -C /import "$@"
