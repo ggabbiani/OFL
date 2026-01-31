@@ -31,7 +31,7 @@ jobs:
       - name: Generate Documentation
         shell: bash
         run: |
-          ls -azz
+          ls -a
           source $HOME/.venv/bin/activate
           xvfb-run -d make SHELL="$(which bash)" -s docs/all
 
