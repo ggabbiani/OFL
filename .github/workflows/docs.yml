@@ -13,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ggabbiani/ofl:ubuntu
-      # Simuliamo il mount del tuo comando docker -v .:/import
-      options: --workdir /import
 
     steps:
       - name: Checkout code
@@ -29,6 +27,7 @@ jobs:
           git config --global --add safe.directory /import
 
       - name: Generate Documentation
+        shell: bash
         run: |
           # Qui eseguiamo quello che il tuo container fa all'avvio.
           # Se il container ha un ENTRYPOINT che genera i file,
