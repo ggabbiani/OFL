@@ -23,21 +23,25 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Questo scarica il contenuto del repo in /import
+          path: /import
 
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Git deve sapere che /import è una directory sicura
           git config --global --add safe.directory /import
 
       - name: Generate Documentation
         run: |
-          whoami
-          pwd
-          ls -a
+          # Lo script gira nella pwd di default,
+          # ma il repo è pronto in /import come richiesto
           make-import.sh docs/all
 
       - name: Deploy with Mike
+        # Mike deve girare dove si trova il file mkdocs.yml (quindi in /import)
+        working-directory: /import
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=$(echo $GITHUB_REF | sed 's/refs\/tags\///' | cut -d. -f1,2)
