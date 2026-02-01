@@ -23,25 +23,25 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Questo scarica il contenuto del repo in /import
-          path: /import
 
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          # Git deve sapere che /import è una directory sicura
-          git config --global --add safe.directory /import
+          git config --global --add safe.directory .
 
       - name: Generate Documentation
+        # Lo script è l'entry-point dell'immagine docker, che usa la
+        # variabile GITHUB_WORKSPACE per il repo. Questa variabile viene
+        # impostata di default a /import per le esecuzioni manuali dei
+        # container, e mi aspetto sia gestita da github quando eseguita
+        # tramite devops
         run: |
-          # Lo script gira nella pwd di default,
-          # ma il repo è pronto in /import come richiesto
           make-import.sh docs/all
 
       - name: Deploy with Mike
-        # Mike deve girare dove si trova il file mkdocs.yml (quindi in /import)
-        working-directory: /import
+        # la directory corrente corrisponde alla root del repo contenente il
+        # file mkdocs.yml necessario a mike
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=$(echo $GITHUB_REF | sed 's/refs\/tags\///' | cut -d. -f1,2)
