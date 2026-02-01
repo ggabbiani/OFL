@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ggabbiani/ofl:ubuntu
-      # Simuliamo il mount del tuo comando docker -v .:/import
-      # options: --workdir /import
+      # Simuliamo il mount del repo su /import
+      options: --workdir /import
 
     steps:
       - name: Checkout code
@@ -29,13 +29,11 @@ jobs:
           git config --global --add safe.directory /import
 
       - name: Generate Documentation
-        shell: bash
         run: |
           whoami
           pwd
           ls -a
-          source $HOME/.venv/bin/activate
-          xvfb-run -a make SHELL="$(which bash)" -s docs/all
+          make-import.sh docs/all
 
       - name: Deploy with Mike
         run: |
