@@ -37,7 +37,7 @@ COPY make-import.sh /usr/local/sbin/
 RUN chmod +x /usr/local/sbin/make-import.sh
 
 # this command is mandatory for the 'git checkout' from inside the container
-RUN git config --global --add safe.directory /import
+RUN git config --global --add safe.directory "$GITHUB_WORKSPACE"
 ###############################################################################
 # entrypoint
 ENTRYPOINT [ "/usr/local/sbin/make-import.sh" ]

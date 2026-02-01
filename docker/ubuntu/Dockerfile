@@ -1,6 +1,8 @@
 #
 # Dockerfile for testing project development and tests under Ubuntu distros.
-# NOTE: The entry-point must active the python3 virtual environment
+#
+# NOTE: The entry-point will activate a python3 virtual environment suitable
+# for running the tests
 #
 # This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 #
@@ -13,6 +15,9 @@ LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.o
 ARG ODOX_VERSION=1.2.2
 ARG ODOX_RELEASE=0ubuntu19
 ARG ODOX_PACKAGE=orthodocs_${ODOX_VERSION}-${ODOX_RELEASE}_amd64.deb
+# Defaulting the github workspace for manual container runs. I expect this
+# value to be overridden when triggered through github actions
+ENV GITHUB_WORKSPACE="/import"
 ###############################################################################
 # system pre requisites
 RUN apt update \
@@ -40,7 +45,7 @@ COPY make-import.sh /usr/local/sbin/
 RUN chmod +x /usr/local/sbin/make-import.sh
 
 # this command is mandatory for the 'git checkout' from inside the container
-RUN git config --global --add safe.directory /import
+RUN git config --global --add safe.directory "$GITHUB_WORKSPACE"
 ###############################################################################
 # entrypoint
 ENTRYPOINT [ "/usr/local/sbin/make-import.sh" ]
