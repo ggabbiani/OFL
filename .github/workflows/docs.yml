@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ggabbiani/ofl:ubuntu
-      # Simuliamo il mount del repo su /import
-      options: --workdir /import
 
     steps:
       - name: Checkout code
@@ -28,6 +26,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # la directory corrente è pari a GITHUB_WORKSPACE
           git config --global --add safe.directory .
 
       - name: Generate Documentation
