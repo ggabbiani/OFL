@@ -28,12 +28,14 @@ RUN dnf install -y \
 # https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1/orthodocs-1.2.1-0.fc36.x86_64.rpm
 RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSION}/orthodocs-${ODOX_RELEASE}.$(uname -m).rpm \
     && dnf install -y ./orthodocs-${ODOX_RELEASE}.$(uname -m).rpm
+
 COPY pyreqs.txt .
-RUN python3 -m venv .venv \
-    && . .venv/bin/activate \
-    && pip install --upgrade pip \
-    && pip install -r pyreqs.txt
+RUN python3 -m venv /venv \
+    && /venv/bin/pip install --upgrade pip \
+    && /venv/bin/pip install -r pyreqs.txt
 COPY make-import.sh /usr/local/sbin/
+RUN chmod +x /usr/local/sbin/make-import.sh
+
 # this command is mandatory for the 'git checkout' from inside the container
 RUN git config --global --add safe.directory /import
 ###############################################################################
