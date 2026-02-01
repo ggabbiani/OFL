@@ -21,4 +21,4 @@ if [ ! -d "$TARGET_DIR" ]; then
     echo "Either GITHUB_WORKSPACE or target directory \"${TARGET_DIR}\" doesn't exist."
     exit 5
 fi
-xvfb-run -d make SHELL="$(which bash)" -s -C "${TARGET_DIR}" "$@"
+xvfb-run -a make SHELL="$(which bash)" -s -C "${TARGET_DIR}" "$@"
