@@ -26,8 +26,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          # la directory corrente è pari a GITHUB_WORKSPACE
-          git config --global --add safe.directory .
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Generate Documentation
         # Lo script è l'entry-point dell'immagine docker, che usa la
