@@ -40,9 +40,12 @@ jobs:
           make-import.sh docs/all
 
       - name: Deploy with Mike
+        shell: bash
         # la directory corrente corrisponde alla root del repo contenente il
         # file mkdocs.yml necessario a mike
         run: |
+          # attivo il virtual environment Python dov'è installato mike
+          source /venv/bin/activate
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=$(echo $GITHUB_REF | sed 's/refs\/tags\///' | cut -d. -f1,2)
             mike deploy --push --update-aliases $VERSION latest
