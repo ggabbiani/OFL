@@ -1220,6 +1220,27 @@ module fl_square(
 
 //**** frame ******************************************************************
 
+function fl_2d_frame_intCorners(size,corners,thick) = let(
+  delta = [thick,thick],
+  zero  = [0,0]
+) // corners==scalar
+  is_num(corners) ? let(
+    e = corners>thick ? [corners,corners]-delta : zero
+  ) [e,e,e,e]
+  // corners==ellipsis ([a,b])
+  : len(corners)==2 ? let(
+    e = min(corners)>thick ? corners-delta : zero
+  ) [e,e,e,e]
+  // corners==[scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,scalar|ellipsis]
+  : assert(len(corners)==4) [
+    for(v=corners)
+      // scalar
+      is_num(v) ? v>thick ? [v,v]-delta : zero
+      // ellipsis
+      : min(v)>thick ? v-delta : zero
+  ];
+
+
 /*!
  * Add a 2d square frame according to corners and thick specifications.
  *
@@ -1265,29 +1286,9 @@ module fl_2d_frame(
 ) {
   assert(is_num(thick),thick);
 
-  function internal_corners(size,corners,thick) = let(
-    delta = [thick,thick],
-    zero  = [0,0]
-  ) // corners==scalar
-    is_num(corners) ? let(
-      e = corners>thick ? [corners,corners]-delta : zero
-    ) [e,e,e,e]
-    // corners==ellipsis ([a,b])
-    : len(corners)==2 ? let(
-      e = min(corners)>thick ? corners-delta : zero
-    ) [e,e,e,e]
-    // corners==[scalar|ellipsis,scalar|ellipsis,scalar|ellipsis,scalar|ellipsis]
-    : assert(len(corners)==4) [
-      for(v=corners)
-        // scalar
-        is_num(v) ? v>thick ? [v,v]-delta : zero
-        // ellipsis
-        : min(v)>thick ? v-delta : zero
-    ];
-
   size        = is_num(size) ? [size,size] : size;
   size_int    = size - 2*[thick,thick];
-  corners_int = internal_corners(size,corners,thick);
+  corners_int = fl_2d_frame_intCorners(size,corners,thick);
   bbox        = [[-size.x/2,-size.y/2],[+size.x/2,+size.y/2]];
 
   fl_2d_vloop(verbs,bbox,quadrant=quadrant) fl_modifier($modifier) {

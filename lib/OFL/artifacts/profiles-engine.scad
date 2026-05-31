@@ -129,7 +129,7 @@ module fl_bentPlate(
   D     = direction ? fl_direction(direction) : I;
   M     = fl_octant(octant,bbox=bbox);
   r     = radius ? radius : 0;
-  R     = assert(thick) r+thick;
+  R     = assert(thick) r?r+thick:0;  // fix for use with r==0
   sz    = is_list(size) ? size : [size,size,size];
   radii = type=="L" ? [
     [bbox[0].x,       bbox[1].y,        0 ],  // 0
@@ -157,12 +157,12 @@ module fl_bentPlate(
     debug_sz      = debug_enabled ? fl_2d_closest(radii)/3 : undef;
 
     if (debug_enabled)
-      #polygon(polyRound(radii,fn=$fn));
+      #polygon(polyRound(radii,fn=$fn?$fn:5));      // fix for missing fn parameter value when $fn is undef
     else
       fl_color(material)
         translate(-Z(sz.z/2))
           linear_extrude(height=sz.z)
-            polygon(polyRound(radii,fn=$fn));
+            polygon(polyRound(radii,fn=$fn?$fn:5)); // fix for missing fn parameter value when $fn is undef
 
     if (fl_dbg_symbols())
       for(p=radii)

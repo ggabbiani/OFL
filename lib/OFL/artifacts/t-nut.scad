@@ -96,7 +96,7 @@ let(
     ["section points", points],
     if (nop_screw) fl_screw_specs(value=nop_screw),
     if (nop_screw) fl_holes(value=holes ? holes : [fl_Hole([0,bbox[1].y,size.z/2],hole_d,+Y,size.y,nop_screw=nop_screw)]),
-    if (knut) let(kn=fl_knut_search(nop_screw,size.y)) assert(kn,"No knurl nut found") ["knut",kn],
+    if (knut) assert(nop_screw) let(kn=fl_knut_select(nominal=hole_d,length=["≤",size.y],best=FL_KNUT_LONGEST)) assert(kn,"No knurl nut found") ["knut",kn],
     fl_dimensions(value=fl_DimensionPack([
       fl_Dimension(opening, "opening" ),
       fl_Dimension(size.x,  "width"   ),

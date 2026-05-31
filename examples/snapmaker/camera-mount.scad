@@ -81,9 +81,6 @@ nut_holes = let(d=scr_d+1) [
 ];
 nut = fl_TNut(opening,[in_width,length],[wall_thick,base_thick,cone_thick],scr_nop,true,nut_holes);
 
-// brass insert
-knut= fl_knut_search(scr_nop,nut_thick);
-
 // thread
 thr_pitch = 2;
 thr_starts = 4;

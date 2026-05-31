@@ -114,6 +114,8 @@ FL_CS_ISO_M20
 /*!
  * return a countersink list fitting the passed properties or undef if no match
  * no match found.
+ *
+ * FIXME: change into new signature
  */
 function fl_cs_select(
   dictionary=FL_CS_ISO_DICT,
@@ -132,10 +134,10 @@ function fl_cs_select(
 /*!
  * Context variables:
  *
- * | Name           | Context   | Description |
- * | -------------  | --------- | ---         |
- * | $fl_thickness  | Parameter | thickness of the surface to be FL_DRILLed. Can be verb-dependant (see fl_parm_thickness()). |
- * | $fl_tolerance  | Parameter | tolerance added to countersink's dimensions during FL_ADD, FL_BBOX and FL_FOOTPRINT. Can be verb-dependant (see fl_parm_tolerance()). |
+ * | Name           | Context   | Description
+ * | -------------  | --------- | ---
+ * | $fl_thickness  | Parameter | thickness of the surface to be FL_DRILLed. Can be verb-dependant (see fl_parm_thickness()). The only used values are the ones provided for ±Z semi-axes
+ * | $fl_tolerance  | Parameter | tolerance added to countersink's dimensions during FL_ADD, FL_BBOX and FL_FOOTPRINT. Can be verb-dependant (see fl_parm_tolerance()).
  */
 module fl_countersink(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_DRILL, FL_FOOTPRINT.
@@ -181,8 +183,13 @@ module fl_countersink(
       fl_bb_add(bbox,auto=true,$FL_ADD=$FL_BBOX);
 
     else if ($this_verb==FL_DRILL) {
-      if ($fl_thickness.z[1])
-        fl_cylinder(d=dk+2*$fl_tolerance,h=$fl_thickness.z[1]+$fl_tolerance,octant=+Z,$FL_ADD=$FL_DRILL);
+      // drill on -Z thickness
+      if ($fl_thickness.z[0]) let(thickness=$fl_thickness.z[0])
+        translate(-Z(size.z-EPS))
+          fl_cylinder(d=nominal+2*$fl_tolerance,h=thickness+$fl_tolerance,octant=-Z,$FL_ADD=$FL_DRILL);
+      // drill on +Z thickness
+      if ($fl_thickness.z[1]) let(thickness=$fl_thickness.z[1])
+        fl_cylinder(d=dk+2*$fl_tolerance,h=thickness+$fl_tolerance,octant=+Z,$FL_ADD=$FL_DRILL);
 
     } else if ($this_verb==FL_FOOTPRINT)
       tolerant()

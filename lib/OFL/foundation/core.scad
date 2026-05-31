@@ -1144,6 +1144,109 @@ function fl_list_pack(left,right) = let(
   for(i=[0:max(l_len,r_len)-1]) [i<l_len ? left[i] : undef, i<r_len ? right[i] : undef]
 ];
 
+function fl_list_ValueFilter(
+  /*!
+   * Key to be searched in an item. When used the standard property keys
+   * the property getter can be used for retrieving the keys like in the
+   * following examples.
+   *
+   * example 1: property key for the knurl nuts 'thread' type
+   *
+   *     fl_knut_thread()[0]
+   *
+   * example 2: property key for general 'nominal' property
+   *
+   *     fl_nominal()[0]
+   *
+   */
+  getter,
+  /*!
+   * property selection in form `[operator,value]` where «operator» can be:
+   *
+   * - "="      : equal to
+   * - "≅"      : approximately equal to
+   * - "<"      : less than
+   * - "≤"|"<=" : less than or equal to
+   * - ">"      : greater than
+   * - "≥"|">=" : greater than or equal to
+   * - "≠"|"!=" : not equal to
+   *
+   * a scalar <value> means ["=",value]
+   */
+  select,
+  default,
+  transform=function(_value_) _value_,
+  epsilon = FL_EPS
+) = let(
+  select    = assert(!is_undef(select)) is_list(select) ? select : ["=",select],
+  operator  = select[0],
+  required  = select[1]
+) function(list) let(
+  value = transform(getter(list, default))
+) (
+  operator=="="                     ? value==required :
+  operator=="≅"                     ? assert(epsilon) abs(value-required)<=epsilon :
+  operator=="<"                     ? value<required :
+  (operator=="≤" || operator=="<=") ? value<=required :
+  operator==">"                     ? value>required :
+  (operator=="≥" || operator==">=") ? value>=required :
+  assert(operator=="≠"||operator=="!=",str("Unknown operator '",operator,"'")) value!=required
+);
+
+/*!
+ * Filter constructor for fl_list_filter() to be used on list of 'objects'.
+ *
+ * NOTE: a list of 'objects' is a list in which each elementi is a [key,value] list.
+ */
+function fl_list_PropertyFilter(
+  /*!
+   * Key to be searched in an item. When used the standard property keys
+   * the property getter can be used for retrieving the keys like in the
+   * following examples.
+   *
+   * example 1: property key for the knurl nuts 'thread' type
+   *
+   *     fl_knut_thread()[0]
+   *
+   * example 2: property key for general 'nominal' property
+   *
+   *     fl_nominal()[0]
+   *
+   */
+  key,
+  /*!
+   * property selection in form `[operator,value]` where «operator» can be:
+   *
+   * - "="      : equal to
+   * - "≅"      : approximately equal to
+   * - "<"      : less than
+   * - "≤"|"<=" : less than or equal to
+   * - ">"      : greater than
+   * - "≥"|">=" : greater than or equal to
+   * - "≠"|"!=" : not equal to
+   *
+   * a scalar <value> means ["=",value]
+   */
+  select,
+  default,
+  transform=function(_value_) _value_,
+  epsilon = FL_EPS
+) = let(
+  select    = is_list(select) ? assert(!is_undef(select[0])&&!is_undef(select[1]),select) select : assert(!is_undef(select)) ["=",select],
+  operator  = select[0],
+  required  = select[1]
+) function(item) let(
+  value     = transform(fl_property(type=item, key=key, default=default))
+) (
+  operator=="="                     ? value==required :
+  operator=="≅"                     ? assert(epsilon) abs(value-required)<=epsilon :
+  operator=="<"                     ? value<required :
+  (operator=="≤" || operator=="<=") ? value<=required :
+  operator==">"                     ? value>required :
+  (operator=="≥" || operator==">=") ? value>=required :
+  assert(operator=="≠"||operator=="!=",str("Unknown operator '",operator,"'")) value!=required
+);
+
 /*!
  * return the items from «list» matching a list of conditions.
  *

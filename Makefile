@@ -61,10 +61,10 @@ endif
 docs/%:	## type `make -s docs/help`
 	$(call make_sub)
 
-examples/%: ## type `make -s examples/help`
+examples/%: check ## type `make -s examples/help`
 	$(call make_sub)
 
-tests/%: ## type `make -s tests/help`
+tests/%: check ## type `make -s tests/help`
 	$(call make_sub)
 
 docker/%: ALWAYS ## type `make -s docker/help`

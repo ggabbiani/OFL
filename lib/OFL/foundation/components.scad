@@ -44,8 +44,9 @@ FL_COMP_EXTERNAL = str(FL_COMP_NS,"/external");
 function fl_Component(
   //! engine to be triggered during component rendering
   engine,
+  //! **MANDATORY** 3d position
   position,
-  //! new coordinate system in [[direction], rotation] format
+  //! **MANDATORY** new coordinate system in [[direction], rotation] format
   direction,
   /*!
    * List of floating semi-axes in the host's reference system. Defines the

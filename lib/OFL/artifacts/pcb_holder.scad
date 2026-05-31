@@ -50,7 +50,7 @@ function fl_PCBHolder(
   spacers   = [for(hole=holes) let(
       screw   = fl_screw_specs(hole,default=pcb_screw),
       nominal = screw ? 2*screw_radius(screw) : 0,
-      knut    = knut_type ? fl_knut_select(thread=knut_type,nominal=nominal,best=FL_KNUT_SHORTEST) : undef
+      knut    = knut_type ? assert(nominal,str("screw=",screw)) fl_knut_select(thread=knut_type,nominal=nominal,best=FL_KNUT_SHORTEST) : undef
     ) fl_Spacer(h_min=h_min,d_min=fl_hole_d(hole)+wall,screw_size=nominal,knut=knut)
   ],
   xs = concat(
@@ -105,6 +105,7 @@ function fl_PCBHolder(
  * | $spc_*           | Children  | fl_spacer{} context
  * | $pcbh_screw      | Children  | currently processed screw (equal to current $hole_screw)
  * | $pcbh_spacer     | Children  | currently processed spacer
+ * | $hole_*          | Children  | currently processed hole context
  * | $pcbh_upperThick | Children  | overall thickness along +Z semi-axis
  * | $pcbh_verb       | Children  | currently triggering verb
  */

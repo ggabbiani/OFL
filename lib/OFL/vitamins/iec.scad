@@ -92,17 +92,18 @@ function fl_IEC(nop,name,description) = let(
   if (description) fl_description(value=description),
   fl_bb_corners(value=[[-w/2,-h/2,-iec_depth(nop)-spades[0][1]],[+w/2,+h/2,+iec_flange_t(nop)+iec_bezel_t(nop)]]),
   fl_nopSCADlib(value=nop),
-  fl_screw(value=iec_screw(nop)),
+  fl_screw(value=iec_screw(nop)), // FIXME: shouldn't be an fl_screw_specs() instead?
   fl_engine(value=FL_IEC_NS),
 ];
 
 /*!
- * Runtime environment:
+ * Context variables:
  *
- * | variable       | description                               |
- * | ---            | ---                                       |
- * | $fl_thickness  | used in FL_CUTOUT, FL_DRILL and FL_MOUNT  |
- * | $fl_tolerance  | used in FL_CUTOUT                         |
+ * | name           | Context   | Description
+ * | ---            | ---       | ---
+ * | $fl_thickness  | Parameter | used in FL_CUTOUT, FL_DRILL and FL_MOUNT
+ * | $fl_tolerance  | Parameter | used during FL_CUTOUT. See also fl_parm_tolerance()
+ * | $iec_screw     | Children  | native OFL screw used by the IEC
  */
 module fl_iec(
   //! supported verbs: FL_ADD, FL_AXES, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_LAYOUT, FL_MOUNT
@@ -115,8 +116,10 @@ module fl_iec(
 ) {
 
   module engine() let(
-    nop   = fl_nopSCADlib($this),
-    screw = iec_screw(nop)
+    $fl_thickness = $fl_thickness.z[1],  // thickness only along +Z
+    nop           = fl_nopSCADlib($this),
+    specs         = iec_screw(nop),
+    screw         = fl_Screw(specs,longer_than=$fl_thickness) // true OFL screw
   ) if ($this_verb==FL_ADD)
       iec(nop);
 
@@ -130,7 +133,7 @@ module fl_iec(
     else if ($this_verb==FL_DRILL) assert(is_num($fl_thickness)) {
       if ($fl_thickness)
         iec_screw_positions(nop)
-          fl_screw(FL_DRILL,screw,thick=$fl_thickness);
+          fl_screw(FL_DRILL,screw);
 
     } else if ($this_verb==FL_LAYOUT) {
       translate(+Z(iec_flange_t(nop)))

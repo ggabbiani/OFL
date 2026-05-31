@@ -329,7 +329,7 @@ function fl_screw_specs_select(
   inventory=FL_SCREW_SPECS_INVENTORY,
   //! screw name, ignored when undef
   name,
-  //! nominal ⌀, when 0 or undef is ignored
+  //! nominal ⌀, in form `[operator,value]` (see fl_list_ValueFilter() for details)
   nominal,
   /*!
    * Either a scalar or a list with each element equal to one of the following:
@@ -377,7 +377,7 @@ function fl_screw_specs_select(
 ) = let(
     washer          = is_undef(washer) ? undef : is_list(washer) ? len(washer)==0 ? undef : washer : [washer],
     // verify if «screw» supports «washer_type» (one of "default", "spring", "star" or "penny")
-    chk_washer_list = function(screw, lst) let(
+    chk_washer_list = function(screw,list) let(
       w           = screw_washer(screw),
       chk_washer  = function(washer_type) (
         w && (
@@ -387,7 +387,7 @@ function fl_screw_specs_select(
             (assert(washer_type=="penny",washer_type) penny_washer(w))
         )
       )
-    ) lst==[] ? true : chk_washer(lst[0]) ? chk_washer_list(screw, fl_pop(lst)) : false,
+    ) list==[] ? true : chk_washer(list[0]) ? chk_washer_list(screw, fl_pop(list)) : false,
     head_type     =
       head_type ?
         assert(is_num(head_type)) head_type :
@@ -402,18 +402,16 @@ function fl_screw_specs_select(
           ["cs cap" ,hs_cs_cap  ],
           ["dome"   ,hs_dome    ]
         ]) :
-      undef
-)
-assert(inventory)
-[
-  for(s=inventory)
-    if (  (is_undef(name)       || s[0]==name   )
-      &&  (!nominal             || 2*screw_radius(s)==nominal   )
-      &&  (is_undef(head_type)  || (let(ht=screw_head_type(s)) is_list(head_type) ? let(result=search(ht,head_type)) result!=[] : ht==head_type)  )
-      &&  (is_undef(nut)        || ((nut=="default" || (nut=="nyloc") && screw_nut(s))))
-      &&  (is_undef(washer)     || (chk_washer_list(s,washer)))
-    ) s
-];
+      undef,
+  filters = [
+    if (!is_undef(name))      echo(name=name) fl_list_ValueFilter(function(screw,default) screw[0],               select=name),
+    if (!is_undef(nominal))   echo(nominal=nominal) fl_list_ValueFilter(function(screw,default) 2*screw_radius(screw),  select=nominal),
+    if (!is_undef(head_type)) echo(head_type=head_type) fl_list_ValueFilter(function(screw,default) screw_head_type(screw), select=head_type),
+    if (!is_undef(washer))    echo(washer=washer) function(screw) chk_washer_list(screw,washer),
+    if (!is_undef(nut))       echo(nut=nut) function(screw) (((nut=="default" || nut=="nyloc") && screw_nut(screw)))
+  ],
+  result = assert(inventory) fl_list_filter(inventory, filters)
+) result;
 
 /*!
  * Context variables:
@@ -427,7 +425,7 @@ assert(inventory)
 module fl_screw(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   verbs       = FL_ADD,
-  //! NopSCADlib screw type
+  //! OFL screw type
   type,
   //! undef, "spring" or "star"
   head_spring,

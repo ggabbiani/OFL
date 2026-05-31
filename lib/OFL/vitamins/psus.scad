@@ -38,7 +38,7 @@ FL_PSU_MeanWell_RS_25_5 = let(
     fl_native(value=true),
     fl_engine(value=FL_PSU_NS),
     fl_bb_corners(value=bbox),
-    fl_screw(value=M3_cs_cap_screw),
+    fl_screw_specs(value=M3_cs_cap_screw),
     ["pcb thickness",       pcb_t],
 
     ["terminal screw",      M3_pan_screw  ],
@@ -90,7 +90,7 @@ FL_PSU_MeanWell_RS_15_5 = let(
     fl_native(value=true),
     fl_engine(value=FL_PSU_NS),
     fl_bb_corners(value=bbox),
-    fl_screw(value=M3_cs_cap_screw),
+    fl_screw_specs(value=M3_cs_cap_screw),
     ["pcb thickness",       pcb_t],
 
     ["terminal screw",      M3_pan_screw  ],
@@ -160,7 +160,7 @@ module fl_psu(
   pcb_t       = fl_get(type,"pcb thickness");
   holes       = fl_holes(type);
 
-  screw       = fl_screw(type);
+  screw       = fl_screw_specs(type);
   screw_r     = screw_radius(screw);
 
   thick     = is_num(thick) ? [[thick,thick],[thick,thick],[thick,thick]]
@@ -268,10 +268,9 @@ module fl_psu(
 
   module do_mount()  {
     do_layout() let(
-        t   = fl_3d_axisValue($hole_n,thick),
-        len = screw_longer_than(t+grid_t)
+        t   = fl_3d_axisValue($hole_n,thick)
       ) translate((t+EPS)*$hole_n)
-        fl_screw(type=screw,len=len,direction=[$hole_n,0],$FL_ADD="ON");
+        fl_screw(type=fl_Screw(screw,longer_than=t+grid_t),direction=[$hole_n,0],$FL_ADD="ON");
   }
 
   module do_drill()  {

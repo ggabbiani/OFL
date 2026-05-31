@@ -97,16 +97,17 @@
 - [X] apply the FL_CUTOUT 'manifest'
 - [X] implement everywhere the multi-verb global parameters (ex.
   fl_parm_tolerance() and fl_parm_thickness())
-- [ ] differentiate documentation by release
+- [X] differentiate documentation by release
 - [X] fully wrap the NopSCADlib screw library
 - [X] renamed knut_nut-test.{conf,json,scad} into knut_nuts-test.{conf,json,scad}
-- [ ] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name
+- [X] unify dictionary search: for list fl_list_filter(), for vitamins fl_«name
   space»_find/select() (see fl_pcb_select()). Eliminate fl_«name
   space»_search(). Involved libraries (not exhaustive list):
   - countersinks
   - screw (after wrapper setup)
 - [ ] move vitamins dictionaries into inventories (dictionaries should be used
   only in generic libraries)
+- [ ] separate dictionaries (Associative Array) from inventories (object list)
 - [X] add constructors to spacer and pcb_holder libraries
 - [X] new artifact: fl_pcb_frame adapting a pcb to holes in order to be later
   mounted on standard pcb holder
@@ -134,6 +135,8 @@
 - [ ] finalize quaternions support;
 - [X] applied Makefile function make-picture and check-picture in all picture related targets;
 - [X] modified library tree moving NopSCADlib, Round-Anything and scad-utils into lib/ext/;
+- [ ] fl_spacer() has etherogeneous behavior in the FL_DRILL implementation
+  depending on the knut attribute;
 
 ## future TODOs
 

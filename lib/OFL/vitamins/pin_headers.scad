@@ -64,6 +64,7 @@ function fl_phdr_nopSize(
 //*****************************************************************************
 //! PinHeader constructor
 function fl_PinHeader(
+  //! mandatory name
   name,
   //! optional description string
   description,
@@ -73,7 +74,7 @@ function fl_PinHeader(
   geometry  = [1,1],
   //! smt
   smt=false,
-  //! "female" or "male"
+  //! mandatory: "female" or "male"
   engine,
   //! pass-through (in that case pin numbers are inverted)
   through=false,

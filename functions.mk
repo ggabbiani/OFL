@@ -158,6 +158,7 @@ endef
 # $(4)=other parameter(s)
 define make-picture
 	$(call make-native-picture,$(1),$(2),$(3),$(4))
+	# TODO: remove the following line (duplicate of the previous one?)
 	$(BIN)/make-picture.py --resolution $(1) $(if $(2),--camera=$(2)) $(if $(3),--projection=$(3)) --ofl-script $< --make-deps $@.deps $(4) $@
 	$(IMCMD) unscaled-$@ -resize $(1) new-$@ &>/dev/null
 	rm -f unscaled-$@
