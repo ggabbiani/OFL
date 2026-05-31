@@ -3450,7 +3450,7 @@ mandatory search inventory</p>
 <p><strong>name</strong><br />
 screw name, ignored when undef</p>
 <p><strong>nominal</strong><br />
-nominal ⌀, when 0 or undef is ignored</p>
+nominal ⌀, in form <code>[operator,value]</code> (see <a href="../../foundation/core/#function-fl_list_valuefilter">fl_list_ValueFilter()</a> for details)</p>
 <p><strong>head_type</strong><br />
 Either a scalar or a list with each element equal to one of the following:</p>
 <ul>
@@ -3538,7 +3538,7 @@ washer support, is either a scalar or a list with each element equal to one of:<
 <p><strong>verbs</strong><br />
 supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT</p>
 <p><strong>type</strong><br />
-NopSCADlib screw type</p>
+OFL screw type</p>
 <p><strong>head_spring</strong><br />
 undef, "spring" or "star"</p>
 <p><strong>head_washer</strong><br />

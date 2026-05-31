@@ -2349,32 +2349,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_knut_search" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        function fl_knut_search
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#function-fl_knut_select" class="md-nav__link">
     <span class="md-ellipsis">
       
         function fl_knut_select
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#function-fl_knut_selectbest" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        function fl_knut_selectBest
       
     </span>
   </a>
@@ -3649,32 +3627,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_knut_search" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        function fl_knut_search
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#function-fl_knut_select" class="md-nav__link">
     <span class="md-ellipsis">
       
         function fl_knut_select
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#function-fl_knut_selectbest" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        function fl_knut_selectBest
       
     </span>
   </a>
@@ -4127,107 +4083,53 @@ stl geometry file from Ruthex</p>
 <p><strong>Syntax:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>fl_knut_screws(knut,nops)
 </code></pre></div>
-<p>filter the passed inventory with «knut» feasible screws</p>
+<p>filter the passed inventory with «knut» feasible screws
+TODO: check if actually used</p>
 <p><strong>Parameters:</strong></p>
 <p><strong>knut</strong><br />
 knurl nut to search for a screw</p>
 <p><strong>nops</strong><br />
 inventory of NopSCADlib screws</p>
 <hr />
-<h3 id="function-fl_knut_search">function fl_knut_search</h3>
-<p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>fl_knut_search(screw,thick,d,thread,best=FL_KNUT_LONGEST)
-</code></pre></div>
-<p>Search into dictionary for the best matching knut (default behavior) or all
-the matching knurl nuts.</p>
-<p>This function is <strong>DEPRECATED</strong> and is going to be removed: use
-function <a href="#function-fl_knut_select">fl_knut_select()</a> instead.</p>
-<p><strong>Parameters:</strong></p>
-<p><strong>screw</strong><br />
-screw to fit into: ignored if undef</p>
-<p><strong>thick</strong><br />
-max knurl nut thickness (along Z axis): ignored if undef</p>
-<p><strong>d</strong><br />
-nominal diameter: ignored if undef/zero</p>
-<p><strong>thread</strong><br />
-thread type: ignored if undef</p>
-<p><strong>best</strong><br />
-Lambda calculating the 'score' for determining the 'best' match.</p>
-<p>The default returns the longest knurl nut.</p>
-<hr />
 <h3 id="function-fl_knut_select">function fl_knut_select</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>fl_knut_select(inventory=fl_knut_dict(),nominal,thread,less_than,greater_than,equal_to,best)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>fl_knut_select(inventory=fl_knut_dict(),nominal,thread,length,best)
 </code></pre></div>
 <p>Returns a list of knurl nuts fitting requirements (empty list if none was
 found) or a sigle best matching knurl nut when the <code>best</code> function literal
 is provided.</p>
 <p><strong>Parameters:</strong></p>
 <p><strong>nominal</strong><br />
-nominal ⌀ in mm</p>
+nominal ⌀ in mm in form <code>[operator,value]</code> (see fl_list_Filter())</p>
 <p><strong>thread</strong><br />
-selector by thread type ("linear" or "spiral")</p>
-<p><strong>less_than</strong><br />
-length less than this value</p>
-<p><strong>greater_than</strong><br />
-length greater than this value</p>
-<p><strong>equal_to</strong><br />
-length equal to this value</p>
+selector by thread type ("linear" or "spiral") in form <code>[operator,value]</code> (see fl_list_Filter())</p>
+<p><strong>length</strong><br />
+length selection in form <code>[operator,value]</code> (see fl_list_Filter())</p>
 <p><strong>best</strong><br />
-Function literal restricting the selection to a <strong>unique</strong> best matching knurl
+Function literal restricting the selection to the <strong>unique</strong> best matching knurl
 nut or to «undef» in the selection result is empty.
-By default the parameter is a no-operation, when implemented it must have
-the following signature:</p>
-<div class="highlight"><pre><span></span><code>function(matches)
-</code></pre></div>
-<hr />
-<h3 id="function-fl_knut_selectbest">function fl_knut_selectBest</h3>
-<p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>fl_knut_selectBest(inventory=fl_knut_dict(),nominal,thread,less_than,greater_than,equal_to,best=FL_KNUT_FIRST)
-</code></pre></div>
-<p>Returns a list of knurl nuts fitting requirements (empty list if none was
-found) or a sigle best matching knurl nut when the <code>best</code> function literal
-is provided.</p>
-<p>The default behavior is to return the <strong>first</strong> matching knurl nut.</p>
-<p><strong>Parameters:</strong></p>
-<p><strong>nominal</strong><br />
-nominal ⌀ in mm</p>
-<p><strong>thread</strong><br />
-selector by thread type ("linear" or "spiral")</p>
-<p><strong>less_than</strong><br />
-length less than this value</p>
-<p><strong>greater_than</strong><br />
-length greater than this value</p>
-<p><strong>equal_to</strong><br />
-length equal to this value</p>
-<p><strong>best</strong><br />
-Function literal restricting the selection to a <strong>unique</strong> best matching knurl
-nut or to «undef» in the selection result is empty.
-By default the parameter is take-first operation, when implemented it must have
-the following signature:</p>
-<div class="highlight"><pre><span></span><code>function(matches)
-</code></pre></div>
+If «undef» no restriction to the matching list is applied.</p>
 <hr />
 <h3 id="function-fl_knut_spiraldict">function fl_knut_spiralDict</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>fl_knut_spiralDict()
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>fl_knut_spiralDict()
 </code></pre></div>
 <hr />
 <h3 id="function-fl_knut_teeth">function fl_knut_teeth</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>fl_knut_teeth(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>fl_knut_teeth(type,value)
 </code></pre></div>
 <p>teeth number</p>
 <hr />
 <h3 id="function-fl_knut_thread">function fl_knut_thread</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>fl_knut_thread(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>fl_knut_thread(type,value)
 </code></pre></div>
 <p>thread type used ("linear" or "spiral")</p>
 <hr />
 <h3 id="function-fl_knut_tooth">function fl_knut_tooth</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>fl_knut_tooth(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>fl_knut_tooth(type,value)
 </code></pre></div>
 <p>tooth height</p>
 <h2 id="modules">Modules</h2>

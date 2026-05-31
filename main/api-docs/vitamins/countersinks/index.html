@@ -3530,6 +3530,7 @@ countersink angle</p>
 </code></pre></div>
 <p>return a countersink list fitting the passed properties or undef if no match
 no match found.</p>
+<p>FIXME: change into new signature</p>
 <p><strong>Parameters:</strong></p>
 <p><strong>name</strong><br />
 countersink name, when undef all names are matched</p>
@@ -3554,7 +3555,7 @@ nominal , when undef all nominal are matched</p>
 <tr>
 <td>$fl_thickness</td>
 <td>Parameter</td>
-<td>thickness of the surface to be FL_DRILLed. Can be verb-dependant (see <a href="../../foundation/core/#function-fl_parm_thickness">fl_parm_thickness()</a>).</td>
+<td>thickness of the surface to be FL_DRILLed. Can be verb-dependant (see <a href="../../foundation/core/#function-fl_parm_thickness">fl_parm_thickness()</a>). The only used values are the ones provided for ±Z semi-axes</td>
 </tr>
 <tr>
 <td>$fl_tolerance</td>

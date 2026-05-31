@@ -3030,22 +3030,30 @@ NopSCADlib object.</p>
 <p><strong>Syntax:</strong></p>
 <div class="highlight"><pre><span></span><code>fl_iec(verbs=FL_ADD,this,direction,octant)
 </code></pre></div>
-<p>Runtime environment:</p>
+<p>Context variables:</p>
 <table>
 <thead>
 <tr>
-<th>variable</th>
-<th>description</th>
+<th>name</th>
+<th>Context</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>$fl_thickness</td>
+<td>Parameter</td>
 <td>used in FL_CUTOUT, FL_DRILL and FL_MOUNT</td>
 </tr>
 <tr>
 <td>$fl_tolerance</td>
-<td>used in FL_CUTOUT</td>
+<td>Parameter</td>
+<td>used during FL_CUTOUT. See also <a href="../../foundation/core/#function-fl_parm_tolerance">fl_parm_tolerance()</a></td>
+</tr>
+<tr>
+<td>$iec_screw</td>
+<td>Children</td>
+<td>native OFL screw used by the IEC</td>
 </tr>
 </tbody>
 </table>

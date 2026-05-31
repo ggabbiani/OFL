@@ -2220,6 +2220,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#function-fl_list_propertyfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_list_PropertyFilter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_list_valuefilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_list_ValueFilter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#function-fl_list_filter" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5816,6 +5838,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#function-fl_list_propertyfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_list_PropertyFilter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_list_valuefilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_list_ValueFilter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#function-fl_list_filter" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7663,9 +7707,67 @@ result    = fl_list_AND(a,b),
 expected  = [-Y,-Z]
 </code></pre></div>
 <hr />
+<h3 id="function-fl_list_propertyfilter">function fl_list_PropertyFilter</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>fl_list_PropertyFilter(key,select,default,transform=function(_value_)_value_,epsilon=FL_EPS)
+</code></pre></div>
+<p>Filter constructor for <a href="#function-fl_list_filter">fl_list_filter()</a> to be used on list of 'objects'.</p>
+<p>NOTE: a list of 'objects' is a list in which each elementi is a [key,value] list.</p>
+<p><strong>Parameters:</strong></p>
+<p><strong>key</strong><br />
+Key to be searched in an item. When used the standard property keys
+the property getter can be used for retrieving the keys like in the
+following examples.</p>
+<p>example 1: property key for the knurl nuts 'thread' type</p>
+<div class="highlight"><pre><span></span><code>[fl_knut_thread()](../vitamins/knurl_nuts.md#function-fl_knut_thread)[0]
+</code></pre></div>
+<p>example 2: property key for general 'nominal' property</p>
+<div class="highlight"><pre><span></span><code>[fl_nominal()](#function-fl_nominal)[0]
+</code></pre></div>
+<p><strong>select</strong><br />
+property selection in form <code>[operator,value]</code> where «operator» can be:</p>
+<ul>
+<li>"="      : equal to</li>
+<li>"≅"      : approximately equal to</li>
+<li>"&lt;"      : less than</li>
+<li>"≤"|"&lt;=" : less than or equal to</li>
+<li>"&gt;"      : greater than</li>
+<li>"≥"|"&gt;=" : greater than or equal to</li>
+<li>"≠"|"!=" : not equal to</li>
+</ul>
+<p>a scalar <value> means ["=",value]</p>
+<hr />
+<h3 id="function-fl_list_valuefilter">function fl_list_ValueFilter</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>fl_list_ValueFilter(getter,select,default,transform=function(_value_)_value_,epsilon=FL_EPS)
+</code></pre></div>
+<p><strong>Parameters:</strong></p>
+<p><strong>getter</strong><br />
+Key to be searched in an item. When used the standard property keys
+the property getter can be used for retrieving the keys like in the
+following examples.</p>
+<p>example 1: property key for the knurl nuts 'thread' type</p>
+<div class="highlight"><pre><span></span><code>[fl_knut_thread()](../vitamins/knurl_nuts.md#function-fl_knut_thread)[0]
+</code></pre></div>
+<p>example 2: property key for general 'nominal' property</p>
+<div class="highlight"><pre><span></span><code>[fl_nominal()](#function-fl_nominal)[0]
+</code></pre></div>
+<p><strong>select</strong><br />
+property selection in form <code>[operator,value]</code> where «operator» can be:</p>
+<ul>
+<li>"="      : equal to</li>
+<li>"≅"      : approximately equal to</li>
+<li>"&lt;"      : less than</li>
+<li>"≤"|"&lt;=" : less than or equal to</li>
+<li>"&gt;"      : greater than</li>
+<li>"≥"|"&gt;=" : greater than or equal to</li>
+<li>"≠"|"!=" : not equal to</li>
+</ul>
+<p>a scalar <value> means ["=",value]</p>
+<hr />
 <h3 id="function-fl_list_filter">function fl_list_filter</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>fl_list_filter(list,filter)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>fl_list_filter(list,filter)
 </code></pre></div>
 <p>return the items from «list» matching a list of conditions.</p>
 <p>example 1: filter out numbers from a list of heterogeneous values</p>
@@ -7699,18 +7801,18 @@ either a function literal or a list of function literals called on each «list»
 <hr />
 <h3 id="function-fl_list_flatten">function fl_list_flatten</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>fl_list_flatten(list)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>fl_list_flatten(list)
 </code></pre></div>
 <p>recursively flatten infinitely nested list</p>
 <hr />
 <h3 id="function-fl_list_has">function fl_list_has</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>fl_list_has(list,item)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a>fl_list_has(list,item)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_list_head">function fl_list_head</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>fl_list_head(list,n)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>fl_list_head(list,n)
 </code></pre></div>
 <p>Returns the «list» head according to «n»:</p>
 <ul>
@@ -7729,7 +7831,7 @@ fl_list_head(list,-7)==[1,2,3]
 <hr />
 <h3 id="function-fl_list_max">function fl_list_max</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a>fl_list_max(list,score=function(item)item)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>fl_list_max(list,score=function(item)item)
 </code></pre></div>
 <p>Return the «list» item with max score. Return undef if «list» is empty.</p>
 <p><strong>Parameters:</strong></p>
@@ -7739,13 +7841,13 @@ itself.</p>
 <hr />
 <h3 id="function-fl_list_medianindex">function fl_list_medianIndex</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>fl_list_medianIndex(l)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a>fl_list_medianIndex(l)
 </code></pre></div>
 <p>calculates the median INDEX of a list</p>
 <hr />
 <h3 id="function-fl_list_min">function fl_list_min</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>fl_list_min(list,score=function(item)item)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a>fl_list_min(list,score=function(item)item)
 </code></pre></div>
 <p>Return the «list» item with min score. Return undef if «list» is empty.</p>
 <p><strong>Parameters:</strong></p>
@@ -7755,7 +7857,7 @@ itself.</p>
 <hr />
 <h3 id="function-fl_list_pack">function fl_list_pack</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a>fl_list_pack(left,right)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a>fl_list_pack(left,right)
 </code></pre></div>
 <p>pack two list in a new one like in the following code:</p>
 <div class="highlight"><pre><span></span><code>labels = [&quot;label 1&quot;, &quot;label 2&quot;, &quot;label 3&quot;, &quot;label 4&quot;];
@@ -7773,19 +7875,19 @@ result = fl_list_pack(labels,values);
 <hr />
 <h3 id="function-fl_list_sort">function fl_list_sort</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a>fl_list_sort(vec,cmp=function(e1,e2)(e1-e2))
+<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a>fl_list_sort(vec,cmp=function(e1,e2)(e1-e2))
 </code></pre></div>
 <p>quick sort «vec» (from <a href="https://github.com/oampo/missile">oampo/missile</a>)</p>
 <hr />
 <h3 id="function-fl_list_sub">function fl_list_sub</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a>fl_list_sub(list,from,to)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a>fl_list_sub(list,from,to)
 </code></pre></div>
 <p>returns a sub list</p>
 <hr />
 <h3 id="function-fl_list_tail">function fl_list_tail</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a>fl_list_tail(list,n)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a>fl_list_tail(list,n)
 </code></pre></div>
 <p>Returns the «list» tail according to «n»:</p>
 <ul>
@@ -7804,7 +7906,7 @@ fl_list_tail(list,-7)==[8,9,10]
 <hr />
 <h3 id="function-fl_list_transform">function fl_list_transform</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a>fl_list_transform(list,M,in=function(p)p,out=function(p)p)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a>fl_list_transform(list,M,in=function(p)p,out=function(p)p)
 </code></pre></div>
 <p>Transforms each item in «list» applying the homogeneous transformation matrix
 «M». By default the in() and out() lambdas manage 3d points, but overloading
@@ -7831,23 +7933,23 @@ assert(result==expected);
 <hr />
 <h3 id="function-fl_list_unique">function fl_list_unique</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a>fl_list_unique(dict)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a>fl_list_unique(dict)
 </code></pre></div>
 <p>strips duplicates from a «dict»</p>
 <hr />
 <h3 id="function-fl_material">function fl_material</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a>fl_material(type,value,default)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a>fl_material(type,value,default)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_name">function fl_name</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a>fl_name(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a>fl_name(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_native">function fl_native</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a>fl_native(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a>fl_native(type,value)
 </code></pre></div>
 <p>When present and true indicates the object is an OFL one.</p>
 <p>:memo: <strong>NOTE:</strong> true for all the objects created by the OFL library. When used as a
@@ -7855,7 +7957,7 @@ getter on OFL alien objects it returns 'false'.</p>
 <hr />
 <h3 id="function-fl_new_property">function fl_new_property</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a>fl_new_property(type,key,new,default,mandatory)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a>fl_new_property(type,key,new,default,mandatory)
 </code></pre></div>
 <p>Property getter with default value when not found. Depending on the stored
 or default value it can return undef. When acting as a getter, a default
@@ -7916,18 +8018,18 @@ when key is not found).</p>
 <hr />
 <h3 id="function-fl_nominal">function fl_nominal</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a>fl_nominal(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a>fl_nominal(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_nopscadlib">function fl_nopSCADlib</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a>fl_nopSCADlib(type,value,default)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a>fl_nopSCADlib(type,value,default)
 </code></pre></div>
 <p>Verbatim NopSCADlib definition</p>
 <hr />
 <h3 id="function-fl_optproperty">function fl_optProperty</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a>fl_optProperty(type,key,value,default)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a>fl_optProperty(type,key,value,default)
 </code></pre></div>
 <p>'bipolar' optional property helper:</p>
 <ul>
@@ -7977,7 +8079,7 @@ when key is not found).</p>
 <hr />
 <h3 id="function-fl_optional">function fl_optional</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a>fl_optional(type,key,default)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a>fl_optional(type,key,default)
 </code></pre></div>
 <p>Optional getter, no error when property is not found.</p>
 <p>Return «default» when «type» is undef or empty, or when «key» is not found</p>
@@ -8023,7 +8125,7 @@ when key is not found).</p>
 <hr />
 <h3 id="function-fl_palette">function fl_palette</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a>fl_palette(color,axis)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a>fl_palette(color,axis)
 </code></pre></div>
 <p>returns the canonical axis color when invoked by «axis»</p>
 <div class="highlight"><pre><span></span><code>X ⟹ red
@@ -8035,7 +8137,7 @@ Z ⟹ blue
 <hr />
 <h3 id="function-fl_parm_multiverb">function fl_parm_MultiVerb</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a>fl_parm_MultiVerb(value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a>fl_parm_MultiVerb(value)
 </code></pre></div>
 <p>Constructor for multi verb parameter.</p>
 <p>OFL engines act in a two steps sequence:</p>
@@ -8124,7 +8226,7 @@ fl_engine(verbs=[FL_DRILL,FL_FOOTPRINT],tolerance=tolerance,...);
 <hr />
 <h3 id="function-fl_parm_octant">function fl_parm_Octant</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a>fl_parm_Octant(x,y,z)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a>fl_parm_Octant(x,y,z)
 </code></pre></div>
 <p>Constructor for the octant parameter from values as passed by customizer
 (see <a href="../3d-engine/#function-fl_octant">fl_octant()</a> for the semantic behind).</p>
@@ -8136,7 +8238,7 @@ fl_engine(verbs=[FL_DRILL,FL_FOOTPRINT],tolerance=tolerance,...);
 <hr />
 <h3 id="function-fl_parm_signedpair">function fl_parm_SignedPair</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a>fl_parm_SignedPair(list)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a>fl_parm_SignedPair(list)
 </code></pre></div>
 <p>The function takes an unordered pair of two opposite signed values and
 returns an ordered list with the negative value at position 0 and the
@@ -8161,14 +8263,14 @@ axis.</p>
 <hr />
 <h3 id="function-fl_parm_clearance">function fl_parm_clearance</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a>fl_parm_clearance(default)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a>fl_parm_clearance(default)
 </code></pre></div>
 <p>Multi valued verb-dependent clearance parameter getter.</p>
 <p>See <a href="#function-fl_parm_multiverb">fl_parm_multiverb()</a> for details.</p>
 <hr />
 <h3 id="function-fl_parm_multiverb_1">function fl_parm_multiverb</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a>fl_parm_multiverb(value,default)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a>fl_parm_multiverb(value,default)
 </code></pre></div>
 <p>Multi valued verb-dependent parameter getter.</p>
 <p>See <a href="#function-fl_parm_multiverb">fl_parm_MultiVerb()</a> for details.</p>
@@ -8181,7 +8283,7 @@ default value eventually overridden by default key/value ("*",default value)</p>
 <hr />
 <h3 id="function-fl_parm_thickness">function fl_parm_thickness</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a>fl_parm_thickness(default=0)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a>fl_parm_thickness(default=0)
 </code></pre></div>
 <p>Multi valued verb-dependent thickness parameter getter.</p>
 <p>The returned value is a full semi-axis number list reporting thickness along
@@ -8204,46 +8306,46 @@ provided by the variable value.</p>
 <hr />
 <h3 id="function-fl_parm_tolerance">function fl_parm_tolerance</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a>fl_parm_tolerance(default=0)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a>fl_parm_tolerance(default=0)
 </code></pre></div>
 <p>Multi valued verb-dependent tolerance parameter getter.</p>
 <p>See <a href="#function-fl_parm_multiverb">fl_parm_multiverb()</a> for details.</p>
 <hr />
 <h3 id="function-fl_parse_diameter">function fl_parse_diameter</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a>fl_parse_diameter(r,r1,d,d1,def)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a>fl_parse_diameter(r,r1,d,d1,def)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_parse_l">function fl_parse_l</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a>fl_parse_l(l,l1,def)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a>fl_parse_l(l,l1,def)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_parse_radius">function fl_parse_radius</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a>fl_parse_radius(r,r1,d,d1,def)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a>fl_parse_radius(r,r1,d,d1,def)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_payload">function fl_payload</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a>fl_payload(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a>fl_payload(type,value)
 </code></pre></div>
 <p>pay-load bounding box, it contributes to the overall bounding box calculation</p>
 <hr />
 <h3 id="function-fl_pcb">function fl_pcb</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a>fl_pcb(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a>fl_pcb(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_pop">function fl_pop</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a>fl_pop(l,i=0)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a>fl_pop(l,i=0)
 </code></pre></div>
 <p>removes till the i-indexed element from the top of list «l»</p>
 <hr />
 <h3 id="function-fl_property">function fl_property</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a>fl_property(type,key,value,default)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a>fl_property(type,key,value,default)
 </code></pre></div>
 <p>'bipolar' property helper:</p>
 <ul>
@@ -8295,34 +8397,34 @@ referring to property key in the more usual getter/setter function pair.</p>
 <hr />
 <h3 id="function-fl_push">function fl_push</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a>fl_push(list,item)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a>fl_push(list,item)
 </code></pre></div>
 <p>push «item» on tail of list «l»</p>
 <hr />
 <h3 id="function-fl_quadraticsolve">function fl_quadraticSolve</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a>fl_quadraticSolve(a,b,c,epsilon=EPS)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a>fl_quadraticSolve(a,b,c,epsilon=EPS)
 </code></pre></div>
 <p>solves a quadratic equation ax^2+bx+c=0 through the Quadratic Formula.</p>
 <hr />
 <h3 id="function-fl_radius">function fl_radius</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a>fl_radius(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a>fl_radius(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_screw">function fl_screw</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a>fl_screw(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a>fl_screw(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_size">function fl_size</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a>fl_size(type)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a>fl_size(type)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_split">function fl_split</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a>fl_split(str,sep=&quot; &quot;,i=0,word=&quot;&quot;,v=[])
+<div class="highlight"><pre><span></span><code><a id="__codelineno-97-1" name="__codelineno-97-1" href="#__codelineno-97-1"></a>fl_split(str,sep=&quot; &quot;,i=0,word=&quot;&quot;,v=[])
 </code></pre></div>
 <p>Returns a vector of substrings by cutting the string <code>str</code> each time where <code>sep</code> appears.
 See also: <a href="#function-fl_strcat">fl_strcat()</a>, str2vec()</p>
@@ -8344,28 +8446,28 @@ The separator who cuts the string (" " by default)</p>
 <hr />
 <h3 id="function-fl_stl">function fl_stl</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a>fl_stl(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-98-1" name="__codelineno-98-1" href="#__codelineno-98-1"></a>fl_stl(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_str_concat">function fl_str_concat</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-97-1" name="__codelineno-97-1" href="#__codelineno-97-1"></a>fl_str_concat(list)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-99-1" name="__codelineno-99-1" href="#__codelineno-99-1"></a>fl_str_concat(list)
 </code></pre></div>
 <p>return a string that is the concatenation of all the list members</p>
 <hr />
 <h3 id="function-fl_str_lower">function fl_str_lower</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-98-1" name="__codelineno-98-1" href="#__codelineno-98-1"></a>fl_str_lower(s)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-100-1" name="__codelineno-100-1" href="#__codelineno-100-1"></a>fl_str_lower(s)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_str_upper">function fl_str_upper</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-99-1" name="__codelineno-99-1" href="#__codelineno-99-1"></a>fl_str_upper(s)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-101-1" name="__codelineno-101-1" href="#__codelineno-101-1"></a>fl_str_upper(s)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_strcat">function fl_strcat</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-100-1" name="__codelineno-100-1" href="#__codelineno-100-1"></a>fl_strcat(v,sep=&quot;&quot;,str=&quot;&quot;,i=0,j=0)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-102-1" name="__codelineno-102-1" href="#__codelineno-102-1"></a>fl_strcat(v,sep=&quot;&quot;,str=&quot;&quot;,i=0,j=0)
 </code></pre></div>
 <p>Returns a string of a concatenated vector of substrings <code>v</code>, with an optionally
 separator <code>sep</code> between each. See also: <a href="#function-fl_split">fl_split()</a>.</p>
@@ -8385,7 +8487,7 @@ A separator which will added between each substrings</p>
 <hr />
 <h3 id="function-fl_substr">function fl_substr</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-101-1" name="__codelineno-101-1" href="#__codelineno-101-1"></a>fl_substr(str,pos=0,len=-1,substr=&quot;&quot;)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-103-1" name="__codelineno-103-1" href="#__codelineno-103-1"></a>fl_substr(str,pos=0,len=-1,substr=&quot;&quot;)
 </code></pre></div>
 <p>Returns a substring of a string.</p>
 <p>Usage:</p>
@@ -8408,7 +8510,7 @@ the original string</p>
 <hr />
 <h3 id="function-fl_switch">function fl_switch</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-102-1" name="__codelineno-102-1" href="#__codelineno-102-1"></a>fl_switch(value,cases,otherwise)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-104-1" name="__codelineno-104-1" href="#__codelineno-104-1"></a>fl_switch(value,cases,otherwise)
 </code></pre></div>
 <p>implementation of switch statement as a function: when «value» matches a case,
 the corresponding value is returned, undef otherwise.</p>
@@ -8445,17 +8547,17 @@ value returned in case of no match or when «value» is undef</p>
 <hr />
 <h3 id="function-fl_tag">function fl_tag</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-103-1" name="__codelineno-103-1" href="#__codelineno-103-1"></a>fl_tag(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-105-1" name="__codelineno-105-1" href="#__codelineno-105-1"></a>fl_tag(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_thick">function fl_thick</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-104-1" name="__codelineno-104-1" href="#__codelineno-104-1"></a>fl_thick(type)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-106-1" name="__codelineno-106-1" href="#__codelineno-106-1"></a>fl_thick(type)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_thickness">function fl_thickness</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-105-1" name="__codelineno-105-1" href="#__codelineno-105-1"></a>fl_thickness(axis,default=0)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-107-1" name="__codelineno-107-1" href="#__codelineno-107-1"></a>fl_thickness(axis,default=0)
 </code></pre></div>
 <p>Returns the thickness value along a given axis.</p>
 <p><strong>Parameters:</strong></p>
@@ -8467,19 +8569,19 @@ Default thickness when $fl_thickness is «undef».</p>
 <hr />
 <h3 id="function-fl_tolerance">function fl_tolerance</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-106-1" name="__codelineno-106-1" href="#__codelineno-106-1"></a>fl_tolerance(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-108-1" name="__codelineno-108-1" href="#__codelineno-108-1"></a>fl_tolerance(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_trace">function fl_trace</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-107-1" name="__codelineno-107-1" href="#__codelineno-107-1"></a>fl_trace(msg,result,always=false)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-109-1" name="__codelineno-109-1" href="#__codelineno-109-1"></a>fl_trace(msg,result,always=false)
 </code></pre></div>
 <p>trace helper function.</p>
 <p>See module <a href="#module-fl_trace">fl_trace{}</a>.</p>
 <hr />
 <h3 id="function-fl_transform">function fl_transform</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-108-1" name="__codelineno-108-1" href="#__codelineno-108-1"></a>fl_transform(M,v)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-110-1" name="__codelineno-110-1" href="#__codelineno-110-1"></a>fl_transform(M,v)
 </code></pre></div>
 <p>Returns M * v , actually transforming v by M.</p>
 <p>:memo: <strong>NOTE:</strong> result in 3d format</p>
@@ -8491,25 +8593,25 @@ fl_vector (in homogeneous or 3d format)</p>
 <hr />
 <h3 id="function-fl_vector_sign">function fl_vector_sign</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-109-1" name="__codelineno-109-1" href="#__codelineno-109-1"></a>fl_vector_sign(v)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-111-1" name="__codelineno-111-1" href="#__codelineno-111-1"></a>fl_vector_sign(v)
 </code></pre></div>
 <p>Defines the vector signum function as a function ℝⁿ → ℝⁿ returning
 [sign(x₁), sign(x₂), …, sign(xₙ)] when v is [x₁, x₂, …, xₙ].</p>
 <hr />
 <h3 id="function-fl_vendor">function fl_vendor</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-110-1" name="__codelineno-110-1" href="#__codelineno-110-1"></a>fl_vendor(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-112-1" name="__codelineno-112-1" href="#__codelineno-112-1"></a>fl_vendor(type,value)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_verb2modifier">function fl_verb2modifier</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-111-1" name="__codelineno-111-1" href="#__codelineno-111-1"></a>fl_verb2modifier(verb)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-113-1" name="__codelineno-113-1" href="#__codelineno-113-1"></a>fl_verb2modifier(verb)
 </code></pre></div>
 <p>given a verb returns the corresponding modifier value</p>
 <hr />
 <h3 id="function-fl_verblist">function fl_verbList</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-112-1" name="__codelineno-112-1" href="#__codelineno-112-1"></a>fl_verbList(supported)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-114-1" name="__codelineno-114-1" href="#__codelineno-114-1"></a>fl_verbList(supported)
 </code></pre></div>
 <p>setup a verb list according on the setting of the runtime attributes</p>
 <p>example:</p>
@@ -8538,22 +8640,22 @@ eventual insertion in the returned list</p>
 <hr />
 <h3 id="function-fl_version">function fl_version</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-113-1" name="__codelineno-113-1" href="#__codelineno-113-1"></a>fl_version()
+<div class="highlight"><pre><span></span><code><a id="__codelineno-115-1" name="__codelineno-115-1" href="#__codelineno-115-1"></a>fl_version()
 </code></pre></div>
 <hr />
 <h3 id="function-fl_versionnumber">function fl_versionNumber</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-114-1" name="__codelineno-114-1" href="#__codelineno-114-1"></a>fl_versionNumber()
+<div class="highlight"><pre><span></span><code><a id="__codelineno-116-1" name="__codelineno-116-1" href="#__codelineno-116-1"></a>fl_versionNumber()
 </code></pre></div>
 <hr />
 <h3 id="function-fl_versor">function fl_versor</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-115-1" name="__codelineno-115-1" href="#__codelineno-115-1"></a>fl_versor(v)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-117-1" name="__codelineno-117-1" href="#__codelineno-117-1"></a>fl_versor(v)
 </code></pre></div>
 <hr />
 <h3 id="function-fl_view">function fl_view</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-116-1" name="__codelineno-116-1" href="#__codelineno-116-1"></a>fl_view(name)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-118-1" name="__codelineno-118-1" href="#__codelineno-118-1"></a>fl_view(name)
 </code></pre></div>
 <p>Returns the rotation list corresponding to an OpenSCAD projection view.</p>
 <p>Example setting OpenSCAD projection programmatically by changing the variable
@@ -8574,7 +8676,7 @@ one of the following esoteric names:</p>
 <hr />
 <h3 id="function-fl_width">function fl_width</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-117-1" name="__codelineno-117-1" href="#__codelineno-117-1"></a>fl_width(type)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-119-1" name="__codelineno-119-1" href="#__codelineno-119-1"></a>fl_width(type)
 </code></pre></div>
 <h2 id="modules">Modules</h2>
 <hr />
