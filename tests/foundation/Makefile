@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-T_LIST			= 2d 2d-ellipse 2d_grid 3d 3d_funcs algo assertions base_geo \
+T_LIST			= 2d 2d-ellipse 2d_closest 2d_grid 3d 3d_funcs algo assertions base_geo \
 base_list base_string bend bend2 connect core-comparison core-symbols \
 dimensions extrusion fillet frame hole label layout limits lists polymorphic \
 square torus trace tube traits-engine util vdp

@@ -1449,62 +1449,39 @@ function fl_2d_dist(p1,p2) = let(
  *     d    = fl_2d_closest(pts);
  */
 function fl_2d_closest(
-  //! list of 2d points
+  //! list of 2d points (3d points are accepted too: only X and Y are used)
   pts,
   //! when true «points» are in ASCENDING X order
   pre_ordered=false
 ) = let(
-  // list must be in X-ASCENDING order
-  ordered = pre_ordered ? pts : fl_list_sort(pts,function(e1,e2) (e1.x-e2.x)),
-  n       = len(pts)
-) n<=1 ? undef :
-  n==2 ? fl_2d_dist(ordered[1],ordered[0]) :
+  n = len(pts)
+) is_undef(n) || n<=1 ? undef :
   let(
+    // list must be in X-ASCENDING order
+    o = pre_ordered ? pts : fl_list_sort(pts,function(e1,e2) (e1.x-e2.x))
+  )
+  n==2 ? fl_2d_dist(o[0],o[1]) :
+  n==3 ? min(fl_2d_dist(o[0],o[1]),fl_2d_dist(o[0],o[2]),fl_2d_dist(o[1],o[2])) :
+  let(
+    // n>=4: both halves have at least two points
     m       = floor(n/2),
-    // m       = fl_list_medianIndex(ordered),
-    left    = [for(i=[0:m]) ordered[i]],
-    d_left  = fl_2d_closest(left,pre_ordered=true),
-    right   = [for(i=[m+1:n-1]) ordered[i]],
-    d_right = fl_2d_closest(right,pre_ordered=true),
+    d_left  = fl_2d_closest([for(i=[0:m-1]) o[i]],pre_ordered=true),
+    d_right = fl_2d_closest([for(i=[m:n-1]) o[i]],pre_ordered=true),
+    d       = min(d_left,d_right),
+    // dividing line equation: x=o[m].x (left points have x<=o[m].x, right
+    // points have x>=o[m].x)
+    middle  = o[m].x,
+    // all the points closer than d to the dividing line, in Y-ASCENDING order
+    strip   = fl_list_sort(
+      [for(p=o) if (abs(p.x-middle)<d) p],
+      function(e1,e2) (e1.y-e2.y)
+    ),
+    s       = len(strip),
+    // for each strip point only the following ones with a Y distance lesser
+    // than d are checked (at most a constant number of them)
     deltas  = [
-      if (!is_undef(d_left))  d_left,
-      if (!is_undef(d_right)) d_right,
-    ],
-    d       = min(deltas),
-    middle  = fl_3d_medianValue(ordered,X,true),
-    // Build a list containing all the points closer than d to the line
-    // equation: x=middle
-    strip   = [for(p=ordered) if (abs(p.x-middle)<d) p],
-    // recursive lambda finding the minimum distance point couple inside a 2d
-    // region described above
-    stripClosest = function(strip,d) let(
-        n = len(strip)
-      ) n<=1 ? d :
-        let(
-          // list must be in Y-DESCENDING order
-          // y_ordered = fl_list_sort(strip,function(e1,e2) (e2.y-e1.y)),
-          y_ordered = strip,
-          deltas    = [
-            for(i=[0:n-1],j=[i+1:1:n-1])
-              if ((y_ordered[j].y-y_ordered[i].y)<d)
-                fl_2d_dist(y_ordered[i],y_ordered[j])
-          ]
-        ) deltas ? min(deltas) : d,
-    // this is an alternative lambda function to the above. it should be quicker
-    // implementing a shortcut during the minimum distance detection loop
-    stripClosest2 = function(strip,d) let(
-        n = len(strip)
-      ) n<=1 ? d :
-        let(
-          last = function(list,condition,_i_=0,_this_=last) let(n=len(list))
-            n==0 ? -1 :
-              condition(list[0]) ? _this_(fl_list_tail(list,-1),condition,_i_+1) :
-              _i_,
-          // list must be in Y-DESCENDING order
-          y_ordered = fl_list_sort(strip,function(e1,e2) (e2.y-e1.y)),
-          deltas    = [
-            for(i=[0:n-1],j=[i+1:1:last(y_ordered,function(p) ((p.y-y_ordered[i].y)<d))-1])
-              fl_2d_dist(y_ordered[i],y_ordered[j])
-          ]
-        ) deltas ? min(deltas) : d
-  ) min(d,stripClosest2(strip,d));
+      for(i=[0:1:s-2])
+        for(j=i+1;j<s && (strip[j].y-strip[i].y)<d;j=j+1)
+          fl_2d_dist(strip[i],strip[j])
+    ]
+  ) deltas ? min(d,min(deltas)) : d;
