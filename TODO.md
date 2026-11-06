@@ -128,7 +128,7 @@
 - [ ] apply fl_2d_closest() algorithm during symbol and label debugging (see fl_bentPlate{})
 - [X] added dimension line management
 - [ ] add dimension lines to relevant tests (see artifacts/joints.scad)
-- [ ] fix bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
+- [X] fixed bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
 - [ ] add fl_circular_layout{} and cyl_layout{} (from 'super-pipe' project);
 - [ ] add fan_guard component to fans;
 - [X] added fl_Object() constructor helper in new package 'type-engine;

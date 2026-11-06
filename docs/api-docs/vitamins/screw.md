@@ -452,7 +452,7 @@ __name__
 screw name, ignored when undef
 
 __nominal__  
-nominal ⌀, when 0 or undef is ignored
+nominal ⌀, in form `[operator,value]` (see [fl_list_ValueFilter()](../foundation/core.md#function-fl_list_valuefilter) for details)
 
 __head_type__  
 Either a scalar or a list with each element equal to one of the following:
@@ -547,7 +547,7 @@ __verbs__
 supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
 
 __type__  
-NopSCADlib screw type
+OFL screw type
 
 __head_spring__  
 undef, "spring" or "star"

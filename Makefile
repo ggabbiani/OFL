@@ -37,7 +37,8 @@ export SCAD		:= $(if $(call scad-path),$(BIN)/openscad.py -m make --view axes,$(
 export WHICH 	:= $(if $(call is-win),where,which)
 export IMVER 	:= $(shell convert --version 2>&1)
 export IMCMD 	:= $(if $(findstring deprecated,$(IMVER)),$(shell $(WHICH) magick 2>/dev/null),$(shell $(WHICH) convert 2>/dev/null))
-export WGET		:= $(shell $(call which) $(if $(call is-mac), curl,wget))
+export DOTCMD	:= $(shell $(WHICH) dot 2>/dev/null)
+export WGET		:=$(shell $(call which) $(if $(call is-mac), curl,wget))
 
 .PHONY: lib
 .DEFAULT_GOAL := help
@@ -52,13 +53,18 @@ check: ## preliminary checks
 ifdef IMVER
 	$(call msg-info,ImageMagick command found '$(IMCMD)')
 else
-	$(call msg-error,ImageMagick not found, please install)
+	$(call msg-error,ImageMagick not found$(COMMA) please install)
+endif
+ifdef DOTCMD
+	$(call msg-info,GraphViz dot command found '$(DOTCMD)')
+else
+	$(call msg-error,GraphViz dot command not found$(COMMA) please install GraphViz)
 endif
 ifndef VIRTUAL_ENV
 	$(call msg-error,Python Virtual Environment not active: type 'source .venv/bin/activate')
 endif
 
-docs/%:	## type `make -s docs/help`
+docs/%: check ## type `make -s docs/help`
 	$(call make_sub)
 
 examples/%: check ## type `make -s examples/help`

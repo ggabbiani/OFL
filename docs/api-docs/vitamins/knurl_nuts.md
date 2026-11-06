@@ -512,6 +512,8 @@ fl_knut_screws(knut,nops)
 ```
 
 filter the passed inventory with «knut» feasible screws
+TODO: check if actually used
+
 
 __Parameters:__
 
@@ -524,50 +526,12 @@ inventory of NopSCADlib screws
 
 ---
 
-### function fl_knut_search
-
-__Syntax:__
-
-```text
-fl_knut_search(screw,thick,d,thread,best=FL_KNUT_LONGEST)
-```
-
-Search into dictionary for the best matching knut (default behavior) or all
-the matching knurl nuts.
-
-This function is **DEPRECATED** and is going to be removed: use
-function [fl_knut_select()](#function-fl_knut_select) instead.
-
-
-__Parameters:__
-
-__screw__  
-screw to fit into: ignored if undef
-
-__thick__  
-max knurl nut thickness (along Z axis): ignored if undef
-
-__d__  
-nominal diameter: ignored if undef/zero
-
-__thread__  
-thread type: ignored if undef
-
-__best__  
-Lambda calculating the 'score' for determining the 'best' match.
-
-The default returns the longest knurl nut.
-
-
-
----
-
 ### function fl_knut_select
 
 __Syntax:__
 
 ```text
-fl_knut_select(inventory=fl_knut_dict(),nominal,thread,less_than,greater_than,equal_to,best)
+fl_knut_select(inventory=fl_knut_dict(),nominal,thread,length,best)
 ```
 
 Returns a list of knurl nuts fitting requirements (empty list if none was
@@ -578,71 +542,18 @@ is provided.
 __Parameters:__
 
 __nominal__  
-nominal ⌀ in mm
+nominal ⌀ in mm in form `[operator,value]` (see fl_list_Filter())
 
 __thread__  
-selector by thread type ("linear" or "spiral")
+selector by thread type ("linear" or "spiral") in form `[operator,value]` (see fl_list_Filter())
 
-__less_than__  
-length less than this value
-
-__greater_than__  
-length greater than this value
-
-__equal_to__  
-length equal to this value
+__length__  
+length selection in form `[operator,value]` (see fl_list_Filter())
 
 __best__  
-Function literal restricting the selection to a **unique** best matching knurl
+Function literal restricting the selection to the **unique** best matching knurl
 nut or to «undef» in the selection result is empty.
-By default the parameter is a no-operation, when implemented it must have
-the following signature:
-
-    function(matches)
-
-
-
----
-
-### function fl_knut_selectBest
-
-__Syntax:__
-
-```text
-fl_knut_selectBest(inventory=fl_knut_dict(),nominal,thread,less_than,greater_than,equal_to,best=FL_KNUT_FIRST)
-```
-
-Returns a list of knurl nuts fitting requirements (empty list if none was
-found) or a sigle best matching knurl nut when the `best` function literal
-is provided.
-
-The default behavior is to return the **first** matching knurl nut.
-
-
-__Parameters:__
-
-__nominal__  
-nominal ⌀ in mm
-
-__thread__  
-selector by thread type ("linear" or "spiral")
-
-__less_than__  
-length less than this value
-
-__greater_than__  
-length greater than this value
-
-__equal_to__  
-length equal to this value
-
-__best__  
-Function literal restricting the selection to a **unique** best matching knurl
-nut or to «undef» in the selection result is empty.
-By default the parameter is take-first operation, when implemented it must have
-the following signature:
-
-    function(matches)
+If «undef» no restriction to the matching list is applied.
 
 
 

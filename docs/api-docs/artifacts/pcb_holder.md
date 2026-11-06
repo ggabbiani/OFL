@@ -86,6 +86,7 @@ Context variables:
 | $spc_*           | Children  | [fl_spacer{}](spacer.md#module-fl_spacer) context
 | $pcbh_screw      | Children  | currently processed screw (equal to current $hole_screw)
 | $pcbh_spacer     | Children  | currently processed spacer
+| $hole_*          | Children  | currently processed hole context
 | $pcbh_upperThick | Children  | overall thickness along +Z semi-axis
 | $pcbh_verb       | Children  | currently triggering verb
 

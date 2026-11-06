@@ -101,8 +101,11 @@ __Parameters:__
 __engine__  
 engine to be triggered during component rendering
 
+__position__  
+**MANDATORY** 3d position
+
 __direction__  
-new coordinate system in [[direction], rotation] format
+**MANDATORY** new coordinate system in [[direction], rotation] format
 
 __cutdirs__  
 List of floating semi-axes in the host's reference system. Defines the

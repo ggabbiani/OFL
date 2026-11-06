@@ -86,6 +86,9 @@ PinHeader constructor
 
 __Parameters:__
 
+__name__  
+mandatory name
+
 __description__  
 optional description string
 
@@ -99,7 +102,7 @@ __smt__
 smt
 
 __engine__  
-"female" or "male"
+mandatory: "female" or "male"
 
 __through__  
 pass-through (in that case pin numbers are inverted)

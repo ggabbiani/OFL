@@ -121,7 +121,7 @@ Usage example:
 __Parameters:__
 
 __pts__  
-list of 2d points
+list of 2d points (3d points are accepted too: only X and Y are used)
 
 __pre_ordered__  
 when true «points» are in ASCENDING X order
@@ -135,6 +135,16 @@ __Syntax:__
 
 ```text
 fl_2d_dist(p1,p2)
+```
+
+---
+
+### function fl_2d_frame_intCorners
+
+__Syntax:__
+
+```text
+fl_2d_frame_intCorners(size,corners,thick)
 ```
 
 ---

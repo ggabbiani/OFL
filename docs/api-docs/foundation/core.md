@@ -1368,6 +1368,95 @@ Example:
 
 ---
 
+### function fl_list_PropertyFilter
+
+__Syntax:__
+
+```text
+fl_list_PropertyFilter(key,select,default,transform=function(_value_)_value_,epsilon=FL_EPS)
+```
+
+Filter constructor for [fl_list_filter()](#function-fl_list_filter) to be used on list of 'objects'.
+
+NOTE: a list of 'objects' is a list in which each elementi is a [key,value] list.
+
+
+__Parameters:__
+
+__key__  
+Key to be searched in an item. When used the standard property keys
+the property getter can be used for retrieving the keys like in the
+following examples.
+
+example 1: property key for the knurl nuts 'thread' type
+
+    [fl_knut_thread()](../vitamins/knurl_nuts.md#function-fl_knut_thread)[0]
+
+example 2: property key for general 'nominal' property
+
+    [fl_nominal()](#function-fl_nominal)[0]
+
+
+
+__select__  
+property selection in form `[operator,value]` where «operator» can be:
+
+- "="      : equal to
+- "≅"      : approximately equal to
+- "<"      : less than
+- "≤"|"<=" : less than or equal to
+- ">"      : greater than
+- "≥"|">=" : greater than or equal to
+- "≠"|"!=" : not equal to
+
+a scalar <value> means ["=",value]
+
+
+
+---
+
+### function fl_list_ValueFilter
+
+__Syntax:__
+
+```text
+fl_list_ValueFilter(getter,select,default,transform=function(_value_)_value_,epsilon=FL_EPS)
+```
+
+__Parameters:__
+
+__getter__  
+Key to be searched in an item. When used the standard property keys
+the property getter can be used for retrieving the keys like in the
+following examples.
+
+example 1: property key for the knurl nuts 'thread' type
+
+    [fl_knut_thread()](../vitamins/knurl_nuts.md#function-fl_knut_thread)[0]
+
+example 2: property key for general 'nominal' property
+
+    [fl_nominal()](#function-fl_nominal)[0]
+
+
+
+__select__  
+property selection in form `[operator,value]` where «operator» can be:
+
+- "="      : equal to
+- "≅"      : approximately equal to
+- "<"      : less than
+- "≤"|"<=" : less than or equal to
+- ">"      : greater than
+- "≥"|">=" : greater than or equal to
+- "≠"|"!=" : not equal to
+
+a scalar <value> means ["=",value]
+
+
+
+---
+
 ### function fl_list_filter
 
 __Syntax:__

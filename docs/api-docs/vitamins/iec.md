@@ -166,12 +166,13 @@ __Syntax:__
 
     fl_iec(verbs=FL_ADD,this,direction,octant)
 
-Runtime environment:
+Context variables:
 
-| variable       | description                               |
-| ---            | ---                                       |
-| $fl_thickness  | used in FL_CUTOUT, FL_DRILL and FL_MOUNT  |
-| $fl_tolerance  | used in FL_CUTOUT                         |
+| name           | Context   | Description
+| ---            | ---       | ---
+| $fl_thickness  | Parameter | used in FL_CUTOUT, FL_DRILL and FL_MOUNT
+| $fl_tolerance  | Parameter | used during FL_CUTOUT. See also [fl_parm_tolerance()](../foundation/core.md#function-fl_parm_tolerance)
+| $iec_screw     | Children  | native OFL screw used by the IEC
 
 
 __Parameters:__

@@ -292,6 +292,8 @@ fl_cs_select(dictionary=FL_CS_ISO_DICT,name,nominal)
 return a countersink list fitting the passed properties or undef if no match
 no match found.
 
+FIXME: change into new signature
+
 
 __Parameters:__
 
@@ -314,10 +316,10 @@ __Syntax:__
 
 Context variables:
 
-| Name           | Context   | Description |
-| -------------  | --------- | ---         |
-| $fl_thickness  | Parameter | thickness of the surface to be FL_DRILLed. Can be verb-dependant (see [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness)). |
-| $fl_tolerance  | Parameter | tolerance added to countersink's dimensions during FL_ADD, FL_BBOX and FL_FOOTPRINT. Can be verb-dependant (see [fl_parm_tolerance()](../foundation/core.md#function-fl_parm_tolerance)). |
+| Name           | Context   | Description
+| -------------  | --------- | ---
+| $fl_thickness  | Parameter | thickness of the surface to be FL_DRILLed. Can be verb-dependant (see [fl_parm_thickness()](../foundation/core.md#function-fl_parm_thickness)). The only used values are the ones provided for ±Z semi-axes
+| $fl_tolerance  | Parameter | tolerance added to countersink's dimensions during FL_ADD, FL_BBOX and FL_FOOTPRINT. Can be verb-dependant (see [fl_parm_tolerance()](../foundation/core.md#function-fl_parm_tolerance)).
 
 
 __Parameters:__
