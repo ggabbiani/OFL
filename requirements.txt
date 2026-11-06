@@ -1,0 +1,21 @@
+# Python dependencies for OFL tooling (tests, docs, examples).
+#
+# Setup (uv-managed interpreter, independent from system Python updates):
+#
+#   uv python install 3.13
+#   uv venv --python 3.13 .venv
+#   uv pip install -r requirements.txt
+#   source .venv/bin/activate
+
+# tests
+python-dotenv==1.0.1
+envsubst==0.1.5
+termcolor==2.5.0
+numpy==2.2.0
+opencv-python-headless==4.10.0.84
+scikit-image==0.25.0
+
+# documentation
+mkdocs-material==9.7.1
+mkdocs-include-markdown-plugin==7.2.1
+mike==2.1.3
