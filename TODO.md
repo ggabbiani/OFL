@@ -105,9 +105,25 @@
   space»_search(). Involved libraries (not exhaustive list):
   - countersinks
   - screw (after wrapper setup)
-- [ ] move vitamins dictionaries into inventories (dictionaries should be used
-  only in generic libraries)
-- [ ] separate dictionaries (Associative Array) from inventories (object list)
+- [X] move vitamins dictionaries into inventories (dictionaries should be used
+  only in generic libraries): all the FL_«name space»_DICT and
+  FL_«name space»_INVENTORY constants in artifacts and vitamins renamed as
+  FL_«name space»_INV, «dictionary» parameters in fl_cs_select() and
+  fl_tnut_select() renamed as «inventory», fl_knut_spiralDict(),
+  fl_knut_linearDict() and fl_knut_dict() renamed as fl_knut_spiralInv(),
+  fl_knut_linearInv() and fl_knut_inv(), fl_ScrewInventory() renamed as
+  fl_ScrewInv(). Data model and naming conventions documented in
+  docs/foundation/README.md.
+- [ ] realign the foundation APIs to the data model (see
+  docs/foundation/README.md):
+  - fl_dict_names() and fl_dict_search() operate on inventories (they rely on
+    the standard 'name' property): move them into the inventory APIs, with
+    the lookup by name returning a single object (or undef) instead of a list
+  - fl_dict_organize() is a generic list operation (group by): move it into
+    the list APIs
+  - fl_get() and fl_optional() are the dictionary getters (fl_get() also
+    evaluates function literal values, an object semantic): evaluate their
+    renaming
 - [X] add constructors to spacer and pcb_holder libraries
 - [X] new artifact: fl_pcb_frame adapting a pcb to holes in order to be later
   mounted on standard pcb holder

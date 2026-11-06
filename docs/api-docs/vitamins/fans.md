@@ -112,7 +112,7 @@ __Default:__
 
 ---
 
-### variable FL_FAN_INVENTORY
+### variable FL_FAN_INV
 
 __Default:__
 
@@ -126,7 +126,7 @@ package inventory as a list of pre-defined and ready-to-use 'objects'
 
 __Default:__
 
-    [for(fan=FL_FAN_INVENTORY)fl_name(fan)]
+    [for(fan=FL_FAN_INV)fl_name(fan)]
 
 inventory item names
 

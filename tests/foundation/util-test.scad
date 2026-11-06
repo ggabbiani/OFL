@@ -94,7 +94,7 @@ fl_status();
 
 // end of automatically generated code
 
-screw = fl_ScrewInventory(
+screw = fl_ScrewInv(
   name        = fl_cust_undef(SCREW_NAME,_when_=SCREW_NAME=="*"),
   longer_than = SCREW_LEN
 )[0];

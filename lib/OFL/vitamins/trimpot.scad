@@ -24,7 +24,7 @@ FL_TRIM_POT10  = let(
   bbox  = [[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]
 ) fl_Object(bbox, name="ten turn trimpot", engine=FL_TRIM_NS, others=[fl_cutout(value=[-Y]),]);
 
-FL_TRIM_DICT  = [
+FL_TRIM_INV  = [
   FL_TRIM_POT10,
 ];
 

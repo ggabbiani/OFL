@@ -24,7 +24,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_USB_DICT
+### variable FL_USB_INV
 
 __Default:__
 

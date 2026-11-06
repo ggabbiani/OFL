@@ -35,14 +35,6 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_PCB_DICT
-
-__Default:__
-
-    [FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,FL_PCB_VIM1,]
-
----
-
 ### variable FL_PCB_ENGINE_FRAME
 
 __Default:__
@@ -58,6 +50,14 @@ PCB frame engine
 __Default:__
 
     let(pcb_t=1.6,sz=[23,16,pcb_t],holes=[for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5])[x,y,0]],1PIN=fl_PinHeader("1-pin",nop=2p54header,engine="male"),comps=[["TRIMPOT",fl_Component(FL_TRIM_NS,[-5,-sz.y/2+0.5,0],[+Y,0],[+Z],FL_TRIM_POT10,[[FL_COMP_OCTANT,+X-Y+Z]])],for(i=[0:len(holes)-1])let(label=str("PIN-",i))[label,fl_Component(FL_PHDR_NS,holes[i],[+Z,0],[+Z],1PIN)],])fl_PCB(name="HiLetgo SX1308 DC-DC Step up power module",bare=[[-sz.x/2,-sz.y/2,-sz.z],[+sz.x/2,+sz.y/2,0]],thick=pcb_t,color="DarkCyan",holes=let(r=0.75,d=r*2)[for(i=[0:len(holes)-1])let(pos=holes[i])fl_Hole(pos,d,+Z,pcb_t,loct=-sign(pos.x)*X-sign(pos.y)*Y)],components=comps,vendors=[["Amazon","https://www.amazon.it/gp/product/B07ZYW68C4"]])
+
+---
+
+### variable FL_PCB_INV
+
+__Default:__
+
+    [FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,FL_PCB_VIM1,]
 
 ---
 
@@ -431,7 +431,7 @@ fl_pcb_radius(type,value)
 __Syntax:__
 
 ```text
-fl_pcb_select(name,inventory=FL_PCB_DICT)
+fl_pcb_select(name,inventory=FL_PCB_INV)
 ```
 
 select a pcb by name

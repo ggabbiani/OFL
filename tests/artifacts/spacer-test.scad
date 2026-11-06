@@ -141,7 +141,7 @@ thickness = let(t= [
 
 scr_inventory = screw_lists[0]; // cap screws from NopSCADlib
 scr_size      = SCREW_SIZE!="no screw" ? fl_atof(SCREW_SIZE) : undef;
-screw         = scr_size ? fl_ScrewInventory(nominal=scr_size)[0] : undef;
+screw         = scr_size ? fl_ScrewInv(nominal=scr_size)[0] : undef;
 knut          = KNUT_TYPE!="none" ? assert(scr_size,"***TEST ERROR***: specify a screw size for knut") fl_knut_select(thread=KNUT_TYPE,nominal=scr_size,best=FL_KNUT_SHORTEST) : undef;
 assert(KNUT_TYPE=="none"||knut,str("***TEST ERROR***: no M",SCREW_SIZE," ",KNUT_TYPE," knurl nut found in inventory"));
 cs            = let(d=knut?fl_nominal(knut):screw?fl_nominal(screw):undef)

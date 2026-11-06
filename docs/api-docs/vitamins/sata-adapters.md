@@ -19,19 +19,19 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_SADP_DICT
-
-__Default:__
-
-    [FL_SADP_ELUTENG,]
-
----
-
 ### variable FL_SADP_ELUTENG
 
 __Default:__
 
     let(socket=FL_SATA_POWERDATASOCKET,handle_size=[47,37,11.6],socket_size=fl_size(socket),size=[handle_size.x,handle_size.y+socket_size.z,handle_size.z],Mpd=T(-Y(FL_EPS))*Ry(180)*Rx(-90)*fl_octant(+Z-Y,type=socket))[fl_name(value="ELUTENG USB 3.0 TO SATA ADAPTER"),fl_bb_corners(value=[[-size.x/2,-handle_size.y,-size.z/2],[size.x/2,socket_size.z,+size.z/2]]),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B06XCV1W97/"]]),["handle size",handle_size],["Mpd",Mpd],["connectors",fl_conn_import(fl_connectors(socket),Mpd)],["SATA socket",socket],]
+
+---
+
+### variable FL_SADP_INV
+
+__Default:__
+
+    [FL_SADP_ELUTENG,]
 
 ---
 

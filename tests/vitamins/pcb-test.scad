@@ -125,8 +125,8 @@ module test() {
       pcb(single)
         children();
   else // TODO: replace with fl_layout
-    layout([for(pcb=FL_PCB_DICT) fl_width(pcb)], 10)
-      pcb(FL_PCB_DICT[$i])
+    layout([for(pcb=FL_PCB_INV) fl_width(pcb)], 10)
+      pcb(FL_PCB_INV[$i])
         children();
 }
 

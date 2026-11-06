@@ -24,8 +24,8 @@ FL_SD_MOLEX_uSD_SOCKET = let(
   fl_cutout(value=[-FL_Y]),
 ];
 
-//! sd dictionary
-FL_SD_DICT = [
+//! sd inventory
+FL_SD_INV = [
   FL_SD_MOLEX_uSD_SOCKET
 ];
 

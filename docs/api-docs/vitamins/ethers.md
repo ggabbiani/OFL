@@ -23,14 +23,6 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_ETHER_DICT
-
-__Default:__
-
-    [FL_ETHER_RJ45,FL_ETHER_RJ45_SM]
-
----
-
 ### variable FL_ETHER_FRAME_T
 
 __Default:__
@@ -38,6 +30,14 @@ __Default:__
     1.5
 
 part of a surface mount ethernet socket length is reserved for the external frame
+
+---
+
+### variable FL_ETHER_INV
+
+__Default:__
+
+    [FL_ETHER_RJ45,FL_ETHER_RJ45_SM]
 
 ---
 

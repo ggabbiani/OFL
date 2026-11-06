@@ -41,7 +41,7 @@ FL_HDMI_TYPE_D  = fl_hdmi_new(
   [ "hdmi_micro", "Micro HDMI socket", 8.5,  5.9, 4.43, 1.4, 2.3, 3,   0.3 ]
 );
 
-FL_HDMI_DICT = [
+FL_HDMI_INV = [
   FL_HDMI_TYPE_A,
   FL_HDMI_TYPE_C,
   FL_HDMI_TYPE_D

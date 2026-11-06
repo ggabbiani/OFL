@@ -20,7 +20,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_CS_ISO_DICT
+### variable FL_CS_ISO_INV
 
 __Default:__
 
@@ -134,7 +134,7 @@ countersinks namespace
 
 ---
 
-### variable FL_CS_UNI_DICT
+### variable FL_CS_UNI_INV
 
 __Default:__
 
@@ -286,7 +286,7 @@ fl_cs_k(type,value)
 __Syntax:__
 
 ```text
-fl_cs_select(dictionary=FL_CS_ISO_DICT,name,nominal)
+fl_cs_select(inventory=FL_CS_ISO_INV,name,nominal)
 ```
 
 return a countersink list fitting the passed properties or undef if no match

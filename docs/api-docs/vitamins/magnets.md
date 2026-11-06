@@ -29,7 +29,7 @@ __Default:__
 
 ---
 
-### variable FL_MAG_DICT
+### variable FL_MAG_INV
 
 __Default:__
 

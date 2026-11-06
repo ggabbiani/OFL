@@ -21,7 +21,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_HDMI_DICT
+### variable FL_HDMI_INV
 
 __Default:__
 

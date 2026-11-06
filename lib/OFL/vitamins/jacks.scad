@@ -68,7 +68,7 @@ FL_JACK_MCXJPHSTEM1 = let(
   ["jack length",       jack]
 ]);
 
-FL_JACK_DICT = [
+FL_JACK_INV = [
   FL_JACK_BARREL,
   FL_JACK_MCXJPHSTEM1,
 ];

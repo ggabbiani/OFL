@@ -31,7 +31,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_TNUT_DICT
+### variable FL_TNUT_INV
 
 __Default:__
 
@@ -160,10 +160,10 @@ t-nut, so conforming to the following assertion
 __Syntax:__
 
 ```text
-fl_tnut_select(dictionary=FL_TNUT_DICT,nop_screw,nominal,best=function(matches)matches[0])
+fl_tnut_select(inventory=FL_TNUT_INV,nop_screw,nominal,best=function(matches)matches[0])
 ```
 
-Selects the T-slot nuts from a dictionary matching the screw or a generic
+Selects the T-slot nuts from an inventory matching the screw or a generic
 nominal ⌀. When the «best» function literal is defined, it is applied to the
 result for further filtering.
 

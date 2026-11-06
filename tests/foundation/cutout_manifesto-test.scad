@@ -103,62 +103,62 @@ function all(inventory,builder) = let(
 ) [for(i=[0:len(inventory)-1]) builder ? builder(i) : inventory[i]];
 
 if (CLASS=="jack") let(
-  all = all(FL_JACK_DICT)
+  all = all(FL_JACK_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_jack(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,octant=octant,direction=direction);
 
 else if (CLASS=="DIN") let(
-  all = all(FL_DIN_RAIL_INVENTORY,function(i) FL_DIN_RAIL_INVENTORY[i](fl_bb_size(FL_DIN_TS_INVENTORY[i]).x*2))
+  all = all(FL_DIN_RAIL_INV,function(i) FL_DIN_RAIL_INV[i](fl_bb_size(FL_DIN_TS_INV[i]).x*2))
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_DIN_rail(verbs,$item,cut_dirs=dirs,cut_drift=CUTOUT_DRIFT,octant=octant,direction=direction);
 
 else if (CLASS=="ether") let(
-  all = all(FL_ETHER_DICT)
+  all = all(FL_ETHER_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_ether(verbs, $item, cut_dirs=dirs, cut_drift=CUTOUT_DRIFT, octant=octant, direction=direction);
 
 else if (CLASS=="hdmi") let(
-  all = all(FL_HDMI_DICT)
+  all = all(FL_HDMI_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_hdmi(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,octant=octant,direction=direction);
 
 else if (CLASS=="hd") let(
-  all = all(FL_HD_DICT)
+  all = all(FL_HD_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_hd(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,direction=direction,octant=octant);
 
 else if (CLASS=="heatsinks") let(
-  all = all(FL_HS_DICT)
+  all = all(FL_HS_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_heatsink(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,octant=octant,direction=direction);
 
 else if (CLASS=="pin header") let(
-  all = all(FL_PHDR_DICT)
+  all = all(FL_PHDR_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_pinHeader(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_dirs=dirs, octant=octant, direction=direction);
 
 else if (CLASS=="SATA") let(
-  all = all(FL_SATA_DICT)
+  all = all(FL_SATA_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_sata(verbs,$item, cut_drift=CUTOUT_DRIFT, cut_dirs=dirs, octant=octant, direction=direction);
 
 else if (CLASS=="SD") let(
-  all = all(FL_SD_DICT)
+  all = all(FL_SD_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_sd_usocket(verbs,$item,cut_drift=CUTOUT_DRIFT,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_dirs=dirs,direction=direction,octant=octant);
 
 else if (CLASS=="switch") let(
-  all = all(FL_SWT_DICT)
+  all = all(FL_SWT_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_switch(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,direction=direction,octant=octant);
 
 else if (CLASS=="trimpot") let(
-  all = all(FL_TRIM_DICT)
+  all = all(FL_TRIM_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_trimpot(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,direction=direction,octant=octant);
 
 else if (CLASS=="USB") let(
-  all = all(FL_USB_DICT)
+  all = all(FL_USB_INV)
 ) fl_layout(axis=+X,gap=gap,types=all,$FL_LAYOUT="ON")
   fl_USB(verbs,$item,cut_thick=$fl_thickness,cut_tolerance=$fl_tolerance,cut_drift=CUTOUT_DRIFT,cut_dirs=dirs,direction=direction,octant=octant);
 

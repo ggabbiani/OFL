@@ -117,7 +117,7 @@ FL_TNUT_M4_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_
 FL_TNUT_M5_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw);
 FL_TNUT_M6_CS = fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw);
 
-FL_TNUT_DICT = [
+FL_TNUT_INV = [
   FL_TNUT_M3_CS,
   FL_TNUT_M4_CS,
   FL_TNUT_M5_CS,
@@ -125,12 +125,12 @@ FL_TNUT_DICT = [
 ];
 
 /*!
- * Selects the T-slot nuts from a dictionary matching the screw or a generic
+ * Selects the T-slot nuts from an inventory matching the screw or a generic
  * nominal ⌀. When the «best» function literal is defined, it is applied to the
  * result for further filtering.
  */
 function fl_tnut_select(
-  dictionary  = FL_TNUT_DICT,
+  inventory   = FL_TNUT_INV,
   //! screw specs to fit into
   nop_screw,
   //! nominal ⌀
@@ -149,7 +149,7 @@ function fl_tnut_select(
     nop_screw ? 2*screw_radius(nop_screw) :
     undef,
   result  = [
-    for(nut=dictionary)
+    for(nut=inventory)
       if (
         is_undef(nominal) || nominal==fl_nominal(nut)
       ) nut

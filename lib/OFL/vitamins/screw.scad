@@ -85,7 +85,7 @@ function fl_screw_headDepth(type, d=0) = screw_head_depth(fl_screw_specs(type,ma
 /*!
  * Screw **specifications** inventory in NopSCADlib format.
  */
-FL_SCREW_SPECS_INVENTORY = [for(list = screw_lists, screw=list) if (screw) screw];
+FL_SCREW_SPECS_INV = [for(list = screw_lists, screw=list) if (screw) screw];
 
 /*!
  * Screw assembly stack.
@@ -257,9 +257,9 @@ function fl_opt_Screw(
 /*!
  * Builds a screw object inventory from specifications selection and shaft length.
  */
-function fl_ScrewInventory(
+function fl_ScrewInv(
   //! mandatory search inventory
-  specs=FL_SCREW_SPECS_INVENTORY,
+  specs=FL_SCREW_SPECS_INV,
   //! screw name, ignored when undef
   name,
   //! nominal ⌀, when 0 or undef is ignored
@@ -326,7 +326,7 @@ function fl_ScrewInventory(
  */
 function fl_screw_specs_select(
   //! mandatory search inventory
-  inventory=FL_SCREW_SPECS_INVENTORY,
+  inventory=FL_SCREW_SPECS_INV,
   //! screw name, ignored when undef
   name,
   //! nominal ⌀, in form `[operator,value]` (see fl_list_ValueFilter() for details)

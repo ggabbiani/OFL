@@ -116,7 +116,7 @@ FL_MAG_RECT_10x5x2  = fl_Magnet(
     ]
 );
 
-FL_MAG_DICT = [
+FL_MAG_INV = [
   FL_MAG_M3_CS_D10x2,
   FL_MAG_D10x5,
   FL_MAG_M3_CS_D10x5,

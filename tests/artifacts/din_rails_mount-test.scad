@@ -112,7 +112,7 @@ module din_mount(rail) {
   );
 }
 
-single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_TS_INVENTORY),FL_DIN_RAIL_INVENTORY));
+single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_TS_INV),FL_DIN_RAIL_INV));
 if (single) {
   din_mount(single(LENGTH,PUNCHED));
   // fl_DIN_rail(
@@ -121,7 +121,7 @@ if (single) {
   //   octant=octant,direction=direction
   // );
 } else {
-  all = [for(constructor=FL_DIN_RAIL_INVENTORY) constructor(LENGTH,PUNCHED)];
+  all = [for(constructor=FL_DIN_RAIL_INV) constructor(LENGTH,PUNCHED)];
   fl_layout(axis=+X,gap=3,types=all,$FL_LAYOUT="ON")
     fl_DIN_rail(
       verbs,all[$i],

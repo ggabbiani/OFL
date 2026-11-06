@@ -66,7 +66,7 @@ FL_IEC_YUNPEN                       = fl_IEC(IEC_yunpen);
  */
 FL_IEC_OUTLET                       = fl_IEC(IEC_outlet);
 
-FL_IEC_INVENTORY = [
+FL_IEC_INV = [
   FL_IEC_FUSED_INLET,
   FL_IEC_FUSED_INLET2,
   FL_IEC_320_C14_SWITCHED_FUSED_INLET,

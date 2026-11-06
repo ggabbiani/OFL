@@ -29,7 +29,7 @@ __Default:__
 
 ---
 
-### variable FL_SATA_DICT
+### variable FL_SATA_INV
 
 __Default:__
 

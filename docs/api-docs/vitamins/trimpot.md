@@ -23,7 +23,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_TRIM_DICT
+### variable FL_TRIM_INV
 
 __Default:__
 

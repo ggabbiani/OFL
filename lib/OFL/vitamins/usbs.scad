@@ -119,7 +119,7 @@ FL_USB_TYPE_uA_NF = let(
     ]
   );
 
-FL_USB_DICT = [
+FL_USB_INV = [
   FL_USB_TYPE_Ax1_NF_SM,
   FL_USB_TYPE_Ax1,
   FL_USB_TYPE_Ax1_NF,

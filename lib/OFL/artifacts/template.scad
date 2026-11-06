@@ -15,7 +15,7 @@ include <../foundation/unsafe_defs.scad>
 __FL_TMP_NS  = "tmp";
 
 //! package inventory as a list of pre-defined and ready-to-use 'objects'
-__FL_TMP_INVENTORY = [
+__FL_TMP_INV = [
 ];
 
 //! helper for new 'object' definition

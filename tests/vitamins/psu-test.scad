@@ -110,7 +110,7 @@ lay_dir = fl_3d_AxisList(LAY_DIRECTION);
 if (single)
   fl_psu(verbs,single,thick=T,lay_direction=lay_dir,octant=octant,direction=direction);
 else
-  fl_layout(FL_LAYOUT,+X,20,FL_PSU_DICT)
-    let(type=FL_PSU_DICT[$i])
+  fl_layout(FL_LAYOUT,+X,20,FL_PSU_INV)
+    let(type=FL_PSU_INV[$i])
       fl_psu(verbs,type,thick=T,lay_direction=lay_dir,octant=octant,direction=direction);
 

@@ -35,7 +35,7 @@ namespace for cantilever attributes: jnt/cantilever
 
 ---
 
-### variable FL_JNT_INVENTORY
+### variable FL_JNT_INV
 
 __Default:__
 

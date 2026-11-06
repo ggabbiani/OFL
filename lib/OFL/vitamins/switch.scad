@@ -25,7 +25,7 @@ FL_SWT_USWITCH_7p2x3p4x3x2p5  = let(
   fl_cutout(value=[FL_X]),
 ];
 
-FL_SWT_DICT = [
+FL_SWT_INV = [
   FL_SWT_USWITCH_7p2x3p4x3x2p5
 ];
 

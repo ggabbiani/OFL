@@ -22,14 +22,6 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_PHDR_DICT
-
-__Default:__
-
-    [FL_PHDR_GPIOHDR,FL_PHDR_GPIOHDR_F,FL_PHDR_GPIOHDR_FL,FL_PHDR_GPIOHDR_F_SMT_LOW,]
-
----
-
 ### variable FL_PHDR_GPIOHDR
 
 __Default:__
@@ -59,6 +51,14 @@ __Default:__
 __Default:__
 
     let(nop=["2p54smtlow",2.54,4,0,0.66,gold,grey(20),4,[0,0,8.7],2.4,0,0,0])fl_PinHeader(name="FL_PHDR_GPIOHDR_F_SMT_LOW",description="GPIO female low pin pass-through header",nop=nop,geometry=[20,2],smt=true,engine="female",through=true)
+
+---
+
+### variable FL_PHDR_INV
+
+__Default:__
+
+    [FL_PHDR_GPIOHDR,FL_PHDR_GPIOHDR_F,FL_PHDR_GPIOHDR_FL,FL_PHDR_GPIOHDR_F_SMT_LOW,]
 
 ---
 

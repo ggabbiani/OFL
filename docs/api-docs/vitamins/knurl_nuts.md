@@ -444,19 +444,6 @@ stl geometry file from Ruthex
 
 ---
 
-### function fl_knut_dict
-
-__Syntax:__
-
-```text
-fl_knut_dict()
-```
-
-full knurl nuts dictionary
-
-
----
-
 ### function fl_knut_drillD
 
 __Syntax:__
@@ -469,12 +456,25 @@ diameter for FL_DRILL
 
 ---
 
-### function fl_knut_linearDict
+### function fl_knut_inv
 
 __Syntax:__
 
 ```text
-fl_knut_linearDict()
+fl_knut_inv()
+```
+
+full knurl nuts inventory
+
+
+---
+
+### function fl_knut_linearInv
+
+__Syntax:__
+
+```text
+fl_knut_linearInv()
 ```
 
 ---
@@ -531,7 +531,7 @@ inventory of NopSCADlib screws
 __Syntax:__
 
 ```text
-fl_knut_select(inventory=fl_knut_dict(),nominal,thread,length,best)
+fl_knut_select(inventory=fl_knut_inv(),nominal,thread,length,best)
 ```
 
 Returns a list of knurl nuts fitting requirements (empty list if none was
@@ -559,12 +559,12 @@ If «undef» no restriction to the matching list is applied.
 
 ---
 
-### function fl_knut_spiralDict
+### function fl_knut_spiralInv
 
 __Syntax:__
 
 ```text
-fl_knut_spiralDict()
+fl_knut_spiralInv()
 ```
 
 ---

@@ -40,7 +40,7 @@ jack plug insertion:
 
 ---
 
-### variable FL_JACK_DICT
+### variable FL_JACK_INV
 
 __Default:__
 

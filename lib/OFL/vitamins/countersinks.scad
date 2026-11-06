@@ -75,7 +75,7 @@ FL_CS_UNI_M12   = fl_Countersink("Countersink UNI 5933 M12",12,24,6.5);
 FL_CS_UNI_M16   = fl_Countersink("Countersink UNI 5933 M16",16,30,7.5);
 FL_CS_UNI_M20   = fl_Countersink("Countersink UNI 5933 M20",20,36,8.5);
 
-FL_CS_UNI_DICT = [
+FL_CS_UNI_INV = [
   FL_CS_UNI_M3,
   FL_CS_UNI_M4,
   FL_CS_UNI_M5,
@@ -100,7 +100,7 @@ FL_CS_ISO_M14   = fl_Countersink("Countersink ISO 10642 M14", 14,   28.31,  8.40
 FL_CS_ISO_M16   = fl_Countersink("Countersink ISO 10642 M16", 16,   30.61,  8.800);
 FL_CS_ISO_M20   = fl_Countersink("Countersink ISO 10642 M20", 20,   36.75,  10.160);
 
-FL_CS_ISO_DICT = [
+FL_CS_ISO_INV = [
 FL_CS_ISO_M2,
 FL_CS_ISO_M2p5,
 FL_CS_ISO_M3,
@@ -122,13 +122,13 @@ FL_CS_ISO_M20
  * FIXME: change into new signature
  */
 function fl_cs_select(
-  dictionary=FL_CS_ISO_DICT,
+  inventory=FL_CS_ISO_INV,
   //! countersink name, when undef all names are matched
   name,
   //! nominal , when undef all nominal are matched
   nominal
 ) = [
-  for(cs=dictionary)
+  for(cs=inventory)
     if (
           (is_undef(name)     || fl_name(cs)==name        )
       &&  (is_undef(nominal)  || fl_nominal(cs)==nominal  )

@@ -29,7 +29,7 @@ __Default:__
 
 ---
 
-### variable FL_SPDT_DICT
+### variable FL_SPDT_INV
 
 __Default:__
 

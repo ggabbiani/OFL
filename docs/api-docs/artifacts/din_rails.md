@@ -36,10 +36,10 @@ The package manages three type of objects:
 - **profiles**: representing the different rail sections available. Currently
   supported types are type Ω top head sections.  DIN profile instances are
   all prefixed with **TS**. The list of available profiles is contained in
-  [variable FL_DIN_TS_INVENTORY](#variable-fl_din_ts_inventory).
+  [variable FL_DIN_TS_INV](#variable-fl_din_ts_inv).
 - **DIN rails**: concrete rail instantiations. DIN rail instances are
   prefixed with **TH**. The list of available rails is provided in
-  [variable FL_DIN_RAIL_INVENTORY](#variable-fl_din_rail_inventory) .
+  [variable FL_DIN_RAIL_INV](#variable-fl_din_rail_inv) .
 
 ## Legal
 
@@ -84,7 +84,7 @@ __Default:__
 
 ---
 
-### variable FL_DIN_RAIL_INVENTORY
+### variable FL_DIN_RAIL_INV
 
 __Default:__
 
@@ -169,7 +169,7 @@ Top hat section profile IEC/EN 60715 – 35×15 mm
 
 ---
 
-### variable FL_DIN_TS_INVENTORY
+### variable FL_DIN_TS_INV
 
 __Default:__
 
@@ -194,7 +194,7 @@ DIN Rails constructor
 __Parameters:__
 
 __profile__  
-one of the supported profiles (see [variable FL_DIN_TS_INVENTORY](#variable-fl_din_ts_inventory))
+one of the supported profiles (see [variable FL_DIN_TS_INV](#variable-fl_din_ts_inv))
 
 __length__  
 overall rail length

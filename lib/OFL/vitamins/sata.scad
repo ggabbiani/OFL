@@ -186,7 +186,7 @@ FL_SATA_POWERDATAPLUG = let(
   __fl_sata_Mdata__(value=Mdata),
 ]);
 
-FL_SATA_DICT = [
+FL_SATA_INV = [
   FL_SATA_POWERPLUG,
   FL_SATA_DATAPLUG,
   FL_SATA_POWERDATASOCKET,

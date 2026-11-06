@@ -99,7 +99,7 @@ fl_status();
 // end of automatically generated code
 
 verbs         = fl_verbList([FL_ADD,FL_ASSEMBLY,FL_AXES,FL_BBOX,FL_DRILL,FL_LAYOUT]);
-one           = let(all=fl_knut_dict())
+one           = let(all=fl_knut_inv())
                   fl_switch(SHOW,fl_list_pack(fl_dict_names(all),all));
 scr_inventory = screw_lists[0]; // cap screws only from NopSCADlib
 thickness = let(t= [

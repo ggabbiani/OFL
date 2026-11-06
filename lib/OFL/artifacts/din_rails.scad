@@ -23,10 +23,10 @@
  * - **profiles**: representing the different rail sections available. Currently
  *   supported types are type Ω top head sections.  DIN profile instances are
  *   all prefixed with **TS**. The list of available profiles is contained in
- *   variable FL_DIN_TS_INVENTORY.
+ *   variable FL_DIN_TS_INV.
  * - **DIN rails**: concrete rail instantiations. DIN rail instances are
  *   prefixed with **TH**. The list of available rails is provided in
- *   variable FL_DIN_RAIL_INVENTORY .
+ *   variable FL_DIN_RAIL_INV .
  *
  * ## Legal
  *
@@ -194,7 +194,7 @@ FL_DIN_TS35  = fl_DIN_TopHatSection("TS35",size=[[27,35],7.5],r=[.8,.8]);
 FL_DIN_TS35D = fl_DIN_TopHatSection("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5);
 
 //! DIN profile inventory
-FL_DIN_TS_INVENTORY = [
+FL_DIN_TS_INV = [
   FL_DIN_TS15,
   FL_DIN_TS35,
   FL_DIN_TS35D
@@ -207,7 +207,7 @@ function fl_DIN_railProfile(type,value)  = fl_property(type,"DIN/rail/profile",v
 
 //! DIN Rails constructor
 function fl_DIN_Rail(
-  //! one of the supported profiles (see variable FL_DIN_TS_INVENTORY)
+  //! one of the supported profiles (see variable FL_DIN_TS_INV)
   profile,
   //! overall rail length
   length,
@@ -259,7 +259,7 @@ FL_DIN_RAIL_TH35D  = function(length,punched=true)
  *
  *     Constructor(length,punched=true);
  */
-FL_DIN_RAIL_INVENTORY = [
+FL_DIN_RAIL_INV = [
   FL_DIN_RAIL_TH15,
   FL_DIN_RAIL_TH35,
   FL_DIN_RAIL_TH35D

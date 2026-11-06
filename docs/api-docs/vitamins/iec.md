@@ -100,7 +100,7 @@ IEC die cast inlet for ATX.
 
 ---
 
-### variable FL_IEC_INVENTORY
+### variable FL_IEC_INV
 
 __Default:__
 

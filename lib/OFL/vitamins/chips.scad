@@ -18,7 +18,7 @@ use <../foundation/mngm-engine.scad>
 FL_CHIP_NS  = "chip";
 
 //! package inventory as a list of pre-defined and ready-to-use 'objects'
-FL_CHIP_INVENTORY = [
+FL_CHIP_INV = [
 ];
 
 /*!

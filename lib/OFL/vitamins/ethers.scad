@@ -55,7 +55,7 @@ FL_ETHER_RJ45_SM = let(
   fl_engine(value=str(FL_ETHER_NS,"/native")),
 ];
 
-FL_ETHER_DICT = [
+FL_ETHER_INV = [
   FL_ETHER_RJ45,
   FL_ETHER_RJ45_SM
 ];

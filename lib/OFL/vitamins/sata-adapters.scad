@@ -29,7 +29,7 @@ let(
   ["SATA socket", socket],
 ];
 
-FL_SADP_DICT = [
+FL_SADP_INV = [
   FL_SADP_ELUTENG,
 ];
 

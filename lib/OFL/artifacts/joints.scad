@@ -29,7 +29,7 @@ FL_JNT_RING_NS        = str(FL_JNT_CANTILEVER_NS,"/ring");
 FL_JNT_SECTION_NS     = str(FL_JNT_CANTILEVER_NS,"/section");
 
 //! package inventory as a list of pre-defined and ready-to-use 'objects'
-FL_JNT_INVENTORY = [
+FL_JNT_INV = [
 ];
 
 /*

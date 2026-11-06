@@ -22,7 +22,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_CHIP_INVENTORY
+### variable FL_CHIP_INV
 
 __Default:__
 

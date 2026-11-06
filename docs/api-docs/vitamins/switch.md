@@ -15,7 +15,7 @@ graph LR
 
 ---
 
-### variable FL_SWT_DICT
+### variable FL_SWT_INV
 
 __Default:__
 

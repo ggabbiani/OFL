@@ -135,8 +135,8 @@ FL_TSP_E4040t = fl_tsp_CrossSection(E4040t);
  */
 FL_TSP_E4080  = fl_tsp_CrossSection(E4080);
 
-//! T-slotted cross-section dictionary
-FL_XTR_DICT = [
+//! T-slotted cross-section inventory
+FL_XTR_INV = [
   FL_TSP_E1515,
   FL_TSP_E2020,
   FL_TSP_E2020t,

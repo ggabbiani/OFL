@@ -6,15 +6,89 @@ The OFL foundation provides a uniform API set for base library tasks used by vit
 
 ![core dependencies](dependencies.svg)
 
-## 'Objects'
+## Data model
 
-An Object is a key/value list like the following:
+OFL distinguishes between **abstract data types** (ADT), describing *how* data
+are organized, and **domain concepts**, describing *what* data represent. Each
+domain concept is a specialization of an ADT:
+
+| Domain concept | Underlying ADT | Specialization                                               |
+| -------------- | -------------- | ------------------------------------------------------------ |
+| Object         | dictionary     | keys are property names, some of them with standard semantic |
+| Inventory      | list           | items are objects, uniquely identified by their name         |
+
+The foundation implements the ADTs and the *generic* domain concepts (objects
+and inventories in general), while artifacts and vitamins implement the
+*specific* domain (like the inventory of the available PCBs).
+
+### Abstract data types
+
+| ADT        | Implementation                    | Notes                                |
+| ---------- | --------------------------------- | ------------------------------------ |
+| list       | native OpenSCAD list              | generic list operations: fl_list_*() |
+| dictionary | list of [key,value] pairs         | keys are unique                      |
+
+Dictionary values are retrieved through the dictionary getters
+([fl_get()](../../orthodocs/foundation/core.md#function-fl_get) and
+[fl_optional()](../../orthodocs/foundation/core.md#function-fl_optional)).
+
+**NOTE:** client code should never use the native OpenSCAD search() on
+dictionaries directly, since its semantic changes depending on the signature
+used (first match index, list of indexes, character by character search when
+the term is a plain string, `[[]]` when nothing is found).
+
+### Objects
+
+An *object* is a dictionary in which every key/value pair represents a
+property of the object:
 
     type = [
       ["first property name", "this is a string"],  // a string property
       ["second property name", -3.5],               // a number propery
       ["a flag name"],                              // a flag
     ];
+
+Object properties belong to one of the following categories:
+
+* **standard properties** - keys whose semantic is shared by all the OFL
+  objects (like *name*, *description*, *bounding box*, *engine* or
+  *nominal*), each one accessed through its own getter (like
+  [fl_name()](../../orthodocs/foundation/core.md#function-fl_name));
+* **namespaced properties** - package specific keys, prefixed by the package
+  namespace and with a semantic shared only inside the package (like
+  `str(FL_JNT_CANTILEVER_NS,"/section YZ")` for joints).
+
+The base object constructor is
+[fl_Object()](../../orthodocs/foundation/type-engine.md#function-fl_object).
+
+**NOTE:** for historical reasons the parameters representing an object are
+often named *type* (like in `fl_get(type,key)`).
+
+### Inventories
+
+An *inventory* is a list of objects, typically the pre-defined and
+ready-to-use objects made available by a package:
+
+* every object in an inventory has a standard *name* property that **must be
+  unique** inside the inventory: the lookup by name returns a single object;
+* all the other properties are not necessarily unique: the selection by other
+  properties returns a (possibly empty) list of objects (like in
+  [fl_pcb_select()](../../orthodocs/vitamins/pcbs.md#function-fl_pcb_select)).
+
+**NOTE:** the uniqueness of names is a rule of the inventory, not a property
+of the single object: an object constructor doesn't know about the other
+objects of an inventory and thus can't enforce it.
+
+Inventories follow these naming conventions:
+
+| Item                              | Convention         | Example                |
+| --------------------------------- | ------------------ | ---------------------- |
+| global inventory constant         | FL_«NS»_INV        | FL_PCB_INV             |
+| function returning an inventory   | fl_«ns»_«name»Inv() | fl_knut_spiralInv()   |
+| constructor building an inventory | fl_«Name»Inv()     | fl_ScrewInv()          |
+| local inventory variable/parameter | inventory         | `fl_cs_select(inventory=FL_CS_ISO_INV)` |
+
+where «NS» and «ns» are the package namespace in upper and lower case.
 
 ## APIs
 
@@ -322,6 +396,19 @@ For similar reasons all global constants used in OFL are prefixed with **'FL_'**
     FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.";
     FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws).";
     FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
+
+Constants defined in a local scope (function and module bodies, let()
+assignments, function parameters) are instead in **lower case**:
+
+    function fl_cs_select(inventory=FL_CS_ISO_INV,name,nominal) = ...
+    let(
+      inventory = fl_knut_inv(),
+      ...
+    ) ...
+
+The only accepted exception are one or two letter names coming from the
+mathematical notation (like `M` for a transformation matrix or `R` for a
+radius).
 
 ## $pecial variables
 

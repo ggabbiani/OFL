@@ -21,13 +21,13 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 ---
 
-### variable FL_SD_DICT
+### variable FL_SD_INV
 
 __Default:__
 
     [FL_SD_MOLEX_uSD_SOCKET]
 
-sd dictionary
+sd inventory
 
 ---
 

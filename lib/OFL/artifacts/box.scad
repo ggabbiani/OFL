@@ -71,7 +71,7 @@ module fl_box(
   knut        = fl_knut_select(thread=kn_type,nominal=scr_nominal,best=FL_KNUT_SHORTEST);
   spacer      = fl_Spacer(knut=knut);
   // first countersink screw matching nominal ⌀
-  screw       = let(inventory=fl_ScrewInventory(nominal=scr_nominal, head_type=hs_cs_cap, shorter_than=fl_thick(spacer))) assert(inventory) inventory[0];
+  screw       = let(inventory=fl_ScrewInv(nominal=scr_nominal, head_type=hs_cs_cap, shorter_than=fl_thick(spacer))) assert(inventory) inventory[0];
   cs          = let(inventory=fl_cs_select(nominal=scr_nominal)) assert(inventory) inventory[0];
 
   T_real   = assert(thick) (thick + tolerance);

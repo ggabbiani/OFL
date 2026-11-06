@@ -104,16 +104,16 @@ module label(str, scale = 0.25, valign = "baseline", halign = "left")
         scale(scale)
           text(str, valign = valign, halign = halign, font="Symbola:style=Regular");
 
-dictionary  = TYPE=="ISO"?FL_CS_ISO_DICT:FL_CS_UNI_DICT;
+inventory   = TYPE=="ISO"?FL_CS_ISO_INV:FL_CS_UNI_INV;
 verbs       = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_DRILL,FL_FOOTPRINT]);
 gap         = 5;
 
 if (SIZE!="ALL") {
-  cs = fl_cs_select(dictionary=dictionary,nominal=fl_atof(SIZE))[0];
+  cs = fl_cs_select(inventory=inventory,nominal=fl_atof(SIZE))[0];
   assert(cs,str("No M",SIZE," ",TYPE," countersink found."))
     fl_countersink(verbs,cs,octant=octant,direction=direction);
 } else
-  fl_layout(axis=X,gap=gap,types=dictionary) {
+  fl_layout(axis=X,gap=gap,types=inventory) {
     let(delta=fl_bb_size($item).y/2+2)
       translate(-Y(delta))
         label(str("M",fl_nominal($item)),halign="center");

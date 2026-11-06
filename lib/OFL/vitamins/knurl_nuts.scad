@@ -122,7 +122,7 @@ FL_KNUT_SPIRAL_M6x12p7  = fl_knut_Spiral(6,12.7,8.7,"vitamins/ruthex/m6x12p7.stl
 //! Double spiral thread knurled nut M8x12.7mm
 FL_KNUT_SPIRAL_M8x12p7  = fl_knut_Spiral(8,12.7,10.1,"vitamins/ruthex/m8x12p7.stl");
 
-function fl_knut_spiralDict() = [
+function fl_knut_spiralInv() = [
   FL_KNUT_SPIRAL_M2x4p0,
   FL_KNUT_SPIRAL_M2p5x5p7,
   FL_KNUT_SPIRAL_M3x4p0,
@@ -224,7 +224,7 @@ FL_KNUT_LINEAR_M5x8     = fl_knut_Linear(5,8,7.0,0.5, [2.4,   2.4       ]);
 //! Linear thread knurled nut M5x10mm
 FL_KNUT_LINEAR_M5x10    = fl_knut_Linear(5,10,7.0,0.8,[1.7,   1.5,  1.7 ]);
 
-function fl_knut_linearDict() = [
+function fl_knut_linearInv() = [
   FL_KNUT_LINEAR_M2x4,
   FL_KNUT_LINEAR_M2x6,
   FL_KNUT_LINEAR_M2x8,
@@ -247,9 +247,9 @@ function fl_knut_linearDict() = [
 ];
 
 /*!
- * full knurl nuts dictionary
+ * full knurl nuts inventory
  */
-function fl_knut_dict() = concat(fl_knut_spiralDict(),fl_knut_linearDict());
+function fl_knut_inv() = concat(fl_knut_spiralInv(),fl_knut_linearInv());
 
 //! in a list of knurl nuts find out the __shortest__ one
 FL_KNUT_SHORTEST  = function(nuts) fl_list_min(nuts,function(item) fl_thick(item));
@@ -264,7 +264,7 @@ FL_KNUT_FIRST     = function(nuts) assert(len(nuts)) nuts[0];
  * is provided.
  */
 function fl_knut_select(
-  inventory = fl_knut_dict(),
+  inventory = fl_knut_inv(),
   //! nominal ⌀ in mm in form `[operator,value]` (see fl_list_Filter())
   nominal,
   //! selector by thread type ("linear" or "spiral") in form `[operator,value]` (see fl_list_Filter())

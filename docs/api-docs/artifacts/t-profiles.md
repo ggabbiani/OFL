@@ -175,13 +175,13 @@ namespace
 
 ---
 
-### variable FL_XTR_DICT
+### variable FL_XTR_INV
 
 __Default:__
 
     [FL_TSP_E1515,FL_TSP_E2020,FL_TSP_E2020t,FL_TSP_E2040,FL_TSP_E2060,FL_TSP_E2080,FL_TSP_E3030,FL_TSP_E3060,FL_TSP_E4040,FL_TSP_E4040t,FL_TSP_E4080,]
 
-T-slotted cross-section dictionary
+T-slotted cross-section inventory
 
 ## Functions
 

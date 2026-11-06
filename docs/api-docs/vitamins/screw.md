@@ -34,7 +34,7 @@ screw namespace
 
 ---
 
-### variable FL_SCREW_SPECS_INVENTORY
+### variable FL_SCREW_SPECS_INV
 
 __Default:__
 
@@ -93,12 +93,12 @@ undef, "default" or "nyloc"
 
 ---
 
-### function fl_ScrewInventory
+### function fl_ScrewInv
 
 __Syntax:__
 
 ```text
-fl_ScrewInventory(specs=FL_SCREW_SPECS_INVENTORY,name,nominal,head_type,head_name,length,longer_than=0,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
+fl_ScrewInv(specs=FL_SCREW_SPECS_INV,name,nominal,head_type,head_name,length,longer_than=0,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
 ```
 
 Builds a screw object inventory from specifications selection and shaft length.
@@ -433,7 +433,7 @@ screw specifications in NopSCADlib format
 __Syntax:__
 
 ```text
-fl_screw_specs_select(inventory=FL_SCREW_SPECS_INVENTORY,name,nominal,head_type,head_name,nut,washer)
+fl_screw_specs_select(inventory=FL_SCREW_SPECS_INV,name,nominal,head_type,head_name,nut,washer)
 ```
 
 Return a list of screw **specifications** matching the passed properties from
