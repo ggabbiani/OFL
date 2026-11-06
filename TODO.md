@@ -125,7 +125,7 @@
 - [X] added Snap-fit joints
 - [X] added 'point' symbol
 - [X] added fl_2d_closest() algorithm
-- [ ] apply fl_2d_closest() algorithm during symbol and label debugging (see fl_bentPlate{})
+- [X] applied fl_2d_closest() algorithm during symbol and label debugging (see fl_bentPlate{})
 - [X] added dimension line management
 - [ ] add dimension lines to relevant tests (see artifacts/joints.scad)
 - [X] fixed bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
