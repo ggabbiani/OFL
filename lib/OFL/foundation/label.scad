@@ -73,8 +73,12 @@ module fl_label(
   module do_add() {
     // translate(+Z(EPS))
       fl_color(fg)
-        resize([0,size,thick],auto=true)
-          linear_extrude(thick)
+        // NOTE: the 2d resize is applied BEFORE the extrusion: a 3d
+        // resize([0,size,thick],auto=true) derives the X auto-scale from the
+        // biggest new dimension, leaving the text unscaled along X when
+        // size<thick
+        linear_extrude(thick)
+          resize([0,size],auto=true)
             text(string, valign=valign, halign=halign, font=font);
   }
 

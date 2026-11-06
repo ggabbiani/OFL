@@ -476,15 +476,19 @@ module fl_jnt_joint(
       let(
         curr_view     = fl_currentView(),
         3d_sectionYZ  = [for(p=sectionYZ) fl_transform(fl_direction([+X,90]),[p.x,p.y,0])],
-        3d_sectionXZ  = [for(p=sectionXZ) fl_transform(fl_direction([-Y,0]),[p.x,p.y,0])]
+        3d_sectionXZ  = [for(p=sectionXZ) fl_transform(fl_direction([-Y,0]),[p.x,p.y,0])],
+        // common debug symbol/label size, proportional to the closest point
+        // couple distance of both sections (rigid transformations don't
+        // change distances)
+        debug_sz      = min(fl_2d_closest(sectionYZ),fl_2d_closest(sectionXZ))/3
       ) {
         if (fl_dbg_symbols()) {
-          fl_3d_polyhedronSymbols(3d_sectionYZ, 0.1,"silver");
-          fl_3d_polyhedronSymbols(3d_sectionXZ, 0.1,"gold");
+          fl_3d_polyhedronSymbols(3d_sectionYZ, debug_sz,"silver");
+          fl_3d_polyhedronSymbols(3d_sectionXZ, debug_sz,"gold");
         }
         if (fl_dbg_labels()) {
-          fl_3d_polyhedronLabels(3d_sectionYZ,0.1,"S");
-          fl_3d_polyhedronLabels(3d_sectionXZ,0.1,"F");
+          fl_3d_polyhedronLabels(3d_sectionYZ,debug_sz,"S");
+          fl_3d_polyhedronLabels(3d_sectionXZ,debug_sz,"F");
         }
       }
 
@@ -626,12 +630,15 @@ module fl_jnt_joint(
       3d_sectionYZ  = [for(p=sectionYZ) fl_transform(fl_direction([+X,90]),[p.x,p.y,0])];
       let(
         curr_view     = fl_currentView(),
-        3d_sectionYZ  = [for(p=sectionYZ) fl_transform(fl_direction([+X,90]),[p.x,p.y,0])]
+        3d_sectionYZ  = [for(p=sectionYZ) fl_transform(fl_direction([+X,90]),[p.x,p.y,0])],
+        // debug symbol/label size proportional to the closest point couple
+        // distance (rigid transformations don't change distances)
+        debug_sz      = fl_2d_closest(sectionYZ)/3
       ) {
         if (fl_dbg_symbols())
-          fl_3d_polyhedronSymbols(3d_sectionYZ, 0.1,"silver");
+          fl_3d_polyhedronSymbols(3d_sectionYZ, debug_sz,"silver");
         if (fl_dbg_labels())
-          fl_3d_polyhedronLabels(3d_sectionYZ,0.1,"S");
+          fl_3d_polyhedronLabels(3d_sectionYZ,debug_sz,"S");
       }
 
       // dimensions are suspended for the ring engine since there are problems
