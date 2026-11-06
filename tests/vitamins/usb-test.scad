@@ -117,7 +117,7 @@ single  = SHOW=="FL_USB_TYPE_Ax1_NF_SM"  ? FL_USB_TYPE_Ax1_NF_SM
 dirs  = fl_3d_AxisList(CUT_DIRECTION);
 
 if (single)
-  fl_USB(verbs,single,direction=direction,octant=octant,cut_thick=thick,cut_direction=dirs,cut_tolerance=tolerance,cut_drift=drift,tongue=COLOR);
+  fl_USB(verbs,single,direction=direction,octant=octant,cut_thick=thick,cut_dirs=dirs,cut_tolerance=tolerance,cut_drift=drift,tongue=COLOR);
 else
   layout([for(socket=FL_USB_DICT) fl_width(socket)], 10)
     fl_USB(verbs,FL_USB_DICT[$i],direction=direction,octant=octant,cut_thick=thick,cut_dirs=dirs,cut_tolerance=tolerance,cut_drift=drift,tongue=COLOR);

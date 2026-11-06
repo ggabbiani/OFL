@@ -280,7 +280,7 @@ function fl_knut_select(
 ) =
 let(
   filters = [
-    if (!is_undef(nominal)) echo(nominal=nominal)
+    if (!is_undef(nominal))
       fl_list_PropertyFilter(fl_nominal()[0],select=nominal,
         transform=function(_value_)
           is_num(_value_) ?

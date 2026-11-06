@@ -19,8 +19,12 @@ FL_CS_NS  = "cs";
 
 //*****************************************************************************
 // properties
+
+// countersink head Z size
 function fl_cs_k(type,value)        = fl_property(type,"cs/head height",value);
+// countersink head ⌀
 function fl_cs_dk(type,value)       = fl_property(type,"cs/head ⌀",value);
+// countersink cut angle in degrees
 function fl_cs_angle(type,value)    = fl_property(type,"cs/angle",value);
 
 //*****************************************************************************

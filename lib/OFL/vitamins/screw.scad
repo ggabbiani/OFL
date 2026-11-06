@@ -404,11 +404,11 @@ function fl_screw_specs_select(
         ]) :
       undef,
   filters = [
-    if (!is_undef(name))      echo(name=name) fl_list_ValueFilter(function(screw,default) screw[0],               select=name),
-    if (!is_undef(nominal))   echo(nominal=nominal) fl_list_ValueFilter(function(screw,default) 2*screw_radius(screw),  select=nominal),
-    if (!is_undef(head_type)) echo(head_type=head_type) fl_list_ValueFilter(function(screw,default) screw_head_type(screw), select=head_type),
-    if (!is_undef(washer))    echo(washer=washer) function(screw) chk_washer_list(screw,washer),
-    if (!is_undef(nut))       echo(nut=nut) function(screw) (((nut=="default" || nut=="nyloc") && screw_nut(screw)))
+    if (!is_undef(name))      fl_list_ValueFilter(function(screw,default) screw[0],               select=name),
+    if (!is_undef(nominal))   fl_list_ValueFilter(function(screw,default) 2*screw_radius(screw),  select=nominal),
+    if (!is_undef(head_type)) fl_list_ValueFilter(function(screw,default) screw_head_type(screw), select=head_type),
+    if (!is_undef(washer))    function(screw) chk_washer_list(screw,washer),
+    if (!is_undef(nut))       function(screw) (((nut=="default" || nut=="nyloc") && screw_nut(screw)))
   ],
   result = assert(inventory) fl_list_filter(inventory, filters)
 ) result;
