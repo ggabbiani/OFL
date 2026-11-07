@@ -16,6 +16,6 @@ opencv-python-headless==4.10.0.84
 scikit-image==0.25.0
 
 # documentation
-mkdocs-material==9.7.1
+mkdocs-material==9.7.7
 mkdocs-include-markdown-plugin==7.2.1
 mike==2.1.3
