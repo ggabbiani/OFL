@@ -10,7 +10,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 ARG ODOX_VERSION=1.2.2
 ARG ODOX_RELEASE=0ubuntu19
