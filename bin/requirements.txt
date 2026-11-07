@@ -1,5 +1,5 @@
-numpy==1.26.4
-opencv_python_headless==4.9.0.80
-python-dotenv==1.0.1
+numpy==2.5.4
+opencv_python_headless==5.0.0.93
+python-dotenv==1.2.4
 skimage==0.0
-termcolor==2.4.0
+termcolor==3.3.0
