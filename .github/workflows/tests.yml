@@ -14,17 +14,14 @@ on:
   workflow_dispatch:
 
 env:
-  ODOX_URL:   https://github.com/ggabbiani/orthodocs/releases/download/v1.2.1
+  DOCKER_LOCAL: ofl:fedora
+  DOCKER_REMOTE: ggabbiani/ofl:fedora
 
 jobs:
 
   fedora:
     name: Fedora
     runs-on: ubuntu-latest
-
-    env:
-      LOCAL_IMAGE: ofl:fedora
-      REMOTE_IMAGE: ggabbiani/ofl:fedora
 
     steps:
 
@@ -68,13 +65,13 @@ jobs:
           # local docker image build
           make -s docker/fedora-build
           # documentation make and tests execution @local image
-          docker run -v .:/import:Z --rm ${LOCAL_IMAGE} all
+          docker run -v .:/import:Z --rm ${DOCKER_LOCAL} all
 
       - name: tests on existing remote docker image
         if: steps.docker.outputs.changed=='no'
         run: |
           # documentation make and tests execution @remote image
-          docker run -v .:/import:Z --rm ${REMOTE_IMAGE} all
+          docker run -v .:/import:Z --rm ${DOCKER_REMOTE} all
 
       - name: Docker Hub Login needed
         if: steps.docker.outputs.changed=='yes' && github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -86,17 +83,12 @@ jobs:
       - name: new local docker image push
         if: steps.docker.outputs.changed=='yes' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          docker tag ${LOCAL_IMAGE} ${REMOTE_IMAGE}
-          docker push ${REMOTE_IMAGE}
+          docker tag ${DOCKER_LOCAL} ${DOCKER_REMOTE}
+          docker push ${DOCKER_REMOTE}
 
   ubuntu:
     name: Ubuntu
-    if: false   # temporarily disabled: to be aligned with the fedora job
     runs-on: ubuntu-latest
-
-    env:
-      LOCAL_IMAGE: ofl:ubuntu
-      REMOTE_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ofl:ubuntu
 
     steps:
 
@@ -121,27 +113,42 @@ jobs:
       # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
       - name: Docker changes
         id: docker
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
         run: |
-          set +e
-          (git diff --name-only HEAD HEAD~1 | grep -e '^docker/ubuntu/' >/dev/null && echo yes || echo no) | xargs -I@ echo changed=@ >> "$GITHUB_OUTPUT"
+          if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            BASE=HEAD~1
+          fi
+          if git diff --name-only "$BASE" HEAD | grep -q '^docker/ubuntu/'; then
+            echo changed=yes >> "$GITHUB_OUTPUT"
+          else
+            echo changed=no >> "$GITHUB_OUTPUT"
+          fi
           cat "$GITHUB_OUTPUT"
 
-      - name: Docker Hub Login
+      - name: tests on new local docker image
         if: steps.docker.outputs.changed=='yes'
+        run: |
+          # local docker image build
+          make -s docker/ubuntu-build
+          # documentation make and tests execution @local image
+          docker run -v .:/import:Z --rm ${DOCKER_LOCAL} all
+
+      - name: tests on existing remote docker image
+        if: steps.docker.outputs.changed=='no'
+        run: |
+          # documentation make and tests execution @remote image
+          docker run -v .:/import:Z --rm ${DOCKER_REMOTE} all
+
+      - name: Docker Hub Login needed
+        if: steps.docker.outputs.changed=='yes' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      # Docker image push after successful build, documentation make and tests execution
-      - name: promote
-        if: steps.docker.outputs.changed=='yes'
-        run: |
-          make -s docker/ubuntu
-          docker run -v .:/import --rm ${LOCAL_IMAGE} all
-          docker tag ${LOCAL_IMAGE} ${REMOTE_IMAGE}
-          docker push ${REMOTE_IMAGE}
 
-      - name: Docker image pull, document and test
-        if: steps.docker.outputs.changed=='no'
+      - name: new local docker image push
+        if: steps.docker.outputs.changed=='yes' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          docker run -v .:/import --rm ${REMOTE_IMAGE} all
+          docker tag ${DOCKER_LOCAL} ${DOCKER_REMOTE}
+          docker push ${DOCKER_REMOTE}
