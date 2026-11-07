@@ -1880,10 +1880,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_iec_inventory" class="md-nav__link">
+  <a href="#variable-fl_iec_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_IEC_INVENTORY
+        variable FL_IEC_INV
       
     </span>
   </a>
@@ -2818,10 +2818,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_iec_inventory" class="md-nav__link">
+  <a href="#variable-fl_iec_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_IEC_INVENTORY
+        variable FL_IEC_INV
       
     </span>
   </a>
@@ -2953,49 +2953,49 @@ into the OFL APIs.</p>
 <hr />
 <h3 id="variable-fl_iec_320_c14_switched_fused_inlet">variable FL_IEC_320_C14_SWITCHED_FUSED_INLET</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_IEC(IEC_320_C14_switched_fused_inlet)
+<div class="highlight"><pre><span></span><code>fl_IEC(IEC_320_C14_switched_fused_inlet,name=&quot;FL_IEC_320_C14_SWITCHED_FUSED_INLET&quot;)
 </code></pre></div>
 <p>IEC320 C14 switched fused inlet module.</p>
 <p><img alt="FL_IEC_320_C14_SWITCHED_FUSED_INLET" src="../256x256/fig_FL_IEC_320_C14_SWITCHED_FUSED_INLET.png" /></p>
 <hr />
 <h3 id="variable-fl_iec_fused_inlet">variable FL_IEC_FUSED_INLET</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_IEC(IEC_fused_inlet)
+<div class="highlight"><pre><span></span><code>fl_IEC(IEC_fused_inlet,name=&quot;FL_IEC_FUSED_INLET&quot;)
 </code></pre></div>
 <p>IEC fused inlet JR-101-1F.</p>
 <p><img alt="FL_IEC_FUSED_INLET" src="../256x256/fig_FL_IEC_FUSED_INLET.png" /></p>
 <hr />
 <h3 id="variable-fl_iec_fused_inlet2">variable FL_IEC_FUSED_INLET2</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_IEC(IEC_fused_inlet2)
+<div class="highlight"><pre><span></span><code>fl_IEC(IEC_fused_inlet2,name=&quot;FL_IEC_FUSED_INLET2&quot;)
 </code></pre></div>
 <p>IEC fused inlet old.</p>
 <p><img alt="FL_IEC_FUSED_INLET" src="../256x256/fig_FL_IEC_FUSED_INLET2.png" /></p>
 <hr />
 <h3 id="variable-fl_iec_inlet">variable FL_IEC_INLET</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_IEC(IEC_inlet)
+<div class="highlight"><pre><span></span><code>fl_IEC(IEC_inlet,name=&quot;FL_IEC_INLET&quot;)
 </code></pre></div>
 <p>IEC inlet.</p>
 <p><img alt="FL_IEC_INLET" src="../256x256/fig_FL_IEC_INLET.png" /></p>
 <hr />
 <h3 id="variable-fl_iec_inlet_atx">variable FL_IEC_INLET_ATX</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_IEC(IEC_inlet_atx)
+<div class="highlight"><pre><span></span><code>fl_IEC(IEC_inlet_atx,name=&quot;FL_IEC_INLET_ATX&quot;)
 </code></pre></div>
 <p>IEC inlet for ATX.</p>
 <p><img alt="FL_IEC_INLET_ATX" src="../256x256/fig_FL_IEC_INLET_ATX.png" /></p>
 <hr />
 <h3 id="variable-fl_iec_inlet_atx2">variable FL_IEC_INLET_ATX2</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_IEC(IEC_inlet_atx2)
+<div class="highlight"><pre><span></span><code>fl_IEC(IEC_inlet_atx2,name=&quot;FL_IEC_INLET_ATX2&quot;)
 </code></pre></div>
 <p>IEC die cast inlet for ATX.</p>
 <p><img alt="FL_IEC_INLET_ATX2" src="../256x256/fig_FL_IEC_INLET_ATX2.png" /></p>
 <hr />
-<h3 id="variable-fl_iec_inventory">variable FL_IEC_INVENTORY</h3>
+<h3 id="variable-fl_iec_inv">variable FL_IEC_INV</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_IEC_FUSED_INLET,FL_IEC_FUSED_INLET2,FL_IEC_320_C14_SWITCHED_FUSED_INLET,FL_IEC_INLET,FL_IEC_INLET_ATX,FL_IEC_INLET_ATX2,FL_IEC_YUNPEN,FL_IEC_OUTLET,]
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_IEC_FUSED_INLET,FL_IEC_FUSED_INLET2,FL_IEC_320_C14_SWITCHED_FUSED_INLET,FL_IEC_INLET,FL_IEC_INLET_ATX,FL_IEC_INLET_ATX2,FL_IEC_YUNPEN,FL_IEC_OUTLET,])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_iec_ns">variable FL_IEC_NS</h3>
@@ -3005,14 +3005,14 @@ into the OFL APIs.</p>
 <hr />
 <h3 id="variable-fl_iec_outlet">variable FL_IEC_OUTLET</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_IEC(IEC_outlet)
+<div class="highlight"><pre><span></span><code>fl_IEC(IEC_outlet,name=&quot;FL_IEC_OUTLET&quot;)
 </code></pre></div>
 <p>IEC outlet RS 811-7193.</p>
 <p><img alt="FL_IEC_OUTLET" src="../256x256/fig_FL_IEC_OUTLET.png" /></p>
 <hr />
 <h3 id="variable-fl_iec_yunpen">variable FL_IEC_YUNPEN</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_IEC(IEC_yunpen)
+<div class="highlight"><pre><span></span><code>fl_IEC(IEC_yunpen,name=&quot;FL_IEC_YUNPEN&quot;)
 </code></pre></div>
 <p>IEC inlet filtered.</p>
 <p><img alt="FL_IEC_YUNPEN" src="../256x256/fig_FL_IEC_YUNPEN.png" /></p>

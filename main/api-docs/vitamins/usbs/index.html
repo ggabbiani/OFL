@@ -2234,10 +2234,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_usb_dict" class="md-nav__link">
+  <a href="#variable-fl_usb_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_USB_DICT
+        variable FL_USB_INV
       
     </span>
   </a>
@@ -2752,10 +2752,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_usb_dict" class="md-nav__link">
+  <a href="#variable-fl_usb_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_USB_DICT
+        variable FL_USB_INV
       
     </span>
   </a>
@@ -2954,9 +2954,9 @@
 <p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</a></p>
 <h2 id="variables">Variables</h2>
 <hr />
-<h3 id="variable-fl_usb_dict">variable FL_USB_DICT</h3>
+<h3 id="variable-fl_usb_inv">variable FL_USB_INV</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_USB_TYPE_Ax1_NF_SM,FL_USB_TYPE_Ax1,FL_USB_TYPE_Ax1_NF,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C,FL_USB_TYPE_uA,FL_USB_TYPE_uA_NF,]
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_USB_TYPE_Ax1_NF_SM,FL_USB_TYPE_Ax1,FL_USB_TYPE_Ax1_NF,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C,FL_USB_TYPE_uA,FL_USB_TYPE_uA_NF,])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_usb_ns">variable FL_USB_NS</h3>
@@ -2966,42 +2966,42 @@
 <hr />
 <h3 id="variable-fl_usb_type_ax1">variable FL_USB_TYPE_Ax1</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(h=6.5,v_flange_l=4.5,bar=0,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine=&quot;USB/Ax1&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
+<div class="highlight"><pre><span></span><code>let(h=6.5,v_flange_l=4.5,bar=0,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name=&quot;FL_USB_TYPE_Ax1&quot;,engine=&quot;USB/Ax1&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_usb_type_ax1_nf">variable FL_USB_TYPE_Ax1_NF</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(h=6.5,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine=&quot;USB/Ax1&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+<div class="highlight"><pre><span></span><code>let(h=6.5,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name=&quot;FL_USB_TYPE_Ax1_NF&quot;,engine=&quot;USB/Ax1&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_usb_type_ax1_nf_sm">variable FL_USB_TYPE_Ax1_NF_SM</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(h=5.8,l=10,w=13.25)fl_Object([[-l,-w/2,0],[0,+w/2,h]],engine=&quot;USB/A SM&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+<div class="highlight"><pre><span></span><code>let(h=5.8,l=10,w=13.25)fl_Object([[-l,-w/2,0],[0,+w/2,h]],name=&quot;FL_USB_TYPE_Ax1_NF_SM&quot;,engine=&quot;USB/A SM&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_usb_type_ax2">variable FL_USB_TYPE_Ax2</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(h=15.6,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine=&quot;USB/Ax2&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
+<div class="highlight"><pre><span></span><code>let(h=15.6,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name=&quot;FL_USB_TYPE_Ax2&quot;,engine=&quot;USB/Ax2&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_usb_type_b">variable FL_USB_TYPE_B</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(l=16.4,w=12.2,h=11)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine=&quot;USB/B&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+<div class="highlight"><pre><span></span><code>let(l=16.4,w=12.2,h=11)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name=&quot;FL_USB_TYPE_B&quot;,engine=&quot;USB/B&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_usb_type_c">variable FL_USB_TYPE_C</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(l=7.35,w=8.94,h=3.26)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine=&quot;USB/C&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+<div class="highlight"><pre><span></span><code>let(l=7.35,w=8.94,h=3.26)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name=&quot;FL_USB_TYPE_C&quot;,engine=&quot;USB/C&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_usb_type_ua">variable FL_USB_TYPE_uA</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(l=6,iw1=7,h=2.65,t=0.4)fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],engine=&quot;USB/uA&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
+<div class="highlight"><pre><span></span><code>let(l=6,iw1=7,h=2.65,t=0.4)fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],name=&quot;FL_USB_TYPE_uA&quot;,engine=&quot;USB/uA&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_usb_type_ua_nf">variable FL_USB_TYPE_uA_NF</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(l=6,iw1=7,h=2.65,t=0.4)fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],engine=&quot;USB/uA&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+<div class="highlight"><pre><span></span><code>let(l=6,iw1=7,h=2.65,t=0.4)fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],name=&quot;FL_USB_TYPE_uA_NF&quot;,engine=&quot;USB/uA&quot;,others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 </code></pre></div>
 <h2 id="functions">Functions</h2>
 <hr />

@@ -752,10 +752,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_tnut_dict" class="md-nav__link">
+  <a href="#variable-fl_tnut_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_TNUT_DICT
+        variable FL_TNUT_INV
       
     </span>
   </a>
@@ -2741,10 +2741,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_tnut_dict" class="md-nav__link">
+  <a href="#variable-fl_tnut_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_TNUT_DICT
+        variable FL_TNUT_INV
       
     </span>
   </a>
@@ -2937,34 +2937,34 @@ to build a variety of industrial structures and machines.</p>
 <p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</a></p>
 <h2 id="variables">Variables</h2>
 <hr />
-<h3 id="variable-fl_tnut_dict">variable FL_TNUT_DICT</h3>
+<h3 id="variable-fl_tnut_inv">variable FL_TNUT_INV</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_TNUT_M3_CS,FL_TNUT_M4_CS,FL_TNUT_M5_CS,FL_TNUT_M6_CS]
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_TNUT_M3_CS,FL_TNUT_M4_CS,FL_TNUT_M5_CS,FL_TNUT_M6_CS])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_tnut_m3_cs">variable FL_TNUT_M3_CS</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw)
+<div class="highlight"><pre><span></span><code>fl_TNut(name=&quot;FL_TNUT_M3_CS&quot;,opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw)
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_tnut_m3_sm">variable FL_TNUT_M3_SM</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_TNut(opening=6,size=[10,20],thickness=[2,1,2],nop_screw=M3_cs_cap_screw)
+<div class="highlight"><pre><span></span><code>fl_TNut(name=&quot;FL_TNUT_M3_SM&quot;,opening=6,size=[10,20],thickness=[2,1,2],nop_screw=M3_cs_cap_screw)
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_tnut_m4_cs">variable FL_TNUT_M4_CS</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_cs_cap_screw)
+<div class="highlight"><pre><span></span><code>fl_TNut(name=&quot;FL_TNUT_M4_CS&quot;,opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_cs_cap_screw)
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_tnut_m5_cs">variable FL_TNUT_M5_CS</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw)
+<div class="highlight"><pre><span></span><code>fl_TNut(name=&quot;FL_TNUT_M5_CS&quot;,opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw)
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_tnut_m6_cs">variable FL_TNUT_M6_CS</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw)
+<div class="highlight"><pre><span></span><code>fl_TNut(name=&quot;FL_TNUT_M6_CS&quot;,opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw)
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_tnut_ns">variable FL_TNUT_NS</h3>
@@ -2976,7 +2976,7 @@ to build a variety of industrial structures and machines.</p>
 <hr />
 <h3 id="function-fl_tnut">function fl_TNut</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>fl_TNut(opening,size,thickness,nop_screw,knut=false,holes)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>fl_TNut(opening,size,thickness,nop_screw,knut=false,holes,name)
 </code></pre></div>
 <p>Constructor returning a T-slot nut.</p>
 <p><strong>TOP VIEW</strong>:</p>
@@ -2998,6 +2998,8 @@ an optional screw determining a hole</p>
 eventual knurl nut</p>
 <p><strong>holes</strong><br />
 list of user defined holes usually positioned on the 'opening' side</p>
+<p><strong>name</strong><br />
+optional name</p>
 <hr />
 <h3 id="function-fl_tnut_height">function fl_tnut_height</h3>
 <p><strong>Syntax:</strong></p>
@@ -3010,9 +3012,9 @@ t-nut, so conforming to the following assertion
 <hr />
 <h3 id="function-fl_tnut_select">function fl_tnut_select</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fl_tnut_select(dictionary=FL_TNUT_DICT,nop_screw,nominal,best=function(matches)matches[0])
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fl_tnut_select(inventory=FL_TNUT_INV,nop_screw,nominal,best=function(matches)matches[0])
 </code></pre></div>
-<p>Selects the T-slot nuts from a dictionary matching the screw or a generic
+<p>Selects the T-slot nuts from an inventory matching the screw or a generic
 nominal ⌀. When the «best» function literal is defined, it is applied to the
 result for further filtering.</p>
 <p><strong>Parameters:</strong></p>

@@ -1590,10 +1590,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_cs_iso_dict" class="md-nav__link">
+  <a href="#variable-fl_cs_iso_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_CS_ISO_DICT
+        variable FL_CS_ISO_INV
       
     </span>
   </a>
@@ -1744,10 +1744,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_cs_uni_dict" class="md-nav__link">
+  <a href="#variable-fl_cs_uni_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_CS_UNI_DICT
+        variable FL_CS_UNI_INV
       
     </span>
   </a>
@@ -2961,10 +2961,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_cs_iso_dict" class="md-nav__link">
+  <a href="#variable-fl_cs_iso_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_CS_ISO_DICT
+        variable FL_CS_ISO_INV
       
     </span>
   </a>
@@ -3115,10 +3115,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_cs_uni_dict" class="md-nav__link">
+  <a href="#variable-fl_cs_uni_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_CS_UNI_DICT
+        variable FL_CS_UNI_INV
       
     </span>
   </a>
@@ -3362,15 +3362,16 @@
 <pre class="mermaid"><code>graph LR
     A1[vitamins/countersinks] --o|include| A2[foundation/core]
     A1 --o|use| A3[foundation/bbox-engine]
-    A1 --o|use| A4[foundation/mngm-engine]</code></pre>
+    A1 --o|use| A4[foundation/mngm-engine]
+    A1 --o|use| A5[foundation/type-engine]</code></pre>
 <p>Countersink definitions based on UNI 5933 and ISO 10642</p>
 <p>Copyright © 2021, Giampiero Gabbiani (giampiero@gabbiani.org)</p>
 <p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</a></p>
 <h2 id="variables">Variables</h2>
 <hr />
-<h3 id="variable-fl_cs_iso_dict">variable FL_CS_ISO_DICT</h3>
+<h3 id="variable-fl_cs_iso_inv">variable FL_CS_ISO_INV</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_CS_ISO_M2,FL_CS_ISO_M2p5,FL_CS_ISO_M3,FL_CS_ISO_M4,FL_CS_ISO_M5,FL_CS_ISO_M6,FL_CS_ISO_M8,FL_CS_ISO_M10,FL_CS_ISO_M12,FL_CS_ISO_M14,FL_CS_ISO_M16,FL_CS_ISO_M20]
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_CS_ISO_M2,FL_CS_ISO_M2p5,FL_CS_ISO_M3,FL_CS_ISO_M4,FL_CS_ISO_M5,FL_CS_ISO_M6,FL_CS_ISO_M8,FL_CS_ISO_M10,FL_CS_ISO_M12,FL_CS_ISO_M14,FL_CS_ISO_M16,FL_CS_ISO_M20])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_cs_iso_m10">variable FL_CS_ISO_M10</h3>
@@ -3439,9 +3440,9 @@
 </code></pre></div>
 <p>countersinks namespace</p>
 <hr />
-<h3 id="variable-fl_cs_uni_dict">variable FL_CS_UNI_DICT</h3>
+<h3 id="variable-fl_cs_uni_inv">variable FL_CS_UNI_INV</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_CS_UNI_M3,FL_CS_UNI_M4,FL_CS_UNI_M5,FL_CS_UNI_M6,FL_CS_UNI_M8,FL_CS_UNI_M10,FL_CS_UNI_M12,FL_CS_UNI_M16,FL_CS_UNI_M20]
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_CS_UNI_M3,FL_CS_UNI_M4,FL_CS_UNI_M5,FL_CS_UNI_M6,FL_CS_UNI_M8,FL_CS_UNI_M10,FL_CS_UNI_M12,FL_CS_UNI_M16,FL_CS_UNI_M20])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_cs_uni_m10">variable FL_CS_UNI_M10</h3>
@@ -3526,7 +3527,7 @@ countersink angle</p>
 <hr />
 <h3 id="function-fl_cs_select">function fl_cs_select</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>fl_cs_select(dictionary=FL_CS_ISO_DICT,name,nominal)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>fl_cs_select(inventory=FL_CS_ISO_INV,name,nominal)
 </code></pre></div>
 <p>return a countersink list fitting the passed properties or undef if no match
 no match found.</p>

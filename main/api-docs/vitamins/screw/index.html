@@ -2077,10 +2077,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_screw_specs_inventory" class="md-nav__link">
+  <a href="#variable-fl_screw_specs_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_SCREW_SPECS_INVENTORY
+        variable FL_SCREW_SPECS_INV
       
     </span>
   </a>
@@ -2116,10 +2116,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_screwinventory" class="md-nav__link">
+  <a href="#function-fl_screwinv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        function fl_ScrewInventory
+        function fl_ScrewInv
       
     </span>
   </a>
@@ -2873,10 +2873,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_screw_specs_inventory" class="md-nav__link">
+  <a href="#variable-fl_screw_specs_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_SCREW_SPECS_INVENTORY
+        variable FL_SCREW_SPECS_INV
       
     </span>
   </a>
@@ -2912,10 +2912,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_screwinventory" class="md-nav__link">
+  <a href="#function-fl_screwinv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        function fl_ScrewInventory
+        function fl_ScrewInv
       
     </span>
   </a>
@@ -3180,7 +3180,7 @@
 </code></pre></div>
 <p>screw namespace</p>
 <hr />
-<h3 id="variable-fl_screw_specs_inventory">variable FL_SCREW_SPECS_INVENTORY</h3>
+<h3 id="variable-fl_screw_specs_inv">variable FL_SCREW_SPECS_INV</h3>
 <p><strong>Default:</strong></p>
 <div class="highlight"><pre><span></span><code>[for(list=screw_lists,screw=list)if(screw)screw]
 </code></pre></div>
@@ -3214,9 +3214,9 @@ undef, "spring" or "star"</p>
 <p><strong>nut</strong><br />
 undef, "default" or "nyloc"</p>
 <hr />
-<h3 id="function-fl_screwinventory">function fl_ScrewInventory</h3>
+<h3 id="function-fl_screwinv">function fl_ScrewInv</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>fl_ScrewInventory(specs=FL_SCREW_SPECS_INVENTORY,name,nominal,head_type,head_name,length,longer_than=0,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>fl_ScrewInv(specs=FL_SCREW_SPECS_INV,name,nominal,head_type,head_name,length,longer_than=0,shorter_than,head_spring,head_washer,thickness,nut_washer,nut_spring,nut)
 </code></pre></div>
 <p>Builds a screw object inventory from specifications selection and shaft length.</p>
 <p><strong>Parameters:</strong></p>
@@ -3438,7 +3438,7 @@ function screw_head_depth().</p>
 <hr />
 <h3 id="function-fl_screw_specs_select">function fl_screw_specs_select</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>fl_screw_specs_select(inventory=FL_SCREW_SPECS_INVENTORY,name,nominal,head_type,head_name,nut,washer)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>fl_screw_specs_select(inventory=FL_SCREW_SPECS_INV,name,nominal,head_type,head_name,nut,washer)
 </code></pre></div>
 <p>Return a list of screw <strong>specifications</strong> matching the passed properties from
 «inventory».</p>

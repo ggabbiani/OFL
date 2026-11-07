@@ -1853,10 +1853,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_jack_dict" class="md-nav__link">
+  <a href="#variable-fl_jack_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_JACK_DICT
+        variable FL_JACK_INV
       
     </span>
   </a>
@@ -2691,10 +2691,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_jack_dict" class="md-nav__link">
+  <a href="#variable-fl_jack_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_JACK_DICT
+        variable FL_JACK_INV
       
     </span>
   </a>
@@ -2811,16 +2811,16 @@
 <hr />
 <h3 id="variable-fl_jack_barrel">variable FL_JACK_BARREL</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(l=12,w=7,h=6,ch=2.5,bbox=[[-l/2,-w/2,0],[+l/2+ch,+w/2,h]])fl_Object(bbox,engine=str(FL_JACK_NS,&quot;/barrel&quot;),others=[fl_cutout(value=[+X])])
+<div class="highlight"><pre><span></span><code>let(l=12,w=7,h=6,ch=2.5,bbox=[[-l/2,-w/2,0],[+l/2+ch,+w/2,h]])fl_Object(bbox,name=&quot;FL_JACK_BARREL&quot;,engine=str(FL_JACK_NS,&quot;/barrel&quot;),others=[fl_cutout(value=[+X])])
 </code></pre></div>
 <p>'Barrel' jack plug.</p>
 <p>The supported cutout direction on +X is circular allowing the carving for
 jack plug insertion:</p>
 <p><img alt="preferred cutouts on +x" src="../256x256/fig_jack_barrel_supported_cutouts.png" /></p>
 <hr />
-<h3 id="variable-fl_jack_dict">variable FL_JACK_DICT</h3>
+<h3 id="variable-fl_jack_inv">variable FL_JACK_INV</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_JACK_BARREL,FL_JACK_MCXJPHSTEM1,]
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_JACK_BARREL,FL_JACK_MCXJPHSTEM1,])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_jack_mcxjphstem1">variable FL_JACK_MCXJPHSTEM1</h3>

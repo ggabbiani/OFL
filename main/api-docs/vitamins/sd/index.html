@@ -2094,10 +2094,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_sd_dict" class="md-nav__link">
+  <a href="#variable-fl_sd_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_SD_DICT
+        variable FL_SD_INV
       
     </span>
   </a>
@@ -2647,10 +2647,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_sd_dict" class="md-nav__link">
+  <a href="#variable-fl_sd_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_SD_DICT
+        variable FL_SD_INV
       
     </span>
   </a>
@@ -2741,15 +2741,15 @@
 <p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</a></p>
 <h2 id="variables">Variables</h2>
 <hr />
-<h3 id="variable-fl_sd_dict">variable FL_SD_DICT</h3>
+<h3 id="variable-fl_sd_inv">variable FL_SD_INV</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_SD_MOLEX_uSD_SOCKET]
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_SD_MOLEX_uSD_SOCKET])
 </code></pre></div>
-<p>sd dictionary</p>
+<p>sd inventory</p>
 <hr />
 <h3 id="variable-fl_sd_molex_usd_socket">variable FL_SD_MOLEX_uSD_SOCKET</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(size=[13,11.5,1.28])[fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),fl_cutout(value=[-FL_Y]),]
+<div class="highlight"><pre><span></span><code>let(size=[13,11.5,1.28])[fl_name(value=&quot;FL_SD_MOLEX_uSD_SOCKET&quot;),fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),fl_cutout(value=[-FL_Y]),]
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_sd_ns">variable FL_SD_NS</h3>

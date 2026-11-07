@@ -1926,17 +1926,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_pcb_dict" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        variable FL_PCB_DICT
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#variable-fl_pcb_engine_frame" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1952,6 +1941,17 @@
     <span class="md-ellipsis">
       
         variable FL_PCB_HILETGO_SX1308
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-fl_pcb_inv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        variable FL_PCB_INV
       
     </span>
   </a>
@@ -2917,17 +2917,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_pcb_dict" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        variable FL_PCB_DICT
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#variable-fl_pcb_engine_frame" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2943,6 +2932,17 @@
     <span class="md-ellipsis">
       
         variable FL_PCB_HILETGO_SX1308
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-fl_pcb_inv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        variable FL_PCB_INV
       
     </span>
   </a>
@@ -3295,11 +3295,6 @@
 <p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</a></p>
 <h2 id="variables">Variables</h2>
 <hr />
-<h3 id="variable-fl_pcb_dict">variable FL_PCB_DICT</h3>
-<p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,FL_PCB_VIM1,]
-</code></pre></div>
-<hr />
 <h3 id="variable-fl_pcb_engine_frame">variable FL_PCB_ENGINE_FRAME</h3>
 <p><strong>Default:</strong></p>
 <div class="highlight"><pre><span></span><code>&quot;PCB frame engine&quot;
@@ -3309,6 +3304,11 @@
 <h3 id="variable-fl_pcb_hiletgo_sx1308">variable FL_PCB_HILETGO_SX1308</h3>
 <p><strong>Default:</strong></p>
 <div class="highlight"><pre><span></span><code>let(pcb_t=1.6,sz=[23,16,pcb_t],holes=[for(x=[-sz.x/2+2.5,+sz.x/2-2.5],y=[-sz.y/2+2.5,+sz.y/2-2.5])[x,y,0]],1PIN=fl_PinHeader(&quot;1-pin&quot;,nop=2p54header,engine=&quot;male&quot;),comps=[[&quot;TRIMPOT&quot;,fl_Component(FL_TRIM_NS,[-5,-sz.y/2+0.5,0],[+Y,0],[+Z],FL_TRIM_POT10,[[FL_COMP_OCTANT,+X-Y+Z]])],for(i=[0:len(holes)-1])let(label=str(&quot;PIN-&quot;,i))[label,fl_Component(FL_PHDR_NS,holes[i],[+Z,0],[+Z],1PIN)],])fl_PCB(name=&quot;HiLetgo SX1308 DC-DC Step up power module&quot;,bare=[[-sz.x/2,-sz.y/2,-sz.z],[+sz.x/2,+sz.y/2,0]],thick=pcb_t,color=&quot;DarkCyan&quot;,holes=let(r=0.75,d=r*2)[for(i=[0:len(holes)-1])let(pos=holes[i])fl_Hole(pos,d,+Z,pcb_t,loct=-sign(pos.x)*X-sign(pos.y)*Y)],components=comps,vendors=[[&quot;Amazon&quot;,&quot;https://www.amazon.it/gp/product/B07ZYW68C4&quot;]])
+</code></pre></div>
+<hr />
+<h3 id="variable-fl_pcb_inv">variable FL_PCB_INV</h3>
+<p><strong>Default:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_PCB_HILETGO_SX1308,FL_PCB_MH4PU_P,FL_PCB_PERF70x50,FL_PCB_PERF60x40,FL_PCB_PERF70x30,FL_PCB_PERF80x20,FL_PCB_RPI4,FL_PCB_RPI_uHAT,FL_PCB_VIM1,])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_pcb_mh4pu_p">variable FL_PCB_MH4PU_P</h3>
@@ -3589,7 +3589,7 @@ use <a href="#module-fl_pcb_adapter">fl_pcb_adapter{}</a> instead.</p>
 <hr />
 <h3 id="function-fl_pcb_select">function fl_pcb_select</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>fl_pcb_select(name,inventory=FL_PCB_DICT)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>fl_pcb_select(name,inventory=FL_PCB_INV)
 </code></pre></div>
 <p>select a pcb by name</p>
 <p><strong>Parameters:</strong></p>

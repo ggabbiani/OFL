@@ -1758,10 +1758,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_hd_dict" class="md-nav__link">
+  <a href="#variable-fl_hd_evo860" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_HD_DICT
+        variable FL_HD_EVO860
       
     </span>
   </a>
@@ -1769,10 +1769,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_hd_evo860" class="md-nav__link">
+  <a href="#variable-fl_hd_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_HD_EVO860
+        variable FL_HD_INV
       
     </span>
   </a>
@@ -2647,10 +2647,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#variable-fl_hd_dict" class="md-nav__link">
+  <a href="#variable-fl_hd_evo860" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_HD_DICT
+        variable FL_HD_EVO860
       
     </span>
   </a>
@@ -2658,10 +2658,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_hd_evo860" class="md-nav__link">
+  <a href="#variable-fl_hd_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_HD_EVO860
+        variable FL_HD_INV
       
     </span>
   </a>
@@ -2743,14 +2743,14 @@ Wiki</a></p>
 <p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/GPL-3.0-or-later.html">GPL-3.0-or-later</a></p>
 <h2 id="variables">Variables</h2>
 <hr />
-<h3 id="variable-fl_hd_dict">variable FL_HD_DICT</h3>
-<p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_HD_EVO860]
-</code></pre></div>
-<hr />
 <h3 id="variable-fl_hd_evo860">variable FL_HD_EVO860</h3>
 <p><strong>Default:</strong></p>
 <div class="highlight"><pre><span></span><code>let(size=[69.85,100,7],plug=FL_SATA_POWERDATAPLUG,cid=fl_sata_powerDataCID(),specs=M3_cs_cap_screw,screw_r=screw_radius(specs),Mpd=T(-X(4.8)-Z(EPS))*fl_direction([-Y,0])*fl_octant(+Y-Z,type=plug),conns=fl_connectors(plug),pc=fl_conn_clone(conns[0],M=Mpd),dc=fl_conn_clone(conns[1],M=Mpd))fl_Object(name=&quot;Samsung V-NAND SSD 860 EVO&quot;,engine=FL_HD_NS,bbox=[[-size.x/2,0,0],[+size.x/2,+size.y,+size.z],],others=[[&quot;offset&quot;,[0,-size.y/2,-size.z/2]],[&quot;corner radius&quot;,3],fl_screw_specs(value=specs),fl_sata_plug(value=plug),fl_connectors(value=[pc,dc]),fl_holes(value=[fl_Hole([size.x/2-3.5,14,0],3,-Z,3+screw_r),fl_Hole([size.x/2-3.5,90.6,0],3,-Z,3+screw_r),fl_Hole([-size.x/2+3.5,14,0],3,-Z,3+screw_r),fl_Hole([-size.x/2+3.5,90.6,0],3,-Z,3+screw_r),fl_Hole([size.x/2,14,3],3,+X,3.5+screw_r),fl_Hole([size.x/2,90.6,3],3,+X,3.5+screw_r),fl_Hole([-size.x/2,14,3],3,-X,3.5+screw_r),fl_Hole([-size.x/2,90.6,3],3,-X,3.5+screw_r),]),[&quot;Mpd&quot;,Mpd],fl_cutout(value=[-Y]),])
+</code></pre></div>
+<hr />
+<h3 id="variable-fl_hd_inv">variable FL_HD_INV</h3>
+<p><strong>Default:</strong></p>
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_HD_EVO860])
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_hd_ns">variable FL_HD_NS</h3>

@@ -2283,17 +2283,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_knut_dict" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        function fl_knut_dict
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#function-fl_knut_drilld" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2305,10 +2294,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_knut_lineardict" class="md-nav__link">
+  <a href="#function-fl_knut_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        function fl_knut_linearDict
+        function fl_knut_inv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_knut_linearinv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_knut_linearInv
       
     </span>
   </a>
@@ -2360,10 +2360,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_knut_spiraldict" class="md-nav__link">
+  <a href="#function-fl_knut_spiralinv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        function fl_knut_spiralDict
+        function fl_knut_spiralInv
       
     </span>
   </a>
@@ -3561,17 +3561,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_knut_dict" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        function fl_knut_dict
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#function-fl_knut_drilld" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3583,10 +3572,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_knut_lineardict" class="md-nav__link">
+  <a href="#function-fl_knut_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        function fl_knut_linearDict
+        function fl_knut_inv
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-fl_knut_linearinv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function fl_knut_linearInv
       
     </span>
   </a>
@@ -3638,10 +3638,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#function-fl_knut_spiraldict" class="md-nav__link">
+  <a href="#function-fl_knut_spiralinv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        function fl_knut_spiralDict
+        function fl_knut_spiralInv
       
     </span>
   </a>
@@ -4050,21 +4050,21 @@ external diameter</p>
 <p><strong>stl_file</strong><br />
 stl geometry file from Ruthex</p>
 <hr />
-<h3 id="function-fl_knut_dict">function fl_knut_dict</h3>
-<p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fl_knut_dict()
-</code></pre></div>
-<p>full knurl nuts dictionary</p>
-<hr />
 <h3 id="function-fl_knut_drilld">function fl_knut_drillD</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>fl_knut_drillD(type,value)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fl_knut_drillD(type,value)
 </code></pre></div>
 <p>diameter for FL_DRILL</p>
 <hr />
-<h3 id="function-fl_knut_lineardict">function fl_knut_linearDict</h3>
+<h3 id="function-fl_knut_inv">function fl_knut_inv</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>fl_knut_linearDict()
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>fl_knut_inv()
+</code></pre></div>
+<p>full knurl nuts inventory</p>
+<hr />
+<h3 id="function-fl_knut_linearinv">function fl_knut_linearInv</h3>
+<p><strong>Syntax:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>fl_knut_linearInv()
 </code></pre></div>
 <hr />
 <h3 id="function-fl_knut_r">function fl_knut_r</h3>
@@ -4093,7 +4093,7 @@ inventory of NopSCADlib screws</p>
 <hr />
 <h3 id="function-fl_knut_select">function fl_knut_select</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>fl_knut_select(inventory=fl_knut_dict(),nominal,thread,length,best)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>fl_knut_select(inventory=fl_knut_inv(),nominal,thread,length,best)
 </code></pre></div>
 <p>Returns a list of knurl nuts fitting requirements (empty list if none was
 found) or a sigle best matching knurl nut when the <code>best</code> function literal
@@ -4110,9 +4110,9 @@ Function literal restricting the selection to the <strong>unique</strong> best m
 nut or to «undef» in the selection result is empty.
 If «undef» no restriction to the matching list is applied.</p>
 <hr />
-<h3 id="function-fl_knut_spiraldict">function fl_knut_spiralDict</h3>
+<h3 id="function-fl_knut_spiralinv">function fl_knut_spiralInv</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>fl_knut_spiralDict()
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>fl_knut_spiralInv()
 </code></pre></div>
 <hr />
 <h3 id="function-fl_knut_teeth">function fl_knut_teeth</h3>

@@ -2392,13 +2392,52 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#objects" class="md-nav__link">
+  <a href="#data-model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        'Objects'
+        Data model
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Data model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abstract-data-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Abstract data types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inventories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inventories
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2771,13 +2810,52 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#objects" class="md-nav__link">
+  <a href="#data-model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        'Objects'
+        Data model
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Data model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abstract-data-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Abstract data types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inventories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inventories
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3007,14 +3085,174 @@
 <h2 id="overview">Overview</h2>
 <p>The OFL foundation provides a uniform API set for base library tasks used by vitamins, replacing part of the OpenSCAD 2d/3d primitives.</p>
 <p><img alt="core dependencies" src="dependencies.svg" /></p>
-<h2 id="objects">'Objects'</h2>
-<p>An Object is a key/value list like the following:</p>
+<h2 id="data-model">Data model</h2>
+<p>OFL distinguishes between <strong>abstract data types</strong> (ADT), describing <em>how</em> data
+are organized, and <strong>domain concepts</strong>, describing <em>what</em> data represent. Each
+domain concept is a specialization of an ADT:</p>
+<table>
+<thead>
+<tr>
+<th>Domain concept</th>
+<th>Underlying ADT</th>
+<th>Specialization</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object</td>
+<td>dictionary</td>
+<td>keys are property names, some of them with standard semantic</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>list</td>
+<td>items are objects, uniquely identified by their name</td>
+</tr>
+</tbody>
+</table>
+<p>The foundation implements the ADTs and the <em>generic</em> domain concepts (objects
+and inventories in general), while artifacts and vitamins implement the
+<em>specific</em> domain (like the inventory of the available PCBs).</p>
+<h3 id="abstract-data-types">Abstract data types</h3>
+<table>
+<thead>
+<tr>
+<th>ADT</th>
+<th>Implementation</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>list</td>
+<td>native OpenSCAD list</td>
+<td>generic list operations: fl_list_*() (like <a href="../../orthodocs/foundation/core.md#function-fl_list_organize">fl_list_organize()</a> grouping items by a property)</td>
+</tr>
+<tr>
+<td>dictionary</td>
+<td>list of [key,value] pairs</td>
+<td>keys are unique</td>
+</tr>
+</tbody>
+</table>
+<p>OFL doesn't provide pure dictionary getters: dictionaries are accessed through
+the object getters (see <a href="#objects">Objects</a>).</p>
+<p><strong>NOTE:</strong> client code should never use the native OpenSCAD search() on
+dictionaries directly, since its semantic changes depending on the signature
+used (first match index, list of indexes, character by character search when
+the term is a plain string, <code>[[]]</code> when nothing is found).</p>
+<h3 id="objects">Objects</h3>
+<p>An <em>object</em> is a dictionary in which every key/value pair represents a
+property of the object:</p>
 <div class="highlight"><pre><span></span><code>type = [
   [&quot;first property name&quot;, &quot;this is a string&quot;],  // a string property
   [&quot;second property name&quot;, -3.5],               // a number propery
   [&quot;a flag name&quot;],                              // a flag
 ];
 </code></pre></div>
+<p>Object properties belong to one of the following categories:</p>
+<ul>
+<li><strong>standard properties</strong> - keys whose semantic is shared by all the OFL
+  objects (like <em>name</em>, <em>description</em>, <em>bounding box</em>, <em>engine</em> or
+  <em>nominal</em>), each one accessed through its own getter (like
+  <a href="../../orthodocs/foundation/core.md#function-fl_name">fl_name()</a>);</li>
+<li><strong>namespaced properties</strong> - package specific keys, prefixed by the package
+  namespace and with a semantic shared only inside the package (like
+  <code>str(FL_JNT_CANTILEVER_NS,"/section YZ")</code> for joints).</li>
+</ul>
+<p>The base object constructor is
+<a href="../../orthodocs/foundation/type-engine.md#function-fl_object">fl_Object()</a>.</p>
+<p>Properties are retrieved through the object getters
+<a href="../../orthodocs/foundation/core.md#function-fl_get">fl_get()</a> (mandatory
+property) and
+<a href="../../orthodocs/foundation/core.md#function-fl_optional">fl_optional()</a>
+(optional property). When a property value is a function literal, both
+getters return the result of its invocation (<code>value(type,key,default)</code>): this
+allows <em>computed</em> properties, like the ones of the PCB frames acting as
+proxies of the framed PCB.</p>
+<p><strong>NOTE:</strong> for historical reasons the parameters representing an object are
+often named <em>type</em> (like in <code>fl_get(type,key)</code>).</p>
+<h3 id="inventories">Inventories</h3>
+<p>An <em>inventory</em> is a list of objects, typically the pre-defined and
+ready-to-use objects made available by a package:</p>
+<ul>
+<li>every object in an inventory has a standard <em>name</em> property that <strong>must be
+  unique</strong> inside the inventory: the lookup by name returns a single object;</li>
+<li>all the other properties are not necessarily unique: the selection by other
+  properties returns a (possibly empty) list of objects (like in
+  <a href="../../orthodocs/vitamins/pcbs.md#function-fl_pcb_select">fl_pcb_select()</a>).</li>
+</ul>
+<p><strong>NOTE:</strong> the uniqueness of names is a rule of the inventory, not a property
+of the single object: an object constructor doesn't know about the other
+objects of an inventory and thus can't enforce it. For this reason
+inventories are built through the inventory constructor
+<a href="../../orthodocs/foundation/core.md#function-fl_inventory">fl_Inventory()</a>,
+failing when an object has no name or when a name is duplicated:</p>
+<div class="highlight"><pre><span></span><code>FL_PCB_INV = fl_Inventory([
+  FL_PCB_RPI4,
+  FL_PCB_VIM1,
+]);
+</code></pre></div>
+<p>The foundation provides the following generic inventory operations:</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../orthodocs/foundation/core.md#function-fl_inv_names">fl_inv_names()</a></td>
+<td>list of the object names</td>
+</tr>
+<tr>
+<td><a href="../../orthodocs/foundation/core.md#function-fl_inv_lookup">fl_inv_lookup()</a></td>
+<td>the object with the passed name, undef when not found</td>
+</tr>
+</tbody>
+</table>
+<p>Inventories follow these naming conventions:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Convention</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>global inventory constant</td>
+<td>FL_«NS»_INV</td>
+<td>FL_PCB_INV</td>
+</tr>
+<tr>
+<td>function returning an inventory</td>
+<td>fl_«ns»_«name»Inv()</td>
+<td>fl_knut_spiralInv()</td>
+</tr>
+<tr>
+<td>constructor building an inventory</td>
+<td>fl_«Name»Inv()</td>
+<td>fl_ScrewInv()</td>
+</tr>
+<tr>
+<td>local inventory variable/parameter</td>
+<td>inventory</td>
+<td><code>fl_cs_select(inventory=FL_CS_ISO_INV)</code></td>
+</tr>
+</tbody>
+</table>
+<p>where «NS» and «ns» are the package namespace in upper and lower case.</p>
+<p><strong>NOTE:</strong> two package lists follow the inventory naming convention without
+being inventories of OFL objects, and thus are not built through
+fl_Inventory():</p>
+<ul>
+<li>FL_SCREW_SPECS_INV - list of NopSCADlib screw <em>specifications</em>;</li>
+<li>FL_DIN_RAIL_INV - list of DIN rail <em>constructors</em>, index aligned with
+  FL_DIN_TS_INV.</li>
+</ul>
 <h2 id="apis">APIs</h2>
 <p>In order to minimize the risk of overlap with other APIs or global constant from other client libraries, every library item has been prefixed in the following way:</p>
 <ul>
@@ -3313,6 +3551,17 @@ FL_FOOTPRINT  = &quot;FL_FOOTPRINT adds a footprint to scene, usually a simplifi
 FL_LAYOUT     = &quot;FL_LAYOUT layout of user passed accessories (like alternative screws).&quot;;
 FL_PAYLOAD    = &quot;FL_PAYLOAD adds a box representing the payload of the shape&quot;;
 </code></pre></div>
+<p>Constants defined in a local scope (function and module bodies, let()
+assignments, function parameters) are instead in <strong>lower case</strong>:</p>
+<div class="highlight"><pre><span></span><code>function fl_cs_select(inventory=FL_CS_ISO_INV,name,nominal) = ...
+let(
+  inventory = fl_knut_inv(),
+  ...
+) ...
+</code></pre></div>
+<p>The only accepted exception are one or two letter names coming from the
+mathematical notation (like <code>M</code> for a transformation matrix or <code>R</code> for a
+radius).</p>
 <h2 id="pecial-variables">$pecial variables</h2>
 <p>$pecial variables used in OFL follow the same naming convention used for constants.</p>
 <table>

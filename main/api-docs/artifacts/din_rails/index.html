@@ -667,10 +667,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_din_rail_inventory" class="md-nav__link">
+  <a href="#variable-fl_din_rail_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_DIN_RAIL_INVENTORY
+        variable FL_DIN_RAIL_INV
       
     </span>
   </a>
@@ -744,10 +744,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_din_ts_inventory" class="md-nav__link">
+  <a href="#variable-fl_din_ts_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_DIN_TS_INVENTORY
+        variable FL_DIN_TS_INV
       
     </span>
   </a>
@@ -2928,10 +2928,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_din_rail_inventory" class="md-nav__link">
+  <a href="#variable-fl_din_rail_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_DIN_RAIL_INVENTORY
+        variable FL_DIN_RAIL_INV
       
     </span>
   </a>
@@ -3005,10 +3005,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#variable-fl_din_ts_inventory" class="md-nav__link">
+  <a href="#variable-fl_din_ts_inv" class="md-nav__link">
     <span class="md-ellipsis">
       
-        variable FL_DIN_TS_INVENTORY
+        variable FL_DIN_TS_INV
       
     </span>
   </a>
@@ -3210,10 +3210,10 @@ present standards in the 1950s.</p>
 <li><strong>profiles</strong>: representing the different rail sections available. Currently
   supported types are type Ω top head sections.  DIN profile instances are
   all prefixed with <strong>TS</strong>. The list of available profiles is contained in
-  <a href="#variable-fl_din_ts_inventory">variable FL_DIN_TS_INVENTORY</a>.</li>
+  <a href="#variable-fl_din_ts_inv">variable FL_DIN_TS_INV</a>.</li>
 <li><strong>DIN rails</strong>: concrete rail instantiations. DIN rail instances are
   prefixed with <strong>TH</strong>. The list of available rails is provided in
-  <a href="#variable-fl_din_rail_inventory">variable FL_DIN_RAIL_INVENTORY</a> .</li>
+  <a href="#variable-fl_din_rail_inv">variable FL_DIN_RAIL_INV</a> .</li>
 </ul>
 <h2 id="legal">Legal</h2>
 <p>This file is part of the 'OpenSCAD Foundation Library' (OFL) project.</p>
@@ -3239,7 +3239,7 @@ present standards in the 1950s.</p>
 </code></pre></div>
 <p>6.3 mm stepped punch</p>
 <hr />
-<h3 id="variable-fl_din_rail_inventory">variable FL_DIN_RAIL_INVENTORY</h3>
+<h3 id="variable-fl_din_rail_inv">variable FL_DIN_RAIL_INV</h3>
 <p><strong>Default:</strong></p>
 <div class="highlight"><pre><span></span><code>[FL_DIN_RAIL_TH15,FL_DIN_RAIL_TH35,FL_DIN_RAIL_TH35D]
 </code></pre></div>
@@ -3288,9 +3288,9 @@ same signature:</p>
 <p>Top hat section profile IEC/EN 60715 – 35×15 mm</p>
 <p><img alt="FL_DIN_TS35D" src="../800x600/fig-TS35D_section.png" /></p>
 <hr />
-<h3 id="variable-fl_din_ts_inventory">variable FL_DIN_TS_INVENTORY</h3>
+<h3 id="variable-fl_din_ts_inv">variable FL_DIN_TS_INV</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>[FL_DIN_TS15,FL_DIN_TS35,FL_DIN_TS35D]
+<div class="highlight"><pre><span></span><code>fl_Inventory([FL_DIN_TS15,FL_DIN_TS35,FL_DIN_TS35D])
 </code></pre></div>
 <p>DIN profile inventory</p>
 <h2 id="functions">Functions</h2>
@@ -3302,7 +3302,7 @@ same signature:</p>
 <p>DIN Rails constructor</p>
 <p><strong>Parameters:</strong></p>
 <p><strong>profile</strong><br />
-one of the supported profiles (see <a href="#variable-fl_din_ts_inventory">variable FL_DIN_TS_INVENTORY</a>)</p>
+one of the supported profiles (see <a href="#variable-fl_din_ts_inv">variable FL_DIN_TS_INV</a>)</p>
 <p><strong>length</strong><br />
 overall rail length</p>
 <p><strong>punch</strong><br />
