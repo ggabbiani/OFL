@@ -7,6 +7,7 @@ graph LR
     A1[vitamins/countersinks] --o|include| A2[foundation/core]
     A1 --o|use| A3[foundation/bbox-engine]
     A1 --o|use| A4[foundation/mngm-engine]
+    A1 --o|use| A5[foundation/type-engine]
 ```
 
 Countersink definitions based on UNI 5933 and ISO 10642
@@ -24,7 +25,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_CS_ISO_M2,FL_CS_ISO_M2p5,FL_CS_ISO_M3,FL_CS_ISO_M4,FL_CS_ISO_M5,FL_CS_ISO_M6,FL_CS_ISO_M8,FL_CS_ISO_M10,FL_CS_ISO_M12,FL_CS_ISO_M14,FL_CS_ISO_M16,FL_CS_ISO_M20]
+    fl_Inventory([FL_CS_ISO_M2,FL_CS_ISO_M2p5,FL_CS_ISO_M3,FL_CS_ISO_M4,FL_CS_ISO_M5,FL_CS_ISO_M6,FL_CS_ISO_M8,FL_CS_ISO_M10,FL_CS_ISO_M12,FL_CS_ISO_M14,FL_CS_ISO_M16,FL_CS_ISO_M20])
 
 ---
 
@@ -138,7 +139,7 @@ countersinks namespace
 
 __Default:__
 
-    [FL_CS_UNI_M3,FL_CS_UNI_M4,FL_CS_UNI_M5,FL_CS_UNI_M6,FL_CS_UNI_M8,FL_CS_UNI_M10,FL_CS_UNI_M12,FL_CS_UNI_M16,FL_CS_UNI_M20]
+    fl_Inventory([FL_CS_UNI_M3,FL_CS_UNI_M4,FL_CS_UNI_M5,FL_CS_UNI_M6,FL_CS_UNI_M8,FL_CS_UNI_M10,FL_CS_UNI_M12,FL_CS_UNI_M16,FL_CS_UNI_M20])
 
 ---
 

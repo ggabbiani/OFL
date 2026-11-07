@@ -35,7 +35,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_TNUT_M3_CS,FL_TNUT_M4_CS,FL_TNUT_M5_CS,FL_TNUT_M6_CS]
+    fl_Inventory([FL_TNUT_M3_CS,FL_TNUT_M4_CS,FL_TNUT_M5_CS,FL_TNUT_M6_CS])
 
 ---
 
@@ -43,7 +43,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw)
+    fl_TNut(name="FL_TNUT_M3_CS",opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw)
 
 ---
 
@@ -51,7 +51,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=6,size=[10,20],thickness=[2,1,2],nop_screw=M3_cs_cap_screw)
+    fl_TNut(name="FL_TNUT_M3_SM",opening=6,size=[10,20],thickness=[2,1,2],nop_screw=M3_cs_cap_screw)
 
 ---
 
@@ -59,7 +59,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_cs_cap_screw)
+    fl_TNut(name="FL_TNUT_M4_CS",opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_cs_cap_screw)
 
 ---
 
@@ -67,7 +67,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw)
+    fl_TNut(name="FL_TNUT_M5_CS",opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw)
 
 ---
 
@@ -75,7 +75,7 @@ __Default:__
 
 __Default:__
 
-    fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw)
+    fl_TNut(name="FL_TNUT_M6_CS",opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw)
 
 ---
 
@@ -96,7 +96,7 @@ namespace
 __Syntax:__
 
 ```text
-fl_TNut(opening,size,thickness,nop_screw,knut=false,holes)
+fl_TNut(opening,size,thickness,nop_screw,knut=false,holes,name)
 ```
 
 Constructor returning a T-slot nut.
@@ -134,6 +134,9 @@ eventual knurl nut
 
 __holes__  
 list of user defined holes usually positioned on the 'opening' side
+
+__name__  
+optional name
 
 
 ---

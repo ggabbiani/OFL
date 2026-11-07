@@ -1372,22 +1372,14 @@ function fl_list_sort(vec,cmp=function(e1,e2) (e1-e2)) =
  */
 function fl_list_AND(a,b,index_only=false) = [for(i=search(a,b)) if (i!=[]) index_only ? i : b[i]];
 
-//**** dictionary *************************************************************
-
-//! return a list with the names of the objects present in «dictionary»
-function fl_dict_names(dictionary) = [for(item=dictionary) fl_name(item)];
-
-function fl_dict_search(dictionary,name) = [
-  for(item=dictionary) let(n=fl_name(item)) if (name==n) item
-];
-
 /*!
- * build a dictionary with rows constituted by items with equal property as
- * retrieved by «func».
+ * Groups the «list» items by the value returned by «func»: returns a list
+ * with a row for each «range» value, each row containing the items for which
+ * «func» returns that value.
  *
  * example:
  *
- *       dict = [
+ *       list = [
  *         ["first", 7],
  *         ["second",9],
  *         ["third", 9],
@@ -1395,7 +1387,7 @@ function fl_dict_search(dictionary,name) = [
  *         ["fifth", 2],
  *       ];
  *
- *       result   = fl_dict_organize(dictionary=dict, range=[0:10], func=function(item) item[1]);
+ *       result   = fl_list_organize(list=list, range=[0:10], func=function(item) item[1]);
  *
  * is functionally equal to:
  *
@@ -1420,15 +1412,58 @@ function fl_dict_search(dictionary,name) = [
  *         []  // 10
  *       ];
  */
-function fl_dict_organize(dictionary,range,func) =
+function fl_list_organize(list,range,func) =
   [for(value=range)
-    [for(item=dictionary) let(property=func(item)) if (property==value) item]
+    [for(item=list) let(property=func(item)) if (property==value) item]
   ];
+
+//**** inventory **************************************************************
+
+/*!
+ * Inventory constructor: returns «objects» after having verified that every
+ * object has a «name» property and that names are unique inside the
+ * inventory.
+ *
+ * Example:
+ *
+ *     FL_PCB_INV = fl_Inventory([
+ *       FL_PCB_RPI4,
+ *       FL_PCB_VIM1,
+ *     ]);
+ */
+function fl_Inventory(
+  //! list of objects
+  objects
+) = let(
+  names = fl_inv_names(objects),
+  dups  = [
+    for(i=[0:1:len(names)-1])
+      if (len([for(name=names) if (name==names[i]) name])>1) names[i]
+  ]
+) assert(dups==[],str("Duplicate names in inventory: ",fl_list_unique(dups))) objects;
+
+//! returns the list of the object names present in «inventory»
+function fl_inv_names(inventory) = [for(item=inventory) fl_name(item)];
+
+/*!
+ * Returns the object in «inventory» whose name is equal to «name», undef when
+ * not found. Since names are unique inside an inventory (see fl_Inventory()),
+ * an error is raised when more than one object is found.
+ */
+function fl_inv_lookup(inventory,name) = let(
+  found = [for(item=inventory) if (fl_name(item)==name) item]
+) assert(len(found)<=1,str("Duplicate name '",name,"' in inventory"))
+  found ? found[0] : undef;
+
+//**** object getters *********************************************************
 
 /*!
  * Optional getter, no error when property is not found.
  *
- * Return «default» when «type» is undef or empty, or when «key» is not found
+ * Return «default» when «type» is undef or empty, or when «key» is not found.
+ * When the property value is a function literal, the returned value is the
+ * result of its invocation with «type», «key» and «default» as parameters
+ * (see also fl_get()).
  *
  * | type    | key     | default | key found | result    | semantic |
  * | ------- | ------- | ------- | --------- | --------- | -------- |
@@ -1439,7 +1474,8 @@ function fl_dict_organize(dictionary,range,func) =
  * **ERROR** in all the other cases
  */
 function fl_optional(type,key,default) =
-  type==undef ? default : let(r=search([key],type)) r!=[[]] ? type[r[0]][1] : default;
+  type==undef ? default : let(r=search([key],type))
+    r!=[[]] ? (let(value=type[r[0]][1]) is_function(value) ? value(type,key,default) : value) : default;
 
 /*!
  * Mandatory property getter with default value when not found

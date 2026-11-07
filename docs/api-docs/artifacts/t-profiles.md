@@ -26,7 +26,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    fl_tsp_CrossSection(E1515)
+    fl_tsp_CrossSection(E1515,name="FL_TSP_E1515")
 
 ![fractional T-slot cross-section](256x256/fig-FL_TSP_E1515.png)
 
@@ -39,7 +39,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E2020)
+    fl_tsp_CrossSection(E2020,name="FL_TSP_E2020")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E2020.png)
 
@@ -52,7 +52,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E2020t)
+    fl_tsp_CrossSection(E2020t,name="FL_TSP_E2020t")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E2020t.png)
 
@@ -65,7 +65,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E2040)
+    fl_tsp_CrossSection(E2040,name="FL_TSP_E2040")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E2040.png)
 
@@ -78,7 +78,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E2060)
+    fl_tsp_CrossSection(E2060,name="FL_TSP_E2060")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E2060.png)
 
@@ -91,7 +91,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E2080)
+    fl_tsp_CrossSection(E2080,name="FL_TSP_E2080")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E2080.png)
 
@@ -104,7 +104,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E3030)
+    fl_tsp_CrossSection(E3030,name="FL_TSP_E3030")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E3030.png)
 
@@ -117,7 +117,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E3060)
+    fl_tsp_CrossSection(E3060,name="FL_TSP_E3060")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E3060.png)
 
@@ -130,7 +130,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E4040)
+    fl_tsp_CrossSection(E4040,name="FL_TSP_E4040")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E4040.png)
 
@@ -143,7 +143,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E4040t)
+    fl_tsp_CrossSection(E4040t,name="FL_TSP_E4040t")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E4040t.png)
 
@@ -156,7 +156,7 @@ __Default:__
 
 __Default:__
 
-    fl_tsp_CrossSection(E4080)
+    fl_tsp_CrossSection(E4080,name="FL_TSP_E4080")
 
 ![metric T-slot cross-section](256x256/fig-FL_TSP_E4080.png)
 
@@ -179,7 +179,7 @@ namespace
 
 __Default:__
 
-    [FL_TSP_E1515,FL_TSP_E2020,FL_TSP_E2020t,FL_TSP_E2040,FL_TSP_E2060,FL_TSP_E2080,FL_TSP_E3030,FL_TSP_E3060,FL_TSP_E4040,FL_TSP_E4040t,FL_TSP_E4080,]
+    fl_Inventory([FL_TSP_E1515,FL_TSP_E2020,FL_TSP_E2020t,FL_TSP_E2040,FL_TSP_E2060,FL_TSP_E2080,FL_TSP_E3030,FL_TSP_E3060,FL_TSP_E4040,FL_TSP_E4040t,FL_TSP_E4080,])
 
 T-slotted cross-section inventory
 
@@ -192,7 +192,7 @@ T-slotted cross-section inventory
 __Syntax:__
 
 ```text
-fl_tsp_CrossSection(nop)
+fl_tsp_CrossSection(nop,name)
 ```
 
 Cross-section constructor
@@ -201,6 +201,9 @@ __Parameters:__
 
 __nop__  
 verbatim NopSCADlib cross-section definition
+
+__name__  
+optional name
 
 
 ---

@@ -19,7 +19,7 @@ graph LR
 
 __Default:__
 
-    [FL_SWT_USWITCH_7p2x3p4x3x2p5]
+    fl_Inventory([FL_SWT_USWITCH_7p2x3p4x3x2p5])
 
 ---
 
@@ -37,7 +37,7 @@ template namespace
 
 __Default:__
 
-    let(Tbutton=1,Tshild=0.1,w=7,h=3.4,l=2.5+Tbutton)[fl_bb_corners(value=[[-l+Tbutton,-w/2,0],[Tbutton,+w/2,h]]),fl_cutout(value=[FL_X]),]
+    let(Tbutton=1,Tshild=0.1,w=7,h=3.4,l=2.5+Tbutton)[fl_name(value="FL_SWT_USWITCH_7p2x3p4x3x2p5"),fl_bb_corners(value=[[-l+Tbutton,-w/2,0],[Tbutton,+w/2,h]]),fl_cutout(value=[FL_X]),]
 
 ## Modules
 

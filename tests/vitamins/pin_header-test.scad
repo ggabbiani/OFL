@@ -105,7 +105,7 @@ fl_status();
 thick     = $FL_CUTOUT!="OFF"||$FL_DRILL!="OFF" ? CO_T : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 color     = PIN_COLOR=="base"?grey(20):PIN_COLOR;
-type      = fl_dict_search(FL_PHDR_INV,SHOW)[0];
+type      = fl_inv_lookup(FL_PHDR_INV,SHOW);
 verbs     = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_DRILL]);
 dirs      = CUTOUT_DIRS==["undef"] ? undef : CUTOUT_DIRS==["empty"] ? [] : fl_3d_AxisList(CUTOUT_DIRS);
 

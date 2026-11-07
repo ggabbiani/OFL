@@ -27,7 +27,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_PSU_MeanWell_RS_25_5,FL_PSU_MeanWell_RS_15_5,]
+    fl_Inventory([FL_PSU_MeanWell_RS_25_5,FL_PSU_MeanWell_RS_15_5,])
 
 ---
 

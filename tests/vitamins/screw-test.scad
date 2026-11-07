@@ -146,7 +146,7 @@ echo(inventory=[for(screw=inventory) fl_name(screw)]);
 // list of unique ordered sizes from user selected screws
 sizes     = fl_list_sort(fl_list_unique([for(s=inventory) fl_nominal(s)]));
 // list organized by rows of screws with same nominal size
-dict      = fl_dict_organize(inventory,sizes,function(screw) fl_nominal(screw));
+dict      = fl_list_organize(inventory,sizes,function(screw) fl_nominal(screw));
 for(row=dict) echo([for(screw=row) str(fl_name(screw),"/",fl_nominal(screw))]);
 // for each not empty row calculates the offsets along Y axis
 y_coords  = let(

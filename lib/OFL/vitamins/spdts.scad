@@ -37,7 +37,7 @@ FL_SODAL_SPDT = let(
   ),
 ];
 
-FL_SPDT_INV = [ FL_SODAL_SPDT ];
+FL_SPDT_INV = fl_Inventory([ FL_SODAL_SPDT ]);
 
 function fl_spdt_d(type)      = fl_get(type,"nominal diameter");
 function fl_spdt_l(type)      = fl_get(type,"length");

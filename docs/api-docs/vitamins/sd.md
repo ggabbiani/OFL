@@ -25,7 +25,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_SD_MOLEX_uSD_SOCKET]
+    fl_Inventory([FL_SD_MOLEX_uSD_SOCKET])
 
 sd inventory
 
@@ -35,7 +35,7 @@ sd inventory
 
 __Default:__
 
-    let(size=[13,11.5,1.28])[fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),fl_cutout(value=[-FL_Y]),]
+    let(size=[13,11.5,1.28])[fl_name(value="FL_SD_MOLEX_uSD_SOCKET"),fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),fl_cutout(value=[-FL_Y]),]
 
 ---
 

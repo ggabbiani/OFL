@@ -112,7 +112,7 @@ module din_mount(rail) {
   );
 }
 
-single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_TS_INV),FL_DIN_RAIL_INV));
+single = fl_switch(SHOW,fl_list_pack(fl_inv_names(FL_DIN_TS_INV),FL_DIN_RAIL_INV));
 if (single) {
   din_mount(single(LENGTH,PUNCHED));
   // fl_DIN_rail(

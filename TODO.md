@@ -114,16 +114,21 @@
   fl_knut_linearInv() and fl_knut_inv(), fl_ScrewInventory() renamed as
   fl_ScrewInv(). Data model and naming conventions documented in
   docs/foundation/README.md.
-- [ ] realign the foundation APIs to the data model (see
+- [X] realigned the foundation APIs to the data model (see
   docs/foundation/README.md):
-  - fl_dict_names() and fl_dict_search() operate on inventories (they rely on
-    the standard 'name' property): move them into the inventory APIs, with
-    the lookup by name returning a single object (or undef) instead of a list
-  - fl_dict_organize() is a generic list operation (group by): move it into
-    the list APIs
-  - fl_get() and fl_optional() are the dictionary getters (fl_get() also
-    evaluates function literal values, an object semantic): evaluate their
-    renaming
+  - fl_dict_names() and fl_dict_search() replaced by the inventory APIs
+    fl_inv_names() and fl_inv_lookup(), the latter returning a single object
+    (or undef) instead of a list
+  - new inventory constructor fl_Inventory() verifying names presence and
+    uniqueness, applied to all the package inventories of OFL objects
+    (FL_SCREW_SPECS_INV and FL_DIN_RAIL_INV excluded)
+  - added the missing 'name' property to the objects of the t-nut,
+    t-profiles, iec, usbs, sata, jacks, sd and switch inventories; fl_TNut()
+    and fl_tsp_CrossSection() accept an optional name
+  - fl_dict_organize() renamed as fl_list_organize()
+  - fl_get() and fl_optional() kept as object getters: fl_optional() now
+    evaluates function literal values like fl_get()
+  - vitamins/countersinks.scad: fixed missing type-engine.scad dependency
 - [X] add constructors to spacer and pcb_holder libraries
 - [X] new artifact: fl_pcb_frame adapting a pcb to holes in order to be later
   mounted on standard pcb holder

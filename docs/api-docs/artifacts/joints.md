@@ -39,7 +39,7 @@ namespace for cantilever attributes: jnt/cantilever
 
 __Default:__
 
-    []
+    fl_Inventory([])
 
 package inventory as a list of pre-defined and ready-to-use 'objects'
 

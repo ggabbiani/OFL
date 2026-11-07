@@ -66,7 +66,9 @@ function fl_TNut(
   //! eventual knurl nut
   knut=false,
   //! list of user defined holes usually positioned on the 'opening' side
-  holes
+  holes,
+  //! optional name
+  name
 ) = assert(!nop_screw || !fl_native(nop_screw))
 let(
   wall    = thickness[0],
@@ -89,6 +91,7 @@ let(
     [bbox[0].x+cone,bbox[0].y],
   ]
 ) fl_Object(bbox,
+  name    = name,
   nominal = hole_d,
   others  = [
     ["opening", opening],
@@ -110,19 +113,19 @@ let(
   ]
 );
 
-FL_TNUT_M3_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw);
+FL_TNUT_M3_CS = fl_TNut(name="FL_TNUT_M3_CS",opening=6,size=[10,20],thickness=[1,1,2],nop_screw=M3_cs_cap_screw);
 // T-slot nut usable with the Snapmaker enclosure for the AT series
-FL_TNUT_M3_SM = fl_TNut(opening=6,size=[10,20],thickness=[2,1,2],nop_screw=M3_cs_cap_screw);
-FL_TNUT_M4_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_cs_cap_screw);
-FL_TNUT_M5_CS = fl_TNut(opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw);
-FL_TNUT_M6_CS = fl_TNut(opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw);
+FL_TNUT_M3_SM = fl_TNut(name="FL_TNUT_M3_SM",opening=6,size=[10,20],thickness=[2,1,2],nop_screw=M3_cs_cap_screw);
+FL_TNUT_M4_CS = fl_TNut(name="FL_TNUT_M4_CS",opening=6,size=[10,20],thickness=[1,1.7,2],nop_screw=M4_cs_cap_screw);
+FL_TNUT_M5_CS = fl_TNut(name="FL_TNUT_M5_CS",opening=6,size=[10,20],thickness=[1,2.2,1.5],nop_screw=M5_cs_cap_screw);
+FL_TNUT_M6_CS = fl_TNut(name="FL_TNUT_M6_CS",opening=8,size=[18.6,20],thickness=[1.9,1.3,5.3],nop_screw=M6_cs_cap_screw);
 
-FL_TNUT_INV = [
+FL_TNUT_INV = fl_Inventory([
   FL_TNUT_M3_CS,
   FL_TNUT_M4_CS,
   FL_TNUT_M5_CS,
   FL_TNUT_M6_CS
-];
+]);
 
 /*!
  * Selects the T-slot nuts from an inventory matching the screw or a generic

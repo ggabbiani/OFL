@@ -29,9 +29,9 @@ let(
   ["SATA socket", socket],
 ];
 
-FL_SADP_INV = [
+FL_SADP_INV = fl_Inventory([
   FL_SADP_ELUTENG,
-];
+]);
 
 module sata_adapter(
   verbs,

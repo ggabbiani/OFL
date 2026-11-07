@@ -249,7 +249,7 @@ function fl_knut_linearInv() = [
 /*!
  * full knurl nuts inventory
  */
-function fl_knut_inv() = concat(fl_knut_spiralInv(),fl_knut_linearInv());
+function fl_knut_inv() = fl_Inventory(concat(fl_knut_spiralInv(),fl_knut_linearInv()));
 
 //! in a list of knurl nuts find out the __shortest__ one
 FL_KNUT_SHORTEST  = function(nuts) fl_list_min(nuts,function(item) fl_thick(item));

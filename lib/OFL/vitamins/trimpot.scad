@@ -24,9 +24,9 @@ FL_TRIM_POT10  = let(
   bbox  = [[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]
 ) fl_Object(bbox, name="ten turn trimpot", engine=FL_TRIM_NS, others=[fl_cutout(value=[-Y]),]);
 
-FL_TRIM_INV  = [
+FL_TRIM_INV  = fl_Inventory([
   FL_TRIM_POT10,
-];
+]);
 
 module fl_trimpot(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT

@@ -25,12 +25,11 @@ and inventories in general), while artifacts and vitamins implement the
 
 | ADT        | Implementation                    | Notes                                |
 | ---------- | --------------------------------- | ------------------------------------ |
-| list       | native OpenSCAD list              | generic list operations: fl_list_*() |
+| list       | native OpenSCAD list              | generic list operations: fl_list_*() (like [fl_list_organize()](../../orthodocs/foundation/core.md#function-fl_list_organize) grouping items by a property) |
 | dictionary | list of [key,value] pairs         | keys are unique                      |
 
-Dictionary values are retrieved through the dictionary getters
-([fl_get()](../../orthodocs/foundation/core.md#function-fl_get) and
-[fl_optional()](../../orthodocs/foundation/core.md#function-fl_optional)).
+OFL doesn't provide pure dictionary getters: dictionaries are accessed through
+the object getters (see [Objects](#objects)).
 
 **NOTE:** client code should never use the native OpenSCAD search() on
 dictionaries directly, since its semantic changes depending on the signature
@@ -61,6 +60,15 @@ Object properties belong to one of the following categories:
 The base object constructor is
 [fl_Object()](../../orthodocs/foundation/type-engine.md#function-fl_object).
 
+Properties are retrieved through the object getters
+[fl_get()](../../orthodocs/foundation/core.md#function-fl_get) (mandatory
+property) and
+[fl_optional()](../../orthodocs/foundation/core.md#function-fl_optional)
+(optional property). When a property value is a function literal, both
+getters return the result of its invocation (`value(type,key,default)`): this
+allows *computed* properties, like the ones of the PCB frames acting as
+proxies of the framed PCB.
+
 **NOTE:** for historical reasons the parameters representing an object are
 often named *type* (like in `fl_get(type,key)`).
 
@@ -77,7 +85,22 @@ ready-to-use objects made available by a package:
 
 **NOTE:** the uniqueness of names is a rule of the inventory, not a property
 of the single object: an object constructor doesn't know about the other
-objects of an inventory and thus can't enforce it.
+objects of an inventory and thus can't enforce it. For this reason
+inventories are built through the inventory constructor
+[fl_Inventory()](../../orthodocs/foundation/core.md#function-fl_inventory),
+failing when an object has no name or when a name is duplicated:
+
+    FL_PCB_INV = fl_Inventory([
+      FL_PCB_RPI4,
+      FL_PCB_VIM1,
+    ]);
+
+The foundation provides the following generic inventory operations:
+
+| API                                                                           | Result                                                |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [fl_inv_names()](../../orthodocs/foundation/core.md#function-fl_inv_names)   | list of the object names                              |
+| [fl_inv_lookup()](../../orthodocs/foundation/core.md#function-fl_inv_lookup) | the object with the passed name, undef when not found |
 
 Inventories follow these naming conventions:
 
@@ -89,6 +112,14 @@ Inventories follow these naming conventions:
 | local inventory variable/parameter | inventory         | `fl_cs_select(inventory=FL_CS_ISO_INV)` |
 
 where «NS» and «ns» are the package namespace in upper and lower case.
+
+**NOTE:** two package lists follow the inventory naming convention without
+being inventories of OFL objects, and thus are not built through
+fl_Inventory():
+
+* FL_SCREW_SPECS_INV - list of NopSCADlib screw *specifications*;
+* FL_DIN_RAIL_INV - list of DIN rail *constructors*, index aligned with
+  FL_DIN_TS_INV.
 
 ## APIs
 

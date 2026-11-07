@@ -36,7 +36,7 @@ __Default:__
 
 __Default:__
 
-    [FL_HD_EVO860]
+    fl_Inventory([FL_HD_EVO860])
 
 ---
 

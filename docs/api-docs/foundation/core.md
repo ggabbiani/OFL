@@ -635,6 +635,34 @@ Engine name constructor.
 
 ---
 
+### function fl_Inventory
+
+__Syntax:__
+
+```text
+fl_Inventory(objects)
+```
+
+Inventory constructor: returns «objects» after having verified that every
+object has a «name» property and that names are unique inside the
+inventory.
+
+Example:
+
+    FL_PCB_INV = fl_Inventory([
+      FL_PCB_RPI4,
+      FL_PCB_VIM1,
+    ]);
+
+
+__Parameters:__
+
+__objects__  
+list of objects
+
+
+---
+
 ### function fl_R
 
 __Syntax:__
@@ -1082,77 +1110,6 @@ fl_description(type,value)
 
 ---
 
-### function fl_dict_names
-
-__Syntax:__
-
-```text
-fl_dict_names(dictionary)
-```
-
-return a list with the names of the objects present in «dictionary»
-
----
-
-### function fl_dict_organize
-
-__Syntax:__
-
-```text
-fl_dict_organize(dictionary,range,func)
-```
-
-build a dictionary with rows constituted by items with equal property as
-retrieved by «func».
-
-example:
-
-      dict = [
-        ["first", 7],
-        ["second",9],
-        ["third", 9],
-        ["fourth",2],
-        ["fifth", 2],
-      ];
-
-      result   = fl_dict_organize(dictionary=dict, range=[0:10], func=function(item) item[1]);
-
-is functionally equal to:
-
-      result = [
-        [], //  0
-        [], //  1
-        [   //  2
-          ["fourth", 2],
-          ["fifth",  2]
-        ],
-        [], // 3
-        [], // 4
-        [], // 5
-        [], // 6
-        [   // 7
-          ["first", 7]
-        ],
-        [], // 8
-        [   // 9
-          ["second", 9], ["third", 9]
-        ],
-        []  // 10
-      ];
-
-
----
-
-### function fl_dict_search
-
-__Syntax:__
-
-```text
-fl_dict_search(dictionary,name)
-```
-
----
-
 ### function fl_dimensions
 
 __Syntax:__
@@ -1274,6 +1231,33 @@ __Syntax:__
 ```text
 fl_holes(type,value)
 ```
+
+---
+
+### function fl_inv_lookup
+
+__Syntax:__
+
+```text
+fl_inv_lookup(inventory,name)
+```
+
+Returns the object in «inventory» whose name is equal to «name», undef when
+not found. Since names are unique inside an inventory (see [fl_Inventory()](#function-fl_inventory)),
+an error is raised when more than one object is found.
+
+
+---
+
+### function fl_inv_names
+
+__Syntax:__
+
+```text
+fl_inv_names(inventory)
+```
+
+returns the list of the object names present in «inventory»
 
 ---
 
@@ -1608,6 +1592,56 @@ itself.
 
 ---
 
+### function fl_list_organize
+
+__Syntax:__
+
+```text
+fl_list_organize(list,range,func)
+```
+
+Groups the «list» items by the value returned by «func»: returns a list
+with a row for each «range» value, each row containing the items for which
+«func» returns that value.
+
+example:
+
+      list = [
+        ["first", 7],
+        ["second",9],
+        ["third", 9],
+        ["fourth",2],
+        ["fifth", 2],
+      ];
+
+      result   = fl_list_organize(list=list, range=[0:10], func=function(item) item[1]);
+
+is functionally equal to:
+
+      result = [
+        [], //  0
+        [], //  1
+        [   //  2
+          ["fourth", 2],
+          ["fifth",  2]
+        ],
+        [], // 3
+        [], // 4
+        [], // 5
+        [], // 6
+        [   // 7
+          ["first", 7]
+        ],
+        [], // 8
+        [   // 9
+          ["second", 9], ["third", 9]
+        ],
+        []  // 10
+      ];
+
+
+---
+
 ### function fl_list_pack
 
 __Syntax:__
@@ -1851,7 +1885,10 @@ fl_optional(type,key,default)
 
 Optional getter, no error when property is not found.
 
-Return «default» when «type» is undef or empty, or when «key» is not found
+Return «default» when «type» is undef or empty, or when «key» is not found.
+When the property value is a function literal, the returned value is the
+result of its invocation with «type», «key» and «default» as parameters
+(see also [fl_get()](#function-fl_get)).
 
 | type    | key     | default | key found | result    | semantic |
 | ------- | ------- | ------- | --------- | --------- | -------- |

@@ -28,7 +28,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_USB_TYPE_Ax1_NF_SM,FL_USB_TYPE_Ax1,FL_USB_TYPE_Ax1_NF,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C,FL_USB_TYPE_uA,FL_USB_TYPE_uA_NF,]
+    fl_Inventory([FL_USB_TYPE_Ax1_NF_SM,FL_USB_TYPE_Ax1,FL_USB_TYPE_Ax1_NF,FL_USB_TYPE_Ax2,FL_USB_TYPE_B,FL_USB_TYPE_C,FL_USB_TYPE_uA,FL_USB_TYPE_uA_NF,])
 
 ---
 
@@ -44,7 +44,7 @@ __Default:__
 
 __Default:__
 
-    let(h=6.5,v_flange_l=4.5,bar=0,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine="USB/Ax1",others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
+    let(h=6.5,v_flange_l=4.5,bar=0,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name="FL_USB_TYPE_Ax1",engine="USB/Ax1",others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
 
 ---
 
@@ -52,7 +52,7 @@ __Default:__
 
 __Default:__
 
-    let(h=6.5,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine="USB/Ax1",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+    let(h=6.5,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name="FL_USB_TYPE_Ax1_NF",engine="USB/Ax1",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 
 ---
 
@@ -60,7 +60,7 @@ __Default:__
 
 __Default:__
 
-    let(h=5.8,l=10,w=13.25)fl_Object([[-l,-w/2,0],[0,+w/2,h]],engine="USB/A SM",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+    let(h=5.8,l=10,w=13.25)fl_Object([[-l,-w/2,0],[0,+w/2,h]],name="FL_USB_TYPE_Ax1_NF_SM",engine="USB/A SM",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 
 ---
 
@@ -68,7 +68,7 @@ __Default:__
 
 __Default:__
 
-    let(h=15.6,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine="USB/Ax2",others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
+    let(h=15.6,l=17,w=13.25,flange_t=0.4)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name="FL_USB_TYPE_Ax2",engine="USB/Ax2",others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
 
 ---
 
@@ -76,7 +76,7 @@ __Default:__
 
 __Default:__
 
-    let(l=16.4,w=12.2,h=11)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine="USB/B",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+    let(l=16.4,w=12.2,h=11)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name="FL_USB_TYPE_B",engine="USB/B",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 
 ---
 
@@ -84,7 +84,7 @@ __Default:__
 
 __Default:__
 
-    let(l=7.35,w=8.94,h=3.26)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],engine="USB/C",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+    let(l=7.35,w=8.94,h=3.26)fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],name="FL_USB_TYPE_C",engine="USB/C",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 
 ---
 
@@ -92,7 +92,7 @@ __Default:__
 
 __Default:__
 
-    let(l=6,iw1=7,h=2.65,t=0.4)fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],engine="USB/uA",others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
+    let(l=6,iw1=7,h=2.65,t=0.4)fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],name="FL_USB_TYPE_uA",engine="USB/uA",others=[fl_cutout(value=[+X]),fl_USB_flange(value=true),])
 
 ---
 
@@ -100,7 +100,7 @@ __Default:__
 
 __Default:__
 
-    let(l=6,iw1=7,h=2.65,t=0.4)fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],engine="USB/uA",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
+    let(l=6,iw1=7,h=2.65,t=0.4)fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],name="FL_USB_TYPE_uA_NF",engine="USB/uA",others=[fl_cutout(value=[+X]),fl_USB_flange(value=false),])
 
 ## Functions
 

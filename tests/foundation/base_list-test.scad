@@ -190,7 +190,7 @@ let(
   ]
 ) assert(result==expected) echo(result=result);
 
-//**** fl_dict_organize() *****************************************************
+//**** fl_list_organize() *****************************************************
 
 let(
   dict = [
@@ -200,7 +200,7 @@ let(
     ["fourth",2],
     ["fifth", 2],
   ],
-  result    = fl_dict_organize(dictionary=dict, range=[0:10], func=function(item) item[1]),
+  result    = fl_list_organize(list=dict, range=[0:10], func=function(item) item[1]),
   expected  = [
     [], // 0
     [], //  1
@@ -231,7 +231,7 @@ let(
     [fl_name(value="fourth"), ["length", 2  ]],
     [fl_name(value="fifth"),  ["length",  2 ]],
   ],
-  result    = fl_dict_organize(dictionary=dict, range=[0:10], func=function(item) fl_property(item,"length")),
+  result    = fl_list_organize(list=dict, range=[0:10], func=function(item) fl_property(item,"length")),
   expected  = [
     [], // length 0
     [], // length 1

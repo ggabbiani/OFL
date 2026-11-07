@@ -29,8 +29,8 @@ FL_JNT_RING_NS        = str(FL_JNT_CANTILEVER_NS,"/ring");
 FL_JNT_SECTION_NS     = str(FL_JNT_CANTILEVER_NS,"/section");
 
 //! package inventory as a list of pre-defined and ready-to-use 'objects'
-FL_JNT_INV = [
-];
+FL_JNT_INV = fl_Inventory([
+]);
 
 /*
  * Returns the section component object used __internally__ by the snap-fit

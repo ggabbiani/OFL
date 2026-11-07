@@ -26,7 +26,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    []
+    fl_Inventory([])
 
 package inventory as a list of pre-defined and ready-to-use 'objects'
 

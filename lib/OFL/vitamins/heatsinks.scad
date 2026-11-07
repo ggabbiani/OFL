@@ -93,7 +93,7 @@ FL_HS_KHADAS = let(
   fl_property(key="tooth height",     value=Zt),
 ];
 
-FL_HS_INV  = [FL_HS_PIMORONI_TOP, FL_HS_PIMORONI_BOTTOM, FL_HS_KHADAS];
+FL_HS_INV  = fl_Inventory([FL_HS_PIMORONI_TOP, FL_HS_PIMORONI_BOTTOM, FL_HS_KHADAS]);
 
 /*!
  * Common wrapper for different heat sink model engines.

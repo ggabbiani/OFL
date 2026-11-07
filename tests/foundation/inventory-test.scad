@@ -1,0 +1,134 @@
+/*
+ * Inventory APIs and object getters tests
+ *
+ * NOTE: this file is generated automatically from 'template-nogui.scad', any
+ * change will be lost.
+ *
+ * This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
+ *
+ * Copyright © 2021, Giampiero Gabbiani <giampiero@gabbiani.org>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+// **** TEST_INCLUDES *********************************************************
+
+include <../../lib/OFL/foundation/unsafe_defs.scad>
+use <../../lib/OFL/foundation/type-engine.scad>
+
+// **** TAB_Debug *************************************************************
+
+/* [Debug] */
+
+// -2⇒none, -1⇒all, [0..)⇒max depth allowed
+$FL_TRACES        = -2;     // [-2:10]
+DEBUG_ASSERTIONS  = false;
+DEBUG_COMPONENTS  = ["none"];
+DEBUG_COLOR       = false;
+DEBUG_DIMENSIONS  = false;
+DEBUG_LABELS      = false;
+DEBUG_SYMBOLS     = false;
+
+// **** TEST_PROLOGUE *********************************************************
+
+
+$dbg_Assert     = DEBUG_ASSERTIONS;
+$dbg_Dimensions = DEBUG_DIMENSIONS;
+$dbg_Color      = DEBUG_COLOR;
+$dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
+$dbg_Labels     = DEBUG_LABELS;
+$dbg_Symbols    = DEBUG_SYMBOLS;
+
+
+fl_status();
+
+// end of automatically generated code
+
+first   = fl_Object(bbox=[[0,0,0],[1,1,1]],name="first",  nominal=3);
+second  = fl_Object(bbox=[[0,0,0],[2,2,2]],name="second", nominal=4);
+third   = fl_Object(bbox=[[0,0,0],[3,3,3]],name="third",  nominal=3);
+objects = [first,second,third];
+
+//**** fl_Inventory() *********************************************************
+
+// a valid inventory is returned unchanged
+let(
+  result    = fl_Inventory(objects),
+  expected  = objects
+) assert(result==expected,result);
+
+// empty inventory
+let(
+  result    = fl_Inventory([]),
+  expected  = []
+) assert(result==expected,result);
+
+//**** fl_inv_names() *********************************************************
+
+let(
+  result    = fl_inv_names(objects),
+  expected  = ["first","second","third"]
+) assert(result==expected,result);
+
+let(
+  result    = fl_inv_names([]),
+  expected  = []
+) assert(result==expected,result);
+
+//**** fl_inv_lookup() ********************************************************
+
+// lookup by name returns a single object
+let(
+  result    = fl_inv_lookup(objects,"second"),
+  expected  = second
+) assert(result==expected,result);
+
+// name not found
+let(
+  result    = fl_inv_lookup(objects,"fourth"),
+  expected  = undef
+) assert(result==expected,result);
+
+// undef name
+let(
+  result    = fl_inv_lookup(objects,undef),
+  expected  = undef
+) assert(result==expected,result);
+
+// empty inventory
+let(
+  result    = fl_inv_lookup([],"first"),
+  expected  = undef
+) assert(result==expected,result);
+
+//**** fl_list_organize() on inventories **************************************
+
+// other properties are not unique: grouping by nominal
+let(
+  result    = fl_list_organize(objects,[3:4],function(item) fl_nominal(item)),
+  expected  = [[first,third],[second]]
+) assert(result==expected,result);
+
+//**** object getters with function literal values ****************************
+
+// a proxy object returning the nominal value of «second»
+proxy = [
+  fl_name(value="proxy"),
+  fl_nominal(value=function(type,key,default) fl_nominal(second)),
+];
+
+let(
+  result    = fl_get(proxy,fl_nominal()[0]),
+  expected  = 4
+) assert(result==expected,result);
+
+let(
+  result    = fl_optional(proxy,fl_nominal()[0]),
+  expected  = 4
+) assert(result==expected,result);
+
+// not found property
+let(
+  result    = fl_optional(proxy,"not a key","default"),
+  expected  = "default"
+) assert(result==expected,result);

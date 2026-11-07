@@ -19,15 +19,16 @@ FL_SD_MOLEX_uSD_SOCKET = let(
   // size  = [12, 11.5, 1.28]
   size  = [13, 11.5, 1.28]
 ) [
+  fl_name(value="FL_SD_MOLEX_uSD_SOCKET"),
   fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),
   // fl_director(value=-Y),fl_rotor(value=+X),
   fl_cutout(value=[-FL_Y]),
 ];
 
 //! sd inventory
-FL_SD_INV = [
+FL_SD_INV = fl_Inventory([
   FL_SD_MOLEX_uSD_SOCKET
-];
+]);
 
 /*!
  * micro SD socket

@@ -194,11 +194,11 @@ FL_DIN_TS35  = fl_DIN_TopHatSection("TS35",size=[[27,35],7.5],r=[.8,.8]);
 FL_DIN_TS35D = fl_DIN_TopHatSection("TS35D",size=[[27,35],15],r=[1.25,1.25],thick=1.5);
 
 //! DIN profile inventory
-FL_DIN_TS_INV = [
+FL_DIN_TS_INV = fl_Inventory([
   FL_DIN_TS15,
   FL_DIN_TS35,
   FL_DIN_TS35D
-];
+]);
 
 //**** rails ******************************************************************
 

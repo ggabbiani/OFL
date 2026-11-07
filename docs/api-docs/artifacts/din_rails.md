@@ -173,7 +173,7 @@ Top hat section profile IEC/EN 60715 – 35×15 mm
 
 __Default:__
 
-    [FL_DIN_TS15,FL_DIN_TS35,FL_DIN_TS35D]
+    fl_Inventory([FL_DIN_TS15,FL_DIN_TS35,FL_DIN_TS35D])
 
 DIN profile inventory
 

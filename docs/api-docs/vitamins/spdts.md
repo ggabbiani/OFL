@@ -33,7 +33,7 @@ __Default:__
 
 __Default:__
 
-    [FL_SODAL_SPDT]
+    fl_Inventory([FL_SODAL_SPDT])
 
 ## Functions
 

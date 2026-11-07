@@ -65,7 +65,7 @@ FL_HD_EVO860 = let(
   ]
 );
 
-FL_HD_INV  = [ FL_HD_EVO860 ];
+FL_HD_INV  = fl_Inventory([ FL_HD_EVO860 ]);
 
 /*!
  * Hard-drive engine.

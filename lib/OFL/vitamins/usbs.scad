@@ -29,6 +29,7 @@ FL_USB_TYPE_Ax1_NF_SM = let(
   // h = 6.5, l = 10, w = 13.25
   h = 5.8, l = 10, w = 13.25
 ) fl_Object([[-l,-w/2,0],[0,+w/2,h]],
+    name    = "FL_USB_TYPE_Ax1_NF_SM",
     engine="USB/A SM",
     others=[
       fl_cutout(value=[+X]),
@@ -42,6 +43,7 @@ FL_USB_TYPE_Ax1 = let(
   // from NopSCADlib usb_A() module
   l=17,w=13.25,flange_t= 0.4
 ) fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],
+    name    = "FL_USB_TYPE_Ax1",
     engine  = "USB/Ax1",
     others  = [
       fl_cutout(value=[+X]),
@@ -55,6 +57,7 @@ FL_USB_TYPE_Ax1_NF = let(
   // from NopSCADlib usb_A() module
   l=17,w=13.25,flange_t= 0.4
 ) fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],
+    name    = "FL_USB_TYPE_Ax1_NF",
     engine  = "USB/Ax1",
     others = [
       fl_cutout(value=[+X]),
@@ -68,6 +71,7 @@ FL_USB_TYPE_Ax2 = let(
   // from NopSCADlib usb_A() module
   l=17, w=13.25, flange_t=0.4
 ) fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],
+    name    = "FL_USB_TYPE_Ax2",
     engine  = "USB/Ax2",
     others  = [
       fl_cutout(value=[+X]),
@@ -79,6 +83,7 @@ FL_USB_TYPE_B   = let(
   // from NopSCADlib usb_A() module
   l=16.4, w=12.2, h=11
 ) fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],
+    name    = "FL_USB_TYPE_B",
     engine  = "USB/B",
     others = [
       fl_cutout(value=[+X]),
@@ -90,6 +95,7 @@ FL_USB_TYPE_C   = let(
   // from NopSCADlib usb_C() module
   l=7.35, w=8.94, h=3.26
 ) fl_Object([[-l/2,-w/2,0],[+l/2,+w/2,h]],
+    name    = "FL_USB_TYPE_C",
     engine  = "USB/C",
     others  = [
       fl_cutout(value=[+X]),
@@ -101,6 +107,7 @@ FL_USB_TYPE_uA = let(
   // from NopSCADlib usb_uA() module
   l = 6, iw1 = 7, h = 2.65, t = 0.4
 ) fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],
+    name    = "FL_USB_TYPE_uA",
     engine  = "USB/uA",
     others  = [
       fl_cutout(value=[+X]),
@@ -112,6 +119,7 @@ FL_USB_TYPE_uA_NF = let(
   // from NopSCADlib usb_uA() module
   l = 6, iw1 = 7, h = 2.65, t = 0.4
 ) fl_Object([[-l/2,-(iw1+2*t)/2,0],[+l/2,+(iw1+2*t)/2,h]],
+    name    = "FL_USB_TYPE_uA_NF",
     engine  = "USB/uA",
     others  = [
       fl_cutout(value=[+X]),
@@ -119,7 +127,7 @@ FL_USB_TYPE_uA_NF = let(
     ]
   );
 
-FL_USB_INV = [
+FL_USB_INV = fl_Inventory([
   FL_USB_TYPE_Ax1_NF_SM,
   FL_USB_TYPE_Ax1,
   FL_USB_TYPE_Ax1_NF,
@@ -128,7 +136,7 @@ FL_USB_INV = [
   FL_USB_TYPE_C,
   FL_USB_TYPE_uA,
   FL_USB_TYPE_uA_NF,
-];
+]);
 
 module fl_USB(
   //! supported verbs: FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT

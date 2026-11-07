@@ -26,7 +26,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    fl_IEC(IEC_320_C14_switched_fused_inlet)
+    fl_IEC(IEC_320_C14_switched_fused_inlet,name="FL_IEC_320_C14_SWITCHED_FUSED_INLET")
 
 IEC320 C14 switched fused inlet module.
 
@@ -39,7 +39,7 @@ IEC320 C14 switched fused inlet module.
 
 __Default:__
 
-    fl_IEC(IEC_fused_inlet)
+    fl_IEC(IEC_fused_inlet,name="FL_IEC_FUSED_INLET")
 
 IEC fused inlet JR-101-1F.
 
@@ -52,7 +52,7 @@ IEC fused inlet JR-101-1F.
 
 __Default:__
 
-    fl_IEC(IEC_fused_inlet2)
+    fl_IEC(IEC_fused_inlet2,name="FL_IEC_FUSED_INLET2")
 
 IEC fused inlet old.
 
@@ -65,7 +65,7 @@ IEC fused inlet old.
 
 __Default:__
 
-    fl_IEC(IEC_inlet)
+    fl_IEC(IEC_inlet,name="FL_IEC_INLET")
 
 IEC inlet.
 
@@ -78,7 +78,7 @@ IEC inlet.
 
 __Default:__
 
-    fl_IEC(IEC_inlet_atx)
+    fl_IEC(IEC_inlet_atx,name="FL_IEC_INLET_ATX")
 
 IEC inlet for ATX.
 
@@ -91,7 +91,7 @@ IEC inlet for ATX.
 
 __Default:__
 
-    fl_IEC(IEC_inlet_atx2)
+    fl_IEC(IEC_inlet_atx2,name="FL_IEC_INLET_ATX2")
 
 IEC die cast inlet for ATX.
 
@@ -104,7 +104,7 @@ IEC die cast inlet for ATX.
 
 __Default:__
 
-    [FL_IEC_FUSED_INLET,FL_IEC_FUSED_INLET2,FL_IEC_320_C14_SWITCHED_FUSED_INLET,FL_IEC_INLET,FL_IEC_INLET_ATX,FL_IEC_INLET_ATX2,FL_IEC_YUNPEN,FL_IEC_OUTLET,]
+    fl_Inventory([FL_IEC_FUSED_INLET,FL_IEC_FUSED_INLET2,FL_IEC_320_C14_SWITCHED_FUSED_INLET,FL_IEC_INLET,FL_IEC_INLET_ATX,FL_IEC_INLET_ATX2,FL_IEC_YUNPEN,FL_IEC_OUTLET,])
 
 ---
 
@@ -120,7 +120,7 @@ __Default:__
 
 __Default:__
 
-    fl_IEC(IEC_outlet)
+    fl_IEC(IEC_outlet,name="FL_IEC_OUTLET")
 
 IEC outlet RS 811-7193.
 
@@ -133,7 +133,7 @@ IEC outlet RS 811-7193.
 
 __Default:__
 
-    fl_IEC(IEC_yunpen)
+    fl_IEC(IEC_yunpen,name="FL_IEC_YUNPEN")
 
 IEC inlet filtered.
 

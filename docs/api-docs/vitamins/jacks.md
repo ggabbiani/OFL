@@ -27,7 +27,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    let(l=12,w=7,h=6,ch=2.5,bbox=[[-l/2,-w/2,0],[+l/2+ch,+w/2,h]])fl_Object(bbox,engine=str(FL_JACK_NS,"/barrel"),others=[fl_cutout(value=[+X])])
+    let(l=12,w=7,h=6,ch=2.5,bbox=[[-l/2,-w/2,0],[+l/2+ch,+w/2,h]])fl_Object(bbox,name="FL_JACK_BARREL",engine=str(FL_JACK_NS,"/barrel"),others=[fl_cutout(value=[+X])])
 
 'Barrel' jack plug.
 
@@ -44,7 +44,7 @@ jack plug insertion:
 
 __Default:__
 
-    [FL_JACK_BARREL,FL_JACK_MCXJPHSTEM1,]
+    fl_Inventory([FL_JACK_BARREL,FL_JACK_MCXJPHSTEM1,])
 
 ---
 

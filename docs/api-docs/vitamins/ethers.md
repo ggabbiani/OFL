@@ -37,7 +37,7 @@ part of a surface mount ethernet socket length is reserved for the external fram
 
 __Default:__
 
-    [FL_ETHER_RJ45,FL_ETHER_RJ45_SM]
+    fl_Inventory([FL_ETHER_RJ45,FL_ETHER_RJ45_SM])
 
 ---
 

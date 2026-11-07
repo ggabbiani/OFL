@@ -27,7 +27,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_TRIM_POT10,]
+    fl_Inventory([FL_TRIM_POT10,])
 
 ---
 

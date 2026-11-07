@@ -378,7 +378,7 @@ FL_PCB_PERF60x40  = fl_pcb_import(PERF60x40);
 FL_PCB_PERF70x30  = fl_pcb_import(PERF70x30);
 FL_PCB_PERF80x20  = fl_pcb_import(PERF80x20);
 
-FL_PCB_INV = [
+FL_PCB_INV = fl_Inventory([
   FL_PCB_HILETGO_SX1308,
   FL_PCB_MH4PU_P,
   FL_PCB_PERF70x50,
@@ -388,14 +388,14 @@ FL_PCB_INV = [
   FL_PCB_RPI4,
   FL_PCB_RPI_uHAT,
   FL_PCB_VIM1,
-];
+]);
 
 //! select a pcb by name
 function fl_pcb_select(
   //! name as returned by fl_name()
   name,
   inventory = FL_PCB_INV
-) = fl_switch(name,fl_list_pack(fl_dict_names(inventory),inventory));
+) = fl_inv_lookup(inventory,name);
 
 //! returns a list with all the components label
 function fl_pcb_compLabels(type)  = let(

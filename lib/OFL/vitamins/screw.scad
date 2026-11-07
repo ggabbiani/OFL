@@ -312,10 +312,10 @@ function fl_ScrewInv(
   nut_washer_l  = is_undef(nut_washer)  ? [] : is_list(nut_washer)  ? nut_washer  : [nut_washer],
   nut_spring_l  = is_undef(nut_spring)  ? [] : is_list(nut_spring)  ? nut_spring  : [nut_spring],
   washer_l      = fl_list_unique(concat(head_spring_l,head_washer_l,nut_washer_l,nut_spring_l))
-) [
+) fl_Inventory([
   for(nop=fl_screw_specs_select(specs, name, nominal, head_type, head_name, nut, washer_l))
     fl_Screw(nop, length, longer_than, shorter_than, head_spring, head_washer, thickness=thickness, nut_washer=nut_washer, nut_spring=nut_spring, nut=nut)
-];
+]);
 
 /*!
  * Return a list of screw **specifications** matching the passed properties from

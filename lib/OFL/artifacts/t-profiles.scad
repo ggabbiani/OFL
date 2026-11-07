@@ -53,8 +53,11 @@ function fl_tsp_filletR(type)    = extrusion_fillet(fl_nopSCADlib(type));
 //! Cross-section constructor
 function fl_tsp_CrossSection(
   //! verbatim NopSCADlib cross-section definition
-  nop
+  nop,
+  //! optional name
+  name
 ) = assert(nop) [
+  if (name) fl_name(value=name),
   fl_nopSCADlib(value=nop),
 ];
 
@@ -63,80 +66,80 @@ function fl_tsp_CrossSection(
  *
  * 15 series T-slotted cross-section size 15mm ⌀3.3mm
  */
-FL_TSP_E1515  = fl_tsp_CrossSection(E1515);
+FL_TSP_E1515  = fl_tsp_CrossSection(E1515,name="FL_TSP_E1515");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2020.png)
  *
  * 20 series T-slotted cross-section size 20mm ⌀4.2mm
  */
-FL_TSP_E2020  = fl_tsp_CrossSection(E2020);
+FL_TSP_E2020  = fl_tsp_CrossSection(E2020,name="FL_TSP_E2020");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2020t.png)
  *
  * 20 series T-slotted cross-section size 20mm ⌀5mm
  */
-FL_TSP_E2020t = fl_tsp_CrossSection(E2020t);
+FL_TSP_E2020t = fl_tsp_CrossSection(E2020t,name="FL_TSP_E2020t");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2040.png)
  *
  * 20 series T-slotted cross-section size 40mm ⌀4.2mm
  */
-FL_TSP_E2040  = fl_tsp_CrossSection(E2040);
+FL_TSP_E2040  = fl_tsp_CrossSection(E2040,name="FL_TSP_E2040");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2060.png)
  *
  * 20 series T-slotted cross-section size 60mm ⌀4.2mm
  */
-FL_TSP_E2060  = fl_tsp_CrossSection(E2060);
+FL_TSP_E2060  = fl_tsp_CrossSection(E2060,name="FL_TSP_E2060");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E2080.png)
  *
  * 20 series T-slotted cross-section size 80mm ⌀4.2mm
  */
-FL_TSP_E2080  = fl_tsp_CrossSection(E2080);
+FL_TSP_E2080  = fl_tsp_CrossSection(E2080,name="FL_TSP_E2080");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E3030.png)
  *
  * 30 series T-slotted cross-section size 30mm ⌀6.8mm
  */
-FL_TSP_E3030  = fl_tsp_CrossSection(E3030);
+FL_TSP_E3030  = fl_tsp_CrossSection(E3030,name="FL_TSP_E3030");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E3060.png)
  *
  * 30 series T-slotted cross-section size 60mm ⌀6.8mm
  */
-FL_TSP_E3060  = fl_tsp_CrossSection(E3060);
+FL_TSP_E3060  = fl_tsp_CrossSection(E3060,name="FL_TSP_E3060");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E4040.png)
  *
  * 40 series T-slotted cross-section size 40mm ⌀10.5mm
  */
-FL_TSP_E4040  = fl_tsp_CrossSection(E4040);
+FL_TSP_E4040  = fl_tsp_CrossSection(E4040,name="FL_TSP_E4040");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E4040t.png)
  *
  * 40 series T-slotted cross-section size 40mm ⌀10mm
  */
-FL_TSP_E4040t = fl_tsp_CrossSection(E4040t);
+FL_TSP_E4040t = fl_tsp_CrossSection(E4040t,name="FL_TSP_E4040t");
 
 /*!
  * ![metric T-slot cross-section](256x256/fig-FL_TSP_E4080.png)
  *
  * 40 series T-slotted cross-section size 80mm ⌀10.5mm
  */
-FL_TSP_E4080  = fl_tsp_CrossSection(E4080);
+FL_TSP_E4080  = fl_tsp_CrossSection(E4080,name="FL_TSP_E4080");
 
 //! T-slotted cross-section inventory
-FL_XTR_INV = [
+FL_XTR_INV = fl_Inventory([
   FL_TSP_E1515,
   FL_TSP_E2020,
   FL_TSP_E2020t,
@@ -148,7 +151,7 @@ FL_XTR_INV = [
   FL_TSP_E4040,
   FL_TSP_E4040t,
   FL_TSP_E4080,
-];
+]);
 
 function fl_tsp_length(type,value)    = fl_property(type,"tsp/length",value);
 

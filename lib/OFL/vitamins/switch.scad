@@ -20,14 +20,15 @@ FL_SWT_USWITCH_7p2x3p4x3x2p5  = let(
   Tbutton=1, Tshild=0.1,
   w=7, h = 3.4, l=2.5+Tbutton
 ) [
+  fl_name(value="FL_SWT_USWITCH_7p2x3p4x3x2p5"),
   fl_bb_corners(value=[[-l+Tbutton,-w/2,0],[Tbutton,+w/2,h]]),
   // fl_director(value=+X),fl_rotor(value=+Y),
   fl_cutout(value=[FL_X]),
 ];
 
-FL_SWT_INV = [
+FL_SWT_INV = fl_Inventory([
   FL_SWT_USWITCH_7p2x3p4x3x2p5
-];
+]);
 
 module fl_switch(
   //! supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT

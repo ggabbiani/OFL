@@ -115,7 +115,7 @@ co_direction  = CO_DIRECTION=="undef" ? undef : fl_3d_AxisList(CO_DIRECTION);
 
 verbs = fl_verbList([FL_ADD,FL_AXES,FL_BBOX,FL_CUTOUT,FL_FOOTPRINT,FL_LAYOUT,FL_MOUNT]);
 
-single = fl_switch(SHOW,fl_list_pack(fl_dict_names(FL_DIN_TS_INV),FL_DIN_RAIL_INV));
+single = fl_switch(SHOW,fl_list_pack(fl_inv_names(FL_DIN_TS_INV),FL_DIN_RAIL_INV));
 if (single) {
   fl_DIN_rail(verbs,single(LENGTH,PUNCH),cut_dirs=co_direction,cut_drift=drift,octant=octant,direction=direction);
 } else {

@@ -22,51 +22,51 @@ FL_IEC_NS="iec";
  *
  * ![FL_IEC_FUSED_INLET](256x256/fig_FL_IEC_FUSED_INLET.png)
  */
-FL_IEC_FUSED_INLET                  = fl_IEC(IEC_fused_inlet);
+FL_IEC_FUSED_INLET                  = fl_IEC(IEC_fused_inlet,name="FL_IEC_FUSED_INLET");
 /*!
  * IEC fused inlet old.
  *
  * ![FL_IEC_FUSED_INLET](256x256/fig_FL_IEC_FUSED_INLET2.png)
  */
-FL_IEC_FUSED_INLET2                 = fl_IEC(IEC_fused_inlet2);
+FL_IEC_FUSED_INLET2                 = fl_IEC(IEC_fused_inlet2,name="FL_IEC_FUSED_INLET2");
 /*!
  * IEC320 C14 switched fused inlet module.
  *
  * ![FL_IEC_320_C14_SWITCHED_FUSED_INLET](256x256/fig_FL_IEC_320_C14_SWITCHED_FUSED_INLET.png)
  */
-FL_IEC_320_C14_SWITCHED_FUSED_INLET = fl_IEC(IEC_320_C14_switched_fused_inlet);
+FL_IEC_320_C14_SWITCHED_FUSED_INLET = fl_IEC(IEC_320_C14_switched_fused_inlet,name="FL_IEC_320_C14_SWITCHED_FUSED_INLET");
 /*!
  * IEC inlet.
  *
  * ![FL_IEC_INLET](256x256/fig_FL_IEC_INLET.png)
  */
-FL_IEC_INLET                        = fl_IEC(IEC_inlet);
+FL_IEC_INLET                        = fl_IEC(IEC_inlet,name="FL_IEC_INLET");
 /*!
  * IEC inlet for ATX.
  *
  * ![FL_IEC_INLET_ATX](256x256/fig_FL_IEC_INLET_ATX.png)
  */
-FL_IEC_INLET_ATX                    = fl_IEC(IEC_inlet_atx);
+FL_IEC_INLET_ATX                    = fl_IEC(IEC_inlet_atx,name="FL_IEC_INLET_ATX");
 /*!
  * IEC die cast inlet for ATX.
  *
  * ![FL_IEC_INLET_ATX2](256x256/fig_FL_IEC_INLET_ATX2.png)
  */
-FL_IEC_INLET_ATX2                   = fl_IEC(IEC_inlet_atx2);
+FL_IEC_INLET_ATX2                   = fl_IEC(IEC_inlet_atx2,name="FL_IEC_INLET_ATX2");
 /*!
  * IEC inlet filtered.
  *
  * ![FL_IEC_YUNPEN](256x256/fig_FL_IEC_YUNPEN.png)
  */
-FL_IEC_YUNPEN                       = fl_IEC(IEC_yunpen);
+FL_IEC_YUNPEN                       = fl_IEC(IEC_yunpen,name="FL_IEC_YUNPEN");
 /*!
  * IEC outlet RS 811-7193.
  *
  * ![FL_IEC_OUTLET](256x256/fig_FL_IEC_OUTLET.png)
  */
-FL_IEC_OUTLET                       = fl_IEC(IEC_outlet);
+FL_IEC_OUTLET                       = fl_IEC(IEC_outlet,name="FL_IEC_OUTLET");
 
-FL_IEC_INV = [
+FL_IEC_INV = fl_Inventory([
   FL_IEC_FUSED_INLET,
   FL_IEC_FUSED_INLET2,
   FL_IEC_320_C14_SWITCHED_FUSED_INLET,
@@ -75,7 +75,7 @@ FL_IEC_INV = [
   FL_IEC_INLET_ATX2,
   FL_IEC_YUNPEN,
   FL_IEC_OUTLET,
-];
+]);
 
 /*!
  * IEC mains inlets and outlet constructor. It wraps the corresponding

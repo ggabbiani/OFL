@@ -78,6 +78,7 @@ FL_SATA_POWERDATASOCKET = let(
   pc            = conn_Socket(fl_sata_powerCID(),-FL_X,+FL_Y,Mpower * [0,0,power_sz.z,1])
 ) fl_Object(
   bbox    = [-blk_sz/2,+blk_sz/2],
+  name    = "FL_SATA_POWERDATASOCKET",
   engine  = "sata/composite socket",
   others  = [
   fl_conn_id(value=cid),
@@ -111,6 +112,7 @@ FL_SATA_DATAPLUG  = let(
   c_h     = __dxf_dim__(file=dxf, name="c_height",  layer="sizes")
 ) fl_Object(
   bbox    = [[0,-size.y,0],[size.x,0,size.z]],
+  name    = "FL_SATA_DATAPLUG",
   engine  = "sata/single plug",
   others  = [
   fl_dxf(value = dxf),
@@ -135,6 +137,7 @@ FL_SATA_POWERPLUG = let(
   c_h     = __dxf_dim__(file=dxf, name="c_height",  layer="sizes")
 ) fl_Object(
   bbox    = [[0,-size.y,0],[size.x,0,size.z]],
+  name    = "FL_SATA_POWERPLUG",
   engine  = "sata/single plug",
   others  = [
   fl_dxf(value = dxf),
@@ -174,6 +177,7 @@ FL_SATA_POWERDATAPLUG = let(
   pc      = fl_conn_clone(fl_connectors(power)[0],M=Mpower*T(-Z(size.z/2)))
 ) fl_Object(
   bbox    = [-size/2,+size/2],
+  name    = "FL_SATA_POWERDATAPLUG",
   engine  = "sata/composite plug",
   others  = [
   fl_dxf(value = dxf),
@@ -186,12 +190,12 @@ FL_SATA_POWERDATAPLUG = let(
   __fl_sata_Mdata__(value=Mdata),
 ]);
 
-FL_SATA_INV = [
+FL_SATA_INV = fl_Inventory([
   FL_SATA_POWERPLUG,
   FL_SATA_DATAPLUG,
   FL_SATA_POWERDATASOCKET,
   FL_SATA_POWERDATAPLUG,
-];
+]);
 
 /*!
  * SATA plug and socket module.

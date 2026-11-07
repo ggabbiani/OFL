@@ -31,7 +31,7 @@ __Default:__
 
 __Default:__
 
-    [FL_SADP_ELUTENG,]
+    fl_Inventory([FL_SADP_ELUTENG,])
 
 ---
 

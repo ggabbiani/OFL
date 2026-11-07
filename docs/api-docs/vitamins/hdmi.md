@@ -25,7 +25,7 @@ SPDX-License-Identifier: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or
 
 __Default:__
 
-    [FL_HDMI_TYPE_A,FL_HDMI_TYPE_C,FL_HDMI_TYPE_D]
+    fl_Inventory([FL_HDMI_TYPE_A,FL_HDMI_TYPE_C,FL_HDMI_TYPE_D])
 
 ---
 

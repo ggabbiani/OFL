@@ -33,7 +33,7 @@ FL_JACK_BARREL = let(
   ch = 2.5,
   // calculated bounding box corners
   bbox      = [[-l/2,-w/2,0],[+l/2+ch,+w/2,h]]
-) fl_Object(bbox, engine=str(FL_JACK_NS,"/barrel"), others=[fl_cutout(value=[+X])]);
+) fl_Object(bbox, name="FL_JACK_BARREL", engine=str(FL_JACK_NS,"/barrel"), others=[fl_cutout(value=[+X])]);
 
 /*!
  * Edge mount jack PCB connector.
@@ -68,10 +68,10 @@ FL_JACK_MCXJPHSTEM1 = let(
   ["jack length",       jack]
 ]);
 
-FL_JACK_INV = [
+FL_JACK_INV = fl_Inventory([
   FL_JACK_BARREL,
   FL_JACK_MCXJPHSTEM1,
-];
+]);
 
 /*!
  * Common jack engine adapter.

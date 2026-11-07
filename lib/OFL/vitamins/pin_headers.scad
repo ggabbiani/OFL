@@ -231,9 +231,9 @@ FL_PHDR_GPIOHDR_F_SMT_LOW  = let(
   through     = true
 );
 
-FL_PHDR_INV = [
+FL_PHDR_INV = fl_Inventory([
   FL_PHDR_GPIOHDR,
   FL_PHDR_GPIOHDR_F,
   FL_PHDR_GPIOHDR_FL,
   FL_PHDR_GPIOHDR_F_SMT_LOW,
-];
+]);

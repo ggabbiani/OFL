@@ -124,10 +124,10 @@ FL_PSU_MeanWell_RS_15_5 = let(
     // fl_director(value=-FL_Y),fl_rotor(value=-FL_X),
   ];
 
-FL_PSU_INV = [
+FL_PSU_INV = fl_Inventory([
   FL_PSU_MeanWell_RS_25_5,
   FL_PSU_MeanWell_RS_15_5,
-];
+]);
 
 module fl_psu(
   //! MANDATORY verb or list of verbs

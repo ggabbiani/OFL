@@ -13,6 +13,7 @@ include <../foundation/core.scad>
 
 use <../foundation/bbox-engine.scad>
 use <../foundation/mngm-engine.scad>
+use <../foundation/type-engine.scad>
 
 //! countersinks namespace
 FL_CS_NS  = "cs";
@@ -75,7 +76,7 @@ FL_CS_UNI_M12   = fl_Countersink("Countersink UNI 5933 M12",12,24,6.5);
 FL_CS_UNI_M16   = fl_Countersink("Countersink UNI 5933 M16",16,30,7.5);
 FL_CS_UNI_M20   = fl_Countersink("Countersink UNI 5933 M20",20,36,8.5);
 
-FL_CS_UNI_INV = [
+FL_CS_UNI_INV = fl_Inventory([
   FL_CS_UNI_M3,
   FL_CS_UNI_M4,
   FL_CS_UNI_M5,
@@ -85,7 +86,7 @@ FL_CS_UNI_INV = [
   FL_CS_UNI_M12,
   FL_CS_UNI_M16,
   FL_CS_UNI_M20
-];
+]);
 
 FL_CS_ISO_M2    = fl_Countersink("Countersink ISO 10642 M2",  2,    4.09,   1.350);
 FL_CS_ISO_M2p5  = fl_Countersink("Countersink ISO 10642 M2.5",2.5,  5.08,   1.690);
@@ -100,7 +101,7 @@ FL_CS_ISO_M14   = fl_Countersink("Countersink ISO 10642 M14", 14,   28.31,  8.40
 FL_CS_ISO_M16   = fl_Countersink("Countersink ISO 10642 M16", 16,   30.61,  8.800);
 FL_CS_ISO_M20   = fl_Countersink("Countersink ISO 10642 M20", 20,   36.75,  10.160);
 
-FL_CS_ISO_INV = [
+FL_CS_ISO_INV = fl_Inventory([
 FL_CS_ISO_M2,
 FL_CS_ISO_M2p5,
 FL_CS_ISO_M3,
@@ -113,7 +114,7 @@ FL_CS_ISO_M12,
 FL_CS_ISO_M14,
 FL_CS_ISO_M16,
 FL_CS_ISO_M20
-];
+]);
 
 /*!
  * return a countersink list fitting the passed properties or undef if no match
