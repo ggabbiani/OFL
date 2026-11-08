@@ -2811,7 +2811,7 @@
 <hr />
 <h3 id="variable-fl_jack_barrel">variable FL_JACK_BARREL</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(l=12,w=7,h=6,ch=2.5,bbox=[[-l/2,-w/2,0],[+l/2+ch,+w/2,h]])fl_Object(bbox,name=&quot;FL_JACK_BARREL&quot;,engine=str(FL_JACK_NS,&quot;/barrel&quot;),others=[fl_cutout(value=[+X])])
+<div class="highlight"><pre><span></span><code>let(l=12,w=7,h=6,ch=2.5,bbox=[[-l/2,-w/2,0],[+l/2+ch,+w/2,h]])fl_Object(bbox,name="FL_JACK_BARREL",engine=str(FL_JACK_NS,"/barrel"),others=[fl_cutout(value=[+X])])
 </code></pre></div>
 <p>'Barrel' jack plug.</p>
 <p>The supported cutout direction on +X is circular allowing the carving for
@@ -2825,7 +2825,7 @@ jack plug insertion:</p>
 <hr />
 <h3 id="variable-fl_jack_mcxjphstem1">variable FL_JACK_MCXJPHSTEM1</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(name=&quot;50Ω MCX EDGE MOUNT JACK PCB CONNECTOR&quot;,w=6.7,l=9.3,h=5,sz=[w,l,h],axis=[0,0,0.4],bbox=[[-w/2,0,-h/2+axis.z],[+w/2,l,+h/2+axis.z]],d_ext=6.7,head=6.25,tail=sz.y-head,jack=sz.y-2)fl_Object(bbox,name=name,engine=str(FL_JACK_NS,&quot;/mcx edge mount&quot;),others=[fl_cutout(value=[-Y]),fl_connectors(value=[conn_Socket(&quot;antenna&quot;,+FL_X,-FL_Z,[0,0,axis.z],size=3.45,octant=-FL_X-FL_Y,direction=[-FL_Z,180])]),[&quot;axis of symmetry&quot;,axis],[&quot;external diameter&quot;,d_ext],[&quot;head&quot;,head],[&quot;tail&quot;,tail],[&quot;jack length&quot;,jack]])
+<div class="highlight"><pre><span></span><code>let(name="50Ω MCX EDGE MOUNT JACK PCB CONNECTOR",w=6.7,l=9.3,h=5,sz=[w,l,h],axis=[0,0,0.4],bbox=[[-w/2,0,-h/2+axis.z],[+w/2,l,+h/2+axis.z]],d_ext=6.7,head=6.25,tail=sz.y-head,jack=sz.y-2)fl_Object(bbox,name=name,engine=str(FL_JACK_NS,"/mcx edge mount"),others=[fl_cutout(value=[-Y]),fl_connectors(value=[conn_Socket("antenna",+FL_X,-FL_Z,[0,0,axis.z],size=3.45,octant=-FL_X-FL_Y,direction=[-FL_Z,180])]),["axis of symmetry",axis],["external diameter",d_ext],["head",head],["tail",tail],["jack length",jack]])
 </code></pre></div>
 <p>Edge mount jack PCB connector.</p>
 <p>The supported cutout direction on -Y is circular allowing the carving for
@@ -2834,7 +2834,7 @@ jack plug insertion:</p>
 <hr />
 <h3 id="variable-fl_jack_ns">variable FL_JACK_NS</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>&quot;jack&quot;
+<div class="highlight"><pre><span></span><code>"jack"
 </code></pre></div>
 <h2 id="modules">Modules</h2>
 <hr />

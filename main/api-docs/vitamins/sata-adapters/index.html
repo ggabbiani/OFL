@@ -2741,7 +2741,7 @@
 <hr />
 <h3 id="variable-fl_sadp_eluteng">variable FL_SADP_ELUTENG</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(socket=FL_SATA_POWERDATASOCKET,handle_size=[47,37,11.6],socket_size=fl_size(socket),size=[handle_size.x,handle_size.y+socket_size.z,handle_size.z],Mpd=T(-Y(FL_EPS))*Ry(180)*Rx(-90)*fl_octant(+Z-Y,type=socket))[fl_name(value=&quot;ELUTENG USB 3.0 TO SATA ADAPTER&quot;),fl_bb_corners(value=[[-size.x/2,-handle_size.y,-size.z/2],[size.x/2,socket_size.z,+size.z/2]]),fl_vendor(value=[[&quot;Amazon&quot;,&quot;https://www.amazon.it/gp/product/B06XCV1W97/&quot;]]),[&quot;handle size&quot;,handle_size],[&quot;Mpd&quot;,Mpd],[&quot;connectors&quot;,fl_conn_import(fl_connectors(socket),Mpd)],[&quot;SATA socket&quot;,socket],]
+<div class="highlight"><pre><span></span><code>let(socket=FL_SATA_POWERDATASOCKET,handle_size=[47,37,11.6],socket_size=fl_size(socket),size=[handle_size.x,handle_size.y+socket_size.z,handle_size.z],Mpd=T(-Y(FL_EPS))*Ry(180)*Rx(-90)*fl_octant(+Z-Y,type=socket))[fl_name(value="ELUTENG USB 3.0 TO SATA ADAPTER"),fl_bb_corners(value=[[-size.x/2,-handle_size.y,-size.z/2],[size.x/2,socket_size.z,+size.z/2]]),fl_vendor(value=[["Amazon","https://www.amazon.it/gp/product/B06XCV1W97/"]]),["handle size",handle_size],["Mpd",Mpd],["connectors",fl_conn_import(fl_connectors(socket),Mpd)],["SATA socket",socket],]
 </code></pre></div>
 <hr />
 <h3 id="variable-fl_sadp_inv">variable FL_SADP_INV</h3>
@@ -2751,7 +2751,7 @@
 <hr />
 <h3 id="variable-fl_sadp_ns">variable FL_SADP_NS</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>&quot;sadp&quot;
+<div class="highlight"><pre><span></span><code>"sadp"
 </code></pre></div>
 <h2 id="modules">Modules</h2>
 <hr />

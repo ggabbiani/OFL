@@ -4353,7 +4353,7 @@
 </code></pre></div>
 <p>Build a floating semi-axis list from literal semi-axis list.</p>
 <p>example:</p>
-<div class="highlight"><pre><span></span><code>list = fl_3d_AxisList(axes=[&quot;-x&quot;,&quot;±Z&quot;]);
+<div class="highlight"><pre><span></span><code>list = fl_3d_AxisList(axes=["-x","±Z"]);
 </code></pre></div>
 <p>is equivalent to:</p>
 <div class="highlight"><pre><span></span><code>list =
@@ -4395,7 +4395,7 @@ strings</p>
 </table>
 <p>See also function <a href="../traits-engine/#function-fl_tt_isaxisvlist">fl_tt_isAxisVList()</a></p>
 <p>example 1:</p>
-<div class="highlight"><pre><span></span><code>thick = fl_3d_AxisVList(kvs=[[&quot;-x&quot;,3],[&quot;±Z&quot;,4]]);
+<div class="highlight"><pre><span></span><code>thick = fl_3d_AxisVList(kvs=[["-x",3],["±Z",4]]);
 </code></pre></div>
 <p>is equivalent to:</p>
 <div class="highlight"><pre><span></span><code>thick =
@@ -4406,7 +4406,7 @@ strings</p>
 ];
 </code></pre></div>
 <p>example 2:</p>
-<div class="highlight"><pre><span></span><code>values = fl_3d_AxisVList(axes=[&quot;-x&quot;,&quot;±Z&quot;]);
+<div class="highlight"><pre><span></span><code>values = fl_3d_AxisVList(axes=["-x","±Z"]);
 </code></pre></div>
 <p>is equivalent to:</p>
 <div class="highlight"><pre><span></span><code>values =
@@ -4862,17 +4862,17 @@ list of types</p>
 <hr />
 <h3 id="module-fl_3d_polyhedronlabels">module fl_3d_polyhedronLabels</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_3d_polyhedronLabels(poly,size,label=&quot;P&quot;)
+<div class="highlight"><pre><span></span><code>fl_3d_polyhedronLabels(poly,size,label="P")
 </code></pre></div>
 <hr />
 <h3 id="module-fl_3d_polyhedronsymbols">module fl_3d_polyhedronSymbols</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_3d_polyhedronSymbols(poly,size,color=&quot;black&quot;)
+<div class="highlight"><pre><span></span><code>fl_3d_polyhedronSymbols(poly,size,color="black")
 </code></pre></div>
 <hr />
 <h3 id="module-fl_bb_add">module fl_bb_add</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_bb_add(corners,mode=&quot;3d&quot;,auto=true)
+<div class="highlight"><pre><span></span><code>fl_bb_add(corners,mode="3d",auto=true)
 </code></pre></div>
 <p>add a bounding box shape to the scene</p>
 <p><strong>Parameters:</strong></p>
@@ -5273,7 +5273,7 @@ supported verbs: FL_ADD</p>
 <hr />
 <h3 id="module-fl_sym_point">module fl_sym_point</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_sym_point(verbs=FL_ADD,point=FL_O,size,color=&quot;black&quot;)
+<div class="highlight"><pre><span></span><code>fl_sym_point(verbs=FL_ADD,point=FL_O,size,color="black")
 </code></pre></div>
 <p>Point symbol.</p>
 <p><strong>Parameters:</strong></p>
@@ -5453,7 +5453,7 @@ module engine() let(
   ; // verb implementation code
 
   else
-    fl_error([&quot;unimplemented verb&quot;,$this_verb]);
+    fl_error(["unimplemented verb",$this_verb]);
 
 ...
 

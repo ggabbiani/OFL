@@ -2821,7 +2821,7 @@
 <hr />
 <h3 id="variable-fl_dim_ns">variable FL_DIM_NS</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>&quot;dim&quot;
+<div class="highlight"><pre><span></span><code>"dim"
 </code></pre></div>
 <p>prefix used for namespacing</p>
 <h2 id="functions">Functions</h2>
@@ -2845,13 +2845,13 @@ mandatory label string</p>
 element can be later retrieved by using the standard <a href="../core/#function-fl_property">fl_property()</a> getter on
 the strip itself, like in the following code:</p>
 <div class="highlight"><pre><span></span><code>strip = fl_DimensionPack([
-          fl_Dimension(20,&quot;Height&quot;),
-          fl_Dimension(10,&quot;Width&quot;)],
+          fl_Dimension(20,"Height"),
+          fl_Dimension(10,"Width")],
           ...
         );
 ...
-fl_dimension(fl_property(strip,&quot;Height&quot;),...);
-fl_dimension(fl_property(strip,&quot;Width&quot;),...);
+fl_dimension(fl_property(strip,"Height"),...);
+fl_dimension(fl_property(strip,"Width"),...);
 </code></pre></div>
 <hr />
 <h3 id="function-fl_dim_label">function fl_dim_label</h3>

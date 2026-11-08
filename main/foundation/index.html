@@ -3145,9 +3145,9 @@ the term is a plain string, <code>[[]]</code> when nothing is found).</p>
 <p>An <em>object</em> is a dictionary in which every key/value pair represents a
 property of the object:</p>
 <div class="highlight"><pre><span></span><code>type = [
-  [&quot;first property name&quot;, &quot;this is a string&quot;],  // a string property
-  [&quot;second property name&quot;, -3.5],               // a number propery
-  [&quot;a flag name&quot;],                              // a flag
+  ["first property name", "this is a string"],  // a string property
+  ["second property name", -3.5],               // a number propery
+  ["a flag name"],                              // a flag
 ];
 </code></pre></div>
 <p>Object properties belong to one of the following categories:</p>
@@ -3367,7 +3367,7 @@ fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6);
 <div class="highlight"><pre><span></span><code>include &lt;OFL/vitamins/magnets.scad&gt;
 
 // multiple verb engine invocation
-fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,$FL_AXES=&quot;DEBUG&quot;);
+fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,$FL_AXES="DEBUG");
 ^         ^                                    ^                  ^         ^
 |         |                                    |                  |         |
 |         |                                    |                  |         +---&gt; DEBUG rendering
@@ -3477,7 +3477,7 @@ fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=+X+Y+Z);
 fl_magnet([FL_ADD,FL_MOUNT,FL_AXES,FL_BBOX],FL_MAG_M4_CS_D32x6,octant=+Y+Z);
 ^         ^                                    ^                  ^
 |         |                                    |                  |
-|         |                                    |                  +---&gt; octant expressed as [0,1,1] ⇒ x==0 means &#39;centered&#39;
+|         |                                    |                  +---&gt; octant expressed as [0,1,1] ⇒ x==0 means 'centered'
 |         |                                    |
 |         |                                    +---&gt; object
 |         |
@@ -3541,15 +3541,15 @@ function __point__(alpha) = ...
 </code></pre></div>
 <h2 id="naming-convention-for-constants">Naming convention for constants</h2>
 <p>For similar reasons all global constants used in OFL are prefixed with <strong>'FL_'</strong> while the rest of the name must be in <strong>UPPER CASE</strong>.</p>
-<div class="highlight"><pre><span></span><code>FL_ADD        = &quot;FL_ADD adds shapes to scene.&quot;;
-FL_ASSEMBLY   = &quot;FL_ASSEMBLY layout of predefined auxiliary shapes (like predefined screws).&quot;;
-FL_AXES       = &quot;FL_AXES draw of local reference axes.&quot;;
-FL_BBOX       = &quot;FL_BBOX adds a bounding box containing the object.&quot;;
-FL_CUTOUT     = &quot;FL_CUTOUT layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z).&quot;;
-FL_DRILL      = &quot;FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter).&quot;;
-FL_FOOTPRINT  = &quot;FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.&quot;;
-FL_LAYOUT     = &quot;FL_LAYOUT layout of user passed accessories (like alternative screws).&quot;;
-FL_PAYLOAD    = &quot;FL_PAYLOAD adds a box representing the payload of the shape&quot;;
+<div class="highlight"><pre><span></span><code>FL_ADD        = "FL_ADD adds shapes to scene.";
+FL_ASSEMBLY   = "FL_ASSEMBLY layout of predefined auxiliary shapes (like predefined screws).";
+FL_AXES       = "FL_AXES draw of local reference axes.";
+FL_BBOX       = "FL_BBOX adds a bounding box containing the object.";
+FL_CUTOUT     = "FL_CUTOUT layout of predefined cutout shapes (+X,-X,+Y,-Y,+Z,-Z).";
+FL_DRILL      = "FL_DRILL layout of predefined drill shapes (like holes with predefined screw diameter).";
+FL_FOOTPRINT  = "FL_FOOTPRINT adds a footprint to scene, usually a simplified FL_ADD.";
+FL_LAYOUT     = "FL_LAYOUT layout of user passed accessories (like alternative screws).";
+FL_PAYLOAD    = "FL_PAYLOAD adds a box representing the payload of the shape";
 </code></pre></div>
 <p>Constants defined in a local scope (function and module bodies, let()
 assignments, function parameters) are instead in <strong>lower case</strong>:</p>
