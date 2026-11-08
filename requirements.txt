@@ -18,7 +18,7 @@
 # tests
 python-dotenv==1.2.4
 envsubst==0.1.5
-termcolor==2.5.0
+termcolor==3.3.0
 numpy==2.5.4
 opencv-python-headless==5.0.0.93
 scikit-image==0.26.0
