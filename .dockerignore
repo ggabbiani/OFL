@@ -1,0 +1,7 @@
+# Build context for the docker/<distro> images is the repository root.
+# Everything is excluded except what the images actually need.
+*
+!.python-version
+!requirements.txt
+!docker/fedora/make-import.sh
+!docker/ubuntu/make-import.sh

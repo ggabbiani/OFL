@@ -1,4 +1,5 @@
 # This Makefile builds locally the Docker image used for run OFL tests.
+# The build context is the project root (see $(PRJ_ROOT)/.dockerignore).
 #
 # This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 #
@@ -17,8 +18,8 @@ FEDORA_MAKE		= $(DOCKER_RUN) ofl:fedora
 UBUNTU_MAKE		= $(DOCKER_RUN) ofl:ubuntu
 
 DOCKER_BUILD	= docker build
-FEDORA_BUILD	= $(DOCKER_BUILD) -t ofl:fedora
-UBUNTU_BUILD	= $(DOCKER_BUILD) -t ofl:ubuntu
+FEDORA_BUILD	= $(DOCKER_BUILD) -t ofl:fedora -f fedora/Dockerfile $(PRJ_ROOT)
+UBUNTU_BUILD	= $(DOCKER_BUILD) -t ofl:ubuntu -f ubuntu/Dockerfile $(PRJ_ROOT)
 
 .DEFAULT_GOAL := help
 
@@ -31,7 +32,7 @@ clean:
 
 fedora-build:	## build docker image: pre-requisite for all fedora targets
 	$(call target-prologue)
-	cd $(word 1,$(subst -, ,$@)) && $(FEDORA_BUILD) .
+	$(FEDORA_BUILD)
 	$(call target-epilogue-success)
 
 fedora: fedora-build	## Fedora make "all"
@@ -44,7 +45,7 @@ fedora-tests: fedora-build	## Fedora make "tests/runs"
 
 ubuntu-build:	## build docker image: pre-requisite for all ubuntu targets
 	$(call section-prologue,$@)
-	cd $(word 1,$(subst -, ,$@)) && $(UBUNTU_BUILD) .
+	$(UBUNTU_BUILD)
 	$(call section-epilogue,$@)
 
 ubuntu: ubuntu-build	## Ubuntu make "all"

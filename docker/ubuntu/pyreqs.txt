@@ -1,8 +1,0 @@
-numpy~=2.2.0
-opencv_python_headless~=4.10.0.84
-python-dotenv~=1.0.1
-termcolor~=2.5.0
-scikit-image~=0.25.0
-envsubst~=0.1.5
-mkdocs-material~=9.7.1
-mike~=2.1.3
