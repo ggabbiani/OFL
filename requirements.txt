@@ -1,11 +1,19 @@
 # Python dependencies for OFL tooling (tests, docs, examples).
 #
-# Setup (uv-managed interpreter, independent from system Python updates):
+# This file is the single source of Python dependencies for both the host
+# virtual environment and the docker/<distro> test images.
 #
-#   uv python install 3.13
-#   uv venv --python 3.13 .venv
+# Setup (uv-managed interpreter, independent from system Python updates; the
+# Python version is read from .python-version):
+#
+#   uv venv .venv
 #   uv pip install -r requirements.txt
 #   source .venv/bin/activate
+#
+# After changing .python-version, recreate the venv with 'uv venv --clear .venv'
+# and check that every pinned package ships wheels for the new version:
+#
+#   uv pip compile requirements.txt --python-version <X.Y> --only-binary :all: -q
 
 # tests
 python-dotenv==1.0.1
