@@ -13,7 +13,7 @@
 # uv binaries (stage referenced below, kept as FROM so Dependabot can bump it)
 FROM ghcr.io/astral-sh/uv:0.13.5 AS uv
 
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 ARG ODOX_VERSION=1.2.2
 ARG ODOX_RELEASE=0ubuntu19
