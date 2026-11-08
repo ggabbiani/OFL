@@ -31,7 +31,8 @@ RUN dnf install -y \
 RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSION}/orthodocs-${ODOX_RELEASE}.$(uname -m).rpm \
     && dnf install -y ./orthodocs-${ODOX_RELEASE}.$(uname -m).rpm
 
-# Python virtual environment: interpreter and packages are managed by uv, so
+# Python virtual environment: interpreter and packages are managed by uv
+# (wheels only: '--no-build' makes a missing wheel fail fast and clearly), so
 # the Python version is pinned by the repo .python-version and doesn't depend
 # on the distro one.
 COPY --from=uv /uv /uvx /usr/local/bin/
@@ -41,7 +42,7 @@ ENV UV_PYTHON_INSTALL_DIR=/opt/uv/python \
 WORKDIR /opt/uv
 COPY .python-version requirements.txt ./
 RUN uv venv /venv \
-    && VIRTUAL_ENV=/venv uv pip install -r requirements.txt
+    && VIRTUAL_ENV=/venv uv pip install --no-build -r requirements.txt
 WORKDIR /
 COPY docker/fedora/make-import.sh /usr/local/sbin/
 RUN chmod +x /usr/local/sbin/make-import.sh
