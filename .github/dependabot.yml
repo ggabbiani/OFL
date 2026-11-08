@@ -1,0 +1,35 @@
+# Dependabot version updates.
+#
+# Every PR is verified by .github/workflows/tests.yml: docker images are rebuilt
+# and tested when their sources change, but never pushed from a PR.
+#
+# Base image major upgrades (new Fedora/Ubuntu releases) are intentionally
+# proposed too: the library must stay usable on up to date systems.
+version: 2
+updates:
+
+  # Python tooling (single source for host venv and docker images)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      python:
+        update-types: ["minor", "patch"]
+
+  # Docker test images: base distro and uv
+  - package-ecosystem: "docker"
+    directories:
+      - "/docker/fedora"
+      - "/docker/ubuntu"
+    schedule:
+      interval: "weekly"
+
+  # GitHub Actions used by the workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        update-types: ["minor", "patch", "major"]

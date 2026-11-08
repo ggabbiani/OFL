@@ -8,6 +8,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
+# uv binaries (stage referenced below, kept as FROM so Dependabot can bump it)
+FROM ghcr.io/astral-sh/uv:0.13.5 AS uv
+
 FROM fedora:43
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 ARG ODOX_VERSION=1.2.2
@@ -31,7 +34,7 @@ RUN wget https://github.com/ggabbiani/orthodocs/releases/download/v${ODOX_VERSIO
 # Python virtual environment: interpreter and packages are managed by uv, so
 # the Python version is pinned by the repo .python-version and doesn't depend
 # on the distro one.
-COPY --from=ghcr.io/astral-sh/uv:0.13.5 /uv /uvx /usr/local/bin/
+COPY --from=uv /uv /uvx /usr/local/bin/
 ENV UV_PYTHON_INSTALL_DIR=/opt/uv/python \
     UV_PYTHON_PREFERENCE=only-managed \
     UV_NO_CACHE=1
