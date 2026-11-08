@@ -11,7 +11,7 @@
 # uv binaries (stage referenced below, kept as FROM so Dependabot can bump it)
 FROM ghcr.io/astral-sh/uv:0.13.7 AS uv
 
-FROM fedora:43
+FROM fedora:45
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
 ARG ODOX_VERSION=1.2.2
 ARG ODOX_RELEASE=${ODOX_VERSION}-19.fc39
