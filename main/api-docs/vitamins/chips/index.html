@@ -2800,11 +2800,15 @@ optional description</p>
 <hr />
 <h3 id="module-fl_chip">module fl_chip</h3>
 <p><strong>Syntax:</strong></p>
-<div class="highlight"><pre><span></span><code>fl_chip(verbs=FL_ADD,type,octant,direction)
+<div class="highlight"><pre><span></span><code>fl_chip(verbs=FL_ADD,type,cut_drift=0,cut_dirs,octant,direction)
 </code></pre></div>
 <p><strong>Parameters:</strong></p>
 <p><strong>verbs</strong><br />
-supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT</p>
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT</p>
+<p><strong>cut_drift</strong><br />
+translation applied to cutout</p>
+<p><strong>cut_dirs</strong><br />
+FL_CUTOUT direction list. Defaults to 'supported' cutout direction</p>
 <p><strong>octant</strong><br />
 when undef native positioning is used</p>
 <p><strong>direction</strong><br />

@@ -4927,7 +4927,7 @@ follow:</p>
 </table>
 <p>This facility is meant to be used with fl_new_cutout() like in the following
 example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>fl_cutoutLoop(cut_dirs, fl_cutout($this))
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>fl_cutoutLoop(cut_dirs, fl_preferredCutouts($this))
 <a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>  if ($co_preferred) {
 <a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a>    fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_thickness=...,$fl_tolerance=..)
 <a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a>      do_footprint();

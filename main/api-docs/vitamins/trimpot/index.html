@@ -2755,7 +2755,7 @@
 <hr />
 <h3 id="variable-fl_trim_pot10">variable FL_TRIM_POT10</h3>
 <p><strong>Default:</strong></p>
-<div class="highlight"><pre><span></span><code>let(sz=[9.5,10+1.5,4.8],bbox=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]])fl_Object(bbox,name="ten turn trimpot",engine=FL_TRIM_NS,others=[fl_cutout(value=[-Y]),])
+<div class="highlight"><pre><span></span><code>let(sz=[9.5,10+1.5,4.8],bbox=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]])fl_Object(bbox,name="ten turn trimpot",engine=FL_TRIM_NS,others=[fl_preferredCutouts(value=[-Y]),])
 </code></pre></div>
 <h2 id="modules">Modules</h2>
 <hr />
