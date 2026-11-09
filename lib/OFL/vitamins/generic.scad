@@ -52,7 +52,7 @@ assert(is_undef(holes) || !fl_dbg_assert() || fl_tt_isHoleList(holes)          )
       fl_name(value=name?name:str("Generic vitamin ",bbox[1]-bbox[0])),
       fl_generic_ghost(value=ghost),
       assert(bbox)        fl_bb_corners(value=bbox),
-      if (cut_directions) fl_cutout(value=cut_directions),
+      if (cut_directions) fl_preferredCutouts(value=cut_directions),
       if (holes)          fl_holes(value=holes),
     ],
     specs
@@ -88,7 +88,7 @@ module fl_generic_vitamin(
   assert(!fl_dbg_assert() || is_num($fl_thickness) || fl_tt_isAxisVList($fl_thickness));
   $fl_thickness           = is_num($fl_thickness) ? [[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness],[$fl_thickness,$fl_thickness]] : $fl_thickness;
   cut_drift       = is_num(cut_drift) ? [[cut_drift,cut_drift],[cut_drift,cut_drift],[cut_drift,cut_drift]] : cut_drift;
-  cut_directions  = fl_cutout(this,default=[]);
+  cut_directions  = fl_preferredCutouts(this,default=[]);
   ghost           = fl_generic_ghost(this);
   holes           = fl_optional(this,key=fl_holes()[0]);
 

@@ -105,7 +105,7 @@ let(
     ["phdr/smt", smt],
     ["phdr/pass-through", through],
     if (vendors!=[]) fl_vendor(value=vendors),
-    fl_cutout(value=[+Z]),
+    fl_preferredCutouts(value=[+Z]),
   ];
 
 /*!
@@ -138,7 +138,7 @@ module fl_pinHeader(
   pitch_sz  = hdr_pitch(nop);
   engine    = fl_engine(type);
   smt       = fl_property(type,"phdr/smt");
-  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs  = fl_cut_dirs(cut_dirs,type);
 
   module do_add() {
     if (engine=="male")
@@ -162,7 +162,7 @@ module fl_pinHeader(
       fl_bb_add($this_bbox);
 
     else if ($verb==FL_CUTOUT)
-      fl_cutoutLoop(cut_dirs, fl_cutout(type),$fl_thickness=cut_thick,$fl_tolerance=cut_tolerance) {
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts(type),$fl_thickness=cut_thick,$fl_tolerance=cut_tolerance) {
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current)
             do_add();

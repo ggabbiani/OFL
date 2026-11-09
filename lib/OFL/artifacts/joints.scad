@@ -159,7 +159,7 @@ function fl_jnt_RectCantilever(
     description = description,
     engine      = FL_JNT_RECT_NS,
     others      = [
-      fl_cutout(value=[+Z]),
+      fl_preferredCutouts(value=[+Z]),
       [str(FL_JNT_CANTILEVER_NS,"/b"),          b         ],
       [str(FL_JNT_CANTILEVER_NS,"/section YZ"), sectionYZ ],
       [str(FL_JNT_CANTILEVER_NS,"/section XZ"), sectionXZ ],
@@ -249,7 +249,7 @@ function fl_jnt_RingCantilever(
     description = description,
     engine      = FL_JNT_RING_NS,
     others      = [
-      fl_cutout(value=[+Z]),
+      fl_preferredCutouts(value=[+Z]),
       [str(FL_JNT_CANTILEVER_NS,"/section YZ"),   sectionYZ ],
       assert(theta) [str(FL_JNT_RING_NS,"/theta"),theta     ],
       assert(r)     [str(FL_JNT_RING_NS,"/arm r"),r         ],
@@ -336,7 +336,7 @@ module fl_jnt_joint(
   ];
 
   engine        = fl_engine(this);
-  preferred_co  = fl_cutout(this);
+  preferred_co  = fl_preferredCutouts(this);
   cut_dirs      = cut_dirs ? cut_dirs : preferred_co;
 
   // Other specific attributes are retrieved by the relevant engine
@@ -390,7 +390,6 @@ module fl_jnt_joint(
 
   // execution context set by fl_vmanage{}
   module engine()
-    echo(str("R<",min(0.6*h[0],undercut)))
     if (engine==str(FL_JNT_CANTILEVER_NS,"/rect"))
       rect_engine()
         children();
@@ -455,8 +454,10 @@ module fl_jnt_joint(
       do_add(fillet=fillet,tolerance=tolerance,$FL_ADD=$FL_FOOTPRINT);
 
     module do_cutout(clearance) {
-      fl_cutoutLoop(cut_dirs, fl_cutout(this))
-        if ($co_preferred) {
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts(this))
+        if ($co_preferred) let(
+          $fl_thickness = fl_thickness($co_current)
+        ) {
           // arm
           translate(-Z(length+clearance))
             translate(-Z(cut_drift))
@@ -568,7 +569,7 @@ module fl_jnt_joint(
      * engine, but this is faster.
      */
     module do_cutout(clearance) {
-      fl_cutoutLoop(cut_dirs, fl_cutout(this))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts(this))
         if ($co_preferred) {
           // arm
           translate(-Z(arm+clearance))

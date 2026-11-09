@@ -22,7 +22,7 @@ FL_SD_MOLEX_uSD_SOCKET = let(
   fl_name(value="FL_SD_MOLEX_uSD_SOCKET"),
   fl_bb_corners(value=[[-size.x/2,-size.y/2,0],[+size.x/2,+size.y/2,+size.z]]),
   // fl_director(value=-Y),fl_rotor(value=+X),
-  fl_cutout(value=[-FL_Y]),
+  fl_preferredCutouts(value=[-FL_Y]),
 ];
 
 //! sd inventory
@@ -52,7 +52,7 @@ module fl_sd_usocket(
   octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs  = fl_cut_dirs(cut_dirs,type);
 
   module do_print()
     rotate(-90,Z)
@@ -66,7 +66,7 @@ module fl_sd_usocket(
       fl_bb_add($this_bbox);
 
     else if ($verb==FL_CUTOUT)
-      fl_cutoutLoop(cut_dirs,fl_cutout(type))
+      fl_cutoutLoop(cut_dirs,fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=cut_tolerance,$fl_thickness=cut_thick)
             do_print();

@@ -33,7 +33,7 @@ FL_JACK_BARREL = let(
   ch = 2.5,
   // calculated bounding box corners
   bbox      = [[-l/2,-w/2,0],[+l/2+ch,+w/2,h]]
-) fl_Object(bbox, name="FL_JACK_BARREL", engine=str(FL_JACK_NS,"/barrel"), others=[fl_cutout(value=[+X])]);
+) fl_Object(bbox, name="FL_JACK_BARREL", engine=str(FL_JACK_NS,"/barrel"), others=[fl_preferredCutouts(value=[+X])]);
 
 /*!
  * Edge mount jack PCB connector.
@@ -57,7 +57,7 @@ FL_JACK_MCXJPHSTEM1 = let(
   tail  = sz.y - head,
   jack  = sz.y-2
 ) fl_Object(bbox, name=name, engine=str(FL_JACK_NS,"/mcx edge mount"), others=[
-  fl_cutout(value=[-Y]),
+  fl_preferredCutouts(value=[-Y]),
   fl_connectors(value=[
     conn_Socket("antenna",+FL_X,-FL_Z,[0,0,axis.z],size=3.45,octant=-FL_X-FL_Y,direction=[-FL_Z,180])
   ]),
@@ -139,7 +139,7 @@ module fl_jack_barrelEngine(
       fl_bb_add($this_bbox);
     else assert($verb==FL_CUTOUT,str("unimplemented verb",$this_verb))
       assert($fl_thickness!=undef)
-      fl_cutoutLoop(co_dirs, fl_cutout(type))
+      fl_cutoutLoop(co_dirs, fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,
             drift         = function() cut_drift+($co_preferred ? -2.5 : 0),
@@ -210,7 +210,7 @@ module fl_jack_mcxjphstem1Engine(
   }
 
   module do_cutout() {
-    fl_cutoutLoop(co_dirs, fl_cutout(type))
+    fl_cutoutLoop(co_dirs, fl_preferredCutouts(type))
       fl_new_cutout(bbox,$co_current,drift=cut_drift, $fl_tolerance=$fl_tolerance+EPSx2)
         if ($co_preferred)
           multmatrix(Mshape)

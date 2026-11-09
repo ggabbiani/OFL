@@ -27,7 +27,7 @@ function fl_hdmi_new(nop) = let(
     bbox  = let(d=max(iw1,iw2)+2*t) [[-l/2,-d/2,h-2*t-ih2],[+l/2,+d/2,h]]
 ) fl_Object(bbox,name=nop[0],description=nop[1],others=[
     fl_nopSCADlib(value=nop),
-    fl_cutout(value=[+X]),
+    fl_preferredCutouts(value=[+X]),
   ]);
 
 // following HDMI socket definitions are taken from NopSCADlib/vitamins/pcb.scad
@@ -117,7 +117,7 @@ module fl_hdmi(
       fl_modifier($modifier) fl_bb_add($this_bbox,auto=true);
 
     else if ($this_verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs, fl_cutout($this))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts($this))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=$fl_tolerance+EPSx2)
             do_footprint();

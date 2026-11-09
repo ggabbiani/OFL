@@ -67,7 +67,7 @@ function fl_Component(
   parameters
 ) = let(
   // transform component directions into host coordinate system
-  comp_dirs       = fl_cutout(type,default=[]),
+  comp_dirs       = fl_preferredCutouts(type,default=[]),
   D               = fl_direction(direction),
   // host-coordinate-system component direction
   host_dirs       = [for(d=comp_dirs) fl_transform(D,d)],

@@ -22,7 +22,7 @@ FL_TRIM_NS    = "trim";
 FL_TRIM_POT10  = let(
   sz    = [9.5,10+1.5,4.8],
   bbox  = [[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]]
-) fl_Object(bbox, name="ten turn trimpot", engine=FL_TRIM_NS, others=[fl_cutout(value=[-Y]),]);
+) fl_Object(bbox, name="ten turn trimpot", engine=FL_TRIM_NS, others=[fl_preferredCutouts(value=[-Y]),]);
 
 FL_TRIM_INV  = fl_Inventory([
   FL_TRIM_POT10,
@@ -45,7 +45,7 @@ module fl_trimpot(
   //! when undef native positioning is used
   octant
 ) {
-  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs  = fl_cut_dirs(cut_dirs,type);
 
   fl_vmanage(verbs,type,octant,direction) {
     if ($verb==FL_ADD) {
@@ -55,7 +55,7 @@ module fl_trimpot(
       fl_bb_add(bbox);
 
     } else if ($verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs,fl_cutout(type))
+      fl_cutoutLoop(cut_dirs,fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=cut_tolerance,$fl_thickness=cut_thick,trim=[0,5.1,0])
             trimpot10();

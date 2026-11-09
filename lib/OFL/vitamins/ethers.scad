@@ -38,7 +38,7 @@ FL_ETHER_RJ45 = let(
 ) [
   fl_name(value="RJ45"),
   fl_bb_corners(value=[[-l/2,-w/2,0],[+l/2,+w/2,h]]),
-  fl_cutout(value=[+X]),
+  fl_preferredCutouts(value=[+X]),
 
   fl_engine(value=str(FL_ETHER_NS,"/NopSCADlib")),
 ];
@@ -49,7 +49,7 @@ FL_ETHER_RJ45_SM = let(
 ) [
   fl_name(value="RJ45 SLIM"),
   fl_bb_corners(value=[[-l+FL_ETHER_FRAME_T,-w/2,-FL_ETHER_Z_OFFSET],+[FL_ETHER_FRAME_T,w/2,h-FL_ETHER_Z_OFFSET]]),
-  fl_cutout(value=[+X]),
+  fl_preferredCutouts(value=[+X]),
 
   fl_dxf(value="vitamins/ether-slim.dxf"),
   fl_engine(value=str(FL_ETHER_NS,"/native")),
@@ -80,7 +80,7 @@ module fl_ether(
    * Cutout direction list in floating semi-axis list (see also
    * fl_tt_isAxisList()).
    *
-   * **NOTE:** defaults to fl_cutout() when undef (so all the preferred cutout
+   * **NOTE:** defaults to fl_preferredCutouts() when undef (so all the preferred cutout
    * directions are included)
    *
    * Example 1:
@@ -131,7 +131,7 @@ module fl_ether(
   }
 
   module do_cutout()
-    fl_cutoutLoop(cut_dirs, fl_cutout($this))
+    fl_cutoutLoop(cut_dirs, fl_preferredCutouts($this))
       if ($co_preferred)
         fl_new_cutout($this_bbox,$co_current,
           drift         = cut_drift,

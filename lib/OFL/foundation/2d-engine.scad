@@ -21,8 +21,9 @@ include <../../ext/Round-Anything/polyround.scad>
  * | ---------------- | --------- | --------------------------------------------------- |
  * | $fl_polyround    | Parameter | when true polyRound() is called, otherwise radiipoints are transformed in normal 2d points ready for polygon() |
  */
-function fl_2d_polyRound(radiipoints,fn=5,mode=0) =
-  $fl_polyround ? polyRound(radiipoints,fn,mode) : [for(p=radiipoints) [p.x,p.y]] ;
+function fl_2d_polyRound(radiipoints,fn=5,mode=0) = let(
+  poly = is_undef($fl_polyround) ? false : assert(is_bool($fl_polyround)) $fl_polyround
+) poly ? polyRound(radiipoints,fn,mode) : [for(p=radiipoints) [p.x,p.y]] ;
 
 /*!
  * High-level (OFL 'objects' only) verb-driven OFL API management for

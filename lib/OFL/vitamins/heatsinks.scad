@@ -34,7 +34,7 @@ FL_HS_PIMORONI_TOP = let(
     ]
   ),
   fl_engine(value="Pimoroni"),
-  fl_cutout(value=[+Z]),
+  fl_preferredCutouts(value=[+Z]),
 
   // private/undocumented properties
   ["corner radius",     3         ],
@@ -61,7 +61,7 @@ FL_HS_PIMORONI_BOTTOM = let(
     ]
   ),
   fl_engine(value="Pimoroni"),
-  fl_cutout(value=[+Y]),
+  fl_preferredCutouts(value=[+Y]),
 
   // private/undocumented properties
   ["corner radius",     3         ],
@@ -84,7 +84,7 @@ FL_HS_KHADAS = let(
   fl_screw(value=M2_cap_screw),
   fl_dxf(value="vitamins/hs-khadas.dxf"),
   fl_engine(value="Khadas"),
-  fl_cutout(value=[+Z]),
+  fl_preferredCutouts(value=[+Z]),
 
   // private/undocumented properties
   fl_property(key="separator height", value=Zs),
@@ -123,7 +123,7 @@ module fl_heatsink(
   assert(is_list(verbs)||is_string(verbs),verbs);
 
   engine    = fl_engine(type);
-  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs  = fl_cut_dirs(cut_dirs,type);
 
   module pimoroni(verb,type,direction,octant) {
     dxf       = fl_dxf(type);
@@ -225,7 +225,7 @@ module fl_heatsink(
       fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
     } else if (verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs, fl_cutout(type))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,
             drift         = cut_drift-(part=="top"?chamfer_t:corner_r),
@@ -290,7 +290,7 @@ module fl_heatsink(
       fl_bb_add($this_bbox);
 
     } else if (verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs, fl_cutout(type))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,
             drift         = cut_drift

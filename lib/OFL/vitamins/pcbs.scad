@@ -693,7 +693,7 @@ module fl_pcb(
               // component direction list
               let(
                 // transform component directions into pcb coordinate system
-                dirs  = fl_cutout($comp_type),
+                dirs  = fl_preferredCutouts($comp_type),
                 D     = fl_direction($comp_direction),
                 new   = [for(d=dirs) fl_transform(D,d)]
               )

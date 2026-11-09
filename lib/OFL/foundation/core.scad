@@ -381,7 +381,7 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  *
  * **Supported directions**
  *
- * The supported cutout directions are specified via fl_cutout() property as a
+ * The supported cutout directions are specified via fl_preferredCutouts() property as a
  * list of directions along which the cutout occurs. Audio jacks for example
  * support cutout along +X axis, while DIN rails support cutout on -Z and +Z axes.
  *
@@ -390,9 +390,9 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  * `cut_dirs==[]` instead, the FL_CUTOUT is a no-op. In all the other cases,
  * cutout is performed only on the directions that are specified in the cut_dirs
  * parameter AND that are supported (i.e. present as list element in the
- * fl_cutout() property).
+ * fl_preferredCutouts() property).
  *
- * **NOTE:** The fl_cutout() property also modifies the behavior of the object
+ * **NOTE:** The fl_preferredCutouts() property also modifies the behavior of the object
  * when it is passed as a component (via fl_Component()) of a 'parent' object.
  * In these cases, objects do not modify the bounding box of their parent along
  * the 'supported' directions.
@@ -402,12 +402,12 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  * Inside a fl_vmanage{} loop, its typical usage is the following:
  *
  *     ...
- *     cut_dirs    = cut_dirs ? cut_dirs : fl_cutout(type);
+ *     cut_dirs    = cut_dirs ? cut_dirs : fl_preferredCutouts(type);
  *     ...
  *     fl_vmanage(verbs,type,octant=octant,direction=direction)
  *       ...
  *       else if ($this_verb==FL_CUTOUT) {
- *         fl_cutoutLoop(cut_dirs, fl_cutout($this))
+ *         fl_cutoutLoop(cut_dirs, fl_preferredCutouts($this))
  *           if ($co_preferred) {
  *             // $co_current contain the current preferred cutout direction
  *             ...
@@ -421,7 +421,7 @@ FL_BBOX       = "FL_BBOX adds a bounding box containing the object";
  *
  * | Name           | Type              | Default                 | Description                                       |
  * | -------------- | ----------------- | ----------------------- | ------------------------------------------------- |
- * | cut_dirs       | parameter         | supported cutout directors as returned by fl_cutout() property | List of semi-axes for the desired cutout directions, cutout will be actually performed on all and only the supported ones |
+ * | cut_dirs       | parameter         | preferred cutout directors as returned by fl_preferredCutouts() property | List of semi-axes for the desired cutout directions, cutout will be actually performed on all and only the supported ones |
  * | cut_drift      | parameter         | 0                       | Cutout extrusions are adjacent to the object bounding box, this parameter adds or subtracts a delta. |
  * | cut_trim       | parameter         | undef                   | 3d translation applied to children() before extrusion, when set object section is modified like the «cut» parameters does in the OpenSCAD primitive projection{} |
  * | $fl_thickness  | parameter context | see fl_parm_thickness() | overall thickness of the cutout surface           |
@@ -619,15 +619,10 @@ function fl_stl(type,value)         = fl_property(type,"STL geometry file",value
 function fl_tolerance(type,value)   = fl_property(type,"tolerance",value);
 function fl_vendor(type,value)      = fl_property(type,"vendor",value);
 /*!
- * cut-out directions in floating semi-axis list form as described in
+ * Preferred cut-out directions in floating semi-axis list form as described in
  * fl_tt_isAxisList().
- *
- * This property represents the list of cut-out directions supported by the
- * passed type.
- *
- * TODO: rename as plural
  */
-function fl_cutout(type,value,default)  = fl_property(type,"cut-out direction list",value,default);
+function fl_preferredCutouts(type,value,default)  = fl_property(type,"preferred cut-out direction list",value,default);
 function fl_dimensions(type,value)      = fl_property(type,"dimension line pack",value);
 
 function fl_radius(type,value)          = fl_property(type,"radius for circle or sphere",value);
@@ -1915,9 +1910,11 @@ function fl_thickness(
 //**** Cutout standard parameters *********************************************
 
 /*!
- * setup FL_CUTOUT «cut_dirs» parameter.
+ * Helper to setup FL_CUTOUT «cut_dirs» parameter.
+ *
+ * NOTE: this is NOT a property getter
  */
-function fl_cut_dirs(value,type)  = is_undef(value) ? fl_cutout(type) : assert(is_list(value)) value;
+function fl_cut_dirs(value,type)  = is_undef(value) ? fl_preferredCutouts(type) : assert(is_list(value)) value;
 
 //**** Execution context helpers **********************************************
 

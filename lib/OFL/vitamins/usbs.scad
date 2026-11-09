@@ -32,7 +32,7 @@ FL_USB_TYPE_Ax1_NF_SM = let(
     name    = "FL_USB_TYPE_Ax1_NF_SM",
     engine="USB/A SM",
     others=[
-      fl_cutout(value=[+X]),
+      fl_preferredCutouts(value=[+X]),
       fl_USB_flange(value=false),
     ]
   );
@@ -46,7 +46,7 @@ FL_USB_TYPE_Ax1 = let(
     name    = "FL_USB_TYPE_Ax1",
     engine  = "USB/Ax1",
     others  = [
-      fl_cutout(value=[+X]),
+      fl_preferredCutouts(value=[+X]),
       fl_USB_flange(value=true),
     ]
   );
@@ -60,7 +60,7 @@ FL_USB_TYPE_Ax1_NF = let(
     name    = "FL_USB_TYPE_Ax1_NF",
     engine  = "USB/Ax1",
     others = [
-      fl_cutout(value=[+X]),
+      fl_preferredCutouts(value=[+X]),
       fl_USB_flange(value=false),
     ]
   );
@@ -74,7 +74,7 @@ FL_USB_TYPE_Ax2 = let(
     name    = "FL_USB_TYPE_Ax2",
     engine  = "USB/Ax2",
     others  = [
-      fl_cutout(value=[+X]),
+      fl_preferredCutouts(value=[+X]),
       fl_USB_flange(value=true),
     ]
   );
@@ -86,7 +86,7 @@ FL_USB_TYPE_B   = let(
     name    = "FL_USB_TYPE_B",
     engine  = "USB/B",
     others = [
-      fl_cutout(value=[+X]),
+      fl_preferredCutouts(value=[+X]),
       fl_USB_flange(value=false),
     ]
   );
@@ -98,7 +98,7 @@ FL_USB_TYPE_C   = let(
     name    = "FL_USB_TYPE_C",
     engine  = "USB/C",
     others  = [
-      fl_cutout(value=[+X]),
+      fl_preferredCutouts(value=[+X]),
       fl_USB_flange(value=false),
     ]
   );
@@ -110,7 +110,7 @@ FL_USB_TYPE_uA = let(
     name    = "FL_USB_TYPE_uA",
     engine  = "USB/uA",
     others  = [
-      fl_cutout(value=[+X]),
+      fl_preferredCutouts(value=[+X]),
       fl_USB_flange(value=true),
     ]
   );
@@ -122,7 +122,7 @@ FL_USB_TYPE_uA_NF = let(
     name    = "FL_USB_TYPE_uA_NF",
     engine  = "USB/uA",
     others  = [
-      fl_cutout(value=[+X]),
+      fl_preferredCutouts(value=[+X]),
       fl_USB_flange(value=false),
     ]
   );
@@ -162,7 +162,7 @@ module fl_USB(
 
   flange    = fl_USB_flange(type);
   engine    = fl_engine(type);
-  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs  = fl_cut_dirs(cut_dirs,type);
 
   module wrap() {
 
@@ -562,7 +562,7 @@ module fl_USB(
 
   module do_cutout() {
     for(axis=cut_direction)
-      if (fl_isInAxisList(axis,fl_cutout(type)))
+      if (fl_isInAxisList(axis,fl_preferredCutouts(type)))
         let(
           sys = [axis.x ? -Z : X ,O,axis],
           t   = ($this_bbox[fl_list_max(axis)>0 ? 1 : 0]*axis+cut_drift)*axis
@@ -583,7 +583,7 @@ module fl_USB(
       fl_bb_add($this_bbox);
 
     } else if ($verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs,fl_cutout(type))
+      fl_cutoutLoop(cut_dirs,fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_tolerance=cut_tolerance,$fl_thickness=cut_thick)
             wrap($verb=FL_ADD,$FL_ADD=$FL_CUTOUT);

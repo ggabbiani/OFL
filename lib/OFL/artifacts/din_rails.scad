@@ -219,7 +219,7 @@ function fl_DIN_Rail(
   assert(profile) fl_DIN_railProfile(value=profile),
   assert(length)  [str(FL_DIN_NS,"/rail/length"), length],
   if (punch)      [str(FL_DIN_NS,"/rail/punch"), punch],
-  fl_cutout(value=[+Z,-Z]),
+  fl_preferredCutouts(value=[+Z,-Z]),
   fl_dimensions(value=fl_DimensionPack([
     fl_Dimension(length,"L"),
   ]))
@@ -291,7 +291,7 @@ module fl_DIN_rail(
    * in this case the rail will perform a cutout along -Z and +Z.
    *
    * **NOTE:** when undefined this parameter defaults to the preferred cutout
-   * directions as specified by fl_cutout().
+   * directions as specified by fl_preferredCutouts().
    */
   cut_dirs,
   //! when undef native positioning is used
@@ -389,7 +389,7 @@ module fl_DIN_rail(
       fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
     } else if ($this_verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs,fl_cutout(this))
+      fl_cutoutLoop(cut_dirs,fl_preferredCutouts(this))
         fl_new_cutout($this_bbox,$co_current,cut_drift)
           if ($co_preferred)
             linear_extrude($this_size.z)

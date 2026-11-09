@@ -83,7 +83,7 @@ FL_SATA_POWERDATASOCKET = let(
   others  = [
   fl_conn_id(value=cid),
   fl_connectors(value=[pc,dc]),
-  fl_cutout(value=[+Z]),
+  fl_preferredCutouts(value=[+Z]),
   ["points",          [[2, 0], [2, -4], [0, -2], [0, 0]]],
   ["block size",      blk_sz],
   ["side block size", side_blk_sz],
@@ -117,7 +117,7 @@ FL_SATA_DATAPLUG  = let(
   others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[conn_Plug(cid,+X,+Y,[0,0,0])]),
-  fl_cutout(value=[+Z]),
+  fl_preferredCutouts(value=[+Z]),
   ["contact sizes", [
     ["short", [c_w,c_h,d_short]],
     ["long",  [c_w,c_h,d_long]]
@@ -142,7 +142,7 @@ FL_SATA_POWERPLUG = let(
   others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[conn_Plug(cid,+X,+Y,[size.x,0,0])]),
-  fl_cutout(value=[+Z]),
+  fl_preferredCutouts(value=[+Z]),
   ["contact sizes", [
     ["short", [c_w,c_h,d_short]],
     ["long",  [c_w,c_h,d_long]]
@@ -182,7 +182,7 @@ FL_SATA_POWERDATAPLUG = let(
   others  = [
   fl_dxf(value = dxf),
   fl_connectors(value=[pc,dc]),
-  fl_cutout(value=[+Z]),
+  fl_preferredCutouts(value=[+Z]),
   ["power plug",  power],
   ["data plug",   data],
   ["shell thick", thick],
@@ -218,7 +218,7 @@ module fl_sata(
    * Cutout direction list in floating semi-axis list (see also
    * fl_tt_isAxisList()).
    *
-   * **NOTE:** defaults to fl_cutout() when undef (so all the preferred cutout
+   * **NOTE:** defaults to fl_preferredCutouts() when undef (so all the preferred cutout
    * directions are included)
    *
    * Example 1:
@@ -252,7 +252,7 @@ module fl_sata(
     is_undef($fl_thickness)       ? 0 :
     is_num($fl_thickness)         ? $fl_thickness :
     assert(is_list($fl_thickness))  $fl_thickness.z[1];
-  cut_dirs    = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs    = fl_cut_dirs(cut_dirs,type);
 
   module singlePlug(
     verbs       = FL_ADD,
@@ -286,7 +286,7 @@ module fl_sata(
     }
 
     module do_cutout()
-      fl_cutoutLoop(cut_dirs, fl_cutout(type))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,drift=cut_drift)
             do_footprint();
@@ -353,7 +353,7 @@ module fl_sata(
     }
 
     module do_cutout()
-      fl_cutoutLoop(cut_dirs, fl_cutout(type))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,drift=cut_drift)
             do_footprint();
@@ -449,7 +449,7 @@ module fl_sata(
         fl_cube(size=size,octant=O);
 
     module do_cutout()
-      fl_cutoutLoop(cut_dirs, fl_cutout(type))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts(type))
         if ($co_preferred)
           fl_new_cutout($this_bbox,$co_current,drift=cut_drift)
             do_footprint();

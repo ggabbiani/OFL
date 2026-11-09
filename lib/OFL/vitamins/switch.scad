@@ -23,7 +23,7 @@ FL_SWT_USWITCH_7p2x3p4x3x2p5  = let(
   fl_name(value="FL_SWT_USWITCH_7p2x3p4x3x2p5"),
   fl_bb_corners(value=[[-l+Tbutton,-w/2,0],[Tbutton,+w/2,h]]),
   // fl_director(value=+X),fl_rotor(value=+Y),
-  fl_cutout(value=[FL_X]),
+  fl_preferredCutouts(value=[FL_X]),
 ];
 
 FL_SWT_INV = fl_Inventory([
@@ -45,7 +45,7 @@ module fl_switch(
   octant
 ) {
   assert(is_list(verbs)||is_string(verbs),verbs);
-  cut_dirs  = is_undef(cut_dirs) ? fl_cutout(type) : cut_dirs;
+  cut_dirs  = fl_cut_dirs(cut_dirs,type);
 
   Tshild  = 0.1;
   Tbutton = 1;
@@ -84,7 +84,7 @@ module fl_switch(
       fl_bb_add($this_bbox);
 
     else if ($verb==FL_CUTOUT)
-      fl_cutoutLoop(cut_dirs,fl_cutout(type)) {
+      fl_cutoutLoop(cut_dirs,fl_preferredCutouts(type)) {
         if ($co_preferred)
           do_cutout();
       }

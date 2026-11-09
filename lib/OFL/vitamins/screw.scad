@@ -217,7 +217,7 @@ function fl_Screw(
     ) [
       fl_screw_specs  (value  = nop       ),
       fl_screw_shaft  (value  = lens[0]   ),
-      fl_cutout       (value  = [+Z]      ),
+      fl_preferredCutouts       (value  = [+Z]      ),
       fl_dimensions   (value  = fl_DimensionPack([
         fl_Dimension(lens[0],     "shaft"       ),
         fl_Dimension(head_h,      "head"        ),
@@ -475,7 +475,7 @@ module fl_screw(
   hole_r        = dri_type=="clearance" ? clearance_d/2 : nominal_d/2;
   dims          = fl_dimensions(type);
   Z_delta       = head_washer_t+head_spring_t;
-  supported_co  = fl_cutout(type);
+  supported_co  = fl_preferredCutouts(type);
   cut_dirs      = cut_dirs ? cut_dirs : supported_co;
 
   module do_assembly() {
@@ -572,7 +572,7 @@ module fl_screw(
       do_assembly();
 
     } else if ($verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs, fl_cutout($this))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts($this))
         if ($co_preferred) {
           fl_new_cutout($this_bbox,$co_current,
             drift         = cut_drift-head_h-EPS,

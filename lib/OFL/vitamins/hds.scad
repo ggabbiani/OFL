@@ -61,7 +61,7 @@ FL_HD_EVO860 = let(
 
     ["Mpd",        Mpd ],
 
-    fl_cutout(value=[-Y]),
+    fl_preferredCutouts(value=[-Y]),
   ]
 );
 
@@ -172,7 +172,7 @@ module fl_hd(
       fl_bb_add($this_bbox,$FL_ADD=$FL_BBOX);
 
     else if ($this_verb==FL_CUTOUT) {
-      fl_cutoutLoop(cut_dirs, fl_cutout($this))
+      fl_cutoutLoop(cut_dirs, fl_preferredCutouts($this))
         if ($co_preferred)
           multmatrix(Mpd) let(
             // the only cutout axis is -Y so we use just the related scalar
