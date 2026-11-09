@@ -293,10 +293,9 @@ module fl_spacer(
     if (knut)
       knut(FL_DRILL);
     else if (scr_size)
-      do_layout()
-        if ($spc_thick)
-          translate(-$spc_h*$spc_director)
-            fl_cylinder(h=$spc_thick+$spc_h,r=hole_r,octant=$spc_director);
+      do_layout($FL_ADD=$FL_DRILL)
+        translate(-$spc_h*$spc_director)
+          fl_cylinder(h=$spc_thick+$spc_h,r=hole_r,octant=$spc_director);
 
   module context(
     director
@@ -314,32 +313,27 @@ module fl_spacer(
   fl_vmanage(verbs, spacer, octant=octant, direction=direction) {
 
     if ($this_verb==FL_ADD) {
-      fl_modifier($modifier) do_add();
+      do_add();
 
     } else if ($this_verb==FL_ASSEMBLY) {
-      fl_modifier($modifier)
-        do_assembly();
+      do_assembly();
 
     } else if ($this_verb==FL_BBOX) {
-      fl_modifier($modifier)
-        fl_bb_add(bbox+[[0,0,-EPS],[0,0,EPS]]);
+      fl_bb_add(bbox+[[0,0,-EPS],[0,0,EPS]]);
 
     } else if ($this_verb==FL_DRILL) {
-      fl_modifier($modifier) do_drill();
+      do_drill();
 
     } else if ($this_verb==FL_LAYOUT) {
-      fl_modifier($modifier)
-        do_layout()
-          children();
+      do_layout()
+        children();
 
     } else if ($this_verb==FL_MOUNT) {
-      fl_modifier($modifier)
-        do_mount()
-          children();
+      do_mount()
+        children();
 
     } else if ($this_verb==FL_FOOTPRINT) {
-      fl_modifier($modifier)
-        do_footprint();
+      do_footprint();
 
     } else {
       fl_error(["unimplemented verb",$this_verb]);

@@ -134,7 +134,7 @@
   mounted on standard pcb holder
 - [X] implemented PCB frames as PCB proxies
 - [ ] constructor for fl_layout()
-- [ ] review and apply everywhere the new generalized cutout algorithm. Use
+- [X] review and apply everywhere the new generalized cutout algorithm. Use
   vitamins/{ethers,heatsink,usbs}.scad as implementation example/reference.
 - [X] implemented new PCB component filtering.
 - [X] fixed documentation generation under Ubuntu
@@ -156,8 +156,8 @@
 - [ ] finalize quaternions support;
 - [X] applied Makefile function make-picture and check-picture in all picture related targets;
 - [X] modified library tree moving NopSCADlib, Round-Anything and scad-utils into lib/ext/;
-- [ ] fl_spacer() has etherogeneous behavior in the FL_DRILL implementation
-  depending on the knut attribute;
+- [X] fixed fl_spacer() heterogeneous behavior in the FL_DRILL implementation
+  depending on the knut property;
 
 ## future TODOs
 
