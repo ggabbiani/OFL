@@ -998,7 +998,7 @@ This facility is meant to be used with fl_new_cutout() like in the following
 example:
 
 ```
-fl_cutoutLoop(cut_dirs, fl_cutout($this))
+fl_cutoutLoop(cut_dirs, fl_preferredCutouts($this))
   if ($co_preferred) {
     fl_new_cutout($this_bbox,$co_current,drift=cut_drift,$fl_thickness=...,$fl_tolerance=..)
       do_footprint();

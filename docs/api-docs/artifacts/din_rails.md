@@ -340,7 +340,7 @@ Example:
 in this case the rail will perform a cutout along -Z and +Z.
 
 :memo: **NOTE:** when undefined this parameter defaults to the preferred cutout
-directions as specified by [fl_cutout()](../foundation/core.md#function-fl_cutout).
+directions as specified by [fl_preferredCutouts()](../foundation/core.md#function-fl_preferredcutouts).
 
 
 __octant__  

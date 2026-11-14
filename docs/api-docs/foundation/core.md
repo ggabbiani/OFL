@@ -209,7 +209,7 @@ semi-axes (±X,±Y,±Z).
 
 **Supported directions**
 
-The supported cutout directions are specified via [fl_cutout()](#function-fl_cutout) property as a
+The supported cutout directions are specified via [fl_preferredCutouts()](#function-fl_preferredcutouts) property as a
 list of directions along which the cutout occurs. Audio jacks for example
 support cutout along +X axis, while DIN rails support cutout on -Z and +Z axes.
 
@@ -218,9 +218,9 @@ When triggering the FL_CUTOUT verb without passing any direction
 `cut_dirs==[]` instead, the FL_CUTOUT is a no-op. In all the other cases,
 cutout is performed only on the directions that are specified in the cut_dirs
 parameter AND that are supported (i.e. present as list element in the
-[fl_cutout()](#function-fl_cutout) property).
+[fl_preferredCutouts()](#function-fl_preferredcutouts) property).
 
-:memo: **NOTE:** The fl_cutout() property also modifies the behavior of the object
+:memo: **NOTE:** The fl_preferredCutouts() property also modifies the behavior of the object
 when it is passed as a component (via fl_Component()) of a 'parent' object.
 In these cases, objects do not modify the bounding box of their parent along
 the 'supported' directions.
@@ -230,12 +230,12 @@ the 'supported' directions.
 Inside a [fl_vmanage{}](3d-engine.md#module-fl_vmanage) loop, its typical usage is the following:
 
     ...
-    cut_dirs    = cut_dirs ? cut_dirs : fl_cutout(type);
+    cut_dirs    = cut_dirs ? cut_dirs : fl_preferredCutouts(type);
     ...
     fl_vmanage(verbs,type,octant=octant,direction=direction)
       ...
       else if ($this_verb==FL_CUTOUT) {
-        fl_cutoutLoop(cut_dirs, fl_cutout($this))
+        fl_cutoutLoop(cut_dirs, fl_preferredCutouts($this))
           if ($co_preferred) {
             // $co_current contain the current preferred cutout direction
             ...
@@ -249,7 +249,7 @@ FL_CUTOUT behavior can be modified through the following parameters:
 
 | Name           | Type              | Default                 | Description                                       |
 | -------------- | ----------------- | ----------------------- | ------------------------------------------------- |
-| cut_dirs       | parameter         | supported cutout directors as returned by [fl_cutout()](#function-fl_cutout) property | List of semi-axes for the desired cutout directions, cutout will be actually performed on all and only the supported ones |
+| cut_dirs       | parameter         | preferred cutout directors as returned by [fl_preferredCutouts()](#function-fl_preferredcutouts) property | List of semi-axes for the desired cutout directions, cutout will be actually performed on all and only the supported ones |
 | cut_drift      | parameter         | 0                       | Cutout extrusions are adjacent to the object bounding box, this parameter adds or subtracts a delta. |
 | cut_trim       | parameter         | undef                   | 3d translation applied to children() before extrusion, when set object section is modified like the «cut» parameters does in the OpenSCAD primitive projection{} |
 | $fl_thickness  | parameter context | see fl_parm_thickness() | overall thickness of the cutout surface           |
@@ -980,26 +980,9 @@ __Syntax:__
 fl_cut_dirs(value,type)
 ```
 
-setup FL_CUTOUT «cut_dirs» parameter.
+Helper to setup FL_CUTOUT «cut_dirs» parameter.
 
-
----
-
-### function fl_cutout
-
-__Syntax:__
-
-```text
-fl_cutout(type,value,default)
-```
-
-cut-out directions in floating semi-axis list form as described in
-[fl_tt_isAxisList()](traits-engine.md#function-fl_tt_isaxislist).
-
-This property represents the list of cut-out directions supported by the
-passed type.
-
-TODO: rename as plural
+NOTE: this is NOT a property getter
 
 
 ---
@@ -2199,6 +2182,20 @@ fl_pop(l,i=0)
 ```
 
 removes till the i-indexed element from the top of list «l»
+
+---
+
+### function fl_preferredCutouts
+
+__Syntax:__
+
+```text
+fl_preferredCutouts(type,value,default)
+```
+
+Preferred cut-out directions in floating semi-axis list form as described in
+[fl_tt_isAxisList()](traits-engine.md#function-fl_tt_isaxislist).
+
 
 ---
 

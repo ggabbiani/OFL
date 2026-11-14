@@ -43,7 +43,7 @@ __Default:__
 
 __Default:__
 
-    let(sz=[9.5,10+1.5,4.8],bbox=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]])fl_Object(bbox,name="ten turn trimpot",engine=FL_TRIM_NS,others=[fl_cutout(value=[-Y]),])
+    let(sz=[9.5,10+1.5,4.8],bbox=[[-sz.x/2,-sz.y/2-1.5/2,0],[sz.x/2,sz.y/2-1.5/2,sz.z]])fl_Object(bbox,name="ten turn trimpot",engine=FL_TRIM_NS,others=[fl_preferredCutouts(value=[-Y]),])
 
 ## Modules
 

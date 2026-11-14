@@ -69,12 +69,18 @@ optional description
 
 __Syntax:__
 
-    fl_chip(verbs=FL_ADD,type,octant,direction)
+    fl_chip(verbs=FL_ADD,type,cut_drift=0,cut_dirs,octant,direction)
 
 __Parameters:__
 
 __verbs__  
-supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_CUTOUT, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
+
+__cut_drift__  
+translation applied to cutout
+
+__cut_dirs__  
+FL_CUTOUT direction list. Defaults to 'supported' cutout direction
 
 __octant__  
 when undef native positioning is used
