@@ -11,7 +11,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # uv binaries (stage referenced below, kept as FROM so Dependabot can bump it)
-FROM ghcr.io/astral-sh/uv:0.13.7 AS uv
+FROM ghcr.io/astral-sh/uv:0.13.8 AS uv
 
 FROM ubuntu:26.04
 LABEL org.opencontainers.image.authors="Giampiero Gabbiani (giampiero@gabbiani.org)"
