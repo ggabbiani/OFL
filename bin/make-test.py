@@ -10,7 +10,6 @@
 #
 
 import argparse
-import dotenv
 import os
 import re
 import shutil
@@ -23,7 +22,7 @@ from termcolor import colored, cprint
 
 def arguments(conf_file):
   result      = []
-  dictionary  = dotenv.dotenv_values(conf_file) if os.path.isfile(conf_file) else []
+  dictionary  = ofl.conf_values(conf_file) if os.path.isfile(conf_file) else {}
   camera      = args.camera      if args.camera     else dictionary.get('ARG_CAMERA')
   projection  = args.projection  if args.projection else dictionary.get('ARG_PROJECTION')
   if camera:
@@ -123,12 +122,16 @@ for i, cmd in enumerate(cmds):
 
   o_file  = echo(o_dir,o_base)
   result  = ofl.openscad(scad,parms=cmd,echo_f=o_file,hw=True,dry_run=args.dry_run,must_fail=args.must_fail)
+  if args.dry_run:
+    continue
   if result.returncode==0:
     cprint(f'{case if case else "✔"}', 'green',end=" ")
   else:
     cprint(f'{case if case else "✝"}', 'red',  end=" ")
 
-  if not args.must_fail and result.returncode!=0:
+  # a normal test must succeed, a --must-fail one must fail
+  unexpected = (result.returncode==0) if args.must_fail else (result.returncode!=0)
+  if unexpected:
     e_file = None
     if (case):
       e_dir = os.path.join(path,base+'-failed.echo')
@@ -140,6 +143,8 @@ for i, cmd in enumerate(cmds):
       e_file = echo(o_dir,o_base,error=True)
       os.rename(o_file, e_file)
     print("\n")
+    if args.must_fail:
+      cprint('***UNEXPECTED SUCCESS*** the test was expected to fail (error%/warn% naming)','red')
     cprint(f'{result}', 'red')
     cat(e_file)
     exit(1)

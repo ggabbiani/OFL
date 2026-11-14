@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
-# Creates new test.conf from a skeleton
+# Creates a new «name»-test.conf from a skeleton and generates the
+# corresponding (working) «name»-test.scad
 #
 # This file is part of the 'OpenSCAD Foundation Library' (OFL) project.
 #
@@ -11,9 +12,10 @@
 
 import argparse
 import os
+import re
+import subprocess
 import sys
 
-from shutil import copyfile
 from termcolor import colored, cprint
 
 script_directory  = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -72,6 +74,45 @@ if os.path.exists(target) and not confirm(f"OVERWRITE '{target}'?"):
   warn("Test creation interrupted")
   sys.exit(1)
 
-copyfile(source,target)
+if not os.path.isfile(os.path.join(target_dir,"Makefile")):
+  cprint(f"[*ERR*] '{target_dir}' is not a test directory (no Makefile found)",'red')
+  sys.exit(1)
+
+# skeleton copy, with the OFL library path relative to the test directory
+lib_path  = os.path.relpath(os.path.join(ofl_directory,"lib","OFL"),target_dir)
+with open(source) as f:
+  conf = f.read().replace("@LIB@",lib_path)
+with open(target,"w") as f:
+  f.write(conf)
 info(f"{target} created.")
+
+# immediate generation of the test source, so to start from a working test
+rel_name  = os.path.relpath(os.path.join(target_dir,test_name),ofl_directory)
+scad      = rel_name+".scad"
+result    = subprocess.run(["make","-s",scad],cwd=ofl_directory)
+if result.returncode!=0:
+  cprint(f"[*ERR*] '{scad}' generation failed",'red')
+  sys.exit(1)
+
+# T_LIST membership check
+short_name = test_name[:-len("-test")]
+with open(os.path.join(target_dir,"Makefile")) as f:
+  makefile = f.read().replace("\\\n"," ")
+t_list = next((line.split("=",1)[1].split() for line in makefile.splitlines() if re.match(r"^T_LIST\s*=",line)),[])
+rel_dir = os.path.relpath(target_dir,ofl_directory)
+
+cprint(f"\nTest '{rel_name}' created from the '{args.template}' skeleton.",'green')
+print(f"""
+Next steps:
+  1. open {scad} in OpenSCAD with 'Design → Automatic Reload and Preview'
+  2. edit {rel_name}.conf (NEVER the .scad), then regenerate with:
+       make -s {scad}
+  3. optionally save Customizer presets in {rel_name}.json:
+       TEST_CASE*  are run as test cases
+       fig_*       can be reused by the documentation pictures""")
+if short_name in t_list:
+  print(f"  4. '{short_name}' is already in the T_LIST of {rel_dir}/Makefile")
+else:
+  cprint(f"  4. add '{short_name}' to the T_LIST of {rel_dir}/Makefile",'yellow')
+print(f"  5. run it with: make -s {rel_name}.echo  (or the whole suite: make -s tests/runs)")
 sys.exit()

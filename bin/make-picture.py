@@ -10,7 +10,6 @@
 #
 
 import argparse
-import dotenv
 import os
 import re
 import subprocess

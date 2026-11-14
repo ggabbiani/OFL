@@ -26,13 +26,13 @@ include $(FUNCTIONS) $(DEF_RULES)
 
 sources: $(SOURCES) artifacts/sources foundation/sources vitamins/sources	## create test sources on artifacts, foudation and vitamins
 
-artifacts/%:	## type `make -s artifacts/help`
+artifacts/%: ALWAYS	## type `make -s artifacts/help`
 	$(call make_sub)
 
-foundation/%:	## type `make -s foundation/help`
+foundation/%: ALWAYS	## type `make -s foundation/help`
 	$(call make_sub)
 
-vitamins/%:		## type `make -s vitamins/help`
+vitamins/%: ALWAYS		## type `make -s vitamins/help`
 	$(call make_sub)
 
 # clean-runs: clean-local $(RESULTS) artifacts/clean-runs foundation/clean-runs vitamins/clean-runs
@@ -55,3 +55,6 @@ clean-sources: artifacts/clean-sources foundation/clean-sources vitamins/clean-s
 
 help: ## Shows this help
 	@grep -Eh '^[a-zA-Z0-9_/%. -]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+# forces the sub-directory dispatch even when the target already exists
+ALWAYS:

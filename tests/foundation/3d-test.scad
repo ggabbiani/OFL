@@ -15,7 +15,6 @@
 include <../../lib/OFL/foundation/core.scad>
 use <../../lib/OFL/foundation/3d-engine.scad>
 
-
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
@@ -43,7 +42,6 @@ $FL_ADD   = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 $FL_AXES  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX  = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
-
 
 /* [3D Placement] */
 
@@ -73,7 +71,6 @@ SIZE    = [1,2,3];
 // Number of edges
 N     = 3; // [3:10]
 
-
 /* [Hidden] */
 
 
@@ -99,4 +96,3 @@ else if (SHAPE == "sphere"  )  fl_sphere(verbs,d=SIZE,octant=octant,direction=di
 else if (SHAPE == "cylinder")  fl_cylinder(verbs,d1=SIZE.x,d2=SIZE.y,h=SIZE.z,octant=octant,direction=direction);
 else if (SHAPE == "prism"   )  fl_prism(verbs,n=N,l1=SIZE.x,l2=SIZE.y,h=SIZE.z,octant=octant,direction=direction);
 else if (SHAPE == "pyramid" )  fl_pyramid(verbs,base=[[-1,-1],[+1,-1],[+1,+1],[-1,+1]],apex=[0,0,2],octant=octant,direction=direction);
-

@@ -1,0 +1,307 @@
+<mxfile host="Electron">
+  <diagram name="tests" id="ofl-tests-activity">
+    <mxGraphModel dx="1537" dy="991" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lane0" parent="1" style="swimlane;startSize=30;html=1;fontStyle=1;" value="Developer" vertex="1">
+          <mxGeometry height="1430" width="420" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lane1" parent="1" style="swimlane;startSize=30;html=1;fontStyle=1;" value="make (tests/defaults.mk)" vertex="1">
+          <mxGeometry height="1430" width="300" x="440" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lane2" parent="1" style="swimlane;startSize=30;html=1;fontStyle=1;" value="Python (bin/)" vertex="1">
+          <mxGeometry height="1430" width="422.5" x="740" y="20" as="geometry">
+            <mxRectangle height="30" width="110" x="740" y="20" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-4" parent="lane2" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" value="more cases?" vertex="1">
+          <mxGeometry height="60" width="115" x="12.5" y="1130" as="geometry" />
+        </mxCell>
+        <mxCell id="n65" edge="1" parent="lane2" source="n26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="G2OUMM-NYBjkH-M4Oe1Y-4" value="[yes]">
+          <mxGeometry relative="1" x="-0.3737" as="geometry">
+            <mxPoint x="192" y="1180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n71" edge="1" parent="lane2" source="G2OUMM-NYBjkH-M4Oe1Y-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="G2OUMM-NYBjkH-M4Oe1Y-2" value="[no]">
+          <mxGeometry relative="1" x="0.2" as="geometry">
+            <mxPoint x="75" y="1190.0000000000002" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-10" connectable="0" parent="lane2" style="group" value="" vertex="1">
+          <mxGeometry height="70" width="132" x="4" y="1340" as="geometry" />
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-2" parent="G2OUMM-NYBjkH-M4Oe1Y-10" style="ellipse;html=1;shape=endState;fillColor=strokeColor;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;labelPerimeter=1;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="51" as="geometry" />
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-9" parent="G2OUMM-NYBjkH-M4Oe1Y-10" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-size: 10px;&quot;&gt;test passed: make continues with the next test&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="132" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="n17" parent="lane2" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="make-test.py --must-fail" vertex="1">
+          <mxGeometry height="50" width="240" x="90" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-12" parent="lane2" style="rhombus;html=1;fillColor=#f5f5f5;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="190.0" y="772.5" as="geometry" />
+        </mxCell>
+        <mxCell id="n54" edge="1" parent="lane2" source="n17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="G2OUMM-NYBjkH-M4Oe1Y-12" value="">
+          <mxGeometry relative="1" x="0.2013" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="620" />
+              <mxPoint x="405" y="620" />
+              <mxPoint x="405" y="760" />
+              <mxPoint x="240.3" y="760" />
+            </Array>
+            <mxPoint x="370" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n66" edge="1" parent="lane2" source="n26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="G2OUMM-NYBjkH-M4Oe1Y-3" value="[no]">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="1241.25" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n67" edge="1" parent="lane2" source="G2OUMM-NYBjkH-M4Oe1Y-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="G2OUMM-NYBjkH-M4Oe1Y-7" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="1291.25" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n63" edge="1" parent="lane2" source="n23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n25" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n64" edge="1" parent="lane2" source="n25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n26" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-11" connectable="0" parent="lane2" style="group" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="305" y="1341.25" as="geometry" />
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-7" parent="G2OUMM-NYBjkH-M4Oe1Y-11" style="ellipse;html=1;shape=endState;fillColor=strokeColor;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;labelPerimeter=1;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="15" as="geometry" />
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-8" parent="G2OUMM-NYBjkH-M4Oe1Y-11" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-size: 10px; text-align: left;&quot;&gt;test failed: make stops&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="60" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n23" parent="lane2" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" value="rc==0 and no&lt;br&gt;ERROR/WARNING?" vertex="1">
+          <mxGeometry height="75" width="150" x="260" y="918.75" as="geometry" />
+        </mxCell>
+        <mxCell id="n25" parent="lane2" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="print «case» / ✝&lt;br&gt;(red)" vertex="1">
+          <mxGeometry height="45" width="115" x="277.5" y="1051.25" as="geometry" />
+        </mxCell>
+        <mxCell id="n26" parent="lane2" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" value="expected&lt;br&gt;outcome?" vertex="1">
+          <mxGeometry height="70" width="130" x="277.5" y="1146.25" as="geometry" />
+        </mxCell>
+        <mxCell id="G2OUMM-NYBjkH-M4Oe1Y-3" parent="lane2" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="rename to *-failed.echo&lt;br&gt;exit 1" vertex="1">
+          <mxGeometry height="45" width="115" x="277.5" y="1241.25" as="geometry" />
+        </mxCell>
+        <mxCell id="lane3" parent="1" style="swimlane;startSize=30;html=1;fontStyle=1;" value="OpenSCAD" vertex="1">
+          <mxGeometry height="1430" width="300" x="1162.2000000000003" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="n22" parent="lane3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="«file»&lt;br&gt;«name»-test.echo&lt;br&gt;(directory when .json cases)" vertex="1">
+          <mxGeometry height="50" width="240" x="30" y="931.25" as="geometry" />
+        </mxCell>
+        <mxCell id="n1" parent="1" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="215" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="«file»&lt;br&gt;tests/skeleton-«3d|2d|nogui».conf" vertex="1">
+          <mxGeometry height="40" width="240" x="830" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n3" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="new-test.py «dir/name» -t «3d|2d|nogui»&lt;br&gt;(@LIB@ → relative library path)" vertex="1">
+          <mxGeometry height="55" width="240" x="830" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="n4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="«file»&lt;br&gt;«name»-test.conf" vertex="1">
+          <mxGeometry height="40" width="240" x="830" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="n5" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="edit «name»-test.conf&lt;br&gt;(heredocs: OpenSCAD code verbatim)" vertex="1">
+          <mxGeometry height="60" width="240" x="110" y="290" as="geometry" />
+        </mxCell>
+        <object label="%type%&lt;br&gt;%name%" placeholders="1" name="tests/defaults.conf" type="«file»" id="n6">
+          <mxCell parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1">
+            <mxGeometry height="40" width="120" x="455" y="215" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="n7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="«file»&lt;br&gt;template-«t».scad" vertex="1">
+          <mxGeometry height="40" width="120" x="600" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="n8" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="%.scad rule:&lt;br&gt;source confs + envsubst &amp;lt; template" vertex="1">
+          <mxGeometry height="50" width="240" x="470" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="n9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="«file»&lt;br&gt;«name»-test.scad (generated)" vertex="1">
+          <mxGeometry height="40" width="240" x="470" y="385" as="geometry" />
+        </mxCell>
+        <mxCell id="n10" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="preview&lt;br&gt;(Automatic Reload and Preview)" vertex="1">
+          <mxGeometry height="50" width="240" x="1190" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="n11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;" value="«file» [optional]&lt;br&gt;«name»-test.json&lt;br&gt;TEST_CASE* → test cases&lt;br&gt;fig_* → documentation pictures" vertex="1">
+          <mxGeometry height="70" width="240" x="1190" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="n12" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" value="test complete?" vertex="1">
+          <mxGeometry height="70" width="150" x="155" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="n13" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="add «name» to T_LIST of the directory Makefile&lt;br&gt;(new-test.py warns when missing)" vertex="1">
+          <mxGeometry height="55" width="240" x="110" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="n14" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="make -s tests/…/«name»-test.echo&lt;br&gt;(or the whole suite: make -s tests/runs)" vertex="1">
+          <mxGeometry height="55" width="240" x="110" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="n15" parent="1" style="shape=note;size=14;whiteSpace=wrap;html=1;align=center;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" value="Edit the .conf,&lt;br&gt;NEVER the generated .scad" vertex="1">
+          <mxGeometry height="50" width="200" x="130" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="n16" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" value="error% / warn% ?" vertex="1">
+          <mxGeometry height="70" width="160" x="510" y="652" as="geometry" />
+        </mxCell>
+        <mxCell id="n18" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="make-test.py" vertex="1">
+          <mxGeometry height="50" width="240" x="830" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="n20" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="read the .conf via bash (ofl.conf_values)&lt;br&gt;build args for the next TEST_CASE*&lt;br&gt;(or the single run)" vertex="1">
+          <mxGeometry height="60" width="240" x="830" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="n21" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="openscad -o «name»-test.echo&lt;br&gt;[-p .json -P «case»]" vertex="1">
+          <mxGeometry height="50" width="240" x="1190" y="865" as="geometry" />
+        </mxCell>
+        <mxCell id="n24" parent="1" style="rounded=1;arcSize=30;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="print «case» / ✔&lt;br&gt;(green)" vertex="1">
+          <mxGeometry height="45" width="115" x="875" y="1070" as="geometry" />
+        </mxCell>
+        <mxCell id="n34" parent="1" style="shape=note;size=14;whiteSpace=wrap;html=1;align=left;spacingLeft=6;fillColor=#f8f8f8;strokeColor=#999999;fontSize=10;" value="• a case fails (✝) when openscad returns rc≠0 or prints any ERROR/WARNING line&lt;br&gt;• expected outcome: ✔ for a normal test, ✝ for a --must-fail one (error%/warn% naming)&lt;br&gt;• an unexpected outcome (also a --must-fail test that succeeds) fails the test" vertex="1">
+          <mxGeometry height="90" width="270" x="1175" y="1060" as="geometry" />
+        </mxCell>
+        <mxCell id="n35" edge="1" parent="1" source="n1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n3" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="290" y="75" />
+              <mxPoint x="290" y="157.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n36" edge="1" parent="1" source="n2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n37" edge="1" parent="1" source="n3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n38" edge="1" parent="1" source="n3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n8" value="make -s …-test.scad">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="171" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n39" edge="1" parent="1" source="n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="n8" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="730" y="235" />
+              <mxPoint x="730" y="325" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n40" edge="1" parent="1" source="n6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="n8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n41" edge="1" parent="1" source="n7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="n8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n42" edge="1" parent="1" source="n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;dashed=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n5" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="890" y="265" />
+              <mxPoint x="230" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n43" edge="1" parent="1" source="n5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n8" value="make -s …-test.scad">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n44" edge="1" parent="1" source="n8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n45" edge="1" parent="1" source="n9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n46" edge="1" parent="1" source="n10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="n12" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1310" y="505" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n47" edge="1" parent="1" source="n12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n5" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n48" edge="1" parent="1" source="n10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="n11" value="save presets">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1442" y="405" />
+              <mxPoint x="1442" y="605" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n49" edge="1" parent="1" source="n12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n13" value="[yes]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n50" edge="1" parent="1" source="n13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n14" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n51" edge="1" parent="1" source="n14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n52" edge="1" parent="1" source="n16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n17" value="[yes]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n53" edge="1" parent="1" source="n16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n18" value="[no]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n55" edge="1" parent="1" source="n18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="G2OUMM-NYBjkH-M4Oe1Y-12" value="">
+          <mxGeometry relative="1" x="-0.6023" as="geometry">
+            <Array as="points">
+              <mxPoint x="920.24" y="780" />
+              <mxPoint x="920.24" y="780" />
+            </Array>
+            <mxPoint x="950" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n56" edge="1" parent="1" source="G2OUMM-NYBjkH-M4Oe1Y-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n20" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="830" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n57" edge="1" parent="1" source="n11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.2;entryDx=0;entryDy=0;" target="n20" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1172" y="605" />
+              <mxPoint x="1172" y="872" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n58" edge="1" parent="1" source="n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;dashed=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeWidth=1.5748;" target="n20" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="812" y="245" />
+              <mxPoint x="812" y="878" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n59" edge="1" parent="1" source="n20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.6;entryDx=0;entryDy=0;" target="n21" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n60" edge="1" parent="1" source="n21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;" target="n22" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n61" edge="1" parent="1" source="n22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="n23" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n62" edge="1" parent="1" source="n23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n24" value="[yes]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="n68" edge="1" parent="1" source="n24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;entryX=1.138;entryY=0.241;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n26" value="">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="932.5" y="1133.0" /><mxPoint x="1082.5" y="1133.0" /></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="n70" edge="1" parent="1" source="G2OUMM-NYBjkH-M4Oe1Y-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endSize=8;fontSize=10;entryX=0;entryY=0.8;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;strokeWidth=1.5748;" target="n20" value="[yes] next case">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="1150" />
+              <mxPoint x="810" y="908" />
+            </Array>
+            <mxPoint x="815" y="1150" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
