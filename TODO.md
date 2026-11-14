@@ -133,27 +133,23 @@
 - [X] new artifact: fl_pcb_frame adapting a pcb to holes in order to be later
   mounted on standard pcb holder
 - [X] implemented PCB frames as PCB proxies
-- [ ] constructor for fl_layout()
 - [X] review and apply everywhere the new generalized cutout algorithm. Use
   vitamins/{ethers,heatsink,usbs}.scad as implementation example/reference.
 - [X] implemented new PCB component filtering.
 - [X] fixed documentation generation under Ubuntu
 - [X] fixed regression after the generic cutout algorithm implementation in pcb
   engine
-- [ ] create template tests
+- [ ] create test template
 - [ ] setup a 3rdy part application template;
-- [ ] complete DIN rails implementing missing verbs (like FL_MOUNT)
 - [X] added Snap-fit joints
 - [X] added 'point' symbol
 - [X] added fl_2d_closest() algorithm
 - [X] applied fl_2d_closest() algorithm during symbol and label debugging (see fl_bentPlate{})
 - [X] added dimension line management
-- [ ] add dimension lines to relevant tests (see artifacts/joints.scad)
 - [X] fixed bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
+- [ ] constructor for fl_layout()
 - [ ] add fl_circular_layout{} and cyl_layout{} (from 'super-pipe' project);
-- [ ] add fan_guard component to fans;
 - [X] added fl_Object() constructor helper in new package 'type-engine;
-- [ ] finalize quaternions support;
 - [X] applied Makefile function make-picture and check-picture in all picture related targets;
 - [X] modified library tree moving NopSCADlib, Round-Anything and scad-utils into lib/ext/;
 - [X] fixed fl_spacer() heterogeneous behavior in the FL_DRILL implementation
@@ -161,6 +157,10 @@
 
 ## future TODOs
 
+- [ ] finalize quaternions support;
+- [ ] add dimension lines to relevant tests (see artifacts/joints.scad)
+- [ ] complete DIN rails implementing missing verbs (like FL_MOUNT)
+- [ ] add fan_guard component to fans;
 - [ ] add Parameter execution context (for tolerance and thickness);
 - [ ] insert 2d shape hierarchy into the official documentation;
 - [ ] write an application customizer template similar to the one existing for tests;
