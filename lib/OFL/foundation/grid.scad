@@ -75,7 +75,7 @@ module fl_grid_layout(
   if (clip)
     intersection() {
       grid() children();
-      fl_bb_add(bbox,2d=true);
+      fl_bb_add(bbox,mode="2d");
     }
   else
     grid()

@@ -47,6 +47,12 @@ function fl_PCBHolder(
   pcb_t     = fl_pcb_thick(pcb),
   pcb_screw = fl_screw_specs(pcb),
   holes     = fl_holes(pcb),
+  knuts     = knut_type ? [for(hole=holes) let(
+      screw   = fl_screw_specs(hole,default=pcb_screw),
+      nominal = screw ? 2*screw_radius(screw) : 0,
+      knut    = knut_type ? fl_knut_select(thread=knut_type,nominal=nominal,best=FL_KNUT_SHORTEST) : undef
+    ) knut] : undef,
+  h_min   = max(h_min,knuts ? max([for(knut=knuts) fl_thick(knut)+1]) : 0),
   spacers   = [for(hole=holes) let(
       screw   = fl_screw_specs(hole,default=pcb_screw),
       nominal = screw ? 2*screw_radius(screw) : 0,

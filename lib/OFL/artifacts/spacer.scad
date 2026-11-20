@@ -65,7 +65,7 @@ function fl_Spacer(
    */
   knut
 ) = let(
-  wall  = knut ? let(nominal=fl_nominal(knut)) fl_switch(nominal, FL_KNUT_NOMINAL_DRILL)[2] : undef,
+  wall  = knut ? fl_switch(fl_nominal(knut),FL_KNUT_NOMINAL_DRILL)[2] : undef,
   d     = max(knut ? fl_knut_drillD(knut)+2*wall : 0,d_min),
   kn_h  = knut ? fl_thick(knut)+1 : 0,
   h     = max(h_min,kn_h)
