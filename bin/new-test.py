@@ -78,7 +78,9 @@ if not os.path.isfile(os.path.join(target_dir,"Makefile")):
   cprint(f"[*ERR*] '{target_dir}' is not a test directory (no Makefile found)",'red')
   sys.exit(1)
 
-# skeleton copy, with the OFL library path relative to the test directory
+# skeleton copy, with the OFL library path relative to the test directory:
+# every value not set by the new configuration is inherited from
+# tests/defaults.conf when the test source is generated
 lib_path  = os.path.relpath(os.path.join(ofl_directory,"lib","OFL"),target_dir)
 with open(source) as f:
   conf = f.read().replace("@LIB@",lib_path)
@@ -107,6 +109,9 @@ Next steps:
   1. open {scad} in OpenSCAD with 'Design → Automatic Reload and Preview'
   2. edit {rel_name}.conf (NEVER the .scad), then regenerate with:
        make -s {scad}
+     values not set in the .conf are inherited from tests/defaults.conf,
+     to see the effective ones:
+       make -s {rel_name}.vars
   3. optionally save Customizer presets in {rel_name}.json:
        TEST_CASE*  are run as test cases
        fig_*       can be reused by the documentation pictures""")

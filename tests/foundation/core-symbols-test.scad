@@ -11,21 +11,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 
 use <../../lib/OFL/foundation/3d-engine.scad>
 use <../../lib/OFL/foundation/hole-engine.scad>
 use <../../lib/OFL/foundation/label.scad>
 
-
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -37,7 +40,7 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
-
+//**** TAB_Verbs ***************************************************************
 /* [Supported verbs] */
 
 // adds shapes to scene.
@@ -45,10 +48,16 @@ $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // layout of user passed accessories (like alternative screws)
 $FL_LAYOUT    = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+//**** TAB_Placement ***********************************************************
 
 
+//**** TAB_Direction ***********************************************************
 
 
+//**** TAB_Dimensions **********************************************************
+
+
+//**** TAB_TEST ****************************************************************
 /* [Test hole] */
 
 // diameter
@@ -70,9 +79,9 @@ SYMBOL          = "direction";  // [direction,hole,plug,point,socket]
 DIRECTION       = [0,0,1];
 ROTATION        = 0;      // [-360:360]
 
-
 /* [Hidden] */
 
+//**** TEST_PROLOGUE ***********************************************************
 fl_status();
 verbs=[
   if ($FL_ADD!="OFF")     FL_ADD,
@@ -82,7 +91,6 @@ verbs=[
 size  = SIZE_TYPE=="default" ? undef : SIZE_TYPE=="scalar" ? SIZE_SCALAR : SIZE_VECTOR;
 
 // end of automatically generated code
-
 if (SYMBOL=="hole")
   fl_hole_Context(fl_Hole(O,HOLE_D,HOLE_N,HOLE_DEPTH))
     fl_sym_hole(FL_ADD);
@@ -93,5 +101,3 @@ else if (SYMBOL=="point")
 else
   fl_symbol(verbs=verbs,size=size,symbol=SYMBOL)
     fl_label(FL_ADD,"Ciao!",size=$sym_size.y,thick=0.1,direction=$sym_ldir);
-
-

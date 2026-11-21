@@ -11,21 +11,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 include <../../lib/OFL/artifacts/caddy.scad>
 
 use <../../lib/OFL/foundation/3d-engine.scad>
 use <../../lib/OFL/foundation/mngm-engine.scad>
 
-
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -37,7 +40,7 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
-
+//**** TAB_Verbs ***************************************************************
 /* [Supported verbs] */
 
 // adds shapes to scene.
@@ -57,14 +60,14 @@ $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a box representing the payload of the shape
 $FL_PAYLOAD   = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-
+//**** TAB_Placement ***********************************************************
 /* [3D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
 Y_PLACE = "undef";  // [undef,-1,0,+1]
 Z_PLACE = "undef";  // [undef,-1,0,+1]
 
-
+//**** TAB_Direction ***********************************************************
 /* [Direction] */
 
 DIR_NATIVE  = true;
@@ -73,8 +76,10 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
+//**** TAB_Dimensions **********************************************************
 
 
+//**** TAB_TEST ****************************************************************
 /* [Caddy] */
 // wall thickness on X semi-axes (-X,+X)
 T_x   = [2.5,2.5];  // [0:0.1:10]
@@ -95,10 +100,9 @@ FILLET_R      = 0;  // [0:0.1:5]
 
 BLOB_BBOX  = [[0,0,0],[30,20,10]];
 
-
 /* [Hidden] */
 
-
+//**** TEST_PROLOGUE ***********************************************************
 $dbg_Assert     = DEBUG_ASSERTIONS;
 $dbg_Dimensions = DEBUG_DIMENSIONS;
 $dbg_Color      = DEBUG_COLOR;
@@ -106,14 +110,12 @@ $dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
 $dbg_Labels     = DEBUG_LABELS;
 $dbg_Symbols    = DEBUG_SYMBOLS;
 
-
 direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
 // end of automatically generated code
-
 module blob(
   verbs       = FL_ADD, // supported verbs: FL_ADD, FL_ASSEMBLY, FL_BBOX, FL_DRILL, FL_FOOTPRINT, FL_LAYOUT
   type,
@@ -206,4 +208,3 @@ fl_caddy(verbs,blob,thick=T,faces=faces,tolerance=TOLERANCE,fillet=FILLET_R,dire
   // $cad_verbs ⇒ list of verbs to be executed
   // $cad_thick ⇒ thickness list for DRILL and CUTOUT
   blob($cad_verbs,blob,thick=$cad_thick+T_NIL,$FL_DRILL="ON",$FL_CUTOUT="ON",$FL_ADD="ON",$FL_ASSEMBLY="ON");
-

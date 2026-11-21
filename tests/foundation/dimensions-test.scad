@@ -11,17 +11,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/dimensions.scad>
 
-
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -33,27 +36,32 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
-
+//**** TAB_Verbs ***************************************************************
 /* [Supported verbs] */
 // adds shapes to scene.
 $FL_ADD       = "ON";   // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 $FL_BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+//**** TAB_Placement ***********************************************************
 
 
+//**** TAB_Direction ***********************************************************
 
+
+//**** TAB_Dimensions **********************************************************
 /* [Dimension Lines] */
 VIEW_TYPE     = "other";    // [other,right,top,bottom,left]
 DIM_MODE      = "full";     // [full,label,value,silent]
 DIM_GAP       = 1;          // [1:.1:10]
 DIM_W         = 0.1;        // [0.1:0.1:1]
 
+//**** TAB_TEST ****************************************************************
 
 
 /* [Hidden] */
 
-
+//**** TEST_PROLOGUE ***********************************************************
 $dbg_Assert     = DEBUG_ASSERTIONS;
 $dbg_Dimensions = DEBUG_DIMENSIONS;
 $dbg_Color      = DEBUG_COLOR;
@@ -61,11 +69,9 @@ $dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
 $dbg_Labels     = DEBUG_LABELS;
 $dbg_Symbols    = DEBUG_SYMBOLS;
 
-
 fl_status();
 
 // end of automatically generated code
-
 verbs   = fl_verbList([FL_ADD,FL_BBOX]);
 
 d       = 4;
@@ -112,4 +118,3 @@ if (fl_dbg_dimensions()) {
     mode=DIM_MODE
   );
 }
-

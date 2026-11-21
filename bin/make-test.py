@@ -22,7 +22,9 @@ from termcolor import colored, cprint
 
 def arguments(conf_file):
   result      = []
-  dictionary  = ofl.conf_values(conf_file) if os.path.isfile(conf_file) else {}
+  # same order used by tests/defaults.mk: defaults first, then the test overrides
+  confs       = [c for c in (os.path.join(ofl.path,'tests','defaults.conf'),conf_file) if os.path.isfile(c)]
+  dictionary  = ofl.conf_values(*confs) if confs else {}
   camera      = args.camera      if args.camera     else dictionary.get('ARG_CAMERA')
   projection  = args.projection  if args.projection else dictionary.get('ARG_PROJECTION')
   if camera:
@@ -55,6 +57,13 @@ def run(title,test,parms,output,dry_run=False,case=None):
     prologue(title,case=case)
   rc = ofl.openscad(test,parms=parms,echo_f=output,hw=True,dry_run=dry_run)
   return ofl.rc_epilogue(rc) if not dry_run else rc
+
+def remove(p):
+  '''removes «p» whatever it is (directory or file), no-op when missing'''
+  if os.path.isdir(p) and not os.path.islink(p):
+    shutil.rmtree(p)
+  elif os.path.lexists(p):
+    os.remove(p)
 
 def echo(path,base,error=False):
   return os.path.join(path,base+('.echo' if not error else '-failed.echo'))
@@ -108,13 +117,19 @@ else:
   ofl.debug("JSON file not found")
   cmds.append(command)
 
+# multi-case results directory: always recreated from scratch, so that
+# - its mtime changes at every run (make compares it against the prerequisites)
+# - results of TEST_CASEs no longer present in the json file are dropped
+if cases and not args.dry_run:
+  o_dir = os.path.join(path,base+'.echo')
+  remove(o_dir)
+  os.mkdir(o_dir)
+
 for i, cmd in enumerate(cmds):
   if cases:
     case = cases[i][10:]
     o_base = case
     o_dir = os.path.join(path,base+'.echo')
-    if not os.path.exists(o_dir) and not args.dry_run:
-      os.mkdir(o_dir)
   else:
     case    = None
     o_base  = base
@@ -135,8 +150,7 @@ for i, cmd in enumerate(cmds):
     e_file = None
     if (case):
       e_dir = os.path.join(path,base+'-failed.echo')
-      if os.path.exists(e_dir):
-        shutil.rmtree(e_dir)
+      remove(e_dir)
       os.rename(o_dir, e_dir)
       e_file = echo(e_dir,o_base)
     else:
@@ -148,3 +162,8 @@ for i, cmd in enumerate(cmds):
     cprint(f'{result}', 'red')
     cat(e_file)
     exit(1)
+
+# successful run: drop any stale failure result left by a previous run
+# (a file for single-case tests, a directory for multi-case ones)
+if not args.dry_run:
+  remove(os.path.join(path,base+'-failed.echo'))

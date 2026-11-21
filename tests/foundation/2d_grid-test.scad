@@ -11,20 +11,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/unsafe_defs.scad>
-use <../../lib/OFL/foundation/2d-engine.scad>
-use <../../lib/OFL/foundation/3d-engine.scad>
-use <../../lib/OFL/foundation/grid.scad>
 
+use     <../../lib/OFL/foundation/2d-engine.scad>
+use     <../../lib/OFL/foundation/3d-engine.scad>
+use     <../../lib/OFL/foundation/grid.scad>
 
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -36,11 +40,19 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
+//**** TAB_Verbs ***************************************************************
 
 
+//**** TAB_Placement ***********************************************************
 
 
+//**** TAB_Direction ***********************************************************
 
+
+//**** TAB_Dimensions **********************************************************
+
+
+//**** TAB_TEST ****************************************************************
 /* [TEST] */
 GRID_SIZE   = [100,100];
 GRID_TYPE   = "quad";   // [quad,hex]
@@ -60,13 +72,12 @@ HOLE_D        = 4.4;
 // drill shape rotation about +Z
 ROTATION    = 0;    // [0:360]
 
-
 /* [Hidden] */
 
+//**** TEST_PROLOGUE ***********************************************************
 fl_status();
 
 // end of automatically generated code
-
 sheet_metal = [[0,0],GRID_SIZE];
 // the grid bounding box is equal to the sheet metal one reduced by border size
 grid_bbox   = sheet_metal+[BORDER,-BORDER];
@@ -89,4 +100,3 @@ fl_color("silver")
       ) // hole shape
         rotate(ROTATION,+Z) fl_circle(d=HOLE_D,$fn=HOLE_VERTICES);
     }
-

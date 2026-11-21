@@ -11,20 +11,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/vitamins/ethers.scad>
 
 use <../../lib/OFL/dxf.scad>
 
-
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -36,7 +39,7 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
-
+//**** TAB_Verbs ***************************************************************
 /* [Supported verbs] */
 
 // adds shapes to scene.
@@ -50,14 +53,14 @@ $FL_CUTOUT    = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a footprint to scene, usually a simplified FL_ADD
 $FL_FOOTPRINT = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-
+//**** TAB_Placement ***********************************************************
 /* [3D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
 Y_PLACE = "undef";  // [undef,-1,0,+1]
 Z_PLACE = "undef";  // [undef,-1,0,+1]
 
-
+//**** TAB_Direction ***********************************************************
 /* [Direction] */
 
 DIR_NATIVE  = true;
@@ -66,8 +69,10 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
+//**** TAB_Dimensions **********************************************************
 
 
+//**** TAB_TEST ****************************************************************
 /* [RJ45] */
 
 ETHER = "FL_ETHER_RJ45";  // [FL_ETHER_RJ45, FL_ETHER_RJ45_SM]
@@ -79,10 +84,9 @@ CO_T  = 2.5;          // [0:0.5:5]
 CO_DRIFT = 0; // [-5:0.5:5]
 CO_DIRECTION  = ["+X"];
 
-
 /* [Hidden] */
 
-
+//**** TEST_PROLOGUE ***********************************************************
 $dbg_Assert     = DEBUG_ASSERTIONS;
 $dbg_Dimensions = DEBUG_DIMENSIONS;
 $dbg_Color      = DEBUG_COLOR;
@@ -90,14 +94,12 @@ $dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
 $dbg_Labels     = DEBUG_LABELS;
 $dbg_Symbols    = DEBUG_SYMBOLS;
 
-
 direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
 // end of automatically generated code
-
 thick     = $FL_CUTOUT!="OFF" ? CO_T          : undef;
 tolerance = $FL_CUTOUT!="OFF" ? CO_TOLERANCE  : undef;
 drift     = $FL_CUTOUT!="OFF" ? CO_DRIFT      : undef;
@@ -114,4 +116,3 @@ fl_ether(verbs,ether,
   direction=direction,octant=octant,
   cut_dirs=co_direction,$fl_thickness=thick,$fl_tolerance=tolerance,cut_drift=drift
 );
-

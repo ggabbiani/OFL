@@ -11,7 +11,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 
 use <../../lib/OFL/foundation/2d-engine.scad>
@@ -19,14 +19,17 @@ use <../../lib/OFL/foundation/3d-engine.scad>
 use <../../lib/OFL/foundation/bbox-engine.scad>
 use <../../lib/OFL/foundation/util.scad>
 
-
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -38,7 +41,7 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
-
+//**** TAB_Verbs ***************************************************************
 /* [Supported verbs] */
 
 // adds shapes to scene.
@@ -48,14 +51,14 @@ AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
-
+//**** TAB_Placement ***********************************************************
 /* [3D Placement] */
 
 X_PLACE = "undef";  // [undef,-1,0,+1]
 Y_PLACE = "undef";  // [undef,-1,0,+1]
 Z_PLACE = "undef";  // [undef,-1,0,+1]
 
-
+//**** TAB_Direction ***********************************************************
 /* [Direction] */
 
 DIR_NATIVE  = true;
@@ -64,16 +67,18 @@ DIR_Z       = [0,0,1];  // [-1:0.1:+1]
 // rotation around
 DIR_R       = 0;        // [-360:360]
 
+//**** TAB_Dimensions **********************************************************
 
 
+//**** TAB_TEST ****************************************************************
 /* [grid] */
 
 // folding thickness
-T           = 0.5;
+T       = 0.5;
 // inter drill shape distance
-DELTA       = 1.60;
+DELTA   = 1.60;
 // drill shape diameter
-D           = 4.4;
+D       = 4.4;
 // hole edge number for grid 1
 EDGES_1 = 50; // [3:1:50]
 // drill rotation about +Z on grid 1
@@ -81,15 +86,14 @@ ROT_1   = 0;  // [0:360]
 // hole edge number for grid 2
 EDGES_2 = 50; // [3:1:50]
 // drill rotation about +Z on grid 2
-ROT_2    = 0; // [0:360]
+ROT_2   = 0; // [0:360]
 // when true folding is NOT bent
-FLAT        = false;
+FLAT    = false;
 BREAK   = 0.5;  // [0:0.1:10]
-
 
 /* [Hidden] */
 
-
+//**** TEST_PROLOGUE ***********************************************************
 $dbg_Assert     = DEBUG_ASSERTIONS;
 $dbg_Dimensions = DEBUG_DIMENSIONS;
 $dbg_Color      = DEBUG_COLOR;
@@ -97,14 +101,12 @@ $dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
 $dbg_Labels     = DEBUG_LABELS;
 $dbg_Symbols    = DEBUG_SYMBOLS;
 
-
 direction       = DIR_NATIVE    ? undef : [DIR_Z,DIR_R];
 octant          = fl_parm_Octant(X_PLACE,Y_PLACE,Z_PLACE);
 
 fl_status();
 
 // end of automatically generated code
-
 verbs=[
   if (ADD!="OFF")       FL_ADD,
   if (AXES!="OFF")      FL_AXES,
@@ -128,7 +130,7 @@ fl_bend(verbs,type=folding,flat=FLAT,octant=octant,direction=direction,$FL_ADD=A
   // bending algorithm requires a 3d shape
   linear_extrude(fl_bb_size($sheet).z)
     difference() {
-      fl_bb_add(fl_bb_corners($sheet),true);
+      fl_bb_add(fl_bb_corners($sheet),mode="2d");
       let(thick=BREAK+T) {
         let(size=$size[3]) translate($H-Y(thick)) fl_square(size=[size.y,thick,size.z],quadrant=+X+Y);
         let(size=$size[4]) translate($F-X(thick)) fl_square(size=[thick,size.y,size.z],quadrant=+X+Y);
@@ -137,4 +139,3 @@ fl_bend(verbs,type=folding,flat=FLAT,octant=octant,direction=direction,$FL_ADD=A
         let(size=$size[3]) translate($I-X(thick)) fl_square(size=[thick,size.y,size.z],quadrant=+X+Y);
       }
     }
-

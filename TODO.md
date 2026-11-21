@@ -139,7 +139,6 @@
 - [X] fixed documentation generation under Ubuntu
 - [X] fixed regression after the generic cutout algorithm implementation in pcb
   engine
-- [ ] create test template
 - [ ] setup a 3rdy part application template;
 - [X] added Snap-fit joints
 - [X] added 'point' symbol

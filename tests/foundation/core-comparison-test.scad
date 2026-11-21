@@ -11,19 +11,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/core.scad>
 
-use <../../lib/OFL/foundation/3d-engine.scad>
+use     <../../lib/OFL/foundation/3d-engine.scad>
 
-
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -35,20 +38,29 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
+//**** TAB_Verbs ***************************************************************
 
 
+//**** TAB_Placement ***********************************************************
 
 
+//**** TAB_Direction ***********************************************************
 
+
+//**** TAB_Dimensions **********************************************************
+
+
+//**** TAB_TEST ****************************************************************
 /* [Primitive comparison] */
 
 PRIMITIVE = "fl_circle vs circle"; // [fl_circle vs circle,fl_square vs square,fl_cube vs cube,fl_sphere vs sphere]
 
-
 /* [Hidden] */
 
-// end of automatically generated code
+//**** TEST_PROLOGUE ***********************************************************
 
+
+// end of automatically generated code
 T_legacy  = [+1.5,0,0];
 T_ofl     = [-1.5,0,0];
 
@@ -79,4 +91,3 @@ translate(T_ofl) {
     fl_sphere([FL_ADD,FL_AXES],d=[1,1,1]);
   }
 }
-

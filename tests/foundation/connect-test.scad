@@ -11,17 +11,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/connect.scad>
 
-
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -33,11 +36,19 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
+//**** TAB_Verbs ***************************************************************
 
 
+//**** TAB_Placement ***********************************************************
 
 
+//**** TAB_Direction ***********************************************************
 
+
+//**** TAB_Dimensions **********************************************************
+
+
+//**** TAB_TEST ****************************************************************
 /* [View] */
 
 VIEW_CONNECTORS = false;
@@ -59,10 +70,9 @@ SOCKET_DISTANCE = 6;        // [0:10]
 // canonical view is relative to connector position and orientation
 PLUG_VIEW       = "actual"; // [natural,canonical,actual]
 
-
 /* [Hidden] */
 
-
+//**** TEST_PROLOGUE ***********************************************************
 $dbg_Assert     = DEBUG_ASSERTIONS;
 $dbg_Dimensions = DEBUG_DIMENSIONS;
 $dbg_Color      = DEBUG_COLOR;
@@ -70,11 +80,9 @@ $dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
 $dbg_Labels     = DEBUG_LABELS;
 $dbg_Symbols    = DEBUG_SYMBOLS;
 
-
 fl_status();
 
 // end of automatically generated code
-
 module __test__() {
   verbs=[
     FL_ADD,
@@ -201,4 +209,3 @@ module __test__() {
 }
 
 __test__();
-

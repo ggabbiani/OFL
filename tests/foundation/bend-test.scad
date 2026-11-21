@@ -11,18 +11,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/grid.scad>
 include <../../lib/OFL/foundation/util.scad>
 
-
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -34,7 +37,7 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
-
+//**** TAB_Verbs ***************************************************************
 /* [Supported verbs] */
 
 // adds shapes to scene.
@@ -44,10 +47,16 @@ AXES      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 // adds a bounding box containing the object
 BBOX      = "OFF";  // [OFF,ON,ONLY,DEBUG,TRANSPARENT]
 
+//**** TAB_Placement ***********************************************************
 
 
+//**** TAB_Direction ***********************************************************
 
 
+//**** TAB_Dimensions **********************************************************
+
+
+//**** TAB_TEST ****************************************************************
 /* [grid] */
 MODE        = "sheet";  // [sheet,bent,both]
 // folding thickness
@@ -65,13 +74,12 @@ EDGES_2 = 50; // [3:1:50]
 // drill rotation about +Z on grid 2
 ROT_2    = 0; // [0:360]
 
-
 /* [Hidden] */
 
+//**** TEST_PROLOGUE ***********************************************************
 fl_status();
 
 // end of automatically generated code
-
 verbs=[
   if (ADD!="OFF")       FL_ADD,
   if (AXES!="OFF")      FL_AXES,
@@ -114,7 +122,7 @@ test()
       // grid algorithm operates on 2d surfaces
       difference() {
         // 2d surface fitting the calculated $sheet size
-        fl_bb_add(fl_bb_corners($sheet),true);
+        fl_bb_add(fl_bb_corners($sheet),mode="2d");
         // grid on face 4 (normal +Y) and part of face 1 (normal +Z)
         if (search($fid,[4,1])) fl_grid_layout(
           origin  = [0,D],
@@ -132,4 +140,3 @@ test()
           clip    = false
         ) rotate(ROT_1,Z) fl_circle(d=D,$fn=EDGES_1);
       }
-

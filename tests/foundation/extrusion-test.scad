@@ -11,20 +11,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-
+//**** TEST_INCLUDES ***********************************************************
 include <../../lib/OFL/foundation/core.scad>
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 
 use <../../lib/OFL/foundation/3d-engine.scad>
 use <../../lib/ext/NopSCADlib/utils/maths.scad>
 
+//**** TAB_PARAMETERS **********************************************************
+// number of segments
 $fn            = 50;           // [3:100]
 // When true, disables PREVIEW corrections like FL_EPS
 $FL_RENDER     = false;
 // Default color for printable items (i.e. artifacts)
 $fl_filament   = "DodgerBlue"; // [DodgerBlue,Blue,OrangeRed,SteelBlue]
+// When false polyRound() is disabled
+$fl_polyround  = true;
 
-
+//**** TAB_Debug ***************************************************************
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -36,11 +40,19 @@ DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
 
+//**** TAB_Verbs ***************************************************************
 
 
+//**** TAB_Placement ***********************************************************
 
 
+//**** TAB_Direction ***********************************************************
 
+
+//**** TAB_Dimensions **********************************************************
+
+
+//**** TAB_TEST ****************************************************************
 /* [EXTRUSION] */
 
 // extrusion direction vector
@@ -58,13 +70,12 @@ CUT_PLANE         = false;
 // translation BEFORE projection()
 XTR_TRIM        = [0,0,0];
 
-
 /* [Hidden] */
 
+//**** TEST_PROLOGUE ***********************************************************
 fl_status();
 
 // end of automatically generated code
-
 // extrude direction
 xtr_direction = [XTR_AXIS,0];
 xtr_trim      = CUT_PLANE ? XTR_TRIM : undef;
@@ -133,4 +144,3 @@ module test(direction,length,trim,cut_plane) {
 
 test(xtr_direction,XTR_LENGTH,XTR_TRIM,CUT_PLANE)
   example002();
-

@@ -12,12 +12,9 @@
  */
 
 // **** TEST_INCLUDES *********************************************************
-
 include <../../lib/OFL/foundation/unsafe_defs.scad>
 use <../../lib/OFL/foundation/2d-engine.scad>
-
 // **** TAB_Debug *************************************************************
-
 /* [Debug] */
 
 // -2⇒none, -1⇒all, [0..)⇒max depth allowed
@@ -28,10 +25,7 @@ DEBUG_COLOR       = false;
 DEBUG_DIMENSIONS  = false;
 DEBUG_LABELS      = false;
 DEBUG_SYMBOLS     = false;
-
 // **** TEST_PROLOGUE *********************************************************
-
-
 $dbg_Assert     = DEBUG_ASSERTIONS;
 $dbg_Dimensions = DEBUG_DIMENSIONS;
 $dbg_Color      = DEBUG_COLOR;
@@ -39,11 +33,8 @@ $dbg_Components = DEBUG_COMPONENTS[0]=="none" ? undef : DEBUG_COMPONENTS;
 $dbg_Labels     = DEBUG_LABELS;
 $dbg_Symbols    = DEBUG_SYMBOLS;
 
-
 fl_status();
-
 // end of automatically generated code
-
 // O(n²) reference implementation
 function brute(p) = let(n=len(p))
   n<2 ? undef : min([for(i=[0:n-1],j=[i+1:1:n-1]) norm([p[i].x-p[j].x,p[i].y-p[j].y])]);

@@ -48,16 +48,17 @@ def rc_epilogue(rc):
     cprint(f'✝ ({rc})','red')
   return rc
 
-def conf_values(fname):
+def conf_values(*fnames):
   '''
-  returns the variables defined by a test .conf file as a dictionary.
+  returns the variables defined by one or more test .conf files (sourced in
+  the given order) as a dictionary.
 
-  The file is sourced by bash exactly like the test makefiles do, so the full
-  shell syntax (heredocs, variable expansion...) is supported. Only the
-  variables set or changed by the file are returned.
+  The files are sourced by bash exactly like the test makefiles do, so the
+  full shell syntax (heredocs, variable expansion...) is supported. Only the
+  variables set or changed by the files are returned.
   '''
   out = subprocess.run(
-    ['bash', '-c', 'env -0 && printf "\\0@@CONF@@\\0" && set -a && . "$1" && env -0', '_', fname],
+    ['bash', '-c', 'env -0 && printf "\\0@@CONF@@\\0" && set -a && for __conf_f; do . "$__conf_f"; done && unset __conf_f && env -0', '_', *fnames],
     capture_output=True, check=True
   ).stdout.decode()
   before, after = out.split('\0@@CONF@@\0')
