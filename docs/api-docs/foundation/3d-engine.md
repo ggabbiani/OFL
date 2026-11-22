@@ -319,6 +319,43 @@ diameter, top of cone. r2 = d2 / 2.
 
 ---
 
+### function fl_Layout
+
+__Syntax:__
+
+```text
+fl_Layout(axis,gap=0,types,name,description)
+```
+
+Layout constructor.
+
+Builds an OFL object describing the arrangement of «types» along «axis»:
+the resulting bounding box is the one calculated by [lay_bb_corners()](#function-lay_bb_corners).
+
+The returned object can be passed to [fl_layout{}](#module-fl_layout) through its «layout»
+parameter.
+
+
+__Parameters:__
+
+__axis__  
+layout direction vector
+
+__gap__  
+gap inserted along «axis»
+
+__types__  
+list of types to be arranged
+
+__name__  
+optional name
+
+__description__  
+optional description
+
+
+---
+
 ### function fl_Prism
 
 __Syntax:__
@@ -682,6 +719,42 @@ TODO: let the function name follow the order of parameters (i.e. rename as
 fl_isAxisInList(axis,list))
 
 
+
+---
+
+### function fl_lay_axis
+
+__Syntax:__
+
+```text
+fl_lay_axis(type,value)
+```
+
+layout direction vector property
+
+---
+
+### function fl_lay_gap
+
+__Syntax:__
+
+```text
+fl_lay_gap(type,value)
+```
+
+gap inserted along the layout direction property
+
+---
+
+### function fl_lay_types
+
+__Syntax:__
+
+```text
+fl_lay_types(type,value)
+```
+
+list of arranged types property
 
 ---
 
@@ -1216,7 +1289,7 @@ direction in [axis,angle] representation
 
 __Syntax:__
 
-    fl_layout(verbs=FL_LAYOUT,axis,gap=0,types,align=0,direction,octant)
+    fl_layout(verbs=FL_LAYOUT,layout,axis,gap,types,align=0,direction,octant)
 
 Layout of types along a direction.
 
@@ -1236,6 +1309,16 @@ Called children can use the following special variables:
     $len    - equal to len(types)
     $size   - equal to bounding box size of $item
 
+The layout can be described by a layout object built by [fl_Layout()](#function-fl_layout)
+passed through «layout», by the «axis», «gap» and «types» parameters
+passed by name, or by both: in this case the explicitly passed parameters
+override the corresponding layout object values. In this way the same
+layout object can be reused along a program, changing only what needed
+case by case.
+
+NOTE: since OFL 4.0.0 «layout» is the second positional parameter, so
+«axis», «gap» and «types» can no more be passed by position.
+
 TODO: add namespace to children context variables.
 
 
@@ -1244,14 +1327,17 @@ __Parameters:__
 __verbs__  
 supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
 
+__layout__  
+optional layout object built by [fl_Layout()](#function-fl_layout), providing «axis», «gap» and «types» defaults
+
 __axis__  
-layout direction vector
+layout direction vector, overrides the «layout» value when passed
 
 __gap__  
-gap inserted along «axis»
+gap inserted along «axis», overrides the «layout» value when passed (0 when undef in both)
 
 __types__  
-list of types to be arranged
+list of types to be arranged, overrides the «layout» value when passed
 
 __align__  
 Internal type alignment into the resulting bounding box surfaces.

@@ -129,6 +129,37 @@ when true «points» are in ASCENDING X order
 
 ---
 
+### function fl_2d_direction
+
+__Syntax:__
+
+```text
+fl_2d_direction(direction,default=I)
+```
+
+Two-dimensional direction matrix.
+
+Returns the 4x4 matrix rotating around Z the native +X axis along the
+«direction» vector lying on the XY plane. This is the two-dimensional
+specialization of the three-dimensional [fl_direction()](3d-engine.md#function-fl_direction): the 2d direction
+«d» corresponds to the 3d one [+Z,atan2(d.y,d.x)].
+
+Since the rotation is built from the «direction» versor components, no
+trigonometric function is involved and the axis directions (like +Y or -X)
+produce exact matrices.
+
+
+__Parameters:__
+
+__direction__  
+2d vector on the XY plane: native +X is rotated along it
+
+__default__  
+returned matrix when «direction» is undef
+
+
+---
+
 ### function fl_2d_dist
 
 __Syntax:__
@@ -782,6 +813,24 @@ Any combination is allowed i.e.
 
 ---
 
+### module fl_2d_direct
+
+__Syntax:__
+
+    fl_2d_direct(direction)
+
+Applies a 2d direction matrix to its children.
+See also [fl_2d_direction()](#function-fl_2d_direction) function comments.
+
+
+__Parameters:__
+
+__direction__  
+2d vector on the XY plane: native +X is rotated along it
+
+
+---
+
 ### module fl_2d_frame
 
 __Syntax:__
@@ -953,7 +1002,7 @@ when undef native positioning is used
 
 __Syntax:__
 
-    fl_2d_vmanage(verbs,this,quadrant)
+    fl_2d_vmanage(verbs,this,quadrant,direction)
 
 High-level (OFL 'objects' only) verb-driven OFL API management for
 two-dimension spaces.
@@ -994,22 +1043,29 @@ interface and enriching the children context with new context variables.
 
     ...
 
-    fl_2d_vmanage(verbs,object,octant=octant,direction=direction)
+    fl_2d_vmanage(verbs,object,quadrant=quadrant,direction=direction)
       engine(thick=T)
         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
         fl_circle(...);
+
+Like in the 3d case, the object is first placed in its «quadrant», then
+oriented along «direction» (see [fl_2d_direction()](#function-fl_2d_direction)).
 
 Context variables:
 
 | Name             | Context   | Description                                         |
 | ---------------- | --------- | --------------------------------------------------- |
-|                  | Children  | see [fl_generic_vmanage{}](mngm-engine.md#module-fl_generic_vmanage) Children context                     |
+| $this_quadrant   | Children  | positioning quadrant                                |
+|                  | Children  | see [fl_generic_vmanage{}](mngm-engine.md#module-fl_generic_vmanage) Children context           |
 
 
 __Parameters:__
 
 __quadrant__  
 when undef native positioning is used
+
+__direction__  
+2d vector on the XY plane along which native +X is oriented, native direction when undef
 
 
 ---

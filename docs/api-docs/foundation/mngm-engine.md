@@ -127,8 +127,8 @@ Context variables:
 | $this_size       | Children  | object 3d dimensions                                |
 | $this_bbox       | Children  | bounding box corners in [low,high] format           |
 | $this_direction  | Children  | orientation in [director,rotation] format           |
-| $this_octant     | Children  | positioning octant (for three-dimensional objects)  |
-| $this_quadrant   | Children  | positioning quadrant (for two-dimensional objects)  |
+| $this_octant     | Children  | positioning octant (set by [fl_vmanage{}](3d-engine.md#module-fl_vmanage))            |
+| $this_quadrant   | Children  | positioning quadrant (set by fl_2d_vmanage{})       |
 | $fl_clearance    | Children  | multi-verb parameter (see [fl_parm_clearance()](core.md#function-fl_parm_clearance))      |
 | $fl_thickness    | Children  | multi-verb parameter (see [fl_parm_thickness()](core.md#function-fl_parm_thickness))      |
 | $fl_tolerance    | Children  | multi-verb parameter (see fl_parm_tolerance())      |
