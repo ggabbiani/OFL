@@ -26,16 +26,34 @@ def warn(message):
   if verbosity>=WARN:
     return cprint("[*WRN*] "+message, 'yellow')
 
-def confirm(message):
-  print((colored(message+" ", 'yellow')),end="",flush=True)
-  ch  = None
-  yes = None
-  no  = None
+# script return codes
+RC_OK     = 0
+RC_ERROR  = 1
+RC_WARN   = 3   # 2 is already used by argparse for command line errors
+
+def confirm(message,default=None):
+  '''
+  asks a y/n question, returns True for 'y' and False for 'n'.
+
+  The answer is read one line at a time (case-insensitive, «yes»/«no» are
+  accepted too): any other answer repeats the question.
+  When stdin is not interactive or reaches EOF, «default» is returned
+  (False when undef), so that the call never blocks in scripts or CI.
+  '''
+  fallback = bool(default)
+  if not sys.stdin.isatty():
+    cprint(f"{message} [non interactive: {'y' if fallback else 'n'}]",'yellow')
+    return fallback
   while True:
-    ch, yes, no = sys.stdin.read(1).lower(), ch=="y", ch=="n"
-    if yes or no:
-      break
-  return False if no else True
+    try:
+      answer = input(colored(message+" [y/n] ",'yellow')).strip().lower()
+    except EOFError:
+      print()
+      return fallback
+    if answer in ('y','yes'):
+      return True
+    if answer in ('n','no'):
+      return False
 
 def error(message):
   if verbosity>=ERROR:

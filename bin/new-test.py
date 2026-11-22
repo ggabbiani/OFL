@@ -16,7 +16,9 @@ import re
 import subprocess
 import sys
 
-from termcolor import colored, cprint
+from termcolor import cprint
+
+import ofl
 
 script_directory  = os.path.dirname(os.path.abspath(sys.argv[0]))
 ofl_directory     = os.path.abspath(os.path.join(script_directory, os.pardir))
@@ -26,6 +28,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("test", type=str, help="test name")
 parser.add_argument("-t", "--template", help = "test template type", choices=['nogui', '2d', '3d'], default='3d')
 parser.add_argument("-v", "--verbosity", type=int, help = "command verbosity", choices=[0,1,2],default=0)
+parser.add_argument("-o", "--overwrite", action="store_true",
+  help="overwrite an existing test configuration without asking (for batch use)")
 
 def info(message):
   if args.verbosity>1:
@@ -34,17 +38,6 @@ def info(message):
 def warn(message):
   if args.verbosity>0:
     return cprint("[*WRN*] "+message, 'yellow')
-
-def confirm(message):
-  print((colored(message+" ", 'yellow')),end="",flush=True)
-  ch  = None
-  yes = None
-  no  = None
-  while True:
-    ch, yes, no = sys.stdin.read(1).lower(), ch=="y", ch=="n"
-    if yes or no:
-      break
-  return False if no else True
 
 def error(message):
   if args.verbosity>0:
@@ -70,13 +63,14 @@ info("tests   : %s" % test_directory)
 info("source skeleton: %s" % source)
 info("target config: %s" % target)
 
-if os.path.exists(target) and not confirm(f"OVERWRITE '{target}'?"):
-  warn("Test creation interrupted")
-  sys.exit(1)
+if os.path.exists(target) and not (args.overwrite or ofl.confirm(f"OVERWRITE '{target}'?")):
+  # shown whatever the verbosity: in batch mode it's the only feedback
+  cprint(f"[*WRN*] '{target}' already exists, test creation skipped (use --overwrite to replace it)",'yellow')
+  sys.exit(ofl.RC_WARN)
 
 if not os.path.isfile(os.path.join(target_dir,"Makefile")):
   cprint(f"[*ERR*] '{target_dir}' is not a test directory (no Makefile found)",'red')
-  sys.exit(1)
+  sys.exit(ofl.RC_ERROR)
 
 # skeleton copy, with the OFL library path relative to the test directory:
 # every value not set by the new configuration is inherited from
@@ -94,7 +88,7 @@ scad      = rel_name+".scad"
 result    = subprocess.run(["make","-s",scad],cwd=ofl_directory)
 if result.returncode!=0:
   cprint(f"[*ERR*] '{scad}' generation failed",'red')
-  sys.exit(1)
+  sys.exit(ofl.RC_ERROR)
 
 # T_LIST membership check
 short_name = test_name[:-len("-test")]
@@ -120,4 +114,4 @@ if short_name in t_list:
 else:
   cprint(f"  4. add '{short_name}' to the T_LIST of {rel_dir}/Makefile",'yellow')
 print(f"  5. run it with: make -s {rel_name}.echo  (or the whole suite: make -s tests/runs)")
-sys.exit()
+sys.exit(ofl.RC_OK)
