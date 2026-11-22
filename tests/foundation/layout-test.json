@@ -1,0 +1,15 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "TEST_CASE-PARAMETERS": {
+            "CONSTRUCTOR": "false"
+        },
+        "TEST_CASE-CONSTRUCTOR": {
+            "CONSTRUCTOR": "true"
+        },
+        "TEST_CASE-OVERRIDE": {
+            "CONSTRUCTOR": "true",
+            "OVERRIDE": "true"
+        }
+    }
+}

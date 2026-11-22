@@ -810,6 +810,51 @@ function lay_bb_size(axis,gap,types) = let(c = lay_bb_corners(axis,gap,types)) c
  */
 function lay_group(axis,gap,types) = [fl_bb_corners(value=lay_bb_corners(axis,gap,types))];
 
+//**** layout properties ******************************************************
+
+//! layout direction vector property
+function fl_lay_axis(type,value)  = fl_property(type,"lay/layout direction",value);
+//! gap inserted along the layout direction property
+function fl_lay_gap(type,value)   = fl_property(type,"lay/gap along direction",value);
+//! list of arranged types property
+function fl_lay_types(type,value) = fl_property(type,"lay/types",value);
+
+/*!
+ * Layout constructor.
+ *
+ * Builds an OFL object describing the arrangement of «types» along «axis»:
+ * the resulting bounding box is the one calculated by lay_bb_corners().
+ *
+ * The returned object can be passed to fl_layout{} through its «layout»
+ * parameter.
+ */
+function fl_Layout(
+  //! layout direction vector
+  axis,
+  //! gap inserted along «axis»
+  gap=0,
+  //! list of types to be arranged
+  types,
+  //! optional name
+  name,
+  //! optional description
+  description
+) =
+  assert(is_list(axis)&&len(axis)==3,axis)
+  assert(is_num(gap),gap)
+  assert(is_list(types)&&len(types),types)
+  fl_Object(
+    bbox        = lay_bb_corners(axis,gap,types),
+    name        = name ? name : str("Layout of ",len(types)," items along ",axis),
+    description = description,
+    engine      = "OFL/layout",
+    others      = [
+      fl_lay_axis(value=axis),
+      fl_lay_gap(value=gap),
+      fl_lay_types(value=types),
+    ]
+  );
+
 /*!
  * returns the bounding box corners of a layout.
  *
@@ -904,16 +949,28 @@ let(
  *     $len    - equal to len(types)
  *     $size   - equal to bounding box size of $item
  *
+ * The layout can be described by a layout object built by fl_Layout()
+ * passed through «layout», by the «axis», «gap» and «types» parameters
+ * passed by name, or by both: in this case the explicitly passed parameters
+ * override the corresponding layout object values. In this way the same
+ * layout object can be reused along a program, changing only what needed
+ * case by case.
+ *
+ * NOTE: since OFL 4.0.0 «layout» is the second positional parameter, so
+ * «axis», «gap» and «types» can no more be passed by position.
+ *
  * TODO: add namespace to children context variables.
  */
 module fl_layout(
   //! supported verbs: FL_AXES, FL_BBOX, FL_LAYOUT
   verbs = FL_LAYOUT,
-  //! layout direction vector
+  //! optional layout object built by fl_Layout(), providing «axis», «gap» and «types» defaults
+  layout,
+  //! layout direction vector, overrides the «layout» value when passed
   axis,
-  //! gap inserted along «axis»
-  gap=0,
-  //! list of types to be arranged
+  //! gap inserted along «axis», overrides the «layout» value when passed (0 when undef in both)
+  gap,
+  //! list of types to be arranged, overrides the «layout» value when passed
   types,
   /*!
    * Internal type alignment into the resulting bounding box surfaces.
@@ -930,6 +987,21 @@ module fl_layout(
   //! when undef native positioning is used
   octant
 ) {
+  // NOTE: body assignments are evaluated before any module statement (assert()
+  // included) and shadow the parameters in the whole module scope: the check
+  // is therefore done on the right hand side of the first assignment, where
+  // the names still refer to the passed parameters.
+  //
+  // Since OFL 4.0.0 the second positional parameter is «layout»: «is_layout»
+  // catches the old positional calls fl_layout(verbs,axis,gap,types,...)
+  is_layout = is_undef(layout) || (fl_native(layout) && fl_engine(layout)=="OFL/layout");
+  not_layout  = str("«layout» must be an object built by fl_Layout(), pass «axis», «gap» and «types» by name (layout=",layout,")");
+  // explicitly passed parameters override the layout object values
+  axis  = assert(is_layout,not_layout)
+          !is_undef(axis)  ? axis  : layout ? fl_lay_axis(layout)  : undef;
+  gap   = !is_undef(gap)   ? gap   : layout ? fl_lay_gap(layout)   : 0;
+  types = !is_undef(types) ? types : layout ? fl_lay_types(layout) : undef;
+
   assert(len(axis)==3,axis);
   assert(is_num(gap),gap);
   assert(is_list(types),types);
@@ -937,10 +1009,8 @@ module fl_layout(
   align = is_num(align)
         ? assert(align==-1||align==0||align==+1) [align,align,align]
         : assert(len(align)==3) align;
+  // always recalculated: overridden parameters may change it
   bbox  = lay_bb_corners(axis,gap,types);
-  size  = bbox[1]-bbox[0]; // resulting size
-  D     = direction ? fl_direction(direction)  : FL_I;
-  M     = fl_octant(octant,bbox=bbox);
 
   fl_trace("$children",$children);
   $len  = len(types);

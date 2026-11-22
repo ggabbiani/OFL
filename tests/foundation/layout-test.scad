@@ -76,6 +76,11 @@ GAP     = 5;
 AXIS    = "+X";   // [+X, -X, +Y, -Y, +Z, -Z]
 RENDER  = "ADD"; // [DRAW, ADD, BBOX]
 ALIGN   = [0,0,0];  // [-1:+1]
+// when true the layout is passed as an object built by fl_Layout()
+CONSTRUCTOR = false;
+// when true (and CONSTRUCTOR is true) the layout object is built with axis -X
+// and no gap, the explicit «axis» and «gap» parameters override them
+OVERRIDE    = false;
 
 /* [Hidden] */
 
@@ -118,5 +123,18 @@ module object(object) {
     assert(false,str("Engine ",engine," UNKNOWN."));
 }
 
-fl_layout(verbs,axis,GAP,types,align=ALIGN,octant=octant,direction=direction)
-  object($item);
+if (CONSTRUCTOR) {
+  layout = OVERRIDE
+    ? fl_Layout(axis=-axis,gap=0,types=types)
+    : fl_Layout(axis=axis,gap=GAP,types=types);
+  assert(OVERRIDE||fl_bb_corners(layout)==lay_bb_corners(axis,GAP,types),fl_bb_corners(layout));
+  echo(str("layout: ",fl_name(layout)));
+  if (OVERRIDE)
+    fl_layout(verbs,layout,axis=axis,gap=GAP,align=ALIGN,octant=octant,direction=direction)
+      object($item);
+  else
+    fl_layout(verbs,layout,align=ALIGN,octant=octant,direction=direction)
+      object($item);
+} else
+  fl_layout(verbs,axis=axis,gap=GAP,types=types,align=ALIGN,octant=octant,direction=direction)
+    object($item);

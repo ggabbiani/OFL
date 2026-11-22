@@ -146,7 +146,8 @@
 - [X] applied fl_2d_closest() algorithm during symbol and label debugging (see fl_bentPlate{})
 - [X] added dimension line management
 - [X] fixed bug in fl_2d_closest() algorithm (see artifacts/joints.scad)
-- [ ] constructor for fl_layout()
+- [X] added fl_Layout() constructor for fl_layout{}: «layout» is now its second
+  positional parameter, «axis», «gap» and «types» must be passed by name;
 - [ ] add fl_circular_layout{} and cyl_layout{} (from 'super-pipe' project);
 - [X] added fl_Object() constructor helper in new package 'type-engine;
 - [X] applied Makefile function make-picture and check-picture in all picture related targets;
@@ -177,3 +178,6 @@
   not implemented verb(s;)
 - [ ] replace bipolar getters with fl_new_property();
 - [ ] add magnet holders from ('super-pipe' project)
+- [ ] complete bin/bump.py so that it replaces bin/bump.sh: the real bump
+  (lib_update(), docs, commit, tag, push) is still commented out and
+  replaced by '/bin/false', only the --dry-run works;
