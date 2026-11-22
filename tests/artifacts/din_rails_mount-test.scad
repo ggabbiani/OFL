@@ -100,14 +100,14 @@ module din_mount(rail) {
     fl_cube(size=size,octant=-Y+Z,$FL_ADD="ON");
     fl_DIN_rail(
       [FL_CUTOUT],rail,
-      cut_direction=[+Z],cut_thick=LENGTH,tolerance=TOLERANCE,cut_drift=-10,
+      cut_dirs=[+Z],$fl_thickness=LENGTH,$fl_tolerance=TOLERANCE,cut_drift=-10,
       octant=-Y+Z,direction=direction,
       $FL_CUTOUT="ON"
     );
   }
   fl_DIN_rail(
     verbs,single(LENGTH,PUNCHED),
-    cut_direction=co_direction,cut_thick=p_thick,tolerance=tolerance,cut_drift=drift,
+    cut_dirs=co_direction,$fl_thickness=LENGTH,$fl_tolerance=TOLERANCE,cut_drift=drift,
     octant=-Y+Z,direction=direction
   );
 }
@@ -125,7 +125,7 @@ if (single) {
   fl_layout(axis=+X,gap=3,types=all,$FL_LAYOUT="ON")
     fl_DIN_rail(
       verbs,all[$i],
-      cut_direction=co_direction,cut_drift=drift,
+      cut_dirs=co_direction,cut_drift=drift,
       octant=octant,direction=direction
     );
 }
