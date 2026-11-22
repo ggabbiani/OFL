@@ -70,7 +70,9 @@ module fl_vmanage(
   octant,
   //! desired direction [director,rotation], native direction when undef
   direction
-) assert(this) fl_generic_vmanage(
+) let(
+    $this_octant = octant
+  ) assert(this) fl_generic_vmanage(
     verbs,
     this,
     positioning = octant,

@@ -65,34 +65,41 @@ function fl_2d_polyRound(radiipoints,fn=5,mode=0) = let(
  *
  *     ...
  *
- *     fl_2d_vmanage(verbs,object,octant=octant,direction=direction)
+ *     fl_2d_vmanage(verbs,object,quadrant=quadrant,direction=direction)
  *       engine(thick=T)
  *         // child passed to engine for further manipulation (ex. during FL_LAYOUT)
  *         fl_circle(...);
+ *
+ * Like in the 3d case, the object is first placed in its «quadrant», then
+ * oriented along «direction» (see fl_2d_direction()).
  *
  * Context variables:
  *
  * | Name             | Context   | Description                                         |
  * | ---------------- | --------- | --------------------------------------------------- |
- * |                  | Children  | see fl_generic_vmanage{} Children context                     |
+ * | $this_quadrant   | Children  | positioning quadrant                                |
+ * |                  | Children  | see fl_generic_vmanage{} Children context           |
  */
 module fl_2d_vmanage(
   verbs,
   this,
   //! when undef native positioning is used
-  quadrant
-) {
-  fl_generic_vmanage(
+  quadrant,
+  //! 2d vector on the XY plane along which native +X is oriented, native direction when undef
+  direction
+) let(
+    $this_quadrant = quadrant
+  ) assert(this) fl_generic_vmanage(
     verbs,
     this,
     positioning = quadrant,
-    m           = function(quadrant,bbox) fl_octant(octant,this),
-    d           = function(direction)     fl_direction(direction)
+    direction   = direction,
+    m           = function(quadrant,type) fl_quadrant(quadrant,type),
+    d           = function(direction)     fl_2d_direction(direction)
   ) {
     children();
     fl_axes(size=1.2*$this_size);
   }
-}
 
 /*!
  * Low-level verb-driven OFL API management.
@@ -1381,6 +1388,45 @@ function fl_quadrant(
     ]
   ) T(t)
   : assert(default) default;
+
+/*!
+ * Two-dimensional direction matrix.
+ *
+ * Returns the 4x4 matrix rotating around Z the native +X axis along the
+ * «direction» vector lying on the XY plane. This is the two-dimensional
+ * specialization of the three-dimensional fl_direction(): the 2d direction
+ * «d» corresponds to the 3d one [+Z,atan2(d.y,d.x)].
+ *
+ * Since the rotation is built from the «direction» versor components, no
+ * trigonometric function is involved and the axis directions (like +Y or -X)
+ * produce exact matrices.
+ */
+function fl_2d_direction(
+  //! 2d vector on the XY plane: native +X is rotated along it
+  direction,
+  //! returned matrix when «direction» is undef
+  default=I
+) = direction ?
+  assert(is_list(direction) && len(direction)==2 && is_num(direction.x) && is_num(direction.y),direction)
+  assert(norm(direction)>0,str("null direction ",direction))
+  let(
+    u = direction/norm(direction)
+  ) [
+    [u.x, -u.y, 0, 0],
+    [u.y,  u.x, 0, 0],
+    [0,    0,   1, 0],
+    [0,    0,   0, 1]
+  ] : assert(default) default;
+
+/*!
+ * Applies a 2d direction matrix to its children.
+ * See also fl_2d_direction() function comments.
+ */
+module fl_2d_direct(
+  //! 2d vector on the XY plane: native +X is rotated along it
+  direction
+) multmatrix(fl_2d_direction(direction))
+    children();
 
 module fl_2d_place(
   type,
