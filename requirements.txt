@@ -18,11 +18,11 @@
 # tests
 envsubst==0.1.5
 termcolor==3.3.0
-numpy==2.5.4
-opencv-python-headless==5.0.0.93
+numpy==2.5.5
+opencv-python-headless==5.1.0.95
 scikit-image==0.26.0
 
 # documentation
 mkdocs-material==9.8.1
-mkdocs-include-markdown-plugin==7.3.1
+mkdocs-include-markdown-plugin==7.3.2
 mike==2.2.0
