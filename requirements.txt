@@ -23,6 +23,6 @@ opencv-python-headless==5.1.0.95
 scikit-image==0.26.0
 
 # documentation
-mkdocs-material==9.8.1
+mkdocs-material==9.8.2
 mkdocs-include-markdown-plugin==7.3.2
 mike==2.2.0
